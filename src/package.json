@@ -1,0 +1,26 @@
+{
+  "name": "eventstore-client-nodejs",
+  "version": "1.0.0",
+  "description": "Client API for Event Store v6 for NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
+  },
+  "keywords": [
+    "EventStore",
+    "EventSourcing"
+  ],
+  "author": "Event Store Limited",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
+  },
+  "homepage": "https://github.com/EventStore/EventStore-Client-NodeJS#readme",
+  "devDependencies": {
+    "ts-protoc-gen": "^0.12.0"
+  }
+}
