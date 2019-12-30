@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
+
+# generate js codes via grpc-tools
+grpc_tools_node_protoc \
+--js_out=import_style=commonjs,binary:../src/generated \
+--grpc_out=../src/generated \
+--plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` \
+-I ../protos \
+streams.proto
+
 protoc \
---plugin="protoc-gen-ts=../src/node_modules/ts-protoc-gen/bin/protoc-gen-ts" \
---ts_out="service=grpc-web:../src/generated" \
---js_out="import_style=commonjs,binary:../src/generated" \
---proto_path="../protos" \
-streams.proto \
-persistent.proto \
-projections.proto \
-users.proto
+    --plugin="protoc-gen-ts=../src/node_modules/.bin/protoc-gen-ts" \
+    --js_out="import_style=commonjs,binary:../src/generated" \
+    --ts_out="service=grpc-node:../src/generated" \
+    -I ../protos \
+    streams.proto

@@ -1173,7 +1173,7 @@ proto.event_store.grpc.streams.ReadReq.Options.ReadDirection = {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_ = [[2,3]];
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_ = [[2,3,4]];
 
 /**
  * @enum {number}
@@ -1181,7 +1181,8 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_ = [[2,
 proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionsCase = {
   REVISION_OPTIONS_NOT_SET: 0,
   REVISION: 2,
-  START: 3
+  START: 3,
+  END: 4
 };
 
 /**
@@ -1224,7 +1225,8 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.toObject = function
   var f, obj = {
     streamName: jspb.Message.getFieldWithDefault(msg, 1, ""),
     revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    start: (f = msg.getStart()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    start: (f = msg.getStart()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1274,6 +1276,11 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinaryFr
       reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
       msg.setStart(value);
       break;
+    case 4:
+      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
+      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      msg.setEnd(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1321,6 +1328,14 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.serializeBinaryToWr
   if (f != null) {
     writer.writeMessage(
       3,
+      f,
+      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getEnd();
+  if (f != null) {
+    writer.writeMessage(
+      4,
       f,
       proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
     );
@@ -1408,6 +1423,39 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasStart 
 };
 
 
+/**
+ * optional Empty end = 4;
+ * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 4));
+};
+
+
+/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.setEnd = function(value) {
+  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearEnd = function() {
+  this.setEnd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasEnd = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
 
 /**
  * Oneof group definitions for this message. Each group defines the field
@@ -1417,7 +1465,7 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasStart 
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_ = [[1,2]];
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_ = [[1,2,3]];
 
 /**
  * @enum {number}
@@ -1425,7 +1473,8 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_ = [[1,2]]
 proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionsCase = {
   ALL_OPTIONS_NOT_SET: 0,
   POSITION: 1,
-  START: 2
+  START: 2,
+  END: 3
 };
 
 /**
@@ -1467,7 +1516,8 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.toObject = f
 proto.event_store.grpc.streams.ReadReq.Options.AllOptions.toObject = function(includeInstance, msg) {
   var f, obj = {
     position: (f = msg.getPosition()) && proto.event_store.grpc.streams.ReadReq.Options.Position.toObject(includeInstance, f),
-    start: (f = msg.getStart()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    start: (f = msg.getStart()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1514,6 +1564,11 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinaryFromR
       reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
       msg.setStart(value);
       break;
+    case 3:
+      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
+      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      msg.setEnd(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1555,6 +1610,14 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWrite
   if (f != null) {
     writer.writeMessage(
       2,
+      f,
+      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getEnd();
+  if (f != null) {
+    writer.writeMessage(
+      3,
       f,
       proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
     );
@@ -1625,6 +1688,39 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearStart =
  */
 proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.hasStart = function() {
   return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional Empty end = 3;
+ * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 3));
+};
+
+
+/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.setEnd = function(value) {
+  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearEnd = function() {
+  this.setEnd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.hasEnd = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -7570,11 +7666,11 @@ proto.event_store.grpc.streams.UUID.Structured.deserializeBinaryFromReader = fun
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {number} */ (reader.readInt64());
       msg.setMostSignificantBits(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {number} */ (reader.readInt64());
       msg.setLeastSignificantBits(value);
       break;
     default:
@@ -7608,14 +7704,14 @@ proto.event_store.grpc.streams.UUID.Structured.serializeBinaryToWriter = functio
   var f = undefined;
   f = message.getMostSignificantBits();
   if (f !== 0) {
-    writer.writeUint64(
+    writer.writeInt64(
       1,
       f
     );
   }
   f = message.getLeastSignificantBits();
   if (f !== 0) {
-    writer.writeUint64(
+    writer.writeInt64(
       2,
       f
     );
@@ -7624,7 +7720,7 @@ proto.event_store.grpc.streams.UUID.Structured.serializeBinaryToWriter = functio
 
 
 /**
- * optional uint64 most_significant_bits = 1;
+ * optional int64 most_significant_bits = 1;
  * @return {number}
  */
 proto.event_store.grpc.streams.UUID.Structured.prototype.getMostSignificantBits = function() {
@@ -7639,7 +7735,7 @@ proto.event_store.grpc.streams.UUID.Structured.prototype.setMostSignificantBits 
 
 
 /**
- * optional uint64 least_significant_bits = 2;
+ * optional int64 least_significant_bits = 2;
  * @return {number}
  */
 proto.event_store.grpc.streams.UUID.Structured.prototype.getLeastSignificantBits = function() {

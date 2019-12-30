@@ -100,6 +100,11 @@ export namespace ReadReq {
       getStart(): ReadReq.Empty | undefined;
       setStart(value?: ReadReq.Empty): void;
 
+      hasEnd(): boolean;
+      clearEnd(): void;
+      getEnd(): ReadReq.Empty | undefined;
+      setEnd(value?: ReadReq.Empty): void;
+
       getRevisionOptionsCase(): StreamOptions.RevisionOptionsCase;
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): StreamOptions.AsObject;
@@ -116,12 +121,14 @@ export namespace ReadReq {
         streamName: string,
         revision: number,
         start?: ReadReq.Empty.AsObject,
+        end?: ReadReq.Empty.AsObject,
       }
 
       export enum RevisionOptionsCase {
         REVISION_OPTIONS_NOT_SET = 0,
         REVISION = 2,
         START = 3,
+        END = 4,
       }
     }
 
@@ -135,6 +142,11 @@ export namespace ReadReq {
       clearStart(): void;
       getStart(): ReadReq.Empty | undefined;
       setStart(value?: ReadReq.Empty): void;
+
+      hasEnd(): boolean;
+      clearEnd(): void;
+      getEnd(): ReadReq.Empty | undefined;
+      setEnd(value?: ReadReq.Empty): void;
 
       getAllOptionsCase(): AllOptions.AllOptionsCase;
       serializeBinary(): Uint8Array;
@@ -151,12 +163,14 @@ export namespace ReadReq {
       export type AsObject = {
         position?: ReadReq.Options.Position.AsObject,
         start?: ReadReq.Empty.AsObject,
+        end?: ReadReq.Empty.AsObject,
       }
 
       export enum AllOptionsCase {
         ALL_OPTIONS_NOT_SET = 0,
         POSITION = 1,
         START = 2,
+        END = 3,
       }
     }
 
