@@ -1,5 +1,5 @@
 let assert = require('assert');
-import {EventData, EventStoreConnection, StreamRevision, ConnectionSettings} from '../dist';
+import {AnyStreamRevision, ConnectionSettings, EventData, EventStoreConnection} from '../dist';
 let uuid = require('uuid/v1');
 
 describe('append_to_stream', function () {
@@ -21,7 +21,7 @@ describe('append_to_stream', function () {
         eventData.push(eventDataOne);
 
         // Send request to append
-        client.appendToStream("SomeStream", StreamRevision.Any, eventData);
+        client.appendToStream("SomeStream", AnyStreamRevision.Any, eventData);
     });
 });
     
