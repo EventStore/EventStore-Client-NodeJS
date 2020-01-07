@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "tsc test/*.ts --module commonjs",
-    "test": "mocha -r ts-node/register test/*.ts",
+    "test": "npm run build; mocha -r ts-node/register test/*.ts",
     "build": "cp -r generated dist/generated/; tsc"
   },
   "repository": {

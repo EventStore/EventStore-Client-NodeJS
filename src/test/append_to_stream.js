@@ -14,7 +14,7 @@ describe('append_to_stream', function () {
         var encoder = new TextEncoder();
         var data = encoder.encode('{"Id": "1"}');
         var eventId = uuid();
-        var eventDataOne = new dist_1.EventData(eventId, "type", new Uint8Array(data));
+        var eventDataOne = new dist_1.EventData(eventId, "type", data);
         eventData.push(eventDataOne);
         // Send request to append
         client.appendToStream("SomeStream", dist_1.AnyStreamRevision.Any, eventData);

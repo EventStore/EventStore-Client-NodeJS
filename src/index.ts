@@ -3,6 +3,7 @@ import * as streamsService from './generated/streams_grpc_pb';
 import * as streams from './generated/streams_pb';
 import * as grpc from "grpc";
 import * as types from "./types";
+import {ReadResp} from "./generated/streams_pb";
 
 type Nullable<T> = T | null;
 
@@ -78,13 +79,13 @@ export class EventStoreConnection {
         appendCall.end();
     }
 
-    readAllForwards(
+    async readAllForwards(
         position: types.Position,
         maxCount: number,
         resolveLinksTo: boolean,
         filter: types.Filter,
         userCredentials: types.UserCredentials
-    ) {
+    ): Promise<object[]> {
         let metadata = new grpc.Metadata();
         let auth = 'Basic ' + Buffer.from(this._username + ':' + this._password).toString('base64');
         metadata.set("authorization", auth);
@@ -118,17 +119,46 @@ export class EventStoreConnection {
 
         let readCall = this._service.read(readRequest, metadata);
 
-        readCall.on("data", chunk => {
-            console.log(chunk);
-        });
+        return new Promise<types.EventRecord[]>((resolve, reject) => {
 
-        readCall.on("status", chunk => {
-            console.log(chunk);
-        });
+            let events = new Array<types.EventRecord>();
+            readCall.on("data", (chunk: streams.ReadResp) => {
+                let event = this.convertToEventRecord(chunk.getEvent()?.getEvent());
+                
+                if (event !== null) {
+                    events.push(event);
+                }
+            });
 
-        readCall.on('error', function (e) {
-            console.log(e);
+            readCall.on('error', (e: Error) => {
+                reject(e);
+            });
+
+            readCall.on('end', () => {
+                resolve(events);
+            })
         });
+    }
+
+    convertToEventRecord(event: ReadResp.ReadEvent.RecordedEvent | undefined) : types.EventRecord | null {
+        if (event === undefined) {
+            return null;
+        }
+
+        let isJson = event.getMetadataMap().get('is-json') as string;
+        let eventType = event.getMetadataMap().get('type') as string;
+
+        return new types.EventRecord(
+            event.getStreamName(),
+            event.getId()?.getString() as string,
+            event.getStreamRevision(),
+            eventType,
+            event.getData_asU8(),
+            event.getCustomMetadata_asU8(),
+            new Date(),
+            new types.Position(event.getCommitPosition(), event.getPreparePosition()),
+            isJson == 'True',
+        )
     }
 }
 

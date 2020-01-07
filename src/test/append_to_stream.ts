@@ -17,7 +17,7 @@ describe('append_to_stream', function () {
 
         let eventId = uuid();
         
-        let eventDataOne = new EventData(eventId, "type", new Uint8Array(data));
+        let eventDataOne = new EventData(eventId, "type", data);
         eventData.push(eventDataOne);
 
         // Send request to append
