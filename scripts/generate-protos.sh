@@ -9,7 +9,7 @@ grpc_tools_node_protoc \
     streams.proto
 
 protoc \
-    --plugin="protoc-gen-ts=../src/node_modules/.bin/protoc-gen-ts" \
+    --plugin="protoc-gen-ts=../node_modules/.bin/protoc-gen-ts" \
     --js_out="import_style=commonjs,binary:../src/generated" \
     --ts_out="service=grpc-node:../src/generated" \
     -I ../protos \

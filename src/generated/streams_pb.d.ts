@@ -61,9 +61,14 @@ export namespace ReadReq {
     getNoFilter(): ReadReq.Empty | undefined;
     setNoFilter(value?: ReadReq.Empty): void;
 
-    getStreamOptionsCase(): Options.StreamOptionsCase;
-    getCountOptionsCase(): Options.CountOptionsCase;
-    getFilterOptionsCase(): Options.FilterOptionsCase;
+    hasUuidOption(): boolean;
+    clearUuidOption(): void;
+    getUuidOption(): ReadReq.Options.UUIDOption | undefined;
+    setUuidOption(value?: ReadReq.Options.UUIDOption): void;
+
+    getStreamOptionCase(): Options.StreamOptionCase;
+    getCountOptionCase(): Options.CountOptionCase;
+    getFilterOptionCase(): Options.FilterOptionCase;
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): Options.AsObject;
     static toObject(includeInstance: boolean, msg: Options): Options.AsObject;
@@ -84,6 +89,7 @@ export namespace ReadReq {
       subscription?: ReadReq.Options.SubscriptionOptions.AsObject,
       filter?: ReadReq.Options.FilterOptions.AsObject,
       noFilter?: ReadReq.Empty.AsObject,
+      uuidOption?: ReadReq.Options.UUIDOption.AsObject,
     }
 
     export class StreamOptions extends jspb.Message {
@@ -105,7 +111,7 @@ export namespace ReadReq {
       getEnd(): ReadReq.Empty | undefined;
       setEnd(value?: ReadReq.Empty): void;
 
-      getRevisionOptionsCase(): StreamOptions.RevisionOptionsCase;
+      getRevisionOptionCase(): StreamOptions.RevisionOptionCase;
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): StreamOptions.AsObject;
       static toObject(includeInstance: boolean, msg: StreamOptions): StreamOptions.AsObject;
@@ -124,8 +130,8 @@ export namespace ReadReq {
         end?: ReadReq.Empty.AsObject,
       }
 
-      export enum RevisionOptionsCase {
-        REVISION_OPTIONS_NOT_SET = 0,
+      export enum RevisionOptionCase {
+        REVISION_OPTION_NOT_SET = 0,
         REVISION = 2,
         START = 3,
         END = 4,
@@ -148,7 +154,7 @@ export namespace ReadReq {
       getEnd(): ReadReq.Empty | undefined;
       setEnd(value?: ReadReq.Empty): void;
 
-      getAllOptionsCase(): AllOptions.AllOptionsCase;
+      getAllOptionCase(): AllOptions.AllOptionCase;
       serializeBinary(): Uint8Array;
       toObject(includeInstance?: boolean): AllOptions.AsObject;
       static toObject(includeInstance: boolean, msg: AllOptions): AllOptions.AsObject;
@@ -166,8 +172,8 @@ export namespace ReadReq {
         end?: ReadReq.Empty.AsObject,
       }
 
-      export enum AllOptionsCase {
-        ALL_OPTIONS_NOT_SET = 0,
+      export enum AllOptionCase {
+        ALL_OPTION_NOT_SET = 0,
         POSITION = 1,
         START = 2,
         END = 3,
@@ -294,6 +300,41 @@ export namespace ReadReq {
       }
     }
 
+    export class UUIDOption extends jspb.Message {
+      hasStructured(): boolean;
+      clearStructured(): void;
+      getStructured(): ReadReq.Empty | undefined;
+      setStructured(value?: ReadReq.Empty): void;
+
+      hasString(): boolean;
+      clearString(): void;
+      getString(): ReadReq.Empty | undefined;
+      setString(value?: ReadReq.Empty): void;
+
+      getContentCase(): UUIDOption.ContentCase;
+      serializeBinary(): Uint8Array;
+      toObject(includeInstance?: boolean): UUIDOption.AsObject;
+      static toObject(includeInstance: boolean, msg: UUIDOption): UUIDOption.AsObject;
+      static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+      static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+      static serializeBinaryToWriter(message: UUIDOption, writer: jspb.BinaryWriter): void;
+      static deserializeBinary(bytes: Uint8Array): UUIDOption;
+      static deserializeBinaryFromReader(message: UUIDOption, reader: jspb.BinaryReader): UUIDOption;
+    }
+
+    export namespace UUIDOption {
+      export type AsObject = {
+        structured?: ReadReq.Empty.AsObject,
+        string?: ReadReq.Empty.AsObject,
+      }
+
+      export enum ContentCase {
+        CONTENT_NOT_SET = 0,
+        STRUCTURED = 1,
+        STRING = 2,
+      }
+    }
+
     export interface ReadDirectionMap {
       FORWARDS: 0;
       BACKWARDS: 1;
@@ -301,20 +342,20 @@ export namespace ReadReq {
 
     export const ReadDirection: ReadDirectionMap;
 
-    export enum StreamOptionsCase {
-      STREAM_OPTIONS_NOT_SET = 0,
+    export enum StreamOptionCase {
+      STREAM_OPTION_NOT_SET = 0,
       STREAM = 1,
       ALL = 2,
     }
 
-    export enum CountOptionsCase {
-      COUNT_OPTIONS_NOT_SET = 0,
+    export enum CountOptionCase {
+      COUNT_OPTION_NOT_SET = 0,
       COUNT = 5,
       SUBSCRIPTION = 6,
     }
 
-    export enum FilterOptionsCase {
-      FILTER_OPTIONS_NOT_SET = 0,
+    export enum FilterOptionCase {
+      FILTER_OPTION_NOT_SET = 0,
       FILTER = 7,
       NO_FILTER = 8,
     }
@@ -637,8 +678,8 @@ export class AppendResp extends jspb.Message {
   getEmpty(): AppendResp.Empty | undefined;
   setEmpty(value?: AppendResp.Empty): void;
 
-  getCurrentRevisionOptionsCase(): AppendResp.CurrentRevisionOptionsCase;
-  getPositionOptionsCase(): AppendResp.PositionOptionsCase;
+  getCurrentRevisionOptionCase(): AppendResp.CurrentRevisionOptionCase;
+  getPositionOptionCase(): AppendResp.PositionOptionCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AppendResp.AsObject;
   static toObject(includeInstance: boolean, msg: AppendResp): AppendResp.AsObject;
@@ -697,14 +738,14 @@ export namespace AppendResp {
     }
   }
 
-  export enum CurrentRevisionOptionsCase {
-    CURRENT_REVISION_OPTIONS_NOT_SET = 0,
+  export enum CurrentRevisionOptionCase {
+    CURRENT_REVISION_OPTION_NOT_SET = 0,
     CURRENT_REVISION = 1,
     NO_STREAM = 2,
   }
 
-  export enum PositionOptionsCase {
-    POSITION_OPTIONS_NOT_SET = 0,
+  export enum PositionOptionCase {
+    POSITION_OPTION_NOT_SET = 0,
     POSITION = 3,
     EMPTY = 4,
   }
@@ -812,7 +853,7 @@ export class DeleteResp extends jspb.Message {
   getEmpty(): DeleteResp.Empty | undefined;
   setEmpty(value?: DeleteResp.Empty): void;
 
-  getPositionOptionsCase(): DeleteResp.PositionOptionsCase;
+  getPositionOptionCase(): DeleteResp.PositionOptionCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DeleteResp.AsObject;
   static toObject(includeInstance: boolean, msg: DeleteResp): DeleteResp.AsObject;
@@ -869,8 +910,8 @@ export namespace DeleteResp {
     }
   }
 
-  export enum PositionOptionsCase {
-    POSITION_OPTIONS_NOT_SET = 0,
+  export enum PositionOptionCase {
+    POSITION_OPTION_NOT_SET = 0,
     POSITION = 1,
     EMPTY = 2,
   }
@@ -978,7 +1019,7 @@ export class TombstoneResp extends jspb.Message {
   getEmpty(): TombstoneResp.Empty | undefined;
   setEmpty(value?: TombstoneResp.Empty): void;
 
-  getPositionOptionsCase(): TombstoneResp.PositionOptionsCase;
+  getPositionOptionCase(): TombstoneResp.PositionOptionCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TombstoneResp.AsObject;
   static toObject(includeInstance: boolean, msg: TombstoneResp): TombstoneResp.AsObject;
@@ -1035,8 +1076,8 @@ export namespace TombstoneResp {
     }
   }
 
-  export enum PositionOptionsCase {
-    POSITION_OPTIONS_NOT_SET = 0,
+  export enum PositionOptionCase {
+    POSITION_OPTION_NOT_SET = 0,
     POSITION = 1,
     EMPTY = 2,
   }

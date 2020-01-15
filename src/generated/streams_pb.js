@@ -19,10 +19,10 @@ goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.Options', null, glob
 goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.Options.ExpectedStreamRevisionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.ProposedMessage', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.AppendResp', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionsCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.Empty', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.PositionOptionsCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.PositionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq.Empty', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq.Options', null, global);
@@ -30,24 +30,26 @@ goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq.Options.ExpectedStre
 goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.Empty', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.PositionOptionsCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.PositionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Empty', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.AllOptions', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionsCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.CountOptionsCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.FilterCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.WindowCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptionsCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.Position', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.ReadDirection', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptions', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionsCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptionsCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.UUIDOption', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadResp', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadResp.Empty', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.ReadResp.ReadEvent', null, global);
@@ -60,7 +62,7 @@ goog.exportSymbol('proto.event_store.grpc.streams.TombstoneReq.Options.ExpectedS
 goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.Empty', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.PositionOptionsCase', null, global);
+goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.UUID', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.UUID.Structured', null, global);
 goog.exportSymbol('proto.event_store.grpc.streams.UUID.ValueCase', null, global);
@@ -231,6 +233,27 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_);
+};
+goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.UUIDOption, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.UUIDOption';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -906,49 +929,49 @@ proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_ = [[1,2],[5,6],[7,8]
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptionsCase = {
-  STREAM_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase = {
+  STREAM_OPTION_NOT_SET: 0,
   STREAM: 1,
   ALL: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.StreamOptionsCase}
+ * @return {proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getStreamOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.StreamOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[0]));
+proto.event_store.grpc.streams.ReadReq.Options.prototype.getStreamOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[0]));
 };
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.CountOptionsCase = {
-  COUNT_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase = {
+  COUNT_OPTION_NOT_SET: 0,
   COUNT: 5,
   SUBSCRIPTION: 6
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.CountOptionsCase}
+ * @return {proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getCountOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.CountOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[1]));
+proto.event_store.grpc.streams.ReadReq.Options.prototype.getCountOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[1]));
 };
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptionsCase = {
-  FILTER_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase = {
+  FILTER_OPTION_NOT_SET: 0,
   FILTER: 7,
   NO_FILTER: 8
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.FilterOptionsCase}
+ * @return {proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getFilterOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.FilterOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[2]));
+proto.event_store.grpc.streams.ReadReq.Options.prototype.getFilterOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[2]));
 };
 
 
@@ -989,7 +1012,8 @@ proto.event_store.grpc.streams.ReadReq.Options.toObject = function(includeInstan
     count: jspb.Message.getFieldWithDefault(msg, 5, 0),
     subscription: (f = msg.getSubscription()) && proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.toObject(includeInstance, f),
     filter: (f = msg.getFilter()) && proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.toObject(includeInstance, f),
-    noFilter: (f = msg.getNoFilter()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    noFilter: (f = msg.getNoFilter()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
+    uuidOption: (f = msg.getUuidOption()) && proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1062,6 +1086,11 @@ proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader = fun
       var value = new proto.event_store.grpc.streams.ReadReq.Empty;
       reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
       msg.setNoFilter(value);
+      break;
+    case 9:
+      var value = new proto.event_store.grpc.streams.ReadReq.Options.UUIDOption;
+      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader);
+      msg.setUuidOption(value);
       break;
     default:
       reader.skipField();
@@ -1153,6 +1182,14 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
       proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
     );
   }
+  f = message.getUuidOption();
+  if (f != null) {
+    writer.writeMessage(
+      9,
+      f,
+      proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter
+    );
+  }
 };
 
 
@@ -1178,18 +1215,18 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_ = [[2,
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionsCase = {
-  REVISION_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase = {
+  REVISION_OPTION_NOT_SET: 0,
   REVISION: 2,
   START: 3,
   END: 4
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionsCase}
+ * @return {proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getRevisionOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0]));
+proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getRevisionOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0]));
 };
 
 
@@ -1470,18 +1507,18 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_ = [[1,2,3
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionsCase = {
-  ALL_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase = {
+  ALL_OPTION_NOT_SET: 0,
   POSITION: 1,
   START: 2,
   END: 3
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionsCase}
+ * @return {proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getAllOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0]));
+proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getAllOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0]));
 };
 
 
@@ -2484,6 +2521,226 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.hasCount 
 };
 
 
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_ = [[1,2]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase = {
+  CONTENT_NOT_SET: 0,
+  STRUCTURED: 1,
+  STRING: 2
+};
+
+/**
+ * @return {proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.getContentCase = function() {
+  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    structured: (f = msg.getStructured()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
+    string: (f = msg.getString()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.grpc.streams.ReadReq.Options.UUIDOption;
+  return proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
+      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      msg.setStructured(value);
+      break;
+    case 2:
+      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
+      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      msg.setString(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStructured();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getString();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional Empty structured = 1;
+ * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.getStructured = function() {
+  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 1));
+};
+
+
+/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.setStructured = function(value) {
+  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.clearStructured = function() {
+  this.setStructured(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.hasStructured = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional Empty string = 2;
+ * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.getString = function() {
+  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 2));
+};
+
+
+/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.setString = function(value) {
+  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.clearString = function() {
+  this.setString(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.hasString = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
 /**
  * optional StreamOptions stream = 1;
  * @return {?proto.event_store.grpc.streams.ReadReq.Options.StreamOptions}
@@ -2708,6 +2965,39 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearNoFilter = functio
  */
 proto.event_store.grpc.streams.ReadReq.Options.prototype.hasNoFilter = function() {
   return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional UUIDOption uuid_option = 9;
+ * @return {?proto.event_store.grpc.streams.ReadReq.Options.UUIDOption}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.prototype.getUuidOption = function() {
+  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption, 9));
+};
+
+
+/** @param {?proto.event_store.grpc.streams.ReadReq.Options.UUIDOption|undefined} value */
+proto.event_store.grpc.streams.ReadReq.Options.prototype.setUuidOption = function(value) {
+  jspb.Message.setWrapperField(this, 9, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.event_store.grpc.streams.ReadReq.Options.prototype.clearUuidOption = function() {
+  this.setUuidOption(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.grpc.streams.ReadReq.Options.prototype.hasUuidOption = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -4749,33 +5039,33 @@ proto.event_store.grpc.streams.AppendResp.oneofGroups_ = [[1,2],[3,4]];
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionsCase = {
-  CURRENT_REVISION_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase = {
+  CURRENT_REVISION_OPTION_NOT_SET: 0,
   CURRENT_REVISION: 1,
   NO_STREAM: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionsCase}
+ * @return {proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getCurrentRevisionOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendResp.oneofGroups_[0]));
+proto.event_store.grpc.streams.AppendResp.prototype.getCurrentRevisionOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendResp.oneofGroups_[0]));
 };
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.AppendResp.PositionOptionsCase = {
-  POSITION_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.AppendResp.PositionOptionCase = {
+  POSITION_OPTION_NOT_SET: 0,
   POSITION: 3,
   EMPTY: 4
 };
 
 /**
- * @return {proto.event_store.grpc.streams.AppendResp.PositionOptionsCase}
+ * @return {proto.event_store.grpc.streams.AppendResp.PositionOptionCase}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getPositionOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.AppendResp.PositionOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendResp.oneofGroups_[1]));
+proto.event_store.grpc.streams.AppendResp.prototype.getPositionOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.AppendResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendResp.oneofGroups_[1]));
 };
 
 
@@ -5919,17 +6209,17 @@ proto.event_store.grpc.streams.DeleteResp.oneofGroups_ = [[1,2]];
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.DeleteResp.PositionOptionsCase = {
-  POSITION_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.DeleteResp.PositionOptionCase = {
+  POSITION_OPTION_NOT_SET: 0,
   POSITION: 1,
   EMPTY: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.DeleteResp.PositionOptionsCase}
+ * @return {proto.event_store.grpc.streams.DeleteResp.PositionOptionCase}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.getPositionOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.DeleteResp.PositionOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.DeleteResp.oneofGroups_[0]));
+proto.event_store.grpc.streams.DeleteResp.prototype.getPositionOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.DeleteResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.DeleteResp.oneofGroups_[0]));
 };
 
 
@@ -6982,17 +7272,17 @@ proto.event_store.grpc.streams.TombstoneResp.oneofGroups_ = [[1,2]];
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.TombstoneResp.PositionOptionsCase = {
-  POSITION_OPTIONS_NOT_SET: 0,
+proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase = {
+  POSITION_OPTION_NOT_SET: 0,
   POSITION: 1,
   EMPTY: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.TombstoneResp.PositionOptionsCase}
+ * @return {proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.getPositionOptionsCase = function() {
-  return /** @type {proto.event_store.grpc.streams.TombstoneResp.PositionOptionsCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.TombstoneResp.oneofGroups_[0]));
+proto.event_store.grpc.streams.TombstoneResp.prototype.getPositionOptionCase = function() {
+  return /** @type {proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.TombstoneResp.oneofGroups_[0]));
 };
 
 

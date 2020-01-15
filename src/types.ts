@@ -1,17 +1,21 @@
 export class ResolvedEvent {
     event: EventRecord;
-    link: EventRecord;
-    originalEvent = this.event ?? this.link;
+    link: EventRecord | null;
+    originalEvent: EventRecord;
     originalPosition: Position | null;
-    originalStreamId = this.originalEvent.eventStreamId;
-    originalEventNumber = this.originalEvent.eventNumber;
+    originalStreamId: string;
+    originalEventNumber: StreamRevision;
 
-    constructor(event: EventRecord, link: EventRecord, commitPosition: number | null) {
+    constructor(event: EventRecord, link: EventRecord | null, commitPosition: number | null) {
         this.event = event;
         this.link = link;
+        
+        this.originalEvent = this.event ?? this.link;
+        this.originalStreamId = this.originalEvent.eventStreamId;
+        this.originalEventNumber = this.originalEvent.eventNumber;
 
         if (commitPosition !== null) {
-            this.originalPosition = new Position(commitPosition, (link ?? event).position.preparePosition)
+            this.originalPosition = new Position(commitPosition, this.originalEvent.position.preparePosition)
         } else {
             this.originalPosition = null;
         }
@@ -73,8 +77,9 @@ export class Filter {
 
 }
 
-export class UserCredentials {
-
+export interface UserCredentials {
+    username: string;
+    password: string;
 }
 
 export class ConnectionSettings {
