@@ -1,4 +1,4 @@
-import {RequestStream, StreamsClient} from "../generated/streams_pb_service";
+import {RequestStream, Status, StreamsClient} from "../generated/streams_pb_service";
 import {AppendReq} from "../generated/streams_pb";
 import {Credentials, EventData, IRevision, Revision} from "./types";
 import {Empty, StreamIdentifier, UUID} from "../generated/shared_pb";
@@ -13,7 +13,7 @@ export class Streams {
 
 export class WriteEvents {
     private client: StreamsClient;
-    private stream: string;
+    private readonly stream: string;
     private revision: IRevision;
     private credentials: Credentials | null;
 
@@ -91,6 +91,34 @@ export class AppendStream {
                 message.setData(JSON.stringify(item.payload));
             }
         }
+
+        req.setProposedMessage(message);
+        this.requestStream.write(req);
+    }
+
+    end(): AppendResponse {
+        this.requestStream.end();
+        return new AppendResponse(this.requestStream);
+    }
+
+    cancel(): void {
+        this.requestStream.cancel();
+    }
+}
+
+export class AppendResponse {
+    private requestStream: RequestStream<AppendReq>;
+
+    constructor(requestStream: RequestStream<AppendReq>) {
+        this.requestStream = requestStream;
+    }
+
+    onEnd(cb: (status?: Status) => void): void {
+        this.requestStream.on("end", cb);
+    }
+
+    onStatus(cb: (status: Status) => void): void {
+        this.requestStream.on("status", cb);
     }
 }
 
