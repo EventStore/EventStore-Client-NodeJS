@@ -22,17 +22,6 @@ export class Credentials {
 }
 
 export class EventStoreConnectionBuilder {
-  protected credentials: Credentials | null;
-
-  constructor() {
-    this.credentials = null;
-  }
-
-  authenticated(credentials: Credentials): EventStoreConnectionBuilder {
-    this.credentials = credentials;
-    return this;
-  }
-
   build(uri: string): EventStoreConnection {
     return new EventStoreConnection(uri);
   }

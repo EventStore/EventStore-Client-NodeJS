@@ -1,53 +1,55 @@
 import { v4 as uuid } from 'uuid';
 
-export interface IRevision {
-    accept(visitor: RevisionVisitor): void;
+export type IRevision = AnyRevision | StreamExistsRevision | NoStreamRevision | ExactRevision;
+
+export type AnyRevision = {
+    __typename: 'any',
 }
 
-export interface RevisionVisitor {
-    onAny(): void;
-    onStreamExists(): void;
-    onNoStream(): void;
-    onExact(revision: number): void;
+export type StreamExistsRevision = {
+    __typename: 'stream_exists',
 }
 
-export class AnyRevision implements IRevision {
-    accept(visitor: RevisionVisitor): void {
-        visitor.onAny();
-    }
+export type NoStreamRevision = {
+    __typename: 'no_stream',
 }
 
-export class StreamExistRevision implements IRevision {
-    accept(visitor: RevisionVisitor): void {
-        visitor.onStreamExists();
-    }
-}
-
-export class NoStreamRevision implements IRevision {
-    accept(visitor: RevisionVisitor): void {
-        visitor.onNoStream();
-    }
-}
-
-export class ExactRevision implements IRevision {
-    revision: number;
-
-    constructor(revision: number) {
-        this.revision = revision;
-    }
-
-    accept(visitor: RevisionVisitor): void {
-        visitor.onExact(this.revision);
-    }
+export type ExactRevision = {
+    __typename: 'exact',
+    revision: number,
 }
 
 export class Revision {
-    static readonly Any: IRevision = new AnyRevision();
-    static readonly StreamExist: IRevision = new StreamExistRevision();
-    static readonly NoStream: IRevision = new NoStreamRevision();
+    static readonly Any: IRevision = {
+        __typename: 'any',
+    };
+
+    static readonly StreamExists: IRevision = {
+        __typename: "stream_exists",
+    };
+
+    static readonly NoStream: IRevision = {
+        __typename: "no_stream",
+    };
+
     static exact(revision: number): IRevision {
-        return new ExactRevision(revision);
+        return {
+            __typename: "exact",
+            revision,
+        };
     }
+}
+
+export type Payload = JsonPayload | BinaryPayload;
+
+type JsonPayload = {
+    __typename: "json",
+    payload: any,
+}
+
+type BinaryPayload = {
+    __typename: "binary",
+    payload: Uint8Array,
 }
 
 export class Credentials {
@@ -62,25 +64,31 @@ export class Credentials {
 
 export class EventDataBuilder {
     eventType: string;
-    payload: any;
+    payload: JsonPayload | BinaryPayload;
     id: string | null;
-    isJson: boolean;
 
-    private constructor(eventType: string, payload: any, id: string | null, isJson: boolean) {
+    private constructor(eventType: string, payload: JsonPayload | BinaryPayload, id: string | null) {
         this.eventType = eventType;
         this.payload = payload;
         this.id = id;
-        this.isJson = isJson;
     }
 
-    static json(eventType: string, payload: any): EventDataBuilder {
-        let builder = new EventDataBuilder(eventType, payload, null, true);
-        return builder;
+    static json(eventType: string, obj: any): EventDataBuilder {
+        let payload: JsonPayload = {
+            __typename: "json",
+            payload: obj,
+        };
+
+        return new EventDataBuilder(eventType, payload, null);
     }
 
-    static binary(eventType: string, payload: Uint8Array): EventDataBuilder {
-        let builder = new EventDataBuilder(eventType, payload, null, false);
-        return builder;
+    static binary(eventType: string, buffer: Uint8Array): EventDataBuilder {
+        let payload: BinaryPayload = {
+            __typename: "binary",
+            payload: buffer,
+        };
+
+        return new EventDataBuilder(eventType, payload, null);
     }
 
     eventId(id: string): EventDataBuilder {
@@ -90,21 +98,19 @@ export class EventDataBuilder {
 
     build(): EventData {
         let id: string = this.id != null ? this.id : uuid();
-        return new EventData(this.eventType, this.payload, id, this.isJson);
+        return new EventData(this.eventType, this.payload, id);
     }
 }
 
 export class EventData {
     eventType: string;
-    payload: any;
+    payload: JsonPayload | BinaryPayload;
     id: string;
-    isJson: boolean;
 
-    public constructor(eventType: string, payload: any, id: string, isJson: boolean) {
+    public constructor(eventType: string, payload: JsonPayload | BinaryPayload, id: string) {
         this.eventType = eventType;
         this.payload = payload;
         this.id = id;
-        this.isJson = isJson;
     }
 
     static json(eventType: string, payload: any): EventDataBuilder {

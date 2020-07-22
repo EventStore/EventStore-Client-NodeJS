@@ -1,6 +1,7 @@
-import { StreamsClient } from "../generated/streams_pb_service";
+import {RequestStream, StreamsClient} from "../generated/streams_pb_service";
 import {AppendReq} from "../generated/streams_pb";
-import {Credentials, IRevision, Revision} from "./types";
+import {Credentials, EventData, IRevision, Revision} from "./types";
+import {Empty, StreamIdentifier, UUID} from "../generated/shared_pb";
 
 export class Streams {
     private client: StreamsClient;
@@ -33,10 +34,63 @@ export class WriteEvents {
         return this;
     }
 
-    execute() {
+    start(): AppendStream {
         let header = new AppendReq();
         let options = new AppendReq.Options();
-        // this.client.append().write()
+        let identifier = new StreamIdentifier();
+
+        identifier.setStreamname(this.stream);
+        options.setStreamIdentifier(identifier);
+
+        switch (this.revision.__typename) {
+            case "exact": {
+                options.setRevision(this.revision.revision);
+            }
+
+            case "no_stream": {
+                options.setNoStream(new Empty());
+            }
+
+            case "stream_exists": {
+                options.setStreamExists(new Empty());
+            }
+
+            case "any": {
+                options.setAny(new Empty());
+            }
+        }
+        header.setOptions(options);
+
+        return new AppendStream(this.client.append().write(header));
+    }
+}
+
+export class AppendStream {
+    private requestStream: RequestStream<AppendReq>;
+
+    constructor(requestStream: RequestStream<AppendReq>) {
+        this.requestStream = requestStream;
+    }
+
+    send(item: EventData) {
+        let req = new AppendReq();
+        let message = new AppendReq.ProposedMessage();
+        let uuid = new UUID();
+
+        uuid.setString(item.id);
+        message.setId(uuid);
+        message.getMetadataMap().set("type", item.eventType);
+
+        switch (item.payload.__typename) {
+            case "binary": {
+                message.getMetadataMap().set("content-type", "application/octet-stream");
+            }
+
+            case "json": {
+                message.getMetadataMap().set("content-type", "application/json");
+                message.setData(JSON.stringify(item.payload));
+            }
+        }
     }
 }
 
