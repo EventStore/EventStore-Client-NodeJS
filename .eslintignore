@@ -2,4 +2,4 @@ node_modules
 dist
 generated
 protos
-.eslintrc.js
+**/*.js
