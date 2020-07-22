@@ -1,6 +1,7 @@
 // import * as fs from "fs";
 import * as grpc from "grpc";
 import { StreamsClient } from "../generated/streams_pb_service";
+import {Streams} from "./streams";
 // import * as streams from "./generated/streams_pb";
 // import { ReadReq, ReadResp } from "./generated/streams_pb";
 //import {Appends} from "./src/append";
@@ -65,7 +66,7 @@ export class EventStoreConnection {
     return new EventStoreConnectionBuilder();
   }
 
-  streams() {
-    return new StreamsClient("hello");
+  streams(): Streams {
+    return new Streams(this._uri);
   }
 }
