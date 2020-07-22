@@ -1,8 +1,10 @@
-import {AnyStreamRevision, ConnectionSettings, EventData, EventStoreConnection} from '../index';
+//import {AnyStreamRevision, ConnectionSettings, EventData, EventStoreConnection} from '../index';
+import * as eventstore from '../index';
 let uuid = require('uuid/v1');
 
 describe('append_to_stream', function () {
     it('should successfully append events to stream', () => {
+        let connection = eventstore.EventStoreConnection.builder();
         // Connect to client
         let connectionSettings = new ConnectionSettings("/Users/mat-mcloughlin/git/eventStore/src/dev-ca/server1.pem");
         let client = new EventStoreConnection('localhost:2113', 'admin', 'changeit', connectionSettings);

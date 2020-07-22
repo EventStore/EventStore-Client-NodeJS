@@ -1,31 +1,52 @@
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
-var streamsService = require("./src/generated/streams_grpc_pb");
+exports.EventStoreConnection = exports.EventStoreConnectionBuilder = exports.Credentials = void 0;
 var grpc = require("grpc");
-var append_1 = require("./src/append");
-var reads_1 = require("./src/reads");
-var EventStoreConnection = /** @class */ (function () {
-    function EventStoreConnection(uri, username, password, connectionSettings) {
-        this.appendToStream = append_1.Appends.prototype.appendToStream;
-        this.readAllForwards = reads_1.Reads.prototype.readAllForwards;
-        this._uri = uri;
+var Credentials = /** @class */ (function () {
+    function Credentials(username, password) {
         this.username = username;
         this.password = password;
-        this._connectionSettings = connectionSettings;
-        var credentials = grpc.credentials.createInsecure();
-        if (connectionSettings !== null) {
-            if (connectionSettings.sslCertificate !== null) {
-                var cert = fs.readFileSync(connectionSettings.sslCertificate);
-                credentials = grpc.credentials.createSsl(cert);
-            }
-        }
-        this.service = new streamsService.StreamsClient("localhost:2113", credentials);
     }
+    return Credentials;
+}());
+exports.Credentials = Credentials;
+var EventStoreConnectionBuilder = /** @class */ (function () {
+    function EventStoreConnectionBuilder() {
+        this.credentials = null;
+    }
+    EventStoreConnectionBuilder.prototype.authenticated = function (credentials) {
+        this.credentials = credentials;
+        return this;
+    };
+    EventStoreConnectionBuilder.prototype.build = function (uri) {
+        return new EventStoreConnection(uri);
+    };
+    return EventStoreConnectionBuilder;
+}());
+exports.EventStoreConnectionBuilder = EventStoreConnectionBuilder;
+var EventStoreConnection = /** @class */ (function () {
+    // protected service: streamsService.StreamsClient;
+    //
+    // appendToStream = Appends.prototype.appendToStream;
+    //
+    // readAllForwards = Reads.prototype.readAllForwards;
+    function EventStoreConnection(uri) {
+        this._uri = uri;
+        var credentials = grpc.credentials.createInsecure();
+        // if (connectionSettings !== null) {
+        //     if (connectionSettings.sslCertificate !== null) {
+        //         let cert = fs.readFileSync(connectionSettings.sslCertificate);
+        //         credentials = grpc.credentials.createSsl(cert);
+        //     }
+        // }
+        //this.service = new streamsService.StreamsClient("localhost:2113", credentials);
+    }
+    EventStoreConnection.builder = function () {
+        return new EventStoreConnectionBuilder();
+    };
+    EventStoreConnection.prototype.streams = function () {
+        null;
+    };
     return EventStoreConnection;
 }());
 exports.EventStoreConnection = EventStoreConnection;
-__export(require("./src/types"));

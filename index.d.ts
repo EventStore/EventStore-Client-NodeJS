@@ -1,18 +1,18 @@
-import * as streamsService from './src/generated/streams_grpc_pb';
-import * as types from "./src/types";
+import * as streams_service from './src/generated/streams_grpc_pb';
+export declare class Credentials {
+    username: string;
+    password: string;
+    constructor(username: string, password: string);
+}
+export declare class EventStoreConnectionBuilder {
+    protected credentials: Credentials | null;
+    constructor();
+    authenticated(credentials: Credentials): EventStoreConnectionBuilder;
+    build(uri: string): EventStoreConnection;
+}
 export declare class EventStoreConnection {
     private _uri;
-    private _connectionSettings;
-    protected username: string;
-    protected password: string;
-    protected service: streamsService.StreamsClient;
-    appendToStream: {
-        (this: EventStoreConnection, streamName: string, expectedRevision: types.StreamRevision, eventData: types.EventData[], userCredentials: types.UserCredentials): void;
-        (this: EventStoreConnection, streamName: string, expectedRevision: types.AnyStreamRevision, eventData: types.EventData[], userCredentials: types.UserCredentials): void;
-        (this: EventStoreConnection, streamName: string, expectedRevision: types.StreamRevision, eventData: types.EventData[]): void;
-        (this: EventStoreConnection, streamName: string, expectedRevision: types.AnyStreamRevision, eventData: types.EventData[]): void;
-    };
-    readAllForwards: (this: EventStoreConnection, position: types.Position, maxCount: number, resolveLinksTo: boolean, filter: types.Filter, userCredentials?: types.UserCredentials | undefined) => Promise<types.ResolvedEvent[]>;
-    constructor(uri: string, username: string, password: string, connectionSettings: types.ConnectionSettings | null);
+    constructor(uri: string);
+    static builder(): EventStoreConnectionBuilder;
+    streams(): streams_service.StreamsClient;
 }
-export * from './src/types';

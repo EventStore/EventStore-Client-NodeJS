@@ -1,44 +1,72 @@
 import * as fs from "fs";
-import * as streamsService from './src/generated/streams_grpc_pb';
-import * as streams from './src/generated/streams_pb';
 import * as grpc from "grpc";
-import * as types from "./src/types";
+import * as streams_service from './src/generated/streams_grpc_pb';
+import * as streams from './src/generated/streams_pb';
 import {ReadReq, ReadResp} from "./src/generated/streams_pb";
-import {Appends} from "./src/append";
-import {Reads} from "./src/reads";
+//import {Appends} from "./src/append";
+//import {Reads} from "./src/reads";
+
+//const streams_service = require('./src/generated/streams_grpc_pb');
 
 type Nullable<T> = T | null;
+
+export class Credentials {
+    public username: string;
+    public password: string;
+
+    constructor(username: string, password: string) {
+        this.username = username;
+        this.password = password;
+    }
+}
+
+export class EventStoreConnectionBuilder {
+    protected credentials: Credentials | null;
+
+    constructor() {
+        this.credentials = null;
+    }
+
+    authenticated(credentials: Credentials): EventStoreConnectionBuilder {
+        this.credentials = credentials;
+        return this;
+    }
+
+    build(uri: string): EventStoreConnection {
+        return new EventStoreConnection(uri);
+    }
+}
 
 export class EventStoreConnection {
 
     // TODO: We need to handle logging levels
     private _uri: string;
-    private _connectionSettings: Nullable<types.ConnectionSettings>;
 
-    protected username: string;
-    protected password: string;
-    protected service: streamsService.StreamsClient;
+    // protected service: streamsService.StreamsClient;
+    //
+    // appendToStream = Appends.prototype.appendToStream;
+    //
+    // readAllForwards = Reads.prototype.readAllForwards;
 
-    appendToStream = Appends.prototype.appendToStream;
-
-    readAllForwards = Reads.prototype.readAllForwards;
-
-    constructor(uri: string, username: string, password: string, connectionSettings: types.ConnectionSettings | null) {
+    constructor(uri: string) {
         this._uri = uri;
-        this.username = username;
-        this.password = password;
-        this._connectionSettings = connectionSettings;
 
         let credentials = grpc.credentials.createInsecure();
-        if (connectionSettings !== null) {
-            if (connectionSettings.sslCertificate !== null) {
-                let cert = fs.readFileSync(connectionSettings.sslCertificate);
-                credentials = grpc.credentials.createSsl(cert);
-            }
-        }
+        // if (connectionSettings !== null) {
+        //     if (connectionSettings.sslCertificate !== null) {
+        //         let cert = fs.readFileSync(connectionSettings.sslCertificate);
+        //         credentials = grpc.credentials.createSsl(cert);
+        //     }
+        // }
 
-        this.service = new streamsService.StreamsClient("localhost:2113", credentials);
+        //this.service = new streamsService.StreamsClient("localhost:2113", credentials);
+    }
+
+    static builder(): EventStoreConnectionBuilder {
+        return new EventStoreConnectionBuilder();
+    }
+
+    streams(): streams_service.StreamsClient {
+        null
     }
 }
-
-export * from './src/types'
