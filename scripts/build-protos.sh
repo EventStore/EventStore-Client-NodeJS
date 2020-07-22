@@ -3,21 +3,17 @@
 BASEDIR=$(dirname "$0")
 cd ${BASEDIR}/../
 
-PROTO_DEST=./src/generated
+# Path to this plugin, Note this must be an abolsute path on Windows (see #15)
+PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 
-mkdir -p ${PROTO_DEST}
+# Directory to write generated code to (.js and .d.ts files)
+OUT_DIR="./generated"
 
-# JavaScript code generation
-yarn run grpc_tools_node_protoc \
-    --js_out=import_style=commonjs,binary:${PROTO_DEST} \
-    --grpc_out=${PROTO_DEST} \
-    --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin \
-    -I ./protos \
-    protos/*.proto
+mkdir -p ${OUT_DIR}
 
-# TypeScript code generation
-yarn run grpc_tools_node_protoc \
-    --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
-    --ts_out=${PROTO_DEST} \
+yarn grpc_tools_node_protoc \
+    --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
+    --js_out="import_style=commonjs,binary:${OUT_DIR}" \
+    --ts_out="service=grpc-web:${OUT_DIR}" \
     -I ./protos \
     protos/*.proto

@@ -2,12 +2,18 @@
   "name": "eventstore-client-nodejs",
   "version": "1.0.0",
   "description": "Client API for Event Store v6 for NodeJS",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "generate": "(cd scripts; bash ./generate-protos.sh)",
+    "generate": "./scripts/build-protos.sh",
     "test": "npm run build; mocha -r ts-node/register test/*.ts",
-    "build": "npm run generate; tsc"
+    "clean": "rm -rf ./dist",
+    "build": "run-s generate build:*",
+    "build:ts": "tsc"
   },
+  "files": [
+    "dist/",
+    "generated/"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
@@ -22,19 +28,17 @@
     "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
   },
   "homepage": "https://github.com/EventStore/EventStore-Client-NodeJS#readme",
+  "dependencies": {
+    "grpc": "^1.24.3",
+    "google-protobuf": "^3.10.0",
+    "@improbable-eng/grpc-web": "^0.13.0"
+  },
   "devDependencies": {
     "@types/google-protobuf": "^3.7.2",
-    "@types/mocha": "^5.2.7",
-    "mocha": "^6.2.2",
-    "ts-node": "^8.5.2",
-    "ts-protoc-gen": "^0.12.0",
-    "typescript": "^3.7.4",
-    "uuid": "^3.3.3"
-  },
-  "dependencies": {
-    "google-protobuf": "^3.10.0",
-    "grpc": "^1.24.3",
     "grpc-tools": "^1.9.1",
-    "grpc_tools_node_protoc_ts": "^4.1.0"
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.5",
+    "ts-protoc-gen": "^0.12.0",
+    "typescript": "^3.9.7"
   }
 }
