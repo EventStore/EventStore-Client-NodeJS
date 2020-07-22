@@ -1,13 +1,32 @@
-import {RequestStream, Status, StreamsClient} from "../generated/streams_pb_service";
-import {AppendReq} from "../generated/streams_pb";
-import {Credentials, EventData, IRevision, Revision} from "./types";
+import {RequestStream, ResponseStream, Status, StreamsClient} from "../generated/streams_pb_service";
+import {AppendReq, ReadReq, ReadResp} from "../generated/streams_pb";
+import {
+    Backward,
+    Credentials,
+    Direction,
+    EventData,
+    Forward,
+    IRevision,
+    Revision, StreamEnd, StreamExact,
+    StreamRevision,
+    StreamStart
+} from "./types";
 import {Empty, StreamIdentifier, UUID} from "../generated/shared_pb";
+import UUIDOption = ReadReq.Options.UUIDOption;
 
 export class Streams {
-    private client: StreamsClient;
+    private readonly client: StreamsClient;
 
     constructor(uri: string) {
         this.client = new StreamsClient(uri);
+    }
+
+    writeEvents(stream: string): WriteEvents {
+        return new WriteEvents(this.client, stream);
+    }
+
+    readStream(stream: string): ReadStreamEvents {
+        return new ReadStreamEvents(this.client, stream);
     }
 }
 
@@ -119,6 +138,139 @@ export class AppendResponse {
 
     onStatus(cb: (status: Status) => void): void {
         this.requestStream.on("status", cb);
+    }
+}
+
+export class ReadStreamEvents {
+    private client: StreamsClient;
+    private stream: string;
+    private revision: StreamRevision;
+    private resolveLinkTos: boolean;
+    private direction: Direction;
+    private credentials: Credentials | null;
+
+    constructor(client: StreamsClient, stream: string) {
+        this.client = client;
+        this.stream = stream;
+        this.revision = StreamStart;
+        this.credentials = null;
+        this.resolveLinkTos = false;
+        this.direction = Forward;
+    }
+
+    forward(): ReadStreamEvents {
+        this.direction = Forward;
+        return this;
+    }
+
+    backward(): ReadStreamEvents {
+        this.direction = Backward;
+        return this;
+    }
+
+    readDirection(direction: Direction): ReadStreamEvents {
+        this.direction = direction;
+        return this;
+    }
+
+    fromRevision(revision: number): ReadStreamEvents {
+        this.revision = StreamExact(revision);
+        return this;
+    }
+
+    fromStart(): ReadStreamEvents {
+        this.revision = StreamStart;
+        return this;
+    }
+
+    fromEnd(): ReadStreamEvents {
+        this.revision = StreamEnd;
+        return this;
+    }
+
+    authenticated(credentials: Credentials): ReadStreamEvents {
+        this.credentials = credentials;
+        return this;
+    }
+
+    resolveLink(): ReadStreamEvents {
+        this.resolveLinkTos = true;
+        return this;
+    }
+
+    doNotResolveLink(): ReadStreamEvents {
+        this.resolveLinkTos = false;
+        return this;
+    }
+
+    execute(count: number): ReadStreamResponse {
+        let req = new ReadReq();
+        const options = new ReadReq.Options();
+        const identifier = new StreamIdentifier();
+        identifier.setStreamname(this.stream);
+
+        const uuidOption = new UUIDOption();
+        uuidOption.setString(new Empty());
+
+        const streamOptions = new ReadReq.Options.StreamOptions();
+        streamOptions.setStreamIdentifier(identifier);
+
+        switch (this.revision.__typename) {
+            case "exact": {
+                streamOptions.setRevision(this.revision.revision);
+            }
+
+            case "start": {
+                streamOptions.setStart(new Empty());
+            }
+
+            case "end": {
+                streamOptions.setEnd(new Empty());
+            }
+        }
+
+        options.setStream(streamOptions);
+        options.setResolveLinks(this.resolveLinkTos);
+        options.setCount(count);
+        options.setUuidOption(uuidOption);
+
+        switch (this.direction.__typename) {
+            case "forward": {
+                options.setReadDirection(0);
+            }
+
+            case "backward": {
+                options.setReadDirection(1);
+            }
+        }
+
+        req.setOptions(options);
+
+        return new ReadStreamResponse(this.client.read(req));
+    }
+}
+
+export class ReadStreamResponse {
+    private readResponse: ResponseStream<ReadResp>;
+
+    constructor (readResponse: ResponseStream<ReadResp>){
+        this.readResponse = readResponse;
+    }
+
+    cancel() {
+        this.readResponse.cancel();
+    }
+
+    onEvent(cb: (resp: ReadResp) => void) {
+        this.readResponse.on("data", cb);
+    }
+
+    onEnd(cb: (status?: Status) => void) {
+        this.readResponse.on("end", cb);
+    }
+
+    onStatus(cb: (status: Status) => void) {
+        this.readResponse.on("status", cb);
     }
 }
 

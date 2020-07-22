@@ -121,3 +121,61 @@ export class EventData {
         return EventDataBuilder.binary(eventType, payload);
     }
 }
+
+export type Direction = Forward | Backward;
+
+export type Forward = {
+    __typename: "forward",
+}
+
+export const Forward: Forward = {
+    __typename: "forward",
+}
+
+export type Backward = {
+    __typename: "backward",
+}
+
+export const Backward: Backward = {
+    __typename: "backward",
+}
+
+export class ReadDirection {
+    static readonly Forward: Forward = {
+        __typename: "forward",
+    };
+
+    static readonly Backward: Backward = {
+        __typename: "backward",
+    };
+}
+
+export type StreamRevision = StreamStart | StreamEnd | StreamExact;
+
+export type StreamStart = {
+    __typename: "start",
+}
+
+export type StreamEnd = {
+    __typename: "end",
+}
+
+export type StreamExact = {
+    __typename: "exact",
+    revision: number,
+}
+
+export const StreamStart: StreamStart = {
+    __typename: "start",
+}
+
+export const StreamEnd: StreamEnd = {
+    __typename: "end",
+}
+
+export const StreamExact = (revision: number): StreamExact => {
+    return {
+        __typename: "exact",
+        revision,
+    };
+};
