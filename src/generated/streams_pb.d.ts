@@ -1,7 +1,8 @@
-// package: event_store.grpc.streams
+// package: event_store.client.streams
 // file: streams.proto
 
 import * as jspb from "google-protobuf";
+import * as shared_pb from "./shared_pb";
 
 export class ReadReq extends jspb.Message {
   hasOptions(): boolean;
@@ -58,8 +59,8 @@ export namespace ReadReq {
 
     hasNoFilter(): boolean;
     clearNoFilter(): void;
-    getNoFilter(): ReadReq.Empty | undefined;
-    setNoFilter(value?: ReadReq.Empty): void;
+    getNoFilter(): shared_pb.Empty | undefined;
+    setNoFilter(value?: shared_pb.Empty): void;
 
     hasUuidOption(): boolean;
     clearUuidOption(): void;
@@ -88,13 +89,15 @@ export namespace ReadReq {
       count: number,
       subscription?: ReadReq.Options.SubscriptionOptions.AsObject,
       filter?: ReadReq.Options.FilterOptions.AsObject,
-      noFilter?: ReadReq.Empty.AsObject,
+      noFilter?: shared_pb.Empty.AsObject,
       uuidOption?: ReadReq.Options.UUIDOption.AsObject,
     }
 
     export class StreamOptions extends jspb.Message {
-      getStreamName(): string;
-      setStreamName(value: string): void;
+      hasStreamIdentifier(): boolean;
+      clearStreamIdentifier(): void;
+      getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+      setStreamIdentifier(value?: shared_pb.StreamIdentifier): void;
 
       hasRevision(): boolean;
       clearRevision(): void;
@@ -103,13 +106,13 @@ export namespace ReadReq {
 
       hasStart(): boolean;
       clearStart(): void;
-      getStart(): ReadReq.Empty | undefined;
-      setStart(value?: ReadReq.Empty): void;
+      getStart(): shared_pb.Empty | undefined;
+      setStart(value?: shared_pb.Empty): void;
 
       hasEnd(): boolean;
       clearEnd(): void;
-      getEnd(): ReadReq.Empty | undefined;
-      setEnd(value?: ReadReq.Empty): void;
+      getEnd(): shared_pb.Empty | undefined;
+      setEnd(value?: shared_pb.Empty): void;
 
       getRevisionOptionCase(): StreamOptions.RevisionOptionCase;
       serializeBinary(): Uint8Array;
@@ -124,10 +127,10 @@ export namespace ReadReq {
 
     export namespace StreamOptions {
       export type AsObject = {
-        streamName: string,
+        streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
         revision: number,
-        start?: ReadReq.Empty.AsObject,
-        end?: ReadReq.Empty.AsObject,
+        start?: shared_pb.Empty.AsObject,
+        end?: shared_pb.Empty.AsObject,
       }
 
       export enum RevisionOptionCase {
@@ -146,13 +149,13 @@ export namespace ReadReq {
 
       hasStart(): boolean;
       clearStart(): void;
-      getStart(): ReadReq.Empty | undefined;
-      setStart(value?: ReadReq.Empty): void;
+      getStart(): shared_pb.Empty | undefined;
+      setStart(value?: shared_pb.Empty): void;
 
       hasEnd(): boolean;
       clearEnd(): void;
-      getEnd(): ReadReq.Empty | undefined;
-      setEnd(value?: ReadReq.Empty): void;
+      getEnd(): shared_pb.Empty | undefined;
+      setEnd(value?: shared_pb.Empty): void;
 
       getAllOptionCase(): AllOptions.AllOptionCase;
       serializeBinary(): Uint8Array;
@@ -168,8 +171,8 @@ export namespace ReadReq {
     export namespace AllOptions {
       export type AsObject = {
         position?: ReadReq.Options.Position.AsObject,
-        start?: ReadReq.Empty.AsObject,
-        end?: ReadReq.Empty.AsObject,
+        start?: shared_pb.Empty.AsObject,
+        end?: shared_pb.Empty.AsObject,
       }
 
       export enum AllOptionCase {
@@ -221,10 +224,10 @@ export namespace ReadReq {
     }
 
     export class FilterOptions extends jspb.Message {
-      hasStreamName(): boolean;
-      clearStreamName(): void;
-      getStreamName(): ReadReq.Options.FilterOptions.Expression | undefined;
-      setStreamName(value?: ReadReq.Options.FilterOptions.Expression): void;
+      hasStreamIdentifier(): boolean;
+      clearStreamIdentifier(): void;
+      getStreamIdentifier(): ReadReq.Options.FilterOptions.Expression | undefined;
+      setStreamIdentifier(value?: ReadReq.Options.FilterOptions.Expression): void;
 
       hasEventType(): boolean;
       clearEventType(): void;
@@ -238,8 +241,11 @@ export namespace ReadReq {
 
       hasCount(): boolean;
       clearCount(): void;
-      getCount(): ReadReq.Empty | undefined;
-      setCount(value?: ReadReq.Empty): void;
+      getCount(): shared_pb.Empty | undefined;
+      setCount(value?: shared_pb.Empty): void;
+
+      getCheckpointintervalmultiplier(): number;
+      setCheckpointintervalmultiplier(value: number): void;
 
       getFilterCase(): FilterOptions.FilterCase;
       getWindowCase(): FilterOptions.WindowCase;
@@ -255,10 +261,11 @@ export namespace ReadReq {
 
     export namespace FilterOptions {
       export type AsObject = {
-        streamName?: ReadReq.Options.FilterOptions.Expression.AsObject,
+        streamIdentifier?: ReadReq.Options.FilterOptions.Expression.AsObject,
         eventType?: ReadReq.Options.FilterOptions.Expression.AsObject,
         max: number,
-        count?: ReadReq.Empty.AsObject,
+        count?: shared_pb.Empty.AsObject,
+        checkpointintervalmultiplier: number,
       }
 
       export class Expression extends jspb.Message {
@@ -289,7 +296,7 @@ export namespace ReadReq {
 
       export enum FilterCase {
         FILTER_NOT_SET = 0,
-        STREAM_NAME = 1,
+        STREAM_IDENTIFIER = 1,
         EVENT_TYPE = 2,
       }
 
@@ -303,13 +310,13 @@ export namespace ReadReq {
     export class UUIDOption extends jspb.Message {
       hasStructured(): boolean;
       clearStructured(): void;
-      getStructured(): ReadReq.Empty | undefined;
-      setStructured(value?: ReadReq.Empty): void;
+      getStructured(): shared_pb.Empty | undefined;
+      setStructured(value?: shared_pb.Empty): void;
 
       hasString(): boolean;
       clearString(): void;
-      getString(): ReadReq.Empty | undefined;
-      setString(value?: ReadReq.Empty): void;
+      getString(): shared_pb.Empty | undefined;
+      setString(value?: shared_pb.Empty): void;
 
       getContentCase(): UUIDOption.ContentCase;
       serializeBinary(): Uint8Array;
@@ -324,8 +331,8 @@ export namespace ReadReq {
 
     export namespace UUIDOption {
       export type AsObject = {
-        structured?: ReadReq.Empty.AsObject,
-        string?: ReadReq.Empty.AsObject,
+        structured?: shared_pb.Empty.AsObject,
+        string?: shared_pb.Empty.AsObject,
       }
 
       export enum ContentCase {
@@ -360,22 +367,6 @@ export namespace ReadReq {
       NO_FILTER = 8,
     }
   }
-
-  export class Empty extends jspb.Message {
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
-  }
-
-  export namespace Empty {
-    export type AsObject = {
-    }
-  }
 }
 
 export class ReadResp extends jspb.Message {
@@ -384,6 +375,22 @@ export class ReadResp extends jspb.Message {
   getEvent(): ReadResp.ReadEvent | undefined;
   setEvent(value?: ReadResp.ReadEvent): void;
 
+  hasConfirmation(): boolean;
+  clearConfirmation(): void;
+  getConfirmation(): ReadResp.SubscriptionConfirmation | undefined;
+  setConfirmation(value?: ReadResp.SubscriptionConfirmation): void;
+
+  hasCheckpoint(): boolean;
+  clearCheckpoint(): void;
+  getCheckpoint(): ReadResp.Checkpoint | undefined;
+  setCheckpoint(value?: ReadResp.Checkpoint): void;
+
+  hasStreamNotFound(): boolean;
+  clearStreamNotFound(): void;
+  getStreamNotFound(): ReadResp.StreamNotFound | undefined;
+  setStreamNotFound(value?: ReadResp.StreamNotFound): void;
+
+  getContentCase(): ReadResp.ContentCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ReadResp.AsObject;
   static toObject(includeInstance: boolean, msg: ReadResp): ReadResp.AsObject;
@@ -397,6 +404,9 @@ export class ReadResp extends jspb.Message {
 export namespace ReadResp {
   export type AsObject = {
     event?: ReadResp.ReadEvent.AsObject,
+    confirmation?: ReadResp.SubscriptionConfirmation.AsObject,
+    checkpoint?: ReadResp.Checkpoint.AsObject,
+    streamNotFound?: ReadResp.StreamNotFound.AsObject,
   }
 
   export class ReadEvent extends jspb.Message {
@@ -417,8 +427,8 @@ export namespace ReadResp {
 
     hasNoPosition(): boolean;
     clearNoPosition(): void;
-    getNoPosition(): ReadResp.Empty | undefined;
-    setNoPosition(value?: ReadResp.Empty): void;
+    getNoPosition(): shared_pb.Empty | undefined;
+    setNoPosition(value?: shared_pb.Empty): void;
 
     getPositionCase(): ReadEvent.PositionCase;
     serializeBinary(): Uint8Array;
@@ -436,17 +446,19 @@ export namespace ReadResp {
       event?: ReadResp.ReadEvent.RecordedEvent.AsObject,
       link?: ReadResp.ReadEvent.RecordedEvent.AsObject,
       commitPosition: number,
-      noPosition?: ReadResp.Empty.AsObject,
+      noPosition?: shared_pb.Empty.AsObject,
     }
 
     export class RecordedEvent extends jspb.Message {
       hasId(): boolean;
       clearId(): void;
-      getId(): UUID | undefined;
-      setId(value?: UUID): void;
+      getId(): shared_pb.UUID | undefined;
+      setId(value?: shared_pb.UUID): void;
 
-      getStreamName(): string;
-      setStreamName(value: string): void;
+      hasStreamIdentifier(): boolean;
+      clearStreamIdentifier(): void;
+      getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+      setStreamIdentifier(value?: shared_pb.StreamIdentifier): void;
 
       getStreamRevision(): number;
       setStreamRevision(value: number): void;
@@ -481,8 +493,8 @@ export namespace ReadResp {
 
     export namespace RecordedEvent {
       export type AsObject = {
-        id?: UUID.AsObject,
-        streamName: string,
+        id?: shared_pb.UUID.AsObject,
+        streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
         streamRevision: number,
         preparePosition: number,
         commitPosition: number,
@@ -499,20 +511,78 @@ export namespace ReadResp {
     }
   }
 
-  export class Empty extends jspb.Message {
+  export class SubscriptionConfirmation extends jspb.Message {
+    getSubscriptionId(): string;
+    setSubscriptionId(value: string): void;
+
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
+    toObject(includeInstance?: boolean): SubscriptionConfirmation.AsObject;
+    static toObject(includeInstance: boolean, msg: SubscriptionConfirmation): SubscriptionConfirmation.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
+    static serializeBinaryToWriter(message: SubscriptionConfirmation, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SubscriptionConfirmation;
+    static deserializeBinaryFromReader(message: SubscriptionConfirmation, reader: jspb.BinaryReader): SubscriptionConfirmation;
   }
 
-  export namespace Empty {
+  export namespace SubscriptionConfirmation {
     export type AsObject = {
+      subscriptionId: string,
     }
+  }
+
+  export class Checkpoint extends jspb.Message {
+    getCommitPosition(): number;
+    setCommitPosition(value: number): void;
+
+    getPreparePosition(): number;
+    setPreparePosition(value: number): void;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Checkpoint.AsObject;
+    static toObject(includeInstance: boolean, msg: Checkpoint): Checkpoint.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Checkpoint, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Checkpoint;
+    static deserializeBinaryFromReader(message: Checkpoint, reader: jspb.BinaryReader): Checkpoint;
+  }
+
+  export namespace Checkpoint {
+    export type AsObject = {
+      commitPosition: number,
+      preparePosition: number,
+    }
+  }
+
+  export class StreamNotFound extends jspb.Message {
+    hasStreamIdentifier(): boolean;
+    clearStreamIdentifier(): void;
+    getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+    setStreamIdentifier(value?: shared_pb.StreamIdentifier): void;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): StreamNotFound.AsObject;
+    static toObject(includeInstance: boolean, msg: StreamNotFound): StreamNotFound.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: StreamNotFound, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): StreamNotFound;
+    static deserializeBinaryFromReader(message: StreamNotFound, reader: jspb.BinaryReader): StreamNotFound;
+  }
+
+  export namespace StreamNotFound {
+    export type AsObject = {
+      streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
+    }
+  }
+
+  export enum ContentCase {
+    CONTENT_NOT_SET = 0,
+    EVENT = 1,
+    CONFIRMATION = 2,
+    CHECKPOINT = 3,
+    STREAM_NOT_FOUND = 4,
   }
 }
 
@@ -545,8 +615,10 @@ export namespace AppendReq {
   }
 
   export class Options extends jspb.Message {
-    getStreamName(): string;
-    setStreamName(value: string): void;
+    hasStreamIdentifier(): boolean;
+    clearStreamIdentifier(): void;
+    getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+    setStreamIdentifier(value?: shared_pb.StreamIdentifier): void;
 
     hasRevision(): boolean;
     clearRevision(): void;
@@ -555,18 +627,18 @@ export namespace AppendReq {
 
     hasNoStream(): boolean;
     clearNoStream(): void;
-    getNoStream(): AppendReq.Empty | undefined;
-    setNoStream(value?: AppendReq.Empty): void;
+    getNoStream(): shared_pb.Empty | undefined;
+    setNoStream(value?: shared_pb.Empty): void;
 
     hasAny(): boolean;
     clearAny(): void;
-    getAny(): AppendReq.Empty | undefined;
-    setAny(value?: AppendReq.Empty): void;
+    getAny(): shared_pb.Empty | undefined;
+    setAny(value?: shared_pb.Empty): void;
 
     hasStreamExists(): boolean;
     clearStreamExists(): void;
-    getStreamExists(): AppendReq.Empty | undefined;
-    setStreamExists(value?: AppendReq.Empty): void;
+    getStreamExists(): shared_pb.Empty | undefined;
+    setStreamExists(value?: shared_pb.Empty): void;
 
     getExpectedStreamRevisionCase(): Options.ExpectedStreamRevisionCase;
     serializeBinary(): Uint8Array;
@@ -581,11 +653,11 @@ export namespace AppendReq {
 
   export namespace Options {
     export type AsObject = {
-      streamName: string,
+      streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
       revision: number,
-      noStream?: AppendReq.Empty.AsObject,
-      any?: AppendReq.Empty.AsObject,
-      streamExists?: AppendReq.Empty.AsObject,
+      noStream?: shared_pb.Empty.AsObject,
+      any?: shared_pb.Empty.AsObject,
+      streamExists?: shared_pb.Empty.AsObject,
     }
 
     export enum ExpectedStreamRevisionCase {
@@ -600,8 +672,8 @@ export namespace AppendReq {
   export class ProposedMessage extends jspb.Message {
     hasId(): boolean;
     clearId(): void;
-    getId(): UUID | undefined;
-    setId(value?: UUID): void;
+    getId(): shared_pb.UUID | undefined;
+    setId(value?: shared_pb.UUID): void;
 
     getMetadataMap(): jspb.Map<string, string>;
     clearMetadataMap(): void;
@@ -627,26 +699,10 @@ export namespace AppendReq {
 
   export namespace ProposedMessage {
     export type AsObject = {
-      id?: UUID.AsObject,
+      id?: shared_pb.UUID.AsObject,
       metadataMap: Array<[string, string]>,
       customMetadata: Uint8Array | string,
       data: Uint8Array | string,
-    }
-  }
-
-  export class Empty extends jspb.Message {
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
-  }
-
-  export namespace Empty {
-    export type AsObject = {
     }
   }
 
@@ -658,28 +714,17 @@ export namespace AppendReq {
 }
 
 export class AppendResp extends jspb.Message {
-  hasCurrentRevision(): boolean;
-  clearCurrentRevision(): void;
-  getCurrentRevision(): number;
-  setCurrentRevision(value: number): void;
+  hasSuccess(): boolean;
+  clearSuccess(): void;
+  getSuccess(): AppendResp.Success | undefined;
+  setSuccess(value?: AppendResp.Success): void;
 
-  hasNoStream(): boolean;
-  clearNoStream(): void;
-  getNoStream(): AppendResp.Empty | undefined;
-  setNoStream(value?: AppendResp.Empty): void;
+  hasWrongExpectedVersion(): boolean;
+  clearWrongExpectedVersion(): void;
+  getWrongExpectedVersion(): AppendResp.WrongExpectedVersion | undefined;
+  setWrongExpectedVersion(value?: AppendResp.WrongExpectedVersion): void;
 
-  hasPosition(): boolean;
-  clearPosition(): void;
-  getPosition(): AppendResp.Position | undefined;
-  setPosition(value?: AppendResp.Position): void;
-
-  hasEmpty(): boolean;
-  clearEmpty(): void;
-  getEmpty(): AppendResp.Empty | undefined;
-  setEmpty(value?: AppendResp.Empty): void;
-
-  getCurrentRevisionOptionCase(): AppendResp.CurrentRevisionOptionCase;
-  getPositionOptionCase(): AppendResp.PositionOptionCase;
+  getResultCase(): AppendResp.ResultCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AppendResp.AsObject;
   static toObject(includeInstance: boolean, msg: AppendResp): AppendResp.AsObject;
@@ -692,10 +737,8 @@ export class AppendResp extends jspb.Message {
 
 export namespace AppendResp {
   export type AsObject = {
-    currentRevision: number,
-    noStream?: AppendResp.Empty.AsObject,
-    position?: AppendResp.Position.AsObject,
-    empty?: AppendResp.Empty.AsObject,
+    success?: AppendResp.Success.AsObject,
+    wrongExpectedVersion?: AppendResp.WrongExpectedVersion.AsObject,
   }
 
   export class Position extends jspb.Message {
@@ -722,32 +765,125 @@ export namespace AppendResp {
     }
   }
 
-  export class Empty extends jspb.Message {
+  export class Success extends jspb.Message {
+    hasCurrentRevision(): boolean;
+    clearCurrentRevision(): void;
+    getCurrentRevision(): number;
+    setCurrentRevision(value: number): void;
+
+    hasNoStream(): boolean;
+    clearNoStream(): void;
+    getNoStream(): shared_pb.Empty | undefined;
+    setNoStream(value?: shared_pb.Empty): void;
+
+    hasPosition(): boolean;
+    clearPosition(): void;
+    getPosition(): AppendResp.Position | undefined;
+    setPosition(value?: AppendResp.Position): void;
+
+    hasNoPosition(): boolean;
+    clearNoPosition(): void;
+    getNoPosition(): shared_pb.Empty | undefined;
+    setNoPosition(value?: shared_pb.Empty): void;
+
+    getCurrentRevisionOptionCase(): Success.CurrentRevisionOptionCase;
+    getPositionOptionCase(): Success.PositionOptionCase;
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
+    toObject(includeInstance?: boolean): Success.AsObject;
+    static toObject(includeInstance: boolean, msg: Success): Success.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
+    static serializeBinaryToWriter(message: Success, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Success;
+    static deserializeBinaryFromReader(message: Success, reader: jspb.BinaryReader): Success;
   }
 
-  export namespace Empty {
+  export namespace Success {
     export type AsObject = {
+      currentRevision: number,
+      noStream?: shared_pb.Empty.AsObject,
+      position?: AppendResp.Position.AsObject,
+      noPosition?: shared_pb.Empty.AsObject,
+    }
+
+    export enum CurrentRevisionOptionCase {
+      CURRENT_REVISION_OPTION_NOT_SET = 0,
+      CURRENT_REVISION = 1,
+      NO_STREAM = 2,
+    }
+
+    export enum PositionOptionCase {
+      POSITION_OPTION_NOT_SET = 0,
+      POSITION = 3,
+      NO_POSITION = 4,
     }
   }
 
-  export enum CurrentRevisionOptionCase {
-    CURRENT_REVISION_OPTION_NOT_SET = 0,
-    CURRENT_REVISION = 1,
-    NO_STREAM = 2,
+  export class WrongExpectedVersion extends jspb.Message {
+    hasCurrentRevision(): boolean;
+    clearCurrentRevision(): void;
+    getCurrentRevision(): number;
+    setCurrentRevision(value: number): void;
+
+    hasNoStream(): boolean;
+    clearNoStream(): void;
+    getNoStream(): shared_pb.Empty | undefined;
+    setNoStream(value?: shared_pb.Empty): void;
+
+    hasExpectedRevision(): boolean;
+    clearExpectedRevision(): void;
+    getExpectedRevision(): number;
+    setExpectedRevision(value: number): void;
+
+    hasAny(): boolean;
+    clearAny(): void;
+    getAny(): shared_pb.Empty | undefined;
+    setAny(value?: shared_pb.Empty): void;
+
+    hasStreamExists(): boolean;
+    clearStreamExists(): void;
+    getStreamExists(): shared_pb.Empty | undefined;
+    setStreamExists(value?: shared_pb.Empty): void;
+
+    getCurrentRevisionOptionCase(): WrongExpectedVersion.CurrentRevisionOptionCase;
+    getExpectedRevisionOptionCase(): WrongExpectedVersion.ExpectedRevisionOptionCase;
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): WrongExpectedVersion.AsObject;
+    static toObject(includeInstance: boolean, msg: WrongExpectedVersion): WrongExpectedVersion.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: WrongExpectedVersion, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): WrongExpectedVersion;
+    static deserializeBinaryFromReader(message: WrongExpectedVersion, reader: jspb.BinaryReader): WrongExpectedVersion;
   }
 
-  export enum PositionOptionCase {
-    POSITION_OPTION_NOT_SET = 0,
-    POSITION = 3,
-    EMPTY = 4,
+  export namespace WrongExpectedVersion {
+    export type AsObject = {
+      currentRevision: number,
+      noStream?: shared_pb.Empty.AsObject,
+      expectedRevision: number,
+      any?: shared_pb.Empty.AsObject,
+      streamExists?: shared_pb.Empty.AsObject,
+    }
+
+    export enum CurrentRevisionOptionCase {
+      CURRENT_REVISION_OPTION_NOT_SET = 0,
+      CURRENT_REVISION = 1,
+      NO_STREAM = 2,
+    }
+
+    export enum ExpectedRevisionOptionCase {
+      EXPECTED_REVISION_OPTION_NOT_SET = 0,
+      EXPECTED_REVISION = 3,
+      ANY = 4,
+      STREAM_EXISTS = 5,
+    }
+  }
+
+  export enum ResultCase {
+    RESULT_NOT_SET = 0,
+    SUCCESS = 1,
+    WRONG_EXPECTED_VERSION = 2,
   }
 }
 
@@ -773,8 +909,10 @@ export namespace DeleteReq {
   }
 
   export class Options extends jspb.Message {
-    getStreamName(): string;
-    setStreamName(value: string): void;
+    hasStreamIdentifier(): boolean;
+    clearStreamIdentifier(): void;
+    getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+    setStreamIdentifier(value?: shared_pb.StreamIdentifier): void;
 
     hasRevision(): boolean;
     clearRevision(): void;
@@ -783,18 +921,18 @@ export namespace DeleteReq {
 
     hasNoStream(): boolean;
     clearNoStream(): void;
-    getNoStream(): DeleteReq.Empty | undefined;
-    setNoStream(value?: DeleteReq.Empty): void;
+    getNoStream(): shared_pb.Empty | undefined;
+    setNoStream(value?: shared_pb.Empty): void;
 
     hasAny(): boolean;
     clearAny(): void;
-    getAny(): DeleteReq.Empty | undefined;
-    setAny(value?: DeleteReq.Empty): void;
+    getAny(): shared_pb.Empty | undefined;
+    setAny(value?: shared_pb.Empty): void;
 
     hasStreamExists(): boolean;
     clearStreamExists(): void;
-    getStreamExists(): DeleteReq.Empty | undefined;
-    setStreamExists(value?: DeleteReq.Empty): void;
+    getStreamExists(): shared_pb.Empty | undefined;
+    setStreamExists(value?: shared_pb.Empty): void;
 
     getExpectedStreamRevisionCase(): Options.ExpectedStreamRevisionCase;
     serializeBinary(): Uint8Array;
@@ -809,11 +947,11 @@ export namespace DeleteReq {
 
   export namespace Options {
     export type AsObject = {
-      streamName: string,
+      streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
       revision: number,
-      noStream?: DeleteReq.Empty.AsObject,
-      any?: DeleteReq.Empty.AsObject,
-      streamExists?: DeleteReq.Empty.AsObject,
+      noStream?: shared_pb.Empty.AsObject,
+      any?: shared_pb.Empty.AsObject,
+      streamExists?: shared_pb.Empty.AsObject,
     }
 
     export enum ExpectedStreamRevisionCase {
@@ -824,22 +962,6 @@ export namespace DeleteReq {
       STREAM_EXISTS = 5,
     }
   }
-
-  export class Empty extends jspb.Message {
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
-  }
-
-  export namespace Empty {
-    export type AsObject = {
-    }
-  }
 }
 
 export class DeleteResp extends jspb.Message {
@@ -848,10 +970,10 @@ export class DeleteResp extends jspb.Message {
   getPosition(): DeleteResp.Position | undefined;
   setPosition(value?: DeleteResp.Position): void;
 
-  hasEmpty(): boolean;
-  clearEmpty(): void;
-  getEmpty(): DeleteResp.Empty | undefined;
-  setEmpty(value?: DeleteResp.Empty): void;
+  hasNoPosition(): boolean;
+  clearNoPosition(): void;
+  getNoPosition(): shared_pb.Empty | undefined;
+  setNoPosition(value?: shared_pb.Empty): void;
 
   getPositionOptionCase(): DeleteResp.PositionOptionCase;
   serializeBinary(): Uint8Array;
@@ -867,7 +989,7 @@ export class DeleteResp extends jspb.Message {
 export namespace DeleteResp {
   export type AsObject = {
     position?: DeleteResp.Position.AsObject,
-    empty?: DeleteResp.Empty.AsObject,
+    noPosition?: shared_pb.Empty.AsObject,
   }
 
   export class Position extends jspb.Message {
@@ -894,26 +1016,10 @@ export namespace DeleteResp {
     }
   }
 
-  export class Empty extends jspb.Message {
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
-  }
-
-  export namespace Empty {
-    export type AsObject = {
-    }
-  }
-
   export enum PositionOptionCase {
     POSITION_OPTION_NOT_SET = 0,
     POSITION = 1,
-    EMPTY = 2,
+    NO_POSITION = 2,
   }
 }
 
@@ -939,8 +1045,10 @@ export namespace TombstoneReq {
   }
 
   export class Options extends jspb.Message {
-    getStreamName(): string;
-    setStreamName(value: string): void;
+    hasStreamIdentifier(): boolean;
+    clearStreamIdentifier(): void;
+    getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+    setStreamIdentifier(value?: shared_pb.StreamIdentifier): void;
 
     hasRevision(): boolean;
     clearRevision(): void;
@@ -949,18 +1057,18 @@ export namespace TombstoneReq {
 
     hasNoStream(): boolean;
     clearNoStream(): void;
-    getNoStream(): TombstoneReq.Empty | undefined;
-    setNoStream(value?: TombstoneReq.Empty): void;
+    getNoStream(): shared_pb.Empty | undefined;
+    setNoStream(value?: shared_pb.Empty): void;
 
     hasAny(): boolean;
     clearAny(): void;
-    getAny(): TombstoneReq.Empty | undefined;
-    setAny(value?: TombstoneReq.Empty): void;
+    getAny(): shared_pb.Empty | undefined;
+    setAny(value?: shared_pb.Empty): void;
 
     hasStreamExists(): boolean;
     clearStreamExists(): void;
-    getStreamExists(): TombstoneReq.Empty | undefined;
-    setStreamExists(value?: TombstoneReq.Empty): void;
+    getStreamExists(): shared_pb.Empty | undefined;
+    setStreamExists(value?: shared_pb.Empty): void;
 
     getExpectedStreamRevisionCase(): Options.ExpectedStreamRevisionCase;
     serializeBinary(): Uint8Array;
@@ -975,11 +1083,11 @@ export namespace TombstoneReq {
 
   export namespace Options {
     export type AsObject = {
-      streamName: string,
+      streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
       revision: number,
-      noStream?: TombstoneReq.Empty.AsObject,
-      any?: TombstoneReq.Empty.AsObject,
-      streamExists?: TombstoneReq.Empty.AsObject,
+      noStream?: shared_pb.Empty.AsObject,
+      any?: shared_pb.Empty.AsObject,
+      streamExists?: shared_pb.Empty.AsObject,
     }
 
     export enum ExpectedStreamRevisionCase {
@@ -990,22 +1098,6 @@ export namespace TombstoneReq {
       STREAM_EXISTS = 5,
     }
   }
-
-  export class Empty extends jspb.Message {
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
-  }
-
-  export namespace Empty {
-    export type AsObject = {
-    }
-  }
 }
 
 export class TombstoneResp extends jspb.Message {
@@ -1014,10 +1106,10 @@ export class TombstoneResp extends jspb.Message {
   getPosition(): TombstoneResp.Position | undefined;
   setPosition(value?: TombstoneResp.Position): void;
 
-  hasEmpty(): boolean;
-  clearEmpty(): void;
-  getEmpty(): TombstoneResp.Empty | undefined;
-  setEmpty(value?: TombstoneResp.Empty): void;
+  hasNoPosition(): boolean;
+  clearNoPosition(): void;
+  getNoPosition(): shared_pb.Empty | undefined;
+  setNoPosition(value?: shared_pb.Empty): void;
 
   getPositionOptionCase(): TombstoneResp.PositionOptionCase;
   serializeBinary(): Uint8Array;
@@ -1033,7 +1125,7 @@ export class TombstoneResp extends jspb.Message {
 export namespace TombstoneResp {
   export type AsObject = {
     position?: TombstoneResp.Position.AsObject,
-    empty?: TombstoneResp.Empty.AsObject,
+    noPosition?: shared_pb.Empty.AsObject,
   }
 
   export class Position extends jspb.Message {
@@ -1060,85 +1152,10 @@ export namespace TombstoneResp {
     }
   }
 
-  export class Empty extends jspb.Message {
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Empty.AsObject;
-    static toObject(includeInstance: boolean, msg: Empty): Empty.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Empty, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Empty;
-    static deserializeBinaryFromReader(message: Empty, reader: jspb.BinaryReader): Empty;
-  }
-
-  export namespace Empty {
-    export type AsObject = {
-    }
-  }
-
   export enum PositionOptionCase {
     POSITION_OPTION_NOT_SET = 0,
     POSITION = 1,
-    EMPTY = 2,
-  }
-}
-
-export class UUID extends jspb.Message {
-  hasStructured(): boolean;
-  clearStructured(): void;
-  getStructured(): UUID.Structured | undefined;
-  setStructured(value?: UUID.Structured): void;
-
-  hasString(): boolean;
-  clearString(): void;
-  getString(): string;
-  setString(value: string): void;
-
-  getValueCase(): UUID.ValueCase;
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): UUID.AsObject;
-  static toObject(includeInstance: boolean, msg: UUID): UUID.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: UUID, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): UUID;
-  static deserializeBinaryFromReader(message: UUID, reader: jspb.BinaryReader): UUID;
-}
-
-export namespace UUID {
-  export type AsObject = {
-    structured?: UUID.Structured.AsObject,
-    string: string,
-  }
-
-  export class Structured extends jspb.Message {
-    getMostSignificantBits(): number;
-    setMostSignificantBits(value: number): void;
-
-    getLeastSignificantBits(): number;
-    setLeastSignificantBits(value: number): void;
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Structured.AsObject;
-    static toObject(includeInstance: boolean, msg: Structured): Structured.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Structured, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Structured;
-    static deserializeBinaryFromReader(message: Structured, reader: jspb.BinaryReader): Structured;
-  }
-
-  export namespace Structured {
-    export type AsObject = {
-      mostSignificantBits: number,
-      leastSignificantBits: number,
-    }
-  }
-
-  export enum ValueCase {
-    VALUE_NOT_SET = 0,
-    STRUCTURED = 1,
-    STRING = 2,
+    NO_POSITION = 2,
   }
 }
 

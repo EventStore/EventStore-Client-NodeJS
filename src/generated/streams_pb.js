@@ -12,60 +12,60 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
-goog.exportSymbol('proto.event_store.grpc.streams.AppendReq', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.ContentCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.Options', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.Options.ExpectedStreamRevisionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendReq.ProposedMessage', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.AppendResp.PositionOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq.Options', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteReq.Options.ExpectedStreamRevisionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.DeleteResp.PositionOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.AllOptions', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.FilterCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.WindowCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.ReadDirection', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptions', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.UUIDOption', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadResp', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadResp.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadResp.ReadEvent', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadResp.ReadEvent.PositionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneReq', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneReq.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneReq.Options', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneReq.Options.ExpectedStreamRevisionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.Empty', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.Position', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.UUID', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.UUID.Structured', null, global);
-goog.exportSymbol('proto.event_store.grpc.streams.UUID.ValueCase', null, global);
+var shared_pb = require('./shared_pb.js');
+goog.object.extend(proto, shared_pb);
+goog.exportSymbol('proto.event_store.client.streams.AppendReq', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendReq.ContentCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendReq.Options.ExpectedStreamRevisionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendReq.ProposedMessage', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.Position', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.ResultCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.Success', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.Success.CurrentRevisionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.Success.PositionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.DeleteReq', null, global);
+goog.exportSymbol('proto.event_store.client.streams.DeleteReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.streams.DeleteReq.Options.ExpectedStreamRevisionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.DeleteResp', null, global);
+goog.exportSymbol('proto.event_store.client.streams.DeleteResp.Position', null, global);
+goog.exportSymbol('proto.event_store.client.streams.DeleteResp.PositionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.AllOptions', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.AllOptions.AllOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.CountOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.FilterOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.FilterOptions', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.FilterOptions.FilterCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.FilterOptions.WindowCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.Position', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.ReadDirection', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.StreamOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.StreamOptions', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.StreamOptions.RevisionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.UUIDOption', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadReq.Options.UUIDOption.ContentCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.Checkpoint', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.ContentCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.ReadEvent', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.ReadEvent.PositionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.StreamNotFound', null, global);
+goog.exportSymbol('proto.event_store.client.streams.ReadResp.SubscriptionConfirmation', null, global);
+goog.exportSymbol('proto.event_store.client.streams.TombstoneReq', null, global);
+goog.exportSymbol('proto.event_store.client.streams.TombstoneReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.streams.TombstoneReq.Options.ExpectedStreamRevisionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.TombstoneResp', null, global);
+goog.exportSymbol('proto.event_store.client.streams.TombstoneResp.Position', null, global);
+goog.exportSymbol('proto.event_store.client.streams.TombstoneResp.PositionOptionCase', null, global);
 /**
  * Generated by JsPbCodeGenerator.
  * @param {Array=} opt_data Optional initial data array, typically from a
@@ -76,16 +76,16 @@ goog.exportSymbol('proto.event_store.grpc.streams.UUID.ValueCase', null, global)
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq = function(opt_data) {
+proto.event_store.client.streams.ReadReq = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.displayName = 'proto.event_store.grpc.streams.ReadReq';
+  proto.event_store.client.streams.ReadReq.displayName = 'proto.event_store.client.streams.ReadReq';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -97,16 +97,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_);
+proto.event_store.client.streams.ReadReq.Options = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadReq.Options.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.displayName = 'proto.event_store.grpc.streams.ReadReq.Options';
+  proto.event_store.client.streams.ReadReq.Options.displayName = 'proto.event_store.client.streams.ReadReq.Options';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -118,16 +118,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_);
+proto.event_store.client.streams.ReadReq.Options.StreamOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.StreamOptions, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.StreamOptions, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.StreamOptions';
+  proto.event_store.client.streams.ReadReq.Options.StreamOptions.displayName = 'proto.event_store.client.streams.ReadReq.Options.StreamOptions';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -139,16 +139,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_);
+proto.event_store.client.streams.ReadReq.Options.AllOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadReq.Options.AllOptions.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.AllOptions, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.AllOptions, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.AllOptions.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.AllOptions';
+  proto.event_store.client.streams.ReadReq.Options.AllOptions.displayName = 'proto.event_store.client.streams.ReadReq.Options.AllOptions';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -160,16 +160,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions = function(opt_data) {
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions';
+  proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.displayName = 'proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -181,16 +181,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position = function(opt_data) {
+proto.event_store.client.streams.ReadReq.Options.Position = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.Position, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.Position, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.Position.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.Position';
+  proto.event_store.client.streams.ReadReq.Options.Position.displayName = 'proto.event_store.client.streams.ReadReq.Options.Position';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -202,16 +202,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.FilterOptions, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.FilterOptions, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.FilterOptions';
+  proto.event_store.client.streams.ReadReq.Options.FilterOptions.displayName = 'proto.event_store.client.streams.ReadReq.Options.FilterOptions';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -223,16 +223,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.repeatedFields_, null);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.repeatedFields_, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression';
+  proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.displayName = 'proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -244,16 +244,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_);
+proto.event_store.client.streams.ReadReq.Options.UUIDOption = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadReq.Options.UUIDOption.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Options.UUIDOption, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadReq.Options.UUIDOption, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.displayName = 'proto.event_store.grpc.streams.ReadReq.Options.UUIDOption';
+  proto.event_store.client.streams.ReadReq.Options.UUIDOption.displayName = 'proto.event_store.client.streams.ReadReq.Options.UUIDOption';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -265,16 +265,58 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadReq.Empty = function(opt_data) {
+proto.event_store.client.streams.ReadResp = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadResp.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.ReadResp, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.ReadResp.displayName = 'proto.event_store.client.streams.ReadResp';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.ReadResp.ReadEvent.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.ReadResp.ReadEvent, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.ReadResp.ReadEvent.displayName = 'proto.event_store.client.streams.ReadResp.ReadEvent';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadReq.Empty, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadReq.Empty.displayName = 'proto.event_store.grpc.streams.ReadReq.Empty';
+  proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.displayName = 'proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -286,16 +328,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadResp = function(opt_data) {
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadResp, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadResp.SubscriptionConfirmation, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadResp.displayName = 'proto.event_store.grpc.streams.ReadResp';
+  proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.displayName = 'proto.event_store.client.streams.ReadResp.SubscriptionConfirmation';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -307,37 +349,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.ReadResp.ReadEvent.oneofGroups_);
-};
-goog.inherits(proto.event_store.grpc.streams.ReadResp.ReadEvent, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.ReadResp.ReadEvent.displayName = 'proto.event_store.grpc.streams.ReadResp.ReadEvent';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent = function(opt_data) {
+proto.event_store.client.streams.ReadResp.Checkpoint = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadResp.Checkpoint, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.displayName = 'proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent';
+  proto.event_store.client.streams.ReadResp.Checkpoint.displayName = 'proto.event_store.client.streams.ReadResp.Checkpoint';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -349,16 +370,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.ReadResp.Empty = function(opt_data) {
+proto.event_store.client.streams.ReadResp.StreamNotFound = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.ReadResp.Empty, jspb.Message);
+goog.inherits(proto.event_store.client.streams.ReadResp.StreamNotFound, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.ReadResp.Empty.displayName = 'proto.event_store.grpc.streams.ReadResp.Empty';
+  proto.event_store.client.streams.ReadResp.StreamNotFound.displayName = 'proto.event_store.client.streams.ReadResp.StreamNotFound';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -370,16 +391,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendReq = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.AppendReq.oneofGroups_);
+proto.event_store.client.streams.AppendReq = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.AppendReq.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendReq, jspb.Message);
+goog.inherits(proto.event_store.client.streams.AppendReq, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendReq.displayName = 'proto.event_store.grpc.streams.AppendReq';
+  proto.event_store.client.streams.AppendReq.displayName = 'proto.event_store.client.streams.AppendReq';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -391,16 +412,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_);
+proto.event_store.client.streams.AppendReq.Options = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.AppendReq.Options.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendReq.Options, jspb.Message);
+goog.inherits(proto.event_store.client.streams.AppendReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendReq.Options.displayName = 'proto.event_store.grpc.streams.AppendReq.Options';
+  proto.event_store.client.streams.AppendReq.Options.displayName = 'proto.event_store.client.streams.AppendReq.Options';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -412,16 +433,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage = function(opt_data) {
+proto.event_store.client.streams.AppendReq.ProposedMessage = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendReq.ProposedMessage, jspb.Message);
+goog.inherits(proto.event_store.client.streams.AppendReq.ProposedMessage, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendReq.ProposedMessage.displayName = 'proto.event_store.grpc.streams.AppendReq.ProposedMessage';
+  proto.event_store.client.streams.AppendReq.ProposedMessage.displayName = 'proto.event_store.client.streams.AppendReq.ProposedMessage';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -433,16 +454,37 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendReq.Empty = function(opt_data) {
+proto.event_store.client.streams.AppendResp = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.AppendResp.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.AppendResp, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.AppendResp.displayName = 'proto.event_store.client.streams.AppendResp';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.AppendResp.Position = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendReq.Empty, jspb.Message);
+goog.inherits(proto.event_store.client.streams.AppendResp.Position, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendReq.Empty.displayName = 'proto.event_store.grpc.streams.AppendReq.Empty';
+  proto.event_store.client.streams.AppendResp.Position.displayName = 'proto.event_store.client.streams.AppendResp.Position';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -454,16 +496,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendResp = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.AppendResp.oneofGroups_);
+proto.event_store.client.streams.AppendResp.Success = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.AppendResp.Success.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendResp, jspb.Message);
+goog.inherits(proto.event_store.client.streams.AppendResp.Success, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendResp.displayName = 'proto.event_store.grpc.streams.AppendResp';
+  proto.event_store.client.streams.AppendResp.Success.displayName = 'proto.event_store.client.streams.AppendResp.Success';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -475,16 +517,37 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendResp.Position = function(opt_data) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.AppendResp.WrongExpectedVersion, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.AppendResp.WrongExpectedVersion.displayName = 'proto.event_store.client.streams.AppendResp.WrongExpectedVersion';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.DeleteReq = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendResp.Position, jspb.Message);
+goog.inherits(proto.event_store.client.streams.DeleteReq, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendResp.Position.displayName = 'proto.event_store.grpc.streams.AppendResp.Position';
+  proto.event_store.client.streams.DeleteReq.displayName = 'proto.event_store.client.streams.DeleteReq';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -496,16 +559,58 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.AppendResp.Empty = function(opt_data) {
+proto.event_store.client.streams.DeleteReq.Options = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.DeleteReq.Options, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.DeleteReq.Options.displayName = 'proto.event_store.client.streams.DeleteReq.Options';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.DeleteResp = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.DeleteResp.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.DeleteResp, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.DeleteResp.displayName = 'proto.event_store.client.streams.DeleteResp';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.DeleteResp.Position = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.AppendResp.Empty, jspb.Message);
+goog.inherits(proto.event_store.client.streams.DeleteResp.Position, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.AppendResp.Empty.displayName = 'proto.event_store.grpc.streams.AppendResp.Empty';
+  proto.event_store.client.streams.DeleteResp.Position.displayName = 'proto.event_store.client.streams.DeleteResp.Position';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -517,16 +622,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.DeleteReq = function(opt_data) {
+proto.event_store.client.streams.TombstoneReq = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.DeleteReq, jspb.Message);
+goog.inherits(proto.event_store.client.streams.TombstoneReq, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.DeleteReq.displayName = 'proto.event_store.grpc.streams.DeleteReq';
+  proto.event_store.client.streams.TombstoneReq.displayName = 'proto.event_store.client.streams.TombstoneReq';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -538,16 +643,16 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.DeleteReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_);
+proto.event_store.client.streams.TombstoneReq.Options = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_);
 };
-goog.inherits(proto.event_store.grpc.streams.DeleteReq.Options, jspb.Message);
+goog.inherits(proto.event_store.client.streams.TombstoneReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.DeleteReq.Options.displayName = 'proto.event_store.grpc.streams.DeleteReq.Options';
+  proto.event_store.client.streams.TombstoneReq.Options.displayName = 'proto.event_store.client.streams.TombstoneReq.Options';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -559,247 +664,37 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.event_store.grpc.streams.DeleteReq.Empty = function(opt_data) {
+proto.event_store.client.streams.TombstoneResp = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.streams.TombstoneResp.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.streams.TombstoneResp, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.streams.TombstoneResp.displayName = 'proto.event_store.client.streams.TombstoneResp';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.streams.TombstoneResp.Position = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
-goog.inherits(proto.event_store.grpc.streams.DeleteReq.Empty, jspb.Message);
+goog.inherits(proto.event_store.client.streams.TombstoneResp.Position, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
    * @override
    */
-  proto.event_store.grpc.streams.DeleteReq.Empty.displayName = 'proto.event_store.grpc.streams.DeleteReq.Empty';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.DeleteResp = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.DeleteResp.oneofGroups_);
-};
-goog.inherits(proto.event_store.grpc.streams.DeleteResp, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.DeleteResp.displayName = 'proto.event_store.grpc.streams.DeleteResp';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.DeleteResp.Position = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.DeleteResp.Position, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.DeleteResp.Position.displayName = 'proto.event_store.grpc.streams.DeleteResp.Position';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.DeleteResp.Empty = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.DeleteResp.Empty, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.DeleteResp.Empty.displayName = 'proto.event_store.grpc.streams.DeleteResp.Empty';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.TombstoneReq = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.TombstoneReq, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.TombstoneReq.displayName = 'proto.event_store.grpc.streams.TombstoneReq';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.TombstoneReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_);
-};
-goog.inherits(proto.event_store.grpc.streams.TombstoneReq.Options, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.TombstoneReq.Options.displayName = 'proto.event_store.grpc.streams.TombstoneReq.Options';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.TombstoneReq.Empty, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.TombstoneReq.Empty.displayName = 'proto.event_store.grpc.streams.TombstoneReq.Empty';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.TombstoneResp = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.TombstoneResp.oneofGroups_);
-};
-goog.inherits(proto.event_store.grpc.streams.TombstoneResp, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.TombstoneResp.displayName = 'proto.event_store.grpc.streams.TombstoneResp';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.TombstoneResp.Position = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.TombstoneResp.Position, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.TombstoneResp.Position.displayName = 'proto.event_store.grpc.streams.TombstoneResp.Position';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.TombstoneResp.Empty = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.TombstoneResp.Empty, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.TombstoneResp.Empty.displayName = 'proto.event_store.grpc.streams.TombstoneResp.Empty';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.UUID = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.grpc.streams.UUID.oneofGroups_);
-};
-goog.inherits(proto.event_store.grpc.streams.UUID, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.UUID.displayName = 'proto.event_store.grpc.streams.UUID';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.event_store.grpc.streams.UUID.Structured = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.event_store.grpc.streams.UUID.Structured, jspb.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.event_store.grpc.streams.UUID.Structured.displayName = 'proto.event_store.grpc.streams.UUID.Structured';
+  proto.event_store.client.streams.TombstoneResp.Position.displayName = 'proto.event_store.client.streams.TombstoneResp.Position';
 }
 
 
@@ -817,8 +712,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.toObject(opt_includeInstance, this);
 };
 
 
@@ -827,13 +722,13 @@ proto.event_store.grpc.streams.ReadReq.prototype.toObject = function(opt_include
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.toObject = function(includeInstance, msg) {
   var f, obj = {
-    options: (f = msg.getOptions()) && proto.event_store.grpc.streams.ReadReq.Options.toObject(includeInstance, f)
+    options: (f = msg.getOptions()) && proto.event_store.client.streams.ReadReq.Options.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -847,23 +742,23 @@ proto.event_store.grpc.streams.ReadReq.toObject = function(includeInstance, msg)
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq}
+ * @return {!proto.event_store.client.streams.ReadReq}
  */
-proto.event_store.grpc.streams.ReadReq.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq;
-  return proto.event_store.grpc.streams.ReadReq.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq;
+  return proto.event_store.client.streams.ReadReq.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq}
+ * @return {!proto.event_store.client.streams.ReadReq}
  */
-proto.event_store.grpc.streams.ReadReq.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -871,8 +766,8 @@ proto.event_store.grpc.streams.ReadReq.deserializeBinaryFromReader = function(ms
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.deserializeBinaryFromReader);
       msg.setOptions(value);
       break;
     default:
@@ -888,9 +783,9 @@ proto.event_store.grpc.streams.ReadReq.deserializeBinaryFromReader = function(ms
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -898,18 +793,18 @@ proto.event_store.grpc.streams.ReadReq.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq} message
+ * @param {!proto.event_store.client.streams.ReadReq} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getOptions();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.serializeBinaryToWriter
     );
   }
 };
@@ -924,54 +819,54 @@ proto.event_store.grpc.streams.ReadReq.serializeBinaryToWriter = function(messag
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_ = [[1,2],[5,6],[7,8]];
+proto.event_store.client.streams.ReadReq.Options.oneofGroups_ = [[1,2],[5,6],[7,8]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase = {
+proto.event_store.client.streams.ReadReq.Options.StreamOptionCase = {
   STREAM_OPTION_NOT_SET: 0,
   STREAM: 1,
   ALL: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.StreamOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getStreamOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[0]));
+proto.event_store.client.streams.ReadReq.Options.prototype.getStreamOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[0]));
 };
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase = {
+proto.event_store.client.streams.ReadReq.Options.CountOptionCase = {
   COUNT_OPTION_NOT_SET: 0,
   COUNT: 5,
   SUBSCRIPTION: 6
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.CountOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getCountOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.CountOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[1]));
+proto.event_store.client.streams.ReadReq.Options.prototype.getCountOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.CountOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[1]));
 };
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase = {
+proto.event_store.client.streams.ReadReq.Options.FilterOptionCase = {
   FILTER_OPTION_NOT_SET: 0,
   FILTER: 7,
   NO_FILTER: 8
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.FilterOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getFilterOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.FilterOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[2]));
+proto.event_store.client.streams.ReadReq.Options.prototype.getFilterOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.FilterOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[2]));
 };
 
 
@@ -989,8 +884,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.toObject(opt_includeInstance, this);
 };
 
 
@@ -999,21 +894,21 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.toObject = function(opt
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
-    stream: (f = msg.getStream()) && proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.toObject(includeInstance, f),
-    all: (f = msg.getAll()) && proto.event_store.grpc.streams.ReadReq.Options.AllOptions.toObject(includeInstance, f),
+    stream: (f = msg.getStream()) && proto.event_store.client.streams.ReadReq.Options.StreamOptions.toObject(includeInstance, f),
+    all: (f = msg.getAll()) && proto.event_store.client.streams.ReadReq.Options.AllOptions.toObject(includeInstance, f),
     readDirection: jspb.Message.getFieldWithDefault(msg, 3, 0),
     resolveLinks: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
     count: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    subscription: (f = msg.getSubscription()) && proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.toObject(includeInstance, f),
-    filter: (f = msg.getFilter()) && proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.toObject(includeInstance, f),
-    noFilter: (f = msg.getNoFilter()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
-    uuidOption: (f = msg.getUuidOption()) && proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject(includeInstance, f)
+    subscription: (f = msg.getSubscription()) && proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.toObject(includeInstance, f),
+    filter: (f = msg.getFilter()) && proto.event_store.client.streams.ReadReq.Options.FilterOptions.toObject(includeInstance, f),
+    noFilter: (f = msg.getNoFilter()) && shared_pb.Empty.toObject(includeInstance, f),
+    uuidOption: (f = msg.getUuidOption()) && proto.event_store.client.streams.ReadReq.Options.UUIDOption.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1027,23 +922,23 @@ proto.event_store.grpc.streams.ReadReq.Options.toObject = function(includeInstan
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options}
+ * @return {!proto.event_store.client.streams.ReadReq.Options}
  */
-proto.event_store.grpc.streams.ReadReq.Options.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options;
-  return proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options;
+  return proto.event_store.client.streams.ReadReq.Options.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options}
+ * @return {!proto.event_store.client.streams.ReadReq.Options}
  */
-proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -1051,17 +946,17 @@ proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader = fun
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.StreamOptions;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.StreamOptions;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.StreamOptions.deserializeBinaryFromReader);
       msg.setStream(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.AllOptions;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.AllOptions;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.AllOptions.deserializeBinaryFromReader);
       msg.setAll(value);
       break;
     case 3:
-      var value = /** @type {!proto.event_store.grpc.streams.ReadReq.Options.ReadDirection} */ (reader.readEnum());
+      var value = /** @type {!proto.event_store.client.streams.ReadReq.Options.ReadDirection} */ (reader.readEnum());
       msg.setReadDirection(value);
       break;
     case 4:
@@ -1069,27 +964,27 @@ proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader = fun
       msg.setResolveLinks(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = /** @type {number} */ (reader.readUint64());
       msg.setCount(value);
       break;
     case 6:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.deserializeBinaryFromReader);
       msg.setSubscription(value);
       break;
     case 7:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.FilterOptions;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.FilterOptions;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.FilterOptions.deserializeBinaryFromReader);
       msg.setFilter(value);
       break;
     case 8:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setNoFilter(value);
       break;
     case 9:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.UUIDOption;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.UUIDOption;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader);
       msg.setUuidOption(value);
       break;
     default:
@@ -1105,9 +1000,9 @@ proto.event_store.grpc.streams.ReadReq.Options.deserializeBinaryFromReader = fun
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -1115,18 +1010,18 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.serializeBinary = funct
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getStream();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.StreamOptions.serializeBinaryToWriter
     );
   }
   f = message.getAll();
@@ -1134,7 +1029,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.AllOptions.serializeBinaryToWriter
     );
   }
   f = message.getReadDirection();
@@ -1153,7 +1048,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 5));
   if (f != null) {
-    writer.writeInt32(
+    writer.writeUint64(
       5,
       f
     );
@@ -1163,7 +1058,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
     writer.writeMessage(
       6,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.serializeBinaryToWriter
     );
   }
   f = message.getFilter();
@@ -1171,7 +1066,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
     writer.writeMessage(
       7,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.FilterOptions.serializeBinaryToWriter
     );
   }
   f = message.getNoFilter();
@@ -1179,7 +1074,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
     writer.writeMessage(
       8,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getUuidOption();
@@ -1187,7 +1082,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
     writer.writeMessage(
       9,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter
     );
   }
 };
@@ -1196,7 +1091,7 @@ proto.event_store.grpc.streams.ReadReq.Options.serializeBinaryToWriter = functio
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.ReadDirection = {
+proto.event_store.client.streams.ReadReq.Options.ReadDirection = {
   FORWARDS: 0,
   BACKWARDS: 1
 };
@@ -1210,12 +1105,12 @@ proto.event_store.grpc.streams.ReadReq.Options.ReadDirection = {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_ = [[2,3,4]];
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_ = [[2,3,4]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase = {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.RevisionOptionCase = {
   REVISION_OPTION_NOT_SET: 0,
   REVISION: 2,
   START: 3,
@@ -1223,10 +1118,10 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase 
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.StreamOptions.RevisionOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getRevisionOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.RevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0]));
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.getRevisionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.StreamOptions.RevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_[0]));
 };
 
 
@@ -1244,8 +1139,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.StreamOptions.toObject(opt_includeInstance, this);
 };
 
 
@@ -1254,16 +1149,16 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.toObject 
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.StreamOptions} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.toObject = function(includeInstance, msg) {
   var f, obj = {
-    streamName: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
     revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    start: (f = msg.getStart()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
-    end: (f = msg.getEnd()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1277,23 +1172,23 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.toObject = function
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.StreamOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.StreamOptions;
-  return proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.StreamOptions;
+  return proto.event_store.client.streams.ReadReq.Options.StreamOptions.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.StreamOptions} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.StreamOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -1301,21 +1196,22 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinaryFr
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setStreamName(value);
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setRevision(value);
       break;
     case 3:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setStart(value);
       break;
     case 4:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setEnd(value);
       break;
     default:
@@ -1331,9 +1227,9 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.deserializeBinaryFr
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.StreamOptions.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -1341,17 +1237,18 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.serialize
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.StreamOptions} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getStreamName();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
       1,
-      f
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 2));
@@ -1366,7 +1263,7 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.serializeBinaryToWr
     writer.writeMessage(
       3,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getEnd();
@@ -1374,24 +1271,46 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.serializeBinaryToWr
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional string stream_name = 1;
- * @return {string}
+ * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.shared.StreamIdentifier}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getStreamName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
-/** @param {string} value */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.setStreamName = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -1399,22 +1318,26 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.setStream
  * optional uint64 revision = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getRevision = function() {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.getRevision = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.setRevision = function(value) {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.setRevision = function(value) {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearRevision = function() {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], undefined);
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.clearRevision = function() {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], undefined);
 };
 
 
@@ -1422,32 +1345,36 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearRevi
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasRevision = function() {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.hasRevision = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional Empty start = 3;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty start = 3;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getStart = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 3));
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.getStart = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.setStart = function(value) {
-  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.setStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearStart = function() {
-  this.setStart(undefined);
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.clearStart = function() {
+  return this.setStart(undefined);
 };
 
 
@@ -1455,32 +1382,36 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearStar
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasStart = function() {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.hasStart = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty end = 4;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty end = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.getEnd = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 4));
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.setEnd = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.setEnd = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.ReadReq.Options.StreamOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearEnd = function() {
-  this.setEnd(undefined);
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.clearEnd = function() {
+  return this.setEnd(undefined);
 };
 
 
@@ -1488,7 +1419,7 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.clearEnd 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasEnd = function() {
+proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.hasEnd = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
@@ -1502,12 +1433,12 @@ proto.event_store.grpc.streams.ReadReq.Options.StreamOptions.prototype.hasEnd = 
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_ = [[1,2,3]];
+proto.event_store.client.streams.ReadReq.Options.AllOptions.oneofGroups_ = [[1,2,3]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase = {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.AllOptionCase = {
   ALL_OPTION_NOT_SET: 0,
   POSITION: 1,
   START: 2,
@@ -1515,10 +1446,10 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase = {
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.AllOptions.AllOptionCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getAllOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.AllOptions.AllOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0]));
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.getAllOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.AllOptions.AllOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.AllOptions.oneofGroups_[0]));
 };
 
 
@@ -1536,8 +1467,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.AllOptions.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.AllOptions.toObject(opt_includeInstance, this);
 };
 
 
@@ -1546,15 +1477,15 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.toObject = f
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.AllOptions} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.AllOptions} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.toObject = function(includeInstance, msg) {
   var f, obj = {
-    position: (f = msg.getPosition()) && proto.event_store.grpc.streams.ReadReq.Options.Position.toObject(includeInstance, f),
-    start: (f = msg.getStart()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
-    end: (f = msg.getEnd()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    position: (f = msg.getPosition()) && proto.event_store.client.streams.ReadReq.Options.Position.toObject(includeInstance, f),
+    start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1568,23 +1499,23 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.toObject = function(in
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.AllOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.AllOptions;
-  return proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.AllOptions;
+  return proto.event_store.client.streams.ReadReq.Options.AllOptions.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.AllOptions} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.AllOptions} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.AllOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -1592,18 +1523,18 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinaryFromR
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.Position;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.Position.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.Position;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.Position.deserializeBinaryFromReader);
       msg.setPosition(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setStart(value);
       break;
     case 3:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setEnd(value);
       break;
     default:
@@ -1619,9 +1550,9 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.deserializeBinaryFromR
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.AllOptions.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -1629,18 +1560,18 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.serializeBin
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.AllOptions} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.AllOptions} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getPosition();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.Position.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.Position.serializeBinaryToWriter
     );
   }
   f = message.getStart();
@@ -1648,7 +1579,7 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWrite
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getEnd();
@@ -1656,7 +1587,7 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWrite
     writer.writeMessage(
       3,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
@@ -1664,25 +1595,29 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.serializeBinaryToWrite
 
 /**
  * optional Position position = 1;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.Position}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.Position}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getPosition = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.Position} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.Position, 1));
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.getPosition = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.Position} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.Position, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.Position|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.setPosition = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.Position|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.setPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearPosition = function() {
-  this.setPosition(undefined);
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.clearPosition = function() {
+  return this.setPosition(undefined);
 };
 
 
@@ -1690,32 +1625,36 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearPositio
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.hasPosition = function() {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.hasPosition = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional Empty start = 2;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty start = 2;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getStart = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 2));
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.getStart = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.setStart = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.setStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearStart = function() {
-  this.setStart(undefined);
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.clearStart = function() {
+  return this.setStart(undefined);
 };
 
 
@@ -1723,32 +1662,36 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearStart =
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.hasStart = function() {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.hasStart = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional Empty end = 3;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty end = 3;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.getEnd = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 3));
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.setEnd = function(value) {
-  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.setEnd = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.ReadReq.Options.AllOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.AllOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearEnd = function() {
-  this.setEnd(undefined);
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.clearEnd = function() {
+  return this.setEnd(undefined);
 };
 
 
@@ -1756,7 +1699,7 @@ proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.clearEnd = f
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.AllOptions.prototype.hasEnd = function() {
+proto.event_store.client.streams.ReadReq.Options.AllOptions.prototype.hasEnd = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
@@ -1777,8 +1720,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.toObject(opt_includeInstance, this);
 };
 
 
@@ -1787,11 +1730,11 @@ proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.prototype.toO
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.toObject = function(includeInstance, msg) {
   var f, obj = {
 
   };
@@ -1807,23 +1750,23 @@ proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.toObject = fu
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions;
-  return proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions;
+  return proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -1843,9 +1786,9 @@ proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.deserializeBi
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -1853,11 +1796,11 @@ proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.prototype.ser
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
 };
 
@@ -1878,8 +1821,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.Position.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.Position.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.Position.toObject(opt_includeInstance, this);
 };
 
 
@@ -1888,11 +1831,11 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.toObject = fun
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.Position} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.Position} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
     commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
     preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
@@ -1909,23 +1852,23 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.toObject = function(incl
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.Position}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.Position}
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.Position.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.Position;
-  return proto.event_store.grpc.streams.ReadReq.Options.Position.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.Position;
+  return proto.event_store.client.streams.ReadReq.Options.Position.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.Position} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.Position} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.Position}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.Position}
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.Position.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -1953,9 +1896,9 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.deserializeBinaryFromRea
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.Position.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.Position.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.Position.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -1963,11 +1906,11 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.serializeBinar
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.Position} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.Position} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
   if (f !== 0) {
@@ -1990,14 +1933,17 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.serializeBinaryToWriter 
  * optional uint64 commit_position = 1;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.getCommitPosition = function() {
+proto.event_store.client.streams.ReadReq.Options.Position.prototype.getCommitPosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.setCommitPosition = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.Position} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.Position.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -2005,14 +1951,17 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.setCommitPosit
  * optional uint64 prepare_position = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.getPreparePosition = function() {
+proto.event_store.client.streams.ReadReq.Options.Position.prototype.getPreparePosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.setPreparePosition = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.Position} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.Position.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -2025,38 +1974,38 @@ proto.event_store.grpc.streams.ReadReq.Options.Position.prototype.setPreparePosi
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_ = [[1,2],[3,4]];
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_ = [[1,2],[3,4]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.FilterCase = {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.FilterCase = {
   FILTER_NOT_SET: 0,
-  STREAM_NAME: 1,
+  STREAM_IDENTIFIER: 1,
   EVENT_TYPE: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.FilterCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.FilterOptions.FilterCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.getFilterCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.FilterCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[0]));
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getFilterCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.FilterOptions.FilterCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[0]));
 };
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.WindowCase = {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.WindowCase = {
   WINDOW_NOT_SET: 0,
   MAX: 3,
   COUNT: 4
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.WindowCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.FilterOptions.WindowCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.getWindowCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.WindowCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[1]));
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getWindowCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.FilterOptions.WindowCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[1]));
 };
 
 
@@ -2074,8 +2023,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.FilterOptions.toObject(opt_includeInstance, this);
 };
 
 
@@ -2084,16 +2033,17 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.toObject 
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.toObject = function(includeInstance, msg) {
   var f, obj = {
-    streamName: (f = msg.getStreamName()) && proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.toObject(includeInstance, f),
-    eventType: (f = msg.getEventType()) && proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.toObject(includeInstance, f),
+    streamIdentifier: (f = msg.getStreamIdentifier()) && proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.toObject(includeInstance, f),
+    eventType: (f = msg.getEventType()) && proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.toObject(includeInstance, f),
     max: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    count: (f = msg.getCount()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    count: (f = msg.getCount()) && shared_pb.Empty.toObject(includeInstance, f),
+    checkpointintervalmultiplier: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -2107,23 +2057,23 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.toObject = function
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.FilterOptions;
-  return proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.FilterOptions;
+  return proto.event_store.client.streams.ReadReq.Options.FilterOptions.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -2131,23 +2081,27 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.deserializeBinaryFr
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader);
-      msg.setStreamName(value);
+      var value = new proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression;
+      reader.readMessage(value,proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader);
       msg.setEventType(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setMax(value);
       break;
     case 4:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setCount(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setCheckpointintervalmultiplier(value);
       break;
     default:
       reader.skipField();
@@ -2162,9 +2116,9 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.deserializeBinaryFr
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.FilterOptions.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -2172,18 +2126,18 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.serialize
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getStreamName();
+  f = message.getStreamIdentifier();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter
     );
   }
   f = message.getEventType();
@@ -2191,12 +2145,12 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.serializeBinaryToWr
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter
     );
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeInt32(
+    writer.writeUint32(
       3,
       f
     );
@@ -2206,7 +2160,14 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.serializeBinaryToWr
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getCheckpointintervalmultiplier();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
     );
   }
 };
@@ -2218,7 +2179,7 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.serializeBinaryToWr
  * @private {!Array<number>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.repeatedFields_ = [2];
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.repeatedFields_ = [2];
 
 
 
@@ -2235,8 +2196,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.toObject(opt_includeInstance, this);
 };
 
 
@@ -2245,11 +2206,11 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototyp
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.toObject = function(includeInstance, msg) {
   var f, obj = {
     regex: jspb.Message.getFieldWithDefault(msg, 1, ""),
     prefixList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
@@ -2266,23 +2227,23 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.toObject
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression;
-  return proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression;
+  return proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -2310,9 +2271,9 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.deserial
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -2320,11 +2281,11 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototyp
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getRegex();
   if (f.length > 0) {
@@ -2347,14 +2308,17 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.serializ
  * optional string regex = 1;
  * @return {string}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.getRegex = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.getRegex = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.setRegex = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.setRegex = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
@@ -2362,55 +2326,64 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototyp
  * repeated string prefix = 2;
  * @return {!Array<string>}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.getPrefixList = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.getPrefixList = function() {
   return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 2));
 };
 
 
-/** @param {!Array<string>} value */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.setPrefixList = function(value) {
-  jspb.Message.setField(this, 2, value || []);
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.setPrefixList = function(value) {
+  return jspb.Message.setField(this, 2, value || []);
 };
 
 
 /**
  * @param {string} value
  * @param {number=} opt_index
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.addPrefix = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 2, value, opt_index);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.addPrefix = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 2, value, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression.prototype.clearPrefixList = function() {
-  this.setPrefixList([]);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression.prototype.clearPrefixList = function() {
+  return this.setPrefixList([]);
 };
 
 
 /**
- * optional Expression stream_name = 1;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression}
+ * optional Expression stream_identifier = 1;
+ * @return {?proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.getStreamName = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression, 1));
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.setStreamName = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearStreamName = function() {
-  this.setStreamName(undefined);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
 };
 
 
@@ -2418,32 +2391,36 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearStre
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.hasStreamName = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.hasStreamIdentifier = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
  * optional Expression event_type = 2;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.getEventType = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression, 2));
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getEventType = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.Expression|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.setEventType = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.FilterOptions.Expression|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.setEventType = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearEventType = function() {
-  this.setEventType(undefined);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.clearEventType = function() {
+  return this.setEventType(undefined);
 };
 
 
@@ -2451,31 +2428,35 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearEven
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.hasEventType = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.hasEventType = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional int32 max = 3;
+ * optional uint32 max = 3;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.getMax = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getMax = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.setMax = function(value) {
-  jspb.Message.setOneofField(this, 3, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[1], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.setMax = function(value) {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[1], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearMax = function() {
-  jspb.Message.setOneofField(this, 3, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[1], undefined);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.clearMax = function() {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[1], undefined);
 };
 
 
@@ -2483,32 +2464,36 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearMax 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.hasMax = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.hasMax = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty count = 4;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty count = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.getCount = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 4));
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getCount = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.setCount = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.oneofGroups_[1], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.setCount = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.ReadReq.Options.FilterOptions.oneofGroups_[1], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearCount = function() {
-  this.setCount(undefined);
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.clearCount = function() {
+  return this.setCount(undefined);
 };
 
 
@@ -2516,8 +2501,26 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.clearCoun
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.hasCount = function() {
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.hasCount = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional uint32 checkpointIntervalMultiplier = 5;
+ * @return {number}
+ */
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.getCheckpointintervalmultiplier = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.FilterOptions} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.FilterOptions.prototype.setCheckpointintervalmultiplier = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
@@ -2530,22 +2533,22 @@ proto.event_store.grpc.streams.ReadReq.Options.FilterOptions.prototype.hasCount 
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_ = [[1,2]];
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.oneofGroups_ = [[1,2]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase = {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.ContentCase = {
   CONTENT_NOT_SET: 0,
   STRUCTURED: 1,
   STRING: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase}
+ * @return {proto.event_store.client.streams.ReadReq.Options.UUIDOption.ContentCase}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.getContentCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.ContentCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_[0]));
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.getContentCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadReq.Options.UUIDOption.ContentCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadReq.Options.UUIDOption.oneofGroups_[0]));
 };
 
 
@@ -2563,8 +2566,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadReq.Options.UUIDOption.toObject(opt_includeInstance, this);
 };
 
 
@@ -2573,14 +2576,14 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.toObject = f
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.toObject = function(includeInstance, msg) {
   var f, obj = {
-    structured: (f = msg.getStructured()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f),
-    string: (f = msg.getString()) && proto.event_store.grpc.streams.ReadReq.Empty.toObject(includeInstance, f)
+    structured: (f = msg.getStructured()) && shared_pb.Empty.toObject(includeInstance, f),
+    string: (f = msg.getString()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -2594,23 +2597,23 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.toObject = function(in
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.UUIDOption}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Options.UUIDOption;
-  return proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadReq.Options.UUIDOption;
+  return proto.event_store.client.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.UUIDOption}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -2618,13 +2621,13 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromR
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setStructured(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.ReadReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setString(value);
       break;
     default:
@@ -2640,9 +2643,9 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.deserializeBinaryFromR
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -2650,18 +2653,18 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.serializeBin
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} message
+ * @param {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getStructured();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getString();
@@ -2669,33 +2672,37 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.serializeBinaryToWrite
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional Empty structured = 1;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty structured = 1;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.getStructured = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 1));
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.getStructured = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.setStructured = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.setStructured = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.ReadReq.Options.UUIDOption.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.clearStructured = function() {
-  this.setStructured(undefined);
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.clearStructured = function() {
+  return this.setStructured(undefined);
 };
 
 
@@ -2703,32 +2710,36 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.clearStructu
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.hasStructured = function() {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.hasStructured = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional Empty string = 2;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty string = 2;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.getString = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 2));
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.getString = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.setString = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.setString = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.ReadReq.Options.UUIDOption.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options.UUIDOption} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.clearString = function() {
-  this.setString(undefined);
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.clearString = function() {
+  return this.setString(undefined);
 };
 
 
@@ -2736,32 +2747,36 @@ proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.clearString 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.UUIDOption.prototype.hasString = function() {
+proto.event_store.client.streams.ReadReq.Options.UUIDOption.prototype.hasString = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
  * optional StreamOptions stream = 1;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.StreamOptions}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.StreamOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getStream = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.StreamOptions} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.StreamOptions, 1));
+proto.event_store.client.streams.ReadReq.Options.prototype.getStream = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.StreamOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.StreamOptions, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.StreamOptions|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setStream = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.StreamOptions|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.prototype.setStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearStream = function() {
-  this.setStream(undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearStream = function() {
+  return this.setStream(undefined);
 };
 
 
@@ -2769,32 +2784,36 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearStream = function(
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasStream = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasStream = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
  * optional AllOptions all = 2;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.AllOptions}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.AllOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getAll = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.AllOptions} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.AllOptions, 2));
+proto.event_store.client.streams.ReadReq.Options.prototype.getAll = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.AllOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.AllOptions, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.AllOptions|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setAll = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.AllOptions|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.prototype.setAll = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearAll = function() {
-  this.setAll(undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearAll = function() {
+  return this.setAll(undefined);
 };
 
 
@@ -2802,23 +2821,26 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearAll = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasAll = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasAll = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
  * optional ReadDirection read_direction = 3;
- * @return {!proto.event_store.grpc.streams.ReadReq.Options.ReadDirection}
+ * @return {!proto.event_store.client.streams.ReadReq.Options.ReadDirection}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getReadDirection = function() {
-  return /** @type {!proto.event_store.grpc.streams.ReadReq.Options.ReadDirection} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+proto.event_store.client.streams.ReadReq.Options.prototype.getReadDirection = function() {
+  return /** @type {!proto.event_store.client.streams.ReadReq.Options.ReadDirection} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
-/** @param {!proto.event_store.grpc.streams.ReadReq.Options.ReadDirection} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setReadDirection = function(value) {
-  jspb.Message.setProto3EnumField(this, 3, value);
+/**
+ * @param {!proto.event_store.client.streams.ReadReq.Options.ReadDirection} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.prototype.setReadDirection = function(value) {
+  return jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
@@ -2826,37 +2848,44 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.setReadDirection = func
  * optional bool resolve_links = 4;
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getResolveLinks = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.getResolveLinks = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
 };
 
 
-/** @param {boolean} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setResolveLinks = function(value) {
-  jspb.Message.setProto3BooleanField(this, 4, value);
+/**
+ * @param {boolean} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.prototype.setResolveLinks = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 4, value);
 };
 
 
 /**
- * optional int32 count = 5;
+ * optional uint64 count = 5;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getCount = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.getCount = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setCount = function(value) {
-  jspb.Message.setOneofField(this, 5, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[1], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+ */
+proto.event_store.client.streams.ReadReq.Options.prototype.setCount = function(value) {
+  return jspb.Message.setOneofField(this, 5, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[1], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearCount = function() {
-  jspb.Message.setOneofField(this, 5, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[1], undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearCount = function() {
+  return jspb.Message.setOneofField(this, 5, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[1], undefined);
 };
 
 
@@ -2864,32 +2893,36 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearCount = function()
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasCount = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasCount = function() {
   return jspb.Message.getField(this, 5) != null;
 };
 
 
 /**
  * optional SubscriptionOptions subscription = 6;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getSubscription = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions, 6));
+proto.event_store.client.streams.ReadReq.Options.prototype.getSubscription = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions, 6));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.SubscriptionOptions|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setSubscription = function(value) {
-  jspb.Message.setOneofWrapperField(this, 6, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[1], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.prototype.setSubscription = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 6, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[1], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearSubscription = function() {
-  this.setSubscription(undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearSubscription = function() {
+  return this.setSubscription(undefined);
 };
 
 
@@ -2897,32 +2930,36 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearSubscription = fun
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasSubscription = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasSubscription = function() {
   return jspb.Message.getField(this, 6) != null;
 };
 
 
 /**
  * optional FilterOptions filter = 7;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.FilterOptions}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getFilter = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.FilterOptions, 7));
+proto.event_store.client.streams.ReadReq.Options.prototype.getFilter = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.FilterOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.FilterOptions, 7));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.FilterOptions|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setFilter = function(value) {
-  jspb.Message.setOneofWrapperField(this, 7, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[2], value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.FilterOptions|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.prototype.setFilter = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 7, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[2], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearFilter = function() {
-  this.setFilter(undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearFilter = function() {
+  return this.setFilter(undefined);
 };
 
 
@@ -2930,32 +2967,36 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearFilter = function(
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasFilter = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasFilter = function() {
   return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * optional Empty no_filter = 8;
- * @return {?proto.event_store.grpc.streams.ReadReq.Empty}
+ * optional event_store.client.shared.Empty no_filter = 8;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getNoFilter = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Empty, 8));
+proto.event_store.client.streams.ReadReq.Options.prototype.getNoFilter = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 8));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setNoFilter = function(value) {
-  jspb.Message.setOneofWrapperField(this, 8, proto.event_store.grpc.streams.ReadReq.Options.oneofGroups_[2], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.prototype.setNoFilter = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 8, proto.event_store.client.streams.ReadReq.Options.oneofGroups_[2], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearNoFilter = function() {
-  this.setNoFilter(undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearNoFilter = function() {
+  return this.setNoFilter(undefined);
 };
 
 
@@ -2963,32 +3004,36 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearNoFilter = functio
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasNoFilter = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasNoFilter = function() {
   return jspb.Message.getField(this, 8) != null;
 };
 
 
 /**
  * optional UUIDOption uuid_option = 9;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options.UUIDOption}
+ * @return {?proto.event_store.client.streams.ReadReq.Options.UUIDOption}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.getUuidOption = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options.UUIDOption} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options.UUIDOption, 9));
+proto.event_store.client.streams.ReadReq.Options.prototype.getUuidOption = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options.UUIDOption} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options.UUIDOption, 9));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options.UUIDOption|undefined} value */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.setUuidOption = function(value) {
-  jspb.Message.setWrapperField(this, 9, value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options.UUIDOption|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
+*/
+proto.event_store.client.streams.ReadReq.Options.prototype.setUuidOption = function(value) {
+  return jspb.Message.setWrapperField(this, 9, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.clearUuidOption = function() {
-  this.setUuidOption(undefined);
+proto.event_store.client.streams.ReadReq.Options.prototype.clearUuidOption = function() {
+  return this.setUuidOption(undefined);
 };
 
 
@@ -2996,133 +3041,36 @@ proto.event_store.grpc.streams.ReadReq.Options.prototype.clearUuidOption = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.Options.prototype.hasUuidOption = function() {
+proto.event_store.client.streams.ReadReq.Options.prototype.hasUuidOption = function() {
   return jspb.Message.getField(this, 9) != null;
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.ReadReq.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadReq.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadReq.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.ReadReq.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadReq.Empty}
- */
-proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadReq.Empty;
-  return proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadReq.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadReq.Empty}
- */
-proto.event_store.grpc.streams.ReadReq.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.ReadReq.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadReq.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.ReadReq.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
 };
 
 
 /**
  * optional Options options = 1;
- * @return {?proto.event_store.grpc.streams.ReadReq.Options}
+ * @return {?proto.event_store.client.streams.ReadReq.Options}
  */
-proto.event_store.grpc.streams.ReadReq.prototype.getOptions = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadReq.Options} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadReq.Options, 1));
+proto.event_store.client.streams.ReadReq.prototype.getOptions = function() {
+  return /** @type{?proto.event_store.client.streams.ReadReq.Options} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadReq.Options, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadReq.Options|undefined} value */
-proto.event_store.grpc.streams.ReadReq.prototype.setOptions = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.streams.ReadReq.Options|undefined} value
+ * @return {!proto.event_store.client.streams.ReadReq} returns this
+*/
+proto.event_store.client.streams.ReadReq.prototype.setOptions = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadReq} returns this
  */
-proto.event_store.grpc.streams.ReadReq.prototype.clearOptions = function() {
-  this.setOptions(undefined);
+proto.event_store.client.streams.ReadReq.prototype.clearOptions = function() {
+  return this.setOptions(undefined);
 };
 
 
@@ -3130,11 +3078,39 @@ proto.event_store.grpc.streams.ReadReq.prototype.clearOptions = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadReq.prototype.hasOptions = function() {
+proto.event_store.client.streams.ReadReq.prototype.hasOptions = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.streams.ReadResp.oneofGroups_ = [[1,2,3,4]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.ReadResp.ContentCase = {
+  CONTENT_NOT_SET: 0,
+  EVENT: 1,
+  CONFIRMATION: 2,
+  CHECKPOINT: 3,
+  STREAM_NOT_FOUND: 4
+};
+
+/**
+ * @return {proto.event_store.client.streams.ReadResp.ContentCase}
+ */
+proto.event_store.client.streams.ReadResp.prototype.getContentCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadResp.ContentCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadResp.oneofGroups_[0]));
+};
 
 
 
@@ -3151,8 +3127,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadResp.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadResp.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadResp.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadResp.toObject(opt_includeInstance, this);
 };
 
 
@@ -3161,13 +3137,16 @@ proto.event_store.grpc.streams.ReadResp.prototype.toObject = function(opt_includ
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadResp} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadResp} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadResp.toObject = function(includeInstance, msg) {
   var f, obj = {
-    event: (f = msg.getEvent()) && proto.event_store.grpc.streams.ReadResp.ReadEvent.toObject(includeInstance, f)
+    event: (f = msg.getEvent()) && proto.event_store.client.streams.ReadResp.ReadEvent.toObject(includeInstance, f),
+    confirmation: (f = msg.getConfirmation()) && proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.toObject(includeInstance, f),
+    checkpoint: (f = msg.getCheckpoint()) && proto.event_store.client.streams.ReadResp.Checkpoint.toObject(includeInstance, f),
+    streamNotFound: (f = msg.getStreamNotFound()) && proto.event_store.client.streams.ReadResp.StreamNotFound.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -3181,23 +3160,23 @@ proto.event_store.grpc.streams.ReadResp.toObject = function(includeInstance, msg
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadResp}
+ * @return {!proto.event_store.client.streams.ReadResp}
  */
-proto.event_store.grpc.streams.ReadResp.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadResp.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadResp;
-  return proto.event_store.grpc.streams.ReadResp.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadResp;
+  return proto.event_store.client.streams.ReadResp.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadResp} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadResp} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadResp}
+ * @return {!proto.event_store.client.streams.ReadResp}
  */
-proto.event_store.grpc.streams.ReadResp.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadResp.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -3205,9 +3184,24 @@ proto.event_store.grpc.streams.ReadResp.deserializeBinaryFromReader = function(m
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadResp.ReadEvent;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadResp.ReadEvent;
+      reader.readMessage(value,proto.event_store.client.streams.ReadResp.ReadEvent.deserializeBinaryFromReader);
       msg.setEvent(value);
+      break;
+    case 2:
+      var value = new proto.event_store.client.streams.ReadResp.SubscriptionConfirmation;
+      reader.readMessage(value,proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.deserializeBinaryFromReader);
+      msg.setConfirmation(value);
+      break;
+    case 3:
+      var value = new proto.event_store.client.streams.ReadResp.Checkpoint;
+      reader.readMessage(value,proto.event_store.client.streams.ReadResp.Checkpoint.deserializeBinaryFromReader);
+      msg.setCheckpoint(value);
+      break;
+    case 4:
+      var value = new proto.event_store.client.streams.ReadResp.StreamNotFound;
+      reader.readMessage(value,proto.event_store.client.streams.ReadResp.StreamNotFound.deserializeBinaryFromReader);
+      msg.setStreamNotFound(value);
       break;
     default:
       reader.skipField();
@@ -3222,9 +3216,9 @@ proto.event_store.grpc.streams.ReadResp.deserializeBinaryFromReader = function(m
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadResp.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadResp.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadResp.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadResp.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -3232,18 +3226,42 @@ proto.event_store.grpc.streams.ReadResp.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadResp} message
+ * @param {!proto.event_store.client.streams.ReadResp} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadResp.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getEvent();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadResp.ReadEvent.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadResp.ReadEvent.serializeBinaryToWriter
+    );
+  }
+  f = message.getConfirmation();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.serializeBinaryToWriter
+    );
+  }
+  f = message.getCheckpoint();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      proto.event_store.client.streams.ReadResp.Checkpoint.serializeBinaryToWriter
+    );
+  }
+  f = message.getStreamNotFound();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      proto.event_store.client.streams.ReadResp.StreamNotFound.serializeBinaryToWriter
     );
   }
 };
@@ -3258,22 +3276,22 @@ proto.event_store.grpc.streams.ReadResp.serializeBinaryToWriter = function(messa
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.oneofGroups_ = [[3,4]];
+proto.event_store.client.streams.ReadResp.ReadEvent.oneofGroups_ = [[3,4]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.PositionCase = {
+proto.event_store.client.streams.ReadResp.ReadEvent.PositionCase = {
   POSITION_NOT_SET: 0,
   COMMIT_POSITION: 3,
   NO_POSITION: 4
 };
 
 /**
- * @return {proto.event_store.grpc.streams.ReadResp.ReadEvent.PositionCase}
+ * @return {proto.event_store.client.streams.ReadResp.ReadEvent.PositionCase}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.getPositionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.ReadResp.ReadEvent.PositionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.ReadResp.ReadEvent.oneofGroups_[0]));
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.getPositionCase = function() {
+  return /** @type {proto.event_store.client.streams.ReadResp.ReadEvent.PositionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.ReadResp.ReadEvent.oneofGroups_[0]));
 };
 
 
@@ -3291,8 +3309,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadResp.ReadEvent.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadResp.ReadEvent.toObject(opt_includeInstance, this);
 };
 
 
@@ -3301,16 +3319,16 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.toObject = function(
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadResp.ReadEvent} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadResp.ReadEvent} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadResp.ReadEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    event: (f = msg.getEvent()) && proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
-    link: (f = msg.getLink()) && proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
+    event: (f = msg.getEvent()) && proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
+    link: (f = msg.getLink()) && proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
     commitPosition: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    noPosition: (f = msg.getNoPosition()) && proto.event_store.grpc.streams.ReadResp.Empty.toObject(includeInstance, f)
+    noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -3324,23 +3342,23 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.toObject = function(includeIns
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadResp.ReadEvent}
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadResp.ReadEvent.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadResp.ReadEvent;
-  return proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadResp.ReadEvent;
+  return proto.event_store.client.streams.ReadResp.ReadEvent.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadResp.ReadEvent} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadResp.ReadEvent} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadResp.ReadEvent}
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadResp.ReadEvent.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -3348,13 +3366,13 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinaryFromReader = 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent;
+      reader.readMessage(value,proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader);
       msg.setEvent(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent;
+      reader.readMessage(value,proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader);
       msg.setLink(value);
       break;
     case 3:
@@ -3362,8 +3380,8 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinaryFromReader = 
       msg.setCommitPosition(value);
       break;
     case 4:
-      var value = new proto.event_store.grpc.streams.ReadResp.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.ReadResp.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setNoPosition(value);
       break;
     default:
@@ -3379,9 +3397,9 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.deserializeBinaryFromReader = 
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadResp.ReadEvent.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadResp.ReadEvent.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -3389,18 +3407,18 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.serializeBinary = fu
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadResp.ReadEvent} message
+ * @param {!proto.event_store.client.streams.ReadResp.ReadEvent} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadResp.ReadEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getEvent();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter
     );
   }
   f = message.getLink();
@@ -3408,7 +3426,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.serializeBinaryToWriter = func
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter
+      proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter
     );
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 3));
@@ -3423,7 +3441,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.serializeBinaryToWriter = func
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.ReadResp.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
@@ -3445,8 +3463,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject(opt_includeInstance, this);
 };
 
 
@@ -3455,14 +3473,14 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.toObje
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: (f = msg.getId()) && proto.event_store.grpc.streams.UUID.toObject(includeInstance, f),
-    streamName: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    id: (f = msg.getId()) && shared_pb.UUID.toObject(includeInstance, f),
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
     streamRevision: jspb.Message.getFieldWithDefault(msg, 3, 0),
     preparePosition: jspb.Message.getFieldWithDefault(msg, 4, 0),
     commitPosition: jspb.Message.getFieldWithDefault(msg, 5, 0),
@@ -3482,23 +3500,23 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.toObject = funct
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent}
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent;
-  return proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent;
+  return proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent}
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -3506,13 +3524,14 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinar
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.UUID;
-      reader.readMessage(value,proto.event_store.grpc.streams.UUID.deserializeBinaryFromReader);
+      var value = new shared_pb.UUID;
+      reader.readMessage(value,shared_pb.UUID.deserializeBinaryFromReader);
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setStreamName(value);
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readUint64());
@@ -3529,7 +3548,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinar
     case 6:
       var value = msg.getMetadataMap();
       reader.readMessage(value, function(message, reader) {
-        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "");
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
          });
       break;
     case 7:
@@ -3553,9 +3572,9 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBinar
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -3563,25 +3582,26 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.serial
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent} message
+ * @param {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getId();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.UUID.serializeBinaryToWriter
+      shared_pb.UUID.serializeBinaryToWriter
     );
   }
-  f = message.getStreamName();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
       2,
-      f
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
   f = message.getStreamRevision();
@@ -3627,26 +3647,30 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryT
 
 
 /**
- * optional UUID id = 1;
- * @return {?proto.event_store.grpc.streams.UUID}
+ * optional event_store.client.shared.UUID id = 1;
+ * @return {?proto.event_store.client.shared.UUID}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getId = function() {
-  return /** @type{?proto.event_store.grpc.streams.UUID} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.UUID, 1));
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getId = function() {
+  return /** @type{?proto.event_store.client.shared.UUID} */ (
+    jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.UUID|undefined} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setId = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+*/
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setId = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.clearId = function() {
-  this.setId(undefined);
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.clearId = function() {
+  return this.setId(undefined);
 };
 
 
@@ -3654,23 +3678,45 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.clearI
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.hasId = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.hasId = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional string stream_name = 2;
- * @return {string}
+ * optional event_store.client.shared.StreamIdentifier stream_identifier = 2;
+ * @return {?proto.event_store.client.shared.StreamIdentifier}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 2));
 };
 
 
-/** @param {string} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamName = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+/**
+ * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+*/
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
@@ -3678,14 +3724,17 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStr
  * optional uint64 stream_revision = 3;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamRevision = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamRevision = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamRevision = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamRevision = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
@@ -3693,14 +3742,17 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStr
  * optional uint64 prepare_position = 4;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getPreparePosition = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getPreparePosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setPreparePosition = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
@@ -3708,14 +3760,17 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setPre
  * optional uint64 commit_position = 5;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCommitPosition = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCommitPosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCommitPosition = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
@@ -3725,7 +3780,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCom
  * empty, instead returning `undefined`
  * @return {!jspb.Map<string,string>}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getMetadataMap = function(opt_noLazyCreate) {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getMetadataMap = function(opt_noLazyCreate) {
   return /** @type {!jspb.Map<string,string>} */ (
       jspb.Message.getMapField(this, 6, opt_noLazyCreate,
       null));
@@ -3734,17 +3789,18 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getMet
 
 /**
  * Clears values from the map. The map will be non-null.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.clearMetadataMap = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.clearMetadataMap = function() {
   this.getMetadataMap().clear();
-};
+  return this;};
 
 
 /**
  * optional bytes custom_metadata = 7;
  * @return {!(string|Uint8Array)}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCustomMetadata = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCustomMetadata = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
@@ -3754,7 +3810,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCus
  * This is a type-conversion wrapper around `getCustomMetadata()`
  * @return {string}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCustomMetadata_asB64 = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCustomMetadata_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
       this.getCustomMetadata()));
 };
@@ -3767,15 +3823,18 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCus
  * This is a type-conversion wrapper around `getCustomMetadata()`
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCustomMetadata_asU8 = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCustomMetadata_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
       this.getCustomMetadata()));
 };
 
 
-/** @param {!(string|Uint8Array)} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCustomMetadata = function(value) {
-  jspb.Message.setProto3BytesField(this, 7, value);
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCustomMetadata = function(value) {
+  return jspb.Message.setProto3BytesField(this, 7, value);
 };
 
 
@@ -3783,7 +3842,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCus
  * optional bytes data = 8;
  * @return {!(string|Uint8Array)}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getData = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getData = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
@@ -3793,7 +3852,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getDat
  * This is a type-conversion wrapper around `getData()`
  * @return {string}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getData_asB64 = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getData_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
       this.getData()));
 };
@@ -3806,39 +3865,46 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getDat
  * This is a type-conversion wrapper around `getData()`
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getData_asU8 = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getData_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
       this.getData()));
 };
 
 
-/** @param {!(string|Uint8Array)} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setData = function(value) {
-  jspb.Message.setProto3BytesField(this, 8, value);
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setData = function(value) {
+  return jspb.Message.setProto3BytesField(this, 8, value);
 };
 
 
 /**
  * optional RecordedEvent event = 1;
- * @return {?proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent}
+ * @return {?proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.getEvent = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent, 1));
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.getEvent = function() {
+  return /** @type{?proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent|undefined} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.setEvent = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
+*/
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.setEvent = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearEvent = function() {
-  this.setEvent(undefined);
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.clearEvent = function() {
+  return this.setEvent(undefined);
 };
 
 
@@ -3846,32 +3912,36 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearEvent = functio
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.hasEvent = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.hasEvent = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
  * optional RecordedEvent link = 2;
- * @return {?proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent}
+ * @return {?proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.getLink = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent, 2));
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.getLink = function() {
+  return /** @type{?proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadResp.ReadEvent.RecordedEvent|undefined} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.setLink = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
+/**
+ * @param {?proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
+*/
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.setLink = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearLink = function() {
-  this.setLink(undefined);
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.clearLink = function() {
+  return this.setLink(undefined);
 };
 
 
@@ -3879,7 +3949,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearLink = function
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.hasLink = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.hasLink = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
@@ -3888,22 +3958,26 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.hasLink = function()
  * optional uint64 commit_position = 3;
  * @return {number}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.getCommitPosition = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.getCommitPosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.setCommitPosition = function(value) {
-  jspb.Message.setOneofField(this, 3, proto.event_store.grpc.streams.ReadResp.ReadEvent.oneofGroups_[0], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
+ */
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.ReadResp.ReadEvent.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearCommitPosition = function() {
-  jspb.Message.setOneofField(this, 3, proto.event_store.grpc.streams.ReadResp.ReadEvent.oneofGroups_[0], undefined);
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.clearCommitPosition = function() {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.ReadResp.ReadEvent.oneofGroups_[0], undefined);
 };
 
 
@@ -3911,32 +3985,36 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearCommitPosition 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.hasCommitPosition = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.hasCommitPosition = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty no_position = 4;
- * @return {?proto.event_store.grpc.streams.ReadResp.Empty}
+ * optional event_store.client.shared.Empty no_position = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.getNoPosition = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadResp.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadResp.Empty, 4));
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.getNoPosition = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadResp.Empty|undefined} value */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.setNoPosition = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.ReadResp.ReadEvent.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
+*/
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.setNoPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.ReadResp.ReadEvent.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearNoPosition = function() {
-  this.setNoPosition(undefined);
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.clearNoPosition = function() {
+  return this.setNoPosition(undefined);
 };
 
 
@@ -3944,7 +4022,7 @@ proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.clearNoPosition = fu
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadResp.ReadEvent.prototype.hasNoPosition = function() {
+proto.event_store.client.streams.ReadResp.ReadEvent.prototype.hasNoPosition = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
@@ -3965,8 +4043,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.ReadResp.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.ReadResp.Empty.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.toObject(opt_includeInstance, this);
 };
 
 
@@ -3975,13 +4053,13 @@ proto.event_store.grpc.streams.ReadResp.Empty.prototype.toObject = function(opt_
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.ReadResp.Empty} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.ReadResp.SubscriptionConfirmation} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.Empty.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+    subscriptionId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -3995,29 +4073,33 @@ proto.event_store.grpc.streams.ReadResp.Empty.toObject = function(includeInstanc
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.ReadResp.Empty}
+ * @return {!proto.event_store.client.streams.ReadResp.SubscriptionConfirmation}
  */
-proto.event_store.grpc.streams.ReadResp.Empty.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.ReadResp.Empty;
-  return proto.event_store.grpc.streams.ReadResp.Empty.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.ReadResp.SubscriptionConfirmation;
+  return proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.ReadResp.Empty} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.ReadResp.SubscriptionConfirmation} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.ReadResp.Empty}
+ * @return {!proto.event_store.client.streams.ReadResp.SubscriptionConfirmation}
  */
-proto.event_store.grpc.streams.ReadResp.Empty.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSubscriptionId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -4031,9 +4113,9 @@ proto.event_store.grpc.streams.ReadResp.Empty.deserializeBinaryFromReader = func
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.ReadResp.Empty.prototype.serializeBinary = function() {
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.ReadResp.Empty.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -4041,36 +4123,339 @@ proto.event_store.grpc.streams.ReadResp.Empty.prototype.serializeBinary = functi
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.ReadResp.Empty} message
+ * @param {!proto.event_store.client.streams.ReadResp.SubscriptionConfirmation} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.ReadResp.Empty.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getSubscriptionId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
 };
 
 
 /**
- * optional ReadEvent event = 1;
- * @return {?proto.event_store.grpc.streams.ReadResp.ReadEvent}
+ * optional string subscription_id = 1;
+ * @return {string}
  */
-proto.event_store.grpc.streams.ReadResp.prototype.getEvent = function() {
-  return /** @type{?proto.event_store.grpc.streams.ReadResp.ReadEvent} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.ReadResp.ReadEvent, 1));
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.prototype.getSubscriptionId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.ReadResp.ReadEvent|undefined} value */
-proto.event_store.grpc.streams.ReadResp.prototype.setEvent = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.streams.ReadResp.SubscriptionConfirmation} returns this
+ */
+proto.event_store.client.streams.ReadResp.SubscriptionConfirmation.prototype.setSubscriptionId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadResp.Checkpoint.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.streams.ReadResp.Checkpoint} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.streams.ReadResp.Checkpoint}
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.streams.ReadResp.Checkpoint;
+  return proto.event_store.client.streams.ReadResp.Checkpoint.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.streams.ReadResp.Checkpoint} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.streams.ReadResp.Checkpoint}
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setCommitPosition(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setPreparePosition(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.streams.ReadResp.Checkpoint.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.streams.ReadResp.Checkpoint} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getCommitPosition();
+  if (f !== 0) {
+    writer.writeUint64(
+      1,
+      f
+    );
+  }
+  f = message.getPreparePosition();
+  if (f !== 0) {
+    writer.writeUint64(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional uint64 commit_position = 1;
+ * @return {number}
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.prototype.getCommitPosition = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadResp.Checkpoint} returns this
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 prepare_position = 2;
+ * @return {number}
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.prototype.getPreparePosition = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.ReadResp.Checkpoint} returns this
+ */
+proto.event_store.client.streams.ReadResp.Checkpoint.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.ReadResp.StreamNotFound.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.streams.ReadResp.StreamNotFound} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.streams.ReadResp.StreamNotFound}
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.streams.ReadResp.StreamNotFound;
+  return proto.event_store.client.streams.ReadResp.StreamNotFound.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.streams.ReadResp.StreamNotFound} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.streams.ReadResp.StreamNotFound}
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.streams.ReadResp.StreamNotFound.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.streams.ReadResp.StreamNotFound} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.shared.StreamIdentifier}
+ */
+proto.event_store.client.streams.ReadResp.StreamNotFound.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp.StreamNotFound} returns this
+*/
+proto.event_store.client.streams.ReadResp.StreamNotFound.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp.StreamNotFound} returns this
  */
-proto.event_store.grpc.streams.ReadResp.prototype.clearEvent = function() {
-  this.setEvent(undefined);
+proto.event_store.client.streams.ReadResp.StreamNotFound.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
 };
 
 
@@ -4078,8 +4463,156 @@ proto.event_store.grpc.streams.ReadResp.prototype.clearEvent = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.ReadResp.prototype.hasEvent = function() {
+proto.event_store.client.streams.ReadResp.StreamNotFound.prototype.hasStreamIdentifier = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional ReadEvent event = 1;
+ * @return {?proto.event_store.client.streams.ReadResp.ReadEvent}
+ */
+proto.event_store.client.streams.ReadResp.prototype.getEvent = function() {
+  return /** @type{?proto.event_store.client.streams.ReadResp.ReadEvent} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadResp.ReadEvent, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.streams.ReadResp.ReadEvent|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+*/
+proto.event_store.client.streams.ReadResp.prototype.setEvent = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.ReadResp.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+ */
+proto.event_store.client.streams.ReadResp.prototype.clearEvent = function() {
+  return this.setEvent(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.ReadResp.prototype.hasEvent = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional SubscriptionConfirmation confirmation = 2;
+ * @return {?proto.event_store.client.streams.ReadResp.SubscriptionConfirmation}
+ */
+proto.event_store.client.streams.ReadResp.prototype.getConfirmation = function() {
+  return /** @type{?proto.event_store.client.streams.ReadResp.SubscriptionConfirmation} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadResp.SubscriptionConfirmation, 2));
+};
+
+
+/**
+ * @param {?proto.event_store.client.streams.ReadResp.SubscriptionConfirmation|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+*/
+proto.event_store.client.streams.ReadResp.prototype.setConfirmation = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.ReadResp.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+ */
+proto.event_store.client.streams.ReadResp.prototype.clearConfirmation = function() {
+  return this.setConfirmation(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.ReadResp.prototype.hasConfirmation = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional Checkpoint checkpoint = 3;
+ * @return {?proto.event_store.client.streams.ReadResp.Checkpoint}
+ */
+proto.event_store.client.streams.ReadResp.prototype.getCheckpoint = function() {
+  return /** @type{?proto.event_store.client.streams.ReadResp.Checkpoint} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadResp.Checkpoint, 3));
+};
+
+
+/**
+ * @param {?proto.event_store.client.streams.ReadResp.Checkpoint|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+*/
+proto.event_store.client.streams.ReadResp.prototype.setCheckpoint = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.ReadResp.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+ */
+proto.event_store.client.streams.ReadResp.prototype.clearCheckpoint = function() {
+  return this.setCheckpoint(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.ReadResp.prototype.hasCheckpoint = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional StreamNotFound stream_not_found = 4;
+ * @return {?proto.event_store.client.streams.ReadResp.StreamNotFound}
+ */
+proto.event_store.client.streams.ReadResp.prototype.getStreamNotFound = function() {
+  return /** @type{?proto.event_store.client.streams.ReadResp.StreamNotFound} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.ReadResp.StreamNotFound, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.streams.ReadResp.StreamNotFound|undefined} value
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+*/
+proto.event_store.client.streams.ReadResp.prototype.setStreamNotFound = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.ReadResp.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.ReadResp} returns this
+ */
+proto.event_store.client.streams.ReadResp.prototype.clearStreamNotFound = function() {
+  return this.setStreamNotFound(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.ReadResp.prototype.hasStreamNotFound = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -4092,22 +4625,22 @@ proto.event_store.grpc.streams.ReadResp.prototype.hasEvent = function() {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.AppendReq.oneofGroups_ = [[1,2]];
+proto.event_store.client.streams.AppendReq.oneofGroups_ = [[1,2]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.AppendReq.ContentCase = {
+proto.event_store.client.streams.AppendReq.ContentCase = {
   CONTENT_NOT_SET: 0,
   OPTIONS: 1,
   PROPOSED_MESSAGE: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.AppendReq.ContentCase}
+ * @return {proto.event_store.client.streams.AppendReq.ContentCase}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.getContentCase = function() {
-  return /** @type {proto.event_store.grpc.streams.AppendReq.ContentCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendReq.oneofGroups_[0]));
+proto.event_store.client.streams.AppendReq.prototype.getContentCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendReq.ContentCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendReq.oneofGroups_[0]));
 };
 
 
@@ -4125,8 +4658,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendReq.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.AppendReq.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendReq.toObject(opt_includeInstance, this);
 };
 
 
@@ -4135,14 +4668,14 @@ proto.event_store.grpc.streams.AppendReq.prototype.toObject = function(opt_inclu
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendReq} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.AppendReq} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendReq.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.AppendReq.toObject = function(includeInstance, msg) {
   var f, obj = {
-    options: (f = msg.getOptions()) && proto.event_store.grpc.streams.AppendReq.Options.toObject(includeInstance, f),
-    proposedMessage: (f = msg.getProposedMessage()) && proto.event_store.grpc.streams.AppendReq.ProposedMessage.toObject(includeInstance, f)
+    options: (f = msg.getOptions()) && proto.event_store.client.streams.AppendReq.Options.toObject(includeInstance, f),
+    proposedMessage: (f = msg.getProposedMessage()) && proto.event_store.client.streams.AppendReq.ProposedMessage.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4156,23 +4689,23 @@ proto.event_store.grpc.streams.AppendReq.toObject = function(includeInstance, ms
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendReq}
+ * @return {!proto.event_store.client.streams.AppendReq}
  */
-proto.event_store.grpc.streams.AppendReq.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.AppendReq.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendReq;
-  return proto.event_store.grpc.streams.AppendReq.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.AppendReq;
+  return proto.event_store.client.streams.AppendReq.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendReq} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.AppendReq} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendReq}
+ * @return {!proto.event_store.client.streams.AppendReq}
  */
-proto.event_store.grpc.streams.AppendReq.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.AppendReq.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -4180,13 +4713,13 @@ proto.event_store.grpc.streams.AppendReq.deserializeBinaryFromReader = function(
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.AppendReq.Options;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendReq.Options.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.AppendReq.Options;
+      reader.readMessage(value,proto.event_store.client.streams.AppendReq.Options.deserializeBinaryFromReader);
       msg.setOptions(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.AppendReq.ProposedMessage;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendReq.ProposedMessage.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.AppendReq.ProposedMessage;
+      reader.readMessage(value,proto.event_store.client.streams.AppendReq.ProposedMessage.deserializeBinaryFromReader);
       msg.setProposedMessage(value);
       break;
     default:
@@ -4202,9 +4735,9 @@ proto.event_store.grpc.streams.AppendReq.deserializeBinaryFromReader = function(
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.serializeBinary = function() {
+proto.event_store.client.streams.AppendReq.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendReq.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.AppendReq.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -4212,18 +4745,18 @@ proto.event_store.grpc.streams.AppendReq.prototype.serializeBinary = function() 
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendReq} message
+ * @param {!proto.event_store.client.streams.AppendReq} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendReq.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.AppendReq.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getOptions();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.AppendReq.Options.serializeBinaryToWriter
+      proto.event_store.client.streams.AppendReq.Options.serializeBinaryToWriter
     );
   }
   f = message.getProposedMessage();
@@ -4231,7 +4764,7 @@ proto.event_store.grpc.streams.AppendReq.serializeBinaryToWriter = function(mess
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.AppendReq.ProposedMessage.serializeBinaryToWriter
+      proto.event_store.client.streams.AppendReq.ProposedMessage.serializeBinaryToWriter
     );
   }
 };
@@ -4246,12 +4779,12 @@ proto.event_store.grpc.streams.AppendReq.serializeBinaryToWriter = function(mess
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_ = [[2,3,4,5]];
+proto.event_store.client.streams.AppendReq.Options.oneofGroups_ = [[2,3,4,5]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.AppendReq.Options.ExpectedStreamRevisionCase = {
+proto.event_store.client.streams.AppendReq.Options.ExpectedStreamRevisionCase = {
   EXPECTED_STREAM_REVISION_NOT_SET: 0,
   REVISION: 2,
   NO_STREAM: 3,
@@ -4260,10 +4793,10 @@ proto.event_store.grpc.streams.AppendReq.Options.ExpectedStreamRevisionCase = {
 };
 
 /**
- * @return {proto.event_store.grpc.streams.AppendReq.Options.ExpectedStreamRevisionCase}
+ * @return {proto.event_store.client.streams.AppendReq.Options.ExpectedStreamRevisionCase}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.getExpectedStreamRevisionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.AppendReq.Options.ExpectedStreamRevisionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_[0]));
+proto.event_store.client.streams.AppendReq.Options.prototype.getExpectedStreamRevisionCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendReq.Options.ExpectedStreamRevisionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendReq.Options.oneofGroups_[0]));
 };
 
 
@@ -4281,8 +4814,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendReq.Options.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.AppendReq.Options.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendReq.Options.toObject(opt_includeInstance, this);
 };
 
 
@@ -4291,17 +4824,17 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.toObject = function(o
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendReq.Options} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.AppendReq.Options} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendReq.Options.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.AppendReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
-    streamName: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
     revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    noStream: (f = msg.getNoStream()) && proto.event_store.grpc.streams.AppendReq.Empty.toObject(includeInstance, f),
-    any: (f = msg.getAny()) && proto.event_store.grpc.streams.AppendReq.Empty.toObject(includeInstance, f),
-    streamExists: (f = msg.getStreamExists()) && proto.event_store.grpc.streams.AppendReq.Empty.toObject(includeInstance, f)
+    noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
+    any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
+    streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4315,23 +4848,23 @@ proto.event_store.grpc.streams.AppendReq.Options.toObject = function(includeInst
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendReq.Options}
+ * @return {!proto.event_store.client.streams.AppendReq.Options}
  */
-proto.event_store.grpc.streams.AppendReq.Options.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.AppendReq.Options.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendReq.Options;
-  return proto.event_store.grpc.streams.AppendReq.Options.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.AppendReq.Options;
+  return proto.event_store.client.streams.AppendReq.Options.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendReq.Options} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.AppendReq.Options} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendReq.Options}
+ * @return {!proto.event_store.client.streams.AppendReq.Options}
  */
-proto.event_store.grpc.streams.AppendReq.Options.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.AppendReq.Options.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -4339,26 +4872,27 @@ proto.event_store.grpc.streams.AppendReq.Options.deserializeBinaryFromReader = f
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setStreamName(value);
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setRevision(value);
       break;
     case 3:
-      var value = new proto.event_store.grpc.streams.AppendReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setNoStream(value);
       break;
     case 4:
-      var value = new proto.event_store.grpc.streams.AppendReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setAny(value);
       break;
     case 5:
-      var value = new proto.event_store.grpc.streams.AppendReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setStreamExists(value);
       break;
     default:
@@ -4374,9 +4908,9 @@ proto.event_store.grpc.streams.AppendReq.Options.deserializeBinaryFromReader = f
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.serializeBinary = function() {
+proto.event_store.client.streams.AppendReq.Options.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendReq.Options.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.AppendReq.Options.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -4384,17 +4918,18 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.serializeBinary = fun
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendReq.Options} message
+ * @param {!proto.event_store.client.streams.AppendReq.Options} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendReq.Options.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.AppendReq.Options.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getStreamName();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
       1,
-      f
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 2));
@@ -4409,7 +4944,7 @@ proto.event_store.grpc.streams.AppendReq.Options.serializeBinaryToWriter = funct
     writer.writeMessage(
       3,
       f,
-      proto.event_store.grpc.streams.AppendReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getAny();
@@ -4417,7 +4952,7 @@ proto.event_store.grpc.streams.AppendReq.Options.serializeBinaryToWriter = funct
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.AppendReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getStreamExists();
@@ -4425,24 +4960,46 @@ proto.event_store.grpc.streams.AppendReq.Options.serializeBinaryToWriter = funct
     writer.writeMessage(
       5,
       f,
-      proto.event_store.grpc.streams.AppendReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional string stream_name = 1;
- * @return {string}
+ * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.shared.StreamIdentifier}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.getStreamName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+proto.event_store.client.streams.AppendReq.Options.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
-/** @param {string} value */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.setStreamName = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
+*/
+proto.event_store.client.streams.AppendReq.Options.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
+ */
+proto.event_store.client.streams.AppendReq.Options.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendReq.Options.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -4450,22 +5007,26 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.setStreamName = funct
  * optional uint64 revision = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.getRevision = function() {
+proto.event_store.client.streams.AppendReq.Options.prototype.getRevision = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.setRevision = function(value) {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_[0], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
+ */
+proto.event_store.client.streams.AppendReq.Options.prototype.setRevision = function(value) {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.AppendReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.clearRevision = function() {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_[0], undefined);
+proto.event_store.client.streams.AppendReq.Options.prototype.clearRevision = function() {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.AppendReq.Options.oneofGroups_[0], undefined);
 };
 
 
@@ -4473,32 +5034,36 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.clearRevision = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.hasRevision = function() {
+proto.event_store.client.streams.AppendReq.Options.prototype.hasRevision = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional Empty no_stream = 3;
- * @return {?proto.event_store.grpc.streams.AppendReq.Empty}
+ * optional event_store.client.shared.Empty no_stream = 3;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.getNoStream = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendReq.Empty, 3));
+proto.event_store.client.streams.AppendReq.Options.prototype.getNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendReq.Empty|undefined} value */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.setNoStream = function(value) {
-  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
+*/
+proto.event_store.client.streams.AppendReq.Options.prototype.setNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.AppendReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.clearNoStream = function() {
-  this.setNoStream(undefined);
+proto.event_store.client.streams.AppendReq.Options.prototype.clearNoStream = function() {
+  return this.setNoStream(undefined);
 };
 
 
@@ -4506,32 +5071,36 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.clearNoStream = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.hasNoStream = function() {
+proto.event_store.client.streams.AppendReq.Options.prototype.hasNoStream = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty any = 4;
- * @return {?proto.event_store.grpc.streams.AppendReq.Empty}
+ * optional event_store.client.shared.Empty any = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.getAny = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendReq.Empty, 4));
+proto.event_store.client.streams.AppendReq.Options.prototype.getAny = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendReq.Empty|undefined} value */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.setAny = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
+*/
+proto.event_store.client.streams.AppendReq.Options.prototype.setAny = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.AppendReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.clearAny = function() {
-  this.setAny(undefined);
+proto.event_store.client.streams.AppendReq.Options.prototype.clearAny = function() {
+  return this.setAny(undefined);
 };
 
 
@@ -4539,32 +5108,36 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.clearAny = function()
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.hasAny = function() {
+proto.event_store.client.streams.AppendReq.Options.prototype.hasAny = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional Empty stream_exists = 5;
- * @return {?proto.event_store.grpc.streams.AppendReq.Empty}
+ * optional event_store.client.shared.Empty stream_exists = 5;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.getStreamExists = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendReq.Empty, 5));
+proto.event_store.client.streams.AppendReq.Options.prototype.getStreamExists = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendReq.Empty|undefined} value */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.setStreamExists = function(value) {
-  jspb.Message.setOneofWrapperField(this, 5, proto.event_store.grpc.streams.AppendReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
+*/
+proto.event_store.client.streams.AppendReq.Options.prototype.setStreamExists = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.AppendReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.clearStreamExists = function() {
-  this.setStreamExists(undefined);
+proto.event_store.client.streams.AppendReq.Options.prototype.clearStreamExists = function() {
+  return this.setStreamExists(undefined);
 };
 
 
@@ -4572,7 +5145,7 @@ proto.event_store.grpc.streams.AppendReq.Options.prototype.clearStreamExists = f
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.Options.prototype.hasStreamExists = function() {
+proto.event_store.client.streams.AppendReq.Options.prototype.hasStreamExists = function() {
   return jspb.Message.getField(this, 5) != null;
 };
 
@@ -4593,8 +5166,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendReq.ProposedMessage.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendReq.ProposedMessage.toObject(opt_includeInstance, this);
 };
 
 
@@ -4603,13 +5176,13 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.toObject = fu
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendReq.ProposedMessage} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.AppendReq.ProposedMessage} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.AppendReq.ProposedMessage.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: (f = msg.getId()) && proto.event_store.grpc.streams.UUID.toObject(includeInstance, f),
+    id: (f = msg.getId()) && shared_pb.UUID.toObject(includeInstance, f),
     metadataMap: (f = msg.getMetadataMap()) ? f.toObject(includeInstance, undefined) : [],
     customMetadata: msg.getCustomMetadata_asB64(),
     data: msg.getData_asB64()
@@ -4626,23 +5199,23 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.toObject = function(inc
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendReq.ProposedMessage}
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.AppendReq.ProposedMessage.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendReq.ProposedMessage;
-  return proto.event_store.grpc.streams.AppendReq.ProposedMessage.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.AppendReq.ProposedMessage;
+  return proto.event_store.client.streams.AppendReq.ProposedMessage.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendReq.ProposedMessage} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.AppendReq.ProposedMessage} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendReq.ProposedMessage}
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.AppendReq.ProposedMessage.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -4650,14 +5223,14 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.deserializeBinaryFromRe
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.UUID;
-      reader.readMessage(value,proto.event_store.grpc.streams.UUID.deserializeBinaryFromReader);
+      var value = new shared_pb.UUID;
+      reader.readMessage(value,shared_pb.UUID.deserializeBinaryFromReader);
       msg.setId(value);
       break;
     case 2:
       var value = msg.getMetadataMap();
       reader.readMessage(value, function(message, reader) {
-        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "");
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
          });
       break;
     case 3:
@@ -4681,9 +5254,9 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.deserializeBinaryFromRe
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.serializeBinary = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendReq.ProposedMessage.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.AppendReq.ProposedMessage.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -4691,18 +5264,18 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.serializeBina
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendReq.ProposedMessage} message
+ * @param {!proto.event_store.client.streams.AppendReq.ProposedMessage} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.AppendReq.ProposedMessage.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getId();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.UUID.serializeBinaryToWriter
+      shared_pb.UUID.serializeBinaryToWriter
     );
   }
   f = message.getMetadataMap(true);
@@ -4727,26 +5300,30 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.serializeBinaryToWriter
 
 
 /**
- * optional UUID id = 1;
- * @return {?proto.event_store.grpc.streams.UUID}
+ * optional event_store.client.shared.UUID id = 1;
+ * @return {?proto.event_store.client.shared.UUID}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getId = function() {
-  return /** @type{?proto.event_store.grpc.streams.UUID} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.UUID, 1));
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getId = function() {
+  return /** @type{?proto.event_store.client.shared.UUID} */ (
+    jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.UUID|undefined} value */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.setId = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage} returns this
+*/
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.setId = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage} returns this
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.clearId = function() {
-  this.setId(undefined);
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.clearId = function() {
+  return this.setId(undefined);
 };
 
 
@@ -4754,7 +5331,7 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.clearId = fun
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.hasId = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.hasId = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -4765,7 +5342,7 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.hasId = funct
  * empty, instead returning `undefined`
  * @return {!jspb.Map<string,string>}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getMetadataMap = function(opt_noLazyCreate) {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getMetadataMap = function(opt_noLazyCreate) {
   return /** @type {!jspb.Map<string,string>} */ (
       jspb.Message.getMapField(this, 2, opt_noLazyCreate,
       null));
@@ -4774,17 +5351,18 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getMetadataMa
 
 /**
  * Clears values from the map. The map will be non-null.
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage} returns this
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.clearMetadataMap = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.clearMetadataMap = function() {
   this.getMetadataMap().clear();
-};
+  return this;};
 
 
 /**
  * optional bytes custom_metadata = 3;
  * @return {!(string|Uint8Array)}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getCustomMetadata = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getCustomMetadata = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -4794,7 +5372,7 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getCustomMeta
  * This is a type-conversion wrapper around `getCustomMetadata()`
  * @return {string}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getCustomMetadata_asB64 = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getCustomMetadata_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
       this.getCustomMetadata()));
 };
@@ -4807,15 +5385,18 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getCustomMeta
  * This is a type-conversion wrapper around `getCustomMetadata()`
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getCustomMetadata_asU8 = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getCustomMetadata_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
       this.getCustomMetadata()));
 };
 
 
-/** @param {!(string|Uint8Array)} value */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.setCustomMetadata = function(value) {
-  jspb.Message.setProto3BytesField(this, 3, value);
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage} returns this
+ */
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.setCustomMetadata = function(value) {
+  return jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 
@@ -4823,7 +5404,7 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.setCustomMeta
  * optional bytes data = 4;
  * @return {!(string|Uint8Array)}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getData = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getData = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -4833,7 +5414,7 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getData = fun
  * This is a type-conversion wrapper around `getData()`
  * @return {string}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getData_asB64 = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getData_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
       this.getData()));
 };
@@ -4846,140 +5427,46 @@ proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getData_asB64
  * This is a type-conversion wrapper around `getData()`
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.getData_asU8 = function() {
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.getData_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
       this.getData()));
 };
 
 
-/** @param {!(string|Uint8Array)} value */
-proto.event_store.grpc.streams.AppendReq.ProposedMessage.prototype.setData = function(value) {
-  jspb.Message.setProto3BytesField(this, 4, value);
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.event_store.client.streams.AppendReq.ProposedMessage} returns this
  */
-proto.event_store.grpc.streams.AppendReq.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendReq.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendReq.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.AppendReq.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendReq.Empty}
- */
-proto.event_store.grpc.streams.AppendReq.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendReq.Empty;
-  return proto.event_store.grpc.streams.AppendReq.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendReq.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendReq.Empty}
- */
-proto.event_store.grpc.streams.AppendReq.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.AppendReq.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendReq.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendReq.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.AppendReq.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
+proto.event_store.client.streams.AppendReq.ProposedMessage.prototype.setData = function(value) {
+  return jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 
 /**
  * optional Options options = 1;
- * @return {?proto.event_store.grpc.streams.AppendReq.Options}
+ * @return {?proto.event_store.client.streams.AppendReq.Options}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.getOptions = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendReq.Options} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendReq.Options, 1));
+proto.event_store.client.streams.AppendReq.prototype.getOptions = function() {
+  return /** @type{?proto.event_store.client.streams.AppendReq.Options} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.AppendReq.Options, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendReq.Options|undefined} value */
-proto.event_store.grpc.streams.AppendReq.prototype.setOptions = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.AppendReq.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.AppendReq.Options|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq} returns this
+*/
+proto.event_store.client.streams.AppendReq.prototype.setOptions = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.AppendReq.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq} returns this
  */
-proto.event_store.grpc.streams.AppendReq.prototype.clearOptions = function() {
-  this.setOptions(undefined);
+proto.event_store.client.streams.AppendReq.prototype.clearOptions = function() {
+  return this.setOptions(undefined);
 };
 
 
@@ -4987,32 +5474,36 @@ proto.event_store.grpc.streams.AppendReq.prototype.clearOptions = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.hasOptions = function() {
+proto.event_store.client.streams.AppendReq.prototype.hasOptions = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
  * optional ProposedMessage proposed_message = 2;
- * @return {?proto.event_store.grpc.streams.AppendReq.ProposedMessage}
+ * @return {?proto.event_store.client.streams.AppendReq.ProposedMessage}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.getProposedMessage = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendReq.ProposedMessage} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendReq.ProposedMessage, 2));
+proto.event_store.client.streams.AppendReq.prototype.getProposedMessage = function() {
+  return /** @type{?proto.event_store.client.streams.AppendReq.ProposedMessage} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.AppendReq.ProposedMessage, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendReq.ProposedMessage|undefined} value */
-proto.event_store.grpc.streams.AppendReq.prototype.setProposedMessage = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.AppendReq.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.AppendReq.ProposedMessage|undefined} value
+ * @return {!proto.event_store.client.streams.AppendReq} returns this
+*/
+proto.event_store.client.streams.AppendReq.prototype.setProposedMessage = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.AppendReq.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendReq} returns this
  */
-proto.event_store.grpc.streams.AppendReq.prototype.clearProposedMessage = function() {
-  this.setProposedMessage(undefined);
+proto.event_store.client.streams.AppendReq.prototype.clearProposedMessage = function() {
+  return this.setProposedMessage(undefined);
 };
 
 
@@ -5020,7 +5511,7 @@ proto.event_store.grpc.streams.AppendReq.prototype.clearProposedMessage = functi
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendReq.prototype.hasProposedMessage = function() {
+proto.event_store.client.streams.AppendReq.prototype.hasProposedMessage = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
@@ -5034,38 +5525,22 @@ proto.event_store.grpc.streams.AppendReq.prototype.hasProposedMessage = function
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.AppendResp.oneofGroups_ = [[1,2],[3,4]];
+proto.event_store.client.streams.AppendResp.oneofGroups_ = [[1,2]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase = {
-  CURRENT_REVISION_OPTION_NOT_SET: 0,
-  CURRENT_REVISION: 1,
-  NO_STREAM: 2
+proto.event_store.client.streams.AppendResp.ResultCase = {
+  RESULT_NOT_SET: 0,
+  SUCCESS: 1,
+  WRONG_EXPECTED_VERSION: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase}
+ * @return {proto.event_store.client.streams.AppendResp.ResultCase}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getCurrentRevisionOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.AppendResp.CurrentRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendResp.oneofGroups_[0]));
-};
-
-/**
- * @enum {number}
- */
-proto.event_store.grpc.streams.AppendResp.PositionOptionCase = {
-  POSITION_OPTION_NOT_SET: 0,
-  POSITION: 3,
-  EMPTY: 4
-};
-
-/**
- * @return {proto.event_store.grpc.streams.AppendResp.PositionOptionCase}
- */
-proto.event_store.grpc.streams.AppendResp.prototype.getPositionOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.AppendResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.AppendResp.oneofGroups_[1]));
+proto.event_store.client.streams.AppendResp.prototype.getResultCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.ResultCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.oneofGroups_[0]));
 };
 
 
@@ -5083,8 +5558,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendResp.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.AppendResp.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendResp.toObject(opt_includeInstance, this);
 };
 
 
@@ -5093,16 +5568,14 @@ proto.event_store.grpc.streams.AppendResp.prototype.toObject = function(opt_incl
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendResp} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.AppendResp} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendResp.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.AppendResp.toObject = function(includeInstance, msg) {
   var f, obj = {
-    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    noStream: (f = msg.getNoStream()) && proto.event_store.grpc.streams.AppendResp.Empty.toObject(includeInstance, f),
-    position: (f = msg.getPosition()) && proto.event_store.grpc.streams.AppendResp.Position.toObject(includeInstance, f),
-    empty: (f = msg.getEmpty()) && proto.event_store.grpc.streams.AppendResp.Empty.toObject(includeInstance, f)
+    success: (f = msg.getSuccess()) && proto.event_store.client.streams.AppendResp.Success.toObject(includeInstance, f),
+    wrongExpectedVersion: (f = msg.getWrongExpectedVersion()) && proto.event_store.client.streams.AppendResp.WrongExpectedVersion.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -5116,23 +5589,23 @@ proto.event_store.grpc.streams.AppendResp.toObject = function(includeInstance, m
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendResp}
+ * @return {!proto.event_store.client.streams.AppendResp}
  */
-proto.event_store.grpc.streams.AppendResp.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.AppendResp.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendResp;
-  return proto.event_store.grpc.streams.AppendResp.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.AppendResp;
+  return proto.event_store.client.streams.AppendResp.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendResp} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.AppendResp} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendResp}
+ * @return {!proto.event_store.client.streams.AppendResp}
  */
-proto.event_store.grpc.streams.AppendResp.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.AppendResp.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -5140,23 +5613,14 @@ proto.event_store.grpc.streams.AppendResp.deserializeBinaryFromReader = function
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setCurrentRevision(value);
+      var value = new proto.event_store.client.streams.AppendResp.Success;
+      reader.readMessage(value,proto.event_store.client.streams.AppendResp.Success.deserializeBinaryFromReader);
+      msg.setSuccess(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.AppendResp.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendResp.Empty.deserializeBinaryFromReader);
-      msg.setNoStream(value);
-      break;
-    case 3:
-      var value = new proto.event_store.grpc.streams.AppendResp.Position;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendResp.Position.deserializeBinaryFromReader);
-      msg.setPosition(value);
-      break;
-    case 4:
-      var value = new proto.event_store.grpc.streams.AppendResp.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.AppendResp.Empty.deserializeBinaryFromReader);
-      msg.setEmpty(value);
+      var value = new proto.event_store.client.streams.AppendResp.WrongExpectedVersion;
+      reader.readMessage(value,proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBinaryFromReader);
+      msg.setWrongExpectedVersion(value);
       break;
     default:
       reader.skipField();
@@ -5171,9 +5635,9 @@ proto.event_store.grpc.streams.AppendResp.deserializeBinaryFromReader = function
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.serializeBinary = function() {
+proto.event_store.client.streams.AppendResp.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendResp.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.AppendResp.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -5181,11 +5645,352 @@ proto.event_store.grpc.streams.AppendResp.prototype.serializeBinary = function()
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendResp} message
+ * @param {!proto.event_store.client.streams.AppendResp} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.AppendResp.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.AppendResp.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getSuccess();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.event_store.client.streams.AppendResp.Success.serializeBinaryToWriter
+    );
+  }
+  f = message.getWrongExpectedVersion();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinaryToWriter
+    );
+  }
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.streams.AppendResp.Position.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendResp.Position.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.streams.AppendResp.Position} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.AppendResp.Position.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.streams.AppendResp.Position}
+ */
+proto.event_store.client.streams.AppendResp.Position.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.streams.AppendResp.Position;
+  return proto.event_store.client.streams.AppendResp.Position.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.streams.AppendResp.Position} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.streams.AppendResp.Position}
+ */
+proto.event_store.client.streams.AppendResp.Position.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setCommitPosition(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setPreparePosition(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.streams.AppendResp.Position.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.streams.AppendResp.Position.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.streams.AppendResp.Position} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.AppendResp.Position.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getCommitPosition();
+  if (f !== 0) {
+    writer.writeUint64(
+      1,
+      f
+    );
+  }
+  f = message.getPreparePosition();
+  if (f !== 0) {
+    writer.writeUint64(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional uint64 commit_position = 1;
+ * @return {number}
+ */
+proto.event_store.client.streams.AppendResp.Position.prototype.getCommitPosition = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendResp.Position} returns this
+ */
+proto.event_store.client.streams.AppendResp.Position.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 prepare_position = 2;
+ * @return {number}
+ */
+proto.event_store.client.streams.AppendResp.Position.prototype.getPreparePosition = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendResp.Position} returns this
+ */
+proto.event_store.client.streams.AppendResp.Position.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.streams.AppendResp.Success.oneofGroups_ = [[1,2],[3,4]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.AppendResp.Success.CurrentRevisionOptionCase = {
+  CURRENT_REVISION_OPTION_NOT_SET: 0,
+  CURRENT_REVISION: 1,
+  NO_STREAM: 2
+};
+
+/**
+ * @return {proto.event_store.client.streams.AppendResp.Success.CurrentRevisionOptionCase}
+ */
+proto.event_store.client.streams.AppendResp.Success.prototype.getCurrentRevisionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.Success.CurrentRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[0]));
+};
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.AppendResp.Success.PositionOptionCase = {
+  POSITION_OPTION_NOT_SET: 0,
+  POSITION: 3,
+  NO_POSITION: 4
+};
+
+/**
+ * @return {proto.event_store.client.streams.AppendResp.Success.PositionOptionCase}
+ */
+proto.event_store.client.streams.AppendResp.Success.prototype.getPositionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.Success.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[1]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.streams.AppendResp.Success.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendResp.Success.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.streams.AppendResp.Success} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.AppendResp.Success.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
+    position: (f = msg.getPosition()) && proto.event_store.client.streams.AppendResp.Position.toObject(includeInstance, f),
+    noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.streams.AppendResp.Success}
+ */
+proto.event_store.client.streams.AppendResp.Success.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.streams.AppendResp.Success;
+  return proto.event_store.client.streams.AppendResp.Success.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.streams.AppendResp.Success} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.streams.AppendResp.Success}
+ */
+proto.event_store.client.streams.AppendResp.Success.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setCurrentRevision(value);
+      break;
+    case 2:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setNoStream(value);
+      break;
+    case 3:
+      var value = new proto.event_store.client.streams.AppendResp.Position;
+      reader.readMessage(value,proto.event_store.client.streams.AppendResp.Position.deserializeBinaryFromReader);
+      msg.setPosition(value);
+      break;
+    case 4:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setNoPosition(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.streams.AppendResp.Success.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.streams.AppendResp.Success.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.streams.AppendResp.Success} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.AppendResp.Success.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
@@ -5199,7 +6004,7 @@ proto.event_store.grpc.streams.AppendResp.serializeBinaryToWriter = function(mes
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.AppendResp.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getPosition();
@@ -5207,272 +6012,17 @@ proto.event_store.grpc.streams.AppendResp.serializeBinaryToWriter = function(mes
     writer.writeMessage(
       3,
       f,
-      proto.event_store.grpc.streams.AppendResp.Position.serializeBinaryToWriter
+      proto.event_store.client.streams.AppendResp.Position.serializeBinaryToWriter
     );
   }
-  f = message.getEmpty();
+  f = message.getNoPosition();
   if (f != null) {
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.AppendResp.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.AppendResp.Position.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendResp.Position.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendResp.Position} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.AppendResp.Position.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendResp.Position}
- */
-proto.event_store.grpc.streams.AppendResp.Position.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendResp.Position;
-  return proto.event_store.grpc.streams.AppendResp.Position.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendResp.Position} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendResp.Position}
- */
-proto.event_store.grpc.streams.AppendResp.Position.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setCommitPosition(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setPreparePosition(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.AppendResp.Position.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendResp.Position.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendResp.Position} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.AppendResp.Position.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
-      1,
-      f
-    );
-  }
-  f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
-      2,
-      f
-    );
-  }
-};
-
-
-/**
- * optional uint64 commit_position = 1;
- * @return {number}
- */
-proto.event_store.grpc.streams.AppendResp.Position.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.event_store.grpc.streams.AppendResp.Position.prototype.setCommitPosition = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
-};
-
-
-/**
- * optional uint64 prepare_position = 2;
- * @return {number}
- */
-proto.event_store.grpc.streams.AppendResp.Position.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.event_store.grpc.streams.AppendResp.Position.prototype.setPreparePosition = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.AppendResp.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.AppendResp.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.AppendResp.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.AppendResp.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.AppendResp.Empty}
- */
-proto.event_store.grpc.streams.AppendResp.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.AppendResp.Empty;
-  return proto.event_store.grpc.streams.AppendResp.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.AppendResp.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.AppendResp.Empty}
- */
-proto.event_store.grpc.streams.AppendResp.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.AppendResp.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.AppendResp.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.AppendResp.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.AppendResp.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
 };
 
 
@@ -5480,22 +6030,26 @@ proto.event_store.grpc.streams.AppendResp.Empty.serializeBinaryToWriter = functi
  * optional uint64 current_revision = 1;
  * @return {number}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getCurrentRevision = function() {
+proto.event_store.client.streams.AppendResp.Success.prototype.getCurrentRevision = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.AppendResp.prototype.setCurrentRevision = function(value) {
-  jspb.Message.setOneofField(this, 1, proto.event_store.grpc.streams.AppendResp.oneofGroups_[0], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
+ */
+proto.event_store.client.streams.AppendResp.Success.prototype.setCurrentRevision = function(value) {
+  return jspb.Message.setOneofField(this, 1, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
  */
-proto.event_store.grpc.streams.AppendResp.prototype.clearCurrentRevision = function() {
-  jspb.Message.setOneofField(this, 1, proto.event_store.grpc.streams.AppendResp.oneofGroups_[0], undefined);
+proto.event_store.client.streams.AppendResp.Success.prototype.clearCurrentRevision = function() {
+  return jspb.Message.setOneofField(this, 1, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[0], undefined);
 };
 
 
@@ -5503,32 +6057,36 @@ proto.event_store.grpc.streams.AppendResp.prototype.clearCurrentRevision = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.hasCurrentRevision = function() {
+proto.event_store.client.streams.AppendResp.Success.prototype.hasCurrentRevision = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional Empty no_stream = 2;
- * @return {?proto.event_store.grpc.streams.AppendResp.Empty}
+ * optional event_store.client.shared.Empty no_stream = 2;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getNoStream = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendResp.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendResp.Empty, 2));
+proto.event_store.client.streams.AppendResp.Success.prototype.getNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendResp.Empty|undefined} value */
-proto.event_store.grpc.streams.AppendResp.prototype.setNoStream = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.AppendResp.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
+*/
+proto.event_store.client.streams.AppendResp.Success.prototype.setNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
  */
-proto.event_store.grpc.streams.AppendResp.prototype.clearNoStream = function() {
-  this.setNoStream(undefined);
+proto.event_store.client.streams.AppendResp.Success.prototype.clearNoStream = function() {
+  return this.setNoStream(undefined);
 };
 
 
@@ -5536,32 +6094,36 @@ proto.event_store.grpc.streams.AppendResp.prototype.clearNoStream = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.hasNoStream = function() {
+proto.event_store.client.streams.AppendResp.Success.prototype.hasNoStream = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
  * optional Position position = 3;
- * @return {?proto.event_store.grpc.streams.AppendResp.Position}
+ * @return {?proto.event_store.client.streams.AppendResp.Position}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getPosition = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendResp.Position} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendResp.Position, 3));
+proto.event_store.client.streams.AppendResp.Success.prototype.getPosition = function() {
+  return /** @type{?proto.event_store.client.streams.AppendResp.Position} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.AppendResp.Position, 3));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendResp.Position|undefined} value */
-proto.event_store.grpc.streams.AppendResp.prototype.setPosition = function(value) {
-  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.AppendResp.oneofGroups_[1], value);
+/**
+ * @param {?proto.event_store.client.streams.AppendResp.Position|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
+*/
+proto.event_store.client.streams.AppendResp.Success.prototype.setPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[1], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
  */
-proto.event_store.grpc.streams.AppendResp.prototype.clearPosition = function() {
-  this.setPosition(undefined);
+proto.event_store.client.streams.AppendResp.Success.prototype.clearPosition = function() {
+  return this.setPosition(undefined);
 };
 
 
@@ -5569,32 +6131,36 @@ proto.event_store.grpc.streams.AppendResp.prototype.clearPosition = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.hasPosition = function() {
+proto.event_store.client.streams.AppendResp.Success.prototype.hasPosition = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty empty = 4;
- * @return {?proto.event_store.grpc.streams.AppendResp.Empty}
+ * optional event_store.client.shared.Empty no_position = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.getEmpty = function() {
-  return /** @type{?proto.event_store.grpc.streams.AppendResp.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.AppendResp.Empty, 4));
+proto.event_store.client.streams.AppendResp.Success.prototype.getNoPosition = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.AppendResp.Empty|undefined} value */
-proto.event_store.grpc.streams.AppendResp.prototype.setEmpty = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.AppendResp.oneofGroups_[1], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
+*/
+proto.event_store.client.streams.AppendResp.Success.prototype.setNoPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.AppendResp.Success.oneofGroups_[1], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
  */
-proto.event_store.grpc.streams.AppendResp.prototype.clearEmpty = function() {
-  this.setEmpty(undefined);
+proto.event_store.client.streams.AppendResp.Success.prototype.clearNoPosition = function() {
+  return this.setNoPosition(undefined);
 };
 
 
@@ -5602,122 +6168,8 @@ proto.event_store.grpc.streams.AppendResp.prototype.clearEmpty = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.AppendResp.prototype.hasEmpty = function() {
+proto.event_store.client.streams.AppendResp.Success.prototype.hasNoPosition = function() {
   return jspb.Message.getField(this, 4) != null;
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.DeleteReq.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.DeleteReq.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.DeleteReq} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.DeleteReq.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    options: (f = msg.getOptions()) && proto.event_store.grpc.streams.DeleteReq.Options.toObject(includeInstance, f)
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.DeleteReq}
- */
-proto.event_store.grpc.streams.DeleteReq.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.DeleteReq;
-  return proto.event_store.grpc.streams.DeleteReq.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.DeleteReq} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.DeleteReq}
- */
-proto.event_store.grpc.streams.DeleteReq.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = new proto.event_store.grpc.streams.DeleteReq.Options;
-      reader.readMessage(value,proto.event_store.grpc.streams.DeleteReq.Options.deserializeBinaryFromReader);
-      msg.setOptions(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.DeleteReq.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.DeleteReq.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.DeleteReq} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.DeleteReq.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getOptions();
-  if (f != null) {
-    writer.writeMessage(
-      1,
-      f,
-      proto.event_store.grpc.streams.DeleteReq.Options.serializeBinaryToWriter
-    );
-  }
 };
 
 
@@ -5730,24 +6182,39 @@ proto.event_store.grpc.streams.DeleteReq.serializeBinaryToWriter = function(mess
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_ = [[2,3,4,5]];
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_ = [[1,2],[3,4,5]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.ExpectedStreamRevisionCase = {
-  EXPECTED_STREAM_REVISION_NOT_SET: 0,
-  REVISION: 2,
-  NO_STREAM: 3,
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase = {
+  CURRENT_REVISION_OPTION_NOT_SET: 0,
+  CURRENT_REVISION: 1,
+  NO_STREAM: 2
+};
+
+/**
+ * @return {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevisionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0]));
+};
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase = {
+  EXPECTED_REVISION_OPTION_NOT_SET: 0,
+  EXPECTED_REVISION: 3,
   ANY: 4,
   STREAM_EXISTS: 5
 };
 
 /**
- * @return {proto.event_store.grpc.streams.DeleteReq.Options.ExpectedStreamRevisionCase}
+ * @return {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.getExpectedStreamRevisionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.DeleteReq.Options.ExpectedStreamRevisionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_[0]));
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevisionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1]));
 };
 
 
@@ -5765,8 +6232,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.DeleteReq.Options.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.AppendResp.WrongExpectedVersion.toObject(opt_includeInstance, this);
 };
 
 
@@ -5775,17 +6242,17 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.toObject = function(o
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.DeleteReq.Options} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.DeleteReq.Options.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.toObject = function(includeInstance, msg) {
   var f, obj = {
-    streamName: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    noStream: (f = msg.getNoStream()) && proto.event_store.grpc.streams.DeleteReq.Empty.toObject(includeInstance, f),
-    any: (f = msg.getAny()) && proto.event_store.grpc.streams.DeleteReq.Empty.toObject(includeInstance, f),
-    streamExists: (f = msg.getStreamExists()) && proto.event_store.grpc.streams.DeleteReq.Empty.toObject(includeInstance, f)
+    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
+    expectedRevision: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
+    streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -5799,23 +6266,23 @@ proto.event_store.grpc.streams.DeleteReq.Options.toObject = function(includeInst
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.DeleteReq.Options}
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.DeleteReq.Options;
-  return proto.event_store.grpc.streams.DeleteReq.Options.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.AppendResp.WrongExpectedVersion;
+  return proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.DeleteReq.Options} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.DeleteReq.Options}
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -5823,26 +6290,26 @@ proto.event_store.grpc.streams.DeleteReq.Options.deserializeBinaryFromReader = f
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setStreamName(value);
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setCurrentRevision(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setRevision(value);
-      break;
-    case 3:
-      var value = new proto.event_store.grpc.streams.DeleteReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.DeleteReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setNoStream(value);
       break;
+    case 3:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setExpectedRevision(value);
+      break;
     case 4:
-      var value = new proto.event_store.grpc.streams.DeleteReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.DeleteReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setAny(value);
       break;
     case 5:
-      var value = new proto.event_store.grpc.streams.DeleteReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.DeleteReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setStreamExists(value);
       break;
     default:
@@ -5858,9 +6325,9 @@ proto.event_store.grpc.streams.DeleteReq.Options.deserializeBinaryFromReader = f
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.serializeBinary = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.DeleteReq.Options.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -5868,17 +6335,584 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.serializeBinary = fun
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.DeleteReq.Options} message
+ * @param {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.DeleteReq.Options.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getStreamName();
-  if (f.length > 0) {
-    writer.writeString(
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
+  if (f != null) {
+    writer.writeUint64(
       1,
       f
+    );
+  }
+  f = message.getNoStream();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeUint64(
+      3,
+      f
+    );
+  }
+  f = message.getAny();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getStreamExists();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional uint64 current_revision = 1;
+ * @return {number}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevision = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentRevision = function(value) {
+  return jspb.Message.setOneofField(this, 1, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearCurrentRevision = function() {
+  return jspb.Message.setOneofField(this, 1, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCurrentRevision = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty no_stream = 2;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearNoStream = function() {
+  return this.setNoStream(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasNoStream = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional uint64 expected_revision = 3;
+ * @return {number}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevision = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedRevision = function(value) {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearExpectedRevision = function() {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedRevision = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty any = 4;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getAny = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setAny = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearAny = function() {
+  return this.setAny(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasAny = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty stream_exists = 5;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getStreamExists = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setStreamExists = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearStreamExists = function() {
+  return this.setStreamExists(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasStreamExists = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional Success success = 1;
+ * @return {?proto.event_store.client.streams.AppendResp.Success}
+ */
+proto.event_store.client.streams.AppendResp.prototype.getSuccess = function() {
+  return /** @type{?proto.event_store.client.streams.AppendResp.Success} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.AppendResp.Success, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.streams.AppendResp.Success|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp} returns this
+*/
+proto.event_store.client.streams.AppendResp.prototype.setSuccess = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.AppendResp.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp} returns this
+ */
+proto.event_store.client.streams.AppendResp.prototype.clearSuccess = function() {
+  return this.setSuccess(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.prototype.hasSuccess = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional WrongExpectedVersion wrong_expected_version = 2;
+ * @return {?proto.event_store.client.streams.AppendResp.WrongExpectedVersion}
+ */
+proto.event_store.client.streams.AppendResp.prototype.getWrongExpectedVersion = function() {
+  return /** @type{?proto.event_store.client.streams.AppendResp.WrongExpectedVersion} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion, 2));
+};
+
+
+/**
+ * @param {?proto.event_store.client.streams.AppendResp.WrongExpectedVersion|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp} returns this
+*/
+proto.event_store.client.streams.AppendResp.prototype.setWrongExpectedVersion = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.AppendResp.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp} returns this
+ */
+proto.event_store.client.streams.AppendResp.prototype.clearWrongExpectedVersion = function() {
+  return this.setWrongExpectedVersion(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.prototype.hasWrongExpectedVersion = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.streams.DeleteReq.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.DeleteReq.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.streams.DeleteReq} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.DeleteReq.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    options: (f = msg.getOptions()) && proto.event_store.client.streams.DeleteReq.Options.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.streams.DeleteReq}
+ */
+proto.event_store.client.streams.DeleteReq.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.streams.DeleteReq;
+  return proto.event_store.client.streams.DeleteReq.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.streams.DeleteReq} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.streams.DeleteReq}
+ */
+proto.event_store.client.streams.DeleteReq.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.event_store.client.streams.DeleteReq.Options;
+      reader.readMessage(value,proto.event_store.client.streams.DeleteReq.Options.deserializeBinaryFromReader);
+      msg.setOptions(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.streams.DeleteReq.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.streams.DeleteReq.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.streams.DeleteReq} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.DeleteReq.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getOptions();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.event_store.client.streams.DeleteReq.Options.serializeBinaryToWriter
+    );
+  }
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.streams.DeleteReq.Options.oneofGroups_ = [[2,3,4,5]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.DeleteReq.Options.ExpectedStreamRevisionCase = {
+  EXPECTED_STREAM_REVISION_NOT_SET: 0,
+  REVISION: 2,
+  NO_STREAM: 3,
+  ANY: 4,
+  STREAM_EXISTS: 5
+};
+
+/**
+ * @return {proto.event_store.client.streams.DeleteReq.Options.ExpectedStreamRevisionCase}
+ */
+proto.event_store.client.streams.DeleteReq.Options.prototype.getExpectedStreamRevisionCase = function() {
+  return /** @type {proto.event_store.client.streams.DeleteReq.Options.ExpectedStreamRevisionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.streams.DeleteReq.Options.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.DeleteReq.Options.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.streams.DeleteReq.Options} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.DeleteReq.Options.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
+    any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
+    streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options}
+ */
+proto.event_store.client.streams.DeleteReq.Options.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.streams.DeleteReq.Options;
+  return proto.event_store.client.streams.DeleteReq.Options.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.streams.DeleteReq.Options} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options}
+ */
+proto.event_store.client.streams.DeleteReq.Options.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setRevision(value);
+      break;
+    case 3:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setNoStream(value);
+      break;
+    case 4:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setAny(value);
+      break;
+    case 5:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setStreamExists(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.streams.DeleteReq.Options.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.streams.DeleteReq.Options.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.streams.DeleteReq.Options} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.streams.DeleteReq.Options.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 2));
@@ -5893,7 +6927,7 @@ proto.event_store.grpc.streams.DeleteReq.Options.serializeBinaryToWriter = funct
     writer.writeMessage(
       3,
       f,
-      proto.event_store.grpc.streams.DeleteReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getAny();
@@ -5901,7 +6935,7 @@ proto.event_store.grpc.streams.DeleteReq.Options.serializeBinaryToWriter = funct
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.DeleteReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getStreamExists();
@@ -5909,24 +6943,46 @@ proto.event_store.grpc.streams.DeleteReq.Options.serializeBinaryToWriter = funct
     writer.writeMessage(
       5,
       f,
-      proto.event_store.grpc.streams.DeleteReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional string stream_name = 1;
- * @return {string}
+ * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.shared.StreamIdentifier}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.getStreamName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+proto.event_store.client.streams.DeleteReq.Options.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
-/** @param {string} value */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.setStreamName = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
+*/
+proto.event_store.client.streams.DeleteReq.Options.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
+ */
+proto.event_store.client.streams.DeleteReq.Options.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.DeleteReq.Options.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -5934,22 +6990,26 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.setStreamName = funct
  * optional uint64 revision = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.getRevision = function() {
+proto.event_store.client.streams.DeleteReq.Options.prototype.getRevision = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.setRevision = function(value) {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_[0], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
+ */
+proto.event_store.client.streams.DeleteReq.Options.prototype.setRevision = function(value) {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearRevision = function() {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_[0], undefined);
+proto.event_store.client.streams.DeleteReq.Options.prototype.clearRevision = function() {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_[0], undefined);
 };
 
 
@@ -5957,32 +7017,36 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearRevision = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.hasRevision = function() {
+proto.event_store.client.streams.DeleteReq.Options.prototype.hasRevision = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional Empty no_stream = 3;
- * @return {?proto.event_store.grpc.streams.DeleteReq.Empty}
+ * optional event_store.client.shared.Empty no_stream = 3;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.getNoStream = function() {
-  return /** @type{?proto.event_store.grpc.streams.DeleteReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.DeleteReq.Empty, 3));
+proto.event_store.client.streams.DeleteReq.Options.prototype.getNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.DeleteReq.Empty|undefined} value */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.setNoStream = function(value) {
-  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
+*/
+proto.event_store.client.streams.DeleteReq.Options.prototype.setNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearNoStream = function() {
-  this.setNoStream(undefined);
+proto.event_store.client.streams.DeleteReq.Options.prototype.clearNoStream = function() {
+  return this.setNoStream(undefined);
 };
 
 
@@ -5990,32 +7054,36 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearNoStream = funct
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.hasNoStream = function() {
+proto.event_store.client.streams.DeleteReq.Options.prototype.hasNoStream = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty any = 4;
- * @return {?proto.event_store.grpc.streams.DeleteReq.Empty}
+ * optional event_store.client.shared.Empty any = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.getAny = function() {
-  return /** @type{?proto.event_store.grpc.streams.DeleteReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.DeleteReq.Empty, 4));
+proto.event_store.client.streams.DeleteReq.Options.prototype.getAny = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.DeleteReq.Empty|undefined} value */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.setAny = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
+*/
+proto.event_store.client.streams.DeleteReq.Options.prototype.setAny = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearAny = function() {
-  this.setAny(undefined);
+proto.event_store.client.streams.DeleteReq.Options.prototype.clearAny = function() {
+  return this.setAny(undefined);
 };
 
 
@@ -6023,32 +7091,36 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearAny = function()
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.hasAny = function() {
+proto.event_store.client.streams.DeleteReq.Options.prototype.hasAny = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional Empty stream_exists = 5;
- * @return {?proto.event_store.grpc.streams.DeleteReq.Empty}
+ * optional event_store.client.shared.Empty stream_exists = 5;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.getStreamExists = function() {
-  return /** @type{?proto.event_store.grpc.streams.DeleteReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.DeleteReq.Empty, 5));
+proto.event_store.client.streams.DeleteReq.Options.prototype.getStreamExists = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.DeleteReq.Empty|undefined} value */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.setStreamExists = function(value) {
-  jspb.Message.setOneofWrapperField(this, 5, proto.event_store.grpc.streams.DeleteReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
+*/
+proto.event_store.client.streams.DeleteReq.Options.prototype.setStreamExists = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.DeleteReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearStreamExists = function() {
-  this.setStreamExists(undefined);
+proto.event_store.client.streams.DeleteReq.Options.prototype.clearStreamExists = function() {
+  return this.setStreamExists(undefined);
 };
 
 
@@ -6056,133 +7128,36 @@ proto.event_store.grpc.streams.DeleteReq.Options.prototype.clearStreamExists = f
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteReq.Options.prototype.hasStreamExists = function() {
+proto.event_store.client.streams.DeleteReq.Options.prototype.hasStreamExists = function() {
   return jspb.Message.getField(this, 5) != null;
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.DeleteReq.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.DeleteReq.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.DeleteReq.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.DeleteReq.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.DeleteReq.Empty}
- */
-proto.event_store.grpc.streams.DeleteReq.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.DeleteReq.Empty;
-  return proto.event_store.grpc.streams.DeleteReq.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.DeleteReq.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.DeleteReq.Empty}
- */
-proto.event_store.grpc.streams.DeleteReq.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.DeleteReq.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.DeleteReq.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.DeleteReq.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.DeleteReq.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
 };
 
 
 /**
  * optional Options options = 1;
- * @return {?proto.event_store.grpc.streams.DeleteReq.Options}
+ * @return {?proto.event_store.client.streams.DeleteReq.Options}
  */
-proto.event_store.grpc.streams.DeleteReq.prototype.getOptions = function() {
-  return /** @type{?proto.event_store.grpc.streams.DeleteReq.Options} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.DeleteReq.Options, 1));
+proto.event_store.client.streams.DeleteReq.prototype.getOptions = function() {
+  return /** @type{?proto.event_store.client.streams.DeleteReq.Options} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.DeleteReq.Options, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.DeleteReq.Options|undefined} value */
-proto.event_store.grpc.streams.DeleteReq.prototype.setOptions = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.streams.DeleteReq.Options|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteReq} returns this
+*/
+proto.event_store.client.streams.DeleteReq.prototype.setOptions = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteReq} returns this
  */
-proto.event_store.grpc.streams.DeleteReq.prototype.clearOptions = function() {
-  this.setOptions(undefined);
+proto.event_store.client.streams.DeleteReq.prototype.clearOptions = function() {
+  return this.setOptions(undefined);
 };
 
 
@@ -6190,7 +7165,7 @@ proto.event_store.grpc.streams.DeleteReq.prototype.clearOptions = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteReq.prototype.hasOptions = function() {
+proto.event_store.client.streams.DeleteReq.prototype.hasOptions = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -6204,22 +7179,22 @@ proto.event_store.grpc.streams.DeleteReq.prototype.hasOptions = function() {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.DeleteResp.oneofGroups_ = [[1,2]];
+proto.event_store.client.streams.DeleteResp.oneofGroups_ = [[1,2]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.DeleteResp.PositionOptionCase = {
+proto.event_store.client.streams.DeleteResp.PositionOptionCase = {
   POSITION_OPTION_NOT_SET: 0,
   POSITION: 1,
-  EMPTY: 2
+  NO_POSITION: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.DeleteResp.PositionOptionCase}
+ * @return {proto.event_store.client.streams.DeleteResp.PositionOptionCase}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.getPositionOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.DeleteResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.DeleteResp.oneofGroups_[0]));
+proto.event_store.client.streams.DeleteResp.prototype.getPositionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.DeleteResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.DeleteResp.oneofGroups_[0]));
 };
 
 
@@ -6237,8 +7212,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.DeleteResp.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.DeleteResp.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.DeleteResp.toObject(opt_includeInstance, this);
 };
 
 
@@ -6247,14 +7222,14 @@ proto.event_store.grpc.streams.DeleteResp.prototype.toObject = function(opt_incl
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.DeleteResp} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.DeleteResp} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.DeleteResp.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.DeleteResp.toObject = function(includeInstance, msg) {
   var f, obj = {
-    position: (f = msg.getPosition()) && proto.event_store.grpc.streams.DeleteResp.Position.toObject(includeInstance, f),
-    empty: (f = msg.getEmpty()) && proto.event_store.grpc.streams.DeleteResp.Empty.toObject(includeInstance, f)
+    position: (f = msg.getPosition()) && proto.event_store.client.streams.DeleteResp.Position.toObject(includeInstance, f),
+    noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6268,23 +7243,23 @@ proto.event_store.grpc.streams.DeleteResp.toObject = function(includeInstance, m
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.DeleteResp}
+ * @return {!proto.event_store.client.streams.DeleteResp}
  */
-proto.event_store.grpc.streams.DeleteResp.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.DeleteResp.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.DeleteResp;
-  return proto.event_store.grpc.streams.DeleteResp.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.DeleteResp;
+  return proto.event_store.client.streams.DeleteResp.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.DeleteResp} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.DeleteResp} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.DeleteResp}
+ * @return {!proto.event_store.client.streams.DeleteResp}
  */
-proto.event_store.grpc.streams.DeleteResp.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.DeleteResp.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6292,14 +7267,14 @@ proto.event_store.grpc.streams.DeleteResp.deserializeBinaryFromReader = function
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.DeleteResp.Position;
-      reader.readMessage(value,proto.event_store.grpc.streams.DeleteResp.Position.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.DeleteResp.Position;
+      reader.readMessage(value,proto.event_store.client.streams.DeleteResp.Position.deserializeBinaryFromReader);
       msg.setPosition(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.DeleteResp.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.DeleteResp.Empty.deserializeBinaryFromReader);
-      msg.setEmpty(value);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setNoPosition(value);
       break;
     default:
       reader.skipField();
@@ -6314,9 +7289,9 @@ proto.event_store.grpc.streams.DeleteResp.deserializeBinaryFromReader = function
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.serializeBinary = function() {
+proto.event_store.client.streams.DeleteResp.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.DeleteResp.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.DeleteResp.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6324,26 +7299,26 @@ proto.event_store.grpc.streams.DeleteResp.prototype.serializeBinary = function()
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.DeleteResp} message
+ * @param {!proto.event_store.client.streams.DeleteResp} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.DeleteResp.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.DeleteResp.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getPosition();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.DeleteResp.Position.serializeBinaryToWriter
+      proto.event_store.client.streams.DeleteResp.Position.serializeBinaryToWriter
     );
   }
-  f = message.getEmpty();
+  f = message.getNoPosition();
   if (f != null) {
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.DeleteResp.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
@@ -6365,8 +7340,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.DeleteResp.Position.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.DeleteResp.Position.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.DeleteResp.Position.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.DeleteResp.Position.toObject(opt_includeInstance, this);
 };
 
 
@@ -6375,11 +7350,11 @@ proto.event_store.grpc.streams.DeleteResp.Position.prototype.toObject = function
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.DeleteResp.Position} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.DeleteResp.Position} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.DeleteResp.Position.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.DeleteResp.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
     commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
     preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
@@ -6396,23 +7371,23 @@ proto.event_store.grpc.streams.DeleteResp.Position.toObject = function(includeIn
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.DeleteResp.Position}
+ * @return {!proto.event_store.client.streams.DeleteResp.Position}
  */
-proto.event_store.grpc.streams.DeleteResp.Position.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.DeleteResp.Position.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.DeleteResp.Position;
-  return proto.event_store.grpc.streams.DeleteResp.Position.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.DeleteResp.Position;
+  return proto.event_store.client.streams.DeleteResp.Position.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.DeleteResp.Position} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.DeleteResp.Position} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.DeleteResp.Position}
+ * @return {!proto.event_store.client.streams.DeleteResp.Position}
  */
-proto.event_store.grpc.streams.DeleteResp.Position.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.DeleteResp.Position.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6440,9 +7415,9 @@ proto.event_store.grpc.streams.DeleteResp.Position.deserializeBinaryFromReader =
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.DeleteResp.Position.prototype.serializeBinary = function() {
+proto.event_store.client.streams.DeleteResp.Position.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.DeleteResp.Position.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.DeleteResp.Position.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6450,11 +7425,11 @@ proto.event_store.grpc.streams.DeleteResp.Position.prototype.serializeBinary = f
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.DeleteResp.Position} message
+ * @param {!proto.event_store.client.streams.DeleteResp.Position} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.DeleteResp.Position.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.DeleteResp.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
   if (f !== 0) {
@@ -6477,14 +7452,17 @@ proto.event_store.grpc.streams.DeleteResp.Position.serializeBinaryToWriter = fun
  * optional uint64 commit_position = 1;
  * @return {number}
  */
-proto.event_store.grpc.streams.DeleteResp.Position.prototype.getCommitPosition = function() {
+proto.event_store.client.streams.DeleteResp.Position.prototype.getCommitPosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.DeleteResp.Position.prototype.setCommitPosition = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.DeleteResp.Position} returns this
+ */
+proto.event_store.client.streams.DeleteResp.Position.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -6492,139 +7470,45 @@ proto.event_store.grpc.streams.DeleteResp.Position.prototype.setCommitPosition =
  * optional uint64 prepare_position = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.DeleteResp.Position.prototype.getPreparePosition = function() {
+proto.event_store.client.streams.DeleteResp.Position.prototype.getPreparePosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.DeleteResp.Position.prototype.setPreparePosition = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.DeleteResp.Position} returns this
  */
-proto.event_store.grpc.streams.DeleteResp.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.DeleteResp.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.DeleteResp.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.DeleteResp.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.DeleteResp.Empty}
- */
-proto.event_store.grpc.streams.DeleteResp.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.DeleteResp.Empty;
-  return proto.event_store.grpc.streams.DeleteResp.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.DeleteResp.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.DeleteResp.Empty}
- */
-proto.event_store.grpc.streams.DeleteResp.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.DeleteResp.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.DeleteResp.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.DeleteResp.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.DeleteResp.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
+proto.event_store.client.streams.DeleteResp.Position.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
 /**
  * optional Position position = 1;
- * @return {?proto.event_store.grpc.streams.DeleteResp.Position}
+ * @return {?proto.event_store.client.streams.DeleteResp.Position}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.getPosition = function() {
-  return /** @type{?proto.event_store.grpc.streams.DeleteResp.Position} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.DeleteResp.Position, 1));
+proto.event_store.client.streams.DeleteResp.prototype.getPosition = function() {
+  return /** @type{?proto.event_store.client.streams.DeleteResp.Position} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.DeleteResp.Position, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.DeleteResp.Position|undefined} value */
-proto.event_store.grpc.streams.DeleteResp.prototype.setPosition = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.DeleteResp.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.DeleteResp.Position|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteResp} returns this
+*/
+proto.event_store.client.streams.DeleteResp.prototype.setPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.DeleteResp.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteResp} returns this
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.clearPosition = function() {
-  this.setPosition(undefined);
+proto.event_store.client.streams.DeleteResp.prototype.clearPosition = function() {
+  return this.setPosition(undefined);
 };
 
 
@@ -6632,32 +7516,36 @@ proto.event_store.grpc.streams.DeleteResp.prototype.clearPosition = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.hasPosition = function() {
+proto.event_store.client.streams.DeleteResp.prototype.hasPosition = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional Empty empty = 2;
- * @return {?proto.event_store.grpc.streams.DeleteResp.Empty}
+ * optional event_store.client.shared.Empty no_position = 2;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.getEmpty = function() {
-  return /** @type{?proto.event_store.grpc.streams.DeleteResp.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.DeleteResp.Empty, 2));
+proto.event_store.client.streams.DeleteResp.prototype.getNoPosition = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.DeleteResp.Empty|undefined} value */
-proto.event_store.grpc.streams.DeleteResp.prototype.setEmpty = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.DeleteResp.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.DeleteResp} returns this
+*/
+proto.event_store.client.streams.DeleteResp.prototype.setNoPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.DeleteResp.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.DeleteResp} returns this
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.clearEmpty = function() {
-  this.setEmpty(undefined);
+proto.event_store.client.streams.DeleteResp.prototype.clearNoPosition = function() {
+  return this.setNoPosition(undefined);
 };
 
 
@@ -6665,7 +7553,7 @@ proto.event_store.grpc.streams.DeleteResp.prototype.clearEmpty = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.DeleteResp.prototype.hasEmpty = function() {
+proto.event_store.client.streams.DeleteResp.prototype.hasNoPosition = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
@@ -6686,8 +7574,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.TombstoneReq.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.TombstoneReq.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.TombstoneReq.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.TombstoneReq.toObject(opt_includeInstance, this);
 };
 
 
@@ -6696,13 +7584,13 @@ proto.event_store.grpc.streams.TombstoneReq.prototype.toObject = function(opt_in
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.TombstoneReq} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.TombstoneReq} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneReq.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.TombstoneReq.toObject = function(includeInstance, msg) {
   var f, obj = {
-    options: (f = msg.getOptions()) && proto.event_store.grpc.streams.TombstoneReq.Options.toObject(includeInstance, f)
+    options: (f = msg.getOptions()) && proto.event_store.client.streams.TombstoneReq.Options.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6716,23 +7604,23 @@ proto.event_store.grpc.streams.TombstoneReq.toObject = function(includeInstance,
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.TombstoneReq}
+ * @return {!proto.event_store.client.streams.TombstoneReq}
  */
-proto.event_store.grpc.streams.TombstoneReq.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.TombstoneReq.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.TombstoneReq;
-  return proto.event_store.grpc.streams.TombstoneReq.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.TombstoneReq;
+  return proto.event_store.client.streams.TombstoneReq.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.TombstoneReq} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.TombstoneReq} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.TombstoneReq}
+ * @return {!proto.event_store.client.streams.TombstoneReq}
  */
-proto.event_store.grpc.streams.TombstoneReq.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.TombstoneReq.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6740,8 +7628,8 @@ proto.event_store.grpc.streams.TombstoneReq.deserializeBinaryFromReader = functi
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.TombstoneReq.Options;
-      reader.readMessage(value,proto.event_store.grpc.streams.TombstoneReq.Options.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.TombstoneReq.Options;
+      reader.readMessage(value,proto.event_store.client.streams.TombstoneReq.Options.deserializeBinaryFromReader);
       msg.setOptions(value);
       break;
     default:
@@ -6757,9 +7645,9 @@ proto.event_store.grpc.streams.TombstoneReq.deserializeBinaryFromReader = functi
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.TombstoneReq.prototype.serializeBinary = function() {
+proto.event_store.client.streams.TombstoneReq.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.TombstoneReq.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.TombstoneReq.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6767,18 +7655,18 @@ proto.event_store.grpc.streams.TombstoneReq.prototype.serializeBinary = function
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.TombstoneReq} message
+ * @param {!proto.event_store.client.streams.TombstoneReq} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneReq.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.TombstoneReq.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getOptions();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.TombstoneReq.Options.serializeBinaryToWriter
+      proto.event_store.client.streams.TombstoneReq.Options.serializeBinaryToWriter
     );
   }
 };
@@ -6793,12 +7681,12 @@ proto.event_store.grpc.streams.TombstoneReq.serializeBinaryToWriter = function(m
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_ = [[2,3,4,5]];
+proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_ = [[2,3,4,5]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.ExpectedStreamRevisionCase = {
+proto.event_store.client.streams.TombstoneReq.Options.ExpectedStreamRevisionCase = {
   EXPECTED_STREAM_REVISION_NOT_SET: 0,
   REVISION: 2,
   NO_STREAM: 3,
@@ -6807,10 +7695,10 @@ proto.event_store.grpc.streams.TombstoneReq.Options.ExpectedStreamRevisionCase =
 };
 
 /**
- * @return {proto.event_store.grpc.streams.TombstoneReq.Options.ExpectedStreamRevisionCase}
+ * @return {proto.event_store.client.streams.TombstoneReq.Options.ExpectedStreamRevisionCase}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.getExpectedStreamRevisionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.TombstoneReq.Options.ExpectedStreamRevisionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_[0]));
+proto.event_store.client.streams.TombstoneReq.Options.prototype.getExpectedStreamRevisionCase = function() {
+  return /** @type {proto.event_store.client.streams.TombstoneReq.Options.ExpectedStreamRevisionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_[0]));
 };
 
 
@@ -6828,8 +7716,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.TombstoneReq.Options.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.TombstoneReq.Options.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.TombstoneReq.Options.toObject(opt_includeInstance, this);
 };
 
 
@@ -6838,17 +7726,17 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.toObject = functio
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.TombstoneReq.Options} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.TombstoneReq.Options} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.TombstoneReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
-    streamName: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
     revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    noStream: (f = msg.getNoStream()) && proto.event_store.grpc.streams.TombstoneReq.Empty.toObject(includeInstance, f),
-    any: (f = msg.getAny()) && proto.event_store.grpc.streams.TombstoneReq.Empty.toObject(includeInstance, f),
-    streamExists: (f = msg.getStreamExists()) && proto.event_store.grpc.streams.TombstoneReq.Empty.toObject(includeInstance, f)
+    noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
+    any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
+    streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6862,23 +7750,23 @@ proto.event_store.grpc.streams.TombstoneReq.Options.toObject = function(includeI
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.TombstoneReq.Options}
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.TombstoneReq.Options.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.TombstoneReq.Options;
-  return proto.event_store.grpc.streams.TombstoneReq.Options.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.TombstoneReq.Options;
+  return proto.event_store.client.streams.TombstoneReq.Options.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.TombstoneReq.Options} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.TombstoneReq.Options} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.TombstoneReq.Options}
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.TombstoneReq.Options.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -6886,26 +7774,27 @@ proto.event_store.grpc.streams.TombstoneReq.Options.deserializeBinaryFromReader 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setStreamName(value);
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setRevision(value);
       break;
     case 3:
-      var value = new proto.event_store.grpc.streams.TombstoneReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.TombstoneReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setNoStream(value);
       break;
     case 4:
-      var value = new proto.event_store.grpc.streams.TombstoneReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.TombstoneReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setAny(value);
       break;
     case 5:
-      var value = new proto.event_store.grpc.streams.TombstoneReq.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.TombstoneReq.Empty.deserializeBinaryFromReader);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setStreamExists(value);
       break;
     default:
@@ -6921,9 +7810,9 @@ proto.event_store.grpc.streams.TombstoneReq.Options.deserializeBinaryFromReader 
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.serializeBinary = function() {
+proto.event_store.client.streams.TombstoneReq.Options.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.TombstoneReq.Options.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.TombstoneReq.Options.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -6931,17 +7820,18 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.serializeBinary = 
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.TombstoneReq.Options} message
+ * @param {!proto.event_store.client.streams.TombstoneReq.Options} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.TombstoneReq.Options.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getStreamName();
-  if (f.length > 0) {
-    writer.writeString(
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
       1,
-      f
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
   f = /** @type {number} */ (jspb.Message.getField(message, 2));
@@ -6956,7 +7846,7 @@ proto.event_store.grpc.streams.TombstoneReq.Options.serializeBinaryToWriter = fu
     writer.writeMessage(
       3,
       f,
-      proto.event_store.grpc.streams.TombstoneReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getAny();
@@ -6964,7 +7854,7 @@ proto.event_store.grpc.streams.TombstoneReq.Options.serializeBinaryToWriter = fu
     writer.writeMessage(
       4,
       f,
-      proto.event_store.grpc.streams.TombstoneReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getStreamExists();
@@ -6972,24 +7862,46 @@ proto.event_store.grpc.streams.TombstoneReq.Options.serializeBinaryToWriter = fu
     writer.writeMessage(
       5,
       f,
-      proto.event_store.grpc.streams.TombstoneReq.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional string stream_name = 1;
- * @return {string}
+ * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.shared.StreamIdentifier}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.getStreamName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+proto.event_store.client.streams.TombstoneReq.Options.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
-/** @param {string} value */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.setStreamName = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
+*/
+proto.event_store.client.streams.TombstoneReq.Options.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
+ */
+proto.event_store.client.streams.TombstoneReq.Options.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.TombstoneReq.Options.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
@@ -6997,22 +7909,26 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.setStreamName = fu
  * optional uint64 revision = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.getRevision = function() {
+proto.event_store.client.streams.TombstoneReq.Options.prototype.getRevision = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.setRevision = function(value) {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_[0], value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
+ */
+proto.event_store.client.streams.TombstoneReq.Options.prototype.setRevision = function(value) {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearRevision = function() {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_[0], undefined);
+proto.event_store.client.streams.TombstoneReq.Options.prototype.clearRevision = function() {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_[0], undefined);
 };
 
 
@@ -7020,32 +7936,36 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearRevision = fu
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.hasRevision = function() {
+proto.event_store.client.streams.TombstoneReq.Options.prototype.hasRevision = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional Empty no_stream = 3;
- * @return {?proto.event_store.grpc.streams.TombstoneReq.Empty}
+ * optional event_store.client.shared.Empty no_stream = 3;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.getNoStream = function() {
-  return /** @type{?proto.event_store.grpc.streams.TombstoneReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.TombstoneReq.Empty, 3));
+proto.event_store.client.streams.TombstoneReq.Options.prototype.getNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.TombstoneReq.Empty|undefined} value */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.setNoStream = function(value) {
-  jspb.Message.setOneofWrapperField(this, 3, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
+*/
+proto.event_store.client.streams.TombstoneReq.Options.prototype.setNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearNoStream = function() {
-  this.setNoStream(undefined);
+proto.event_store.client.streams.TombstoneReq.Options.prototype.clearNoStream = function() {
+  return this.setNoStream(undefined);
 };
 
 
@@ -7053,32 +7973,36 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearNoStream = fu
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.hasNoStream = function() {
+proto.event_store.client.streams.TombstoneReq.Options.prototype.hasNoStream = function() {
   return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional Empty any = 4;
- * @return {?proto.event_store.grpc.streams.TombstoneReq.Empty}
+ * optional event_store.client.shared.Empty any = 4;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.getAny = function() {
-  return /** @type{?proto.event_store.grpc.streams.TombstoneReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.TombstoneReq.Empty, 4));
+proto.event_store.client.streams.TombstoneReq.Options.prototype.getAny = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.TombstoneReq.Empty|undefined} value */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.setAny = function(value) {
-  jspb.Message.setOneofWrapperField(this, 4, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
+*/
+proto.event_store.client.streams.TombstoneReq.Options.prototype.setAny = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearAny = function() {
-  this.setAny(undefined);
+proto.event_store.client.streams.TombstoneReq.Options.prototype.clearAny = function() {
+  return this.setAny(undefined);
 };
 
 
@@ -7086,32 +8010,36 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearAny = functio
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.hasAny = function() {
+proto.event_store.client.streams.TombstoneReq.Options.prototype.hasAny = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional Empty stream_exists = 5;
- * @return {?proto.event_store.grpc.streams.TombstoneReq.Empty}
+ * optional event_store.client.shared.Empty stream_exists = 5;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.getStreamExists = function() {
-  return /** @type{?proto.event_store.grpc.streams.TombstoneReq.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.TombstoneReq.Empty, 5));
+proto.event_store.client.streams.TombstoneReq.Options.prototype.getStreamExists = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.TombstoneReq.Empty|undefined} value */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.setStreamExists = function(value) {
-  jspb.Message.setOneofWrapperField(this, 5, proto.event_store.grpc.streams.TombstoneReq.Options.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
+*/
+proto.event_store.client.streams.TombstoneReq.Options.prototype.setStreamExists = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.TombstoneReq.Options.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearStreamExists = function() {
-  this.setStreamExists(undefined);
+proto.event_store.client.streams.TombstoneReq.Options.prototype.clearStreamExists = function() {
+  return this.setStreamExists(undefined);
 };
 
 
@@ -7119,133 +8047,36 @@ proto.event_store.grpc.streams.TombstoneReq.Options.prototype.clearStreamExists 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneReq.Options.prototype.hasStreamExists = function() {
+proto.event_store.client.streams.TombstoneReq.Options.prototype.hasStreamExists = function() {
   return jspb.Message.getField(this, 5) != null;
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.TombstoneReq.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.TombstoneReq.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.TombstoneReq.Empty}
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.TombstoneReq.Empty;
-  return proto.event_store.grpc.streams.TombstoneReq.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.TombstoneReq.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.TombstoneReq.Empty}
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.TombstoneReq.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.TombstoneReq.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.TombstoneReq.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
 };
 
 
 /**
  * optional Options options = 1;
- * @return {?proto.event_store.grpc.streams.TombstoneReq.Options}
+ * @return {?proto.event_store.client.streams.TombstoneReq.Options}
  */
-proto.event_store.grpc.streams.TombstoneReq.prototype.getOptions = function() {
-  return /** @type{?proto.event_store.grpc.streams.TombstoneReq.Options} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.TombstoneReq.Options, 1));
+proto.event_store.client.streams.TombstoneReq.prototype.getOptions = function() {
+  return /** @type{?proto.event_store.client.streams.TombstoneReq.Options} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.TombstoneReq.Options, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.TombstoneReq.Options|undefined} value */
-proto.event_store.grpc.streams.TombstoneReq.prototype.setOptions = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
+/**
+ * @param {?proto.event_store.client.streams.TombstoneReq.Options|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneReq} returns this
+*/
+proto.event_store.client.streams.TombstoneReq.prototype.setOptions = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneReq} returns this
  */
-proto.event_store.grpc.streams.TombstoneReq.prototype.clearOptions = function() {
-  this.setOptions(undefined);
+proto.event_store.client.streams.TombstoneReq.prototype.clearOptions = function() {
+  return this.setOptions(undefined);
 };
 
 
@@ -7253,7 +8084,7 @@ proto.event_store.grpc.streams.TombstoneReq.prototype.clearOptions = function() 
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneReq.prototype.hasOptions = function() {
+proto.event_store.client.streams.TombstoneReq.prototype.hasOptions = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -7267,22 +8098,22 @@ proto.event_store.grpc.streams.TombstoneReq.prototype.hasOptions = function() {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.grpc.streams.TombstoneResp.oneofGroups_ = [[1,2]];
+proto.event_store.client.streams.TombstoneResp.oneofGroups_ = [[1,2]];
 
 /**
  * @enum {number}
  */
-proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase = {
+proto.event_store.client.streams.TombstoneResp.PositionOptionCase = {
   POSITION_OPTION_NOT_SET: 0,
   POSITION: 1,
-  EMPTY: 2
+  NO_POSITION: 2
 };
 
 /**
- * @return {proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase}
+ * @return {proto.event_store.client.streams.TombstoneResp.PositionOptionCase}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.getPositionOptionCase = function() {
-  return /** @type {proto.event_store.grpc.streams.TombstoneResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.TombstoneResp.oneofGroups_[0]));
+proto.event_store.client.streams.TombstoneResp.prototype.getPositionOptionCase = function() {
+  return /** @type {proto.event_store.client.streams.TombstoneResp.PositionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.TombstoneResp.oneofGroups_[0]));
 };
 
 
@@ -7300,8 +8131,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.TombstoneResp.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.TombstoneResp.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.TombstoneResp.toObject(opt_includeInstance, this);
 };
 
 
@@ -7310,14 +8141,14 @@ proto.event_store.grpc.streams.TombstoneResp.prototype.toObject = function(opt_i
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.TombstoneResp} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.TombstoneResp} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneResp.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.TombstoneResp.toObject = function(includeInstance, msg) {
   var f, obj = {
-    position: (f = msg.getPosition()) && proto.event_store.grpc.streams.TombstoneResp.Position.toObject(includeInstance, f),
-    empty: (f = msg.getEmpty()) && proto.event_store.grpc.streams.TombstoneResp.Empty.toObject(includeInstance, f)
+    position: (f = msg.getPosition()) && proto.event_store.client.streams.TombstoneResp.Position.toObject(includeInstance, f),
+    noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -7331,23 +8162,23 @@ proto.event_store.grpc.streams.TombstoneResp.toObject = function(includeInstance
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.TombstoneResp}
+ * @return {!proto.event_store.client.streams.TombstoneResp}
  */
-proto.event_store.grpc.streams.TombstoneResp.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.TombstoneResp.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.TombstoneResp;
-  return proto.event_store.grpc.streams.TombstoneResp.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.TombstoneResp;
+  return proto.event_store.client.streams.TombstoneResp.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.TombstoneResp} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.TombstoneResp} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.TombstoneResp}
+ * @return {!proto.event_store.client.streams.TombstoneResp}
  */
-proto.event_store.grpc.streams.TombstoneResp.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.TombstoneResp.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -7355,14 +8186,14 @@ proto.event_store.grpc.streams.TombstoneResp.deserializeBinaryFromReader = funct
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.event_store.grpc.streams.TombstoneResp.Position;
-      reader.readMessage(value,proto.event_store.grpc.streams.TombstoneResp.Position.deserializeBinaryFromReader);
+      var value = new proto.event_store.client.streams.TombstoneResp.Position;
+      reader.readMessage(value,proto.event_store.client.streams.TombstoneResp.Position.deserializeBinaryFromReader);
       msg.setPosition(value);
       break;
     case 2:
-      var value = new proto.event_store.grpc.streams.TombstoneResp.Empty;
-      reader.readMessage(value,proto.event_store.grpc.streams.TombstoneResp.Empty.deserializeBinaryFromReader);
-      msg.setEmpty(value);
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setNoPosition(value);
       break;
     default:
       reader.skipField();
@@ -7377,9 +8208,9 @@ proto.event_store.grpc.streams.TombstoneResp.deserializeBinaryFromReader = funct
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.serializeBinary = function() {
+proto.event_store.client.streams.TombstoneResp.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.TombstoneResp.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.TombstoneResp.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -7387,26 +8218,26 @@ proto.event_store.grpc.streams.TombstoneResp.prototype.serializeBinary = functio
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.TombstoneResp} message
+ * @param {!proto.event_store.client.streams.TombstoneResp} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneResp.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.TombstoneResp.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getPosition();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      proto.event_store.grpc.streams.TombstoneResp.Position.serializeBinaryToWriter
+      proto.event_store.client.streams.TombstoneResp.Position.serializeBinaryToWriter
     );
   }
-  f = message.getEmpty();
+  f = message.getNoPosition();
   if (f != null) {
     writer.writeMessage(
       2,
       f,
-      proto.event_store.grpc.streams.TombstoneResp.Empty.serializeBinaryToWriter
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
 };
@@ -7428,8 +8259,8 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.TombstoneResp.Position.toObject(opt_includeInstance, this);
+proto.event_store.client.streams.TombstoneResp.Position.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.streams.TombstoneResp.Position.toObject(opt_includeInstance, this);
 };
 
 
@@ -7438,11 +8269,11 @@ proto.event_store.grpc.streams.TombstoneResp.Position.prototype.toObject = funct
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.TombstoneResp.Position} msg The msg instance to transform.
+ * @param {!proto.event_store.client.streams.TombstoneResp.Position} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.toObject = function(includeInstance, msg) {
+proto.event_store.client.streams.TombstoneResp.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
     commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
     preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
@@ -7459,23 +8290,23 @@ proto.event_store.grpc.streams.TombstoneResp.Position.toObject = function(includ
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.TombstoneResp.Position}
+ * @return {!proto.event_store.client.streams.TombstoneResp.Position}
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.deserializeBinary = function(bytes) {
+proto.event_store.client.streams.TombstoneResp.Position.deserializeBinary = function(bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.TombstoneResp.Position;
-  return proto.event_store.grpc.streams.TombstoneResp.Position.deserializeBinaryFromReader(msg, reader);
+  var msg = new proto.event_store.client.streams.TombstoneResp.Position;
+  return proto.event_store.client.streams.TombstoneResp.Position.deserializeBinaryFromReader(msg, reader);
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.TombstoneResp.Position} msg The message object to deserialize into.
+ * @param {!proto.event_store.client.streams.TombstoneResp.Position} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.TombstoneResp.Position}
+ * @return {!proto.event_store.client.streams.TombstoneResp.Position}
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.deserializeBinaryFromReader = function(msg, reader) {
+proto.event_store.client.streams.TombstoneResp.Position.deserializeBinaryFromReader = function(msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -7503,9 +8334,9 @@ proto.event_store.grpc.streams.TombstoneResp.Position.deserializeBinaryFromReade
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.prototype.serializeBinary = function() {
+proto.event_store.client.streams.TombstoneResp.Position.prototype.serializeBinary = function() {
   var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.TombstoneResp.Position.serializeBinaryToWriter(this, writer);
+  proto.event_store.client.streams.TombstoneResp.Position.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
 
@@ -7513,11 +8344,11 @@ proto.event_store.grpc.streams.TombstoneResp.Position.prototype.serializeBinary 
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.TombstoneResp.Position} message
+ * @param {!proto.event_store.client.streams.TombstoneResp.Position} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.serializeBinaryToWriter = function(message, writer) {
+proto.event_store.client.streams.TombstoneResp.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
   if (f !== 0) {
@@ -7540,14 +8371,17 @@ proto.event_store.grpc.streams.TombstoneResp.Position.serializeBinaryToWriter = 
  * optional uint64 commit_position = 1;
  * @return {number}
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.prototype.getCommitPosition = function() {
+proto.event_store.client.streams.TombstoneResp.Position.prototype.getCommitPosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.TombstoneResp.Position.prototype.setCommitPosition = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.TombstoneResp.Position} returns this
+ */
+proto.event_store.client.streams.TombstoneResp.Position.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -7555,139 +8389,45 @@ proto.event_store.grpc.streams.TombstoneResp.Position.prototype.setCommitPositio
  * optional uint64 prepare_position = 2;
  * @return {number}
  */
-proto.event_store.grpc.streams.TombstoneResp.Position.prototype.getPreparePosition = function() {
+proto.event_store.client.streams.TombstoneResp.Position.prototype.getPreparePosition = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {number} value */
-proto.event_store.grpc.streams.TombstoneResp.Position.prototype.setPreparePosition = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
 /**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.TombstoneResp.Position} returns this
  */
-proto.event_store.grpc.streams.TombstoneResp.Empty.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.TombstoneResp.Empty.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.TombstoneResp.Empty} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.TombstoneResp.Empty.toObject = function(includeInstance, msg) {
-  var f, obj = {
-
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.TombstoneResp.Empty}
- */
-proto.event_store.grpc.streams.TombstoneResp.Empty.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.TombstoneResp.Empty;
-  return proto.event_store.grpc.streams.TombstoneResp.Empty.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.TombstoneResp.Empty} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.TombstoneResp.Empty}
- */
-proto.event_store.grpc.streams.TombstoneResp.Empty.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.TombstoneResp.Empty.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.TombstoneResp.Empty.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.TombstoneResp.Empty} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.TombstoneResp.Empty.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
+proto.event_store.client.streams.TombstoneResp.Position.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
 /**
  * optional Position position = 1;
- * @return {?proto.event_store.grpc.streams.TombstoneResp.Position}
+ * @return {?proto.event_store.client.streams.TombstoneResp.Position}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.getPosition = function() {
-  return /** @type{?proto.event_store.grpc.streams.TombstoneResp.Position} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.TombstoneResp.Position, 1));
+proto.event_store.client.streams.TombstoneResp.prototype.getPosition = function() {
+  return /** @type{?proto.event_store.client.streams.TombstoneResp.Position} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.streams.TombstoneResp.Position, 1));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.TombstoneResp.Position|undefined} value */
-proto.event_store.grpc.streams.TombstoneResp.prototype.setPosition = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.TombstoneResp.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.streams.TombstoneResp.Position|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneResp} returns this
+*/
+proto.event_store.client.streams.TombstoneResp.prototype.setPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.streams.TombstoneResp.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneResp} returns this
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.clearPosition = function() {
-  this.setPosition(undefined);
+proto.event_store.client.streams.TombstoneResp.prototype.clearPosition = function() {
+  return this.setPosition(undefined);
 };
 
 
@@ -7695,32 +8435,36 @@ proto.event_store.grpc.streams.TombstoneResp.prototype.clearPosition = function(
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.hasPosition = function() {
+proto.event_store.client.streams.TombstoneResp.prototype.hasPosition = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional Empty empty = 2;
- * @return {?proto.event_store.grpc.streams.TombstoneResp.Empty}
+ * optional event_store.client.shared.Empty no_position = 2;
+ * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.getEmpty = function() {
-  return /** @type{?proto.event_store.grpc.streams.TombstoneResp.Empty} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.TombstoneResp.Empty, 2));
+proto.event_store.client.streams.TombstoneResp.prototype.getNoPosition = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
-/** @param {?proto.event_store.grpc.streams.TombstoneResp.Empty|undefined} value */
-proto.event_store.grpc.streams.TombstoneResp.prototype.setEmpty = function(value) {
-  jspb.Message.setOneofWrapperField(this, 2, proto.event_store.grpc.streams.TombstoneResp.oneofGroups_[0], value);
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.TombstoneResp} returns this
+*/
+proto.event_store.client.streams.TombstoneResp.prototype.setNoPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.TombstoneResp.oneofGroups_[0], value);
 };
 
 
 /**
  * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.TombstoneResp} returns this
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.clearEmpty = function() {
-  this.setEmpty(undefined);
+proto.event_store.client.streams.TombstoneResp.prototype.clearNoPosition = function() {
+  return this.setNoPosition(undefined);
 };
 
 
@@ -7728,380 +8472,9 @@ proto.event_store.grpc.streams.TombstoneResp.prototype.clearEmpty = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.grpc.streams.TombstoneResp.prototype.hasEmpty = function() {
+proto.event_store.client.streams.TombstoneResp.prototype.hasNoPosition = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
 
-
-/**
- * Oneof group definitions for this message. Each group defines the field
- * numbers belonging to that group. When of these fields' value is set, all
- * other fields in the group are cleared. During deserialization, if multiple
- * fields are encountered for a group, only the last value seen will be kept.
- * @private {!Array<!Array<number>>}
- * @const
- */
-proto.event_store.grpc.streams.UUID.oneofGroups_ = [[1,2]];
-
-/**
- * @enum {number}
- */
-proto.event_store.grpc.streams.UUID.ValueCase = {
-  VALUE_NOT_SET: 0,
-  STRUCTURED: 1,
-  STRING: 2
-};
-
-/**
- * @return {proto.event_store.grpc.streams.UUID.ValueCase}
- */
-proto.event_store.grpc.streams.UUID.prototype.getValueCase = function() {
-  return /** @type {proto.event_store.grpc.streams.UUID.ValueCase} */(jspb.Message.computeOneofCase(this, proto.event_store.grpc.streams.UUID.oneofGroups_[0]));
-};
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.UUID.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.UUID.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.UUID} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.UUID.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    structured: (f = msg.getStructured()) && proto.event_store.grpc.streams.UUID.Structured.toObject(includeInstance, f),
-    string: jspb.Message.getFieldWithDefault(msg, 2, "")
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.UUID}
- */
-proto.event_store.grpc.streams.UUID.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.UUID;
-  return proto.event_store.grpc.streams.UUID.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.UUID} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.UUID}
- */
-proto.event_store.grpc.streams.UUID.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = new proto.event_store.grpc.streams.UUID.Structured;
-      reader.readMessage(value,proto.event_store.grpc.streams.UUID.Structured.deserializeBinaryFromReader);
-      msg.setStructured(value);
-      break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setString(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.UUID.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.UUID.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.UUID} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.UUID.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getStructured();
-  if (f != null) {
-    writer.writeMessage(
-      1,
-      f,
-      proto.event_store.grpc.streams.UUID.Structured.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {string} */ (jspb.Message.getField(message, 2));
-  if (f != null) {
-    writer.writeString(
-      2,
-      f
-    );
-  }
-};
-
-
-
-
-
-if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.event_store.grpc.streams.UUID.Structured.prototype.toObject = function(opt_includeInstance) {
-  return proto.event_store.grpc.streams.UUID.Structured.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.event_store.grpc.streams.UUID.Structured} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.UUID.Structured.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    mostSignificantBits: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    leastSignificantBits: jspb.Message.getFieldWithDefault(msg, 2, 0)
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.event_store.grpc.streams.UUID.Structured}
- */
-proto.event_store.grpc.streams.UUID.Structured.deserializeBinary = function(bytes) {
-  var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.event_store.grpc.streams.UUID.Structured;
-  return proto.event_store.grpc.streams.UUID.Structured.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.event_store.grpc.streams.UUID.Structured} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.event_store.grpc.streams.UUID.Structured}
- */
-proto.event_store.grpc.streams.UUID.Structured.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.setMostSignificantBits(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readInt64());
-      msg.setLeastSignificantBits(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.event_store.grpc.streams.UUID.Structured.prototype.serializeBinary = function() {
-  var writer = new jspb.BinaryWriter();
-  proto.event_store.grpc.streams.UUID.Structured.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.event_store.grpc.streams.UUID.Structured} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.event_store.grpc.streams.UUID.Structured.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getMostSignificantBits();
-  if (f !== 0) {
-    writer.writeInt64(
-      1,
-      f
-    );
-  }
-  f = message.getLeastSignificantBits();
-  if (f !== 0) {
-    writer.writeInt64(
-      2,
-      f
-    );
-  }
-};
-
-
-/**
- * optional int64 most_significant_bits = 1;
- * @return {number}
- */
-proto.event_store.grpc.streams.UUID.Structured.prototype.getMostSignificantBits = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
-};
-
-
-/** @param {number} value */
-proto.event_store.grpc.streams.UUID.Structured.prototype.setMostSignificantBits = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
-};
-
-
-/**
- * optional int64 least_significant_bits = 2;
- * @return {number}
- */
-proto.event_store.grpc.streams.UUID.Structured.prototype.getLeastSignificantBits = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.event_store.grpc.streams.UUID.Structured.prototype.setLeastSignificantBits = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional Structured structured = 1;
- * @return {?proto.event_store.grpc.streams.UUID.Structured}
- */
-proto.event_store.grpc.streams.UUID.prototype.getStructured = function() {
-  return /** @type{?proto.event_store.grpc.streams.UUID.Structured} */ (
-    jspb.Message.getWrapperField(this, proto.event_store.grpc.streams.UUID.Structured, 1));
-};
-
-
-/** @param {?proto.event_store.grpc.streams.UUID.Structured|undefined} value */
-proto.event_store.grpc.streams.UUID.prototype.setStructured = function(value) {
-  jspb.Message.setOneofWrapperField(this, 1, proto.event_store.grpc.streams.UUID.oneofGroups_[0], value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.event_store.grpc.streams.UUID.prototype.clearStructured = function() {
-  this.setStructured(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.event_store.grpc.streams.UUID.prototype.hasStructured = function() {
-  return jspb.Message.getField(this, 1) != null;
-};
-
-
-/**
- * optional string string = 2;
- * @return {string}
- */
-proto.event_store.grpc.streams.UUID.prototype.getString = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/** @param {string} value */
-proto.event_store.grpc.streams.UUID.prototype.setString = function(value) {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.UUID.oneofGroups_[0], value);
-};
-
-
-/**
- * Clears the field making it undefined.
- */
-proto.event_store.grpc.streams.UUID.prototype.clearString = function() {
-  jspb.Message.setOneofField(this, 2, proto.event_store.grpc.streams.UUID.oneofGroups_[0], undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.event_store.grpc.streams.UUID.prototype.hasString = function() {
-  return jspb.Message.getField(this, 2) != null;
-};
-
-
-goog.object.extend(exports, proto.event_store.grpc.streams);
+goog.object.extend(exports, proto.event_store.client.streams);
