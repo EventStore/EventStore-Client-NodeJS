@@ -29,12 +29,15 @@
   },
   "homepage": "https://github.com/EventStore/EventStore-Client-NodeJS#readme",
   "dependencies": {
-    "grpc": "^1.24.3",
+    "@improbable-eng/grpc-web": "^0.13.0",
     "google-protobuf": "^3.10.0",
-    "@improbable-eng/grpc-web": "^0.13.0"
+    "grpc": "^1.24.3"
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.7.2",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "eslint": "^7.5.0",
     "grpc-tools": "^1.9.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
