@@ -4,11 +4,14 @@
   "description": "Client API for Event Store v6 for NodeJS",
   "main": "./dist/index.js",
   "scripts": {
-    "generate": "./scripts/build-protos.sh",
-    "test": "jest",
-    "clean": "rm -rf ./dist",
     "build": "run-s generate build:*",
-    "build:ts": "tsc"
+    "build:ts": "tsc",
+    "lint": "run-s -c lint:*",
+    "lint:prettier": "prettier --check \"src/**/**/!(*.d).{ts,json}\"",
+    "lint:eslint": "eslint \"src/**/*.ts\"",
+    "test": "jest",
+    "generate": "./scripts/build-protos.sh",
+    "clean": "rm -rf ./dist"
   },
   "files": [
     "dist/",
