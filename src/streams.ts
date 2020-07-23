@@ -14,11 +14,13 @@ import {
 } from "./types";
 import {Empty, StreamIdentifier, UUID} from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
+import {grpc} from "@improbable-eng/grpc-web";
 
 export class Streams {
     private readonly client: StreamsClient;
 
     constructor(uri: string) {
+        grpc.CrossBrowserHttpTransport
         this.client = new StreamsClient(uri);
     }
 
@@ -111,8 +113,9 @@ export class AppendStream {
             }
 
             case "json": {
+                const buffer = Buffer.from(JSON.stringify(item.payload))
                 message.getMetadataMap().set("content-type", "application/json");
-                message.setData(JSON.stringify(item.payload));
+                message.setData(buffer.toString("base64"));
             }
         }
 

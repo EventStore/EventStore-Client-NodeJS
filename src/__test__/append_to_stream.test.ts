@@ -1,13 +1,36 @@
 // import { v4 as uuid } from "uuid";
 
 import * as eventstore from "../";
+import {EventData, Revision} from "../types";
 
 describe("append_to_stream", function () {
   it("should successfully append events to stream", () => {
-    const connection = eventstore.EventStoreConnection.builder();
+    const connection = eventstore.EventStoreConnection
+        .builder()
+        .build("http://localhost:2113");
+
+    const sink = connection
+        .streams()
+        .writeEvents("foobar")
+        .expectedVersion(Revision.Any)
+        .start();
+
+    const evt = EventData.json("typescript-type", {
+        message: "baz"
+    }).build();
+
+    sink.send(evt);
+    let resp = sink.end();
+
+    resp.onEnd(status => {
+        console.log(`onEnd: ${JSON.stringify(status, null, 4)}`);
+    });
+
+    resp.onStatus(status => {
+      console.log(`onStatus: ${JSON.stringify(status, null, 4)}`);
+    });
 
     expect(1).toBe(1);
-    console.log(connection);
 
     // Connect to client
     // let connectionSettings = new ConnectionSettings(
