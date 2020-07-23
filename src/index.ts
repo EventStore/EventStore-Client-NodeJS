@@ -1,18 +1,17 @@
 // import * as fs from "fs";
-import { StreamsClient } from "../generated/streams_pb_service";
-import {Streams} from "./streams";
+import { Streams } from "./streams";
 // import * as streams from "./generated/streams_pb";
 // import { ReadReq, ReadResp } from "./generated/streams_pb";
 //import {Appends} from "./src/append";
 //import {Reads} from "./src/reads";
 
 //const streams_service = require('./src/generated/streams_grpc_pb');
-import {grpc} from "@improbable-eng/grpc-web";
-import { NodeHttpTransport } from '@improbable-eng/grpc-web-node-http-transport';
+import { grpc } from "@improbable-eng/grpc-web";
+import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
 
 export class EventStoreConnectionBuilder {
   build(uri: string): EventStoreConnection {
-    grpc.setDefaultTransport( NodeHttpTransport());
+    grpc.setDefaultTransport(NodeHttpTransport());
     return new EventStoreConnection(uri);
   }
 }

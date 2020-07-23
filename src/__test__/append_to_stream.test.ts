@@ -1,26 +1,27 @@
 // import { v4 as uuid } from "uuid";
 
 import * as eventstore from "../";
-import {EventData, Revision} from "../types";
+import { EventData, Revision } from "../types";
 
 describe("append_to_stream", function () {
   it("should successfully append events to stream", async () => {
-    const connection = eventstore.EventStoreConnection
-        .builder()
-        .build("http://localhost:2113");
+    const connection = eventstore.EventStoreConnection.builder().build(
+      "http://localhost:2113"
+    );
 
     const sink = connection
-        .streams()
-        .writeEvents("foobar")
-        .expectedVersion(Revision.Any)
-        .start();
+      .streams()
+      .writeEvents("foobar")
+      .expectedVersion(Revision.Any)
+      .start();
 
     const evt = EventData.json("typescript-type", {
-        message: "baz"
+      message: "baz",
     }).build();
 
     sink.send(evt);
-    let resp = await sink.end();
+    const resp = await sink.end();
+    console.log(JSON.stringify(resp, null, 4));
 
     expect(1).toBe(1);
 
@@ -50,5 +51,4 @@ describe("append_to_stream", function () {
     // // Send request to append
     // client.appendToStream("SomeStream", AnyStreamRevision.Any, eventData);
   });
-
 });
