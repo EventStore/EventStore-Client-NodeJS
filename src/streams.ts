@@ -69,18 +69,22 @@ export class WriteEvents {
         switch (this.revision.__typename) {
             case "exact": {
                 options.setRevision(this.revision.revision);
+                break;
             }
 
             case "no_stream": {
                 options.setNoStream(new Empty());
+                break;
             }
 
             case "stream_exists": {
                 options.setStreamExists(new Empty());
+                break;
             }
 
             case "any": {
                 options.setAny(new Empty());
+                break;
             }
         }
         header.setOptions(options);
@@ -108,12 +112,14 @@ export class AppendStream {
         switch (item.payload.__typename) {
             case "binary": {
                 message.getMetadataMap().set("content-type", "application/octet-stream");
+                break;
             }
 
             case "json": {
                 const buffer = Buffer.from(JSON.stringify(item.payload))
                 message.getMetadataMap().set("content-type", "application/json");
                 message.setData(buffer.toString("base64"));
+                break;
             }
         }
 
@@ -226,14 +232,17 @@ export class ReadStreamEvents {
         switch (this.revision.__typename) {
             case "exact": {
                 streamOptions.setRevision(this.revision.revision);
+                break;
             }
 
             case "start": {
                 streamOptions.setStart(new Empty());
+                break;
             }
 
             case "end": {
                 streamOptions.setEnd(new Empty());
+                break;
             }
         }
 
@@ -245,10 +254,12 @@ export class ReadStreamEvents {
         switch (this.direction.__typename) {
             case "forward": {
                 options.setReadDirection(0);
+                break;
             }
 
             case "backward": {
                 options.setReadDirection(1);
+                break;
             }
         }
 
@@ -320,14 +331,17 @@ export class ReadAllEvents {
                 pos.setCommitPosition(this.position.position.commit);
                 pos.setPreparePosition(this.position.position.prepare);
                 allOptions.setPosition(pos);
+                break;
             }
 
             case "start": {
                 allOptions.setStart(new Empty());
+                break;
             }
 
             case "end": {
                 allOptions.setEnd(new Empty());
+                break;
             }
         }
         options.setCount(count);
@@ -337,10 +351,12 @@ export class ReadAllEvents {
         switch (this.direction.__typename) {
             case "forward": {
                 options.setReadDirection(0);
+                break;
             }
 
             case "backward": {
                 options.setReadDirection(1);
+                break;
             }
         }
 
