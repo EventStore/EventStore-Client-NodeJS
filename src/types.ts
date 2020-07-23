@@ -211,3 +211,108 @@ export const StreamPosition: (pos: Position) => StreamPosition = (pos) => {
     position: pos,
   };
 };
+
+export type WriteResult = WriteResultSuccess | WriteResultFailure;
+
+export type WriteResultSuccess = {
+  __typename: "success",
+  nextExpectedVersion: number,
+  position: Position,
+};
+
+export type WriteResultFailure = {
+  __typename: "failure",
+  error: WrongExpectedVersion | Error,
+}
+
+export type CurrentRevisionNoStream = {
+  __typename: "no_stream",
+};
+
+export const CurrentRevisionNoStream : CurrentRevisionNoStream = {
+  __typename: "no_stream",
+};
+
+export type CurrentStreamRevision = {
+  __typename: "current",
+  revision: number,
+}
+
+export const CurrentStreamRevision: (revision: number) => CurrentStreamRevision = revision => {
+  return {
+    __typename: "current",
+    revision,
+  };
+};
+
+export type CurrentRevision = CurrentStreamRevision | CurrentRevisionNoStream;
+
+export type ExpectedStreamRevision = {
+  __typename: "expected",
+  revision: number,
+};
+
+export type ExpectedRevisionAny = {
+  __typename: "any",
+};
+
+export type ExpectedRevisionExists = {
+  __typename: "stream_exists",
+};
+
+export const ExpectedRevisionExists: ExpectedRevisionExists = {
+  __typename: "stream_exists",
+};
+
+export const ExpectedRevisionAny: ExpectedRevisionAny = {
+  __typename: "any",
+};
+
+export const ExpectedStreamRevision: (revision: number) => ExpectedStreamRevision = (revision) => {
+  return {
+    __typename: "expected",
+    revision,
+  };
+}
+
+export type ExpectedRevision = ExpectedStreamRevision | ExpectedRevisionAny | ExpectedRevisionExists;
+
+export type WrongExpectedVersion = {
+  current: CurrentRevision,
+  expected: ExpectedRevision,
+};
+
+export type ResolvedEvent = {
+  event: RecordedEvent | undefined,
+  link: RecordedEvent | undefined,
+  commit_position: number | undefined,
+}
+
+export type RecordedEvent = {
+  streamId: string,
+  id: string, // UUID
+  revision: number,
+  eventType: string,
+  data: Uint8Array | Object,
+  metadata: Uint8Array | Object,
+  isJson: boolean,
+  position: Position,
+  created: number,
+};
+
+export type ReadStreamResult = ReadStreamSuccess | ReadStreamNotFound;
+
+export type ReadStreamSuccess = {
+  __typename: "success",
+  events: ResolvedEvent[] | undefined, // always defined.
+};
+
+export type ReadStreamNotFound = {
+  __typename: "not_found",
+  events: ResolvedEvent[] | undefined,
+};
+
+export const ReadStreamNotFound: ReadStreamNotFound = {
+  __typename: "not_found",
+  events: undefined,
+};

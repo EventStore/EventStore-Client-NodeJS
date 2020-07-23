@@ -6,12 +6,9 @@ import { Streams } from "./streams";
 //import {Reads} from "./src/reads";
 
 //const streams_service = require('./src/generated/streams_grpc_pb');
-import { grpc } from "@improbable-eng/grpc-web";
-import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
 
 export class EventStoreConnectionBuilder {
   build(uri: string): EventStoreConnection {
-    grpc.setDefaultTransport(NodeHttpTransport());
     return new EventStoreConnection(uri);
   }
 }
