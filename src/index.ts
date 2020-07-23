@@ -1,5 +1,4 @@
 // import * as fs from "fs";
-import * as grpc from "grpc";
 import { StreamsClient } from "../generated/streams_pb_service";
 import {Streams} from "./streams";
 // import * as streams from "./generated/streams_pb";
@@ -8,21 +7,12 @@ import {Streams} from "./streams";
 //import {Reads} from "./src/reads";
 
 //const streams_service = require('./src/generated/streams_grpc_pb');
-
-type Nullable<T> = T | null;
-
-export class Credentials {
-  public username: string;
-  public password: string;
-
-  constructor(username:     string, password: string) {
-    this.username = username;
-    this.password = password;
-  }
-}
+import {grpc} from "@improbable-eng/grpc-web";
+import { NodeHttpTransport } from '@improbable-eng/grpc-web-node-http-transport';
 
 export class EventStoreConnectionBuilder {
   build(uri: string): EventStoreConnection {
+    grpc.setDefaultTransport( NodeHttpTransport());
     return new EventStoreConnection(uri);
   }
 }
@@ -40,7 +30,7 @@ export class EventStoreConnection {
   constructor(uri: string) {
     this._uri = uri;
 
-    let credentials = grpc.credentials.createInsecure();
+    //let credentials = grpc.credentials.createInsecure();
     // if (connectionSettings !== null) {
     //     if (connectionSettings.sslCertificate !== null) {
     //         let cert = fs.readFileSync(connectionSettings.sslCertificate);

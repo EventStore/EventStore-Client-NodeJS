@@ -14,13 +14,11 @@ import {
 } from "./types";
 import {Empty, StreamIdentifier, UUID} from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
-import {grpc} from "@improbable-eng/grpc-web";
 
 export class Streams {
     private readonly client: StreamsClient;
 
     constructor(uri: string) {
-        grpc.CrossBrowserHttpTransport
         this.client = new StreamsClient(uri);
     }
 
@@ -123,9 +121,11 @@ export class AppendStream {
         this.requestStream.write(req);
     }
 
-    end(): AppendResponse {
+    end(): Promise<Status> {
         this.requestStream.end();
-        return new AppendResponse(this.requestStream);
+        return new Promise<Status>((resolve) => {
+            this.requestStream.on("end", status => resolve(status))
+        });
     }
 
     cancel(): void {

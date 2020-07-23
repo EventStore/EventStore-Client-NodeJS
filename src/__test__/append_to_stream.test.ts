@@ -4,7 +4,7 @@ import * as eventstore from "../";
 import {EventData, Revision} from "../types";
 
 describe("append_to_stream", function () {
-  it("should successfully append events to stream", () => {
+  it("should successfully append events to stream", async () => {
     const connection = eventstore.EventStoreConnection
         .builder()
         .build("http://localhost:2113");
@@ -20,15 +20,7 @@ describe("append_to_stream", function () {
     }).build();
 
     sink.send(evt);
-    let resp = sink.end();
-
-    resp.onEnd(status => {
-        console.log(`onEnd: ${JSON.stringify(status, null, 4)}`);
-    });
-
-    resp.onStatus(status => {
-      console.log(`onStatus: ${JSON.stringify(status, null, 4)}`);
-    });
+    let resp = await sink.end();
 
     expect(1).toBe(1);
 
@@ -59,9 +51,4 @@ describe("append_to_stream", function () {
     // client.appendToStream("SomeStream", AnyStreamRevision.Any, eventData);
   });
 
-  // it("should append stream with revision", () => {});
-
-  // it("should not append to stream when already exists", () => {});
-
-  // it("should not append to stream when stream doesnt exist", () => {});
 });
