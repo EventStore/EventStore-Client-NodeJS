@@ -7,7 +7,8 @@ import {
     EventData,
     Forward,
     IRevision,
-    Revision, StreamEnd, StreamExact,
+    Position,
+    Revision, StreamEnd, StreamExact, StreamPosition,
     StreamRevision,
     StreamStart
 } from "./types";
@@ -27,6 +28,10 @@ export class Streams {
 
     readStream(stream: string): ReadStreamEvents {
         return new ReadStreamEvents(this.client, stream);
+    }
+
+    readAll(): ReadAllEvents {
+        return new ReadAllEvents(this.client);
     }
 }
 
@@ -232,6 +237,98 @@ export class ReadStreamEvents {
         options.setStream(streamOptions);
         options.setResolveLinks(this.resolveLinkTos);
         options.setCount(count);
+        options.setUuidOption(uuidOption);
+
+        switch (this.direction.__typename) {
+            case "forward": {
+                options.setReadDirection(0);
+            }
+
+            case "backward": {
+                options.setReadDirection(1);
+            }
+        }
+
+        req.setOptions(options);
+
+        return new ReadStreamResponse(this.client.read(req));
+    }
+}
+
+export class ReadAllEvents {
+    private client: StreamsClient;
+    private position: StreamPosition | StreamStart | StreamEnd;
+    private direction: Direction;
+    private credentials: Credentials | undefined;
+
+    constructor(client: StreamsClient) {
+        this.client = client;
+        this.direction = Forward;
+        this.position = StreamStart;
+    }
+
+    forward(): ReadAllEvents {
+        this.direction = Forward;
+        return this;
+    }
+
+    backward(): ReadAllEvents {
+        this.direction = Backward;
+        return this;
+    }
+
+    readDirection(direction: Direction): ReadAllEvents {
+        this.direction = direction;
+        return this;
+    }
+
+    fromPosition(position: Position): ReadAllEvents {
+        this.position = StreamPosition(position);
+        return this;
+    }
+
+    fromStart(): ReadAllEvents {
+        this.position = StreamStart;
+        return this;
+    }
+
+    fromEnd(): ReadAllEvents {
+        this.position = StreamEnd;
+        return this;
+    }
+
+    authenticated(credentials: Credentials): ReadAllEvents {
+        this.credentials = credentials;
+        return this;
+    }
+
+    execute(count: number): ReadStreamResponse {
+        let req = new ReadReq();
+        const options = new ReadReq.Options();
+
+        const uuidOption = new UUIDOption();
+        uuidOption.setString(new Empty());
+
+        const allOptions = new ReadReq.Options.AllOptions();
+
+        switch (this.position.__typename) {
+            case "position": {
+                let pos = new ReadReq.Options.Position();
+                pos.setCommitPosition(this.position.position.commit);
+                pos.setPreparePosition(this.position.position.prepare);
+                allOptions.setPosition(pos);
+            }
+
+            case "start": {
+                allOptions.setStart(new Empty());
+            }
+
+            case "end": {
+                allOptions.setEnd(new Empty());
+            }
+        }
+        options.setCount(count);
+        options.setAll(allOptions);
         options.setUuidOption(uuidOption);
 
         switch (this.direction.__typename) {

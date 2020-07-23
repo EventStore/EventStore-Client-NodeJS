@@ -179,3 +179,20 @@ export const StreamExact = (revision: number): StreamExact => {
         revision,
     };
 };
+
+export type Position = {
+    commit: number,
+    prepare: number,
+}
+
+export type StreamPosition = {
+    __typename: "position",
+    position: Position,
+}
+
+export const StreamPosition: (pos: Position) => StreamPosition = (pos) => {
+    return {
+        __typename: "position",
+        position: pos,
+    };
+}
