@@ -1,33 +1,34 @@
 import {
-  RequestStream,
-  ResponseStream,
-  Status,
   StreamsClient,
-} from "../generated/streams_pb_service";
-import { AppendReq, ReadReq, ReadResp } from "../generated/streams_pb";
+} from "../generated/streams_grpc_pb";
+import {AppendReq, AppendResp, ReadReq, ReadResp} from "../generated/streams_pb";
 import {
   Backward,
-  Credentials,
+  Credentials, CurrentRevision, CurrentRevisionNoStream, CurrentStreamRevision,
   Direction,
-  EventData,
+  EventData, ExpectedRevision, ExpectedRevisionAny, ExpectedRevisionExists, ExpectedStreamRevision,
   Forward,
   IRevision,
-  Position,
+  Position, ReadStreamNotFound, ReadStreamResult, ReadStreamSuccess, RecordedEvent, ResolvedEvent,
   Revision,
   StreamEnd,
   StreamExact,
   StreamPosition,
   StreamRevision,
-  StreamStart,
+  StreamStart, WriteResult, WriteResultFailure, WriteResultSuccess, WrongExpectedVersion,
 } from "./types";
 import { Empty, StreamIdentifier, UUID } from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
+import * as grpc from "grpc";
+import * as streams_pb from "../generated/streams_pb";
+import * as file from "fs";
 
 export class Streams {
   private readonly client: StreamsClient;
 
   constructor(uri: string) {
-    this.client = new StreamsClient(uri);
+    const root = file.readFileSync(`${__dirname}/../dev-ca/ca.pem`);
+    this.client = new StreamsClient(uri, grpc.credentials.createSsl(root, undefined, undefined));
   }
 
   writeEvents(stream: string): WriteEvents {
@@ -66,12 +67,12 @@ export class WriteEvents {
     return this;
   }
 
-  start(): AppendStream {
+  send(events: EventData[]): Promise<WriteResult> {
     const header = new AppendReq();
     const options = new AppendReq.Options();
     const identifier = new StreamIdentifier();
 
-    identifier.setStreamname(this.stream);
+    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
     options.setStreamIdentifier(identifier);
 
     switch (this.revision.__typename) {
@@ -97,72 +98,143 @@ export class WriteEvents {
     }
     header.setOptions(options);
 
-    return new AppendStream(this.client.append().write(header));
-  }
-}
+    return new Promise<WriteResult>((resolve) => {
+      const sink = this.client.append((error, resp) => {
+        if (error != null) {
+          const result: WriteResultFailure = {
+            __typename: "failure",
+            error,
+          };
 
-export class AppendStream {
-  private requestStream: RequestStream<AppendReq>;
+          resolve(result);
+          return;
+        }
 
-  constructor(requestStream: RequestStream<AppendReq>) {
-    this.requestStream = requestStream;
-  }
+        if (resp.hasSuccess()) {
+          const success = resp.getSuccess()!;
+          const nextExpectedVersion = success.getCurrentRevision();
+          const grpcPosition = success.getPosition()!;
+          const position: Position = {
+            commit: grpcPosition.getCommitPosition(),
+            prepare: grpcPosition.getPreparePosition(),
+          };
+          const result: WriteResultSuccess = {
+            __typename: "success",
+            nextExpectedVersion,
+            position,
+          };
 
-  send(item: EventData): void {
-    const req = new AppendReq();
-    const message = new AppendReq.ProposedMessage();
-    const uuid = new UUID();
+          resolve(result);
+        } else {
+          const error = resp.getWrongExpectedVersion()!;
+          let current: CurrentRevision | undefined;
+          let expected: ExpectedRevision | undefined;
 
-    uuid.setString(item.id);
-    message.setId(uuid);
-    message.getMetadataMap().set("type", item.eventType);
+          if (error.hasCurrentRevision()) {
+            current = CurrentStreamRevision(error.getCurrentRevision());
+          } else {
+            current = CurrentRevisionNoStream;
+          }
 
-    switch (item.payload.__typename) {
-      case "binary": {
-        message
-          .getMetadataMap()
-          .set("content-type", "application/octet-stream");
-        break;
+          if (error.hasExpectedRevision()) {
+            expected = ExpectedStreamRevision(error.getExpectedRevision());
+          } else if (error.hasStreamExists()) {
+            expected = ExpectedRevisionExists;
+          } else if (error.hasAny()) {
+            expected = ExpectedRevisionAny;
+          }
+
+          const failure: WriteResultFailure = {
+            __typename: "failure",
+            error: {
+              current: current!,
+              expected: expected!,
+            },
+          };
+
+          resolve(failure);
+        }
+      });
+
+      sink.write(header);
+
+      for (const event of events) {
+        const entry = new AppendReq();
+        const message = new AppendReq.ProposedMessage();
+        const id = new UUID();
+
+        id.setString(event.id);
+
+        message.setId(id);
+
+        switch (event.payload.__typename) {
+          case "json": {
+            message.getMetadataMap().set("content-type", "application/json");
+            const data = JSON.stringify(event.payload.payload);
+            message.setData(Buffer.from(data, 'binary').toString('base64'));
+            break;
+          }
+          case "binary": {
+            message.getMetadataMap().set("content-type", "application/octet-stream");
+            message.setData(event.payload.payload);
+          }
+        }
+        message.getMetadataMap().set("type", event.eventType);
+        entry.setProposedMessage(message);
+        sink.write(entry);
       }
-
-      case "json": {
-        const buffer = Buffer.from(JSON.stringify(item.payload));
-        message.getMetadataMap().set("content-type", "application/json");
-        message.setData(buffer.toString("base64"));
-        break;
-      }
-    }
-
-    req.setProposedMessage(message);
-    this.requestStream.write(req);
-  }
-
-  end(): Promise<Status> {
-    this.requestStream.end();
-    return new Promise<Status>((resolve) => {
-      this.requestStream.on("end", (status) => resolve(status));
+      sink.end()
     });
   }
-
-  cancel(): void {
-    this.requestStream.cancel();
-  }
 }
 
-export class AppendResponse {
-  private requestStream: RequestStream<AppendReq>;
+const convertGrpcRecord: (grpcRecord: streams_pb.ReadResp.ReadEvent.RecordedEvent) => RecordedEvent = (grpcRecord) =>  {
+  const eventType = grpcRecord.getMetadataMap().get("type") || "<no-event-type-provided>";
+  let isJson = false;
 
-  constructor(requestStream: RequestStream<AppendReq>) {
-    this.requestStream = requestStream;
+  const contentType = grpcRecord.getMetadataMap().get("content-type") || "application/octet-stream";
+  const createdStr = grpcRecord.getMetadataMap().get("created") || "0";
+  const created = parseInt(createdStr);
+
+  if (contentType === "application/json") {
+    isJson = true;
   }
 
-  onEnd(cb: (status?: Status) => void): void {
-    this.requestStream.on("end", cb);
+  const position: Position = {
+    commit: grpcRecord.getCommitPosition(),
+    prepare: grpcRecord.getPreparePosition(),
+  };
+
+  let data: Uint8Array | Object | undefined;
+
+  if (isJson) {
+    data = JSON.parse(Buffer.from(grpcRecord.getData()).toString("binary"));
+  } else {
+    data = grpcRecord.getData_asU8();
   }
 
-  onStatus(cb: (status: Status) => void): void {
-    this.requestStream.on("status", cb);
+  let customMetadata: Uint8Array | Object | undefined;
+
+  if (isJson) {
+    const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString("binary");
+    if (metadataStr.length > 0) {
+      customMetadata = JSON.parse(metadataStr);
+    } else {
+      customMetadata = metadataStr;
+    }
   }
+
+  return {
+    streamId: Buffer.from(grpcRecord.getStreamIdentifier()!.getStreamname()).toString("binary"),
+    id: grpcRecord.getId()!.getString(),
+    revision: grpcRecord.getStreamRevision(),
+    eventType,
+    data: data!,
+    metadata: customMetadata!,
+    isJson,
+    position,
+    created,
+  };
 }
 
 export class ReadStreamEvents {
@@ -227,11 +299,11 @@ export class ReadStreamEvents {
     return this;
   }
 
-  execute(count: number): ReadStreamResponse {
+  execute(count: number): Promise<ReadStreamResult> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();
-    identifier.setStreamname(this.stream);
+    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
 
     const uuidOption = new UUIDOption();
     uuidOption.setString(new Empty());
@@ -260,6 +332,7 @@ export class ReadStreamEvents {
     options.setResolveLinks(this.resolveLinkTos);
     options.setCount(count);
     options.setUuidOption(uuidOption);
+    options.setNoFilter(new Empty());
 
     switch (this.direction.__typename) {
       case "forward": {
@@ -275,7 +348,57 @@ export class ReadStreamEvents {
 
     req.setOptions(options);
 
-    return new ReadStreamResponse(this.client.read(req));
+    const stream = this.client.read(req);
+    return new Promise<ReadStreamResult>((resolve, reject) => {
+      const buffer: ResolvedEvent[] = [];
+      let found = true;
+
+      stream.on("data", (resp: ReadResp) => {
+        if (resp.hasStreamNotFound()) {
+          found = false;
+        } else {
+          let event: RecordedEvent | undefined;
+          let link: RecordedEvent | undefined;
+
+          if (resp.hasEvent()) {
+            const grpcEvent = resp.getEvent()!;
+
+            if (grpcEvent.hasEvent()) {
+              event = convertGrpcRecord(grpcEvent.getEvent()!);
+            }
+
+            if (grpcEvent.hasLink()) {
+              link = convertGrpcRecord(grpcEvent.getLink()!);
+            }
+
+            const resolved: ResolvedEvent = {
+              event,
+              link,
+              commit_position: grpcEvent.getCommitPosition(),
+            };
+
+            buffer.push(resolved);
+          }
+        }
+      });
+
+      stream.on("end", () => {
+        if (found) {
+          const result: ReadStreamSuccess = {
+            __typename: "success",
+            events: buffer,
+          };
+
+          resolve(result);
+        } else {
+          resolve(ReadStreamNotFound);
+        }
+      });
+
+      stream.on("error", error => {
+        reject(error);
+      });
+    });
   }
 }
 
@@ -326,7 +449,7 @@ export class ReadAllEvents {
     return this;
   }
 
-  execute(count: number): ReadStreamResponse {
+  execute(count: number): Promise<ResolvedEvent[]> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
 
@@ -357,6 +480,7 @@ export class ReadAllEvents {
     options.setCount(count);
     options.setAll(allOptions);
     options.setUuidOption(uuidOption);
+    options.setNoFilter(new Empty());
 
     switch (this.direction.__typename) {
       case "forward": {
@@ -372,30 +496,40 @@ export class ReadAllEvents {
 
     req.setOptions(options);
 
-    return new ReadStreamResponse(this.client.read(req));
-  }
-}
+    const stream = this.client.read(req);
+    return new Promise<ResolvedEvent[]>((resolve, reject) => {
+      const buffer: ResolvedEvent[] = [];
 
-export class ReadStreamResponse {
-  private readResponse: ResponseStream<ReadResp>;
+      stream.on("data", (resp: ReadResp) => {
+        let event: RecordedEvent | undefined;
+        let link: RecordedEvent | undefined;
 
-  constructor(readResponse: ResponseStream<ReadResp>) {
-    this.readResponse = readResponse;
-  }
+        if (resp.hasEvent()) {
+          const grpcEvent = resp.getEvent()!;
 
-  cancel(): void {
-    this.readResponse.cancel();
-  }
+          if (grpcEvent.hasEvent()) {
+            event = convertGrpcRecord(grpcEvent.getEvent()!);
+          }
 
-  onEvent(cb: (resp: ReadResp) => void): void {
-    this.readResponse.on("data", cb);
-  }
+          if (grpcEvent.hasLink()) {
+            link = convertGrpcRecord(grpcEvent.getLink()!);
+          }
 
-  onEnd(cb: (status?: Status) => void): void {
-    this.readResponse.on("end", cb);
-  }
+          const resolved: ResolvedEvent = {
+            event,
+            link,
+            commit_position: grpcEvent.getCommitPosition(),
+          };
 
-  onStatus(cb: (status: Status) => void): void {
-    this.readResponse.on("status", cb);
+          buffer.push(resolved);
+        }
+      });
+
+      stream.on("end", () => {
+        resolve(buffer);
+      })
+
+      stream.on("error", reject);
+    });
   }
 }

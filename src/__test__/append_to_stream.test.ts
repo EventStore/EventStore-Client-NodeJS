@@ -2,53 +2,26 @@
 
 import * as eventstore from "../";
 import { EventData, Revision } from "../types";
+import {v4 as uuid} from "uuid";
 
 describe("append_to_stream", function () {
   it("should successfully append events to stream", async () => {
     const connection = eventstore.EventStoreConnection.builder().build(
-      "http://localhost:2113"
+      "localhost:2113"
     );
 
-    const sink = connection
-      .streams()
-      .writeEvents("foobar")
-      .expectedVersion(Revision.Any)
-      .start();
-
+    const streamName = `write-${uuid()}`;
     const evt = EventData.json("typescript-type", {
       message: "baz",
     }).build();
 
-    sink.send(evt);
-    const resp = await sink.end();
-    console.log(JSON.stringify(resp, null, 4));
+    const result = await connection
+        .streams()
+        .writeEvents(streamName)
+        .expectedVersion(Revision.Any)
+        .send([evt])
 
+    console.log(result);
     expect(1).toBe(1);
-
-    // Connect to client
-    // let connectionSettings = new ConnectionSettings(
-    //   "/Users/mat-mcloughlin/git/eventStore/src/dev-ca/server1.pem"
-    // );
-    // let client = new EventStoreConnection(
-    //   "localhost:2113",
-    //   "admin",
-    //   "changeit",
-    //   connectionSettings
-    // );
-
-    // // Generate event data
-    // let eventData = new Array<EventData>();
-
-    // // Encode JSON
-    // const encoder = new TextEncoder();
-    // let data = encoder.encode('{"Id": "1"}');
-
-    // let eventId = uuid();
-
-    // let eventDataOne = new EventData(eventId, "type", data);
-    // eventData.push(eventDataOne);
-
-    // // Send request to append
-    // client.appendToStream("SomeStream", AnyStreamRevision.Any, eventData);
   });
 });
