@@ -1,12 +1,13 @@
 import {
   StreamsClient,
 } from "../generated/streams_grpc_pb";
-import {AppendReq, AppendResp, ReadReq, ReadResp} from "../generated/streams_pb";
+import {AppendReq, AppendResp, ReadReq, ReadResp } from "../generated/streams_pb";
 import {
+  AllPosition,
   Backward,
   Credentials, CurrentRevision, CurrentRevisionNoStream, CurrentStreamRevision,
   Direction,
-  EventData, ExpectedRevision, ExpectedRevisionAny, ExpectedRevisionExists, ExpectedStreamRevision,
+  EventData, ExpectedRevision, ExpectedRevisionAny, ExpectedRevisionExists, ExpectedStreamRevision, Filter,
   Forward,
   IRevision,
   Position, ReadStreamNotFound, ReadStreamResult, ReadStreamSuccess, RecordedEvent, ResolvedEvent,
@@ -15,13 +16,14 @@ import {
   StreamExact,
   StreamPosition,
   StreamRevision,
-  StreamStart, WriteResult, WriteResultFailure, WriteResultSuccess, WrongExpectedVersion,
+  StreamStart, SubscriptionHandler, WriteResult, WriteResultFailure, WriteResultSuccess, WrongExpectedVersion,
 } from "./types";
 import { Empty, StreamIdentifier, UUID } from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import * as grpc from "grpc";
 import * as streams_pb from "../generated/streams_pb";
 import * as file from "fs";
+import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
 export class Streams {
   private readonly client: StreamsClient;
@@ -41,6 +43,14 @@ export class Streams {
 
   readAll(): ReadAllEvents {
     return new ReadAllEvents(this.client);
+  }
+
+  subscribe(stream: string): SubscribeToStream {
+    return new SubscribeToStream(this.client, stream);
+  }
+
+  subscribeToAll(): SubscribeToAll {
+    return new SubscribeToAll(this.client);
   }
 }
 
@@ -243,13 +253,12 @@ export class ReadStreamEvents {
   private revision: StreamRevision;
   private resolveLinkTos: boolean;
   private direction: Direction;
-  private credentials: Credentials | null;
+  private credentials: Credentials | undefined;
 
   constructor(client: StreamsClient, stream: string) {
     this.client = client;
     this.stream = stream;
     this.revision = StreamStart;
-    this.credentials = null;
     this.resolveLinkTos = false;
     this.direction = Forward;
   }
@@ -533,3 +542,244 @@ export class ReadAllEvents {
     });
   }
 }
+
+export class SubscribeToStream {
+  private client: StreamsClient;
+  private stream: string;
+  private revision: StreamRevision;
+  private resolveLinkTos: boolean;
+  private credentials: Credentials | undefined;
+
+  constructor(client: StreamsClient, stream: string) {
+    this.client = client;
+    this.stream = stream;
+    this.revision = StreamEnd;
+    this.resolveLinkTos = false;
+  }
+
+  fromRevision(revision: number): SubscribeToStream {
+    this.revision = StreamExact(revision);
+    return this;
+  }
+
+  fromStart(): SubscribeToStream {
+    this.revision = StreamStart;
+    return this;
+  }
+
+  fromEnd(): SubscribeToStream {
+    this.revision = StreamEnd;
+    return this;
+  }
+
+  authenticated(credentials: Credentials): SubscribeToStream {
+    this.credentials = credentials;
+    return this;
+  }
+
+  resolveLink(): SubscribeToStream {
+    this.resolveLinkTos = true;
+    return this;
+  }
+
+  doNotResolveLink(): SubscribeToStream {
+    this.resolveLinkTos = false;
+    return this;
+  }
+
+  execute(handler: SubscriptionHandler): void {
+    const req = new ReadReq();
+    const options = new ReadReq.Options();
+    const identifier = new StreamIdentifier();
+    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
+
+    const uuidOption = new UUIDOption();
+    uuidOption.setString(new Empty());
+
+    const streamOptions = new ReadReq.Options.StreamOptions();
+    streamOptions.setStreamIdentifier(identifier);
+
+    switch (this.revision.__typename) {
+      case "exact": {
+        streamOptions.setRevision(this.revision.revision);
+        break;
+      }
+
+      case "start": {
+        streamOptions.setStart(new Empty());
+        break;
+      }
+
+      default: {
+        streamOptions.setEnd(new Empty());
+        break;
+      }
+    }
+
+    options.setStream(streamOptions);
+    options.setResolveLinks(this.resolveLinkTos);
+    options.setSubscription(new SubscriptionOptions());
+    options.setUuidOption(uuidOption);
+    options.setNoFilter(new Empty());
+
+    req.setOptions(options);
+
+    const stream = this.client.read(req);
+    stream.on("data", (resp: ReadResp) => {
+      if (resp.hasCheckpoint())
+        handler.onConfirmation;
+
+      if (resp.hasEvent()) {
+        let event: RecordedEvent | undefined;
+        let link: RecordedEvent | undefined;
+
+        if (resp.hasEvent()) {
+          const grpcEvent = resp.getEvent()!;
+
+          if (grpcEvent.hasEvent()) {
+            event = convertGrpcRecord(grpcEvent.getEvent()!);
+          }
+
+          if (grpcEvent.hasLink()) {
+            link = convertGrpcRecord(grpcEvent.getLink()!);
+          }
+
+          const resolved: ResolvedEvent = {
+            event,
+            link,
+            commit_position: grpcEvent.getCommitPosition(),
+          };
+
+          handler.onEvent(resolved);
+        }
+      }
+    });
+
+    stream.on("end", handler.onEnd);
+  }
+}
+
+export class SubscribeToAll {
+  private client: StreamsClient;
+  private position: AllPosition;
+  private resolveLinkTos: boolean;
+  private credentials: Credentials | undefined;
+  private _filter: Filter | undefined;
+
+  constructor(client: StreamsClient) {
+    this.client = client;
+    this.position = StreamEnd;
+    this.resolveLinkTos = false;
+  }
+
+  fromPosition(position: Position): SubscribeToAll {
+    this.position = StreamPosition(position);
+    return this;
+  }
+
+  fromStart(): SubscribeToAll {
+    this.position = StreamStart;
+    return this;
+  }
+
+  fromEnd(): SubscribeToAll {
+    this.position = StreamEnd;
+    return this;
+  }
+
+  authenticated(credentials: Credentials): SubscribeToAll {
+    this.credentials = credentials;
+    return this;
+  }
+
+  resolveLink(): SubscribeToAll {
+    this.resolveLinkTos = true;
+    return this;
+  }
+
+  doNotResolveLink(): SubscribeToAll {
+    this.resolveLinkTos = false;
+    return this;
+  }
+
+  filter(value: Filter): SubscribeToAll {
+    this._filter = value;
+    return this;
+  }
+
+  execute(handler: SubscriptionHandler): void {
+    const req = new ReadReq();
+    const options = new ReadReq.Options();
+    const uuidOption = new UUIDOption();
+    uuidOption.setString(new Empty());
+
+    const allOptions = new ReadReq.Options.AllOptions();
+
+    switch (this.position.__typename) {
+      case "position": {
+        const grpcPos = new ReadReq.Options.Position();
+        grpcPos.setCommitPosition(this.position.position.commit);
+        grpcPos.setPreparePosition(this.position.position.prepare);
+        allOptions.setPosition(grpcPos);
+        break;
+      }
+
+      case "start": {
+        allOptions.setStart(new Empty());
+        break;
+      }
+
+      default: {
+        allOptions.setEnd(new Empty());
+        break;
+      }
+    }
+
+    options.setAll(allOptions);
+    options.setResolveLinks(this.resolveLinkTos);
+    options.setSubscription(new SubscriptionOptions());
+    options.setUuidOption(uuidOption);
+
+    if (this._filter) {
+      options.setFilter(this._filter.toGrpc());
+    } else {
+      options.setNoFilter(new Empty());
+    }
+
+    req.setOptions(options);
+
+    const stream = this.client.read(req);
+    stream.on("data", (resp: ReadResp) => {
+      if (resp.hasCheckpoint())
+        handler.onConfirmation;
+
+      if (resp.hasEvent()) {
+        let event: RecordedEvent | undefined;
+        let link: RecordedEvent | undefined;
+
+        if (resp.hasEvent()) {
+          const grpcEvent = resp.getEvent()!;
+
+          if (grpcEvent.hasEvent()) {
+            event = convertGrpcRecord(grpcEvent.getEvent()!);
+          }
+
+          if (grpcEvent.hasLink()) {
+            link = convertGrpcRecord(grpcEvent.getLink()!);
+          }
+
+          const resolved: ResolvedEvent = {
+            event,
+            link,
+            commit_position: grpcEvent.getCommitPosition(),
+          };
+
+          handler.onEvent(resolved);
+        }
+      }
+    });
+
+    stream.on("end", handler.onEnd);
+  }
+}
+
