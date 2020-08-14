@@ -1,11 +1,11 @@
 import {
   StreamsClient,
 } from "../generated/streams_grpc_pb";
-import {AppendReq, AppendResp, ReadReq, ReadResp } from "../generated/streams_pb";
+import {AppendReq, AppendResp, DeleteReq, ReadReq, ReadResp} from "../generated/streams_pb";
 import {
   AllPosition,
   Backward,
-  Credentials, CurrentRevision, CurrentRevisionNoStream, CurrentStreamRevision,
+  Credentials, CurrentRevision, CurrentRevisionNoStream, CurrentStreamRevision, DeleteResult,
   Direction,
   EventData, ExpectedRevision, ExpectedRevisionAny, ExpectedRevisionExists, ExpectedStreamRevision, Filter,
   Forward,
@@ -35,6 +35,14 @@ export class Streams {
 
   writeEvents(stream: string): WriteEvents {
     return new WriteEvents(this.client, stream);
+  }
+
+  delete(stream: string): DeleteStream {
+    return new DeleteStream(this.client, stream);
+  }
+
+  tombstone(stream: string): TombstoneStream {
+    return new TombstoneStream(this.client, stream);
   }
 
   readStream(stream: string): ReadStreamEvents {
@@ -245,6 +253,160 @@ const convertGrpcRecord: (grpcRecord: streams_pb.ReadResp.ReadEvent.RecordedEven
     position,
     created,
   };
+}
+
+export class DeleteStream {
+  private _client: StreamsClient;
+  private readonly _stream: string;
+  private _revision: IRevision;
+  private _credentials?: Credentials;
+
+  constructor(client: StreamsClient, stream: string) {
+    this._client = client;
+    this._stream = stream;
+    this._revision = Revision.Any;
+  }
+
+  authenticated(credentials: Credentials): DeleteStream {
+    this._credentials = credentials;
+    return this;
+  }
+
+  expectedVersion(revision: IRevision): DeleteStream {
+    this._revision = revision;
+    return this;
+  }
+
+  execute(): Promise<DeleteResult> {
+    const req = new DeleteReq();
+    const options = new DeleteReq.Options();
+    const identifier = new StreamIdentifier();
+    identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
+
+    options.setStreamIdentifier(identifier);
+
+    switch (this._revision.__typename) {
+      case "exact": {
+        options.setRevision(this._revision.revision);
+        break;
+      }
+
+      case "no_stream": {
+        options.setNoStream(new Empty());
+        break;
+      }
+
+      case "stream_exists": {
+        options.setStreamExists(new Empty());
+        break;
+      }
+
+      case "any": {
+        options.setAny(new Empty());
+        break;
+      }
+    }
+
+    req.setOptions(options);
+    return new Promise<DeleteResult>((resolve, reject) => {
+      this._client.delete(req,(error, resp) => {
+        if (error) {
+          reject(error);
+        }
+
+        const result: DeleteResult = {};
+
+        if (resp.hasPosition()) {
+          const grpcPos = resp.getPosition()!;
+          const pos: Position = {
+            commit: grpcPos.getCommitPosition(),
+            prepare: grpcPos.getPreparePosition(),
+          };
+
+          result.position = pos;
+        }
+
+        resolve(result);
+      });
+    })
+  }
+}
+
+export class TombstoneStream {
+  private _client: StreamsClient;
+  private readonly _stream: string;
+  private _revision: IRevision;
+  private _credentials?: Credentials;
+
+  constructor(client: StreamsClient, stream: string) {
+    this._client = client;
+    this._stream = stream;
+    this._revision = Revision.Any;
+  }
+
+  authenticated(credentials: Credentials): TombstoneStream {
+    this._credentials = credentials;
+    return this;
+  }
+
+  expectedVersion(revision: IRevision): TombstoneStream {
+    this._revision = revision;
+    return this;
+  }
+
+  execute(): Promise<DeleteResult> {
+    const req = new DeleteReq();
+    const options = new DeleteReq.Options();
+    const identifier = new StreamIdentifier();
+    identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
+
+    options.setStreamIdentifier(identifier);
+
+    switch (this._revision.__typename) {
+      case "exact": {
+        options.setRevision(this._revision.revision);
+        break;
+      }
+
+      case "no_stream": {
+        options.setNoStream(new Empty());
+        break;
+      }
+
+      case "stream_exists": {
+        options.setStreamExists(new Empty());
+        break;
+      }
+
+      case "any": {
+        options.setAny(new Empty());
+        break;
+      }
+    }
+
+    req.setOptions(options);
+    return new Promise<DeleteResult>((resolve, reject) => {
+      this._client.delete(req,(error, resp) => {
+        if (error) {
+          reject(error);
+        }
+
+        const result: DeleteResult = {};
+
+        if (resp.hasPosition()) {
+          const grpcPos = resp.getPosition()!;
+          const pos: Position = {
+            commit: grpcPos.getCommitPosition(),
+            prepare: grpcPos.getPreparePosition(),
+          };
+
+          result.position = pos;
+        }
+
+        resolve(result);
+      });
+    })
+  }
 }
 
 export class ReadStreamEvents {

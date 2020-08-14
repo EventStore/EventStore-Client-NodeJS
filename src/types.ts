@@ -401,3 +401,7 @@ export class Filter {
     return options;
   }
 }
+
+export type DeleteResult = {
+  position?: Position,
+}
