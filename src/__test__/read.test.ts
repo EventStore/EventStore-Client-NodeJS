@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import * as eventstore from "../index";
-import {EventData, ReadStreamResult, Revision} from "../types";
+import {EventData, Forward, ReadStreamResult, Revision} from "../types";
 
 describe("read all forwards", function () {
   it("should successfully read all events", async function () {

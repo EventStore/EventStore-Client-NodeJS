@@ -1,5 +1,6 @@
 // import * as fs from "fs";
 import { Streams } from "./streams";
+import {Persistent} from "./persistent";
 // import * as streams from "./generated/streams_pb";
 // import { ReadReq, ReadResp } from "./generated/streams_pb";
 //import {Appends} from "./src/append";
@@ -43,5 +44,9 @@ export class EventStoreConnection {
 
   streams(): Streams {
     return new Streams(this._uri);
+  }
+
+  persistentSubscriptions(): Persistent {
+    return new Persistent(this._uri);
   }
 }
