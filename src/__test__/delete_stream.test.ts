@@ -10,7 +10,7 @@ describe("delete_stream", function () {
       "localhost:2113"
     );
 
-    const streamName = `delete-${uuid()}`;
+    const streamName = `tombstone-${uuid()}`;
     const evt = EventData.json("typescript-type", {
       message: "baz",
     }).build();
@@ -23,7 +23,7 @@ describe("delete_stream", function () {
 
     const result = await connection
         .streams()
-        .delete(streamName)
+        .tombstone(streamName)
         .execute();
 
     console.log(result);

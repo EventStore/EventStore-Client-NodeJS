@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import {ReadReq} from "../generated/streams_pb";
 import FilterOptions = ReadReq.Options.FilterOptions;
 import Expression = ReadReq.Options.FilterOptions.Expression;
+import * as grpc from "grpc";
 
 export type IRevision =
   | AnyRevision
@@ -60,14 +61,23 @@ export type BinaryPayload = {
   payload: Uint8Array;
 };
 
-export class Credentials {
-  username: string;
-  password: string;
+export type Credentials = {
+  username: string,
+  password: string,
+}
 
-  constructor(username: string, password: string) {
-    this.username = username;
-    this.password = password;
-  }
+export const Credentials: (username: string, password: string) => Credentials = (username, password) => {
+  return {
+    username,
+    password,
+  };
+}
+
+export const configureAuth: (creds: Credentials, meta: grpc.Metadata) => void = (creds, meta) => {
+  const auth = Buffer.from(`${creds.username}:${creds.password}`).toString("base64");
+  const header = `Basic ${auth}`;
+
+  meta.add("authorization", header);
 }
 
 export class EventDataBuilder {
@@ -327,6 +337,14 @@ export type SubscriptionHandler = {
   onConfirmation: () => void,
 };
 
+export type PersistentSubscriptionHandler = {
+  onEvent: (report: PersistentReport, event: ResolvedEvent) => void,
+  onEnd: () => void,
+  onConfirmation: () => void,
+  onError: (error: Error) => void,
+};
+
+
 export class Filter {
   private baseOnStream: boolean
   private _max: number | undefined
@@ -405,3 +423,68 @@ export class Filter {
 export type DeleteResult = {
   position?: Position,
 }
+
+export type ConsumerStrategy = DispatchToSingle | RoundRobin | Pinned;
+
+export type DispatchToSingle = {
+  __typename: "dispatch_to_single",
+}
+
+export const DispatchToSingle: DispatchToSingle = {
+  __typename: "dispatch_to_single",
+}
+
+export type RoundRobin = {
+  __typename: "round-robin",
+}
+
+export const RoundRobin: RoundRobin = {
+  __typename: "round-robin",
+}
+
+export type Pinned = {
+  __typename: "pinned",
+}
+
+export const Pinned: Pinned = {
+  __typename: "pinned",
+}
+
+export interface PersistentReport {
+  ack(ids: string[]): void;
+  nack(action: PersistentAction, reason: string, ids: string[]): void;
+}
+
+export type ParkAction = {
+  __typename: "park",
+}
+
+export const Park: ParkAction = {
+  __typename: "park",
+}
+
+export type RetryAction = {
+  __typename: "retry",
+}
+
+export const Retry: RetryAction = {
+  __typename: "retry",
+}
+
+export type SkipAction = {
+  __typename: "skip",
+}
+
+export const Skip: SkipAction = {
+  __typename: "skip",
+}
+
+export type StopAction = {
+  __typename: "stop",
+}
+
+export const Stop: StopAction = {
+  __typename: "stop",
+}
+
+export type PersistentAction = ParkAction | RetryAction | SkipAction | StopAction;
