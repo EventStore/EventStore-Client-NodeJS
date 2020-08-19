@@ -586,7 +586,7 @@ export class ConnectToPersistentSubscription {
             deadline: Infinity,
         };
 
-        const stream = this.client.read(metadata);
+        const stream = this.client.read(metadata, callOptions);
         const report = new PersistentReportImpl(this._bufferSize, this.stream, this.group, stream);
         stream.write(req);
         stream.on("error", error => {

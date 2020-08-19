@@ -44,6 +44,7 @@ import * as grpc from "grpc";
 import * as streams_pb from "../generated/streams_pb";
 import * as file from "fs";
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
+import {CallOptions} from "grpc";
 
 export class Streams {
   private readonly client: StreamsClient;
@@ -773,7 +774,11 @@ export class SubscribeToStream {
     const metadata = new grpc.Metadata();
     if (this.credentials) configureAuth(this.credentials, metadata);
 
-    const stream = this.client.read(req, metadata);
+    const callOptions: CallOptions = {
+      deadline: Infinity,
+    };
+
+    const stream = this.client.read(req, metadata, callOptions);
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasCheckpoint())
         handler.onConfirmation;
@@ -805,6 +810,7 @@ export class SubscribeToStream {
     });
 
     stream.on("end", handler.onEnd);
+    stream.on("error", handler.onError);
   }
 }
 
@@ -900,7 +906,11 @@ export class SubscribeToAll {
     const metadata = new grpc.Metadata();
     if (this.credentials) configureAuth(this.credentials, metadata);
 
-    const stream = this.client.read(req, metadata);
+    const callOptions: CallOptions = {
+      deadline: Infinity,
+    };
+
+    const stream = this.client.read(req, metadata, callOptions);
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasCheckpoint())
         handler.onConfirmation;
@@ -932,6 +942,7 @@ export class SubscribeToAll {
     });
 
     stream.on("end", handler.onEnd);
+    stream.on("error", handler.onError);
   }
 }
 

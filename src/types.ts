@@ -337,6 +337,7 @@ export type SubscriptionHandler = {
   onEvent: (event: ResolvedEvent) => void,
   onEnd: () => void,
   onConfirmation: () => void,
+  onError: (error: Error) => void,
 };
 
 export type PersistentSubscriptionHandler = {
