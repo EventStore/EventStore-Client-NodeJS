@@ -4,7 +4,10 @@ import {EventData, ReadStreamResult, Revision} from "../types";
 
 describe("subscribe to stream", function () {
     it("should successfully subsscribe to stream", async function () {
-        const connection = eventstore.EventStoreConnection.builder().build(
+        const connection = eventstore.EventStoreConnection
+            .builder()
+            .sslDevMode()
+            .build(
             "localhost:2113"
         );
 
@@ -19,6 +22,7 @@ describe("subscribe to stream", function () {
                 .streams()
                 .subscribe(streamName)
                 .execute({
+                    onError: reject,
                     onEnd: () => { resolve(count)},
                     onConfirmation: () => {},
                     onEvent: (event) => {

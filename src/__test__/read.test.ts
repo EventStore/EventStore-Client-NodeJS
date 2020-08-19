@@ -4,7 +4,10 @@ import {EventData, Forward, ReadStreamResult, Revision} from "../types";
 
 describe("read all forwards", function () {
   it("should successfully read all events", async function () {
-    const connection = eventstore.EventStoreConnection.builder().build(
+    const connection = eventstore.EventStoreConnection
+        .builder()
+        .sslDevMode()
+        .build(
         "localhost:2113"
     );
 

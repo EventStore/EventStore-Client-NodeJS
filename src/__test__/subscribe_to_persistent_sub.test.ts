@@ -6,7 +6,10 @@ jest.setTimeout(30_000);
 
 describe("subscribe to persistent sub", function () {
     it("should successfully subscribe to a persistent subscription", async function () {
-        const connection = eventstore.EventStoreConnection.builder().build(
+        const connection = eventstore.EventStoreConnection
+            .builder()
+            .sslDevMode()
+            .build(
             "localhost:2113"
         );
 

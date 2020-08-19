@@ -21,9 +21,15 @@ import {CallOptions} from "grpc";
 export class Persistent {
     private readonly client: PersistentSubscriptionsClient;
 
-    constructor(uri: string) {
-        const root = file.readFileSync(`${__dirname}/../dev-ca/ca.pem`);
-        this.client = new PersistentSubscriptionsClient(uri, grpc.credentials.createSsl(root, undefined, undefined));
+    constructor(uri: string, cert?: Buffer) {
+        let creds: grpc.ChannelCredentials;
+
+        if (cert) {
+            creds = grpc.credentials.createSsl(cert);
+        } else {
+            creds = grpc.credentials.createInsecure();
+        }
+        this.client = new PersistentSubscriptionsClient(uri, creds);
     }
 
     create(stream: string, group: string): CreatePersistentSubscription {

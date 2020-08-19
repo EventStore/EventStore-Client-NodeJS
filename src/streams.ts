@@ -49,9 +49,16 @@ import {CallOptions} from "grpc";
 export class Streams {
   private readonly client: StreamsClient;
 
-  constructor(uri: string) {
-    const root = file.readFileSync(`${__dirname}/../dev-ca/ca.pem`);
-    this.client = new StreamsClient(uri, grpc.credentials.createSsl(root, undefined, undefined));
+  constructor(uri: string, cert?: Buffer) {
+    let creds: grpc.ChannelCredentials;
+
+    if (cert) {
+      creds = grpc.credentials.createSsl(cert);
+    } else {
+      creds = grpc.credentials.createInsecure();
+    }
+
+    this.client = new StreamsClient(uri, creds);
   }
 
   writeEvents(stream: string): WriteEvents {

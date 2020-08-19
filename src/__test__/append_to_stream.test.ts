@@ -1,12 +1,13 @@
-// import { v4 as uuid } from "uuid";
-
 import * as eventstore from "../";
 import { EventData, Revision } from "../types";
 import {v4 as uuid} from "uuid";
 
 describe("append_to_stream", function () {
   it("should successfully append events to stream", async () => {
-    const connection = eventstore.EventStoreConnection.builder().build(
+    const connection = eventstore.EventStoreConnection
+        .builder()
+        .sslDevMode()
+        .build(
       "localhost:2113"
     );
 
@@ -22,6 +23,6 @@ describe("append_to_stream", function () {
         .send([evt])
 
     console.log(result);
-    expect(1).toBe(1);
+    expect(result.__typename).toBe("success");
   });
 });

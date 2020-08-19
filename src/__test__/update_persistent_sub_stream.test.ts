@@ -6,7 +6,10 @@ import {v4 as uuid} from "uuid";
 
 describe("update_persistent_sub", function () {
   it("should successfully update a persistent subscription", async () => {
-    const connection = eventstore.EventStoreConnection.builder().build(
+    const connection = eventstore.EventStoreConnection
+        .builder()
+        .sslDevMode()
+        .build(
       "localhost:2113"
     );
 

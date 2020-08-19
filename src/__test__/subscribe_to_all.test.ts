@@ -4,7 +4,10 @@ import {EventData, ReadStreamResult, Revision} from "../types";
 
 describe("subscribe to $all", function () {
     it("should successfully subsscribe to $all", async function () {
-        const connection = eventstore.EventStoreConnection.builder().build(
+        const connection = eventstore.EventStoreConnection
+            .builder()
+            .sslDevMode()
+            .build(
             "localhost:2113"
         );
 
@@ -13,7 +16,9 @@ describe("subscribe to $all", function () {
             connection
                 .streams()
                 .subscribeToAll()
+                .authenticated("admin", "changeit")
                 .execute({
+                    onError: reject,
                     onEnd: () => { resolve(count)},
                     onConfirmation: () => {},
                     onEvent: (event) => {

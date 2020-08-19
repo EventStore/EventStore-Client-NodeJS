@@ -1,41 +1,42 @@
-// import * as fs from "fs";
 import { Streams } from "./streams";
-import {Persistent} from "./persistent";
-// import * as streams from "./generated/streams_pb";
-// import { ReadReq, ReadResp } from "./generated/streams_pb";
-//import {Appends} from "./src/append";
-//import {Reads} from "./src/reads";
-
-//const streams_service = require('./src/generated/streams_grpc_pb');
+import { Persistent } from "./persistent";
+import * as file from "fs";
 
 export class EventStoreConnectionBuilder {
+  private _rootCertificate?: Buffer;
+
+  sslRootCertificate(rootCertificate: Buffer | string): EventStoreConnectionBuilder {
+    if ((rootCertificate as string) !== undefined) {
+      const filepath = rootCertificate as string;
+      this._rootCertificate = file.readFileSync(filepath);
+    } else {
+      this._rootCertificate = rootCertificate as Buffer;
+    }
+
+    return this;
+  }
+
+  sslDevMode(): EventStoreConnectionBuilder {
+    return this.sslRootCertificate(`${__dirname}/../dev-ca/ca.pem`);
+  }
+
+  // Default mode.
+  insecure(): EventStoreConnectionBuilder {
+    return this;
+  }
+
   build(uri: string): EventStoreConnection {
-    return new EventStoreConnection(uri);
+    return new EventStoreConnection(uri, this._rootCertificate);
   }
 }
 
 export class EventStoreConnection {
-  // TODO: We need to handle logging levels
   private _uri: string;
+  private _rootCertificate?: Buffer;
 
-  // protected service: streamsService.StreamsClient;
-  //
-  // appendToStream = Appends.prototype.appendToStream;
-  //
-  // readAllForwards = Reads.prototype.readAllForwards;
-
-  constructor(uri: string) {
+  constructor(uri: string, rootCertificate?: Buffer) {
     this._uri = uri;
-
-    //let credentials = grpc.credentials.createInsecure();
-    // if (connectionSettings !== null) {
-    //     if (connectionSettings.sslCertificate !== null) {
-    //         let cert = fs.readFileSync(connectionSettings.sslCertificate);
-    //         credentials = grpc.credentials.createSsl(cert);
-    //     }
-    // }
-
-    //this.service = new streamsService.StreamsClient("localhost:2113", credentials);
+    this._rootCertificate = rootCertificate;
   }
 
   static builder(): EventStoreConnectionBuilder {
@@ -43,10 +44,10 @@ export class EventStoreConnection {
   }
 
   streams(): Streams {
-    return new Streams(this._uri);
+    return new Streams(this._uri, this._rootCertificate);
   }
 
   persistentSubscriptions(): Persistent {
-    return new Persistent(this._uri);
+    return new Persistent(this._uri, this._rootCertificate);
   }
 }

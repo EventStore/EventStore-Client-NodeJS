@@ -6,7 +6,10 @@ import {v4 as uuid} from "uuid";
 
 describe("tombstone_stream", function () {
   it("should successfully tombstone a stream", async () => {
-    const connection = eventstore.EventStoreConnection.builder().build(
+    const connection = eventstore.EventStoreConnection
+        .builder()
+        .sslDevMode()
+        .build(
       "localhost:2113"
     );
 
