@@ -16,6 +16,7 @@ describe("subscribe to $all", function () {
             connection
                 .streams()
                 .subscribeToAll()
+                .fromStart()
                 .authenticated("admin", "changeit")
                 .execute({
                     onError: reject,
