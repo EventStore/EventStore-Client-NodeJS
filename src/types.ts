@@ -3,6 +3,8 @@ import {ReadReq} from "../generated/streams_pb";
 import FilterOptions = ReadReq.Options.FilterOptions;
 import Expression = ReadReq.Options.FilterOptions.Expression;
 import * as grpc from "grpc";
+import * as streams_pb from "../generated/streams_pb";
+import * as persistent_pb from "../generated/persistent_pb";
 
 export type IRevision =
   | AnyRevision
@@ -488,3 +490,52 @@ export const Stop: StopAction = {
 }
 
 export type PersistentAction = ParkAction | RetryAction | SkipAction | StopAction;
+
+export const convertGrpcRecord: (grpcRecord: streams_pb.ReadResp.ReadEvent.RecordedEvent | persistent_pb.ReadResp.ReadEvent.RecordedEvent) => RecordedEvent = (grpcRecord) =>  {
+  const eventType = grpcRecord.getMetadataMap().get("type") || "<no-event-type-provided>";
+  let isJson = false;
+
+  const contentType = grpcRecord.getMetadataMap().get("content-type") || "application/octet-stream";
+  const createdStr = grpcRecord.getMetadataMap().get("created") || "0";
+  const created = parseInt(createdStr);
+
+  if (contentType === "application/json") {
+    isJson = true;
+  }
+
+  const position: Position = {
+    commit: grpcRecord.getCommitPosition(),
+    prepare: grpcRecord.getPreparePosition(),
+  };
+
+  let data: Uint8Array | Object | undefined;
+
+  if (isJson) {
+    data = JSON.parse(Buffer.from(grpcRecord.getData()).toString("binary"));
+  } else {
+    data = grpcRecord.getData_asU8();
+  }
+
+  let customMetadata: Uint8Array | Object | undefined;
+
+  if (isJson) {
+    const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString("binary");
+    if (metadataStr.length > 0) {
+      customMetadata = JSON.parse(metadataStr);
+    } else {
+      customMetadata = metadataStr;
+    }
+  }
+
+  return {
+    streamId: Buffer.from(grpcRecord.getStreamIdentifier()!.getStreamname()).toString("binary"),
+    id: grpcRecord.getId()!.getString(),
+    revision: grpcRecord.getStreamRevision(),
+    eventType,
+    data: data!,
+    metadata: customMetadata!,
+    isJson,
+    position,
+    created,
+  };
+}

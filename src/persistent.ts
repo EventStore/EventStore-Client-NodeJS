@@ -5,7 +5,7 @@ import {CreateReq, DeleteReq, ReadReq, ReadResp, UpdateReq} from "../generated/p
 import {Empty, StreamIdentifier, UUID} from "../generated/shared_pb";
 import {
     configureAuth,
-    ConsumerStrategy,
+    ConsumerStrategy, convertGrpcRecord,
     Credentials,
     PersistentAction,
     PersistentReport, PersistentSubscriptionHandler, Position,
@@ -539,55 +539,6 @@ class PersistentReportImpl implements PersistentReport {
         req.setNack(nack);
         req.setOptions(options);
     }
-}
-
-const convertGrpcRecord: (grpcRecord: ReadResp.ReadEvent.RecordedEvent) => RecordedEvent = (grpcRecord) =>  {
-    const eventType = grpcRecord.getMetadataMap().get("type") || "<no-event-type-provided>";
-    let isJson = false;
-
-    const contentType = grpcRecord.getMetadataMap().get("content-type") || "application/octet-stream";
-    const createdStr = grpcRecord.getMetadataMap().get("created") || "0";
-    const created = parseInt(createdStr);
-
-    if (contentType === "application/json") {
-        isJson = true;
-    }
-
-    const position: Position = {
-        commit: grpcRecord.getCommitPosition(),
-        prepare: grpcRecord.getPreparePosition(),
-    };
-
-    let data: Uint8Array | Object | undefined;
-
-    if (isJson) {
-        data = JSON.parse(Buffer.from(grpcRecord.getData()).toString("binary"));
-    } else {
-        data = grpcRecord.getData_asU8();
-    }
-
-    let customMetadata: Uint8Array | Object | undefined;
-
-    if (isJson) {
-        const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString("binary");
-        if (metadataStr.length > 0) {
-            customMetadata = JSON.parse(metadataStr);
-        } else {
-            customMetadata = metadataStr;
-        }
-    }
-
-    return {
-        streamId: Buffer.from(grpcRecord.getStreamIdentifier()!.getStreamname()).toString("binary"),
-        id: grpcRecord.getId()!.getString(),
-        revision: grpcRecord.getStreamRevision(),
-        eventType,
-        data: data!,
-        metadata: customMetadata!,
-        isJson,
-        position,
-        created,
-    };
 }
 
 export class ConnectToPersistentSubscription {
