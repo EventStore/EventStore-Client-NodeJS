@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import {ReadReq} from "../generated/streams_pb";
+import { ReadReq } from "../generated/streams_pb";
 import FilterOptions = ReadReq.Options.FilterOptions;
 import Expression = ReadReq.Options.FilterOptions.Expression;
 import * as grpc from "grpc";
@@ -64,23 +64,31 @@ export type BinaryPayload = {
 };
 
 export type Credentials = {
-  username: string,
-  password: string,
-}
+  username: string;
+  password: string;
+};
 
-export const Credentials: (username: string, password: string) => Credentials = (username, password) => {
+export const Credentials: (
+  username: string,
+  password: string
+) => Credentials = (username, password) => {
   return {
     username,
     password,
   };
-}
+};
 
-export const configureAuth: (creds: Credentials, meta: grpc.Metadata) => void = (creds, meta) => {
-  const auth = Buffer.from(`${creds.username}:${creds.password}`).toString("base64");
+export const configureAuth: (
+  creds: Credentials,
+  meta: grpc.Metadata
+) => void = (creds, meta) => {
+  const auth = Buffer.from(`${creds.username}:${creds.password}`).toString(
+    "base64"
+  );
   const header = `Basic ${auth}`;
 
   meta.add("authorization", header);
-}
+};
 
 export class EventDataBuilder {
   eventType: string;
@@ -231,30 +239,32 @@ export const StreamPosition: (pos: Position) => StreamPosition = (pos) => {
 export type WriteResult = WriteResultSuccess | WriteResultFailure;
 
 export type WriteResultSuccess = {
-  __typename: "success",
-  nextExpectedVersion: number,
-  position: Position,
+  __typename: "success";
+  nextExpectedVersion: number;
+  position?: Position;
 };
 
 export type WriteResultFailure = {
-  __typename: "failure",
-  error: WrongExpectedVersion | Error,
-}
-
-export type CurrentRevisionNoStream = {
-  __typename: "no_stream",
+  __typename: "failure";
+  error: WrongExpectedVersion | Error;
 };
 
-export const CurrentRevisionNoStream : CurrentRevisionNoStream = {
+export type CurrentRevisionNoStream = {
+  __typename: "no_stream";
+};
+
+export const CurrentRevisionNoStream: CurrentRevisionNoStream = {
   __typename: "no_stream",
 };
 
 export type CurrentStreamRevision = {
-  __typename: "current",
-  revision: number,
-}
+  __typename: "current";
+  revision: number;
+};
 
-export const CurrentStreamRevision: (revision: number) => CurrentStreamRevision = revision => {
+export const CurrentStreamRevision: (
+  revision: number
+) => CurrentStreamRevision = (revision) => {
   return {
     __typename: "current",
     revision,
@@ -264,16 +274,16 @@ export const CurrentStreamRevision: (revision: number) => CurrentStreamRevision 
 export type CurrentRevision = CurrentStreamRevision | CurrentRevisionNoStream;
 
 export type ExpectedStreamRevision = {
-  __typename: "expected",
-  revision: number,
+  __typename: "expected";
+  revision: number;
 };
 
 export type ExpectedRevisionAny = {
-  __typename: "any",
+  __typename: "any";
 };
 
 export type ExpectedRevisionExists = {
-  __typename: "stream_exists",
+  __typename: "stream_exists";
 };
 
 export const ExpectedRevisionExists: ExpectedRevisionExists = {
@@ -284,48 +294,55 @@ export const ExpectedRevisionAny: ExpectedRevisionAny = {
   __typename: "any",
 };
 
-export const ExpectedStreamRevision: (revision: number) => ExpectedStreamRevision = (revision) => {
+export const ExpectedStreamRevision: (
+  revision: number
+) => ExpectedStreamRevision = (revision) => {
   return {
     __typename: "expected",
     revision,
   };
-}
+};
 
-export type ExpectedRevision = ExpectedStreamRevision | ExpectedRevisionAny | ExpectedRevisionExists;
+export type ExpectedRevision =
+  | ExpectedStreamRevision
+  | ExpectedRevisionAny
+  | ExpectedRevisionExists;
 
 export type WrongExpectedVersion = {
-  current: CurrentRevision,
-  expected: ExpectedRevision,
+  current: CurrentRevision;
+  expected: ExpectedRevision;
 };
 
 export type ResolvedEvent = {
-  event: RecordedEvent | undefined,
-  link: RecordedEvent | undefined,
-  commit_position: number | undefined,
-}
+  event?: RecordedEvent;
+  link?: RecordedEvent;
+  commit_position: number | undefined;
+};
 
 export type RecordedEvent = {
-  streamId: string,
-  id: string, // UUID
-  revision: number,
-  eventType: string,
-  data: Uint8Array | Object,
-  metadata: Uint8Array | Object,
-  isJson: boolean,
-  position: Position,
-  created: number,
+  streamId: string;
+  id: string; // UUID
+  revision: number;
+  eventType: string;
+  // eslint-disable-next-line
+  data: Uint8Array | Object;
+  // eslint-disable-next-line
+  metadata: Uint8Array | Object;
+  isJson: boolean;
+  position: Position;
+  created: number;
 };
 
 export type ReadStreamResult = ReadStreamSuccess | ReadStreamNotFound;
 
 export type ReadStreamSuccess = {
-  __typename: "success",
-  events: ResolvedEvent[] | undefined, // always defined.
+  __typename: "success";
+  events: ResolvedEvent[] | undefined; // always defined.
 };
 
 export type ReadStreamNotFound = {
-  __typename: "not_found",
-  events: ResolvedEvent[] | undefined,
+  __typename: "not_found";
+  events: ResolvedEvent[] | undefined;
 };
 
 export const ReadStreamNotFound: ReadStreamNotFound = {
@@ -334,26 +351,27 @@ export const ReadStreamNotFound: ReadStreamNotFound = {
 };
 
 export type SubscriptionHandler = {
-  onEvent: (event: ResolvedEvent) => void,
-  onEnd: () => void,
-  onConfirmation: () => void,
-  onError: (error: Error) => void,
+  onEvent: (event: ResolvedEvent) => void;
+  onEnd?: () => void;
+  onConfirmation?: () => void;
+  onError?: (error: Error) => void;
+  onClose?: () => void;
 };
 
 export type PersistentSubscriptionHandler = {
-  onEvent: (report: PersistentReport, event: ResolvedEvent) => void,
-  onEnd: () => void,
-  onConfirmation: () => void,
-  onError: (error: Error) => void,
+  onEvent: (report: PersistentReport, event: ResolvedEvent) => void;
+  onEnd?: () => void;
+  onConfirmation?: () => void;
+  onError?: (error: Error) => void;
+  onClose?: () => void;
 };
 
-
 export class Filter {
-  private baseOnStream: boolean
-  private _max: number | undefined
-  private _checkpointIntervalMul: number | undefined
-  private _regex: string | undefined
-  private _prefixes: string[] | undefined
+  private baseOnStream: boolean;
+  private _max: number | undefined;
+  private _checkpointIntervalMul: number | undefined;
+  private _regex: string | undefined;
+  private _prefixes: string[] | undefined;
 
   private constructor(baseOnStream: boolean) {
     this.baseOnStream = baseOnStream;
@@ -424,34 +442,34 @@ export class Filter {
 }
 
 export type DeleteResult = {
-  position?: Position,
-}
+  position?: Position;
+};
 
 export type ConsumerStrategy = DispatchToSingle | RoundRobin | Pinned;
 
 export type DispatchToSingle = {
-  __typename: "dispatch_to_single",
-}
+  __typename: "dispatch_to_single";
+};
 
 export const DispatchToSingle: DispatchToSingle = {
   __typename: "dispatch_to_single",
-}
+};
 
 export type RoundRobin = {
-  __typename: "round-robin",
-}
+  __typename: "round-robin";
+};
 
 export const RoundRobin: RoundRobin = {
   __typename: "round-robin",
-}
+};
 
 export type Pinned = {
-  __typename: "pinned",
-}
+  __typename: "pinned";
+};
 
 export const Pinned: Pinned = {
   __typename: "pinned",
-}
+};
 
 export interface PersistentReport {
   ack(ids: string[]): void;
@@ -459,44 +477,55 @@ export interface PersistentReport {
 }
 
 export type ParkAction = {
-  __typename: "park",
-}
+  __typename: "park";
+};
 
 export const Park: ParkAction = {
   __typename: "park",
-}
+};
 
 export type RetryAction = {
-  __typename: "retry",
-}
+  __typename: "retry";
+};
 
 export const Retry: RetryAction = {
   __typename: "retry",
-}
+};
 
 export type SkipAction = {
-  __typename: "skip",
-}
+  __typename: "skip";
+};
 
 export const Skip: SkipAction = {
   __typename: "skip",
-}
+};
 
 export type StopAction = {
-  __typename: "stop",
-}
+  __typename: "stop";
+};
 
 export const Stop: StopAction = {
   __typename: "stop",
-}
+};
 
-export type PersistentAction = ParkAction | RetryAction | SkipAction | StopAction;
+export type PersistentAction =
+  | ParkAction
+  | RetryAction
+  | SkipAction
+  | StopAction;
 
-export const convertGrpcRecord: (grpcRecord: streams_pb.ReadResp.ReadEvent.RecordedEvent | persistent_pb.ReadResp.ReadEvent.RecordedEvent) => RecordedEvent = (grpcRecord) =>  {
-  const eventType = grpcRecord.getMetadataMap().get("type") || "<no-event-type-provided>";
+export const convertGrpcRecord: (
+  grpcRecord:
+    | streams_pb.ReadResp.ReadEvent.RecordedEvent
+    | persistent_pb.ReadResp.ReadEvent.RecordedEvent
+) => RecordedEvent = (grpcRecord) => {
+  const eventType =
+    grpcRecord.getMetadataMap().get("type") || "<no-event-type-provided>";
   let isJson = false;
 
-  const contentType = grpcRecord.getMetadataMap().get("content-type") || "application/octet-stream";
+  const contentType =
+    grpcRecord.getMetadataMap().get("content-type") ||
+    "application/octet-stream";
   const createdStr = grpcRecord.getMetadataMap().get("created") || "0";
   const created = parseInt(createdStr);
 
@@ -509,7 +538,8 @@ export const convertGrpcRecord: (grpcRecord: streams_pb.ReadResp.ReadEvent.Recor
     prepare: grpcRecord.getPreparePosition(),
   };
 
-  let data: Uint8Array | Object | undefined;
+  // eslint-disable-next-line
+  let data: Uint8Array | Object;
 
   if (isJson) {
     data = JSON.parse(Buffer.from(grpcRecord.getData()).toString("binary"));
@@ -517,26 +547,49 @@ export const convertGrpcRecord: (grpcRecord: streams_pb.ReadResp.ReadEvent.Recor
     data = grpcRecord.getData_asU8();
   }
 
-  let customMetadata: Uint8Array | Object | undefined;
+  // eslint-disable-next-line
+  let customMetadata: Uint8Array | Object;
 
   if (isJson) {
-    const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString("binary");
+    const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString(
+      "binary"
+    );
     if (metadataStr.length > 0) {
       customMetadata = JSON.parse(metadataStr);
     } else {
       customMetadata = metadataStr;
     }
+  } else {
+    customMetadata = new Uint8Array();
+  }
+
+  const identifier = grpcRecord.getStreamIdentifier();
+  const eventId = grpcRecord.getId();
+
+  let streamId: string;
+  let id: string;
+
+  if (identifier) {
+    streamId = Buffer.from(identifier.getStreamname()).toString("binary");
+  } else {
+    throw "Impossible situation where streamIdentifier is undefined in a recorded event";
+  }
+
+  if (eventId) {
+    id = eventId.getString();
+  } else {
+    throw "Impossible situation where event id is undefined in a recorded event";
   }
 
   return {
-    streamId: Buffer.from(grpcRecord.getStreamIdentifier()!.getStreamname()).toString("binary"),
-    id: grpcRecord.getId()!.getString(),
+    streamId,
+    id,
     revision: grpcRecord.getStreamRevision(),
     eventType,
-    data: data!,
-    metadata: customMetadata!,
+    data: data,
+    metadata: customMetadata,
     isJson,
     position,
     created,
   };
-}
+};
