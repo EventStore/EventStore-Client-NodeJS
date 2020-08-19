@@ -1,22 +1,42 @@
 import {
   StreamsClient,
 } from "../generated/streams_grpc_pb";
-import {AppendReq, AppendResp, DeleteReq, ReadReq, ReadResp} from "../generated/streams_pb";
+import {AppendReq, AppendResp, DeleteReq, ReadReq, ReadResp, TombstoneReq} from "../generated/streams_pb";
 import {
   AllPosition,
   Backward,
-  Credentials, CurrentRevision, CurrentRevisionNoStream, CurrentStreamRevision, DeleteResult,
+  Credentials,
+  CurrentRevision,
+  CurrentRevisionNoStream,
+  CurrentStreamRevision,
+  DeleteResult,
   Direction,
-  EventData, ExpectedRevision, ExpectedRevisionAny, ExpectedRevisionExists, ExpectedStreamRevision, Filter,
+  EventData,
+  ExpectedRevision,
+  ExpectedRevisionAny,
+  ExpectedRevisionExists,
+  ExpectedStreamRevision,
+  Filter,
   Forward,
   IRevision,
-  Position, ReadStreamNotFound, ReadStreamResult, ReadStreamSuccess, RecordedEvent, ResolvedEvent,
+  Position,
+  ReadStreamNotFound,
+  ReadStreamResult,
+  ReadStreamSuccess,
+  RecordedEvent,
+  ResolvedEvent,
   Revision,
   StreamEnd,
   StreamExact,
   StreamPosition,
   StreamRevision,
-  StreamStart, SubscriptionHandler, WriteResult, WriteResultFailure, WriteResultSuccess, convertGrpcRecord,
+  StreamStart,
+  SubscriptionHandler,
+  WriteResult,
+  WriteResultFailure,
+  WriteResultSuccess,
+  convertGrpcRecord,
+  configureAuth,
 } from "./types";
 import { Empty, StreamIdentifier, UUID } from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
@@ -66,13 +86,12 @@ export class WriteEvents {
   private client: StreamsClient;
   private readonly stream: string;
   private revision: IRevision;
-  private credentials: Credentials | null;
+  private credentials?: Credentials;
 
   constructor(client: StreamsClient, stream: string) {
     this.client = client;
     this.stream = stream;
     this.revision = Revision.Any;
-    this.credentials = null;
   }
 
   expectedVersion(revision: IRevision): WriteEvents {
@@ -80,8 +99,8 @@ export class WriteEvents {
     return this;
   }
 
-  authenticated(credentials: Credentials): WriteEvents {
-    this.credentials = credentials;
+  authenticated(username: string, password: string): WriteEvents {
+    this.credentials = Credentials(username, password);
     return this;
   }
 
@@ -116,8 +135,11 @@ export class WriteEvents {
     }
     header.setOptions(options);
 
+    const metadata = new grpc.Metadata();
+    if (this.credentials) configureAuth(this.credentials, metadata);
+
     return new Promise<WriteResult>((resolve) => {
-      const sink = this.client.append((error, resp) => {
+      const sink = this.client.append(metadata, (error, resp) => {
         if (error != null) {
           const result: WriteResultFailure = {
             __typename: "failure",
@@ -218,8 +240,8 @@ export class DeleteStream {
     this._revision = Revision.Any;
   }
 
-  authenticated(credentials: Credentials): DeleteStream {
-    this._credentials = credentials;
+  authenticated(username: string, password: string): DeleteStream {
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -259,8 +281,11 @@ export class DeleteStream {
     }
 
     req.setOptions(options);
+    const metadata = new grpc.Metadata();
+    if (this._credentials) configureAuth(this._credentials, metadata);
+
     return new Promise<DeleteResult>((resolve, reject) => {
-      this._client.delete(req,(error, resp) => {
+      this._client.delete(req, metadata,(error, resp) => {
         if (error) {
           reject(error);
         }
@@ -295,8 +320,8 @@ export class TombstoneStream {
     this._revision = Revision.Any;
   }
 
-  authenticated(credentials: Credentials): TombstoneStream {
-    this._credentials = credentials;
+  authenticated(username: string, password: string): TombstoneStream {
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -306,8 +331,8 @@ export class TombstoneStream {
   }
 
   execute(): Promise<DeleteResult> {
-    const req = new DeleteReq();
-    const options = new DeleteReq.Options();
+    const req = new TombstoneReq();
+    const options = new TombstoneReq.Options();
     const identifier = new StreamIdentifier();
     identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
 
@@ -336,8 +361,11 @@ export class TombstoneStream {
     }
 
     req.setOptions(options);
+    const metadata = new grpc.Metadata();
+    if (this._credentials) configureAuth(this._credentials, metadata);
+
     return new Promise<DeleteResult>((resolve, reject) => {
-      this._client.delete(req,(error, resp) => {
+      this._client.tombstone(req, metadata,(error, resp) => {
         if (error) {
           reject(error);
         }
@@ -366,7 +394,7 @@ export class ReadStreamEvents {
   private revision: StreamRevision;
   private resolveLinkTos: boolean;
   private direction: Direction;
-  private credentials: Credentials | undefined;
+  private credentials?: Credentials;
 
   constructor(client: StreamsClient, stream: string) {
     this.client = client;
@@ -406,8 +434,8 @@ export class ReadStreamEvents {
     return this;
   }
 
-  authenticated(credentials: Credentials): ReadStreamEvents {
-    this.credentials = credentials;
+  authenticated(username: string, password: string): ReadStreamEvents {
+    this.credentials = Credentials(username, password);
     return this;
   }
 
@@ -469,8 +497,10 @@ export class ReadStreamEvents {
     }
 
     req.setOptions(options);
+    const metadata = new grpc.Metadata();
+    if (this.credentials) configureAuth(this.credentials, metadata);
 
-    const stream = this.client.read(req);
+    const stream = this.client.read(req, metadata);
     return new Promise<ReadStreamResult>((resolve, reject) => {
       const buffer: ResolvedEvent[] = [];
       let found = true;
@@ -528,7 +558,7 @@ export class ReadAllEvents {
   private client: StreamsClient;
   private position: StreamPosition | StreamStart | StreamEnd;
   private direction: Direction;
-  private credentials: Credentials | undefined;
+  private credentials?: Credentials;
 
   constructor(client: StreamsClient) {
     this.client = client;
@@ -566,8 +596,8 @@ export class ReadAllEvents {
     return this;
   }
 
-  authenticated(credentials: Credentials): ReadAllEvents {
-    this.credentials = credentials;
+  authenticated(username: string, password: string): ReadAllEvents {
+    this.credentials = Credentials(username, password);
     return this;
   }
 
@@ -618,7 +648,10 @@ export class ReadAllEvents {
 
     req.setOptions(options);
 
-    const stream = this.client.read(req);
+    const metadata = new grpc.Metadata();
+    if (this.credentials) configureAuth(this.credentials, metadata);
+
+    const stream = this.client.read(req, metadata);
     return new Promise<ResolvedEvent[]>((resolve, reject) => {
       const buffer: ResolvedEvent[] = [];
 
@@ -661,7 +694,7 @@ export class SubscribeToStream {
   private stream: string;
   private revision: StreamRevision;
   private resolveLinkTos: boolean;
-  private credentials: Credentials | undefined;
+  private credentials?: Credentials
 
   constructor(client: StreamsClient, stream: string) {
     this.client = client;
@@ -737,7 +770,10 @@ export class SubscribeToStream {
 
     req.setOptions(options);
 
-    const stream = this.client.read(req);
+    const metadata = new grpc.Metadata();
+    if (this.credentials) configureAuth(this.credentials, metadata);
+
+    const stream = this.client.read(req, metadata);
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasCheckpoint())
         handler.onConfirmation;
@@ -776,8 +812,8 @@ export class SubscribeToAll {
   private client: StreamsClient;
   private position: AllPosition;
   private resolveLinkTos: boolean;
-  private credentials: Credentials | undefined;
-  private _filter: Filter | undefined;
+  private credentials?: Credentials;
+  private _filter?: Filter;
 
   constructor(client: StreamsClient) {
     this.client = client;
@@ -800,8 +836,8 @@ export class SubscribeToAll {
     return this;
   }
 
-  authenticated(credentials: Credentials): SubscribeToAll {
-    this.credentials = credentials;
+  authenticated(username: string, password: string): SubscribeToAll {
+    this.credentials = Credentials(username, password);
     return this;
   }
 
@@ -861,7 +897,10 @@ export class SubscribeToAll {
 
     req.setOptions(options);
 
-    const stream = this.client.read(req);
+    const metadata = new grpc.Metadata();
+    if (this.credentials) configureAuth(this.credentials, metadata);
+
+    const stream = this.client.read(req, metadata);
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasCheckpoint())
         handler.onConfirmation;
