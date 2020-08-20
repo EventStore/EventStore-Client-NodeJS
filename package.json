@@ -1,7 +1,7 @@
 {
-  "name": "eventstore-client-nodejs",
+  "name": "@eventstore/client",
   "version": "1.0.0",
-  "description": "Client API for Event Store v6 for NodeJS",
+  "description": "NodeJS EventStoreDB version 20+ and uses gRPC as the communication protocol.",
   "main": "./dist/index.js",
   "scripts": {
     "build": "run-s generate build:*",
