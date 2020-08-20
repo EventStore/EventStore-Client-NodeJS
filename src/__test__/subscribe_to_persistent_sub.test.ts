@@ -43,6 +43,7 @@ describe("subscribe to persistent sub", function () {
             } else throw "Unexpected undefined event property";
 
             if (count === 3) {
+              report.unsubscribe();
               resolve(count);
             }
           },
@@ -50,6 +51,7 @@ describe("subscribe to persistent sub", function () {
     });
 
     const result = await promise;
+    persistent.close();
     expect(result).toBe(3);
   });
 });

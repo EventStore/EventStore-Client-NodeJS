@@ -19,7 +19,6 @@ describe("append_to_stream", function () {
       .expectedVersion(Revision.Any)
       .send([evt]);
 
-    console.log(result);
     expect(result.__typename).toBe("success");
   });
 });
