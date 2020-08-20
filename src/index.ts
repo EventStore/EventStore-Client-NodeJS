@@ -5,7 +5,9 @@ import * as file from "fs";
 export class EventStoreConnectionBuilder {
   private _rootCertificate?: Buffer;
 
-  sslRootCertificate(rootCertificate: Buffer | string): EventStoreConnectionBuilder {
+  sslRootCertificate(
+    rootCertificate: Buffer | string
+  ): EventStoreConnectionBuilder {
     if ((rootCertificate as string) !== undefined) {
       const filepath = rootCertificate as string;
       this._rootCertificate = file.readFileSync(filepath);

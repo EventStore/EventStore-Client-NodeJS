@@ -1,7 +1,11 @@
+import { StreamsClient } from "../generated/streams_grpc_pb";
 import {
-  StreamsClient,
-} from "../generated/streams_grpc_pb";
-import {AppendReq, AppendResp, DeleteReq, ReadReq, ReadResp, TombstoneReq} from "../generated/streams_pb";
+  AppendReq,
+  DeleteReq,
+  ReadReq,
+  ReadResp,
+  TombstoneReq,
+} from "../generated/streams_pb";
 import {
   AllPosition,
   Backward,
@@ -42,9 +46,8 @@ import { Empty, StreamIdentifier, UUID } from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import * as grpc from "grpc";
 import * as streams_pb from "../generated/streams_pb";
-import * as file from "fs";
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
-import {CallOptions} from "grpc";
+import { CallOptions } from "grpc";
 
 export class Streams {
   private readonly client: StreamsClient;
@@ -158,14 +161,20 @@ export class WriteEvents {
           return;
         }
 
-        if (resp.hasSuccess()) {
-          const success = resp.getSuccess()!;
+        const success = resp.getSuccess();
+        const grpcError = resp.getWrongExpectedVersion();
+        if (resp.hasSuccess() && success) {
           const nextExpectedVersion = success.getCurrentRevision();
-          const grpcPosition = success.getPosition()!;
-          const position: Position = {
-            commit: grpcPosition.getCommitPosition(),
-            prepare: grpcPosition.getPreparePosition(),
-          };
+          const grpcPosition = success.getPosition();
+
+          let position: Position | undefined;
+
+          if (grpcPosition) {
+            position = {
+              commit: grpcPosition.getCommitPosition(),
+              prepare: grpcPosition.getPreparePosition(),
+            };
+          }
           const result: WriteResultSuccess = {
             __typename: "success",
             nextExpectedVersion,
@@ -173,30 +182,25 @@ export class WriteEvents {
           };
 
           resolve(result);
-        } else {
-          const error = resp.getWrongExpectedVersion()!;
-          let current: CurrentRevision | undefined;
-          let expected: ExpectedRevision | undefined;
+        } else if (resp.hasWrongExpectedVersion() && grpcError) {
+          let current: CurrentRevision = CurrentRevisionNoStream;
+          let expected: ExpectedRevision = ExpectedRevisionAny;
 
-          if (error.hasCurrentRevision()) {
-            current = CurrentStreamRevision(error.getCurrentRevision());
-          } else {
-            current = CurrentRevisionNoStream;
+          if (grpcError.hasCurrentRevision()) {
+            current = CurrentStreamRevision(grpcError.getCurrentRevision());
           }
 
-          if (error.hasExpectedRevision()) {
-            expected = ExpectedStreamRevision(error.getExpectedRevision());
-          } else if (error.hasStreamExists()) {
+          if (grpcError.hasExpectedRevision()) {
+            expected = ExpectedStreamRevision(grpcError.getExpectedRevision());
+          } else if (grpcError.hasStreamExists()) {
             expected = ExpectedRevisionExists;
-          } else if (error.hasAny()) {
-            expected = ExpectedRevisionAny;
           }
 
           const failure: WriteResultFailure = {
             __typename: "failure",
             error: {
-              current: current!,
-              expected: expected!,
+              current: current,
+              expected: expected,
             },
           };
 
@@ -219,11 +223,13 @@ export class WriteEvents {
           case "json": {
             message.getMetadataMap().set("content-type", "application/json");
             const data = JSON.stringify(event.payload.payload);
-            message.setData(Buffer.from(data, 'binary').toString('base64'));
+            message.setData(Buffer.from(data, "binary").toString("base64"));
             break;
           }
           case "binary": {
-            message.getMetadataMap().set("content-type", "application/octet-stream");
+            message
+              .getMetadataMap()
+              .set("content-type", "application/octet-stream");
             message.setData(event.payload.payload);
           }
         }
@@ -231,7 +237,7 @@ export class WriteEvents {
         entry.setProposedMessage(message);
         sink.write(entry);
       }
-      sink.end()
+      sink.end();
     });
   }
 }
@@ -293,15 +299,15 @@ export class DeleteStream {
     if (this._credentials) configureAuth(this._credentials, metadata);
 
     return new Promise<DeleteResult>((resolve, reject) => {
-      this._client.delete(req, metadata,(error, resp) => {
+      this._client.delete(req, metadata, (error, resp) => {
         if (error) {
           reject(error);
         }
 
         const result: DeleteResult = {};
+        const grpcPos = resp.getPosition();
 
-        if (resp.hasPosition()) {
-          const grpcPos = resp.getPosition()!;
+        if (resp.hasPosition() && grpcPos) {
           const pos: Position = {
             commit: grpcPos.getCommitPosition(),
             prepare: grpcPos.getPreparePosition(),
@@ -312,7 +318,7 @@ export class DeleteStream {
 
         resolve(result);
       });
-    })
+    });
   }
 }
 
@@ -373,15 +379,15 @@ export class TombstoneStream {
     if (this._credentials) configureAuth(this._credentials, metadata);
 
     return new Promise<DeleteResult>((resolve, reject) => {
-      this._client.tombstone(req, metadata,(error, resp) => {
+      this._client.tombstone(req, metadata, (error, resp) => {
         if (error) {
           reject(error);
         }
 
         const result: DeleteResult = {};
+        const grpcPos = resp.getPosition();
 
-        if (resp.hasPosition()) {
-          const grpcPos = resp.getPosition()!;
+        if (resp.hasPosition() && grpcPos) {
           const pos: Position = {
             commit: grpcPos.getCommitPosition(),
             prepare: grpcPos.getPreparePosition(),
@@ -392,7 +398,7 @@ export class TombstoneStream {
 
         resolve(result);
       });
-    })
+    });
   }
 }
 
@@ -509,56 +515,7 @@ export class ReadStreamEvents {
     if (this.credentials) configureAuth(this.credentials, metadata);
 
     const stream = this.client.read(req, metadata);
-    return new Promise<ReadStreamResult>((resolve, reject) => {
-      const buffer: ResolvedEvent[] = [];
-      let found = true;
-
-      stream.on("data", (resp: ReadResp) => {
-        if (resp.hasStreamNotFound()) {
-          found = false;
-        } else {
-          let event: RecordedEvent | undefined;
-          let link: RecordedEvent | undefined;
-
-          if (resp.hasEvent()) {
-            const grpcEvent = resp.getEvent()!;
-
-            if (grpcEvent.hasEvent()) {
-              event = convertGrpcRecord(grpcEvent.getEvent()!);
-            }
-
-            if (grpcEvent.hasLink()) {
-              link = convertGrpcRecord(grpcEvent.getLink()!);
-            }
-
-            const resolved: ResolvedEvent = {
-              event,
-              link,
-              commit_position: grpcEvent.getCommitPosition(),
-            };
-
-            buffer.push(resolved);
-          }
-        }
-      });
-
-      stream.on("end", () => {
-        if (found) {
-          const result: ReadStreamSuccess = {
-            __typename: "success",
-            events: buffer,
-          };
-
-          resolve(result);
-        } else {
-          resolve(ReadStreamNotFound);
-        }
-      });
-
-      stream.on("error", error => {
-        reject(error);
-      });
-    });
+    return handleBatchRead(stream);
   }
 }
 
@@ -609,7 +566,7 @@ export class ReadAllEvents {
     return this;
   }
 
-  execute(count: number): Promise<ResolvedEvent[]> {
+  execute(count: number): Promise<ReadStreamResult> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
 
@@ -660,40 +617,7 @@ export class ReadAllEvents {
     if (this.credentials) configureAuth(this.credentials, metadata);
 
     const stream = this.client.read(req, metadata);
-    return new Promise<ResolvedEvent[]>((resolve, reject) => {
-      const buffer: ResolvedEvent[] = [];
-
-      stream.on("data", (resp: ReadResp) => {
-        let event: RecordedEvent | undefined;
-        let link: RecordedEvent | undefined;
-
-        if (resp.hasEvent()) {
-          const grpcEvent = resp.getEvent()!;
-
-          if (grpcEvent.hasEvent()) {
-            event = convertGrpcRecord(grpcEvent.getEvent()!);
-          }
-
-          if (grpcEvent.hasLink()) {
-            link = convertGrpcRecord(grpcEvent.getLink()!);
-          }
-
-          const resolved: ResolvedEvent = {
-            event,
-            link,
-            commit_position: grpcEvent.getCommitPosition(),
-          };
-
-          buffer.push(resolved);
-        }
-      });
-
-      stream.on("end", () => {
-        resolve(buffer);
-      })
-
-      stream.on("error", reject);
-    });
+    return handleBatchRead(stream);
   }
 }
 
@@ -702,7 +626,7 @@ export class SubscribeToStream {
   private stream: string;
   private revision: StreamRevision;
   private resolveLinkTos: boolean;
-  private credentials?: Credentials
+  private credentials?: Credentials;
 
   constructor(client: StreamsClient, stream: string) {
     this.client = client;
@@ -786,23 +710,78 @@ export class SubscribeToStream {
     };
 
     const stream = this.client.read(req, metadata, callOptions);
-    stream.on("data", (resp: ReadResp) => {
-      if (resp.hasCheckpoint())
-        handler.onConfirmation;
+    handleOneWaySubscription(stream, handler);
+  }
+}
 
-      if (resp.hasEvent()) {
+function handleOneWaySubscription(
+  stream: grpc.ClientReadableStream<streams_pb.ReadResp>,
+  handler: SubscriptionHandler
+): void {
+  stream.on("data", (resp: ReadResp) => {
+    if (resp.hasConfirmation() && handler.onConfirmation)
+      handler.onConfirmation();
+
+    if (resp.hasEvent()) {
+      let event: RecordedEvent | undefined;
+      let link: RecordedEvent | undefined;
+
+      const grpcEvent = resp.getEvent();
+      if (resp.hasEvent() && grpcEvent) {
+        let grpcRecordedEvent = grpcEvent.getEvent();
+        if (grpcEvent.hasEvent() && grpcRecordedEvent) {
+          event = convertGrpcRecord(grpcRecordedEvent);
+        }
+
+        grpcRecordedEvent = grpcEvent.getLink();
+        if (grpcEvent.hasLink() && grpcRecordedEvent) {
+          link = convertGrpcRecord(grpcRecordedEvent);
+        }
+
+        const resolved: ResolvedEvent = {
+          event,
+          link,
+          commit_position: grpcEvent.getCommitPosition(),
+        };
+
+        handler.onEvent(resolved);
+      }
+    }
+  });
+
+  stream.on("end", () => {
+    if (handler.onEnd) handler.onEnd();
+  });
+  stream.on("error", (error) => {
+    if (handler.onError) handler.onError(error);
+  });
+}
+
+function handleBatchRead(
+  stream: grpc.ClientReadableStream<streams_pb.ReadResp>
+): Promise<ReadStreamResult> {
+  return new Promise<ReadStreamResult>((resolve, reject) => {
+    const buffer: ResolvedEvent[] = [];
+    let found = true;
+
+    stream.on("data", (resp: ReadResp) => {
+      if (resp.hasStreamNotFound()) {
+        found = false;
+      } else {
         let event: RecordedEvent | undefined;
         let link: RecordedEvent | undefined;
 
-        if (resp.hasEvent()) {
-          const grpcEvent = resp.getEvent()!;
+        const grpcEvent = resp.getEvent();
+        if (resp.hasEvent() && grpcEvent) {
+          let grpcRecordedEvent = grpcEvent.getEvent();
 
-          if (grpcEvent.hasEvent()) {
-            event = convertGrpcRecord(grpcEvent.getEvent()!);
+          if (grpcEvent.hasEvent() && grpcRecordedEvent) {
+            event = convertGrpcRecord(grpcRecordedEvent);
           }
 
-          if (grpcEvent.hasLink()) {
-            link = convertGrpcRecord(grpcEvent.getLink()!);
+          grpcRecordedEvent = grpcEvent.getLink();
+          if (grpcEvent.hasLink() && grpcRecordedEvent) {
+            link = convertGrpcRecord(grpcRecordedEvent);
           }
 
           const resolved: ResolvedEvent = {
@@ -811,14 +790,28 @@ export class SubscribeToStream {
             commit_position: grpcEvent.getCommitPosition(),
           };
 
-          handler.onEvent(resolved);
+          buffer.push(resolved);
         }
       }
     });
 
-    stream.on("end", handler.onEnd);
-    stream.on("error", handler.onError);
-  }
+    stream.on("end", () => {
+      if (found) {
+        const result: ReadStreamSuccess = {
+          __typename: "success",
+          events: buffer,
+        };
+
+        resolve(result);
+      } else {
+        resolve(ReadStreamNotFound);
+      }
+    });
+
+    stream.on("error", (error) => {
+      reject(error);
+    });
+  });
 }
 
 export class SubscribeToAll {
@@ -918,38 +911,6 @@ export class SubscribeToAll {
     };
 
     const stream = this.client.read(req, metadata, callOptions);
-    stream.on("data", (resp: ReadResp) => {
-      if (resp.hasCheckpoint())
-        handler.onConfirmation;
-
-      if (resp.hasEvent()) {
-        let event: RecordedEvent | undefined;
-        let link: RecordedEvent | undefined;
-
-        if (resp.hasEvent()) {
-          const grpcEvent = resp.getEvent()!;
-
-          if (grpcEvent.hasEvent()) {
-            event = convertGrpcRecord(grpcEvent.getEvent()!);
-          }
-
-          if (grpcEvent.hasLink()) {
-            link = convertGrpcRecord(grpcEvent.getLink()!);
-          }
-
-          const resolved: ResolvedEvent = {
-            event,
-            link,
-            commit_position: grpcEvent.getCommitPosition(),
-          };
-
-          handler.onEvent(resolved);
-        }
-      }
-    });
-
-    stream.on("end", handler.onEnd);
-    stream.on("error", handler.onError);
+    handleOneWaySubscription(stream, handler);
   }
 }
-
