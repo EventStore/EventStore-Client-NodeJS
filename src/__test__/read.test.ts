@@ -16,7 +16,7 @@ describe("read all forwards", function () {
     const result = await connection
       .streams()
       .writeEvents(streamName)
-      .expectedVersion(Revision.Any)
+      .expectedRevision(Revision.Any)
       .send([evt]);
 
     expect(result.__typename).toBe("success");

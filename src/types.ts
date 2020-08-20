@@ -6,7 +6,15 @@ import * as grpc from "grpc";
 import * as streams_pb from "../generated/streams_pb";
 import * as persistent_pb from "../generated/persistent_pb";
 
-export type IRevision =
+/**
+ * Constants used for expected version control. The use of expected version can be a bit tricky especially when
+ * discussing assurances given by the EventStoreDB server.
+ *
+ * The EventStoreDB server will assure idempotency for all operations using any value in ExpectedVersion except
+ * {@link Revision.Any}. When using {@link Revision.Any}., the EventStoreDB server will do its best to assure
+ * idempotency but will not guarantee idempotency.
+ */
+export type Revision =
   | AnyRevision
   | StreamExistsRevision
   | NoStreamRevision
@@ -29,26 +37,46 @@ export type ExactRevision = {
   revision: number;
 };
 
-export class Revision {
-  static readonly Any: IRevision = {
+export type RevisionObj = {
+  Any: AnyRevision;
+  StreamExists: StreamExistsRevision;
+  NoStream: NoStreamRevision;
+  exact: (revision: number) => ExactRevision;
+};
+
+export const Revision: RevisionObj = {
+  /**
+   * This write should not conflict with anything and should always succeed.
+   */
+  Any: {
     __typename: "any",
-  };
+  },
 
-  static readonly StreamExists: IRevision = {
+  /**
+   * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
+   */
+  StreamExists: {
     __typename: "stream_exists",
-  };
+  },
 
-  static readonly NoStream: IRevision = {
+  /**
+   * The stream being written to should not yet exist. If it does exist, treats that as a concurrency problem.
+   */
+  NoStream: {
     __typename: "no_stream",
-  };
+  },
 
-  static exact(revision: number): IRevision {
+  /**
+   * States that the last event written to the stream should have an event number matching your expected value.
+   * @param revision
+   */
+  exact: (revision: number) => {
     return {
       __typename: "exact",
       revision,
     };
-  }
-}
+  },
+};
 
 export type Payload = JsonPayload | BinaryPayload;
 
@@ -124,6 +152,10 @@ export class EventDataBuilder {
     return new EventDataBuilder(eventType, payload, null);
   }
 
+  /**
+   * Set an id to this event. By default, the id will be generated.
+   * @param id
+   */
   eventId(id: string): EventDataBuilder {
     this.id = id;
     return this;
@@ -135,6 +167,9 @@ export class EventDataBuilder {
   }
 }
 
+/**
+ * Holds data of event about to be sent to the server.
+ */
 export class EventData {
   eventType: string;
   payload: JsonPayload | BinaryPayload;
@@ -150,11 +185,21 @@ export class EventData {
     this.id = id;
   }
 
+  /**
+   * Creates an event with a JSON payload.
+   * @param eventType
+   * @param payload An object.
+   */
   // eslint-disable-next-line
   static json(eventType: string, payload: any): EventDataBuilder {
     return EventDataBuilder.json(eventType, payload);
   }
 
+  /**
+   * Creates an event with a raw binary payload.
+   * @param eventType
+   * @param payload
+   */
   static binary(eventType: string, payload: Uint8Array): EventDataBuilder {
     return EventDataBuilder.binary(eventType, payload);
   }
@@ -178,15 +223,23 @@ export const Backward: Backward = {
   __typename: "backward",
 };
 
-export class ReadDirection {
-  static readonly Forward: Forward = {
-    __typename: "forward",
-  };
+export type ReadDirectionObj = {
+  Forward: Forward;
+  Backward: Backward;
+};
 
-  static readonly Backward: Backward = {
+/**
+ * Represents the direction of read operation (both from '$all' and a regular stream).
+ */
+export const ReadDirection: ReadDirectionObj = {
+  Forward: {
+    __typename: "forward",
+  },
+
+  Backward: {
     __typename: "backward",
-  };
-}
+  },
+};
 
 export type StreamRevision = StreamStart | StreamEnd | StreamExact;
 export type AllPosition = StreamStart | StreamEnd | StreamPosition;
@@ -219,6 +272,9 @@ export const StreamExact = (revision: number): StreamExact => {
   };
 };
 
+/**
+ * A structure referring to a potential logical record position in the EventStoreDB transaction file.
+ */
 export type Position = {
   commit: number;
   prepare: number;
@@ -313,23 +369,76 @@ export type WrongExpectedVersion = {
   expected: ExpectedRevision;
 };
 
+/**
+ * A structure representing a single event or an resolved link event.
+ */
 export type ResolvedEvent = {
+  /**
+   * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
+   */
   event?: RecordedEvent;
+
+  /**
+   *
+   The link event if this ResolvedEvent is a link event.
+   */
   link?: RecordedEvent;
-  commit_position: number | undefined;
+
+  /**
+   * Commit position of the record.
+   */
+  commit_position?: number;
 };
 
+/**
+ * Represents a previously written event.
+ */
 export type RecordedEvent = {
+  /**
+   * The event stream that events belongs to.
+   */
   streamId: string;
-  id: string; // UUID
+
+  /**
+   * Unique identifier representing this event. UUID format.
+   */
+  id: string;
+
+  /**
+   * Number of this event in the stream.
+   */
   revision: number;
+
+  /**
+   * Type of this event.
+   */
   eventType: string;
+
+  /**
+   * Payload of this event.
+   */
   // eslint-disable-next-line
   data: Uint8Array | Object;
+
+  /**
+   * Representing the metadata associated with this event.
+   */
   // eslint-disable-next-line
   metadata: Uint8Array | Object;
+
+  /**
+   * Indicates wheter the content is internally marked as JSON.
+   */
   isJson: boolean;
+
+  /**
+   * Position of this event in the transaction log.
+   */
   position: Position;
+
+  /**
+   * Representing when this event was created in the database system.
+   */
   created: number;
 };
 
