@@ -53,6 +53,10 @@ export class Persistent {
   subscribe(stream: string, group: string): ConnectToPersistentSubscription {
     return new ConnectToPersistentSubscription(this.client, stream, group);
   }
+
+  close(): void {
+    this.client.close();
+  }
 }
 
 export class CreatePersistentSubscription {
@@ -543,6 +547,8 @@ class PersistentReportImpl implements PersistentReport {
 
     req.setAck(ack);
     req.setOptions(options);
+
+    this._duplexStream.write(req);
   }
 
   nack(action: PersistentAction, reason: string, ids: string[]): void {
@@ -588,6 +594,13 @@ class PersistentReportImpl implements PersistentReport {
 
     req.setNack(nack);
     req.setOptions(options);
+
+    this._duplexStream.write(req);
+  }
+
+  unsubscribe(): void {
+    this._duplexStream.end();
+    this._duplexStream.cancel();
   }
 }
 

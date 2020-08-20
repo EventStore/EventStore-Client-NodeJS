@@ -351,7 +351,7 @@ export const ReadStreamNotFound: ReadStreamNotFound = {
 };
 
 export type SubscriptionHandler = {
-  onEvent: (event: ResolvedEvent) => void;
+  onEvent: (report: SubscriptionReport, event: ResolvedEvent) => void;
   onEnd?: () => void;
   onConfirmation?: () => void;
   onError?: (error: Error) => void;
@@ -474,6 +474,11 @@ export const Pinned: Pinned = {
 export interface PersistentReport {
   ack(ids: string[]): void;
   nack(action: PersistentAction, reason: string, ids: string[]): void;
+  unsubscribe(): void;
+}
+
+export interface SubscriptionReport {
+  unsubcribe(): void;
 }
 
 export type ParkAction = {

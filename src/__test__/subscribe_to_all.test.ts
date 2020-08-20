@@ -4,12 +4,12 @@ describe("subscribe to $all", function () {
   it("should successfully subsscribe to $all", async function () {
     const connection = eventstore.EventStoreConnection.builder()
       .sslDevMode()
-      .build("localhost:2113");
+      .build("localhost:2113")
+      .streams();
 
     const promise = new Promise<number>((resolve, reject) => {
       let count = 0;
       connection
-        .streams()
         .subscribeToAll()
         .fromStart()
         .authenticated("admin", "changeit")
@@ -18,10 +18,10 @@ describe("subscribe to $all", function () {
           onEnd: () => {
             resolve(count);
           },
-          onEvent: (event) => {
-            console.log(JSON.stringify(event, null, 4));
+          onEvent: (report) => {
             ++count;
             if (count === 3) {
+              report.unsubcribe();
               resolve(count);
             }
           },
@@ -29,6 +29,7 @@ describe("subscribe to $all", function () {
     });
 
     const result = await promise;
+    connection.close();
     expect(result).toBe(3);
   });
 });

@@ -41,6 +41,7 @@ import {
   WriteResultSuccess,
   convertGrpcRecord,
   configureAuth,
+  SubscriptionReport,
 } from "./types";
 import { Empty, StreamIdentifier, UUID } from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
@@ -90,6 +91,10 @@ export class Streams {
 
   subscribeToAll(): SubscribeToAll {
     return new SubscribeToAll(this.client);
+  }
+
+  close(): void {
+    this.client.close();
   }
 }
 
@@ -621,6 +626,17 @@ export class ReadAllEvents {
   }
 }
 
+class SubscriptionReportImpl implements SubscriptionReport {
+  private _stream: grpc.ClientReadableStream<streams_pb.ReadResp>;
+
+  constructor(stream: grpc.ClientReadableStream<streams_pb.ReadResp>) {
+    this._stream = stream;
+  }
+  unsubcribe(): void {
+    this._stream.cancel();
+  }
+}
+
 export class SubscribeToStream {
   private client: StreamsClient;
   private stream: string;
@@ -718,6 +734,8 @@ function handleOneWaySubscription(
   stream: grpc.ClientReadableStream<streams_pb.ReadResp>,
   handler: SubscriptionHandler
 ): void {
+  const report = new SubscriptionReportImpl(stream);
+
   stream.on("data", (resp: ReadResp) => {
     if (resp.hasConfirmation() && handler.onConfirmation)
       handler.onConfirmation();
@@ -744,7 +762,7 @@ function handleOneWaySubscription(
           commit_position: grpcEvent.getCommitPosition(),
         };
 
-        handler.onEvent(resolved);
+        handler.onEvent(report, resolved);
       }
     }
   });

@@ -23,8 +23,6 @@ describe("tombstone_stream", function () {
 
     const result = await connection.streams().tombstone(streamName).execute();
 
-    console.log(result);
-
-    expect(1).toBe(1);
+    expect(result).toBeDefined();
   });
 });
