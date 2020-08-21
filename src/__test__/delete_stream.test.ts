@@ -18,7 +18,7 @@ describe("delete_stream", function () {
     await connection
       .streams()
       .writeEvents(streamName)
-      .expectedVersion(Revision.Any)
+      .expectedRevision(Revision.Any)
       .send([evt]);
 
     const result = await connection.streams().tombstone(streamName).execute();

@@ -38,22 +38,47 @@ export class Persistent {
     this.client = new PersistentSubscriptionsClient(uri, creds);
   }
 
+  /**
+   * Creates a persistent subscription on a stream. Persistent subscriptions are special kind of subscription where the
+   * server remembers where the read offset is at. This allows for many different modes of operations compared to a
+   * regular subscription where the client holds the read offset. The pair stream name and group must be unique.
+   * @param stream A stream name.
+   * @param group
+   */
   create(stream: string, group: string): CreatePersistentSubscription {
     return new CreatePersistentSubscription(this.client, stream, group);
   }
 
+  /**
+   * Updates a persistent subscription configuration.
+   * @param stream A stream name.
+   * @param group
+   */
   update(stream: string, group: string): UpdatePersistentSubscription {
     return new UpdatePersistentSubscription(this.client, stream, group);
   }
 
+  /**
+   * Deletes a persistent subscription.
+   * @param stream A stream name.
+   * @param group
+   */
   delete(stream: string, group: string): DeletePersistentSubscription {
     return new DeletePersistentSubscription(this.client, stream, group);
   }
 
+  /**
+   * Connects to a persistent subscription.
+   * @param stream A stream name.
+   * @param group
+   */
   subscribe(stream: string, group: string): ConnectToPersistentSubscription {
     return new ConnectToPersistentSubscription(this.client, stream, group);
   }
 
+  /**
+   * Closes the connection to the server.
+   */
   close(): void {
     this.client.close();
   }
@@ -101,6 +126,11 @@ export class CreatePersistentSubscription {
     this._strategy = RoundRobin;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(
     username: string,
     password: string
@@ -109,97 +139,173 @@ export class CreatePersistentSubscription {
     return this;
   }
 
+  /**
+   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
+   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
+   * resolution feature, the server will also return the event targeted by the link.
+   */
   enableLinkResolution(): CreatePersistentSubscription {
     this._resolveLink = true;
     return this;
   }
 
+  /**
+   * Disables link resolution. See {@link resolveLink}. Default behavior.
+   */
   disableLinkResolution(): CreatePersistentSubscription {
     this.setExtraStats(false);
     return this;
   }
 
+  /**
+   * See {@link enableLinkResolution} or {@link disableLinkResolution}.
+   * @param value
+   */
   setLinkResolution(value: boolean): void {
     this._resolveLink = value;
   }
 
+  /**
+   * Enables in depth latency statistics should be tracked on this subscription.
+   */
   enableExtraStats(): CreatePersistentSubscription {
     this.setExtraStats(true);
     return this;
   }
 
+  /**
+   * See {@link enableExtraStats}
+   */
   disableExtraStats(): CreatePersistentSubscription {
     this._extraStats = false;
     return this;
   }
 
+  /**
+   * See {@link enableExtraStats}
+   * @param value
+   */
   setExtraStats(value: boolean): void {
     this._extraStats = value;
   }
 
+  /**
+   * Starts the read from the beginning of the stream. Default behavior.
+   */
   fromStart(): CreatePersistentSubscription {
     return this.fromRevision(0);
   }
 
+  /**
+   * Starts the read at the given event revision.
+   * @param revision
+   */
   fromRevision(value: number): CreatePersistentSubscription {
     this._revision = value;
     return this;
   }
 
+  /**
+   * The amount of time after which a message should be considered to be timeout and retried.
+   * @param value timeout in milliseconds.
+   */
   messageTimeout(value: number): CreatePersistentSubscription {
     this._messageTimeout = value;
     return this;
   }
 
+  /**
+   * The maximum number of retries (due to timeout) before a message get considered to be parked.
+   * @param value
+   */
   maxRetryCount(value: number): CreatePersistentSubscription {
     this._maxRetryCount = value;
     return this;
   }
 
-  checkoutpointAfter(value: number): CreatePersistentSubscription {
+  /**
+   * The amount of time to try checkpoint after.
+   * @param value amount of time in milliseconds.
+   */
+  checkpointAfter(value: number): CreatePersistentSubscription {
     this._checkpointAfter = value;
     return this;
   }
 
+  /**
+   * The minimum number of messages to checkpoint.
+   * @param value
+   */
   minCheckpointCount(value: number): CreatePersistentSubscription {
     this._minCheckpointCount = value;
     return this;
   }
 
+  /**
+   * The maximum number of messages to checkpoint. If this number is reached , a checkpoint will be forced.
+   * @param value
+   */
   maxCheckpointCount(value: number): CreatePersistentSubscription {
     this._maxCheckpointCount = value;
     return this;
   }
 
+  /**
+   * The maximum number of subscribers allowed.
+   * @param value
+   */
   maxSubscriberCount(value: number): CreatePersistentSubscription {
     this._maxSubscriberCount = value;
     return this;
   }
 
+  /**
+   * Set no restriction of the number of subscriber that subscription can support.
+   * See {@link maxSubscriberCount}
+   */
   noSubscriberCountLimitation(): CreatePersistentSubscription {
     return this.maxCheckpointCount(0);
   }
 
+  /**
+   * The size of the buffer listening to live messages as they happen.
+   * @param value
+   */
   liveBufferSize(value: number): CreatePersistentSubscription {
     this._liveBufferSize = value;
     return this;
   }
 
+  /**
+   * The number of events read at a time when paging in history.
+   * @param value
+   */
   readBatchSize(value: number): CreatePersistentSubscription {
     this._readBatchSize = value;
     return this;
   }
 
+  /**
+   * The number of events to cache when paging through history.
+   * @param value
+   */
   historyBufferSize(value: number): CreatePersistentSubscription {
     this._historyBufferSize = value;
     return this;
   }
 
+  /**
+   * The strategy to use for distributing events to client consumers.
+   * @param strategy
+   */
   consumerStrategy(strategy: ConsumerStrategy): CreatePersistentSubscription {
     this._strategy = strategy;
     return this;
   }
 
+  /**
+   * Creates a persistent subscription asynchronously.
+   */
   execute(): Promise<void> {
     const req = new CreateReq();
     const options = new CreateReq.Options();
@@ -297,6 +403,11 @@ export class UpdatePersistentSubscription {
     this._strategy = RoundRobin;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(
     username: string,
     password: string
@@ -305,97 +416,173 @@ export class UpdatePersistentSubscription {
     return this;
   }
 
+  /**
+   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
+   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
+   * resolution feature, the server will also return the event targeted by the link.
+   */
   enableLinkResolution(): UpdatePersistentSubscription {
     this._resolveLink = true;
     return this;
   }
 
+  /**
+   * Disables link resolution. See {@link resolveLink}. Default behavior.
+   */
   disableLinkResolution(): UpdatePersistentSubscription {
     this.setExtraStats(false);
     return this;
   }
 
+  /**
+   * See {@link enableLinkResolution} or {@link disableLinkResolution}.
+   * @param value
+   */
   setLinkResolution(value: boolean): void {
     this._resolveLink = value;
   }
 
+  /**
+   * Enables in depth latency statistics should be tracked on this subscription.
+   */
   enableExtraStats(): UpdatePersistentSubscription {
     this.setExtraStats(true);
     return this;
   }
 
+  /**
+   * See {@link enableExtraStats}
+   */
   disableExtraStats(): UpdatePersistentSubscription {
     this._extraStats = false;
     return this;
   }
 
+  /**
+   * See {@link enableExtraStats}
+   * @param value
+   */
   setExtraStats(value: boolean): void {
     this._extraStats = value;
   }
 
+  /**
+   * Starts the read from the beginning of the stream. Default behavior.
+   */
   fromStart(): UpdatePersistentSubscription {
     return this.fromRevision(0);
   }
 
+  /**
+   * Starts the read at the given event revision.
+   * @param revision
+   */
   fromRevision(value: number): UpdatePersistentSubscription {
     this._revision = value;
     return this;
   }
 
+  /**
+   * The amount of time after which a message should be considered to be timeout and retried.
+   * @param value timeout in milliseconds.
+   */
   messageTimeout(value: number): UpdatePersistentSubscription {
     this._messageTimeout = value;
     return this;
   }
 
+  /**
+   * The maximum number of retries (due to timeout) before a message get considered to be parked.
+   * @param value
+   */
   maxRetryCount(value: number): UpdatePersistentSubscription {
     this._maxRetryCount = value;
     return this;
   }
 
-  checkoutpointAfter(value: number): UpdatePersistentSubscription {
+  /**
+   * The amount of time to try checkpoint after.
+   * @param value amount of time in milliseconds.
+   */
+  checkpointAfter(value: number): UpdatePersistentSubscription {
     this._checkpointAfter = value;
     return this;
   }
 
+  /**
+   * The minimum number of messages to checkpoint.
+   * @param value
+   */
   minCheckpointCount(value: number): UpdatePersistentSubscription {
     this._minCheckpointCount = value;
     return this;
   }
 
+  /**
+   * The maximum number of messages to checkpoint. If this number is reached , a checkpoint will be forced.
+   * @param value
+   */
   maxCheckpointCount(value: number): UpdatePersistentSubscription {
     this._maxCheckpointCount = value;
     return this;
   }
 
+  /**
+   * The maximum number of subscribers allowed.
+   * @param value
+   */
   maxSubscriberCount(value: number): UpdatePersistentSubscription {
     this._maxSubscriberCount = value;
     return this;
   }
 
+  /**
+   * Set no restriction of the number of subscriber that subscription can support.
+   * See {@link maxSubscriberCount}
+   */
   noSubscriberCountLimitation(): UpdatePersistentSubscription {
     return this.maxCheckpointCount(0);
   }
 
+  /**
+   * The size of the buffer listening to live messages as they happen.
+   * @param value
+   */
   liveBufferSize(value: number): UpdatePersistentSubscription {
     this._liveBufferSize = value;
     return this;
   }
 
+  /**
+   * The number of events read at a time when paging in history.
+   * @param value
+   */
   readBatchSize(value: number): UpdatePersistentSubscription {
     this._readBatchSize = value;
     return this;
   }
 
+  /**
+   * The number of events to cache when paging through history.
+   * @param value
+   */
   historyBufferSize(value: number): UpdatePersistentSubscription {
     this._historyBufferSize = value;
     return this;
   }
 
+  /**
+   * The strategy to use for distributing events to client consumers.
+   * @param strategy
+   */
   consumerStrategy(strategy: ConsumerStrategy): UpdatePersistentSubscription {
     this._strategy = strategy;
     return this;
   }
 
+  /**
+   * Updates a persistent subscription asynchronously.
+   */
   execute(): Promise<void> {
     const req = new UpdateReq();
     const options = new UpdateReq.Options();
@@ -467,6 +654,11 @@ export class DeletePersistentSubscription {
     this._group = group;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(
     username: string,
     password: string
@@ -475,6 +667,9 @@ export class DeletePersistentSubscription {
     return this;
   }
 
+  /**
+   * Deletes a persistent subscription asynchronously.
+   */
   execute(): Promise<void> {
     const req = new DeleteReq();
     const options = new DeleteReq.Options();
@@ -622,11 +817,20 @@ export class ConnectToPersistentSubscription {
     this._bufferSize = 10;
   }
 
+  /**
+   * The buffer size to use for the persistent subscription.
+   * @param value
+   */
   bufferSize(value: number): ConnectToPersistentSubscription {
     this._bufferSize = value;
     return this;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(
     username: string,
     password: string
@@ -635,6 +839,10 @@ export class ConnectToPersistentSubscription {
     return this;
   }
 
+  /**
+   * Starts the subscription immediately.
+   * @param handler Set of callbacks used during the subscription lifecycle.
+   */
   execute(handler: PersistentSubscriptionHandler): void {
     const req = new ReadReq();
     const options = new ReadReq.Options();

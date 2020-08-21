@@ -23,7 +23,7 @@ describe("subscribe to persistent sub", function () {
     await connection
       .streams()
       .writeEvents(streamName)
-      .expectedVersion(Revision.Any)
+      .expectedRevision(Revision.Any)
       .send([evt, evt, evt]);
 
     const promise = new Promise<number>((resolve, reject) => {

@@ -17,7 +17,7 @@ describe("subscribe to stream", function () {
 
     await connection
       .writeEvents(streamName)
-      .expectedVersion(Revision.Any)
+      .expectedRevision(Revision.Any)
       .send([evt, evt, evt]);
 
     const promise = new Promise<number>((resolve, reject) => {

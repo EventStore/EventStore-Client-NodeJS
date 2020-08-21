@@ -22,7 +22,6 @@ import {
   ExpectedStreamRevision,
   Filter,
   Forward,
-  IRevision,
   Position,
   ReadStreamNotFound,
   ReadStreamResult,
@@ -50,6 +49,9 @@ import * as streams_pb from "../generated/streams_pb";
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 import { CallOptions } from "grpc";
 
+/**
+ * Streams API. You can write, read, delete and subscribe to streams.
+ */
 export class Streams {
   private readonly client: StreamsClient;
 
@@ -65,34 +67,66 @@ export class Streams {
     this.client = new StreamsClient(uri, creds);
   }
 
+  /**
+   * Sends events to a given stream.
+   * @param stream A stream name.
+   */
   writeEvents(stream: string): WriteEvents {
     return new WriteEvents(this.client, stream);
   }
 
+  /**
+   * Soft-deletes a stream.
+   * @param stream A Stream name.
+   */
   delete(stream: string): DeleteStream {
     return new DeleteStream(this.client, stream);
   }
 
+  /**
+   * Hard-deletes a stream.
+   * @param stream A stream name.
+   */
   tombstone(stream: string): TombstoneStream {
     return new TombstoneStream(this.client, stream);
   }
 
+  /**
+   * Reads events from a stream. You can read forward or backward.
+   * @param stream A Stream name.
+   */
   readStream(stream: string): ReadStreamEvents {
     return new ReadStreamEvents(this.client, stream);
   }
 
+  /**
+   * Reads events from the $all. You can read forward or backward. You might need to be authenticated to execute
+   * that command successfully.
+   */
   readAll(): ReadAllEvents {
     return new ReadAllEvents(this.client);
   }
 
+  /**
+   * Subscribes to a stream. You can specify a starting point, from the beginning, a specific revision or be at the
+   * end of a stream. You will be notified of incoming events in a push fashion.
+   * @param stream A stream name.
+   */
   subscribe(stream: string): SubscribeToStream {
     return new SubscribeToStream(this.client, stream);
   }
 
+  /**
+   * Same as {@link subscribe} but targets $all stream instead. You might need to be authenticated to execute that
+   * command successfully.
+   */
   subscribeToAll(): SubscribeToAll {
     return new SubscribeToAll(this.client);
   }
 
+  /**
+   * Closes the connection to the server.
+   */
   close(): void {
     this.client.close();
   }
@@ -101,7 +135,7 @@ export class Streams {
 export class WriteEvents {
   private client: StreamsClient;
   private readonly stream: string;
-  private revision: IRevision;
+  private revision: Revision;
   private credentials?: Credentials;
 
   constructor(client: StreamsClient, stream: string) {
@@ -110,16 +144,29 @@ export class WriteEvents {
     this.revision = Revision.Any;
   }
 
-  expectedVersion(revision: IRevision): WriteEvents {
+  /**
+   * Asks the server to check the stream is at specific revision before writing events.
+   * @param revision
+   */
+  expectedRevision(revision: Revision): WriteEvents {
     this.revision = revision;
     return this;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(username: string, password: string): WriteEvents {
     this.credentials = Credentials(username, password);
     return this;
   }
 
+  /**
+   * Sends asynchronously events to the server.
+   * @param events Events sent to the server.
+   */
   send(events: EventData[]): Promise<WriteResult> {
     const header = new AppendReq();
     const options = new AppendReq.Options();
@@ -250,7 +297,7 @@ export class WriteEvents {
 export class DeleteStream {
   private _client: StreamsClient;
   private readonly _stream: string;
-  private _revision: IRevision;
+  private _revision: Revision;
   private _credentials?: Credentials;
 
   constructor(client: StreamsClient, stream: string) {
@@ -259,16 +306,28 @@ export class DeleteStream {
     this._revision = Revision.Any;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(username: string, password: string): DeleteStream {
     this._credentials = Credentials(username, password);
     return this;
   }
 
-  expectedVersion(revision: IRevision): DeleteStream {
+  /**
+   * Asks the server to check the stream is at specific revision before writing events.
+   * @param revision
+   */
+  expectedRevision(revision: Revision): DeleteStream {
     this._revision = revision;
     return this;
   }
 
+  /**
+   * Sends asynchronously the delete command to the server.
+   */
   execute(): Promise<DeleteResult> {
     const req = new DeleteReq();
     const options = new DeleteReq.Options();
@@ -330,7 +389,7 @@ export class DeleteStream {
 export class TombstoneStream {
   private _client: StreamsClient;
   private readonly _stream: string;
-  private _revision: IRevision;
+  private _revision: Revision;
   private _credentials?: Credentials;
 
   constructor(client: StreamsClient, stream: string) {
@@ -339,16 +398,28 @@ export class TombstoneStream {
     this._revision = Revision.Any;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(username: string, password: string): TombstoneStream {
     this._credentials = Credentials(username, password);
     return this;
   }
 
-  expectedVersion(revision: IRevision): TombstoneStream {
+  /**
+   * Asks the server to check the stream is at specific revision before writing events.
+   * @param revision
+   */
+  expectedRevision(revision: Revision): TombstoneStream {
     this._revision = revision;
     return this;
   }
 
+  /**
+   * Sends asynchronously the tombstone command to the server.
+   */
   execute(): Promise<DeleteResult> {
     const req = new TombstoneReq();
     const options = new TombstoneReq.Options();
@@ -423,51 +494,88 @@ export class ReadStreamEvents {
     this.direction = Forward;
   }
 
+  /**
+   * Asks the command to read forward (toward the end of the stream). Default behavior.
+   */
   forward(): ReadStreamEvents {
     this.direction = Forward;
     return this;
   }
 
+  /**
+   * Asks the command to read backward (toward the beginning of the stream).
+   */
   backward(): ReadStreamEvents {
     this.direction = Backward;
     return this;
   }
 
+  /**
+   * Asks the command to read in a specific direction.
+   * @param direction
+   */
   readDirection(direction: Direction): ReadStreamEvents {
     this.direction = direction;
     return this;
   }
 
+  /**
+   * Starts the read at the given event revision.
+   * @param revision
+   */
   fromRevision(revision: number): ReadStreamEvents {
     this.revision = StreamExact(revision);
     return this;
   }
 
+  /**
+   * Starts the read from the beginning of the stream. Default behavior.
+   */
   fromStart(): ReadStreamEvents {
     this.revision = StreamStart;
     return this;
   }
 
+  /**
+   * Starts the read from the end of the stream.
+   */
   fromEnd(): ReadStreamEvents {
     this.revision = StreamEnd;
     return this;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(username: string, password: string): ReadStreamEvents {
     this.credentials = Credentials(username, password);
     return this;
   }
 
+  /**
+   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
+   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
+   * resolution feature, the server will also return the event targeted by the link.
+   */
   resolveLink(): ReadStreamEvents {
     this.resolveLinkTos = true;
     return this;
   }
 
+  /**
+   * Disables link resolution. See {@link resolveLink}. Default behavior.
+   */
   doNotResolveLink(): ReadStreamEvents {
     this.resolveLinkTos = false;
     return this;
   }
 
+  /**
+   * Sends asynchronously the read command to the server.
+   * @param count Max number of events to read.
+   */
   execute(count: number): Promise<ReadStreamResult> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
@@ -536,41 +644,70 @@ export class ReadAllEvents {
     this.position = StreamStart;
   }
 
+  /**
+   * Asks the command to read forward (toward the end of the stream). Default behavior.
+   */
   forward(): ReadAllEvents {
     this.direction = Forward;
     return this;
   }
 
+  /**
+   * Asks the command to read backward (toward the beginning of the stream).
+   */
   backward(): ReadAllEvents {
     this.direction = Backward;
     return this;
   }
 
+  /**
+   * Asks the command to read in a specific direction.
+   * @param direction
+   */
   readDirection(direction: Direction): ReadAllEvents {
     this.direction = direction;
     return this;
   }
 
+  /**
+   * Starts the read at the given position in $all.
+   * @param position
+   */
   fromPosition(position: Position): ReadAllEvents {
     this.position = StreamPosition(position);
     return this;
   }
 
+  /**
+   * Starts the read from the beginning of the stream. Default behavior.
+   */
   fromStart(): ReadAllEvents {
     this.position = StreamStart;
     return this;
   }
 
+  /**
+   * Starts the read from the end of the stream.
+   */
   fromEnd(): ReadAllEvents {
     this.position = StreamEnd;
     return this;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(username: string, password: string): ReadAllEvents {
     this.credentials = Credentials(username, password);
     return this;
   }
 
+  /**
+   * Sends asynchronously the read command to the server.
+   * @param count Max number of events to read.
+   */
   execute(count: number): Promise<ReadStreamResult> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
@@ -651,36 +788,63 @@ export class SubscribeToStream {
     this.resolveLinkTos = false;
   }
 
+  /**
+   * Starts the read at the given event revision.
+   * @param revision
+   */
   fromRevision(revision: number): SubscribeToStream {
     this.revision = StreamExact(revision);
     return this;
   }
 
+  /**
+   * Starts the read from the beginning of the stream. Default behavior.
+   */
   fromStart(): SubscribeToStream {
     this.revision = StreamStart;
     return this;
   }
 
+  /**
+   * Starts the read from the end of the stream.
+   */
   fromEnd(): SubscribeToStream {
     this.revision = StreamEnd;
     return this;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(credentials: Credentials): SubscribeToStream {
     this.credentials = credentials;
     return this;
   }
 
+  /**
+   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
+   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
+   * resolution feature, the server will also return the event targeted by the link.
+   */
   resolveLink(): SubscribeToStream {
     this.resolveLinkTos = true;
     return this;
   }
 
+  /**
+   * Disables link resolution. See {@link resolveLink}. Default behavior.
+   */
   doNotResolveLink(): SubscribeToStream {
     this.resolveLinkTos = false;
     return this;
   }
 
+  /**
+   * Starts the subscription immediately.
+   * @param handler Set of callbacks used during the subscription lifecycle.
+   */
   execute(handler: SubscriptionHandler): void {
     const req = new ReadReq();
     const options = new ReadReq.Options();
@@ -845,41 +1009,72 @@ export class SubscribeToAll {
     this.resolveLinkTos = false;
   }
 
+  /**
+   * Starts the read at the given position in $all.
+   * @param position
+   */
   fromPosition(position: Position): SubscribeToAll {
     this.position = StreamPosition(position);
     return this;
   }
 
+  /**
+   * Starts the read from the beginning of the stream. Default behavior.
+   */
   fromStart(): SubscribeToAll {
     this.position = StreamStart;
     return this;
   }
 
+  /**
+   * Starts the read from the end of the stream.
+   */
   fromEnd(): SubscribeToAll {
     this.position = StreamEnd;
     return this;
   }
 
+  /**
+   * Executes this command as an authenticated user.
+   * @param username
+   * @param password
+   */
   authenticated(username: string, password: string): SubscribeToAll {
     this.credentials = Credentials(username, password);
     return this;
   }
 
+  /**
+   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
+   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
+   * resolution feature, the server will also return the event targeted by the link.
+   */
   resolveLink(): SubscribeToAll {
     this.resolveLinkTos = true;
     return this;
   }
 
+  /**
+   * Disables link resolution. See {@link resolveLink}. Default behavior.
+   */
   doNotResolveLink(): SubscribeToAll {
     this.resolveLinkTos = false;
     return this;
   }
 
+  /**
+   * Filters events or streams based upon a predicate.
+   * @param value
+   */
   filter(value: Filter): SubscribeToAll {
     this._filter = value;
     return this;
   }
 
+  /**
+   * Starts the subscription immediately.
+   * @param handler Set of callbacks used during the subscription lifecycle.
+   */
   execute(handler: SubscriptionHandler): void {
     const req = new ReadReq();
     const options = new ReadReq.Options();
