@@ -17,10 +17,10 @@ $ eventstored --dev
 ```
 
 ```typescript
-import * as eventstore from '@eventstore/db-client';
+import { EventData, EventStoreConnection } from '@eventstore/db-client';
 
 async function simpleExample(): void {
-    const connection = eventstore.EventStoreConnection.builder()
+    const connection = EventStoreConnection.builder()
         .sslDevMode()
         .build("localhost:2113")
         .streams();
