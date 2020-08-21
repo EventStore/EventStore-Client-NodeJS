@@ -16,6 +16,7 @@ server. This snippet expects the server to be started like this:
 $ eventstored --dev
 ```
 
+###### Typescript example:
 ```typescript
 import { EventData, EventStoreConnection } from '@eventstore/db-client';
 
@@ -42,6 +43,37 @@ async function simpleExample(): void {
         .execute(10);
 
     readResult.events!.forEach(doSomethingProductive);
+}
+```
+
+###### Javascript example:
+
+```javascript
+const { EventData, EventStoreConnection } = require("@eventstore/db-client");
+
+async function simpleTest() {
+    const connection = EventStoreConnection.builder()
+        .sslDevMode()
+        .build("localhost:2113")
+        .streams();
+
+    const streamName = 'es_supported_clients';
+    const evt = EventData.json('grpc-client', {
+        languages: ['typescript', 'javascript'],
+        runtime: 'NodeJS',
+    }).build();
+
+    const writeResult = await connection
+        .writeEvents(streamName)
+        .send([evt]);
+
+    const readResult = await connection
+        .readStream(streamName)
+        .fromStart()
+        .forward()
+        .execute(10);
+
+    readResult.events.forEach(doSomethingProductive);
 }
 ```
 
