@@ -2,6 +2,10 @@ import { Streams } from "./streams";
 import { Persistent } from "./persistent";
 import * as file from "fs";
 
+export { Streams, Persistent };
+
+export * from "./types";
+
 /**
  * Helps constructing an EventStoreDB connection.
  */
