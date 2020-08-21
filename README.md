@@ -6,6 +6,45 @@ EventStoreDB is the open-source, functional database with Complex Event Processi
 
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
+## Example
+
+The following snippet is not runnable as-is but showcases a simple example where we write and read events from the
+server. This snippet expects the server to be started like this:
+
+```shell script
+# Server version 20.6.0.
+$ eventstored --dev
+```
+
+```typescript
+import * as eventstore from '@eventstore/db-client';
+
+async function simpleExample(): void {
+    const connection = eventstore.EventStoreConnection.builder()
+        .sslDevMode()
+        .build("localhost:2113")
+        .streams();
+
+    const streamName = 'es_supported_clients';
+    const evt = EventData.json('grpc-client', {
+        languages: ['typescript', 'javascript'],
+        runtime: "NodeJS"
+    }).build();
+
+    const writeResult = await connection
+        .writeEvents(streamName)
+        .send([evt]);
+
+    const readResult = await connection
+        .readStream(streamName)
+        .fromStart()
+        .forward()
+        .execute(10);
+
+    readResult.events!.forEach(doSomethingProductive);
+}
+```
+
 ## Support
 
 Information on support can be found here: [EventStoreDB Support]
