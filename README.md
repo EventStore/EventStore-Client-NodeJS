@@ -6,6 +6,15 @@ EventStoreDB is the open-source, functional database with Complex Event Processi
 
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
+## Build from source
+
+This project uses [Yarn] as a build tool. The following command like should get you started:
+
+```shell script
+$ yarn
+$ yarn build
+```
+
 ## Example
 
 The following snippet is not runnable as-is but showcases a simple example where we write and read events from the
@@ -98,3 +107,4 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 [EventStoreDB Support]: https://eventstore.com/support/
 [EventStoreDB Docs]: https://developers.eventstore.com/
 [EventStoreDB Discuss]: https://discuss.eventstore.com/
+[Yarn]: https://yarnpkg.com/
