@@ -8,7 +8,7 @@ This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC 
 
 ## Build from source
 
-This project uses [Yarn] as a build tool. The following command like should get you started:
+This project uses [Yarn] as a build tool. The following shell command lines should get you started:
 
 ```shell script
 $ yarn
