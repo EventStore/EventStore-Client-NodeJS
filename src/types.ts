@@ -712,8 +712,8 @@ export const convertGrpcRecord: (
 };
 
 export type EndPoint = {
-  address: string,
-  port: number,
+  address: string;
+  port: number;
 };
 
 export function Endpoint(address: string, port: number): EndPoint {
@@ -724,23 +724,23 @@ export function Endpoint(address: string, port: number): EndPoint {
 }
 
 export type MemberInfo = {
-  instanceId?: string,
-  timeStamp: number,
-  state: VNodeState,
-  isAlive: boolean,
-  httpEndpoint?: EndPoint,
-}
+  instanceId?: string;
+  timeStamp: number;
+  state: VNodeState;
+  isAlive: boolean;
+  httpEndpoint?: EndPoint;
+};
 
 export type GossipSeed = {
-  hostname: string,
-  port: number,
-}
+  hostname: string;
+  port: number;
+};
 
 export type ClusterSettings = {
-  gossipSeeds?: GossipSeed[],
-  domain?: string,
-  nodePreference?: NodePreference,
-}
+  gossipSeeds?: GossipSeed[];
+  domain?: string;
+  nodePreference?: NodePreference;
+};
 
 export enum NodePreference {
   Random,
