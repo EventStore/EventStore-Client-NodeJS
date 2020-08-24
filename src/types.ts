@@ -5,7 +5,10 @@ import Expression = ReadReq.Options.FilterOptions.Expression;
 import * as grpc from "grpc";
 import * as streams_pb from "../generated/streams_pb";
 import * as persistent_pb from "../generated/persistent_pb";
+import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
+import VNodeState = GrpcMemberInfo.VNodeState;
 
+export { VNodeState };
 /**
  * Constants used for expected version control. The use of expected version can be a bit tricky especially when
  * discussing assurances given by the EventStoreDB server.
@@ -707,3 +710,40 @@ export const convertGrpcRecord: (
     created,
   };
 };
+
+export type EndPoint = {
+  address: string,
+  port: number,
+};
+
+export function Endpoint(address: string, port: number): EndPoint {
+  return {
+    address,
+    port,
+  };
+}
+
+export type MemberInfo = {
+  instanceId?: string,
+  timeStamp: number,
+  state: VNodeState,
+  isAlive: boolean,
+  httpEndpoint?: EndPoint,
+}
+
+export type GossipSeed = {
+  hostname: string,
+  port: number,
+}
+
+export type ClusterSettings = {
+  gossipSeeds?: GossipSeed[],
+  domain?: string,
+  nodePreference?: NodePreference,
+}
+
+export enum NodePreference {
+  Random,
+  Slave,
+  Master,
+}
