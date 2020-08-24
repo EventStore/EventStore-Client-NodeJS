@@ -101,7 +101,7 @@ function determineBestNode(
 
   let finalMember;
   switch (preference) {
-    case NodePreference.Master:
+    case NodePreference.Leader:
       finalMember = sorted.find((member) => member.state === VNodeState.LEADER);
       if (finalMember && finalMember.httpEndpoint) {
         return {
@@ -111,7 +111,7 @@ function determineBestNode(
       }
       break;
 
-    case NodePreference.Slave:
+    case NodePreference.Follower:
       finalMember = sorted
         .filter((member) => member.state === VNodeState.FOLLOWER)
         .sort(() => Math.random() - 0.5)
