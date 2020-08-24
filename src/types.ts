@@ -744,6 +744,6 @@ export type ClusterSettings = {
 
 export enum NodePreference {
   Random,
-  Slave,
-  Master,
+  Follower,
+  Leader,
 }
