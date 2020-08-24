@@ -19,8 +19,6 @@ export function discoverEndpoint(setts: ClusterSettings, previous?: EndPoint, ce
                 }
             }
 
-            let elected: GossipSeed | undefined;
-
             for (const candidate of candidates) {
                 const client = Gossip.fromSeed(candidate, cert);
                 let members: MemberInfo[] = []
@@ -31,10 +29,23 @@ export function discoverEndpoint(setts: ClusterSettings, previous?: EndPoint, ce
                     continue;
                 }
 
-                if (members.length === 0) continue;
+                if (members.length !== 0) {
+                    const preference = setts.nodePreference ?? NodePreference.Random;
+                    const selected = determineBestNode(preference, members);
 
+                    if (selected) {
+                        let endpoint: EndPoint = {
+                            address: selected.address,
+                            port: selected.port,
+                        };
 
+                        resolve(endpoint);
+                        break;
+                    }
+                }
             }
+
+            await asyncSetTimeout(500);
         }
     });
 }
@@ -58,15 +69,19 @@ function resolveDomainName(domain: string): Promise<GossipSeed[]> {
 
 function inAllowedStates(member: MemberInfo): boolean {
     switch (member.state) {
-        case VNodeState.MANAGER:
-            return false;
-        case VNodeState.SHUTTINGDOWN:
-            return false;
         case VNodeState.SHUTDOWN:
             return false;
         default:
             return true;
     }
+}
+
+function asyncSetTimeout(timeout: number): Promise<void> {
+    return new Promise(resolve => {
+        setTimeout(() => {
+           resolve();
+        }, timeout)
+    });
 }
 
 function determineBestNode(preference: NodePreference, members: MemberInfo[]): EndPoint | undefined {
@@ -87,7 +102,20 @@ function determineBestNode(preference: NodePreference, members: MemberInfo[]): E
             }
             break;
 
-        case NodePreference.Random:
+        case NodePreference.Slave:
+            finalMember = sorted.filter(member => member.state === VNodeState.FOLLOWER)
+                .sort(() => Math.random() - 0.5)
+                .shift();
+
+            if (finalMember && finalMember.httpEndpoint) {
+                return {
+                    address: finalMember.httpEndpoint.address,
+                    port: finalMember.httpEndpoint.port,
+                };
+            }
+            break;
+
+        default:
             finalMember = sorted.sort(() => Math.random() - 0.5).shift();
             if (finalMember && finalMember.httpEndpoint) {
                 return {
