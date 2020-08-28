@@ -1,13 +1,24 @@
-import * as eventstore from "../index";
+import { SingleNode } from "./utils";
+import { EventStoreConnection } from "../index";
 
-describe("subscribe to $all", function () {
-  it("should successfully subsscribe to $all", async function () {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113")
+describe("subscribe to $all", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
+  it("should successfully subsscribe to $all", async () => {
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri)
       .streams();
 
-    const promise = new Promise<number>((resolve, reject) => {
+    const result = await new Promise<number>((resolve, reject) => {
       let count = 0;
       connection
         .subscribeToAll()
@@ -28,7 +39,6 @@ describe("subscribe to $all", function () {
         });
     });
 
-    const result = await promise;
     connection.close();
     expect(result).toBe(3);
   });

@@ -1,12 +1,22 @@
-import * as eventstore from "../";
-import { Pinned } from "../types";
 import { v4 as uuid } from "uuid";
+import { SingleNode } from "./utils";
+import { EventStoreConnection, Pinned } from "../";
 
-describe("update_persistent_sub", function () {
+describe("update_persistent_sub", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
   it("should successfully update a persistent subscription", async () => {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113");
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri);
 
     const streamName = `update_persistent_sub-${uuid()}`;
     await connection

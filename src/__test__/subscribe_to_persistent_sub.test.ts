@@ -1,12 +1,22 @@
 import { v4 as uuid } from "uuid";
-import * as eventstore from "../";
-import { EventData, Revision } from "../types";
+import { SingleNode } from "./utils";
+import { EventStoreConnection, EventData, Revision } from "../";
 
-describe("subscribe to persistent sub", function () {
-  it("should successfully subscribe to a persistent subscription", async function () {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113");
+describe("subscribe to persistent sub", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
+  it("should successfully subscribe to a persistent subscription", async () => {
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri);
 
     const evt = EventData.json("typescript-type", {
       message: "baz",
@@ -26,7 +36,7 @@ describe("subscribe to persistent sub", function () {
       .expectedRevision(Revision.Any)
       .send([evt, evt, evt]);
 
-    const promise = new Promise<number>((resolve, reject) => {
+    const result = await new Promise<number>((resolve, reject) => {
       let count = 0;
       persistent
         .subscribe(streamName, "jokers")
@@ -50,7 +60,6 @@ describe("subscribe to persistent sub", function () {
         });
     });
 
-    const result = await promise;
     persistent.close();
     expect(result).toBe(3);
   });

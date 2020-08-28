@@ -1,12 +1,22 @@
 import { v4 as uuid } from "uuid";
-import * as eventstore from "../";
-import { EventData, Revision } from "../types";
+import { SingleNode } from "./utils";
+import { EventStoreConnection, EventData, Revision } from "../";
 
-describe("subscribe to stream", function () {
-  it("should successfully subscribe to stream", async function () {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113")
+describe("subscribe to stream", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
+  it("should successfully subscribe to stream", async () => {
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri)
       .streams();
 
     const evt = EventData.json("typescript-type", {
@@ -20,7 +30,7 @@ describe("subscribe to stream", function () {
       .expectedRevision(Revision.Any)
       .send([evt, evt, evt]);
 
-    const promise = new Promise<number>((resolve, reject) => {
+    const result = await new Promise<number>((resolve, reject) => {
       let count = 0;
       connection
         .subscribe(streamName)
@@ -41,7 +51,6 @@ describe("subscribe to stream", function () {
         });
     });
 
-    const result = await promise;
     connection.close();
     expect(result).toBe(3);
   });
