@@ -19,8 +19,7 @@
   },
   "files": [
     "dist/",
-    "generated/",
-    "dev-ca"
+    "generated/"
   ],
   "repository": {
     "type": "git",

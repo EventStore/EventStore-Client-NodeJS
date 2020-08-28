@@ -30,14 +30,6 @@ export class EventStoreConnectionBuilder {
   }
 
   /**
-   * Enable a secured connection with the server while using the self-signed certificate used by EventStoreDB in dev
-   * mode.
-   */
-  sslDevMode(): EventStoreConnectionBuilder {
-    return this.sslRootCertificate(`${__dirname}/../dev-ca/ca.pem`);
-  }
-
-  /**
    * Default behavior. Use an insecure connection to the server. We do not advise using this mode while executing
    * authenticated commands as your credentials will be visible on the network.
    */
