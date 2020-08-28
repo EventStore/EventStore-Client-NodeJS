@@ -21,17 +21,17 @@ The following snippet is not runnable as-is but showcases a simple example where
 server. This snippet expects the server to be started like this:
 
 ```shell script
-# Server version 20.6.0.
-$ eventstored --dev
+# Server version 20.6.1
+$ eventstored --insecure
 ```
 
 ###### Typescript example:
 ```typescript
 import { EventData, EventStoreConnection } from '@eventstore/db-client';
 
-async function simpleExample(): void {
+async function simpleExample(): Promise<void> {
     const connection = EventStoreConnection.builder()
-        .sslDevMode()
+        .insecure()
         .build("localhost:2113")
         .streams();
 
@@ -62,7 +62,7 @@ const { EventData, EventStoreConnection } = require("@eventstore/db-client");
 
 async function simpleTest() {
     const connection = EventStoreConnection.builder()
-        .sslDevMode()
+        .insecure()
         .build("localhost:2113")
         .streams();
 
