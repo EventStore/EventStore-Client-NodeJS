@@ -25,8 +25,8 @@ export class SingleNode {
   }
 
   public up = async (): Promise<void> => {
-    // allow up to 30 seconds to complete
-    jest.setTimeout(30000);
+    // allow up to 5 minites to complete (pulling a package can take a while)
+    jest.setTimeout(300_000);
 
     await this.ready;
 
@@ -64,6 +64,11 @@ export class SingleNode {
       "utf-8"
     );
     const config = parse(baseConfig);
+    config.services[
+      "eventstore.db"
+    ].image = `docker.pkg.github.com/eventstore/eventstore/eventstore:${
+      process.env.EVENTSTORE_VERSION ?? "ci"
+    }`;
     config.services["eventstore.db"].ports = [`${this.port}:2113`];
     await mkdir(this.path(), { recursive: true });
     await writeFile(this.path("./docker-compose.yaml"), stringify(config));

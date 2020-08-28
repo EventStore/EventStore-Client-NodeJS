@@ -6,7 +6,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 3 * * 0' # Every sunday at 3am UTC.
+    - cron: "0 3 * * 0" # Every sunday at 3am UTC.
 
 jobs:
   build:
@@ -25,22 +25,29 @@ jobs:
         run: yarn build
 
   tests:
-    name: 20.6.0 Release
+    name: Test
+    strategy:
+      matrix:
+        version: [ci, "20.6.0"]
     needs: build
     runs-on: ubuntu-18.04
-    services:
-      eventstore:
-        image: eventstore/eventstore:20.6.0-bionic
-        env:
-          EVENTSTORE_DEV: true
-        ports:
-          - 2113:2113
     steps:
       - uses: actions/checkout@v1
+      # Install up to date version of node
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Login to GitHub Package Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Install
         run: yarn
       - name: Run Tests
-        run: yarn test --ci
+        run: yarn test:${{ matrix.version }} --ci
 
   linting:
     name: Linting
