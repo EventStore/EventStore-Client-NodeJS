@@ -1,14 +1,22 @@
-// import { v4 as uuid } from "uuid";
-
-import * as eventstore from "../";
-import { EventData, Revision } from "../types";
 import { v4 as uuid } from "uuid";
+import { SingleNode } from "./utils";
+import { EventStoreConnection, EventData, Revision } from "../";
 
-describe("delete_stream", function () {
+describe("delete_stream", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
   it("should successfully delete a stream", async () => {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113");
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri);
 
     const streamName = `tombstone-${uuid()}`;
     const evt = EventData.json("typescript-type", {

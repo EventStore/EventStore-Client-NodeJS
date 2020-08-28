@@ -1,12 +1,22 @@
-import * as eventstore from "../";
-import { EventData, Revision } from "../types";
 import { v4 as uuid } from "uuid";
+import { SingleNode } from "./utils";
+import { EventStoreConnection, EventData, Revision } from "../";
 
-describe("append_to_stream", function () {
+describe("append_to_stream", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
   it("should successfully append events to stream", async () => {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113");
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri);
 
     const streamName = `write-${uuid()}`;
     const evt = EventData.json("typescript-type", {

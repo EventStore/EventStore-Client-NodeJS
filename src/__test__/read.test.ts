@@ -1,12 +1,27 @@
 import { v4 as uuid } from "uuid";
-import * as eventstore from "../index";
-import { EventData, ReadStreamResult, Revision } from "../types";
+import { SingleNode } from "./utils";
+import {
+  EventStoreConnection,
+  EventData,
+  ReadStreamResult,
+  Revision,
+} from "../index";
 
-describe("read all forwards", function () {
-  it("should successfully read all events", async function () {
-    const connection = eventstore.EventStoreConnection.builder()
-      .sslDevMode()
-      .build("localhost:2113");
+describe("read all forwards", () => {
+  const node = new SingleNode();
+
+  beforeAll(async () => {
+    await node.up();
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
+  it("should successfully read all events", async () => {
+    const connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .build(node.uri);
 
     const evt = EventData.json("typescript-type", {
       message: "baz",
