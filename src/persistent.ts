@@ -19,25 +19,18 @@ import {
   RecordedEvent,
   ResolvedEvent,
   RoundRobin,
+  ESDBConnection,
 } from "./types";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import Action = ReadReq.Nack.Action;
 import { CallOptions } from "grpc";
 
 export class Persistent {
-  private readonly client: PersistentSubscriptionsClient;
+  private readonly _connection: ESDBConnection;
 
-  constructor(uri: string, cert?: Buffer) {
-    let creds: grpc.ChannelCredentials;
-
-    if (cert) {
-      creds = grpc.credentials.createSsl(cert);
-    } else {
-      creds = grpc.credentials.createInsecure();
-    }
-    this.client = new PersistentSubscriptionsClient(uri, creds);
+  constructor(connection: ESDBConnection) {
+    this._connection = connection;
   }
-
   /**
    * Creates a persistent subscription on a stream. Persistent subscriptions are special kind of subscription where the
    * server remembers where the read offset is at. This allows for many different modes of operations compared to a
@@ -46,7 +39,7 @@ export class Persistent {
    * @param group
    */
   create(stream: string, group: string): CreatePersistentSubscription {
-    return new CreatePersistentSubscription(this.client, stream, group);
+    return new CreatePersistentSubscription(this._connection, stream, group);
   }
 
   /**
@@ -55,7 +48,7 @@ export class Persistent {
    * @param group
    */
   update(stream: string, group: string): UpdatePersistentSubscription {
-    return new UpdatePersistentSubscription(this.client, stream, group);
+    return new UpdatePersistentSubscription(this._connection, stream, group);
   }
 
   /**
@@ -64,7 +57,7 @@ export class Persistent {
    * @param group
    */
   delete(stream: string, group: string): DeletePersistentSubscription {
-    return new DeletePersistentSubscription(this.client, stream, group);
+    return new DeletePersistentSubscription(this._connection, stream, group);
   }
 
   /**
@@ -73,19 +66,19 @@ export class Persistent {
    * @param group
    */
   subscribe(stream: string, group: string): ConnectToPersistentSubscription {
-    return new ConnectToPersistentSubscription(this.client, stream, group);
+    return new ConnectToPersistentSubscription(this._connection, stream, group);
   }
 
   /**
    * Closes the connection to the server.
    */
   close(): void {
-    this.client.close();
+    this._connection.close();
   }
 }
 
 export class CreatePersistentSubscription {
-  private _client: PersistentSubscriptionsClient;
+  private readonly _connection: ESDBConnection;
   private _stream: string;
   private _group: string;
   private _resolveLink: boolean;
@@ -103,12 +96,8 @@ export class CreatePersistentSubscription {
   private _strategy: ConsumerStrategy;
   private _credentials?: Credentials;
 
-  constructor(
-    client: PersistentSubscriptionsClient,
-    stream: string,
-    group: string
-  ) {
-    this._client = client;
+  constructor(connection: ESDBConnection, stream: string, group: string) {
+    this._connection = connection;
     this._stream = stream;
     this._group = group;
     this._resolveLink = false;
@@ -306,7 +295,7 @@ export class CreatePersistentSubscription {
   /**
    * Creates a persistent subscription asynchronously.
    */
-  execute(): Promise<void> {
+  async execute(): Promise<void> {
     const req = new CreateReq();
     const options = new CreateReq.Options();
     const identifier = new StreamIdentifier();
@@ -351,10 +340,13 @@ export class CreatePersistentSubscription {
     const metadata = new grpc.Metadata();
     if (this._credentials) configureAuth(this._credentials, metadata);
 
-    return new Promise<void>((resolve, reject) => {
-      this._client.create(req, metadata, (error) => {
-        if (error) reject(error);
+    const client = await this._connection._client(
+      PersistentSubscriptionsClient
+    );
 
+    return new Promise<void>((resolve, reject) => {
+      client.create(req, metadata, (error) => {
+        if (error) reject(error);
         resolve();
       });
     });
@@ -362,7 +354,7 @@ export class CreatePersistentSubscription {
 }
 
 export class UpdatePersistentSubscription {
-  private _client: PersistentSubscriptionsClient;
+  private readonly _connection: ESDBConnection;
   private _stream: string;
   private _group: string;
   private _resolveLink: boolean;
@@ -380,12 +372,8 @@ export class UpdatePersistentSubscription {
   private _strategy: ConsumerStrategy;
   private _credentials?: Credentials;
 
-  constructor(
-    client: PersistentSubscriptionsClient,
-    stream: string,
-    group: string
-  ) {
-    this._client = client;
+  constructor(connection: ESDBConnection, stream: string, group: string) {
+    this._connection = connection;
     this._stream = stream;
     this._group = group;
     this._resolveLink = false;
@@ -583,7 +571,7 @@ export class UpdatePersistentSubscription {
   /**
    * Updates a persistent subscription asynchronously.
    */
-  execute(): Promise<void> {
+  async execute(): Promise<void> {
     const req = new UpdateReq();
     const options = new UpdateReq.Options();
     const identifier = new StreamIdentifier();
@@ -628,8 +616,11 @@ export class UpdatePersistentSubscription {
     const metadata = new grpc.Metadata();
     if (this._credentials) configureAuth(this._credentials, metadata);
 
+    const client = await this._connection._client(
+      PersistentSubscriptionsClient
+    );
     return new Promise<void>((resolve, reject) => {
-      this._client.update(req, metadata, (error) => {
+      client.update(req, metadata, (error) => {
         if (error) reject(error);
 
         resolve();
@@ -639,17 +630,13 @@ export class UpdatePersistentSubscription {
 }
 
 export class DeletePersistentSubscription {
-  private _client: PersistentSubscriptionsClient;
+  private readonly _connection: ESDBConnection;
   private _stream: string;
   private _group: string;
   private _credentials?: Credentials;
 
-  constructor(
-    client: PersistentSubscriptionsClient,
-    stream: string,
-    group: string
-  ) {
-    this._client = client;
+  constructor(connection: ESDBConnection, stream: string, group: string) {
+    this._connection = connection;
     this._stream = stream;
     this._group = group;
   }
@@ -670,7 +657,7 @@ export class DeletePersistentSubscription {
   /**
    * Deletes a persistent subscription asynchronously.
    */
-  execute(): Promise<void> {
+  async execute(): Promise<void> {
     const req = new DeleteReq();
     const options = new DeleteReq.Options();
     const identifier = new StreamIdentifier();
@@ -682,11 +669,12 @@ export class DeletePersistentSubscription {
 
     const metadata = new grpc.Metadata();
     if (this._credentials) configureAuth(this._credentials, metadata);
-
+    const client = await this._connection._client(
+      PersistentSubscriptionsClient
+    );
     return new Promise<void>((resolve, reject) => {
-      this._client.delete(req, metadata, (error) => {
+      client.delete(req, metadata, (error) => {
         if (error) reject(error);
-
         resolve();
       });
     });
@@ -800,20 +788,16 @@ class PersistentReportImpl implements PersistentReport {
 }
 
 export class ConnectToPersistentSubscription {
-  private client: PersistentSubscriptionsClient;
-  private stream: string;
-  private group: string;
+  private readonly _connection: ESDBConnection;
+  private _stream: string;
+  private _group: string;
   private _bufferSize: number;
-  private credentials?: Credentials;
+  private _credentials?: Credentials;
 
-  constructor(
-    client: PersistentSubscriptionsClient,
-    stream: string,
-    group: string
-  ) {
-    this.client = client;
-    this.stream = stream;
-    this.group = group;
+  constructor(connection: ESDBConnection, stream: string, group: string) {
+    this._connection = connection;
+    this._stream = stream;
+    this._group = group;
     this._bufferSize = 10;
   }
 
@@ -835,7 +819,7 @@ export class ConnectToPersistentSubscription {
     username: string,
     password: string
   ): ConnectToPersistentSubscription {
-    this.credentials = Credentials(username, password);
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -843,32 +827,35 @@ export class ConnectToPersistentSubscription {
    * Starts the subscription immediately.
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-  execute(handler: PersistentSubscriptionHandler): void {
+  async execute(handler: PersistentSubscriptionHandler): Promise<void> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();
-    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
+    identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
 
     const uuidOption = new UUIDOption();
     uuidOption.setString(new Empty());
     options.setStreamIdentifier(identifier);
-    options.setGroupName(this.group);
+    options.setGroupName(this._group);
     options.setBufferSize(this._bufferSize);
     options.setUuidOption(uuidOption);
     req.setOptions(options);
 
     const metadata = new grpc.Metadata();
-    if (this.credentials) configureAuth(this.credentials, metadata);
+    if (this._credentials) configureAuth(this._credentials, metadata);
 
     const callOptions: CallOptions = {
       deadline: Infinity,
     };
 
-    const stream = this.client.read(metadata, callOptions);
+    const client = await this._connection._client(
+      PersistentSubscriptionsClient
+    );
+    const stream = client.read(metadata, callOptions);
     const report = new PersistentReportImpl(
       this._bufferSize,
-      this.stream,
-      this.group,
+      this._stream,
+      this._group,
       stream
     );
     stream.write(req);

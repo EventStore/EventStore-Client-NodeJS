@@ -41,6 +41,7 @@ import {
   convertGrpcRecord,
   configureAuth,
   SubscriptionReport,
+  ESDBConnection,
 } from "./types";
 import { Empty, StreamIdentifier, UUID } from "../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
@@ -53,18 +54,10 @@ import { CallOptions } from "grpc";
  * Streams API. You can write, read, delete and subscribe to streams.
  */
 export class Streams {
-  private readonly client: StreamsClient;
+  private readonly _connection: ESDBConnection;
 
-  constructor(uri: string, cert?: Buffer) {
-    let creds: grpc.ChannelCredentials;
-
-    if (cert) {
-      creds = grpc.credentials.createSsl(cert);
-    } else {
-      creds = grpc.credentials.createInsecure();
-    }
-
-    this.client = new StreamsClient(uri, creds);
+  constructor(connection: ESDBConnection) {
+    this._connection = connection;
   }
 
   /**
@@ -72,7 +65,7 @@ export class Streams {
    * @param stream A stream name.
    */
   writeEvents(stream: string): WriteEvents {
-    return new WriteEvents(this.client, stream);
+    return new WriteEvents(this._connection, stream);
   }
 
   /**
@@ -80,7 +73,7 @@ export class Streams {
    * @param stream A Stream name.
    */
   delete(stream: string): DeleteStream {
-    return new DeleteStream(this.client, stream);
+    return new DeleteStream(this._connection, stream);
   }
 
   /**
@@ -88,7 +81,7 @@ export class Streams {
    * @param stream A stream name.
    */
   tombstone(stream: string): TombstoneStream {
-    return new TombstoneStream(this.client, stream);
+    return new TombstoneStream(this._connection, stream);
   }
 
   /**
@@ -96,7 +89,7 @@ export class Streams {
    * @param stream A Stream name.
    */
   readStream(stream: string): ReadStreamEvents {
-    return new ReadStreamEvents(this.client, stream);
+    return new ReadStreamEvents(this._connection, stream);
   }
 
   /**
@@ -104,7 +97,7 @@ export class Streams {
    * that command successfully.
    */
   readAll(): ReadAllEvents {
-    return new ReadAllEvents(this.client);
+    return new ReadAllEvents(this._connection);
   }
 
   /**
@@ -113,7 +106,7 @@ export class Streams {
    * @param stream A stream name.
    */
   subscribe(stream: string): SubscribeToStream {
-    return new SubscribeToStream(this.client, stream);
+    return new SubscribeToStream(this._connection, stream);
   }
 
   /**
@@ -121,27 +114,27 @@ export class Streams {
    * command successfully.
    */
   subscribeToAll(): SubscribeToAll {
-    return new SubscribeToAll(this.client);
+    return new SubscribeToAll(this._connection);
   }
 
   /**
    * Closes the connection to the server.
    */
   close(): void {
-    this.client.close();
+    this._connection.close();
   }
 }
 
 export class WriteEvents {
-  private client: StreamsClient;
-  private readonly stream: string;
-  private revision: Revision;
-  private credentials?: Credentials;
+  private readonly _connection: ESDBConnection;
+  private readonly _stream: string;
+  private _revision: Revision;
+  private _credentials?: Credentials;
 
-  constructor(client: StreamsClient, stream: string) {
-    this.client = client;
-    this.stream = stream;
-    this.revision = Revision.Any;
+  constructor(connection: ESDBConnection, stream: string) {
+    this._connection = connection;
+    this._stream = stream;
+    this._revision = Revision.Any;
   }
 
   /**
@@ -149,7 +142,7 @@ export class WriteEvents {
    * @param revision
    */
   expectedRevision(revision: Revision): WriteEvents {
-    this.revision = revision;
+    this._revision = revision;
     return this;
   }
 
@@ -159,7 +152,7 @@ export class WriteEvents {
    * @param password
    */
   authenticated(username: string, password: string): WriteEvents {
-    this.credentials = Credentials(username, password);
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -167,17 +160,17 @@ export class WriteEvents {
    * Sends asynchronously events to the server.
    * @param events Events sent to the server.
    */
-  send(events: EventData[]): Promise<WriteResult> {
+  async send(events: EventData[]): Promise<WriteResult> {
     const header = new AppendReq();
     const options = new AppendReq.Options();
     const identifier = new StreamIdentifier();
 
-    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
+    identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
     options.setStreamIdentifier(identifier);
 
-    switch (this.revision.__typename) {
+    switch (this._revision.__typename) {
       case "exact": {
-        options.setRevision(this.revision.revision);
+        options.setRevision(this._revision.revision);
         break;
       }
 
@@ -199,10 +192,12 @@ export class WriteEvents {
     header.setOptions(options);
 
     const metadata = new grpc.Metadata();
-    if (this.credentials) configureAuth(this.credentials, metadata);
+    if (this._credentials) configureAuth(this._credentials, metadata);
+
+    const client = await this._connection._client(StreamsClient);
 
     return new Promise<WriteResult>((resolve) => {
-      const sink = this.client.append(metadata, (error, resp) => {
+      const sink = client.append(metadata, (error, resp) => {
         if (error != null) {
           const result: WriteResultFailure = {
             __typename: "failure",
@@ -295,13 +290,13 @@ export class WriteEvents {
 }
 
 export class DeleteStream {
-  private _client: StreamsClient;
+  private readonly _connection: ESDBConnection;
   private readonly _stream: string;
   private _revision: Revision;
   private _credentials?: Credentials;
 
-  constructor(client: StreamsClient, stream: string) {
-    this._client = client;
+  constructor(connection: ESDBConnection, stream: string) {
+    this._connection = connection;
     this._stream = stream;
     this._revision = Revision.Any;
   }
@@ -328,7 +323,7 @@ export class DeleteStream {
   /**
    * Sends asynchronously the delete command to the server.
    */
-  execute(): Promise<DeleteResult> {
+  async execute(): Promise<DeleteResult> {
     const req = new DeleteReq();
     const options = new DeleteReq.Options();
     const identifier = new StreamIdentifier();
@@ -361,9 +356,9 @@ export class DeleteStream {
     req.setOptions(options);
     const metadata = new grpc.Metadata();
     if (this._credentials) configureAuth(this._credentials, metadata);
-
+    const client = await this._connection._client(StreamsClient);
     return new Promise<DeleteResult>((resolve, reject) => {
-      this._client.delete(req, metadata, (error, resp) => {
+      client.delete(req, metadata, (error, resp) => {
         if (error) {
           reject(error);
         }
@@ -387,13 +382,13 @@ export class DeleteStream {
 }
 
 export class TombstoneStream {
-  private _client: StreamsClient;
+  private _connection: ESDBConnection;
   private readonly _stream: string;
   private _revision: Revision;
   private _credentials?: Credentials;
 
-  constructor(client: StreamsClient, stream: string) {
-    this._client = client;
+  constructor(connection: ESDBConnection, stream: string) {
+    this._connection = connection;
     this._stream = stream;
     this._revision = Revision.Any;
   }
@@ -420,7 +415,7 @@ export class TombstoneStream {
   /**
    * Sends asynchronously the tombstone command to the server.
    */
-  execute(): Promise<DeleteResult> {
+  async execute(): Promise<DeleteResult> {
     const req = new TombstoneReq();
     const options = new TombstoneReq.Options();
     const identifier = new StreamIdentifier();
@@ -454,8 +449,10 @@ export class TombstoneStream {
     const metadata = new grpc.Metadata();
     if (this._credentials) configureAuth(this._credentials, metadata);
 
+    const client = await this._connection._client(StreamsClient);
+
     return new Promise<DeleteResult>((resolve, reject) => {
-      this._client.tombstone(req, metadata, (error, resp) => {
+      client.tombstone(req, metadata, (error, resp) => {
         if (error) {
           reject(error);
         }
@@ -479,26 +476,26 @@ export class TombstoneStream {
 }
 
 export class ReadStreamEvents {
-  private client: StreamsClient;
-  private stream: string;
-  private revision: StreamRevision;
-  private resolveLinkTos: boolean;
-  private direction: Direction;
-  private credentials?: Credentials;
+  private _connection: ESDBConnection;
+  private _stream: string;
+  private _revision: StreamRevision;
+  private _resolveLinkTos: boolean;
+  private _direction: Direction;
+  private _credentials?: Credentials;
 
-  constructor(client: StreamsClient, stream: string) {
-    this.client = client;
-    this.stream = stream;
-    this.revision = StreamStart;
-    this.resolveLinkTos = false;
-    this.direction = Forward;
+  constructor(connection: ESDBConnection, stream: string) {
+    this._connection = connection;
+    this._stream = stream;
+    this._revision = StreamStart;
+    this._resolveLinkTos = false;
+    this._direction = Forward;
   }
 
   /**
    * Asks the command to read forward (toward the end of the stream). Default behavior.
    */
   forward(): ReadStreamEvents {
-    this.direction = Forward;
+    this._direction = Forward;
     return this;
   }
 
@@ -506,7 +503,7 @@ export class ReadStreamEvents {
    * Asks the command to read backward (toward the beginning of the stream).
    */
   backward(): ReadStreamEvents {
-    this.direction = Backward;
+    this._direction = Backward;
     return this;
   }
 
@@ -515,7 +512,7 @@ export class ReadStreamEvents {
    * @param direction
    */
   readDirection(direction: Direction): ReadStreamEvents {
-    this.direction = direction;
+    this._direction = direction;
     return this;
   }
 
@@ -524,7 +521,7 @@ export class ReadStreamEvents {
    * @param revision
    */
   fromRevision(revision: number): ReadStreamEvents {
-    this.revision = StreamExact(revision);
+    this._revision = StreamExact(revision);
     return this;
   }
 
@@ -532,7 +529,7 @@ export class ReadStreamEvents {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): ReadStreamEvents {
-    this.revision = StreamStart;
+    this._revision = StreamStart;
     return this;
   }
 
@@ -540,7 +537,7 @@ export class ReadStreamEvents {
    * Starts the read from the end of the stream.
    */
   fromEnd(): ReadStreamEvents {
-    this.revision = StreamEnd;
+    this._revision = StreamEnd;
     return this;
   }
 
@@ -550,7 +547,7 @@ export class ReadStreamEvents {
    * @param password
    */
   authenticated(username: string, password: string): ReadStreamEvents {
-    this.credentials = Credentials(username, password);
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -560,7 +557,7 @@ export class ReadStreamEvents {
    * resolution feature, the server will also return the event targeted by the link.
    */
   resolveLink(): ReadStreamEvents {
-    this.resolveLinkTos = true;
+    this._resolveLinkTos = true;
     return this;
   }
 
@@ -568,7 +565,7 @@ export class ReadStreamEvents {
    * Disables link resolution. See {@link resolveLink}. Default behavior.
    */
   doNotResolveLink(): ReadStreamEvents {
-    this.resolveLinkTos = false;
+    this._resolveLinkTos = false;
     return this;
   }
 
@@ -576,11 +573,11 @@ export class ReadStreamEvents {
    * Sends asynchronously the read command to the server.
    * @param count Max number of events to read.
    */
-  execute(count: number): Promise<ReadStreamResult> {
+  async execute(count: number): Promise<ReadStreamResult> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();
-    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
+    identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
 
     const uuidOption = new UUIDOption();
     uuidOption.setString(new Empty());
@@ -588,9 +585,9 @@ export class ReadStreamEvents {
     const streamOptions = new ReadReq.Options.StreamOptions();
     streamOptions.setStreamIdentifier(identifier);
 
-    switch (this.revision.__typename) {
+    switch (this._revision.__typename) {
       case "exact": {
-        streamOptions.setRevision(this.revision.revision);
+        streamOptions.setRevision(this._revision.revision);
         break;
       }
 
@@ -606,12 +603,12 @@ export class ReadStreamEvents {
     }
 
     options.setStream(streamOptions);
-    options.setResolveLinks(this.resolveLinkTos);
+    options.setResolveLinks(this._resolveLinkTos);
     options.setCount(count);
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());
 
-    switch (this.direction.__typename) {
+    switch (this._direction.__typename) {
       case "forward": {
         options.setReadDirection(0);
         break;
@@ -625,30 +622,31 @@ export class ReadStreamEvents {
 
     req.setOptions(options);
     const metadata = new grpc.Metadata();
-    if (this.credentials) configureAuth(this.credentials, metadata);
+    if (this._credentials) configureAuth(this._credentials, metadata);
 
-    const stream = this.client.read(req, metadata);
+    const client = await this._connection._client(StreamsClient);
+    const stream = client.read(req, metadata);
     return handleBatchRead(stream);
   }
 }
 
 export class ReadAllEvents {
-  private client: StreamsClient;
-  private position: StreamPosition | StreamStart | StreamEnd;
-  private direction: Direction;
-  private credentials?: Credentials;
+  private _connection: ESDBConnection;
+  private _position: StreamPosition | StreamStart | StreamEnd;
+  private _direction: Direction;
+  private _credentials?: Credentials;
 
-  constructor(client: StreamsClient) {
-    this.client = client;
-    this.direction = Forward;
-    this.position = StreamStart;
+  constructor(connection: ESDBConnection) {
+    this._connection = connection;
+    this._direction = Forward;
+    this._position = StreamStart;
   }
 
   /**
    * Asks the command to read forward (toward the end of the stream). Default behavior.
    */
   forward(): ReadAllEvents {
-    this.direction = Forward;
+    this._direction = Forward;
     return this;
   }
 
@@ -656,7 +654,7 @@ export class ReadAllEvents {
    * Asks the command to read backward (toward the beginning of the stream).
    */
   backward(): ReadAllEvents {
-    this.direction = Backward;
+    this._direction = Backward;
     return this;
   }
 
@@ -665,7 +663,7 @@ export class ReadAllEvents {
    * @param direction
    */
   readDirection(direction: Direction): ReadAllEvents {
-    this.direction = direction;
+    this._direction = direction;
     return this;
   }
 
@@ -674,7 +672,7 @@ export class ReadAllEvents {
    * @param position
    */
   fromPosition(position: Position): ReadAllEvents {
-    this.position = StreamPosition(position);
+    this._position = StreamPosition(position);
     return this;
   }
 
@@ -682,7 +680,7 @@ export class ReadAllEvents {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): ReadAllEvents {
-    this.position = StreamStart;
+    this._position = StreamStart;
     return this;
   }
 
@@ -690,7 +688,7 @@ export class ReadAllEvents {
    * Starts the read from the end of the stream.
    */
   fromEnd(): ReadAllEvents {
-    this.position = StreamEnd;
+    this._position = StreamEnd;
     return this;
   }
 
@@ -700,7 +698,7 @@ export class ReadAllEvents {
    * @param password
    */
   authenticated(username: string, password: string): ReadAllEvents {
-    this.credentials = Credentials(username, password);
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -708,7 +706,7 @@ export class ReadAllEvents {
    * Sends asynchronously the read command to the server.
    * @param count Max number of events to read.
    */
-  execute(count: number): Promise<ReadStreamResult> {
+  async execute(count: number): Promise<ReadStreamResult> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
 
@@ -717,11 +715,11 @@ export class ReadAllEvents {
 
     const allOptions = new ReadReq.Options.AllOptions();
 
-    switch (this.position.__typename) {
+    switch (this._position.__typename) {
       case "position": {
         const pos = new ReadReq.Options.Position();
-        pos.setCommitPosition(this.position.position.commit);
-        pos.setPreparePosition(this.position.position.prepare);
+        pos.setCommitPosition(this._position.position.commit);
+        pos.setPreparePosition(this._position.position.prepare);
         allOptions.setPosition(pos);
         break;
       }
@@ -741,7 +739,7 @@ export class ReadAllEvents {
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());
 
-    switch (this.direction.__typename) {
+    switch (this._direction.__typename) {
       case "forward": {
         options.setReadDirection(0);
         break;
@@ -756,9 +754,10 @@ export class ReadAllEvents {
     req.setOptions(options);
 
     const metadata = new grpc.Metadata();
-    if (this.credentials) configureAuth(this.credentials, metadata);
+    if (this._credentials) configureAuth(this._credentials, metadata);
 
-    const stream = this.client.read(req, metadata);
+    const client = await this._connection._client(StreamsClient);
+    const stream = client.read(req, metadata);
     return handleBatchRead(stream);
   }
 }
@@ -775,17 +774,17 @@ class SubscriptionReportImpl implements SubscriptionReport {
 }
 
 export class SubscribeToStream {
-  private client: StreamsClient;
-  private stream: string;
-  private revision: StreamRevision;
-  private resolveLinkTos: boolean;
-  private credentials?: Credentials;
+  private _connection: ESDBConnection;
+  private _stream: string;
+  private _revision: StreamRevision;
+  private _resolveLinkTos: boolean;
+  private _credentials?: Credentials;
 
-  constructor(client: StreamsClient, stream: string) {
-    this.client = client;
-    this.stream = stream;
-    this.revision = StreamEnd;
-    this.resolveLinkTos = false;
+  constructor(connection: ESDBConnection, stream: string) {
+    this._connection = connection;
+    this._stream = stream;
+    this._revision = StreamEnd;
+    this._resolveLinkTos = false;
   }
 
   /**
@@ -793,7 +792,7 @@ export class SubscribeToStream {
    * @param revision
    */
   fromRevision(revision: number): SubscribeToStream {
-    this.revision = StreamExact(revision);
+    this._revision = StreamExact(revision);
     return this;
   }
 
@@ -801,7 +800,7 @@ export class SubscribeToStream {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): SubscribeToStream {
-    this.revision = StreamStart;
+    this._revision = StreamStart;
     return this;
   }
 
@@ -809,7 +808,7 @@ export class SubscribeToStream {
    * Starts the read from the end of the stream.
    */
   fromEnd(): SubscribeToStream {
-    this.revision = StreamEnd;
+    this._revision = StreamEnd;
     return this;
   }
 
@@ -819,7 +818,7 @@ export class SubscribeToStream {
    * @param password
    */
   authenticated(credentials: Credentials): SubscribeToStream {
-    this.credentials = credentials;
+    this._credentials = credentials;
     return this;
   }
 
@@ -829,7 +828,7 @@ export class SubscribeToStream {
    * resolution feature, the server will also return the event targeted by the link.
    */
   resolveLink(): SubscribeToStream {
-    this.resolveLinkTos = true;
+    this._resolveLinkTos = true;
     return this;
   }
 
@@ -837,7 +836,7 @@ export class SubscribeToStream {
    * Disables link resolution. See {@link resolveLink}. Default behavior.
    */
   doNotResolveLink(): SubscribeToStream {
-    this.resolveLinkTos = false;
+    this._resolveLinkTos = false;
     return this;
   }
 
@@ -845,11 +844,11 @@ export class SubscribeToStream {
    * Starts the subscription immediately.
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-  execute(handler: SubscriptionHandler): void {
+  async execute(handler: SubscriptionHandler): Promise<void> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();
-    identifier.setStreamname(Buffer.from(this.stream).toString("base64"));
+    identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
 
     const uuidOption = new UUIDOption();
     uuidOption.setString(new Empty());
@@ -857,9 +856,9 @@ export class SubscribeToStream {
     const streamOptions = new ReadReq.Options.StreamOptions();
     streamOptions.setStreamIdentifier(identifier);
 
-    switch (this.revision.__typename) {
+    switch (this._revision.__typename) {
       case "exact": {
-        streamOptions.setRevision(this.revision.revision);
+        streamOptions.setRevision(this._revision.revision);
         break;
       }
 
@@ -875,7 +874,7 @@ export class SubscribeToStream {
     }
 
     options.setStream(streamOptions);
-    options.setResolveLinks(this.resolveLinkTos);
+    options.setResolveLinks(this._resolveLinkTos);
     options.setSubscription(new SubscriptionOptions());
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());
@@ -883,13 +882,14 @@ export class SubscribeToStream {
     req.setOptions(options);
 
     const metadata = new grpc.Metadata();
-    if (this.credentials) configureAuth(this.credentials, metadata);
+    if (this._credentials) configureAuth(this._credentials, metadata);
 
     const callOptions: CallOptions = {
       deadline: Infinity,
     };
 
-    const stream = this.client.read(req, metadata, callOptions);
+    const client = await this._connection._client(StreamsClient);
+    const stream = client.read(req, metadata, callOptions);
     handleOneWaySubscription(stream, handler);
   }
 }
@@ -997,16 +997,16 @@ function handleBatchRead(
 }
 
 export class SubscribeToAll {
-  private client: StreamsClient;
-  private position: AllPosition;
-  private resolveLinkTos: boolean;
-  private credentials?: Credentials;
+  private _connection: ESDBConnection;
+  private _position: AllPosition;
+  private _resolveLinkTos: boolean;
+  private _credentials?: Credentials;
   private _filter?: Filter;
 
-  constructor(client: StreamsClient) {
-    this.client = client;
-    this.position = StreamEnd;
-    this.resolveLinkTos = false;
+  constructor(connection: ESDBConnection) {
+    this._connection = connection;
+    this._position = StreamEnd;
+    this._resolveLinkTos = false;
   }
 
   /**
@@ -1014,7 +1014,7 @@ export class SubscribeToAll {
    * @param position
    */
   fromPosition(position: Position): SubscribeToAll {
-    this.position = StreamPosition(position);
+    this._position = StreamPosition(position);
     return this;
   }
 
@@ -1022,7 +1022,7 @@ export class SubscribeToAll {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): SubscribeToAll {
-    this.position = StreamStart;
+    this._position = StreamStart;
     return this;
   }
 
@@ -1030,7 +1030,7 @@ export class SubscribeToAll {
    * Starts the read from the end of the stream.
    */
   fromEnd(): SubscribeToAll {
-    this.position = StreamEnd;
+    this._position = StreamEnd;
     return this;
   }
 
@@ -1040,7 +1040,7 @@ export class SubscribeToAll {
    * @param password
    */
   authenticated(username: string, password: string): SubscribeToAll {
-    this.credentials = Credentials(username, password);
+    this._credentials = Credentials(username, password);
     return this;
   }
 
@@ -1050,7 +1050,7 @@ export class SubscribeToAll {
    * resolution feature, the server will also return the event targeted by the link.
    */
   resolveLink(): SubscribeToAll {
-    this.resolveLinkTos = true;
+    this._resolveLinkTos = true;
     return this;
   }
 
@@ -1058,7 +1058,7 @@ export class SubscribeToAll {
    * Disables link resolution. See {@link resolveLink}. Default behavior.
    */
   doNotResolveLink(): SubscribeToAll {
-    this.resolveLinkTos = false;
+    this._resolveLinkTos = false;
     return this;
   }
 
@@ -1075,7 +1075,7 @@ export class SubscribeToAll {
    * Starts the subscription immediately.
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-  execute(handler: SubscriptionHandler): void {
+  async execute(handler: SubscriptionHandler): Promise<void> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const uuidOption = new UUIDOption();
@@ -1083,11 +1083,11 @@ export class SubscribeToAll {
 
     const allOptions = new ReadReq.Options.AllOptions();
 
-    switch (this.position.__typename) {
+    switch (this._position.__typename) {
       case "position": {
         const grpcPos = new ReadReq.Options.Position();
-        grpcPos.setCommitPosition(this.position.position.commit);
-        grpcPos.setPreparePosition(this.position.position.prepare);
+        grpcPos.setCommitPosition(this._position.position.commit);
+        grpcPos.setPreparePosition(this._position.position.prepare);
         allOptions.setPosition(grpcPos);
         break;
       }
@@ -1104,7 +1104,7 @@ export class SubscribeToAll {
     }
 
     options.setAll(allOptions);
-    options.setResolveLinks(this.resolveLinkTos);
+    options.setResolveLinks(this._resolveLinkTos);
     options.setSubscription(new SubscriptionOptions());
     options.setUuidOption(uuidOption);
 
@@ -1117,13 +1117,14 @@ export class SubscribeToAll {
     req.setOptions(options);
 
     const metadata = new grpc.Metadata();
-    if (this.credentials) configureAuth(this.credentials, metadata);
+    if (this._credentials) configureAuth(this._credentials, metadata);
 
     const callOptions: CallOptions = {
       deadline: Infinity,
     };
 
-    const stream = this.client.read(req, metadata, callOptions);
+    const client = await this._connection._client(StreamsClient);
+    const stream = client.read(req, metadata, callOptions);
     handleOneWaySubscription(stream, handler);
   }
 }

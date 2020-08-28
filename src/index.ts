@@ -1,6 +1,8 @@
 import { Streams } from "./streams";
 import { Persistent } from "./persistent";
 import * as file from "fs";
+import * as grpc from "grpc";
+import { ESDBConnection, ClientConstructor } from "./types";
 
 export { Streams, Persistent };
 
@@ -52,13 +54,17 @@ export class EventStoreConnectionBuilder {
  * EventStoreDB connection, you want to keep the connection open for a much longer of time than when you use a SQL
  * connection.
  */
-export class EventStoreConnection {
+export class EventStoreConnection implements ESDBConnection {
   private _uri: string;
   private _rootCertificate?: Buffer;
+
+  private _channel?: grpc.Channel;
+  private _clients: Map<ClientConstructor<grpc.Client>, grpc.Client>;
 
   constructor(uri: string, rootCertificate?: Buffer) {
     this._uri = uri;
     this._rootCertificate = rootCertificate;
+    this._clients = new Map();
   }
 
   /**
@@ -72,13 +78,54 @@ export class EventStoreConnection {
    * Exposes the Streams API.
    */
   streams(): Streams {
-    return new Streams(this._uri, this._rootCertificate);
+    return new Streams(this);
   }
 
   /**
    * Exposes the Persistent Subscriptions API.
    */
   persistentSubscriptions(): Persistent {
-    return new Persistent(this._uri, this._rootCertificate);
+    return new Persistent(this);
+  }
+
+  /**
+   * Closes the connection
+   * Equivalent to {@link Persistent.close} or {@link Streams.close}
+   */
+  close = async (): Promise<void> => {
+    this._channel?.close();
+    delete this._channel;
+    this._clients = new Map();
+  };
+
+  /**
+   * internal access to grpc client.
+   */
+  _client = async <T extends grpc.Client>(
+    Client: ClientConstructor<T>
+  ): Promise<T> => {
+    if (this._clients.has(Client)) {
+      return this._clients.get(Client) as T;
+    }
+
+    const client = new Client(null as never, null as never, {
+      channelOverride: this.channel,
+    });
+
+    this._clients.set(Client, client);
+
+    return client;
+  };
+
+  private get channel(): grpc.Channel {
+    if (this._channel) return this._channel;
+
+    const credentials = this._rootCertificate
+      ? grpc.credentials.createSsl(this._rootCertificate)
+      : grpc.credentials.createInsecure();
+
+    this._channel = new grpc.Channel(this._uri, credentials, {});
+
+    return this._channel;
   }
 }
