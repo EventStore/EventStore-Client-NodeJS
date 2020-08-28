@@ -747,3 +747,15 @@ export enum NodePreference {
   Follower,
   Leader,
 }
+
+export type ClientConstructor<T extends grpc.Client> = new (
+  address: string,
+  credentials: grpc.ChannelCredentials,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  options?: object
+) => T;
+
+export interface ESDBConnection {
+  close(): Promise<void>;
+  _client<T extends grpc.Client>(c: ClientConstructor<T>): Promise<T>;
+}
