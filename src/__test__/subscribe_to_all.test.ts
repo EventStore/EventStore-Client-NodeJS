@@ -1,8 +1,8 @@
-import { SingleNode } from "./utils";
+import { createTestNode } from "./utils";
 import { EventStoreConnection } from "../index";
 
 describe("subscribe to $all", () => {
-  const node = new SingleNode();
+  const node = createTestNode();
 
   beforeAll(async () => {
     await node.up();

@@ -1,9 +1,9 @@
 import { v4 as uuid } from "uuid";
-import { SingleNode } from "./utils";
+import { createTestNode } from "./utils";
 import { EventStoreConnection, EventData, Revision } from "../";
 
 describe("subscribe to stream", () => {
-  const node = new SingleNode();
+  const node = createTestNode();
 
   beforeAll(async () => {
     await node.up();

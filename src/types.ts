@@ -743,9 +743,9 @@ export type ClusterSettings = {
 };
 
 export enum NodePreference {
-  Random,
-  Follower,
-  Leader,
+  Random = "random",
+  Follower = "follower",
+  Leader = "leader",
 }
 
 export type ClientConstructor<T extends grpc.Client> = new (

@@ -23,8 +23,9 @@ export async function discoverEndpoint(
     } else if (setts.domain) {
       try {
         candidates = await resolveDomainName(setts.domain);
-      } catch {
+      } catch (error) {
         // TODO - Log about why it has failed.
+        console.error(error);
       }
     }
 
