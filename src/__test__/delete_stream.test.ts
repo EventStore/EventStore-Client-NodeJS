@@ -16,7 +16,7 @@ describe("delete_stream", () => {
   it("should successfully delete a stream", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(node.certPath)
-      .build(node.uri);
+      .singleNodeConnection(node.uri);
 
     const streamName = `tombstone-${uuid()}`;
     const evt = EventData.json("typescript-type", {

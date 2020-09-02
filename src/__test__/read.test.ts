@@ -21,7 +21,7 @@ describe("read all forwards", () => {
   it("should successfully read all events", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(node.certPath)
-      .build(node.uri);
+      .singleNodeConnection(node.uri);
 
     const evt = EventData.json("typescript-type", {
       message: "baz",

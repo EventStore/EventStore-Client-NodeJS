@@ -16,7 +16,7 @@ describe("create_persistent_sub", () => {
   it("should successfully create a persistent subscription", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(node.certPath)
-      .build(node.uri);
+      .singleNodeConnection(node.uri);
 
     const streamName = `create_persistent_sub-${uuid()}`;
     await connection

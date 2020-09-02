@@ -16,7 +16,7 @@ describe("subscribe to stream", () => {
   it("should successfully subscribe to stream", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(node.certPath)
-      .build(node.uri)
+      .singleNodeConnection(node.uri)
       .streams();
 
     const evt = EventData.json("typescript-type", {

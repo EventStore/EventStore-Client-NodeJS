@@ -109,18 +109,6 @@ export const Credentials: (
   };
 };
 
-export const configureAuth: (
-  creds: Credentials,
-  meta: grpc.Metadata
-) => void = (creds, meta) => {
-  const auth = Buffer.from(`${creds.username}:${creds.password}`).toString(
-    "base64"
-  );
-  const header = `Basic ${auth}`;
-
-  meta.add("authorization", header);
-};
-
 export class EventDataBuilder {
   eventType: string;
   payload: JsonPayload | BinaryPayload;

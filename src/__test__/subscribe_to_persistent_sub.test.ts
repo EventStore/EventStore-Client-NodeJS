@@ -16,7 +16,7 @@ describe("subscribe to persistent sub", () => {
   it("should successfully subscribe to a persistent subscription", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(node.certPath)
-      .build(node.uri);
+      .singleNodeConnection(node.uri);
 
     const evt = EventData.json("typescript-type", {
       message: "baz",

@@ -1,21 +1,22 @@
+import * as dns from "dns";
+import { credentials as grpcCredentials } from "grpc";
+import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
+import { GossipClient } from "../../generated/gossip_grpc_pb";
+import VNodeState = GrpcMemberInfo.VNodeState;
 import {
   ClusterSettings,
   EndPoint,
   GossipSeed,
   MemberInfo,
   NodePreference,
-} from "./types";
-import * as dns from "dns";
-import { Gossip } from "./gossip";
-import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
-import VNodeState = GrpcMemberInfo.VNodeState;
+} from "../types";
+import { Empty } from "../../generated/shared_pb";
 
 export async function discoverEndpoint(
   setts: ClusterSettings,
-  previous?: EndPoint,
   cert?: Buffer
 ): Promise<EndPoint> {
-  for (;;) {
+  while (true) {
     let candidates: GossipSeed[] = [];
 
     if (setts.gossipSeeds) {
@@ -30,11 +31,10 @@ export async function discoverEndpoint(
     }
 
     for (const candidate of candidates) {
-      const client = Gossip.fromSeed(candidate, cert);
       let members: MemberInfo[] = [];
 
       try {
-        members = await client.list();
+        members = await listClusterMembers(candidate, cert);
       } catch {
         continue;
       }
@@ -62,6 +62,8 @@ function resolveDomainName(domain: string): Promise<GossipSeed[]> {
   return new Promise((resolve, reject) => {
     dns.resolveSrv(domain, (error, addresses) => {
       if (error) reject(error);
+
+      console.log(addresses);
 
       const seeds: GossipSeed[] = addresses.map((record) => {
         return {
@@ -136,4 +138,48 @@ function determineBestNode(
       }
       break;
   }
+}
+
+function listClusterMembers(
+  seed: GossipSeed,
+  cert?: Buffer
+): Promise<MemberInfo[]> {
+  const uri = `${seed.hostname}:${seed.port}`;
+  const credentials = cert
+    ? grpcCredentials.createSsl(cert)
+    : grpcCredentials.createInsecure();
+
+  const client = new GossipClient(uri, credentials);
+
+  return new Promise((resolve, reject) => {
+    client.read(new Empty(), (error, info) => {
+      if (error) reject(error);
+
+      const members: MemberInfo[] = [];
+
+      for (const grpcMember of info.getMembersList()) {
+        let httpEndpoint;
+        const grpcHttpEndpoint = grpcMember.getHttpEndPoint();
+
+        if (grpcHttpEndpoint) {
+          httpEndpoint = {
+            address: grpcHttpEndpoint.getAddress(),
+            port: grpcHttpEndpoint.getPort(),
+          };
+        }
+
+        const member: MemberInfo = {
+          instanceId: grpcMember.getInstanceId()?.getString(),
+          timeStamp: grpcMember.getTimeStamp(),
+          state: grpcMember.getState(),
+          isAlive: grpcMember.getIsAlive(),
+          httpEndpoint,
+        };
+
+        members.push(member);
+      }
+
+      resolve(members);
+    });
+  });
 }

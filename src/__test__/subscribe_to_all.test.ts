@@ -15,7 +15,7 @@ describe("subscribe to $all", () => {
   it("should successfully subsscribe to $all", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(node.certPath)
-      .build(node.uri)
+      .singleNodeConnection(node.uri)
       .streams();
 
     const result = await new Promise<number>((resolve, reject) => {
