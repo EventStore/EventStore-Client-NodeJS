@@ -19,7 +19,7 @@ import {
 import { Command } from "../Command";
 import { ESDBConnection } from "../../types";
 
-export class WriteEvents extends Command {
+export class WriteEventsToStream extends Command {
   private readonly _stream: string;
   private _revision: Revision;
   private _events: EventData[] = [];
@@ -34,7 +34,7 @@ export class WriteEvents extends Command {
    * Asks the server to check the stream is at specific revision before writing events.
    * @param revision
    */
-  expectedRevision(revision: Revision): WriteEvents {
+  expectedRevision(revision: Revision): WriteEventsToStream {
     this._revision = revision;
     return this;
   }
@@ -48,8 +48,8 @@ export class WriteEvents extends Command {
    * Adds events to be sent to the server, can be called multiple times.
    * @param events Events sent to the server.
    */
-  send(...events: EventData[]): WriteEvents {
-    this._events.concat(events);
+  send(...events: EventData[]): WriteEventsToStream {
+    this._events = this._events.concat(events);
     return this;
   }
 
@@ -58,6 +58,10 @@ export class WriteEvents extends Command {
    * @param connection
    */
   async execute(connection: ESDBConnection): Promise<WriteResult> {
+    if (!this._events.length) {
+      throw new Error("No events to send");
+    }
+
     const header = new AppendReq();
     const options = new AppendReq.Options();
     const identifier = new StreamIdentifier();
@@ -98,13 +102,11 @@ export class WriteEvents extends Command {
             error,
           };
 
-          resolve(result);
-          return;
+          return resolve(result);
         }
 
-        const success = resp.getSuccess();
-        const grpcError = resp.getWrongExpectedVersion();
-        if (resp.hasSuccess() && success) {
+        if (resp.hasSuccess()) {
+          const success = resp.getSuccess()!;
           const nextExpectedVersion = success.getCurrentRevision();
           const grpcPosition = success.getPosition();
 
@@ -121,8 +123,11 @@ export class WriteEvents extends Command {
             position,
           };
 
-          resolve(result);
-        } else if (resp.hasWrongExpectedVersion() && grpcError) {
+          return resolve(result);
+        }
+
+        if (resp.hasWrongExpectedVersion()) {
+          const grpcError = resp.getWrongExpectedVersion()!;
           let current: CurrentRevision = CurrentRevisionNoStream;
           let expected: ExpectedRevision = ExpectedRevisionAny;
 
@@ -171,12 +176,14 @@ export class WriteEvents extends Command {
               .getMetadataMap()
               .set("content-type", "application/octet-stream");
             message.setData(event.payload.payload);
+            break;
           }
         }
         message.getMetadataMap().set("type", event.eventType);
         entry.setProposedMessage(message);
         sink.write(entry);
       }
+
       sink.end();
     });
   }

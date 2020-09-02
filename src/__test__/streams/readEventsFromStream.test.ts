@@ -1,0 +1,152 @@
+import { createTestNode } from "../utils";
+
+import {
+  readEventsFromStream,
+  writeEventsToStream,
+  ESDBConnection,
+  EventStoreConnection,
+  EventData,
+} from "../../index";
+
+describe("readEventsFromStream", () => {
+  const node = createTestNode();
+  let connection!: ESDBConnection;
+  const STREAM_NAME = "test_stream_name";
+  const OUT_OF_STREAM_NAME = "out_of_stream_name";
+
+  beforeAll(async () => {
+    await node.up();
+    connection = EventStoreConnection.builder()
+      .sslRootCertificate(node.certPath)
+      .singleNodeConnection(node.uri);
+
+    const jsonEvents = Array.from({ length: 4 }, (_, i) =>
+      EventData.json("json-test", { message: "test", index: i }).build()
+    );
+
+    const binaryEvents = Array.from({ length: 4 }, (_, i) =>
+      EventData.binary(
+        "binary-test",
+        Uint8Array.from(Buffer.from(`hello: ${i}`))
+      ).build()
+    );
+
+    const result1 = await writeEventsToStream(STREAM_NAME)
+      .send(...jsonEvents)
+      .send(...binaryEvents)
+      .execute(connection);
+
+    expect(result1.__typename).toBe("success");
+
+    const outOfStreamEvent = EventData.json("out-of-stream-test", {
+      message: "outOfStream",
+    }).build();
+
+    const result2 = await writeEventsToStream(OUT_OF_STREAM_NAME)
+      .send(
+        outOfStreamEvent,
+        outOfStreamEvent,
+        outOfStreamEvent,
+        outOfStreamEvent,
+        outOfStreamEvent
+      )
+      .execute(connection);
+
+    expect(result2.__typename).toBe("success");
+  });
+
+  afterAll(async () => {
+    await node.down();
+  });
+
+  describe("should successfully read from stream", () => {
+    describe("Event types", () => {
+      test("json event", async () => {
+        const { events } = await readEventsFromStream(STREAM_NAME)
+          .fromRevision(1)
+          .count(1)
+          .execute(connection);
+
+        expect(events).toBeDefined();
+
+        const event = events![0].event!;
+
+        expect(event.isJson).toBe(true);
+        expect(event.eventType).toBe("json-test");
+        expect(event.data).toMatchObject({
+          index: 1,
+          message: "test",
+        });
+      });
+
+      test("binary event", async () => {
+        const { events } = await readEventsFromStream(STREAM_NAME)
+          .fromRevision(5)
+          .count(1)
+          .execute(connection);
+
+        expect(events).toBeDefined();
+
+        const event = events![0].event!;
+
+        expect(event.isJson).toBe(false);
+        expect(event.eventType).toBe("binary-test");
+
+        expect(Buffer.from(event.data).toString()).toBe("hello: 1");
+      });
+    });
+
+    describe("options", () => {
+      test("from start", async () => {
+        const result = await readEventsFromStream(STREAM_NAME)
+          .fromStart()
+          .count(Number.MAX_SAFE_INTEGER)
+          .execute(connection);
+
+        expect(result.__typename).toBe("success");
+        expect(result.events!.length).toBe(8);
+      });
+
+      test("from revision", async () => {
+        const result = await readEventsFromStream(STREAM_NAME)
+          .fromRevision(1)
+          .count(Number.MAX_SAFE_INTEGER)
+          .execute(connection);
+
+        expect(result.__typename).toBe("success");
+        expect(result.events!.length).toBe(7);
+      });
+
+      test("backward from end", async () => {
+        const result = await readEventsFromStream(STREAM_NAME)
+          .fromEnd()
+          .backward()
+          .count(Number.MAX_SAFE_INTEGER)
+          .execute(connection);
+
+        expect(result.__typename).toBe("success");
+        expect(result.events!.length).toBe(8);
+      });
+
+      test("backward from revision", async () => {
+        const result = await readEventsFromStream(STREAM_NAME)
+          .fromRevision(1)
+          .backward()
+          .count(Number.MAX_SAFE_INTEGER)
+          .execute(connection);
+
+        expect(result.__typename).toBe("success");
+        expect(result.events!.length).toBe(2);
+      });
+
+      test("count", async () => {
+        const result = await readEventsFromStream(STREAM_NAME)
+          .count(2)
+          .execute(connection);
+
+        expect(result.__typename).toBe("success");
+        expect(result.events!.length).toBe(2);
+      });
+    });
+  });
+});

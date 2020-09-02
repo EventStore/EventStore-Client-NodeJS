@@ -35,7 +35,6 @@ export class EventStoreConnectionBuilder {
    * authenticated commands as your credentials will be visible on the network.
    */
   insecure(): EventStoreConnectionBuilder {
-    delete this._rootCertificate;
     return this;
   }
 
@@ -44,32 +43,46 @@ export class EventStoreConnectionBuilder {
    * @param uri The URI must not contain any protocol. Here's an valid example `localhost:2113`.
    */
   singleNodeConnection(uri: string | EndPoint): EventStoreConnection {
-    return new EventStoreConnection({
-      endpoint: uri,
-      rootCertificate: this._rootCertificate,
-    });
+    return new EventStoreConnection(
+      {
+        endpoint: uri,
+      },
+      this._rootCertificate
+    );
   }
 
   /**
    * Creates an EventStoreDB connection.
    * @param endpoints An array of cluster endpoints.
    */
-  gossipClusterConnection(endpoints: EndPoint[]): EventStoreConnection {
-    return new EventStoreConnection({
-      endpoints,
-      rootCertificate: this._rootCertificate,
-    });
+  gossipClusterConnection(
+    endpoints: EndPoint[],
+    nodePreference?: NodePreference
+  ): EventStoreConnection {
+    return new EventStoreConnection(
+      {
+        endpoints,
+        nodePreference,
+      },
+      this._rootCertificate
+    );
   }
 
   /**
    * Creates an EventStoreDB connection.
    * @param domain
    */
-  dnsClusterConnection(domain: string): EventStoreConnection {
-    return new EventStoreConnection({
-      domain,
-      rootCertificate: this._rootCertificate,
-    });
+  dnsClusterConnection(
+    domain: string,
+    nodePreference?: NodePreference
+  ): EventStoreConnection {
+    return new EventStoreConnection(
+      {
+        domain,
+        nodePreference,
+      },
+      this._rootCertificate
+    );
   }
 }
 
@@ -77,16 +90,13 @@ export type ConnectionSettings =
   | {
       domain: string;
       nodePreference?: NodePreference;
-      rootCertificate?: Buffer;
     }
   | {
       endpoints: EndPoint[];
       nodePreference?: NodePreference;
-      rootCertificate?: Buffer;
     }
   | {
       endpoint: EndPoint | string;
-      rootCertificate?: Buffer;
     };
 
 /**
@@ -102,7 +112,8 @@ export class EventStoreConnection implements ESDBConnection {
   private _channel?: Channel;
   private _clients: Map<ClientConstructor<Client>, Client>;
 
-  constructor(settings: ConnectionSettings) {
+  constructor(settings: ConnectionSettings, rootCertificate?: Buffer) {
+    this._rootCertificate = rootCertificate;
     this._settings = settings;
     this._clients = new Map();
   }
@@ -134,9 +145,7 @@ export class EventStoreConnection implements ESDBConnection {
       return this._clients.get(Client) as T;
     }
 
-    console.log("getting channel");
     const channelOverride = await this.getChannel();
-    console.log("got channel", channelOverride);
 
     const client = new Client(null as never, null as never, {
       channelOverride,
@@ -156,8 +165,6 @@ export class EventStoreConnection implements ESDBConnection {
       ? grpcCredentials.createSsl(this._rootCertificate)
       : grpcCredentials.createInsecure();
 
-    console.log("got uri:", uri);
-
     this._channel = new Channel(uri, credentials, {});
 
     return this._channel;
@@ -169,8 +176,6 @@ export class EventStoreConnection implements ESDBConnection {
         ? this._settings.endpoint
         : `${this._settings.endpoint.address}:${this._settings.endpoint.port}`;
     }
-
-    console.log("discoveringEndpoint");
 
     const { address, port } = await discoverEndpoint(
       this._settings,

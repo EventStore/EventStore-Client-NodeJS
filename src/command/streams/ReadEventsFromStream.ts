@@ -16,7 +16,7 @@ import {
 import { Command } from "../Command";
 import { handleBatchRead } from "./utils";
 
-export class ReadStreamEvents extends Command {
+export class ReadEventsFromStream extends Command {
   private _stream: string;
   private _revision: StreamRevision;
   private _resolveLinkTos: boolean;
@@ -35,7 +35,7 @@ export class ReadStreamEvents extends Command {
   /**
    * Asks the command to read forward (toward the end of the stream). Default behavior.
    */
-  forward(): ReadStreamEvents {
+  forward(): ReadEventsFromStream {
     this._direction = Forward;
     return this;
   }
@@ -43,7 +43,7 @@ export class ReadStreamEvents extends Command {
   /**
    * Asks the command to read backward (toward the beginning of the stream).
    */
-  backward(): ReadStreamEvents {
+  backward(): ReadEventsFromStream {
     this._direction = Backward;
     return this;
   }
@@ -52,7 +52,7 @@ export class ReadStreamEvents extends Command {
    * Asks the command to read in a specific direction.
    * @param direction
    */
-  readDirection(direction: Direction): ReadStreamEvents {
+  readDirection(direction: Direction): ReadEventsFromStream {
     this._direction = direction;
     return this;
   }
@@ -61,7 +61,7 @@ export class ReadStreamEvents extends Command {
    * Starts the read at the given event revision.
    * @param revision
    */
-  fromRevision(revision: number): ReadStreamEvents {
+  fromRevision(revision: number): ReadEventsFromStream {
     this._revision = StreamExact(revision);
     return this;
   }
@@ -69,7 +69,7 @@ export class ReadStreamEvents extends Command {
   /**
    * Starts the read from the beginning of the stream. Default behavior.
    */
-  fromStart(): ReadStreamEvents {
+  fromStart(): ReadEventsFromStream {
     this._revision = StreamStart;
     return this;
   }
@@ -77,7 +77,7 @@ export class ReadStreamEvents extends Command {
   /**
    * Starts the read from the end of the stream.
    */
-  fromEnd(): ReadStreamEvents {
+  fromEnd(): ReadEventsFromStream {
     this._revision = StreamEnd;
     return this;
   }
@@ -87,7 +87,7 @@ export class ReadStreamEvents extends Command {
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
    */
-  resolveLink(): ReadStreamEvents {
+  resolveLink(): ReadEventsFromStream {
     this._resolveLinkTos = true;
     return this;
   }
@@ -95,12 +95,12 @@ export class ReadStreamEvents extends Command {
   /**
    * Disables link resolution. See {@link resolveLink}. Default behavior.
    */
-  doNotResolveLink(): ReadStreamEvents {
+  doNotResolveLink(): ReadEventsFromStream {
     this._resolveLinkTos = false;
     return this;
   }
 
-  count(count: number): ReadStreamEvents {
+  count(count: number): ReadEventsFromStream {
     this._count = count;
     return this;
   }

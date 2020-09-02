@@ -43,7 +43,7 @@ export const deletePersistentSubscription = (
  * @param stream A stream name.
  * @param group
  */
-export const subscribePersistentSubscription = (
+export const connectToPersistentSubscription = (
   stream: string,
   group: string
 ): ConnectToPersistentSubscription =>

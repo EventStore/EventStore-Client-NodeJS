@@ -190,37 +190,33 @@ export class ConnectToPersistentSubscription extends Command {
     });
 
     stream.on("data", (resp: ReadResp) => {
-      const confirmation = resp.getSubscriptionConfirmation();
-      if (resp.hasSubscriptionConfirmation() && confirmation) {
+      if (resp.hasSubscriptionConfirmation()) {
+        const confirmation = resp.getSubscriptionConfirmation()!;
         report.setId(confirmation.getSubscriptionId());
-
         this._handler?.onConfirmation?.();
       }
 
       if (resp.hasEvent()) {
+        const grpcEvent = resp.getEvent()!;
+
         let event: RecordedEvent | undefined;
         let link: RecordedEvent | undefined;
-        const grpcEvent = resp.getEvent();
 
-        if (resp.hasEvent() && grpcEvent) {
-          let recorded = grpcEvent.getEvent();
-          if (grpcEvent.hasEvent() && recorded) {
-            event = convertGrpcRecord(recorded);
-          }
-
-          recorded = grpcEvent.getLink();
-          if (grpcEvent.hasLink() && recorded) {
-            link = convertGrpcRecord(recorded);
-          }
-
-          const resolved: ResolvedEvent = {
-            event,
-            link,
-            commit_position: grpcEvent.getCommitPosition(),
-          };
-
-          this._handler?.onEvent(report, resolved);
+        if (grpcEvent.hasEvent()) {
+          event = convertGrpcRecord(grpcEvent.getEvent()!);
         }
+
+        if (grpcEvent.hasLink()) {
+          link = convertGrpcRecord(grpcEvent.getLink()!);
+        }
+
+        const resolved: ResolvedEvent = {
+          event,
+          link,
+          commit_position: grpcEvent.getCommitPosition(),
+        };
+
+        this._handler?.onEvent(report, resolved);
       }
     });
 

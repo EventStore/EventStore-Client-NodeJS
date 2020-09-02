@@ -63,13 +63,13 @@ export class TombstoneStream extends Command {
     return new Promise<DeleteResult>((resolve, reject) => {
       client.tombstone(req, this.metadata, (error, resp) => {
         if (error) {
-          reject(error);
+          return reject(error);
         }
 
         const result: DeleteResult = {};
-        const grpcPos = resp.getPosition();
 
-        if (resp.hasPosition() && grpcPos) {
+        if (resp.hasPosition()) {
+          const grpcPos = resp.getPosition()!;
           const pos: Position = {
             commit: grpcPos.getCommitPosition(),
             prepare: grpcPos.getPreparePosition(),
@@ -78,7 +78,7 @@ export class TombstoneStream extends Command {
           result.position = pos;
         }
 
-        resolve(result);
+        return resolve(result);
       });
     });
   }

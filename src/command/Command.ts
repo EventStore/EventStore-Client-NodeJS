@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { Metadata } from "grpc";
 import { Credentials } from "../types";
 

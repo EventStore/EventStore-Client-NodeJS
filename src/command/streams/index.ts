@@ -1,5 +1,5 @@
-import { ReadStreamEvents } from "./ReadStreamEvents";
-import { WriteEvents } from "./WriteEvents";
+import { WriteEventsToStream } from "./WriteEventsToStream";
+import { ReadEventsFromStream } from "./ReadEventsFromStream";
 import { DeleteStream } from "./DeleteStream";
 import { TombstoneStream } from "./TombstoneStream";
 import { ReadAllEvents } from "./ReadAllEvents";
@@ -10,8 +10,8 @@ import { SubscribeToAll } from "./SubscribeToAll";
  * Sends events to a given stream.
  * @param stream A stream name.
  */
-export const writeEvents = (stream: string): WriteEvents =>
-  new WriteEvents(stream);
+export const writeEventsToStream = (stream: string): WriteEventsToStream =>
+  new WriteEventsToStream(stream);
 
 /**
  * Soft-deletes a stream.
@@ -31,8 +31,8 @@ export const tombstoneStream = (stream: string): TombstoneStream =>
  * Reads events from a stream. You can read forward or backward.
  * @param stream A Stream name.
  */
-export const readStreamEvents = (stream: string): ReadStreamEvents =>
-  new ReadStreamEvents(stream);
+export const readEventsFromStream = (stream: string): ReadEventsFromStream =>
+  new ReadEventsFromStream(stream);
 
 /**
  * Reads events from the $all. You can read forward or backward. You might need to be authenticated to execute

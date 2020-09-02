@@ -1,4 +1,3 @@
-/* eslint-disable no-constant-condition */
 import { join } from "path";
 import * as fs from "fs";
 import { promisify } from "util";
@@ -8,12 +7,11 @@ import * as getPort from "get-port";
 import { upAll, down, exec } from "docker-compose";
 import { stringify } from "yaml";
 
+import { GossipSeed, EndPoint } from "../../types";
+
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
-
-const rnd = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
 
 const nodeList = (count: number, ipStub: string) =>
   Promise.all<ClusterLocation>(

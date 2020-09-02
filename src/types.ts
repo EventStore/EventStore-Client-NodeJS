@@ -408,14 +408,13 @@ export type RecordedEvent = {
   /**
    * Payload of this event.
    */
-  // eslint-disable-next-line
-  data: Uint8Array | Object;
+  data: Uint8Array | Record<string, unknown>;
 
   /**
    * Representing the metadata associated with this event.
    */
   // eslint-disable-next-line
-  metadata: Uint8Array | Object;
+  metadata: Uint8Array | Record<string, unknown>;
 
   /**
    * Indicates wheter the content is internally marked as JSON.
@@ -578,7 +577,7 @@ export interface PersistentReport {
 }
 
 export interface SubscriptionReport {
-  unsubcribe(): void;
+  unsubscribe(): void;
 }
 
 export type ParkAction = {
@@ -643,8 +642,7 @@ export const convertGrpcRecord: (
     prepare: grpcRecord.getPreparePosition(),
   };
 
-  // eslint-disable-next-line
-  let data: Uint8Array | Object;
+  let data: RecordedEvent["data"];
 
   if (isJson) {
     data = JSON.parse(Buffer.from(grpcRecord.getData()).toString("binary"));
@@ -652,8 +650,7 @@ export const convertGrpcRecord: (
     data = grpcRecord.getData_asU8();
   }
 
-  // eslint-disable-next-line
-  let customMetadata: Uint8Array | Object;
+  let customMetadata: RecordedEvent["metadata"];
 
   if (isJson) {
     const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString(
@@ -662,7 +659,7 @@ export const convertGrpcRecord: (
     if (metadataStr.length > 0) {
       customMetadata = JSON.parse(metadataStr);
     } else {
-      customMetadata = metadataStr;
+      customMetadata = {};
     }
   } else {
     customMetadata = new Uint8Array();
