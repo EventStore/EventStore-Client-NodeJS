@@ -1,11 +1,17 @@
 /* eslint-disable no-constant-condition */
 import { join } from "path";
-import { rmdir, mkdir, readFile, writeFile } from "fs/promises";
+import * as fs from "fs";
+import { promisify } from "util";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
 import { upAll, down, exec } from "docker-compose";
 import { parse, stringify } from "yaml";
+
+const rmdir = promisify(fs.rmdir);
+const mkdir = promisify(fs.mkdir);
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 export class SingleNode {
   private id: string;
