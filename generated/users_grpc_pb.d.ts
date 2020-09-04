@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as users_pb from "./users_pb";
 
 interface IUsersService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
@@ -131,7 +132,7 @@ export interface IUsersClient {
 }
 
 export class UsersClient extends grpc.Client implements IUsersClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public create(request: users_pb.CreateReq, callback: (error: grpc.ServiceError | null, response: users_pb.CreateResp) => void): grpc.ClientUnaryCall;
     public create(request: users_pb.CreateReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: users_pb.CreateResp) => void): grpc.ClientUnaryCall;
     public create(request: users_pb.CreateReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: users_pb.CreateResp) => void): grpc.ClientUnaryCall;

@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as gossip_pb from "./gossip_pb";
 import * as shared_pb from "./shared_pb";
 
@@ -35,7 +36,7 @@ export interface IGossipClient {
 }
 
 export class GossipClient extends grpc.Client implements IGossipClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public read(request: shared_pb.Empty, callback: (error: grpc.ServiceError | null, response: gossip_pb.ClusterInfo) => void): grpc.ClientUnaryCall;
     public read(request: shared_pb.Empty, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: gossip_pb.ClusterInfo) => void): grpc.ClientUnaryCall;
     public read(request: shared_pb.Empty, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: gossip_pb.ClusterInfo) => void): grpc.ClientUnaryCall;

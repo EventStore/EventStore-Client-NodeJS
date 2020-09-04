@@ -1,4 +1,4 @@
-import { CallOptions, ClientDuplexStream } from "grpc";
+import { CallOptions, ClientDuplexStream } from "@grpc/grpc-js";
 import { StreamIdentifier, UUID, Empty } from "../../../generated/shared_pb";
 import { ReadReq, ReadResp } from "../../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../../generated/persistent_grpc_pb";

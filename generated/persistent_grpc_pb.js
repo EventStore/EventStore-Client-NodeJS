@@ -1,7 +1,7 @@
 // GENERATED CODE -- DO NOT EDIT!
 
 'use strict';
-var grpc = require('grpc');
+var grpc = require('@grpc/grpc-js');
 var persistent_pb = require('./persistent_pb.js');
 var shared_pb = require('./shared_pb.js');
 

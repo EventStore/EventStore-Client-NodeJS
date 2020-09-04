@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as streams_pb from "./streams_pb";
 import * as shared_pb from "./shared_pb";
 
@@ -56,7 +57,7 @@ export const StreamsService: IStreamsService;
 
 export interface IStreamsServer {
     read: grpc.handleServerStreamingCall<streams_pb.ReadReq, streams_pb.ReadResp>;
-    append: grpc.handleClientStreamingCall<streams_pb.AppendReq, streams_pb.AppendResp>;
+    append: handleClientStreamingCall<streams_pb.AppendReq, streams_pb.AppendResp>;
     delete: grpc.handleUnaryCall<streams_pb.DeleteReq, streams_pb.DeleteResp>;
     tombstone: grpc.handleUnaryCall<streams_pb.TombstoneReq, streams_pb.TombstoneResp>;
 }
@@ -77,7 +78,7 @@ export interface IStreamsClient {
 }
 
 export class StreamsClient extends grpc.Client implements IStreamsClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public read(request: streams_pb.ReadReq, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<streams_pb.ReadResp>;
     public read(request: streams_pb.ReadReq, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<streams_pb.ReadResp>;
     public append(callback: (error: grpc.ServiceError | null, response: streams_pb.AppendResp) => void): grpc.ClientWritableStream<streams_pb.AppendReq>;

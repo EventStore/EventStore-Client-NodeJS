@@ -1,7 +1,7 @@
 // GENERATED CODE -- DO NOT EDIT!
 
 'use strict';
-var grpc = require('grpc');
+var grpc = require('@grpc/grpc-js');
 var users_pb = require('./users_pb.js');
 
 function serialize_event_store_client_users_ChangePasswordReq(arg) {

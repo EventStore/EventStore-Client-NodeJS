@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as operations_pb from "./operations_pb";
 import * as shared_pb from "./shared_pb";
 
@@ -119,7 +120,7 @@ export interface IOperationsClient {
 }
 
 export class OperationsClient extends grpc.Client implements IOperationsClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public startScavenge(request: operations_pb.StartScavengeReq, callback: (error: grpc.ServiceError | null, response: operations_pb.ScavengeResp) => void): grpc.ClientUnaryCall;
     public startScavenge(request: operations_pb.StartScavengeReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: operations_pb.ScavengeResp) => void): grpc.ClientUnaryCall;
     public startScavenge(request: operations_pb.StartScavengeReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: operations_pb.ScavengeResp) => void): grpc.ClientUnaryCall;
