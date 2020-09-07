@@ -61,7 +61,7 @@ describe("readAllEvents", () => {
     });
 
     // throws deep in GRPC crapness (goog.asserts)
-    test.skip("from revision", async () => {
+    test.skip("from position", async () => {
       const streamResult = await readEventsFromStream(STREAM_NAME_A)
         .fromRevision(1)
         .count(1)
@@ -69,8 +69,6 @@ describe("readAllEvents", () => {
 
       const [eventToExtract] = streamResult.events!;
       const { position } = eventToExtract.event!;
-
-      console.log(position);
 
       const allResult = await readAllEvents()
         .authenticated("admin", "changeit")

@@ -8,8 +8,8 @@ import {
   ResolvedEvent,
   SubscriptionReport,
   subscribeToAll,
+  readEventsFromStream,
 } from "../../index";
-import { readEventsFromStream } from "../../command/streams";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();

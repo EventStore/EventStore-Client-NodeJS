@@ -86,7 +86,7 @@ export class EventStoreConnectionBuilder {
   }
 }
 
-export type ConnectionSettings =
+export type ClusterSettings =
   | {
       domain: string;
       nodePreference?: NodePreference;
@@ -94,7 +94,10 @@ export type ConnectionSettings =
   | {
       endpoints: EndPoint[];
       nodePreference?: NodePreference;
-    }
+    };
+
+export type ConnectionSettings =
+  | ClusterSettings
   | {
       endpoint: EndPoint | string;
     };

@@ -716,17 +716,6 @@ export type MemberInfo = {
   httpEndpoint?: EndPoint;
 };
 
-export type GossipSeed = {
-  hostname: string;
-  port: number;
-};
-
-export type ClusterSettings = {
-  gossipSeeds?: GossipSeed[];
-  domain?: string;
-  nodePreference?: NodePreference;
-};
-
 export enum NodePreference {
   Random = "random",
   Follower = "follower",

@@ -1,56 +1,32 @@
 import * as dns from "dns";
 import { credentials as grpcCredentials } from "grpc";
+
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import { GossipClient } from "../../generated/gossip_grpc_pb";
-import VNodeState = GrpcMemberInfo.VNodeState;
-import {
-  ClusterSettings,
-  EndPoint,
-  GossipSeed,
-  MemberInfo,
-  NodePreference,
-} from "../types";
 import { Empty } from "../../generated/shared_pb";
+import VNodeState = GrpcMemberInfo.VNodeState;
+
+import { EndPoint, MemberInfo, NodePreference } from "../types";
+import { ClusterSettings } from ".";
 
 export async function discoverEndpoint(
-  setts: ClusterSettings,
+  settings: ClusterSettings,
   cert?: Buffer
 ): Promise<EndPoint> {
   while (true) {
-    let candidates: GossipSeed[] = [];
-
-    if (setts.gossipSeeds) {
-      candidates = setts.gossipSeeds;
-    } else if (setts.domain) {
-      try {
-        candidates = await resolveDomainName(setts.domain);
-      } catch (error) {
-        // TODO - Log about why it has failed.
-        console.error(error);
-      }
-    }
+    const candidates: EndPoint[] =
+      "endpoints" in settings
+        ? settings.endpoints
+        : await resolveDomainName(settings.domain);
 
     for (const candidate of candidates) {
-      let members: MemberInfo[] = [];
-
       try {
-        members = await listClusterMembers(candidate, cert);
+        const members = await listClusterMembers(candidate, cert);
+        const preference = settings.nodePreference ?? NodePreference.Random;
+        const endpoint = determineBestNode(preference, members);
+        if (endpoint) return Promise.resolve(endpoint);
       } catch {
         continue;
-      }
-
-      if (members.length !== 0) {
-        const preference = setts.nodePreference ?? NodePreference.Random;
-        const selected = determineBestNode(preference, members);
-
-        if (selected) {
-          const endpoint: EndPoint = {
-            address: selected.address,
-            port: selected.port,
-          };
-
-          return Promise.resolve(endpoint);
-        }
       }
     }
 
@@ -58,21 +34,16 @@ export async function discoverEndpoint(
   }
 }
 
-function resolveDomainName(domain: string): Promise<GossipSeed[]> {
+function resolveDomainName(domain: string): Promise<EndPoint[]> {
   return new Promise((resolve, reject) => {
     dns.resolveSrv(domain, (error, addresses) => {
-      if (error) reject(error);
-
-      console.log(addresses);
-
-      const seeds: GossipSeed[] = addresses.map((record) => {
-        return {
-          hostname: record.name,
+      if (error) return reject(error);
+      return resolve(
+        addresses.map<EndPoint>((record) => ({
+          address: record.name,
           port: record.port,
-        };
-      });
-
-      resolve(seeds);
+        }))
+      );
     });
   });
 }
@@ -141,10 +112,10 @@ function determineBestNode(
 }
 
 function listClusterMembers(
-  seed: GossipSeed,
+  seed: EndPoint,
   cert?: Buffer
 ): Promise<MemberInfo[]> {
-  const uri = `${seed.hostname}:${seed.port}`;
+  const uri = `${seed.address}:${seed.port}`;
   const credentials = cert
     ? grpcCredentials.createSsl(cert)
     : grpcCredentials.createInsecure();

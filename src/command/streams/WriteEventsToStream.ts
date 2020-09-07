@@ -149,7 +149,7 @@ export class WriteEventsToStream extends Command {
             },
           };
 
-          resolve(failure);
+          return resolve(failure);
         }
       });
 

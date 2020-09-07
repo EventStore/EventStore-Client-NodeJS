@@ -7,7 +7,7 @@ import * as getPort from "get-port";
 import { upAll, down, exec } from "docker-compose";
 import { stringify } from "yaml";
 
-import { GossipSeed, EndPoint } from "../../types";
+import { EndPoint } from "../../types";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
@@ -103,12 +103,6 @@ export class Cluster {
   public domain = "127.0.0.1";
   public get uri(): string {
     return `${this.domain}:${this.locations[0].port}`;
-  }
-  public get seeds(): GossipSeed[] {
-    return this.locations.map(({ port }) => ({
-      hostname: this.domain,
-      port,
-    }));
   }
   public get endpoints(): EndPoint[] {
     return this.locations.map(({ port }) => ({
