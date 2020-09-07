@@ -83,6 +83,9 @@ const createNodes = (internalIPs: ClusterLocation[], domain: string) => {
   );
 };
 
+const rnd = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min) + min);
+
 export class Cluster {
   private id: string;
   private count: number;
@@ -93,7 +96,7 @@ export class Cluster {
   constructor(count: number, id = uuid()) {
     this.id = id;
     this.count = count;
-    this.ipStub = `172.30.${process.env.JEST_WORKER_ID}`;
+    this.ipStub = `172.${rnd(0, 255)}.${process.env.JEST_WORKER_ID}`;
     this.ready = this.initialize();
   }
 
@@ -117,11 +120,18 @@ export class Cluster {
 
     await this.ready;
 
-    const { exitCode: e } = await upAll({ cwd: this.path() });
-    expect(e).toBe(0);
+    try {
+      const { exitCode: e } = await upAll({ cwd: this.path() });
+      expect(e).toBe(0);
+    } catch (error) {
+      console.log(`${this.ipStub}.0/24`);
+      console.log(JSON.stringify(this.endpoints, null, 2));
+      console.error(error.err);
+      return;
+    }
 
     health: while (true) {
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < this.count; i++) {
         try {
           const { exitCode } = await exec(
             `esdb-node-${i}`,
