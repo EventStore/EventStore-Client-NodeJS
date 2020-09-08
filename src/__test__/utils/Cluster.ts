@@ -89,14 +89,15 @@ const rnd = (min: number, max: number) =>
 export class Cluster {
   private id: string;
   private count: number;
-  private ipStub: string;
+  private ipStub!: string;
+  private retryCount = 3;
   private locations: ClusterLocation[] = [];
   private ready: Promise<void>;
 
   constructor(count: number, id = uuid()) {
     this.id = id;
     this.count = count;
-    this.ipStub = `172.${rnd(0, 255)}.${process.env.JEST_WORKER_ID}`;
+
     this.ready = this.initialize();
   }
 
@@ -124,6 +125,18 @@ export class Cluster {
       const { exitCode: e } = await upAll({ cwd: this.path() });
       expect(e).toBe(0);
     } catch (error) {
+      if (this.retryCount > 0) {
+        this.retryCount -= 1;
+
+        console.log(
+          `Failed to initialize cluster. Retry ${3 - this.retryCount}`
+        );
+
+        await this.cleanUp();
+        await this.initialize();
+        return this.up();
+      }
+
       console.log(`${this.ipStub}.0/24`);
       console.log(JSON.stringify(this.endpoints, null, 2));
       console.error(error.err);
@@ -156,10 +169,11 @@ export class Cluster {
     });
     expect(exitCode).toBe(0);
 
-    await rmdir(this.path(), { recursive: true });
+    await this.cleanUp();
   };
 
   private initialize = async (): Promise<void> => {
+    this.ipStub = `172.${rnd(0, 255)}.${process.env.JEST_WORKER_ID}`;
     this.locations = await nodeList(this.count, this.ipStub);
 
     const config = {
@@ -198,5 +212,9 @@ export class Cluster {
 
   private path = (...parts: string[]): string => {
     return join(__dirname, "instances", this.id, ...parts);
+  };
+
+  private cleanUp = async () => {
+    await rmdir(this.path(), { recursive: true });
   };
 }
