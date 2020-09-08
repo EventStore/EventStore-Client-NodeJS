@@ -1,4 +1,4 @@
-import { createTestNode, Defer } from "../utils";
+import { createTestNode, Defer, delay } from "../utils";
 
 import {
   writeEventsToStream,
@@ -126,6 +126,8 @@ describe("subscribeToStream", () => {
           onEnd,
         })
         .execute(connection);
+
+      await delay(500);
 
       const writeResult = await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build())
