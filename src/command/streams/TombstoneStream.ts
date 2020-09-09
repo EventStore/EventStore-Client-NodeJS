@@ -3,6 +3,7 @@ import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { TombstoneReq } from "../../../generated/streams_pb";
 import { DeleteResult, Position, Revision, ESDBConnection } from "../../types";
 import { Command } from "../Command";
+import { convertToCommandError } from "../CommandError";
 
 export class TombstoneStream extends Command {
   private readonly _stream: string;
@@ -63,7 +64,7 @@ export class TombstoneStream extends Command {
     return new Promise<DeleteResult>((resolve, reject) => {
       client.tombstone(req, this.metadata, (error, resp) => {
         if (error) {
-          return reject(error);
+          return reject(convertToCommandError(error));
         }
 
         const result: DeleteResult = {};

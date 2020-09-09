@@ -4,6 +4,7 @@ import { PersistentSubscriptionsClient } from "../../../generated/persistent_grp
 
 import { ConsumerStrategy, RoundRobin, ESDBConnection } from "../../types";
 import { Command } from "../Command";
+import { convertToCommandError } from "../CommandError";
 
 export class UpdatePersistentSubscription extends Command {
   private _stream: string;
@@ -239,9 +240,8 @@ export class UpdatePersistentSubscription extends Command {
 
     return new Promise<void>((resolve, reject) => {
       client.update(req, this.metadata, (error) => {
-        if (error) reject(error);
-
-        resolve();
+        if (error) return reject(convertToCommandError(error));
+        return resolve();
       });
     });
   }
