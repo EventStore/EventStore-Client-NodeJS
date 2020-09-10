@@ -5,7 +5,10 @@ import Expression = ReadReq.Options.FilterOptions.Expression;
 import * as grpc from "grpc";
 import * as streams_pb from "../generated/streams_pb";
 import * as persistent_pb from "../generated/persistent_pb";
+import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
+import VNodeState = GrpcMemberInfo.VNodeState;
 
+export { VNodeState };
 /**
  * Constants used for expected version control. The use of expected version can be a bit tricky especially when
  * discussing assurances given by the EventStoreDB server.
@@ -104,18 +107,6 @@ export const Credentials: (
     username,
     password,
   };
-};
-
-export const configureAuth: (
-  creds: Credentials,
-  meta: grpc.Metadata
-) => void = (creds, meta) => {
-  const auth = Buffer.from(`${creds.username}:${creds.password}`).toString(
-    "base64"
-  );
-  const header = `Basic ${auth}`;
-
-  meta.add("authorization", header);
 };
 
 export class EventDataBuilder {
@@ -417,14 +408,13 @@ export type RecordedEvent = {
   /**
    * Payload of this event.
    */
-  // eslint-disable-next-line
-  data: Uint8Array | Object;
+  data: Uint8Array | Record<string, unknown>;
 
   /**
    * Representing the metadata associated with this event.
    */
   // eslint-disable-next-line
-  metadata: Uint8Array | Object;
+  metadata: Uint8Array | Record<string, unknown>;
 
   /**
    * Indicates wheter the content is internally marked as JSON.
@@ -587,7 +577,7 @@ export interface PersistentReport {
 }
 
 export interface SubscriptionReport {
-  unsubcribe(): void;
+  unsubscribe(): void;
 }
 
 export type ParkAction = {
@@ -652,8 +642,7 @@ export const convertGrpcRecord: (
     prepare: grpcRecord.getPreparePosition(),
   };
 
-  // eslint-disable-next-line
-  let data: Uint8Array | Object;
+  let data: RecordedEvent["data"];
 
   if (isJson) {
     data = JSON.parse(Buffer.from(grpcRecord.getData()).toString("binary"));
@@ -661,8 +650,7 @@ export const convertGrpcRecord: (
     data = grpcRecord.getData_asU8();
   }
 
-  // eslint-disable-next-line
-  let customMetadata: Uint8Array | Object;
+  let customMetadata: RecordedEvent["metadata"];
 
   if (isJson) {
     const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString(
@@ -671,7 +659,7 @@ export const convertGrpcRecord: (
     if (metadataStr.length > 0) {
       customMetadata = JSON.parse(metadataStr);
     } else {
-      customMetadata = metadataStr;
+      customMetadata = {};
     }
   } else {
     customMetadata = new Uint8Array();
@@ -707,3 +695,41 @@ export const convertGrpcRecord: (
     created,
   };
 };
+
+export type EndPoint = {
+  address: string;
+  port: number;
+};
+
+export function Endpoint(address: string, port: number): EndPoint {
+  return {
+    address,
+    port,
+  };
+}
+
+export type MemberInfo = {
+  instanceId?: string;
+  timeStamp: number;
+  state: VNodeState;
+  isAlive: boolean;
+  httpEndpoint?: EndPoint;
+};
+
+export enum NodePreference {
+  Random = "random",
+  Follower = "follower",
+  Leader = "leader",
+}
+
+export type ClientConstructor<T extends grpc.Client> = new (
+  address: string,
+  credentials: grpc.ChannelCredentials,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  options?: object
+) => T;
+
+export interface ESDBConnection {
+  close(): Promise<void>;
+  _client<T extends grpc.Client>(c: ClientConstructor<T>): Promise<T>;
+}
