@@ -202,8 +202,8 @@ export class UpdatePersistentSubscription extends Command {
     settings.setResolveLinks(this._resolveLink);
     settings.setRevision(this._revision);
     settings.setExtraStatistics(this._extraStats);
-    settings.setMessageTimeout(this._messageTimeout);
-    settings.setCheckpointAfter(this._checkpointAfter);
+    settings.setMessageTimeoutMs(this._messageTimeout);
+    settings.setCheckpointAfterMs(this._checkpointAfter);
     settings.setMaxRetryCount(this._maxRetryCount);
     settings.setMinCheckpointCount(this._minCheckpointCount);
     settings.setMaxCheckpointCount(this._maxCheckpointCount);

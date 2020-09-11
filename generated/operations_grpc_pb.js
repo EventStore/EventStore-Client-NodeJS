@@ -128,6 +128,17 @@ var OperationsService = exports.OperationsService = {
     responseSerialize: serialize_event_store_client_shared_Empty,
     responseDeserialize: deserialize_event_store_client_shared_Empty,
   },
+  restartPersistentSubscriptions: {
+    path: '/event_store.client.operations.Operations/RestartPersistentSubscriptions',
+    requestStream: false,
+    responseStream: false,
+    requestType: shared_pb.Empty,
+    responseType: shared_pb.Empty,
+    requestSerialize: serialize_event_store_client_shared_Empty,
+    requestDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_shared_Empty,
+    responseDeserialize: deserialize_event_store_client_shared_Empty,
+  },
 };
 
 exports.OperationsClient = grpc.makeGenericClientConstructor(OperationsService);

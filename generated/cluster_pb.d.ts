@@ -550,6 +550,15 @@ export class MemberInfo extends jspb.Message {
     getIsReadOnlyReplica(): boolean;
     setIsReadOnlyReplica(value: boolean): MemberInfo;
 
+    getAdvertiseHostToClientAs(): string;
+    setAdvertiseHostToClientAs(value: string): MemberInfo;
+
+    getAdvertiseHttpPortToClientAs(): number;
+    setAdvertiseHttpPortToClientAs(value: number): MemberInfo;
+
+    getAdvertiseTcpPortToClientAs(): number;
+    setAdvertiseTcpPortToClientAs(value: number): MemberInfo;
+
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): MemberInfo.AsObject;
@@ -580,6 +589,9 @@ export namespace MemberInfo {
         epochId?: shared_pb.UUID.AsObject,
         nodePriority: number,
         isReadOnlyReplica: boolean,
+        advertiseHostToClientAs: string,
+        advertiseHttpPortToClientAs: number,
+        advertiseTcpPortToClientAs: number,
     }
 
     export enum VNodeState {
