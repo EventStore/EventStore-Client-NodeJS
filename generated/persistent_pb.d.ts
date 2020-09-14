@@ -499,14 +499,8 @@ export namespace CreateReq {
         getExtraStatistics(): boolean;
         setExtraStatistics(value: boolean): Settings;
 
-        getMessageTimeout(): number;
-        setMessageTimeout(value: number): Settings;
-
         getMaxRetryCount(): number;
         setMaxRetryCount(value: number): Settings;
-
-        getCheckpointAfter(): number;
-        setCheckpointAfter(value: number): Settings;
 
         getMinCheckpointCount(): number;
         setMinCheckpointCount(value: number): Settings;
@@ -530,6 +524,33 @@ export namespace CreateReq {
         setNamedConsumerStrategy(value: CreateReq.ConsumerStrategy): Settings;
 
 
+        hasMessageTimeoutTicks(): boolean;
+        clearMessageTimeoutTicks(): void;
+        getMessageTimeoutTicks(): number;
+        setMessageTimeoutTicks(value: number): Settings;
+
+
+        hasMessageTimeoutMs(): boolean;
+        clearMessageTimeoutMs(): void;
+        getMessageTimeoutMs(): number;
+        setMessageTimeoutMs(value: number): Settings;
+
+
+        hasCheckpointAfterTicks(): boolean;
+        clearCheckpointAfterTicks(): void;
+        getCheckpointAfterTicks(): number;
+        setCheckpointAfterTicks(value: number): Settings;
+
+
+        hasCheckpointAfterMs(): boolean;
+        clearCheckpointAfterMs(): void;
+        getCheckpointAfterMs(): number;
+        setCheckpointAfterMs(value: number): Settings;
+
+
+        getMessageTimeoutCase(): Settings.MessageTimeoutCase;
+        getCheckpointAfterCase(): Settings.CheckpointAfterCase;
+
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Settings.AsObject;
         static toObject(includeInstance: boolean, msg: Settings): Settings.AsObject;
@@ -545,9 +566,7 @@ export namespace CreateReq {
             resolveLinks: boolean,
             revision: number,
             extraStatistics: boolean,
-            messageTimeout: number,
             maxRetryCount: number,
-            checkpointAfter: number,
             minCheckpointCount: number,
             maxCheckpointCount: number,
             maxSubscriberCount: number,
@@ -555,7 +574,30 @@ export namespace CreateReq {
             readBatchSize: number,
             historyBufferSize: number,
             namedConsumerStrategy: CreateReq.ConsumerStrategy,
+            messageTimeoutTicks: number,
+            messageTimeoutMs: number,
+            checkpointAfterTicks: number,
+            checkpointAfterMs: number,
         }
+
+        export enum MessageTimeoutCase {
+            MESSAGE_TIMEOUT_NOT_SET = 0,
+        
+    MESSAGE_TIMEOUT_TICKS = 4,
+
+    MESSAGE_TIMEOUT_MS = 14,
+
+        }
+
+        export enum CheckpointAfterCase {
+            CHECKPOINT_AFTER_NOT_SET = 0,
+        
+    CHECKPOINT_AFTER_TICKS = 6,
+
+    CHECKPOINT_AFTER_MS = 15,
+
+        }
+
     }
 
 
@@ -653,14 +695,8 @@ export namespace UpdateReq {
         getExtraStatistics(): boolean;
         setExtraStatistics(value: boolean): Settings;
 
-        getMessageTimeout(): number;
-        setMessageTimeout(value: number): Settings;
-
         getMaxRetryCount(): number;
         setMaxRetryCount(value: number): Settings;
-
-        getCheckpointAfter(): number;
-        setCheckpointAfter(value: number): Settings;
 
         getMinCheckpointCount(): number;
         setMinCheckpointCount(value: number): Settings;
@@ -684,6 +720,33 @@ export namespace UpdateReq {
         setNamedConsumerStrategy(value: UpdateReq.ConsumerStrategy): Settings;
 
 
+        hasMessageTimeoutTicks(): boolean;
+        clearMessageTimeoutTicks(): void;
+        getMessageTimeoutTicks(): number;
+        setMessageTimeoutTicks(value: number): Settings;
+
+
+        hasMessageTimeoutMs(): boolean;
+        clearMessageTimeoutMs(): void;
+        getMessageTimeoutMs(): number;
+        setMessageTimeoutMs(value: number): Settings;
+
+
+        hasCheckpointAfterTicks(): boolean;
+        clearCheckpointAfterTicks(): void;
+        getCheckpointAfterTicks(): number;
+        setCheckpointAfterTicks(value: number): Settings;
+
+
+        hasCheckpointAfterMs(): boolean;
+        clearCheckpointAfterMs(): void;
+        getCheckpointAfterMs(): number;
+        setCheckpointAfterMs(value: number): Settings;
+
+
+        getMessageTimeoutCase(): Settings.MessageTimeoutCase;
+        getCheckpointAfterCase(): Settings.CheckpointAfterCase;
+
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Settings.AsObject;
         static toObject(includeInstance: boolean, msg: Settings): Settings.AsObject;
@@ -699,9 +762,7 @@ export namespace UpdateReq {
             resolveLinks: boolean,
             revision: number,
             extraStatistics: boolean,
-            messageTimeout: number,
             maxRetryCount: number,
-            checkpointAfter: number,
             minCheckpointCount: number,
             maxCheckpointCount: number,
             maxSubscriberCount: number,
@@ -709,7 +770,30 @@ export namespace UpdateReq {
             readBatchSize: number,
             historyBufferSize: number,
             namedConsumerStrategy: UpdateReq.ConsumerStrategy,
+            messageTimeoutTicks: number,
+            messageTimeoutMs: number,
+            checkpointAfterTicks: number,
+            checkpointAfterMs: number,
         }
+
+        export enum MessageTimeoutCase {
+            MESSAGE_TIMEOUT_NOT_SET = 0,
+        
+    MESSAGE_TIMEOUT_TICKS = 4,
+
+    MESSAGE_TIMEOUT_MS = 14,
+
+        }
+
+        export enum CheckpointAfterCase {
+            CHECKPOINT_AFTER_NOT_SET = 0,
+        
+    CHECKPOINT_AFTER_TICKS = 6,
+
+    CHECKPOINT_AFTER_MS = 15,
+
+        }
+
     }
 
 

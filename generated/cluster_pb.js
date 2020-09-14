@@ -3566,7 +3566,10 @@ proto.event_store.cluster.MemberInfo.toObject = function(includeInstance, msg) {
     epochNumber: jspb.Message.getFieldWithDefault(msg, 14, 0),
     epochId: (f = msg.getEpochId()) && shared_pb.UUID.toObject(includeInstance, f),
     nodePriority: jspb.Message.getFieldWithDefault(msg, 16, 0),
-    isReadOnlyReplica: jspb.Message.getBooleanFieldWithDefault(msg, 17, false)
+    isReadOnlyReplica: jspb.Message.getBooleanFieldWithDefault(msg, 17, false),
+    advertiseHostToClientAs: jspb.Message.getFieldWithDefault(msg, 18, ""),
+    advertiseHttpPortToClientAs: jspb.Message.getFieldWithDefault(msg, 19, 0),
+    advertiseTcpPortToClientAs: jspb.Message.getFieldWithDefault(msg, 20, 0)
   };
 
   if (includeInstance) {
@@ -3675,6 +3678,18 @@ proto.event_store.cluster.MemberInfo.deserializeBinaryFromReader = function(msg,
     case 17:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsReadOnlyReplica(value);
+      break;
+    case 18:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAdvertiseHostToClientAs(value);
+      break;
+    case 19:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setAdvertiseHttpPortToClientAs(value);
+      break;
+    case 20:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setAdvertiseTcpPortToClientAs(value);
       break;
     default:
       reader.skipField();
@@ -3826,6 +3841,27 @@ proto.event_store.cluster.MemberInfo.serializeBinaryToWriter = function(message,
   if (f) {
     writer.writeBool(
       17,
+      f
+    );
+  }
+  f = message.getAdvertiseHostToClientAs();
+  if (f.length > 0) {
+    writer.writeString(
+      18,
+      f
+    );
+  }
+  f = message.getAdvertiseHttpPortToClientAs();
+  if (f !== 0) {
+    writer.writeUint32(
+      19,
+      f
+    );
+  }
+  f = message.getAdvertiseTcpPortToClientAs();
+  if (f !== 0) {
+    writer.writeUint32(
+      20,
       f
     );
   }
@@ -4252,6 +4288,60 @@ proto.event_store.cluster.MemberInfo.prototype.getIsReadOnlyReplica = function()
  */
 proto.event_store.cluster.MemberInfo.prototype.setIsReadOnlyReplica = function(value) {
   return jspb.Message.setProto3BooleanField(this, 17, value);
+};
+
+
+/**
+ * optional string advertise_host_to_client_as = 18;
+ * @return {string}
+ */
+proto.event_store.cluster.MemberInfo.prototype.getAdvertiseHostToClientAs = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 18, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.cluster.MemberInfo} returns this
+ */
+proto.event_store.cluster.MemberInfo.prototype.setAdvertiseHostToClientAs = function(value) {
+  return jspb.Message.setProto3StringField(this, 18, value);
+};
+
+
+/**
+ * optional uint32 advertise_http_port_to_client_as = 19;
+ * @return {number}
+ */
+proto.event_store.cluster.MemberInfo.prototype.getAdvertiseHttpPortToClientAs = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 19, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.cluster.MemberInfo} returns this
+ */
+proto.event_store.cluster.MemberInfo.prototype.setAdvertiseHttpPortToClientAs = function(value) {
+  return jspb.Message.setProto3IntField(this, 19, value);
+};
+
+
+/**
+ * optional uint32 advertise_tcp_port_to_client_as = 20;
+ * @return {number}
+ */
+proto.event_store.cluster.MemberInfo.prototype.getAdvertiseTcpPortToClientAs = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 20, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.cluster.MemberInfo} returns this
+ */
+proto.event_store.cluster.MemberInfo.prototype.setAdvertiseTcpPortToClientAs = function(value) {
+  return jspb.Message.setProto3IntField(this, 20, value);
 };
 
 
