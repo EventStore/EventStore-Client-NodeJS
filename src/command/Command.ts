@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { Metadata } from "grpc";
+import { Metadata } from "@grpc/grpc-js";
 import { Credentials } from "../types";
 
 export class Command {

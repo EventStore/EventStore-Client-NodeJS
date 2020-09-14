@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as persistent_pb from "./persistent_pb";
 import * as shared_pb from "./shared_pb";
 
@@ -77,7 +78,7 @@ export interface IPersistentSubscriptionsClient {
 }
 
 export class PersistentSubscriptionsClient extends grpc.Client implements IPersistentSubscriptionsClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public create(request: persistent_pb.CreateReq, callback: (error: grpc.ServiceError | null, response: persistent_pb.CreateResp) => void): grpc.ClientUnaryCall;
     public create(request: persistent_pb.CreateReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: persistent_pb.CreateResp) => void): grpc.ClientUnaryCall;
     public create(request: persistent_pb.CreateReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: persistent_pb.CreateResp) => void): grpc.ClientUnaryCall;

@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as projections_pb from "./projections_pb";
 import * as google_protobuf_struct_pb from "google-protobuf/google/protobuf/struct_pb";
 import * as shared_pb from "./shared_pb";
@@ -161,7 +162,7 @@ export interface IProjectionsClient {
 }
 
 export class ProjectionsClient extends grpc.Client implements IProjectionsClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public create(request: projections_pb.CreateReq, callback: (error: grpc.ServiceError | null, response: projections_pb.CreateResp) => void): grpc.ClientUnaryCall;
     public create(request: projections_pb.CreateReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: projections_pb.CreateResp) => void): grpc.ClientUnaryCall;
     public create(request: projections_pb.CreateReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: projections_pb.CreateResp) => void): grpc.ClientUnaryCall;

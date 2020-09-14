@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { Channel, Client, credentials as grpcCredentials } from "grpc";
+import { Channel, Client, credentials as grpcCredentials } from "@grpc/grpc-js";
 import { discoverEndpoint } from "./discovery";
 import {
   NodePreference,

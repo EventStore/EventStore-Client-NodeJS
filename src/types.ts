@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { ReadReq } from "../generated/streams_pb";
 import FilterOptions = ReadReq.Options.FilterOptions;
 import Expression = ReadReq.Options.FilterOptions.Expression;
-import * as grpc from "grpc";
+import { Client, ChannelCredentials } from "@grpc/grpc-js";
 import * as streams_pb from "../generated/streams_pb";
 import * as persistent_pb from "../generated/persistent_pb";
 import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
@@ -722,14 +722,14 @@ export enum NodePreference {
   Leader = "leader",
 }
 
-export type ClientConstructor<T extends grpc.Client> = new (
+export type ClientConstructor<T extends Client> = new (
   address: string,
-  credentials: grpc.ChannelCredentials,
+  credentials: ChannelCredentials,
   // eslint-disable-next-line @typescript-eslint/ban-types
   options?: object
 ) => T;
 
 export interface ESDBConnection {
   close(): Promise<void>;
-  _client<T extends grpc.Client>(c: ClientConstructor<T>): Promise<T>;
+  _client<T extends Client>(c: ClientConstructor<T>): Promise<T>;
 }

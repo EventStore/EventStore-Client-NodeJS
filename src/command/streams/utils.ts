@@ -1,4 +1,4 @@
-import { ClientReadableStream } from "grpc";
+import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { ReadResp } from "../../../generated/streams_pb";
 import {
   SubscriptionHandler,
@@ -117,7 +117,7 @@ export function handleBatchRead(
       }
     });
 
-    stream.on("error", (error) => {
+    stream.on("error", (error: ServiceError) => {
       reject(convertToCommandError(error));
     });
   });

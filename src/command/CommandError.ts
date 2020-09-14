@@ -1,4 +1,4 @@
-import { status as StatusCode, ServiceError } from "grpc";
+import { status as StatusCode, ServiceError } from "@grpc/grpc-js";
 import { EndPoint } from "../types";
 
 export enum ErrorType {

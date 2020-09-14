@@ -1,5 +1,5 @@
 import * as dns from "dns";
-import { credentials as grpcCredentials } from "grpc";
+import { credentials as grpcCredentials } from "@grpc/grpc-js";
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import { GossipClient } from "../../generated/gossip_grpc_pb";

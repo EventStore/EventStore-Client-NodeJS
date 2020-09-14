@@ -4,7 +4,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import * as grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as cluster_pb from "./cluster_pb";
 import * as shared_pb from "./shared_pb";
 
@@ -49,7 +50,7 @@ export interface IGossipClient {
 }
 
 export class GossipClient extends grpc.Client implements IGossipClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public update(request: cluster_pb.GossipRequest, callback: (error: grpc.ServiceError | null, response: cluster_pb.ClusterInfo) => void): grpc.ClientUnaryCall;
     public update(request: cluster_pb.GossipRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: cluster_pb.ClusterInfo) => void): grpc.ClientUnaryCall;
     public update(request: cluster_pb.GossipRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: cluster_pb.ClusterInfo) => void): grpc.ClientUnaryCall;
@@ -183,7 +184,7 @@ export interface IElectionsClient {
 }
 
 export class ElectionsClient extends grpc.Client implements IElectionsClient {
-    constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
+    constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public viewChange(request: cluster_pb.ViewChangeRequest, callback: (error: grpc.ServiceError | null, response: shared_pb.Empty) => void): grpc.ClientUnaryCall;
     public viewChange(request: cluster_pb.ViewChangeRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: shared_pb.Empty) => void): grpc.ClientUnaryCall;
     public viewChange(request: cluster_pb.ViewChangeRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: shared_pb.Empty) => void): grpc.ClientUnaryCall;

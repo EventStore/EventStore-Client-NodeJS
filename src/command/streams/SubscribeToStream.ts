@@ -1,4 +1,4 @@
-import { CallOptions } from "grpc";
+import { CallOptions } from "@grpc/grpc-js";
 
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { ReadReq } from "../../../generated/streams_pb";
