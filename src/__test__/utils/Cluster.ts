@@ -21,31 +21,38 @@ const nodeList = (count: number, ipStub: string) =>
     }))
   );
 
-const createCertGen = (internalIPs: ClusterLocation[]) => ({
-  "cert-gen": {
-    image:
-      "docker.pkg.github.com/eventstore/es-gencert-cli/es-gencert-cli:1.0.2",
-    entrypoint: "bash",
-    command: `-c "es-gencert-cli create-ca -out /tmp/certs/ca &&
+const createCertGen = (internalIPs: ClusterLocation[], insecure: boolean) =>
+  insecure
+    ? {}
+    : {
+        "cert-gen": {
+          image:
+            "docker.pkg.github.com/eventstore/es-gencert-cli/es-gencert-cli:1.0.2",
+          entrypoint: "bash",
+          command: `-c "es-gencert-cli create-ca -out /tmp/certs/ca &&
     ${internalIPs
       .map(
         ({ ipv4_address }, i) =>
           `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address}`
       )
       .join(" && ")}"`,
-    user: "1000:1000",
-    volumes: ["./certs:/tmp/certs"],
-    depends_on: ["volumes-provisioner"],
-  },
-});
+          user: "1000:1000",
+          volumes: ["./certs:/tmp/certs"],
+          depends_on: ["volumes-provisioner"],
+        },
+      };
 
 interface ClusterLocation {
   port: number;
   ipv4_address: string;
 }
 
-const createNodes = (internalIPs: ClusterLocation[], domain: string) => {
-  return internalIPs.reduce(
+const createNodes = (
+  internalIPs: ClusterLocation[],
+  domain: string,
+  insecure: boolean
+) =>
+  internalIPs.reduce(
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
       ...acc,
       [`esdb-node-${i}`]: {
@@ -59,14 +66,18 @@ const createNodes = (internalIPs: ClusterLocation[], domain: string) => {
             )
             .join(",")}`,
           `EVENTSTORE_INT_IP=${ipv4_address}`,
-          `EVENTSTORE_CERTIFICATE_FILE=/etc/eventstore/certs/node${i}/node.crt`,
-          `EVENTSTORE_CERTIFICATE_PRIVATE_KEY_FILE=/etc/eventstore/certs/node${i}/node.key`,
           `EVENTSTORE_ADVERTISE_HOST_TO_CLIENT_AS=${domain}`,
           `EVENTSTORE_ADVERTISE_HTTP_PORT_TO_CLIENT_AS=${port}`,
           `EVENTSTORE_CLUSTER_SIZE=${internalIPs.length}`,
           "EVENTSTORE_RUN_PROJECTIONS=All",
-          "EVENTSTORE_TRUSTED_ROOT_CERTIFICATES_PATH=/etc/eventstore/certs/ca",
           "EVENTSTORE_DISCOVER_VIA_DNS=false",
+          ...(insecure
+            ? [`EVENTSTORE_INSECURE=true`]
+            : [
+                `EVENTSTORE_CERTIFICATE_FILE=/etc/eventstore/certs/node${i}/node.crt`,
+                `EVENTSTORE_CERTIFICATE_PRIVATE_KEY_FILE=/etc/eventstore/certs/node${i}/node.key`,
+                "EVENTSTORE_TRUSTED_ROOT_CERTIFICATES_PATH=/etc/eventstore/certs/ca",
+              ]),
         ],
         ports: [`${port}:2113`],
         networks: {
@@ -74,14 +85,17 @@ const createNodes = (internalIPs: ClusterLocation[], domain: string) => {
             ipv4_address,
           },
         },
-        volumes: ["./certs:/etc/eventstore/certs"],
         restart: "unless-stopped",
-        depends_on: ["cert-gen"],
+        ...(insecure
+          ? {}
+          : {
+              volumes: ["./certs:/etc/eventstore/certs"],
+              depends_on: ["cert-gen"],
+            }),
       },
     }),
     {}
   );
-};
 
 const rnd = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min) + min);
@@ -89,19 +103,21 @@ const rnd = (min: number, max: number) =>
 export class Cluster {
   private id: string;
   private count: number;
+  private insecure: boolean;
   private ipStub!: string;
   private retryCount = 3;
   private locations: ClusterLocation[] = [];
   private ready: Promise<void>;
 
-  constructor(count: number, id = uuid()) {
+  constructor(count: number, insecure = false, id = uuid()) {
     this.id = id;
     this.count = count;
-
+    this.insecure = insecure;
     this.ready = this.initialize();
   }
 
   public get certPath(): string {
+    if (this.insecure) throw new Error("No Cert for insecure cluster");
     return this.path("./certs/ca/ca.crt");
   }
   public domain = "127.0.0.1";
@@ -129,7 +145,8 @@ export class Cluster {
         this.retryCount -= 1;
 
         console.log(
-          `Failed to initialize cluster. Retry ${3 - this.retryCount}`
+          `Failed to initialize cluster. Retry ${3 - this.retryCount}`,
+          error
         );
 
         await this.cleanUp();
@@ -148,7 +165,9 @@ export class Cluster {
         try {
           const { exitCode } = await exec(
             `esdb-node-${i}`,
-            `curl --fail --insecure https://localhost:2113/health/live`,
+            `curl --fail --insecure http${
+              this.insecure ? "" : "s"
+            }://localhost:2113/health/live`,
             { cwd: this.path() }
           );
           // console.log(`--> esdb-node-${i}`, exitCode, out, err);
@@ -187,8 +206,8 @@ export class Cluster {
           volumes: ["./certs:/tmp/certs"],
           network_mode: "none",
         },
-        ...createCertGen(this.locations),
-        ...createNodes(this.locations, this.domain),
+        ...createCertGen(this.locations, this.insecure),
+        ...createNodes(this.locations, this.domain, this.insecure),
       },
       networks: {
         clusternetwork: {
