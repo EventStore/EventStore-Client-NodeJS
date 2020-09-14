@@ -1,4 +1,4 @@
-import { createTestNode, Defer } from "../utils";
+import { createTestNode, Defer, delay } from "../utils";
 
 import {
   writeEventsToStream,
@@ -150,6 +150,8 @@ describe("subscribeToAll", () => {
       const finishEvent = EventData.json(FINISH_TEST, {
         message: "lets wrap this up",
       });
+
+      await delay(500);
 
       const writeResult = await writeEventsToStream(STREAM_NAME_A)
         .send(event.build(), event.build(), event.build())
