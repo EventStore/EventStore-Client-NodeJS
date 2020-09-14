@@ -8,6 +8,7 @@ import {
   readEventsFromStream,
 } from "../../index";
 import { deleteStream } from "../../command/streams";
+import { WrongExpectedVersionError } from "../../command";
 
 describe("deleteStream", () => {
   const node = createTestNode();
@@ -68,16 +69,22 @@ describe("deleteStream", () => {
         });
 
         it("fails", async () => {
-          await expect(
-            deleteStream(STREAM)
+          try {
+            const result = await deleteStream(STREAM)
               .expectedRevision({
                 __typename: "exact",
                 revision: 2,
               })
-              .execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Append failed due to WrongExpectedVersion. Stream: ${STREAM}, Expected version: 2, Actual version: `
-          );
+              .execute(connection);
+
+            expect(result).toBe("Unreachable");
+          } catch (error) {
+            expect(error).toBeInstanceOf(WrongExpectedVersionError);
+            if (error instanceof WrongExpectedVersionError) {
+              expect(error.streamName).toBe(STREAM);
+              expect(error.expectedVersion).toBe(2);
+            }
+          }
         });
 
         it("succeeds", async () => {
@@ -161,15 +168,21 @@ describe("deleteStream", () => {
         });
 
         it("fails", async () => {
-          await expect(
-            deleteStream(STREAM)
+          try {
+            const result = await deleteStream(STREAM)
               .expectedRevision({
                 __typename: "no_stream",
               })
-              .execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Append failed due to WrongExpectedVersion. Stream: ${STREAM}, Expected version: -1, Actual version: `
-          );
+              .execute(connection);
+
+            expect(result).toBe("Unreachable");
+          } catch (error) {
+            expect(error).toBeInstanceOf(WrongExpectedVersionError);
+
+            if (error instanceof WrongExpectedVersionError) {
+              expect(error.streamName).toBe(STREAM);
+            }
+          }
         });
 
         it("succeeds", async () => {

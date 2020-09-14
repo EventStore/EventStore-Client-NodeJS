@@ -1,8 +1,9 @@
 import { DeleteReq } from "../../../generated/streams_pb";
 import { StreamIdentifier, Empty } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
-import { Revision, Position, DeleteResult, ESDBConnection } from "../../types";
+import { Revision, DeleteResult, ESDBConnection } from "../../types";
 import { Command } from "../Command";
+import { convertToCommandError } from "../CommandError";
 
 export class DeleteStream extends Command {
   private readonly _stream: string;
@@ -62,7 +63,7 @@ export class DeleteStream extends Command {
     return new Promise<DeleteResult>((resolve, reject) => {
       client.delete(req, this.metadata, (error, resp) => {
         if (error) {
-          return reject(error);
+          return reject(convertToCommandError(error));
         }
 
         const result: DeleteResult = {};

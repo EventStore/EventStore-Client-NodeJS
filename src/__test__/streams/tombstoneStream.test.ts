@@ -6,8 +6,10 @@ import {
   EventStoreConnection,
   EventData,
   readEventsFromStream,
+  WrongExpectedVersionError,
 } from "../../index";
 import { tombstoneStream } from "../../command/streams";
+import { StreamDeletedError } from "../../command";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {
@@ -46,11 +48,19 @@ describe("tombstoneStream", () => {
         );
         expect(result).toBeDefined();
 
-        await expect(() =>
-          readEventsFromStream(ANY_REVISION_STREAM).execute(connection)
-        ).rejects.toThrowError(
-          `9 FAILED_PRECONDITION: Event stream '${ANY_REVISION_STREAM}' is deleted.`
-        );
+        try {
+          const result = await readEventsFromStream(
+            ANY_REVISION_STREAM
+          ).execute(connection);
+
+          expect(result).toBe("Unreachable");
+        } catch (error) {
+          expect(error).toBeInstanceOf(StreamDeletedError);
+
+          if (error instanceof StreamDeletedError) {
+            expect(error.streamName).toBe(ANY_REVISION_STREAM);
+          }
+        }
       });
     });
 
@@ -67,16 +77,22 @@ describe("tombstoneStream", () => {
         });
 
         it("fails", async () => {
-          await expect(
-            tombstoneStream(STREAM)
+          try {
+            const result = await tombstoneStream(STREAM)
               .expectedRevision({
                 __typename: "exact",
                 revision: 2,
               })
-              .execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Append failed due to WrongExpectedVersion. Stream: ${STREAM}, Expected version: 2, Actual version: `
-          );
+              .execute(connection);
+
+            expect(result).toBe("Unreachable");
+          } catch (error) {
+            expect(error).toBeInstanceOf(WrongExpectedVersionError);
+            if (error instanceof WrongExpectedVersionError) {
+              expect(error.streamName).toBe(STREAM);
+              expect(error.expectedVersion).toBe(2);
+            }
+          }
         });
 
         it("succeeds", async () => {
@@ -99,9 +115,7 @@ describe("tombstoneStream", () => {
 
           await expect(() =>
             readEventsFromStream(STREAM).execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Event stream '${STREAM}' is deleted.`
-          );
+          ).rejects.toThrowError(StreamDeletedError);
         });
       });
 
@@ -139,9 +153,7 @@ describe("tombstoneStream", () => {
 
           await expect(() =>
             readEventsFromStream(STREAM).execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Event stream '${STREAM}' is deleted.`
-          );
+          ).rejects.toThrowError(StreamDeletedError);
         });
       });
 
@@ -158,15 +170,20 @@ describe("tombstoneStream", () => {
         });
 
         it("fails", async () => {
-          await expect(
-            tombstoneStream(STREAM)
+          try {
+            const result = await tombstoneStream(STREAM)
               .expectedRevision({
                 __typename: "no_stream",
               })
-              .execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Append failed due to WrongExpectedVersion. Stream: ${STREAM}, Expected version: -1, Actual version: `
-          );
+              .execute(connection);
+
+            expect(result).toBe("Unreachable");
+          } catch (error) {
+            expect(error).toBeInstanceOf(WrongExpectedVersionError);
+            if (error instanceof WrongExpectedVersionError) {
+              expect(error.streamName).toBe(STREAM);
+            }
+          }
         });
 
         it("succeeds", async () => {
@@ -180,9 +197,7 @@ describe("tombstoneStream", () => {
 
           await expect(() =>
             readEventsFromStream(NOT_A_STREAM).execute(connection)
-          ).rejects.toThrowError(
-            `9 FAILED_PRECONDITION: Event stream '${NOT_A_STREAM}' is deleted.`
-          );
+          ).rejects.toThrowError(StreamDeletedError);
         });
       });
     });

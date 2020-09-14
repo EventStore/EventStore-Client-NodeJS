@@ -10,6 +10,7 @@ import {
   ReadStreamSuccess,
   ReadStreamNotFound,
 } from "../../types";
+import { convertToCommandError } from "../CommandError";
 
 export class SubscriptionReportImpl implements SubscriptionReport {
   private _stream: ClientReadableStream<ReadResp>;
@@ -117,7 +118,7 @@ export function handleBatchRead(
     });
 
     stream.on("error", (error) => {
-      reject(error);
+      reject(convertToCommandError(error));
     });
   });
 }

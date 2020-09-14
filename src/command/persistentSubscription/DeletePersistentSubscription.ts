@@ -4,6 +4,7 @@ import { PersistentSubscriptionsClient } from "../../../generated/persistent_grp
 
 import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
+import { convertToCommandError } from "../CommandError";
 
 export class DeletePersistentSubscription extends Command {
   private _stream: string;
@@ -32,8 +33,8 @@ export class DeletePersistentSubscription extends Command {
 
     return new Promise<void>((resolve, reject) => {
       client.delete(req, this.metadata, (error) => {
-        if (error) reject(error);
-        resolve();
+        if (error) return reject(convertToCommandError(error));
+        return resolve();
       });
     });
   }
