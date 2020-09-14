@@ -434,7 +434,7 @@ proto.event_store.client.gossip.MemberInfo.prototype.toObject = function(opt_inc
 proto.event_store.client.gossip.MemberInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
     instanceId: (f = msg.getInstanceId()) && shared_pb.UUID.toObject(includeInstance, f),
-    timeStamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    timeStamp: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     state: jspb.Message.getFieldWithDefault(msg, 3, 0),
     isAlive: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
     httpEndPoint: (f = msg.getHttpEndPoint()) && proto.event_store.client.gossip.EndPoint.toObject(includeInstance, f)
@@ -480,7 +480,7 @@ proto.event_store.client.gossip.MemberInfo.deserializeBinaryFromReader = functio
       msg.setInstanceId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setTimeStamp(value);
       break;
     case 3:
@@ -534,8 +534,8 @@ proto.event_store.client.gossip.MemberInfo.serializeBinaryToWriter = function(me
     );
   }
   f = message.getTimeStamp();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       2,
       f
     );
@@ -626,19 +626,19 @@ proto.event_store.client.gossip.MemberInfo.prototype.hasInstanceId = function() 
 
 /**
  * optional int64 time_stamp = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.gossip.MemberInfo.prototype.getTimeStamp = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.gossip.MemberInfo} returns this
  */
 proto.event_store.client.gossip.MemberInfo.prototype.setTimeStamp = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 

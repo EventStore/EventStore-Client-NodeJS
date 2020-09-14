@@ -90,7 +90,7 @@ message DetailsResp {
 		bool disabled = 5;
 
 		message DateTime {
-			int64 ticks_since_epoch = 1;
+			int64 ticks_since_epoch = 1 [jstype = JS_STRING];
 		}
 	}
 }

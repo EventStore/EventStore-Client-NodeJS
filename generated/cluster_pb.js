@@ -1213,12 +1213,12 @@ proto.event_store.cluster.PrepareOkRequest.toObject = function(includeInstance, 
     serverId: (f = msg.getServerId()) && shared_pb.UUID.toObject(includeInstance, f),
     serverHttp: (f = msg.getServerHttp()) && proto.event_store.cluster.EndPoint.toObject(includeInstance, f),
     epochNumber: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    epochPosition: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    epochPosition: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     epochId: (f = msg.getEpochId()) && shared_pb.UUID.toObject(includeInstance, f),
     epochLeaderInstanceId: (f = msg.getEpochLeaderInstanceId()) && shared_pb.UUID.toObject(includeInstance, f),
-    lastCommitPosition: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    writerCheckpoint: jspb.Message.getFieldWithDefault(msg, 9, 0),
-    chaserCheckpoint: jspb.Message.getFieldWithDefault(msg, 10, 0),
+    lastCommitPosition: jspb.Message.getFieldWithDefault(msg, 8, "0"),
+    writerCheckpoint: jspb.Message.getFieldWithDefault(msg, 9, "0"),
+    chaserCheckpoint: jspb.Message.getFieldWithDefault(msg, 10, "0"),
     nodePriority: jspb.Message.getFieldWithDefault(msg, 11, 0),
     clusterInfo: (f = msg.getClusterInfo()) && proto.event_store.cluster.ClusterInfo.toObject(includeInstance, f)
   };
@@ -1276,7 +1276,7 @@ proto.event_store.cluster.PrepareOkRequest.deserializeBinaryFromReader = functio
       msg.setEpochNumber(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setEpochPosition(value);
       break;
     case 6:
@@ -1290,15 +1290,15 @@ proto.event_store.cluster.PrepareOkRequest.deserializeBinaryFromReader = functio
       msg.setEpochLeaderInstanceId(value);
       break;
     case 8:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setLastCommitPosition(value);
       break;
     case 9:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setWriterCheckpoint(value);
       break;
     case 10:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setChaserCheckpoint(value);
       break;
     case 11:
@@ -1370,8 +1370,8 @@ proto.event_store.cluster.PrepareOkRequest.serializeBinaryToWriter = function(me
     );
   }
   f = message.getEpochPosition();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       5,
       f
     );
@@ -1393,22 +1393,22 @@ proto.event_store.cluster.PrepareOkRequest.serializeBinaryToWriter = function(me
     );
   }
   f = message.getLastCommitPosition();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       8,
       f
     );
   }
   f = message.getWriterCheckpoint();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       9,
       f
     );
   }
   f = message.getChaserCheckpoint();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       10,
       f
     );
@@ -1543,19 +1543,19 @@ proto.event_store.cluster.PrepareOkRequest.prototype.setEpochNumber = function(v
 
 /**
  * optional int64 epoch_position = 5;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getEpochPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.setEpochPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3StringIntField(this, 5, value);
 };
 
 
@@ -1635,55 +1635,55 @@ proto.event_store.cluster.PrepareOkRequest.prototype.hasEpochLeaderInstanceId = 
 
 /**
  * optional int64 last_commit_position = 8;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getLastCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.setLastCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 8, value);
+  return jspb.Message.setProto3StringIntField(this, 8, value);
 };
 
 
 /**
  * optional int64 writer_checkpoint = 9;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getWriterCheckpoint = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 9, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.setWriterCheckpoint = function(value) {
-  return jspb.Message.setProto3IntField(this, 9, value);
+  return jspb.Message.setProto3StringIntField(this, 9, value);
 };
 
 
 /**
  * optional int64 chaser_checkpoint = 10;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getChaserCheckpoint = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 10, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.setChaserCheckpoint = function(value) {
-  return jspb.Message.setProto3IntField(this, 10, value);
+  return jspb.Message.setProto3StringIntField(this, 10, value);
 };
 
 
@@ -1780,12 +1780,12 @@ proto.event_store.cluster.ProposalRequest.toObject = function(includeInstance, m
     leaderHttp: (f = msg.getLeaderHttp()) && proto.event_store.cluster.EndPoint.toObject(includeInstance, f),
     view: jspb.Message.getFieldWithDefault(msg, 5, 0),
     epochNumber: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    epochPosition: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    epochPosition: jspb.Message.getFieldWithDefault(msg, 7, "0"),
     epochId: (f = msg.getEpochId()) && shared_pb.UUID.toObject(includeInstance, f),
     epochLeaderInstanceId: (f = msg.getEpochLeaderInstanceId()) && shared_pb.UUID.toObject(includeInstance, f),
-    lastCommitPosition: jspb.Message.getFieldWithDefault(msg, 10, 0),
-    writerCheckpoint: jspb.Message.getFieldWithDefault(msg, 11, 0),
-    chaserCheckpoint: jspb.Message.getFieldWithDefault(msg, 12, 0),
+    lastCommitPosition: jspb.Message.getFieldWithDefault(msg, 10, "0"),
+    writerCheckpoint: jspb.Message.getFieldWithDefault(msg, 11, "0"),
+    chaserCheckpoint: jspb.Message.getFieldWithDefault(msg, 12, "0"),
     nodePriority: jspb.Message.getFieldWithDefault(msg, 13, 0)
   };
 
@@ -1852,7 +1852,7 @@ proto.event_store.cluster.ProposalRequest.deserializeBinaryFromReader = function
       msg.setEpochNumber(value);
       break;
     case 7:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setEpochPosition(value);
       break;
     case 8:
@@ -1866,15 +1866,15 @@ proto.event_store.cluster.ProposalRequest.deserializeBinaryFromReader = function
       msg.setEpochLeaderInstanceId(value);
       break;
     case 10:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setLastCommitPosition(value);
       break;
     case 11:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setWriterCheckpoint(value);
       break;
     case 12:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setChaserCheckpoint(value);
       break;
     case 13:
@@ -1957,8 +1957,8 @@ proto.event_store.cluster.ProposalRequest.serializeBinaryToWriter = function(mes
     );
   }
   f = message.getEpochPosition();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       7,
       f
     );
@@ -1980,22 +1980,22 @@ proto.event_store.cluster.ProposalRequest.serializeBinaryToWriter = function(mes
     );
   }
   f = message.getLastCommitPosition();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       10,
       f
     );
   }
   f = message.getWriterCheckpoint();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       11,
       f
     );
   }
   f = message.getChaserCheckpoint();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       12,
       f
     );
@@ -2196,19 +2196,19 @@ proto.event_store.cluster.ProposalRequest.prototype.setEpochNumber = function(va
 
 /**
  * optional int64 epoch_position = 7;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getEpochPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
  */
 proto.event_store.cluster.ProposalRequest.prototype.setEpochPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 7, value);
+  return jspb.Message.setProto3StringIntField(this, 7, value);
 };
 
 
@@ -2288,55 +2288,55 @@ proto.event_store.cluster.ProposalRequest.prototype.hasEpochLeaderInstanceId = f
 
 /**
  * optional int64 last_commit_position = 10;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getLastCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 10, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
  */
 proto.event_store.cluster.ProposalRequest.prototype.setLastCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 10, value);
+  return jspb.Message.setProto3StringIntField(this, 10, value);
 };
 
 
 /**
  * optional int64 writer_checkpoint = 11;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getWriterCheckpoint = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 11, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 11, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
  */
 proto.event_store.cluster.ProposalRequest.prototype.setWriterCheckpoint = function(value) {
-  return jspb.Message.setProto3IntField(this, 11, value);
+  return jspb.Message.setProto3StringIntField(this, 11, value);
 };
 
 
 /**
  * optional int64 chaser_checkpoint = 12;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getChaserCheckpoint = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 12, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 12, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
  */
 proto.event_store.cluster.ProposalRequest.prototype.setChaserCheckpoint = function(value) {
-  return jspb.Message.setProto3IntField(this, 12, value);
+  return jspb.Message.setProto3StringIntField(this, 12, value);
 };
 
 
@@ -3551,7 +3551,7 @@ proto.event_store.cluster.MemberInfo.prototype.toObject = function(opt_includeIn
 proto.event_store.cluster.MemberInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
     instanceId: (f = msg.getInstanceId()) && shared_pb.UUID.toObject(includeInstance, f),
-    timeStamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    timeStamp: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     state: jspb.Message.getFieldWithDefault(msg, 3, 0),
     isAlive: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
     httpEndPoint: (f = msg.getHttpEndPoint()) && proto.event_store.cluster.EndPoint.toObject(includeInstance, f),
@@ -3559,10 +3559,10 @@ proto.event_store.cluster.MemberInfo.toObject = function(includeInstance, msg) {
     externalTcp: (f = msg.getExternalTcp()) && proto.event_store.cluster.EndPoint.toObject(includeInstance, f),
     internalTcpUsesTls: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
     externalTcpUsesTls: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
-    lastCommitPosition: jspb.Message.getFieldWithDefault(msg, 10, 0),
-    writerCheckpoint: jspb.Message.getFieldWithDefault(msg, 11, 0),
-    chaserCheckpoint: jspb.Message.getFieldWithDefault(msg, 12, 0),
-    epochPosition: jspb.Message.getFieldWithDefault(msg, 13, 0),
+    lastCommitPosition: jspb.Message.getFieldWithDefault(msg, 10, "0"),
+    writerCheckpoint: jspb.Message.getFieldWithDefault(msg, 11, "0"),
+    chaserCheckpoint: jspb.Message.getFieldWithDefault(msg, 12, "0"),
+    epochPosition: jspb.Message.getFieldWithDefault(msg, 13, "0"),
     epochNumber: jspb.Message.getFieldWithDefault(msg, 14, 0),
     epochId: (f = msg.getEpochId()) && shared_pb.UUID.toObject(includeInstance, f),
     nodePriority: jspb.Message.getFieldWithDefault(msg, 16, 0),
@@ -3612,7 +3612,7 @@ proto.event_store.cluster.MemberInfo.deserializeBinaryFromReader = function(msg,
       msg.setInstanceId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setTimeStamp(value);
       break;
     case 3:
@@ -3647,19 +3647,19 @@ proto.event_store.cluster.MemberInfo.deserializeBinaryFromReader = function(msg,
       msg.setExternalTcpUsesTls(value);
       break;
     case 10:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setLastCommitPosition(value);
       break;
     case 11:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setWriterCheckpoint(value);
       break;
     case 12:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setChaserCheckpoint(value);
       break;
     case 13:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setEpochPosition(value);
       break;
     case 14:
@@ -3729,8 +3729,8 @@ proto.event_store.cluster.MemberInfo.serializeBinaryToWriter = function(message,
     );
   }
   f = message.getTimeStamp();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       2,
       f
     );
@@ -3788,29 +3788,29 @@ proto.event_store.cluster.MemberInfo.serializeBinaryToWriter = function(message,
     );
   }
   f = message.getLastCommitPosition();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       10,
       f
     );
   }
   f = message.getWriterCheckpoint();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       11,
       f
     );
   }
   f = message.getChaserCheckpoint();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       12,
       f
     );
   }
   f = message.getEpochPosition();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       13,
       f
     );
@@ -3929,19 +3929,19 @@ proto.event_store.cluster.MemberInfo.prototype.hasInstanceId = function() {
 
 /**
  * optional int64 time_stamp = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.MemberInfo.prototype.getTimeStamp = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
  */
 proto.event_store.cluster.MemberInfo.prototype.setTimeStamp = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -4130,73 +4130,73 @@ proto.event_store.cluster.MemberInfo.prototype.setExternalTcpUsesTls = function(
 
 /**
  * optional int64 last_commit_position = 10;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.MemberInfo.prototype.getLastCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 10, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
  */
 proto.event_store.cluster.MemberInfo.prototype.setLastCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 10, value);
+  return jspb.Message.setProto3StringIntField(this, 10, value);
 };
 
 
 /**
  * optional int64 writer_checkpoint = 11;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.MemberInfo.prototype.getWriterCheckpoint = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 11, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 11, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
  */
 proto.event_store.cluster.MemberInfo.prototype.setWriterCheckpoint = function(value) {
-  return jspb.Message.setProto3IntField(this, 11, value);
+  return jspb.Message.setProto3StringIntField(this, 11, value);
 };
 
 
 /**
  * optional int64 chaser_checkpoint = 12;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.MemberInfo.prototype.getChaserCheckpoint = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 12, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 12, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
  */
 proto.event_store.cluster.MemberInfo.prototype.setChaserCheckpoint = function(value) {
-  return jspb.Message.setProto3IntField(this, 12, value);
+  return jspb.Message.setProto3StringIntField(this, 12, value);
 };
 
 
 /**
  * optional int64 epoch_position = 13;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.cluster.MemberInfo.prototype.getEpochPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 13, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 13, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
  */
 proto.event_store.cluster.MemberInfo.prototype.setEpochPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 13, value);
+  return jspb.Message.setProto3StringIntField(this, 13, value);
 };
 
 

@@ -1965,7 +1965,7 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.toObject = 
   var f, obj = {
     event: (f = msg.getEvent()) && proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
     link: (f = msg.getLink()) && proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f),
     retryCount: jspb.Message.getFieldWithDefault(msg, 5, 0),
     noRetryCount: (f = msg.getNoRetryCount()) && shared_pb.Empty.toObject(includeInstance, f)
@@ -2016,7 +2016,7 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.deserialize
       msg.setLink(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 4:
@@ -2078,9 +2078,9 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.serializeBi
       proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       3,
       f
     );
@@ -2145,9 +2145,9 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEve
   var f, obj = {
     id: (f = msg.getId()) && shared_pb.UUID.toObject(includeInstance, f),
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
-    streamRevision: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    streamRevision: jspb.Message.getFieldWithDefault(msg, 3, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 4, "0"),
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     metadataMap: (f = msg.getMetadataMap()) ? f.toObject(includeInstance, undefined) : [],
     customMetadata: msg.getCustomMetadata_asB64(),
     data: msg.getData_asB64()
@@ -2198,15 +2198,15 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEve
       msg.setStreamIdentifier(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setStreamRevision(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 6:
@@ -2269,22 +2269,22 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEve
     );
   }
   f = message.getStreamRevision();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       3,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       4,
       f
     );
   }
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       5,
       f
     );
@@ -2386,55 +2386,55 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEve
 
 /**
  * optional uint64 stream_revision = 3;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent} returns this
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamRevision = function(value) {
-  return jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3StringIntField(this, 3, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 4;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent} returns this
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 4, value);
+  return jspb.Message.setProto3StringIntField(this, 4, value);
 };
 
 
 /**
  * optional uint64 commit_position = 5;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent} returns this
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3StringIntField(this, 5, value);
 };
 
 
@@ -2620,15 +2620,15 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.h
 
 /**
  * optional uint64 commit_position = 3;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent} returns this
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.setCommitPosition = function(value) {
@@ -3398,7 +3398,7 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.t
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.toObject = function(includeInstance, msg) {
   var f, obj = {
     resolveLinks: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     extraStatistics: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
     maxRetryCount: jspb.Message.getFieldWithDefault(msg, 5, 0),
     minCheckpointCount: jspb.Message.getFieldWithDefault(msg, 7, 0),
@@ -3408,9 +3408,9 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.toObject = 
     readBatchSize: jspb.Message.getFieldWithDefault(msg, 11, 0),
     historyBufferSize: jspb.Message.getFieldWithDefault(msg, 12, 0),
     namedConsumerStrategy: jspb.Message.getFieldWithDefault(msg, 13, 0),
-    messageTimeoutTicks: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    messageTimeoutTicks: jspb.Message.getFieldWithDefault(msg, 4, "0"),
     messageTimeoutMs: jspb.Message.getFieldWithDefault(msg, 14, 0),
-    checkpointAfterTicks: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    checkpointAfterTicks: jspb.Message.getFieldWithDefault(msg, 6, "0"),
     checkpointAfterMs: jspb.Message.getFieldWithDefault(msg, 15, 0)
   };
 
@@ -3453,7 +3453,7 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.deserialize
       msg.setResolveLinks(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setRevision(value);
       break;
     case 3:
@@ -3493,7 +3493,7 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.deserialize
       msg.setNamedConsumerStrategy(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setMessageTimeoutTicks(value);
       break;
     case 14:
@@ -3501,7 +3501,7 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.deserialize
       msg.setMessageTimeoutMs(value);
       break;
     case 6:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setCheckpointAfterTicks(value);
       break;
     case 15:
@@ -3545,8 +3545,8 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.serializeBi
     );
   }
   f = message.getRevision();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -3614,9 +3614,9 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.serializeBi
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 4));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
-    writer.writeInt64(
+    writer.writeInt64String(
       4,
       f
     );
@@ -3628,9 +3628,9 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.serializeBi
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 6));
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
   if (f != null) {
-    writer.writeInt64(
+    writer.writeInt64String(
       6,
       f
     );
@@ -3665,19 +3665,19 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.s
 
 /**
  * optional uint64 revision = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.getRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Settings} returns this
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.setRevision = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -3845,15 +3845,15 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.s
 
 /**
  * optional int64 message_timeout_ticks = 4;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.getMessageTimeoutTicks = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Settings} returns this
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.setMessageTimeoutTicks = function(value) {
@@ -3917,15 +3917,15 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.h
 
 /**
  * optional int64 checkpoint_after_ticks = 6;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.getCheckpointAfterTicks = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Settings} returns this
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Settings.prototype.setCheckpointAfterTicks = function(value) {
@@ -4555,7 +4555,7 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.t
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.toObject = function(includeInstance, msg) {
   var f, obj = {
     resolveLinks: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     extraStatistics: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
     maxRetryCount: jspb.Message.getFieldWithDefault(msg, 5, 0),
     minCheckpointCount: jspb.Message.getFieldWithDefault(msg, 7, 0),
@@ -4565,9 +4565,9 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.toObject = 
     readBatchSize: jspb.Message.getFieldWithDefault(msg, 11, 0),
     historyBufferSize: jspb.Message.getFieldWithDefault(msg, 12, 0),
     namedConsumerStrategy: jspb.Message.getFieldWithDefault(msg, 13, 0),
-    messageTimeoutTicks: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    messageTimeoutTicks: jspb.Message.getFieldWithDefault(msg, 4, "0"),
     messageTimeoutMs: jspb.Message.getFieldWithDefault(msg, 14, 0),
-    checkpointAfterTicks: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    checkpointAfterTicks: jspb.Message.getFieldWithDefault(msg, 6, "0"),
     checkpointAfterMs: jspb.Message.getFieldWithDefault(msg, 15, 0)
   };
 
@@ -4610,7 +4610,7 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.deserialize
       msg.setResolveLinks(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setRevision(value);
       break;
     case 3:
@@ -4650,7 +4650,7 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.deserialize
       msg.setNamedConsumerStrategy(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setMessageTimeoutTicks(value);
       break;
     case 14:
@@ -4658,7 +4658,7 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.deserialize
       msg.setMessageTimeoutMs(value);
       break;
     case 6:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setCheckpointAfterTicks(value);
       break;
     case 15:
@@ -4702,8 +4702,8 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.serializeBi
     );
   }
   f = message.getRevision();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -4771,9 +4771,9 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.serializeBi
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 4));
+  f = /** @type {string} */ (jspb.Message.getField(message, 4));
   if (f != null) {
-    writer.writeInt64(
+    writer.writeInt64String(
       4,
       f
     );
@@ -4785,9 +4785,9 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.serializeBi
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 6));
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
   if (f != null) {
-    writer.writeInt64(
+    writer.writeInt64String(
       6,
       f
     );
@@ -4822,19 +4822,19 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.s
 
 /**
  * optional uint64 revision = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.getRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Settings} returns this
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.setRevision = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -5002,15 +5002,15 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.s
 
 /**
  * optional int64 message_timeout_ticks = 4;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.getMessageTimeoutTicks = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Settings} returns this
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.setMessageTimeoutTicks = function(value) {
@@ -5074,15 +5074,15 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.h
 
 /**
  * optional int64 checkpoint_after_ticks = 6;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.getCheckpointAfterTicks = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Settings} returns this
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.prototype.setCheckpointAfterTicks = function(value) {

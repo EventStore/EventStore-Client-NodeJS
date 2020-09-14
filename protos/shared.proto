@@ -9,8 +9,8 @@ message UUID {
 	}
 
 	message Structured {
-		int64 most_significant_bits = 1;
-		int64 least_significant_bits = 2;
+		int64 most_significant_bits = 1 [jstype = JS_STRING];
+		int64 least_significant_bits = 2 [jstype = JS_STRING];
 	}
 }
 message Empty {

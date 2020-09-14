@@ -62,8 +62,8 @@ export class MemberInfo extends jspb.Message {
     getInstanceId(): shared_pb.UUID | undefined;
     setInstanceId(value?: shared_pb.UUID): MemberInfo;
 
-    getTimeStamp(): number;
-    setTimeStamp(value: number): MemberInfo;
+    getTimeStamp(): string;
+    setTimeStamp(value: string): MemberInfo;
 
     getState(): MemberInfo.VNodeState;
     setState(value: MemberInfo.VNodeState): MemberInfo;
@@ -91,7 +91,7 @@ export class MemberInfo extends jspb.Message {
 export namespace MemberInfo {
     export type AsObject = {
         instanceId?: shared_pb.UUID.AsObject,
-        timeStamp: number,
+        timeStamp: string,
         state: MemberInfo.VNodeState,
         isAlive: boolean,
         httpEndPoint?: EndPoint.AsObject,

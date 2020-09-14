@@ -37,7 +37,7 @@ message MemberInfo {
 		ResigningLeader = 15;
 	}
 	event_store.client.shared.UUID instance_id = 1;
-	int64 time_stamp = 2;
+	int64 time_stamp = 2 [jstype = JS_STRING];
 	VNodeState state = 3;
 	bool is_alive = 4;
 	EndPoint http_end_point = 5;

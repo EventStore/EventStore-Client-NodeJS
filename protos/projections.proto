@@ -89,9 +89,9 @@ message StatisticsResp {
 	Details details = 1;
 
 	message Details {
-		int64 coreProcessingTime = 1;
-		int64 version = 2;
-		int64 epoch = 3;
+		int64 coreProcessingTime = 1 [jstype = JS_STRING];
+		int64 version = 2 [jstype = JS_STRING];
+		int64 epoch = 3 [jstype = JS_STRING];
 		string effectiveName = 4;
 		int32 writesInProgress = 5;
 		int32 readsInProgress = 6;
@@ -103,9 +103,9 @@ message StatisticsResp {
 		string position = 12;
 		float progress = 13;
 		string lastCheckpoint = 14;
-		int64 eventsProcessedAfterRestart = 15;
+		int64 eventsProcessedAfterRestart = 15 [jstype = JS_STRING];
 		string checkpointStatus = 16;
-		int64 bufferedEvents = 17;
+		int64 bufferedEvents = 17 [jstype = JS_STRING];
 		int32 writePendingEventsBeforeCheckpoint = 18;
 		int32 writePendingEventsAfterCheckpoint = 19;
 	}

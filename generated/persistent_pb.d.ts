@@ -269,8 +269,8 @@ export namespace ReadResp {
 
         hasCommitPosition(): boolean;
         clearCommitPosition(): void;
-        getCommitPosition(): number;
-        setCommitPosition(value: number): ReadEvent;
+        getCommitPosition(): string;
+        setCommitPosition(value: string): ReadEvent;
 
 
         hasNoPosition(): boolean;
@@ -308,7 +308,7 @@ export namespace ReadResp {
         export type AsObject = {
             event?: ReadResp.ReadEvent.RecordedEvent.AsObject,
             link?: ReadResp.ReadEvent.RecordedEvent.AsObject,
-            commitPosition: number,
+            commitPosition: string,
             noPosition?: shared_pb.Empty.AsObject,
             retryCount: number,
             noRetryCount?: shared_pb.Empty.AsObject,
@@ -328,14 +328,14 @@ export namespace ReadResp {
             getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
             setStreamIdentifier(value?: shared_pb.StreamIdentifier): RecordedEvent;
 
-            getStreamRevision(): number;
-            setStreamRevision(value: number): RecordedEvent;
+            getStreamRevision(): string;
+            setStreamRevision(value: string): RecordedEvent;
 
-            getPreparePosition(): number;
-            setPreparePosition(value: number): RecordedEvent;
+            getPreparePosition(): string;
+            setPreparePosition(value: string): RecordedEvent;
 
-            getCommitPosition(): number;
-            setCommitPosition(value: number): RecordedEvent;
+            getCommitPosition(): string;
+            setCommitPosition(value: string): RecordedEvent;
 
 
             getMetadataMap(): jspb.Map<string, string>;
@@ -366,9 +366,9 @@ export namespace ReadResp {
             export type AsObject = {
                 id?: shared_pb.UUID.AsObject,
                 streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
-                streamRevision: number,
-                preparePosition: number,
-                commitPosition: number,
+                streamRevision: string,
+                preparePosition: string,
+                commitPosition: string,
 
                 metadataMap: Array<[string, string]>,
                 customMetadata: Uint8Array | string,
@@ -493,8 +493,8 @@ export namespace CreateReq {
         getResolveLinks(): boolean;
         setResolveLinks(value: boolean): Settings;
 
-        getRevision(): number;
-        setRevision(value: number): Settings;
+        getRevision(): string;
+        setRevision(value: string): Settings;
 
         getExtraStatistics(): boolean;
         setExtraStatistics(value: boolean): Settings;
@@ -526,8 +526,8 @@ export namespace CreateReq {
 
         hasMessageTimeoutTicks(): boolean;
         clearMessageTimeoutTicks(): void;
-        getMessageTimeoutTicks(): number;
-        setMessageTimeoutTicks(value: number): Settings;
+        getMessageTimeoutTicks(): string;
+        setMessageTimeoutTicks(value: string): Settings;
 
 
         hasMessageTimeoutMs(): boolean;
@@ -538,8 +538,8 @@ export namespace CreateReq {
 
         hasCheckpointAfterTicks(): boolean;
         clearCheckpointAfterTicks(): void;
-        getCheckpointAfterTicks(): number;
-        setCheckpointAfterTicks(value: number): Settings;
+        getCheckpointAfterTicks(): string;
+        setCheckpointAfterTicks(value: string): Settings;
 
 
         hasCheckpointAfterMs(): boolean;
@@ -564,7 +564,7 @@ export namespace CreateReq {
     export namespace Settings {
         export type AsObject = {
             resolveLinks: boolean,
-            revision: number,
+            revision: string,
             extraStatistics: boolean,
             maxRetryCount: number,
             minCheckpointCount: number,
@@ -574,9 +574,9 @@ export namespace CreateReq {
             readBatchSize: number,
             historyBufferSize: number,
             namedConsumerStrategy: CreateReq.ConsumerStrategy,
-            messageTimeoutTicks: number,
+            messageTimeoutTicks: string,
             messageTimeoutMs: number,
-            checkpointAfterTicks: number,
+            checkpointAfterTicks: string,
             checkpointAfterMs: number,
         }
 
@@ -689,8 +689,8 @@ export namespace UpdateReq {
         getResolveLinks(): boolean;
         setResolveLinks(value: boolean): Settings;
 
-        getRevision(): number;
-        setRevision(value: number): Settings;
+        getRevision(): string;
+        setRevision(value: string): Settings;
 
         getExtraStatistics(): boolean;
         setExtraStatistics(value: boolean): Settings;
@@ -722,8 +722,8 @@ export namespace UpdateReq {
 
         hasMessageTimeoutTicks(): boolean;
         clearMessageTimeoutTicks(): void;
-        getMessageTimeoutTicks(): number;
-        setMessageTimeoutTicks(value: number): Settings;
+        getMessageTimeoutTicks(): string;
+        setMessageTimeoutTicks(value: string): Settings;
 
 
         hasMessageTimeoutMs(): boolean;
@@ -734,8 +734,8 @@ export namespace UpdateReq {
 
         hasCheckpointAfterTicks(): boolean;
         clearCheckpointAfterTicks(): void;
-        getCheckpointAfterTicks(): number;
-        setCheckpointAfterTicks(value: number): Settings;
+        getCheckpointAfterTicks(): string;
+        setCheckpointAfterTicks(value: string): Settings;
 
 
         hasCheckpointAfterMs(): boolean;
@@ -760,7 +760,7 @@ export namespace UpdateReq {
     export namespace Settings {
         export type AsObject = {
             resolveLinks: boolean,
-            revision: number,
+            revision: string,
             extraStatistics: boolean,
             maxRetryCount: number,
             minCheckpointCount: number,
@@ -770,9 +770,9 @@ export namespace UpdateReq {
             readBatchSize: number,
             historyBufferSize: number,
             namedConsumerStrategy: UpdateReq.ConsumerStrategy,
-            messageTimeoutTicks: number,
+            messageTimeoutTicks: string,
             messageTimeoutMs: number,
-            checkpointAfterTicks: number,
+            checkpointAfterTicks: string,
             checkpointAfterMs: number,
         }
 
