@@ -4,7 +4,7 @@ import { PersistentSubscriptionsClient } from "../../../generated/persistent_grp
 
 import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
-import { convertToCommandError } from "../CommandError";
+import { convertToCommandError } from "../../utils/CommandError";
 
 export class DeletePersistentSubscription extends Command {
   private _stream: string;

@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { Metadata } from "@grpc/grpc-js";
-import { Credentials } from "../types";
+
+interface Credentials {
+  username: string;
+  password: string;
+}
 
 export class Command {
   private _credentials?: Credentials;
@@ -30,7 +34,7 @@ export class Command {
    * @param password
    */
   authenticated(username: string, password: string) {
-    this._credentials = Credentials(username, password);
+    this._credentials = { username, password };
     return this;
   }
 

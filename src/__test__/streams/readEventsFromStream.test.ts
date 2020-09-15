@@ -6,7 +6,7 @@ import {
   ESDBConnection,
   EventStoreConnection,
   EventData,
-} from "../../index";
+} from "../..";
 
 describe("readEventsFromStream", () => {
   const node = createTestNode();

@@ -2,9 +2,9 @@ import { StreamIdentifier } from "../../../generated/shared_pb";
 import { CreateReq } from "../../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../../generated/persistent_grpc_pb";
 
-import { ConsumerStrategy, RoundRobin, ESDBConnection } from "../../types";
+import { ConsumerStrategy, ESDBConnection } from "../../types";
 import { Command } from "../Command";
-import { convertToCommandError } from "../CommandError";
+import { convertToCommandError } from "../../utils/CommandError";
 
 export class CreatePersistentSubscription extends Command {
   private _stream: string;
@@ -39,7 +39,7 @@ export class CreatePersistentSubscription extends Command {
     this._liveBufferSize = 500;
     this._readBatchSize = 20;
     this._historyBufferSize = 500;
-    this._strategy = RoundRobin;
+    this._strategy = "round_robin";
   }
 
   /**
@@ -228,7 +228,7 @@ export class CreatePersistentSubscription extends Command {
     settings.setReadBatchSize(this._readBatchSize);
     settings.setHistoryBufferSize(this._historyBufferSize);
 
-    switch (this._strategy.__typename) {
+    switch (this._strategy) {
       case "dispatch_to_single":
         settings.setNamedConsumerStrategy(
           CreateReq.ConsumerStrategy.DISPATCHTOSINGLE
@@ -237,7 +237,7 @@ export class CreatePersistentSubscription extends Command {
       case "pinned":
         settings.setNamedConsumerStrategy(CreateReq.ConsumerStrategy.PINNED);
         break;
-      default:
+      case "round_robin":
         settings.setNamedConsumerStrategy(
           CreateReq.ConsumerStrategy.ROUNDROBIN
         );

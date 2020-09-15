@@ -9,7 +9,7 @@ import {
   SubscriptionReport,
   subscribeToAll,
   readEventsFromStream,
-} from "../../index";
+} from "../..";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();

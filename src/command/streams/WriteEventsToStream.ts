@@ -3,46 +3,35 @@ import { StreamIdentifier, Empty, UUID } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
 import {
-  Revision,
-  EventData,
   WriteResult,
   WriteResultFailure,
   WriteResultSuccess,
   CurrentRevision,
-  CurrentRevisionNoStream,
+  ESDBConnection,
   ExpectedRevision,
-  ExpectedRevisionAny,
-  CurrentStreamRevision,
-  ExpectedStreamRevision,
-  ExpectedRevisionExists,
-} from "../..";
+} from "../../types";
 import { Command } from "../Command";
-import { ESDBConnection } from "../../types";
+import { EventData } from "../../events";
 
 export class WriteEventsToStream extends Command {
   private readonly _stream: string;
-  private _revision: Revision;
+  private _revision: ExpectedRevision;
   private _events: EventData[] = [];
 
   constructor(stream: string) {
     super();
     this._stream = stream;
-    this._revision = Revision.Any;
+    this._revision = "any";
   }
 
   /**
    * Asks the server to check the stream is at specific revision before writing events.
    * @param revision
    */
-  expectedRevision(revision: Revision): WriteEventsToStream {
+  expectedRevision(revision: ExpectedRevision): WriteEventsToStream {
     this._revision = revision;
     return this;
   }
-
-  /**
-   * Sends asynchronously events to the server.
-   * @param events Events sent to the server.
-   */
 
   /**
    * Adds events to be sent to the server, can be called multiple times.
@@ -69,27 +58,25 @@ export class WriteEventsToStream extends Command {
     identifier.setStreamname(Buffer.from(this._stream).toString("base64"));
     options.setStreamIdentifier(identifier);
 
-    switch (this._revision.__typename) {
-      case "exact": {
-        options.setRevision(this._revision.revision);
-        break;
-      }
-
-      case "no_stream": {
-        options.setNoStream(new Empty());
-        break;
-      }
-
-      case "stream_exists": {
-        options.setStreamExists(new Empty());
-        break;
-      }
-
+    switch (this._revision) {
       case "any": {
         options.setAny(new Empty());
         break;
       }
+      case "no_stream": {
+        options.setNoStream(new Empty());
+        break;
+      }
+      case "stream_exists": {
+        options.setStreamExists(new Empty());
+        break;
+      }
+      default: {
+        options.setRevision(this._revision);
+        break;
+      }
     }
+
     header.setOptions(options);
 
     const client = await connection._client(StreamsClient);
@@ -128,17 +115,17 @@ export class WriteEventsToStream extends Command {
 
         if (resp.hasWrongExpectedVersion()) {
           const grpcError = resp.getWrongExpectedVersion()!;
-          let current: CurrentRevision = CurrentRevisionNoStream;
-          let expected: ExpectedRevision = ExpectedRevisionAny;
+          let current: CurrentRevision = "no_stream";
+          let expected: ExpectedRevision = "any";
 
           if (grpcError.hasCurrentRevision()) {
-            current = CurrentStreamRevision(grpcError.getCurrentRevision());
+            current = grpcError.getCurrentRevision();
           }
 
           if (grpcError.hasExpectedRevision()) {
-            expected = ExpectedStreamRevision(grpcError.getExpectedRevision());
+            expected = grpcError.getExpectedRevision();
           } else if (grpcError.hasStreamExists()) {
-            expected = ExpectedRevisionExists;
+            expected = "stream_exists";
           }
 
           const failure: WriteResultFailure = {

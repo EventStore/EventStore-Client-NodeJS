@@ -3,28 +3,25 @@ import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { ReadReq } from "../../../generated/streams_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import {
-  Backward,
-  Direction,
-  Forward,
   Position,
   ReadStreamResult,
-  StreamEnd,
-  StreamPosition,
-  StreamStart,
   ESDBConnection,
+  ReadPosition,
+  Direction,
 } from "../../types";
+
 import { Command } from "../Command";
-import { handleBatchRead } from "./utils";
+import { handleBatchRead } from "../../utils/handleBatchRead";
 
 export class ReadAllEvents extends Command {
-  private _position: StreamPosition | StreamStart | StreamEnd;
+  private _position: ReadPosition;
   private _direction: Direction;
   private _count: number;
 
   constructor() {
     super();
-    this._direction = Forward;
-    this._position = StreamStart;
+    this._direction = "forward";
+    this._position = "start";
     this._count = 1;
   }
 
@@ -32,7 +29,7 @@ export class ReadAllEvents extends Command {
    * Asks the command to read forward (toward the end of the stream). Default behavior.
    */
   forward(): ReadAllEvents {
-    this._direction = Forward;
+    this._direction = "forward";
     return this;
   }
 
@@ -40,7 +37,7 @@ export class ReadAllEvents extends Command {
    * Asks the command to read backward (toward the beginning of the stream).
    */
   backward(): ReadAllEvents {
-    this._direction = Backward;
+    this._direction = "backward";
     return this;
   }
 
@@ -58,7 +55,7 @@ export class ReadAllEvents extends Command {
    * @param position
    */
   fromPosition(position: Position): ReadAllEvents {
-    this._position = StreamPosition(position);
+    this._position = position;
     return this;
   }
 
@@ -66,7 +63,7 @@ export class ReadAllEvents extends Command {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): ReadAllEvents {
-    this._position = StreamStart;
+    this._position = "start";
     return this;
   }
 
@@ -74,7 +71,7 @@ export class ReadAllEvents extends Command {
    * Starts the read from the end of the stream.
    */
   fromEnd(): ReadAllEvents {
-    this._position = StreamEnd;
+    this._position = "end";
     return this;
   }
 
@@ -99,15 +96,7 @@ export class ReadAllEvents extends Command {
 
     const allOptions = new ReadReq.Options.AllOptions();
 
-    switch (this._position.__typename) {
-      case "position": {
-        const pos = new ReadReq.Options.Position();
-        pos.setCommitPosition(this._position.position.commit);
-        pos.setPreparePosition(this._position.position.prepare);
-        allOptions.setPosition(pos);
-        break;
-      }
-
+    switch (this._position) {
       case "start": {
         allOptions.setStart(new Empty());
         break;
@@ -117,18 +106,25 @@ export class ReadAllEvents extends Command {
         allOptions.setEnd(new Empty());
         break;
       }
+
+      default: {
+        const pos = new ReadReq.Options.Position();
+        pos.setCommitPosition(this._position.commit);
+        pos.setPreparePosition(this._position.prepare);
+        allOptions.setPosition(pos);
+        break;
+      }
     }
     options.setCount(this._count);
     options.setAll(allOptions);
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());
 
-    switch (this._direction.__typename) {
+    switch (this._direction) {
       case "forward": {
         options.setReadDirection(0);
         break;
       }
-
       case "backward": {
         options.setReadDirection(1);
         break;

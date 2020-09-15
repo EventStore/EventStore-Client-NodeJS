@@ -6,9 +6,10 @@ import {
   EventStoreConnection,
   EventData,
   readEventsFromStream,
-} from "../../index";
-import { deleteStream } from "../../command/streams";
-import { WrongExpectedVersionError } from "../../command";
+  WrongExpectedVersionError,
+  deleteStream,
+} from "../..";
+import { NO_STREAM, STREAM_EXISTS } from "../../constants";
 
 describe("deleteStream", () => {
   const node = createTestNode();
@@ -71,10 +72,7 @@ describe("deleteStream", () => {
         it("fails", async () => {
           try {
             const result = await deleteStream(STREAM)
-              .expectedRevision({
-                __typename: "exact",
-                revision: 2,
-              })
+              .expectedRevision(2)
               .execute(connection);
 
             expect(result).toBe("Unreachable");
@@ -97,10 +95,7 @@ describe("deleteStream", () => {
           const revision = events![0].event!.revision;
 
           const result = await deleteStream(STREAM)
-            .expectedRevision({
-              __typename: "exact",
-              revision,
-            })
+            .expectedRevision(revision)
             .execute(connection);
 
           expect(result).toBeDefined();
@@ -130,18 +125,14 @@ describe("deleteStream", () => {
         it("fails", async () => {
           await expect(
             deleteStream(NOT_A_STREAM)
-              .expectedRevision({
-                __typename: "stream_exists",
-              })
+              .expectedRevision(STREAM_EXISTS)
               .execute(connection)
           ).rejects.toThrowError(`error here`);
         });
 
         it("succeeds", async () => {
           const result = await deleteStream(STREAM)
-            .expectedRevision({
-              __typename: "stream_exists",
-            })
+            .expectedRevision(STREAM_EXISTS)
             .execute(connection);
 
           expect(result).toBeDefined();
@@ -170,9 +161,7 @@ describe("deleteStream", () => {
         it("fails", async () => {
           try {
             const result = await deleteStream(STREAM)
-              .expectedRevision({
-                __typename: "no_stream",
-              })
+              .expectedRevision(NO_STREAM)
               .execute(connection);
 
             expect(result).toBe("Unreachable");
@@ -187,9 +176,7 @@ describe("deleteStream", () => {
 
         it("succeeds", async () => {
           const result = await deleteStream(NOT_A_STREAM)
-            .expectedRevision({
-              __typename: "no_stream",
-            })
+            .expectedRevision(NO_STREAM)
             .execute(connection);
 
           expect(result).toBeDefined();

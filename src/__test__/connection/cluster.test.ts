@@ -5,7 +5,7 @@ import {
   writeEventsToStream,
   EventStoreConnection,
   EventData,
-} from "../../index";
+} from "../..";
 
 describe("cluster", () => {
   const cluster = createTestCluster();

@@ -5,10 +5,10 @@ import {
   writeEventsToStream,
   EventStoreConnection,
   EventData,
-  NodePreference,
+  FOLLOWER,
   ErrorType,
   NotLeaderError,
-} from "../../index";
+} from "../..";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();
@@ -26,7 +26,7 @@ describe("not-leader", () => {
   test("should get an error here", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(cluster.certPath)
-      .gossipClusterConnection(cluster.endpoints, NodePreference.Follower);
+      .gossipClusterConnection(cluster.endpoints, FOLLOWER);
 
     const writeResult = await writeEventsToStream(STREAM_NAME)
       .send(event.build())

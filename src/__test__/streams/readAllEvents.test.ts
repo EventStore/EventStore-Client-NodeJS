@@ -7,7 +7,7 @@ import {
   EventData,
   readAllEvents,
   readEventsFromStream,
-} from "../../index";
+} from "../..";
 
 describe("readAllEvents", () => {
   const node = createTestNode();

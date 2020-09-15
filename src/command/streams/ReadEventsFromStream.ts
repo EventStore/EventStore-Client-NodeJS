@@ -3,22 +3,17 @@ import { ReadReq } from "../../../generated/streams_pb";
 import { Empty, StreamIdentifier } from "../../../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import {
-  Backward,
-  Direction,
-  Forward,
   ReadStreamResult,
-  StreamEnd,
-  StreamExact,
-  StreamRevision,
-  StreamStart,
   ESDBConnection,
+  ReadRevision,
+  Direction,
 } from "../../types";
 import { Command } from "../Command";
-import { handleBatchRead } from "./utils";
+import { handleBatchRead } from "../../utils/handleBatchRead";
 
 export class ReadEventsFromStream extends Command {
   private _stream: string;
-  private _revision: StreamRevision;
+  private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
   private _direction: Direction;
   private _count: number;
@@ -26,9 +21,9 @@ export class ReadEventsFromStream extends Command {
   constructor(stream: string) {
     super();
     this._stream = stream;
-    this._revision = StreamStart;
+    this._revision = "start";
     this._resolveLinkTos = false;
-    this._direction = Forward;
+    this._direction = "forward";
     this._count = 1;
   }
 
@@ -36,7 +31,7 @@ export class ReadEventsFromStream extends Command {
    * Asks the command to read forward (toward the end of the stream). Default behavior.
    */
   forward(): ReadEventsFromStream {
-    this._direction = Forward;
+    this._direction = "forward";
     return this;
   }
 
@@ -44,7 +39,7 @@ export class ReadEventsFromStream extends Command {
    * Asks the command to read backward (toward the beginning of the stream).
    */
   backward(): ReadEventsFromStream {
-    this._direction = Backward;
+    this._direction = "backward";
     return this;
   }
 
@@ -62,7 +57,7 @@ export class ReadEventsFromStream extends Command {
    * @param revision
    */
   fromRevision(revision: number): ReadEventsFromStream {
-    this._revision = StreamExact(revision);
+    this._revision = revision;
     return this;
   }
 
@@ -70,7 +65,7 @@ export class ReadEventsFromStream extends Command {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): ReadEventsFromStream {
-    this._revision = StreamStart;
+    this._revision = "start";
     return this;
   }
 
@@ -78,7 +73,7 @@ export class ReadEventsFromStream extends Command {
    * Starts the read from the end of the stream.
    */
   fromEnd(): ReadEventsFromStream {
-    this._revision = StreamEnd;
+    this._revision = "end";
     return this;
   }
 
@@ -122,17 +117,17 @@ export class ReadEventsFromStream extends Command {
     const streamOptions = new ReadReq.Options.StreamOptions();
     streamOptions.setStreamIdentifier(identifier);
 
-    switch (this._revision.__typename) {
-      case "exact": {
-        streamOptions.setRevision(this._revision.revision);
-        break;
-      }
+    switch (this._revision) {
       case "start": {
         streamOptions.setStart(new Empty());
         break;
       }
       case "end": {
         streamOptions.setEnd(new Empty());
+        break;
+      }
+      default: {
+        streamOptions.setRevision(this._revision);
         break;
       }
     }
@@ -143,7 +138,7 @@ export class ReadEventsFromStream extends Command {
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());
 
-    switch (this._direction.__typename) {
+    switch (this._direction) {
       case "forward": {
         options.setReadDirection(0);
         break;

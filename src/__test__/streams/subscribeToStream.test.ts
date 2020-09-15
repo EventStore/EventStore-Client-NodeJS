@@ -8,7 +8,7 @@ import {
   ResolvedEvent,
   SubscriptionReport,
   subscribeToStream,
-} from "../../index";
+} from "../..";
 
 describe("subscribeToStream", () => {
   const node = createTestNode();
