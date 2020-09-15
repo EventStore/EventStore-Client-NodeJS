@@ -56,27 +56,14 @@ export type CurrentRevision =
    */
   | number;
 
-export interface WrongExpectedVersion {
-  current: CurrentRevision;
-  expected: ExpectedRevision;
-}
-
 /**
  * Represents the direction of read operation (both from '$all' and a regular stream).
  */
 export type Direction = typeof constants.FORWARD | typeof constants.BACKWARD;
 
-export type WriteResult = WriteResultSuccess | WriteResultFailure;
-
-export type WriteResultSuccess = {
-  __typename: "success";
+export type WriteResult = {
   nextExpectedVersion: number;
   position?: Position;
-};
-
-export type WriteResultFailure = {
-  __typename: "failure";
-  error: WrongExpectedVersion | Error;
 };
 
 /**

@@ -37,11 +37,9 @@ describe("tombstoneStream", () => {
       const ANY_REVISION_STREAM = "any_revision_stream";
 
       beforeAll(async () => {
-        const result = await writeEventsToStream(ANY_REVISION_STREAM)
+        await writeEventsToStream(ANY_REVISION_STREAM)
           .send(event, event, event, event)
           .execute(connection);
-
-        expect(result.__typename).toBe("success");
       });
 
       it("succeeds", async () => {
@@ -71,11 +69,9 @@ describe("tombstoneStream", () => {
         const STREAM = "expected_revision_stream_exact";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
@@ -121,11 +117,9 @@ describe("tombstoneStream", () => {
         const NOT_A_STREAM = "i_dont_exist_hopefully";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
@@ -154,11 +148,9 @@ describe("tombstoneStream", () => {
         const STREAM = "i_exist_hopefully";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {

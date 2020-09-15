@@ -28,12 +28,9 @@ describe("subscribeToStream", () => {
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
-    const OUT_OF_STREAM_NAME = "out_of_stream_name";
-    const result = await writeEventsToStream(OUT_OF_STREAM_NAME)
+    await writeEventsToStream("out_of_stream_name")
       .send(event.build(), event.build(), event.build(), event.build())
       .execute(connection);
-
-    expect(result.__typename).toBe("success");
   });
 
   afterAll(async () => {
@@ -45,11 +42,9 @@ describe("subscribeToStream", () => {
       const defer = new Defer();
       const STREAM_NAME = "from_start_test_stream_name";
 
-      const preWriteResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build(), event.build())
         .execute(connection);
-
-      expect(preWriteResult.__typename).toBe("success");
 
       const onError = jest.fn((error) => {
         defer.reject(error);
@@ -77,12 +72,12 @@ describe("subscribeToStream", () => {
         })
         .execute(connection);
 
-      const writeResult = await writeEventsToStream(STREAM_NAME)
+      await delay(500);
+
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 
@@ -95,11 +90,9 @@ describe("subscribeToStream", () => {
       const STREAM_NAME = "from_end_test_stream_name";
       const defer = new Defer();
 
-      const preWriteResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build(), event.build())
         .execute(connection);
-
-      expect(preWriteResult.__typename).toBe("success");
 
       const onError = jest.fn((error) => {
         defer.reject(error);
@@ -129,12 +122,10 @@ describe("subscribeToStream", () => {
 
       await delay(500);
 
-      const writeResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 
@@ -146,11 +137,9 @@ describe("subscribeToStream", () => {
     test("from revision", async () => {
       const STREAM_NAME = "from_revision_test_stream_name";
 
-      const preWriteResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build(), event.build())
         .execute(connection);
-
-      expect(preWriteResult.__typename).toBe("success");
 
       const defer = new Defer();
 
@@ -180,12 +169,12 @@ describe("subscribeToStream", () => {
         })
         .execute(connection);
 
-      const writeResult = await writeEventsToStream(STREAM_NAME)
+      await delay(500);
+
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 

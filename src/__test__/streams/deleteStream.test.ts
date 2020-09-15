@@ -36,11 +36,9 @@ describe("deleteStream", () => {
       const ANY_REVISION_STREAM = "any_revision_stream";
 
       beforeAll(async () => {
-        const result = await writeEventsToStream(ANY_REVISION_STREAM)
+        await writeEventsToStream(ANY_REVISION_STREAM)
           .send(event, event, event, event)
           .execute(connection);
-
-        expect(result.__typename).toBe("success");
       });
 
       it("succeeds", async () => {
@@ -60,11 +58,9 @@ describe("deleteStream", () => {
         const STREAM = "expected_revision_stream_exact";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
@@ -105,16 +101,14 @@ describe("deleteStream", () => {
       });
 
       // throws error: 2 UNKNOWN: Exception was thrown by handler.
-      describe.skip("exists", () => {
+      describe.skip(STREAM_EXISTS, () => {
         const STREAM = "expected_revision_stream_exists";
         const NOT_A_STREAM = "i_dont_exist_hopefully";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
@@ -138,16 +132,14 @@ describe("deleteStream", () => {
         });
       });
 
-      describe("no stream", () => {
+      describe(NO_STREAM, () => {
         const NOT_A_STREAM = "expected_revision_stream_no_stream";
         const STREAM = "i_exist_hopefully";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {

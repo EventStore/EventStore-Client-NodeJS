@@ -1,5 +1,5 @@
 import { status as StatusCode, ServiceError } from "@grpc/grpc-js";
-import { EndPoint } from "../types";
+import { CurrentRevision, EndPoint, ExpectedRevision } from "../types";
 
 export enum ErrorType {
   TIMEOUT = "timeout",
@@ -117,25 +117,36 @@ export class ScavengeNotFoundError extends CommandErrorBase {
   }
 }
 
+interface WrongExpectedVersion {
+  streamName: string;
+  expected: ExpectedRevision;
+  current: CurrentRevision;
+}
+
 export class WrongExpectedVersionError extends CommandErrorBase {
   public type: ErrorType.WRONG_EXPECTED_VERSION =
     ErrorType.WRONG_EXPECTED_VERSION;
   public streamName: string;
-  public expectedVersion: number;
-  public actualVersion?: number;
+  public expectedVersion: ExpectedRevision;
+  public actualVersion: CurrentRevision;
 
-  constructor(error: ServiceError) {
+  constructor(error?: ServiceError, versions?: WrongExpectedVersion) {
     super(error);
-    const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.expectedVersion = parseInt(
-      metadata["expected-version"].toString(),
-      10
-    );
 
-    const actualVersion = metadata["actual-version"];
-    if (actualVersion) {
-      this.actualVersion = parseInt(actualVersion.toString(), 10);
+    if (error) {
+      const metadata = error.metadata!.getMap();
+      this.streamName = metadata["stream-name"].toString();
+      this.expectedVersion = parseInt(
+        metadata["expected-version"].toString(),
+        10
+      );
+      this.actualVersion = metadata["actual-version"]
+        ? parseInt(metadata["actual-version"].toString(), 10)
+        : "no_stream";
+    } else {
+      this.streamName = versions!.streamName;
+      this.expectedVersion = versions!.expected;
+      this.actualVersion = versions!.current;
     }
   }
 }

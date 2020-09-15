@@ -25,17 +25,13 @@ describe("readAllEvents", () => {
       message: "test",
     }).build();
 
-    const result1 = await writeEventsToStream(STREAM_NAME_A)
+    await writeEventsToStream(STREAM_NAME_A)
       .send(event, event, event, event)
       .execute(connection);
 
-    expect(result1.__typename).toBe("success");
-
-    const result2 = await writeEventsToStream(STREAM_NAME_B)
+    await writeEventsToStream(STREAM_NAME_B)
       .send(event, event, event, event)
       .execute(connection);
-
-    expect(result2.__typename).toBe("success");
   });
 
   afterAll(async () => {

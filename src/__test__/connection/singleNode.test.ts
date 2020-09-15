@@ -29,7 +29,7 @@ describe("singleNodeConnection", () => {
       .send(event.build())
       .execute(connection);
 
-    expect(writeResult.__typename).toBe("success");
+    expect(writeResult).toBeDefined();
 
     const readResult = await readEventsFromStream(STREAM_NAME).execute(
       connection

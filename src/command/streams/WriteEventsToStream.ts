@@ -2,16 +2,13 @@ import { AppendReq } from "../../../generated/streams_pb";
 import { StreamIdentifier, Empty, UUID } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
-import {
-  WriteResult,
-  WriteResultFailure,
-  WriteResultSuccess,
-  CurrentRevision,
-  ESDBConnection,
-  ExpectedRevision,
-} from "../../types";
+import { WriteResult, ESDBConnection, ExpectedRevision } from "../../types";
 import { Command } from "../Command";
 import { EventData } from "../../events";
+import {
+  convertToCommandError,
+  WrongExpectedVersionError,
+} from "../../utils/CommandError";
 
 export class WriteEventsToStream extends Command {
   private readonly _stream: string;
@@ -81,15 +78,41 @@ export class WriteEventsToStream extends Command {
 
     const client = await connection._client(StreamsClient);
 
-    return new Promise<WriteResult>((resolve) => {
+    return new Promise<WriteResult>((resolve, reject) => {
       const sink = client.append(this.metadata, (error, resp) => {
         if (error != null) {
-          const result: WriteResultFailure = {
-            __typename: "failure",
-            error,
-          };
+          return reject(convertToCommandError(error));
+        }
 
-          return resolve(result);
+        if (resp.hasWrongExpectedVersion()) {
+          const grpcError = resp.getWrongExpectedVersion()!;
+
+          let expected: ExpectedRevision = "any";
+
+          switch (true) {
+            case grpcError.hasExpectedRevision(): {
+              expected = grpcError.getExpectedRevision()!;
+              break;
+            }
+            case grpcError.hasStreamExists(): {
+              expected = "stream_exists";
+              break;
+            }
+            case grpcError.hasNoStream(): {
+              expected = "no_stream";
+              break;
+            }
+          }
+
+          return reject(
+            new WrongExpectedVersionError(null as never, {
+              streamName: this._stream,
+              current: grpcError.hasCurrentRevision()
+                ? grpcError.getCurrentRevision()
+                : "no_stream",
+              expected,
+            })
+          );
         }
 
         if (resp.hasSuccess()) {
@@ -104,39 +127,10 @@ export class WriteEventsToStream extends Command {
               }
             : undefined;
 
-          const result: WriteResultSuccess = {
-            __typename: "success",
+          return resolve({
             nextExpectedVersion,
             position,
-          };
-
-          return resolve(result);
-        }
-
-        if (resp.hasWrongExpectedVersion()) {
-          const grpcError = resp.getWrongExpectedVersion()!;
-          let current: CurrentRevision = "no_stream";
-          let expected: ExpectedRevision = "any";
-
-          if (grpcError.hasCurrentRevision()) {
-            current = grpcError.getCurrentRevision();
-          }
-
-          if (grpcError.hasExpectedRevision()) {
-            expected = grpcError.getExpectedRevision();
-          } else if (grpcError.hasStreamExists()) {
-            expected = "stream_exists";
-          }
-
-          const failure: WriteResultFailure = {
-            __typename: "failure",
-            error: {
-              current: current,
-              expected: expected,
-            },
-          };
-
-          return resolve(failure);
+          });
         }
       });
 

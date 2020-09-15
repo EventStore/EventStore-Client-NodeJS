@@ -31,18 +31,16 @@ describe("readEventsFromStream", () => {
       ).build()
     );
 
-    const result1 = await writeEventsToStream(STREAM_NAME)
+    await writeEventsToStream(STREAM_NAME)
       .send(...jsonEvents)
       .send(...binaryEvents)
       .execute(connection);
-
-    expect(result1.__typename).toBe("success");
 
     const outOfStreamEvent = EventData.json("out-of-stream-test", {
       message: "outOfStream",
     }).build();
 
-    const result2 = await writeEventsToStream(OUT_OF_STREAM_NAME)
+    await writeEventsToStream(OUT_OF_STREAM_NAME)
       .send(
         outOfStreamEvent,
         outOfStreamEvent,
@@ -51,8 +49,6 @@ describe("readEventsFromStream", () => {
         outOfStreamEvent
       )
       .execute(connection);
-
-    expect(result2.__typename).toBe("success");
   });
 
   afterAll(async () => {

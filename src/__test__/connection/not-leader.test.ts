@@ -32,7 +32,7 @@ describe("not-leader", () => {
       .send(event.build())
       .execute(connection);
 
-    expect(writeResult.__typename).toBe("success");
+    expect(writeResult).toBeDefined();
 
     const readFromStream = readEventsFromStream(STREAM_NAME)
       .count(10)
