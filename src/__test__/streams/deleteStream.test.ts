@@ -66,7 +66,7 @@ describe("deleteStream", () => {
         it("fails", async () => {
           try {
             const result = await deleteStream(STREAM)
-              .expectedRevision(2)
+              .expectedRevision(2n)
               .execute(connection);
 
             expect(result).toBe("Unreachable");
@@ -74,7 +74,7 @@ describe("deleteStream", () => {
             expect(error).toBeInstanceOf(WrongExpectedVersionError);
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM);
-              expect(error.expectedVersion).toBe(2);
+              expect(error.expectedVersion).toBe(2n);
             }
           }
         });

@@ -59,7 +59,7 @@ describe("readEventsFromStream", () => {
     describe("Event types", () => {
       test("json event", async () => {
         const [resolvedEvent] = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(1)
+          .fromRevision(1n)
           .count(1)
           .execute(connection);
 
@@ -75,7 +75,7 @@ describe("readEventsFromStream", () => {
 
       test("binary event", async () => {
         const [resolvedEvent] = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(5)
+          .fromRevision(5n)
           .count(1)
           .execute(connection);
 
@@ -100,7 +100,7 @@ describe("readEventsFromStream", () => {
 
       test("from revision", async () => {
         const events = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(1)
+          .fromRevision(1n)
           .count(Number.MAX_SAFE_INTEGER)
           .execute(connection);
 
@@ -119,7 +119,7 @@ describe("readEventsFromStream", () => {
 
       test("backward from revision", async () => {
         const events = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(1)
+          .fromRevision(1n)
           .backward()
           .count(Number.MAX_SAFE_INTEGER)
           .execute(connection);

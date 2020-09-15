@@ -16,7 +16,7 @@ export class ReadEventsFromStream extends Command {
   private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
   private _direction: Direction;
-  private _count: number;
+  private _count: bigint;
 
   constructor(stream: string) {
     super();
@@ -24,7 +24,7 @@ export class ReadEventsFromStream extends Command {
     this._revision = "start";
     this._resolveLinkTos = false;
     this._direction = "forward";
-    this._count = 1;
+    this._count = BigInt(1);
   }
 
   /**
@@ -56,7 +56,7 @@ export class ReadEventsFromStream extends Command {
    * Starts the read at the given event revision.
    * @param revision
    */
-  fromRevision(revision: number): ReadEventsFromStream {
+  fromRevision(revision: bigint): ReadEventsFromStream {
     this._revision = revision;
     return this;
   }
@@ -95,8 +95,8 @@ export class ReadEventsFromStream extends Command {
     return this;
   }
 
-  count(count: number): ReadEventsFromStream {
-    this._count = count;
+  count(count: bigint | number): ReadEventsFromStream {
+    this._count = BigInt(count);
     return this;
   }
 
@@ -127,14 +127,14 @@ export class ReadEventsFromStream extends Command {
         break;
       }
       default: {
-        streamOptions.setRevision(this._revision);
+        streamOptions.setRevision(this._revision.toString(10));
         break;
       }
     }
 
     options.setStream(streamOptions);
     options.setResolveLinks(this._resolveLinkTos);
-    options.setCount(this._count);
+    options.setCount(this._count.toString(10));
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());
 

@@ -136,12 +136,9 @@ export class WrongExpectedVersionError extends CommandErrorBase {
     if (error) {
       const metadata = error.metadata!.getMap();
       this.streamName = metadata["stream-name"].toString();
-      this.expectedVersion = parseInt(
-        metadata["expected-version"].toString(),
-        10
-      );
+      this.expectedVersion = BigInt(metadata["expected-version"].toString());
       this.actualVersion = metadata["actual-version"]
-        ? parseInt(metadata["actual-version"].toString(), 10)
+        ? BigInt(metadata["actual-version"].toString())
         : "no_stream";
     } else {
       this.streamName = versions!.streamName;

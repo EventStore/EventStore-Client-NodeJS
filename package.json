@@ -36,7 +36,12 @@
   },
   "homepage": "https://github.com/EventStore/EventStore-Client-NodeJS#readme",
   "jest": {
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "./src/__test__/tsconfig.json"
+      }
+    }
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.1.5",

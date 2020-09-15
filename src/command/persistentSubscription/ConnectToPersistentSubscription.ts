@@ -10,11 +10,9 @@ import {
   PersistentReport,
   PersistentAction,
   PersistentSubscriptionHandler,
-  RecordedEvent,
-  ResolvedEvent,
 } from "../../types";
 import { Command } from "../Command";
-import { convertGrpcRecord } from "../../utils/convertGrpcRecord";
+import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
 
 class PersistentReportImpl implements PersistentReport {
   private _duplexStream: ClientDuplexStream<ReadReq, ReadResp>;
@@ -197,25 +195,7 @@ export class ConnectToPersistentSubscription extends Command {
       }
 
       if (resp.hasEvent()) {
-        const grpcEvent = resp.getEvent()!;
-
-        let event: RecordedEvent | undefined;
-        let link: RecordedEvent | undefined;
-
-        if (grpcEvent.hasEvent()) {
-          event = convertGrpcRecord(grpcEvent.getEvent()!);
-        }
-
-        if (grpcEvent.hasLink()) {
-          link = convertGrpcRecord(grpcEvent.getLink()!);
-        }
-
-        const resolved: ResolvedEvent = {
-          event,
-          link,
-          commit_position: grpcEvent.getCommitPosition(),
-        };
-
+        const resolved = convertGrpcEvent(resp.getEvent()!);
         this._handler?.onEvent(report, resolved);
       }
     });

@@ -114,8 +114,8 @@ export class SubscribeToAll extends Command {
 
       default: {
         const grpcPos = new ReadReq.Options.Position();
-        grpcPos.setCommitPosition(this._position.commit);
-        grpcPos.setPreparePosition(this._position.prepare);
+        grpcPos.setCommitPosition(this._position.commit.toString(10));
+        grpcPos.setPreparePosition(this._position.prepare.toString(10));
         allOptions.setPosition(grpcPos);
         break;
       }

@@ -40,7 +40,7 @@ describe("createPersistentSubscription", () => {
       await expect(
         createPersistentSubscription(STREAM_NAME, GROUP_NAME)
           .authenticated("admin", "changeit")
-          .fromRevision(1)
+          .fromRevision(1n)
           .execute(connection)
       ).resolves.toBeUndefined();
     });

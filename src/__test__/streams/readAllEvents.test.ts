@@ -59,7 +59,7 @@ describe("readAllEvents", () => {
     // throws deep in GRPC crapness (goog.asserts)
     test.skip("from position", async () => {
       const [eventToExtract] = await readEventsFromStream(STREAM_NAME_A)
-        .fromRevision(1)
+        .fromRevision(1n)
         .count(1)
         .execute(connection);
 

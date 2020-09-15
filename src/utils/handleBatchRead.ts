@@ -1,9 +1,9 @@
 import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { ReadResp } from "../../generated/streams_pb";
 
-import { RecordedEvent, ResolvedEvent } from "../types";
+import { ResolvedEvent } from "../types";
 import { convertToCommandError, StreamNotFoundError } from "./CommandError";
-import { convertGrpcRecord } from "./convertGrpcRecord";
+import { convertGrpcEvent } from "./convertGrpcEvent";
 
 export function handleBatchRead(
   stream: ClientReadableStream<ReadResp>
@@ -15,31 +15,9 @@ export function handleBatchRead(
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasStreamNotFound()) {
         streamNotFound = resp.getStreamNotFound();
-      } else {
-        let event: RecordedEvent | undefined;
-        let link: RecordedEvent | undefined;
-
-        const grpcEvent = resp.getEvent();
-        if (resp.hasEvent() && grpcEvent) {
-          let grpcRecordedEvent = grpcEvent.getEvent();
-
-          if (grpcEvent.hasEvent() && grpcRecordedEvent) {
-            event = convertGrpcRecord(grpcRecordedEvent);
-          }
-
-          grpcRecordedEvent = grpcEvent.getLink();
-          if (grpcEvent.hasLink() && grpcRecordedEvent) {
-            link = convertGrpcRecord(grpcRecordedEvent);
-          }
-
-          const resolved: ResolvedEvent = {
-            event,
-            link,
-            commit_position: grpcEvent.getCommitPosition(),
-          };
-
-          resolvedEvents.push(resolved);
-        }
+      } else if (resp.hasEvent()) {
+        const resolved = convertGrpcEvent(resp.getEvent()!);
+        resolvedEvents.push(resolved);
       }
     });
 

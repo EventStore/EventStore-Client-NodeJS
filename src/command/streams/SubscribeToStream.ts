@@ -28,7 +28,7 @@ export class SubscribeToStream extends Command {
    * Starts the read at the given event revision.
    * @param revision
    */
-  fromRevision(revision: number): SubscribeToStream {
+  fromRevision(revision: bigint): SubscribeToStream {
     this._revision = revision;
     return this;
   }
@@ -104,7 +104,7 @@ export class SubscribeToStream extends Command {
       }
 
       default: {
-        streamOptions.setRevision(this._revision);
+        streamOptions.setRevision(this._revision.toString(10));
         break;
       }
     }

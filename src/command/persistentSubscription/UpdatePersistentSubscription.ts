@@ -10,7 +10,7 @@ export class UpdatePersistentSubscription extends Command {
   private _stream: string;
   private _group: string;
   private _resolveLink: boolean;
-  private _revision: number;
+  private _revision: bigint;
   private _extraStats: boolean;
   private _messageTimeout: number;
   private _maxRetryCount: number;
@@ -29,7 +29,7 @@ export class UpdatePersistentSubscription extends Command {
     this._group = group;
     this._resolveLink = false;
     this._extraStats = false;
-    this._revision = 0;
+    this._revision = BigInt(0);
     this._messageTimeout = 30_000;
     this._maxRetryCount = 10;
     this._checkpointAfter = 2_000;
@@ -80,15 +80,15 @@ export class UpdatePersistentSubscription extends Command {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): UpdatePersistentSubscription {
-    return this.fromRevision(0);
+    return this.fromRevision(BigInt(0));
   }
 
   /**
    * Starts the read at the given event revision.
    * @param revision
    */
-  fromRevision(value: number): UpdatePersistentSubscription {
-    this._revision = value;
+  fromRevision(value: bigint): UpdatePersistentSubscription {
+    this._revision = BigInt(value);
     return this;
   }
 
@@ -200,7 +200,7 @@ export class UpdatePersistentSubscription extends Command {
     const settings = new UpdateReq.Settings();
 
     settings.setResolveLinks(this._resolveLink);
-    settings.setRevision(this._revision);
+    settings.setRevision(this._revision.toString(10));
     settings.setExtraStatistics(this._extraStats);
     settings.setMessageTimeoutMs(this._messageTimeout);
     settings.setCheckpointAfterMs(this._checkpointAfter);

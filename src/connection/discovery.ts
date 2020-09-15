@@ -143,7 +143,7 @@ function listClusterMembers(
 
         const member: MemberInfo = {
           instanceId: grpcMember.getInstanceId()?.getString(),
-          timeStamp: grpcMember.getTimeStamp(),
+          timeStamp: parseInt(grpcMember.getTimeStamp(), 10),
           state: grpcMember.getState(),
           isAlive: grpcMember.getIsAlive(),
           httpEndpoint,
