@@ -3,10 +3,10 @@ import { ReadReq } from "../../../generated/streams_pb";
 import { Empty, StreamIdentifier } from "../../../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import {
-  ReadStreamResult,
   ESDBConnection,
   ReadRevision,
   Direction,
+  ResolvedEvent,
 } from "../../types";
 import { Command } from "../Command";
 import { handleBatchRead } from "../../utils/handleBatchRead";
@@ -105,7 +105,7 @@ export class ReadEventsFromStream extends Command {
    * @param count Max number of events to read.
    */
 
-  async execute(connection: ESDBConnection): Promise<ReadStreamResult> {
+  async execute(connection: ESDBConnection): Promise<ResolvedEvent[]> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();

@@ -178,7 +178,7 @@ describe("subscribeToAll", () => {
       const FINISH_TEST = "from-position-finish";
       const MARKER_EVENT = "marker_event";
 
-      const setUpResult = await writeEventsToStream(STREAM_NAME_B)
+      await writeEventsToStream(STREAM_NAME_B)
         .send(
           EventData.json(MARKER_EVENT, {
             message: "mark my words",
@@ -186,17 +186,13 @@ describe("subscribeToAll", () => {
         )
         .execute(connection);
 
-      expect(setUpResult.__typename).toBe("success");
-
-      const readMarkerResult = await readEventsFromStream(STREAM_NAME_B)
+      const [readMarkerResult] = await readEventsFromStream(STREAM_NAME_B)
         .backward()
         .fromEnd()
         .count(1)
         .execute(connection);
 
-      expect(readMarkerResult.__typename).toBe("success");
-
-      const marker = readMarkerResult.events![0].event!;
+      const marker = readMarkerResult.event!;
       expect(marker.eventType).toBe(MARKER_EVENT);
 
       const addSomeMoreResult = await writeEventsToStream(STREAM_NAME_A)

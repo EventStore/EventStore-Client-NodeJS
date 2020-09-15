@@ -95,13 +95,13 @@ describe("tombstoneStream", () => {
         });
 
         it("succeeds", async () => {
-          const { events } = await readEventsFromStream(STREAM)
+          const [resolvedEvent] = await readEventsFromStream(STREAM)
             .fromEnd()
             .backward()
             .count(1)
             .execute(connection);
 
-          const revision = events![0].event!.revision;
+          const revision = resolvedEvent.event!.revision;
 
           const result = await tombstoneStream(STREAM)
             .expectedRevision(revision)

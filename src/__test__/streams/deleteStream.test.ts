@@ -10,6 +10,7 @@ import {
   deleteStream,
 } from "../..";
 import { NO_STREAM, STREAM_EXISTS } from "../../constants";
+import { StreamNotFoundError } from "../../utils/CommandError";
 
 describe("deleteStream", () => {
   const node = createTestNode();
@@ -48,12 +49,9 @@ describe("deleteStream", () => {
         );
         expect(result).toBeDefined();
 
-        const readResult = await readEventsFromStream(
-          ANY_REVISION_STREAM
-        ).execute(connection);
-
-        expect(readResult.__typename).toBe("not_found");
-        expect(readResult.events).toBeUndefined();
+        await expect(
+          readEventsFromStream(ANY_REVISION_STREAM).execute(connection)
+        ).rejects.toThrowError(StreamNotFoundError);
       });
     });
 
@@ -86,13 +84,13 @@ describe("deleteStream", () => {
         });
 
         it("succeeds", async () => {
-          const { events } = await readEventsFromStream(STREAM)
+          const events = await readEventsFromStream(STREAM)
             .fromEnd()
             .backward()
             .count(1)
             .execute(connection);
 
-          const revision = events![0].event!.revision;
+          const revision = events[0].event!.revision;
 
           const result = await deleteStream(STREAM)
             .expectedRevision(revision)
@@ -100,12 +98,9 @@ describe("deleteStream", () => {
 
           expect(result).toBeDefined();
 
-          const readResult = await readEventsFromStream(STREAM).execute(
-            connection
-          );
-
-          expect(readResult.__typename).toBe("not_found");
-          expect(readResult.events).toBeUndefined();
+          await expect(
+            readEventsFromStream(STREAM).execute(connection)
+          ).rejects.toThrowError(StreamNotFoundError);
         });
       });
 
@@ -137,12 +132,9 @@ describe("deleteStream", () => {
 
           expect(result).toBeDefined();
 
-          const readResult = await readEventsFromStream(STREAM).execute(
-            connection
-          );
-
-          expect(readResult.__typename).toBe("not_found");
-          expect(readResult.events).toBeUndefined();
+          await expect(
+            readEventsFromStream(STREAM).execute(connection)
+          ).rejects.toThrowError(StreamNotFoundError);
         });
       });
 

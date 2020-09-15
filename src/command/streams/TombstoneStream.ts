@@ -73,12 +73,10 @@ export class TombstoneStream extends Command {
 
         if (resp.hasPosition()) {
           const grpcPos = resp.getPosition()!;
-          const pos: Position = {
+          result.position = {
             commit: grpcPos.getCommitPosition(),
             prepare: grpcPos.getPreparePosition(),
           };
-
-          result.position = pos;
         }
 
         return resolve(result);

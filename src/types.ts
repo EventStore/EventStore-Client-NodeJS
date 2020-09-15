@@ -150,18 +150,6 @@ export type RecordedEvent = {
   created: number;
 };
 
-export type ReadStreamResult = ReadStreamSuccess | ReadStreamNotFound;
-
-export type ReadStreamSuccess = {
-  __typename: "success";
-  events: ResolvedEvent[] | undefined; // always defined.
-};
-
-export type ReadStreamNotFound = {
-  __typename: "not_found";
-  events: ResolvedEvent[] | undefined;
-};
-
 export type SubscriptionHandler = {
   onEvent: (report: SubscriptionReport, event: ResolvedEvent) => void;
   onEnd?: () => void;

@@ -35,7 +35,6 @@ describe("insecure", () => {
       connection
     );
 
-    expect(readResult.__typename).toBe("success");
-    expect(readResult.events).toBeDefined();
+    expect(readResult).toBeDefined();
   });
 });

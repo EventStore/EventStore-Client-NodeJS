@@ -28,15 +28,15 @@ export enum ErrorType {
 
 abstract class CommandErrorBase extends Error {
   public abstract readonly type: ErrorType;
-  public code: StatusCode;
+  public code?: StatusCode;
   public message: string;
-  public _raw: ServiceError;
+  public _raw?: ServiceError;
 
-  constructor(error: ServiceError) {
-    super(error.message);
+  constructor(error?: ServiceError, message?: string) {
+    super(error?.message);
     Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
-    this.code = error.code!;
-    this.message = error.message;
+    this.code = error?.code;
+    this.message = error?.message ?? message ?? "";
     this._raw = error;
   }
 }
@@ -71,10 +71,15 @@ export class StreamNotFoundError extends CommandErrorBase {
   public type: ErrorType.STREAM_NOT_FOUND = ErrorType.STREAM_NOT_FOUND;
   public streamName: string;
 
-  constructor(error: ServiceError) {
-    super(error);
-    const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
+  constructor(error?: ServiceError, streamName?: string) {
+    super(error, `${streamName} not found`);
+
+    if (error) {
+      const metadata = error.metadata!.getMap();
+      this.streamName = metadata["stream-name"].toString();
+    } else {
+      this.streamName = streamName ?? "";
+    }
   }
 }
 

@@ -58,7 +58,7 @@ describe("not-leader", () => {
 
         const readResult = await readFromStream.execute(connection);
 
-        expect(readResult.__typename).toBe("success");
+        expect(readResult).toBeDefined();
       }
     }
   });

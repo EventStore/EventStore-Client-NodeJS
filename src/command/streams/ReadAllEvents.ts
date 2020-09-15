@@ -4,10 +4,10 @@ import { ReadReq } from "../../../generated/streams_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import {
   Position,
-  ReadStreamResult,
   ESDBConnection,
   ReadPosition,
   Direction,
+  ResolvedEvent,
 } from "../../types";
 
 import { Command } from "../Command";
@@ -87,7 +87,7 @@ export class ReadAllEvents extends Command {
   /**
    * Sends asynchronously the read command to the server.
    */
-  async execute(connection: ESDBConnection): Promise<ReadStreamResult> {
+  async execute(connection: ESDBConnection): Promise<ResolvedEvent[]> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
 
