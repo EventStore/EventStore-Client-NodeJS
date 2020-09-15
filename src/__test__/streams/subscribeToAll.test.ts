@@ -9,7 +9,7 @@ import {
   SubscriptionReport,
   subscribeToAll,
   readEventsFromStream,
-} from "../../index";
+} from "../..";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();
@@ -28,17 +28,13 @@ describe("subscribeToAll", () => {
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
-    const resultA = await writeEventsToStream(STREAM_NAME_A)
+    await writeEventsToStream(STREAM_NAME_A)
       .send(event.build(), event.build(), event.build(), event.build())
       .execute(connection);
 
-    expect(resultA.__typename).toBe("success");
-
-    const resultB = await writeEventsToStream(STREAM_NAME_B)
+    await writeEventsToStream(STREAM_NAME_B)
       .send(event.build(), event.build(), event.build(), event.build())
       .execute(connection);
-
-    expect(resultB.__typename).toBe("success");
   });
 
   afterAll(async () => {
@@ -89,12 +85,10 @@ describe("subscribeToAll", () => {
         message: "lets wrap this up",
       });
 
-      const writeResult = await writeEventsToStream(STREAM_NAME_A)
+      await writeEventsToStream(STREAM_NAME_A)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 
@@ -153,12 +147,10 @@ describe("subscribeToAll", () => {
 
       await delay(500);
 
-      const writeResult = await writeEventsToStream(STREAM_NAME_A)
+      await writeEventsToStream(STREAM_NAME_A)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 
@@ -178,7 +170,7 @@ describe("subscribeToAll", () => {
       const FINISH_TEST = "from-position-finish";
       const MARKER_EVENT = "marker_event";
 
-      const setUpResult = await writeEventsToStream(STREAM_NAME_B)
+      await writeEventsToStream(STREAM_NAME_B)
         .send(
           EventData.json(MARKER_EVENT, {
             message: "mark my words",
@@ -186,24 +178,18 @@ describe("subscribeToAll", () => {
         )
         .execute(connection);
 
-      expect(setUpResult.__typename).toBe("success");
-
-      const readMarkerResult = await readEventsFromStream(STREAM_NAME_B)
+      const [readMarkerResult] = await readEventsFromStream(STREAM_NAME_B)
         .backward()
         .fromEnd()
         .count(1)
         .execute(connection);
 
-      expect(readMarkerResult.__typename).toBe("success");
-
-      const marker = readMarkerResult.events![0].event!;
+      const marker = readMarkerResult.event!;
       expect(marker.eventType).toBe(MARKER_EVENT);
 
-      const addSomeMoreResult = await writeEventsToStream(STREAM_NAME_A)
+      await writeEventsToStream(STREAM_NAME_A)
         .send(event.build(), event.build(), event.build())
         .execute(connection);
-
-      expect(addSomeMoreResult.__typename).toBe("success");
 
       const events: ResolvedEvent[] = [];
       const filteredEvents: ResolvedEvent[] = [];
@@ -244,12 +230,10 @@ describe("subscribeToAll", () => {
         message: "lets wrap this up",
       });
 
-      const writeResult = await writeEventsToStream(STREAM_NAME_B)
+      await writeEventsToStream(STREAM_NAME_B)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 

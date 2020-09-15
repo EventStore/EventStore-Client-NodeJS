@@ -40,11 +40,9 @@ describe("connectToPersistentSubscription", () => {
       const STREAM_NAME = "from_start_test_stream_name";
       const GROUP_NAME = "from_start_test_group_name";
 
-      const preWriteResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build(), event.build())
         .execute(connection);
-
-      expect(preWriteResult.__typename).toBe("success");
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .authenticated("admin", "changeit")
@@ -78,12 +76,10 @@ describe("connectToPersistentSubscription", () => {
         })
         .execute(connection);
 
-      const writeResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 
@@ -98,11 +94,9 @@ describe("connectToPersistentSubscription", () => {
       const STREAM_NAME = "from_revision_test_stream_name";
       const GROUP_NAME = "from_revision_test_group_name";
 
-      const preWriteResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build(), event.build())
         .execute(connection);
-
-      expect(preWriteResult.__typename).toBe("success");
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .authenticated("admin", "changeit")
@@ -136,12 +130,10 @@ describe("connectToPersistentSubscription", () => {
         })
         .execute(connection);
 
-      const writeResult = await writeEventsToStream(STREAM_NAME)
+      await writeEventsToStream(STREAM_NAME)
         .send(event.build(), event.build(), event.build())
         .send(finishEvent.build())
         .execute(connection);
-
-      expect(writeResult.__typename).toBe("success");
 
       await defer.promise;
 

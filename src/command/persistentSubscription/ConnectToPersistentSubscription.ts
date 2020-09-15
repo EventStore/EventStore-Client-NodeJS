@@ -11,10 +11,10 @@ import {
   PersistentAction,
   PersistentSubscriptionHandler,
   RecordedEvent,
-  convertGrpcRecord,
   ResolvedEvent,
 } from "../../types";
 import { Command } from "../Command";
+import { convertGrpcRecord } from "../../utils/convertGrpcRecord";
 
 class PersistentReportImpl implements PersistentReport {
   private _duplexStream: ClientDuplexStream<ReadReq, ReadResp>;
@@ -77,7 +77,7 @@ class PersistentReportImpl implements PersistentReport {
     const identifier = new StreamIdentifier();
     const uuidOption = new UUIDOption();
 
-    switch (action.__typename) {
+    switch (action) {
       case "park":
         nack.setAction(Action.PARK);
         break;

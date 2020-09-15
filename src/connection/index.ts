@@ -1,5 +1,10 @@
 import { readFileSync } from "fs";
-import { Channel, Client, credentials as grpcCredentials } from "@grpc/grpc-js";
+import {
+  Channel,
+  Client,
+  ClientOptions,
+  credentials as grpcCredentials,
+} from "@grpc/grpc-js";
 import { discoverEndpoint } from "./discovery";
 import {
   NodePreference,
@@ -148,11 +153,15 @@ export class EventStoreConnection implements ESDBConnection {
       return this._clients.get(Client) as T;
     }
 
-    const channelOverride = await this.getChannel();
+    const channelOverride: ClientOptions["channelOverride"] = await this.getChannel();
 
-    const client = new Client(null as never, null as never, {
-      channelOverride,
-    });
+    const client = new Client(
+      null as never,
+      null as never,
+      {
+        channelOverride,
+      } as ClientOptions
+    );
 
     this._clients.set(Client, client);
 

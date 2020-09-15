@@ -5,10 +5,10 @@ import {
   writeEventsToStream,
   EventStoreConnection,
   EventData,
-  NodePreference,
+  FOLLOWER,
   ErrorType,
   NotLeaderError,
-} from "../../index";
+} from "../..";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();
@@ -26,13 +26,13 @@ describe("not-leader", () => {
   test("should get an error here", async () => {
     const connection = EventStoreConnection.builder()
       .sslRootCertificate(cluster.certPath)
-      .gossipClusterConnection(cluster.endpoints, NodePreference.Follower);
+      .gossipClusterConnection(cluster.endpoints, FOLLOWER);
 
     const writeResult = await writeEventsToStream(STREAM_NAME)
       .send(event.build())
       .execute(connection);
 
-    expect(writeResult.__typename).toBe("success");
+    expect(writeResult).toBeDefined();
 
     const readFromStream = readEventsFromStream(STREAM_NAME)
       .count(10)
@@ -58,7 +58,7 @@ describe("not-leader", () => {
 
         const readResult = await readFromStream.execute(connection);
 
-        expect(readResult.__typename).toBe("success");
+        expect(readResult).toBeDefined();
       }
     }
   });

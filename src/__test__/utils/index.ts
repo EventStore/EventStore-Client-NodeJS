@@ -8,3 +8,4 @@ export const createInsecureTestCluster = (count = 3): Cluster =>
 
 export * from "./Defer";
 export * from "./delay";
+export * from "./testEvents";

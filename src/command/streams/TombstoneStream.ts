@@ -1,25 +1,30 @@
 import { Empty, StreamIdentifier } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { TombstoneReq } from "../../../generated/streams_pb";
-import { DeleteResult, Position, Revision, ESDBConnection } from "../../types";
+import {
+  DeleteResult,
+  Position,
+  ESDBConnection,
+  ExpectedRevision,
+} from "../../types";
+import { convertToCommandError } from "../../utils/CommandError";
 import { Command } from "../Command";
-import { convertToCommandError } from "../CommandError";
 
 export class TombstoneStream extends Command {
   private readonly _stream: string;
-  private _revision: Revision;
+  private _revision: ExpectedRevision;
 
   constructor(stream: string) {
     super();
     this._stream = stream;
-    this._revision = Revision.Any;
+    this._revision = "any";
   }
 
   /**
    * Asks the server to check the stream is at specific revision before writing events.
    * @param revision
    */
-  expectedRevision(revision: Revision): TombstoneStream {
+  expectedRevision(revision: ExpectedRevision): TombstoneStream {
     this._revision = revision;
     return this;
   }
@@ -35,24 +40,21 @@ export class TombstoneStream extends Command {
 
     options.setStreamIdentifier(identifier);
 
-    switch (this._revision.__typename) {
-      case "exact": {
-        options.setRevision(this._revision.revision);
+    switch (this._revision) {
+      case "any": {
+        options.setAny(new Empty());
         break;
       }
-
       case "no_stream": {
         options.setNoStream(new Empty());
         break;
       }
-
       case "stream_exists": {
         options.setStreamExists(new Empty());
         break;
       }
-
-      case "any": {
-        options.setAny(new Empty());
+      default: {
+        options.setRevision(this._revision);
         break;
       }
     }
@@ -71,12 +73,10 @@ export class TombstoneStream extends Command {
 
         if (resp.hasPosition()) {
           const grpcPos = resp.getPosition()!;
-          const pos: Position = {
+          result.position = {
             commit: grpcPos.getCommitPosition(),
             prepare: grpcPos.getPreparePosition(),
           };
-
-          result.position = pos;
         }
 
         return resolve(result);

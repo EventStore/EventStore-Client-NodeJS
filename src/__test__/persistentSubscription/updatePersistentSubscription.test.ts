@@ -5,7 +5,7 @@ import {
   createPersistentSubscription,
   updatePersistentSubscription,
   ESDBConnection,
-  Pinned,
+  PINNED,
 } from "../..";
 
 describe("updatePersistentSubscription", () => {
@@ -36,7 +36,7 @@ describe("updatePersistentSubscription", () => {
     await expect(
       updatePersistentSubscription(STREAM_NAME, GROUP_NAME)
         .authenticated("admin", "changeit")
-        .consumerStrategy(Pinned)
+        .consumerStrategy(PINNED)
         .execute(connection)
     ).resolves.toBeUndefined();
   });

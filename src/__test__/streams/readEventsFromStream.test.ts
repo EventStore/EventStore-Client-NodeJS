@@ -6,7 +6,7 @@ import {
   ESDBConnection,
   EventStoreConnection,
   EventData,
-} from "../../index";
+} from "../..";
 
 describe("readEventsFromStream", () => {
   const node = createTestNode();
@@ -31,18 +31,16 @@ describe("readEventsFromStream", () => {
       ).build()
     );
 
-    const result1 = await writeEventsToStream(STREAM_NAME)
+    await writeEventsToStream(STREAM_NAME)
       .send(...jsonEvents)
       .send(...binaryEvents)
       .execute(connection);
-
-    expect(result1.__typename).toBe("success");
 
     const outOfStreamEvent = EventData.json("out-of-stream-test", {
       message: "outOfStream",
     }).build();
 
-    const result2 = await writeEventsToStream(OUT_OF_STREAM_NAME)
+    await writeEventsToStream(OUT_OF_STREAM_NAME)
       .send(
         outOfStreamEvent,
         outOfStreamEvent,
@@ -51,8 +49,6 @@ describe("readEventsFromStream", () => {
         outOfStreamEvent
       )
       .execute(connection);
-
-    expect(result2.__typename).toBe("success");
   });
 
   afterAll(async () => {
@@ -62,14 +58,12 @@ describe("readEventsFromStream", () => {
   describe("should successfully read from stream", () => {
     describe("Event types", () => {
       test("json event", async () => {
-        const { events } = await readEventsFromStream(STREAM_NAME)
+        const [resolvedEvent] = await readEventsFromStream(STREAM_NAME)
           .fromRevision(1)
           .count(1)
           .execute(connection);
 
-        expect(events).toBeDefined();
-
-        const event = events![0].event!;
+        const event = resolvedEvent.event!;
 
         expect(event.isJson).toBe(true);
         expect(event.eventType).toBe("json-test");
@@ -80,14 +74,12 @@ describe("readEventsFromStream", () => {
       });
 
       test("binary event", async () => {
-        const { events } = await readEventsFromStream(STREAM_NAME)
+        const [resolvedEvent] = await readEventsFromStream(STREAM_NAME)
           .fromRevision(5)
           .count(1)
           .execute(connection);
 
-        expect(events).toBeDefined();
-
-        const event = events![0].event!;
+        const event = resolvedEvent.event!;
 
         expect(event.isJson).toBe(false);
         expect(event.eventType).toBe("binary-test");
@@ -98,54 +90,49 @@ describe("readEventsFromStream", () => {
 
     describe("options", () => {
       test("from start", async () => {
-        const result = await readEventsFromStream(STREAM_NAME)
+        const events = await readEventsFromStream(STREAM_NAME)
           .fromStart()
           .count(Number.MAX_SAFE_INTEGER)
           .execute(connection);
 
-        expect(result.__typename).toBe("success");
-        expect(result.events!.length).toBe(8);
+        expect(events.length).toBe(8);
       });
 
       test("from revision", async () => {
-        const result = await readEventsFromStream(STREAM_NAME)
+        const events = await readEventsFromStream(STREAM_NAME)
           .fromRevision(1)
           .count(Number.MAX_SAFE_INTEGER)
           .execute(connection);
 
-        expect(result.__typename).toBe("success");
-        expect(result.events!.length).toBe(7);
+        expect(events.length).toBe(7);
       });
 
       test("backward from end", async () => {
-        const result = await readEventsFromStream(STREAM_NAME)
+        const events = await readEventsFromStream(STREAM_NAME)
           .fromEnd()
           .backward()
           .count(Number.MAX_SAFE_INTEGER)
           .execute(connection);
 
-        expect(result.__typename).toBe("success");
-        expect(result.events!.length).toBe(8);
+        expect(events.length).toBe(8);
       });
 
       test("backward from revision", async () => {
-        const result = await readEventsFromStream(STREAM_NAME)
+        const events = await readEventsFromStream(STREAM_NAME)
           .fromRevision(1)
           .backward()
           .count(Number.MAX_SAFE_INTEGER)
           .execute(connection);
 
-        expect(result.__typename).toBe("success");
-        expect(result.events!.length).toBe(2);
+        expect(events.length).toBe(2);
       });
 
       test("count", async () => {
-        const result = await readEventsFromStream(STREAM_NAME)
+        const events = await readEventsFromStream(STREAM_NAME)
           .count(2)
           .execute(connection);
 
-        expect(result.__typename).toBe("success");
-        expect(result.events!.length).toBe(2);
+        expect(events.length).toBe(2);
       });
     });
   });

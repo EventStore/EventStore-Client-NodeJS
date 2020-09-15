@@ -6,20 +6,13 @@ import { Empty, StreamIdentifier } from "../../../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
-import {
-  StreamEnd,
-  StreamExact,
-  StreamRevision,
-  StreamStart,
-  SubscriptionHandler,
-  ESDBConnection,
-} from "../../types";
+import { SubscriptionHandler, ESDBConnection, ReadRevision } from "../../types";
 import { Command } from "../Command";
-import { handleOneWaySubscription } from "./utils";
+import { handleOneWaySubscription } from "../../utils/handleOneWaySubscription";
 
 export class SubscribeToStream extends Command {
   private _stream: string;
-  private _revision: StreamRevision;
+  private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
   // TODO: handle no handler
   private _handler!: SubscriptionHandler;
@@ -27,7 +20,7 @@ export class SubscribeToStream extends Command {
   constructor(stream: string) {
     super();
     this._stream = stream;
-    this._revision = StreamEnd;
+    this._revision = "end";
     this._resolveLinkTos = false;
   }
 
@@ -36,7 +29,7 @@ export class SubscribeToStream extends Command {
    * @param revision
    */
   fromRevision(revision: number): SubscribeToStream {
-    this._revision = StreamExact(revision);
+    this._revision = revision;
     return this;
   }
 
@@ -44,7 +37,7 @@ export class SubscribeToStream extends Command {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): SubscribeToStream {
-    this._revision = StreamStart;
+    this._revision = "start";
     return this;
   }
 
@@ -52,7 +45,7 @@ export class SubscribeToStream extends Command {
    * Starts the read from the end of the stream.
    */
   fromEnd(): SubscribeToStream {
-    this._revision = StreamEnd;
+    this._revision = "end";
     return this;
   }
 
@@ -99,19 +92,19 @@ export class SubscribeToStream extends Command {
     const streamOptions = new ReadReq.Options.StreamOptions();
     streamOptions.setStreamIdentifier(identifier);
 
-    switch (this._revision.__typename) {
-      case "exact": {
-        streamOptions.setRevision(this._revision.revision);
-        break;
-      }
-
+    switch (this._revision) {
       case "start": {
         streamOptions.setStart(new Empty());
         break;
       }
 
-      default: {
+      case "end": {
         streamOptions.setEnd(new Empty());
+        break;
+      }
+
+      default: {
+        streamOptions.setRevision(this._revision);
         break;
       }
     }

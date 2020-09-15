@@ -7,6 +7,7 @@ import { Empty } from "../../generated/shared_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
 
 import { EndPoint, MemberInfo, NodePreference } from "../types";
+import { RANDOM } from "../constants";
 import { ClusterSettings } from ".";
 
 export async function discoverEndpoint(
@@ -22,7 +23,7 @@ export async function discoverEndpoint(
     for (const candidate of candidates) {
       try {
         const members = await listClusterMembers(candidate, cert);
-        const preference = settings.nodePreference ?? NodePreference.Random;
+        const preference = settings.nodePreference ?? RANDOM;
         const endpoint = determineBestNode(preference, members);
         if (endpoint) return Promise.resolve(endpoint);
       } catch {
@@ -75,7 +76,7 @@ function determineBestNode(
 
   let finalMember;
   switch (preference) {
-    case NodePreference.Leader:
+    case "leader":
       finalMember = sorted.find((member) => member.state === VNodeState.LEADER);
       if (finalMember && finalMember.httpEndpoint) {
         return {
@@ -85,7 +86,7 @@ function determineBestNode(
       }
       break;
 
-    case NodePreference.Follower:
+    case "follower":
       finalMember = sorted
         .filter((member) => member.state === VNodeState.FOLLOWER)
         .sort(() => Math.random() - 0.5)
@@ -100,6 +101,7 @@ function determineBestNode(
       break;
 
     default:
+    case "random":
       finalMember = sorted.sort(() => Math.random() - 0.5).shift();
       if (finalMember && finalMember.httpEndpoint) {
         return {

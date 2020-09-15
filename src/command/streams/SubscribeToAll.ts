@@ -5,20 +5,17 @@ import { ReadReq } from "../../../generated/streams_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 import {
-  AllPosition,
-  Filter,
   Position,
-  StreamEnd,
-  StreamPosition,
-  StreamStart,
   SubscriptionHandler,
   ESDBConnection,
+  ReadPosition,
 } from "../../types";
 import { Command } from "../Command";
-import { handleOneWaySubscription } from "./utils";
+import { Filter } from "../../utils/Filter";
+import { handleOneWaySubscription } from "../../utils/handleOneWaySubscription";
 
 export class SubscribeToAll extends Command {
-  private _position: AllPosition;
+  private _position: ReadPosition;
   private _resolveLinkTos: boolean;
   private _filter?: Filter;
   // TODO: handle no handler
@@ -26,7 +23,7 @@ export class SubscribeToAll extends Command {
 
   constructor() {
     super();
-    this._position = StreamEnd;
+    this._position = "end";
     this._resolveLinkTos = false;
   }
 
@@ -35,7 +32,7 @@ export class SubscribeToAll extends Command {
    * @param position
    */
   fromPosition(position: Position): SubscribeToAll {
-    this._position = StreamPosition(position);
+    this._position = position;
     return this;
   }
 
@@ -43,7 +40,7 @@ export class SubscribeToAll extends Command {
    * Starts the read from the beginning of the stream. Default behavior.
    */
   fromStart(): SubscribeToAll {
-    this._position = StreamStart;
+    this._position = "start";
     return this;
   }
 
@@ -51,7 +48,7 @@ export class SubscribeToAll extends Command {
    * Starts the read from the end of the stream.
    */
   fromEnd(): SubscribeToAll {
-    this._position = StreamEnd;
+    this._position = "end";
     return this;
   }
 
@@ -104,22 +101,22 @@ export class SubscribeToAll extends Command {
 
     const allOptions = new ReadReq.Options.AllOptions();
 
-    switch (this._position.__typename) {
-      case "position": {
-        const grpcPos = new ReadReq.Options.Position();
-        grpcPos.setCommitPosition(this._position.position.commit);
-        grpcPos.setPreparePosition(this._position.position.prepare);
-        allOptions.setPosition(grpcPos);
-        break;
-      }
-
+    switch (this._position) {
       case "start": {
         allOptions.setStart(new Empty());
         break;
       }
 
-      default: {
+      case "end": {
         allOptions.setEnd(new Empty());
+        break;
+      }
+
+      default: {
+        const grpcPos = new ReadReq.Options.Position();
+        grpcPos.setCommitPosition(this._position.commit);
+        grpcPos.setPreparePosition(this._position.prepare);
+        allOptions.setPosition(grpcPos);
         break;
       }
     }

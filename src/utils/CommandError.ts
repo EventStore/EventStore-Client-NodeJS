@@ -1,5 +1,5 @@
 import { status as StatusCode, ServiceError } from "@grpc/grpc-js";
-import { EndPoint } from "../types";
+import { CurrentRevision, EndPoint, ExpectedRevision } from "../types";
 
 export enum ErrorType {
   TIMEOUT = "timeout",
@@ -28,15 +28,15 @@ export enum ErrorType {
 
 abstract class CommandErrorBase extends Error {
   public abstract readonly type: ErrorType;
-  public code: StatusCode;
+  public code?: StatusCode;
   public message: string;
-  public _raw: ServiceError;
+  public _raw?: ServiceError;
 
-  constructor(error: ServiceError) {
-    super(error.message);
+  constructor(error?: ServiceError, message?: string) {
+    super(error?.message);
     Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
-    this.code = error.code!;
-    this.message = error.message;
+    this.code = error?.code;
+    this.message = error?.message ?? message ?? "";
     this._raw = error;
   }
 }
@@ -71,10 +71,15 @@ export class StreamNotFoundError extends CommandErrorBase {
   public type: ErrorType.STREAM_NOT_FOUND = ErrorType.STREAM_NOT_FOUND;
   public streamName: string;
 
-  constructor(error: ServiceError) {
-    super(error);
-    const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
+  constructor(error?: ServiceError, streamName?: string) {
+    super(error, `${streamName} not found`);
+
+    if (error) {
+      const metadata = error.metadata!.getMap();
+      this.streamName = metadata["stream-name"].toString();
+    } else {
+      this.streamName = streamName ?? "";
+    }
   }
 }
 
@@ -112,25 +117,36 @@ export class ScavengeNotFoundError extends CommandErrorBase {
   }
 }
 
+interface WrongExpectedVersion {
+  streamName: string;
+  expected: ExpectedRevision;
+  current: CurrentRevision;
+}
+
 export class WrongExpectedVersionError extends CommandErrorBase {
   public type: ErrorType.WRONG_EXPECTED_VERSION =
     ErrorType.WRONG_EXPECTED_VERSION;
   public streamName: string;
-  public expectedVersion: number;
-  public actualVersion?: number;
+  public expectedVersion: ExpectedRevision;
+  public actualVersion: CurrentRevision;
 
-  constructor(error: ServiceError) {
+  constructor(error?: ServiceError, versions?: WrongExpectedVersion) {
     super(error);
-    const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.expectedVersion = parseInt(
-      metadata["expected-version"].toString(),
-      10
-    );
 
-    const actualVersion = metadata["actual-version"];
-    if (actualVersion) {
-      this.actualVersion = parseInt(actualVersion.toString(), 10);
+    if (error) {
+      const metadata = error.metadata!.getMap();
+      this.streamName = metadata["stream-name"].toString();
+      this.expectedVersion = parseInt(
+        metadata["expected-version"].toString(),
+        10
+      );
+      this.actualVersion = metadata["actual-version"]
+        ? parseInt(metadata["actual-version"].toString(), 10)
+        : "no_stream";
+    } else {
+      this.streamName = versions!.streamName;
+      this.expectedVersion = versions!.expected;
+      this.actualVersion = versions!.current;
     }
   }
 }

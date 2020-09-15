@@ -7,7 +7,7 @@ import {
   EventData,
   readAllEvents,
   readEventsFromStream,
-} from "../../index";
+} from "../..";
 
 describe("readAllEvents", () => {
   const node = createTestNode();
@@ -25,17 +25,13 @@ describe("readAllEvents", () => {
       message: "test",
     }).build();
 
-    const result1 = await writeEventsToStream(STREAM_NAME_A)
+    await writeEventsToStream(STREAM_NAME_A)
       .send(event, event, event, event)
       .execute(connection);
 
-    expect(result1.__typename).toBe("success");
-
-    const result2 = await writeEventsToStream(STREAM_NAME_B)
+    await writeEventsToStream(STREAM_NAME_B)
       .send(event, event, event, event)
       .execute(connection);
-
-    expect(result2.__typename).toBe("success");
   });
 
   afterAll(async () => {
@@ -44,16 +40,16 @@ describe("readAllEvents", () => {
 
   describe("should successfully read from $all", () => {
     test("from start", async () => {
-      const { events } = await readAllEvents()
+      const events = await readAllEvents()
         .authenticated("admin", "changeit")
         .fromStart()
         .count(Number.MAX_SAFE_INTEGER)
         .execute(connection);
 
       expect(events).toBeDefined();
-      expect(events!.length).toBeGreaterThan(8);
+      expect(events.length).toBeGreaterThan(8);
 
-      const filteredEvents = events!.filter(
+      const filteredEvents = events.filter(
         ({ event }) => !event?.streamId.startsWith("$")
       );
       expect(filteredEvents.length).toEqual(8);
@@ -62,27 +58,24 @@ describe("readAllEvents", () => {
 
     // throws deep in GRPC crapness (goog.asserts)
     test.skip("from position", async () => {
-      const streamResult = await readEventsFromStream(STREAM_NAME_A)
+      const [eventToExtract] = await readEventsFromStream(STREAM_NAME_A)
         .fromRevision(1)
         .count(1)
         .execute(connection);
 
-      const [eventToExtract] = streamResult.events!;
       const { position } = eventToExtract.event!;
 
-      const allResult = await readAllEvents()
+      const [extracted] = await readAllEvents()
         .authenticated("admin", "changeit")
         .fromPosition(position)
         .count(1)
         .execute(connection);
 
-      const [extracted] = allResult.events!;
-
       expect(extracted).toEqual(eventToExtract);
     });
 
     test("backward from end", async () => {
-      const { events } = await readAllEvents()
+      const events = await readAllEvents()
         .authenticated("admin", "changeit")
         .backward()
         .fromEnd()
@@ -90,9 +83,9 @@ describe("readAllEvents", () => {
         .execute(connection);
 
       expect(events).toBeDefined();
-      expect(events!.length).toBeGreaterThan(8);
+      expect(events.length).toBeGreaterThan(8);
 
-      const filteredEvents = events!.filter(
+      const filteredEvents = events.filter(
         ({ event }) => !event?.streamId.startsWith("$")
       );
       expect(filteredEvents.length).toEqual(8);
@@ -100,14 +93,13 @@ describe("readAllEvents", () => {
     });
 
     test("count", async () => {
-      const result = await readAllEvents()
+      const events = await readAllEvents()
         .authenticated("admin", "changeit")
         .fromStart()
         .count(2)
         .execute(connection);
 
-      expect(result.__typename).toBe("success");
-      expect(result.events!.length).toBe(2);
+      expect(events.length).toBe(2);
     });
   });
 });

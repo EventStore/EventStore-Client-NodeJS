@@ -7,9 +7,11 @@ import {
   EventData,
   readEventsFromStream,
   WrongExpectedVersionError,
-} from "../../index";
-import { tombstoneStream } from "../../command/streams";
-import { StreamDeletedError } from "../../command";
+  tombstoneStream,
+  StreamDeletedError,
+  NO_STREAM,
+  STREAM_EXISTS,
+} from "../..";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {
@@ -35,11 +37,9 @@ describe("tombstoneStream", () => {
       const ANY_REVISION_STREAM = "any_revision_stream";
 
       beforeAll(async () => {
-        const result = await writeEventsToStream(ANY_REVISION_STREAM)
+        await writeEventsToStream(ANY_REVISION_STREAM)
           .send(event, event, event, event)
           .execute(connection);
-
-        expect(result.__typename).toBe("success");
       });
 
       it("succeeds", async () => {
@@ -69,20 +69,15 @@ describe("tombstoneStream", () => {
         const STREAM = "expected_revision_stream_exact";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
           try {
             const result = await tombstoneStream(STREAM)
-              .expectedRevision({
-                __typename: "exact",
-                revision: 2,
-              })
+              .expectedRevision(2)
               .execute(connection);
 
             expect(result).toBe("Unreachable");
@@ -96,19 +91,16 @@ describe("tombstoneStream", () => {
         });
 
         it("succeeds", async () => {
-          const { events } = await readEventsFromStream(STREAM)
+          const [resolvedEvent] = await readEventsFromStream(STREAM)
             .fromEnd()
             .backward()
             .count(1)
             .execute(connection);
 
-          const revision = events![0].event!.revision;
+          const revision = resolvedEvent.event!.revision;
 
           const result = await tombstoneStream(STREAM)
-            .expectedRevision({
-              __typename: "exact",
-              revision,
-            })
+            .expectedRevision(revision)
             .execute(connection);
 
           expect(result).toBeDefined();
@@ -125,28 +117,22 @@ describe("tombstoneStream", () => {
         const NOT_A_STREAM = "i_dont_exist_hopefully";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
           await expect(
             tombstoneStream(NOT_A_STREAM)
-              .expectedRevision({
-                __typename: "stream_exists",
-              })
+              .expectedRevision(STREAM_EXISTS)
               .execute(connection)
           ).rejects.toThrowError(`error here`);
         });
 
         it("succeeds", async () => {
           const result = await tombstoneStream(STREAM)
-            .expectedRevision({
-              __typename: "stream_exists",
-            })
+            .expectedRevision(STREAM_EXISTS)
             .execute(connection);
 
           expect(result).toBeDefined();
@@ -162,19 +148,15 @@ describe("tombstoneStream", () => {
         const STREAM = "i_exist_hopefully";
 
         beforeAll(async () => {
-          const result = await writeEventsToStream(STREAM)
+          await writeEventsToStream(STREAM)
             .send(event, event, event, event)
             .execute(connection);
-
-          expect(result.__typename).toBe("success");
         });
 
         it("fails", async () => {
           try {
             const result = await tombstoneStream(STREAM)
-              .expectedRevision({
-                __typename: "no_stream",
-              })
+              .expectedRevision(NO_STREAM)
               .execute(connection);
 
             expect(result).toBe("Unreachable");
@@ -188,9 +170,7 @@ describe("tombstoneStream", () => {
 
         it("succeeds", async () => {
           const result = await tombstoneStream(NOT_A_STREAM)
-            .expectedRevision({
-              __typename: "no_stream",
-            })
+            .expectedRevision(NO_STREAM)
             .execute(connection);
 
           expect(result).toBeDefined();
