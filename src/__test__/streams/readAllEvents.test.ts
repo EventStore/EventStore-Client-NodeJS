@@ -56,7 +56,7 @@ describe("readAllEvents", () => {
       expect(filteredEvents[0].event?.streamId).toBe(STREAM_NAME_A);
     });
 
-    // throws deep in GRPC crapness (goog.asserts)
+    // server bug, position is returned incorrectly
     test.skip("from position", async () => {
       const [eventToExtract] = await readEventsFromStream(STREAM_NAME_A)
         .fromRevision(1n)
