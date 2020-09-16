@@ -98,7 +98,7 @@ export type ResolvedEvent = {
 /**
  * Represents a previously written event.
  */
-export interface RecordedEvent {
+export interface RecordedEventBase {
   /**
    * The event stream that events belongs to.
    */
@@ -120,30 +120,51 @@ export interface RecordedEvent {
   eventType: string;
 
   /**
-   * Payload of this event.
+   * Representing when this event was created in the database system.
    */
-  data: Uint8Array | Record<string, unknown>;
-
-  /**
-   * Representing the metadata associated with this event.
-   */
-  metadata: Uint8Array | Record<string, unknown>;
-
-  /**
-   * Indicates wheter the content is internally marked as JSON.
-   */
-  isJson: boolean;
+  created: number;
 
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
+}
+
+export interface JSONRecordedEvent extends RecordedEventBase {
+  /**
+   * Indicates wheter the content is internally marked as JSON.
+   */
+  isJson: true;
 
   /**
-   * Representing when this event was created in the database system.
+   * Payload of this event.
    */
-  created: number;
+  data: Record<string, unknown>;
+
+  /**
+   * Representing the metadata associated with this event.
+   */
+  metadata: Record<string, unknown>;
 }
+
+export interface BinaryRecordedEvent extends RecordedEventBase {
+  /**
+   * Indicates wheter the content is internally marked as JSON.
+   */
+  isJson: false;
+
+  /**
+   * Payload of this event.
+   */
+  data: Uint8Array;
+
+  /**
+   * Representing the metadata associated with this event.
+   */
+  metadata: Uint8Array;
+}
+
+export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
 
 export type SubscriptionHandler = {
   onEvent: (report: SubscriptionReport, event: ResolvedEvent) => void;
