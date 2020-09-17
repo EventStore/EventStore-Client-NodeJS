@@ -46,6 +46,14 @@ export type ExpectedRevision =
    */
   | number;
 
+/**
+ * Delete stream does not support "stream_exists". see: {@link ExpectedRevision}.
+ */
+export type DeleteStreamExpectedRevision = Exclude<
+  ExpectedRevision,
+  typeof constants.STREAM_EXISTS
+>;
+
 export type CurrentRevision =
   /**
    * The stream being written to does not yet exist.
