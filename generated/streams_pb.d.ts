@@ -984,10 +984,10 @@ export namespace AppendResp {
         setCurrentRevision(value: string): WrongExpectedVersion;
 
 
-        hasNoStream(): boolean;
-        clearNoStream(): void;
-        getNoStream(): shared_pb.Empty | undefined;
-        setNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
+        hasCurrentNoStream(): boolean;
+        clearCurrentNoStream(): void;
+        getCurrentNoStream(): shared_pb.Empty | undefined;
+        setCurrentNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
 
 
         hasExpectedRevision(): boolean;
@@ -996,16 +996,22 @@ export namespace AppendResp {
         setExpectedRevision(value: string): WrongExpectedVersion;
 
 
-        hasAny(): boolean;
-        clearAny(): void;
-        getAny(): shared_pb.Empty | undefined;
-        setAny(value?: shared_pb.Empty): WrongExpectedVersion;
+        hasExpectedAny(): boolean;
+        clearExpectedAny(): void;
+        getExpectedAny(): shared_pb.Empty | undefined;
+        setExpectedAny(value?: shared_pb.Empty): WrongExpectedVersion;
 
 
-        hasStreamExists(): boolean;
-        clearStreamExists(): void;
-        getStreamExists(): shared_pb.Empty | undefined;
-        setStreamExists(value?: shared_pb.Empty): WrongExpectedVersion;
+        hasExpectedStreamExists(): boolean;
+        clearExpectedStreamExists(): void;
+        getExpectedStreamExists(): shared_pb.Empty | undefined;
+        setExpectedStreamExists(value?: shared_pb.Empty): WrongExpectedVersion;
+
+
+        hasExpectedNoStream(): boolean;
+        clearExpectedNoStream(): void;
+        getExpectedNoStream(): shared_pb.Empty | undefined;
+        setExpectedNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
 
 
         getCurrentRevisionOptionCase(): WrongExpectedVersion.CurrentRevisionOptionCase;
@@ -1024,10 +1030,11 @@ export namespace AppendResp {
     export namespace WrongExpectedVersion {
         export type AsObject = {
             currentRevision: string,
-            noStream?: shared_pb.Empty.AsObject,
+            currentNoStream?: shared_pb.Empty.AsObject,
             expectedRevision: string,
-            any?: shared_pb.Empty.AsObject,
-            streamExists?: shared_pb.Empty.AsObject,
+            expectedAny?: shared_pb.Empty.AsObject,
+            expectedStreamExists?: shared_pb.Empty.AsObject,
+            expectedNoStream?: shared_pb.Empty.AsObject,
         }
 
         export enum CurrentRevisionOptionCase {
@@ -1035,7 +1042,7 @@ export namespace AppendResp {
         
     CURRENT_REVISION = 1,
 
-    NO_STREAM = 2,
+    CURRENT_NO_STREAM = 2,
 
         }
 
@@ -1044,9 +1051,11 @@ export namespace AppendResp {
         
     EXPECTED_REVISION = 3,
 
-    ANY = 4,
+    EXPECTED_ANY = 4,
 
-    STREAM_EXISTS = 5,
+    EXPECTED_STREAM_EXISTS = 5,
+
+    EXPECTED_NO_STREAM = 6,
 
         }
 

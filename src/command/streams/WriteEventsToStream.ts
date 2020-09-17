@@ -89,16 +89,18 @@ export class WriteEventsToStream extends Command {
 
           let expected: ExpectedRevision = "any";
 
+          console.log(grpcError.toObject());
+
           switch (true) {
             case grpcError.hasExpectedRevision(): {
               expected = BigInt(grpcError.getExpectedRevision()!);
               break;
             }
-            case grpcError.hasStreamExists(): {
+            case grpcError.hasExpectedStreamExists(): {
               expected = "stream_exists";
               break;
             }
-            case grpcError.hasNoStream(): {
+            case grpcError.hasExpectedNoStream(): {
               expected = "no_stream";
               break;
             }

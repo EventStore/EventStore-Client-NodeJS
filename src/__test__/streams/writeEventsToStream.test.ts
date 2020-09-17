@@ -84,8 +84,7 @@ describe("writeEventsToStream", () => {
           expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
         });
 
-        // issue on server
-        test.skip("fails", async () => {
+        test("fails", async () => {
           const STREAM_NAME = "no_stream_here_but_there_is";
 
           await writeEventsToStream(STREAM_NAME)

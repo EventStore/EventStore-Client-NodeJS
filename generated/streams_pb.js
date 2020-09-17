@@ -6182,7 +6182,7 @@ proto.event_store.client.streams.AppendResp.Success.prototype.hasNoPosition = fu
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_ = [[1,2],[3,4,5]];
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_ = [[1,2],[3,4,5,6]];
 
 /**
  * @enum {number}
@@ -6190,7 +6190,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_ = 
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase = {
   CURRENT_REVISION_OPTION_NOT_SET: 0,
   CURRENT_REVISION: 1,
-  NO_STREAM: 2
+  CURRENT_NO_STREAM: 2
 };
 
 /**
@@ -6206,8 +6206,9 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCu
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase = {
   EXPECTED_REVISION_OPTION_NOT_SET: 0,
   EXPECTED_REVISION: 3,
-  ANY: 4,
-  STREAM_EXISTS: 5
+  EXPECTED_ANY: 4,
+  EXPECTED_STREAM_EXISTS: 5,
+  EXPECTED_NO_STREAM: 6
 };
 
 /**
@@ -6249,10 +6250,11 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.toObj
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.toObject = function(includeInstance, msg) {
   var f, obj = {
     currentRevision: jspb.Message.getFieldWithDefault(msg, 1, "0"),
-    noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
+    currentNoStream: (f = msg.getCurrentNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
     expectedRevision: jspb.Message.getFieldWithDefault(msg, 3, "0"),
-    any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
-    streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
+    expectedAny: (f = msg.getExpectedAny()) && shared_pb.Empty.toObject(includeInstance, f),
+    expectedStreamExists: (f = msg.getExpectedStreamExists()) && shared_pb.Empty.toObject(includeInstance, f),
+    expectedNoStream: (f = msg.getExpectedNoStream()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6296,7 +6298,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBina
     case 2:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
-      msg.setNoStream(value);
+      msg.setCurrentNoStream(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readUint64String());
@@ -6305,12 +6307,17 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBina
     case 4:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
-      msg.setAny(value);
+      msg.setExpectedAny(value);
       break;
     case 5:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
-      msg.setStreamExists(value);
+      msg.setExpectedStreamExists(value);
+      break;
+    case 6:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setExpectedNoStream(value);
       break;
     default:
       reader.skipField();
@@ -6348,7 +6355,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       f
     );
   }
-  f = message.getNoStream();
+  f = message.getCurrentNoStream();
   if (f != null) {
     writer.writeMessage(
       2,
@@ -6363,7 +6370,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       f
     );
   }
-  f = message.getAny();
+  f = message.getExpectedAny();
   if (f != null) {
     writer.writeMessage(
       4,
@@ -6371,10 +6378,18 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       shared_pb.Empty.serializeBinaryToWriter
     );
   }
-  f = message.getStreamExists();
+  f = message.getExpectedStreamExists();
   if (f != null) {
     writer.writeMessage(
       5,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getExpectedNoStream();
+  if (f != null) {
+    writer.writeMessage(
+      6,
       f,
       shared_pb.Empty.serializeBinaryToWriter
     );
@@ -6419,10 +6434,10 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCu
 
 
 /**
- * optional event_store.client.shared.Empty no_stream = 2;
+ * optional event_store.client.shared.Empty current_no_stream = 2;
  * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getNoStream = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentNoStream = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
@@ -6432,7 +6447,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getNo
  * @param {?proto.event_store.client.shared.Empty|undefined} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setNoStream = function(value) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentNoStream = function(value) {
   return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], value);
 };
 
@@ -6441,8 +6456,8 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setNo
  * Clears the message field making it undefined.
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearNoStream = function() {
-  return this.setNoStream(undefined);
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearCurrentNoStream = function() {
+  return this.setCurrentNoStream(undefined);
 };
 
 
@@ -6450,7 +6465,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasNoStream = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCurrentNoStream = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 
@@ -6492,10 +6507,10 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasEx
 
 
 /**
- * optional event_store.client.shared.Empty any = 4;
+ * optional event_store.client.shared.Empty expected_any = 4;
  * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getAny = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedAny = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
@@ -6505,7 +6520,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getAn
  * @param {?proto.event_store.client.shared.Empty|undefined} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setAny = function(value) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedAny = function(value) {
   return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
 };
 
@@ -6514,8 +6529,8 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setAn
  * Clears the message field making it undefined.
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearAny = function() {
-  return this.setAny(undefined);
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearExpectedAny = function() {
+  return this.setExpectedAny(undefined);
 };
 
 
@@ -6523,16 +6538,16 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasAny = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedAny = function() {
   return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional event_store.client.shared.Empty stream_exists = 5;
+ * optional event_store.client.shared.Empty expected_stream_exists = 5;
  * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getStreamExists = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedStreamExists = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
 };
@@ -6542,7 +6557,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getSt
  * @param {?proto.event_store.client.shared.Empty|undefined} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setStreamExists = function(value) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedStreamExists = function(value) {
   return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
 };
 
@@ -6551,8 +6566,8 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setSt
  * Clears the message field making it undefined.
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearStreamExists = function() {
-  return this.setStreamExists(undefined);
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearExpectedStreamExists = function() {
+  return this.setExpectedStreamExists(undefined);
 };
 
 
@@ -6560,8 +6575,45 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasStreamExists = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedStreamExists = function() {
   return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty expected_no_stream = 6;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 6));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 6, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearExpectedNoStream = function() {
+  return this.setExpectedNoStream(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedNoStream = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
