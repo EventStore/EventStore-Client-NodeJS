@@ -1,13 +1,17 @@
 import { DeleteReq } from "../../../generated/streams_pb";
 import { StreamIdentifier, Empty } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
-import { DeleteResult, ESDBConnection, ExpectedRevision } from "../../types";
+import {
+  DeleteResult,
+  ESDBConnection,
+  DeleteStreamExpectedRevision,
+} from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 
 export class DeleteStream extends Command {
   private readonly _stream: string;
-  private _revision: ExpectedRevision;
+  private _revision: DeleteStreamExpectedRevision;
 
   constructor(stream: string) {
     super();
@@ -19,7 +23,7 @@ export class DeleteStream extends Command {
    * Asks the server to check the stream is at specific revision before writing events.
    * @param revision
    */
-  expectedRevision(revision: ExpectedRevision): DeleteStream {
+  expectedRevision(revision: DeleteStreamExpectedRevision): DeleteStream {
     this._revision = revision;
     return this;
   }
@@ -42,10 +46,6 @@ export class DeleteStream extends Command {
       }
       case "no_stream": {
         options.setNoStream(new Empty());
-        break;
-      }
-      case "stream_exists": {
-        options.setStreamExists(new Empty());
         break;
       }
       default: {
