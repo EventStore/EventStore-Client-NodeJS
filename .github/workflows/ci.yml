@@ -28,7 +28,7 @@ jobs:
     name: Test
     strategy:
       matrix:
-        version: [ci, "20.6.0"]
+        version: [ci]
     needs: build
     runs-on: ubuntu-18.04
     steps:

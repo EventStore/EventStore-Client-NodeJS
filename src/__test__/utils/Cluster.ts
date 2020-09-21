@@ -13,6 +13,21 @@ const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
+const image = (() => {
+  const version = process.env.EVENTSTORE_IMAGE ?? "github:ci";
+  switch (true) {
+    case version.startsWith("local:"):
+      return version.replace("local:", "");
+    case version.startsWith("github:"):
+      return version.replace(
+        "github:",
+        "docker.pkg.github.com/eventstore/eventstore/eventstore:"
+      );
+    default:
+      return version;
+  }
+})();
+
 const nodeList = (count: number, ipStub: string) =>
   Promise.all<ClusterLocation>(
     Array.from({ length: count }, async (_, i) => ({
@@ -56,7 +71,7 @@ const createNodes = (
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
       ...acc,
       [`esdb-node-${i}`]: {
-        image: "docker.pkg.github.com/eventstore/eventstore/eventstore:ci",
+        image,
         environment: [
           `EVENTSTORE_GOSSIP_SEED=${ipAddresses
             .reduce<string[]>(
