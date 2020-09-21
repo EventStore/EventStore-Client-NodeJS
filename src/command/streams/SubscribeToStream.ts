@@ -6,16 +6,22 @@ import { Empty, StreamIdentifier } from "../../../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
-import { SubscriptionHandler, ESDBConnection, ReadRevision } from "../../types";
+import {
+  SubscriptionHandler,
+  ESDBConnection,
+  ReadRevision,
+  ResolvedEvent,
+} from "../../types";
 import { Command } from "../Command";
 import { handleOneWaySubscription } from "../../utils/handleOneWaySubscription";
+import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
 
 export class SubscribeToStream extends Command {
   private _stream: string;
   private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
   // TODO: handle no handler
-  private _handler!: SubscriptionHandler;
+  private _handler!: SubscriptionHandler<ResolvedEvent>;
 
   constructor(stream: string) {
     super();
@@ -71,7 +77,7 @@ export class SubscribeToStream extends Command {
    * Sets the handler for the subscription
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-  handler(handler: SubscriptionHandler): SubscribeToStream {
+  handler(handler: SubscriptionHandler<ResolvedEvent>): SubscribeToStream {
     this._handler = handler;
     return this;
   }
@@ -123,6 +129,6 @@ export class SubscribeToStream extends Command {
 
     const client = await connection._client(StreamsClient);
     const stream = client.read(req, this.metadata, callOptions);
-    handleOneWaySubscription(stream, this._handler);
+    handleOneWaySubscription(stream, this._handler, convertGrpcEvent);
   }
 }

@@ -10,6 +10,7 @@ import {
 } from "../../types";
 import { Command } from "../Command";
 import { handleBatchRead } from "../../utils/handleBatchRead";
+import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
 
 export class ReadEventsFromStream extends Command {
   private _stream: string;
@@ -153,6 +154,6 @@ export class ReadEventsFromStream extends Command {
 
     const client = await connection._client(StreamsClient);
     const stream = client.read(req, this.metadata);
-    return handleBatchRead(stream);
+    return handleBatchRead(stream, convertGrpcEvent);
   }
 }

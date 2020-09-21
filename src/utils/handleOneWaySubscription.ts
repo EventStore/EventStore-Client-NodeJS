@@ -1,11 +1,6 @@
 import { ClientReadableStream } from "@grpc/grpc-js";
 import { ReadResp } from "../../generated/streams_pb";
-import {
-  SubscriptionHandler,
-  ResolvedEvent,
-  SubscriptionReport,
-} from "../types";
-import { convertGrpcEvent } from "./convertGrpcEvent";
+import { SubscriptionHandler, SubscriptionReport } from "../types";
 
 export class SubscriptionReportImpl implements SubscriptionReport {
   private _stream: ClientReadableStream<ReadResp>;
@@ -18,9 +13,10 @@ export class SubscriptionReportImpl implements SubscriptionReport {
   }
 }
 
-export function handleOneWaySubscription(
+export function handleOneWaySubscription<T>(
   stream: ClientReadableStream<ReadResp>,
-  handler: SubscriptionHandler
+  handler: SubscriptionHandler<T>,
+  convertGrpcEvent: (e: ReadResp.ReadEvent) => T
 ): void {
   const report = new SubscriptionReportImpl(stream);
 
@@ -30,7 +26,7 @@ export function handleOneWaySubscription(
     }
 
     if (resp.hasEvent()) {
-      const resolved: ResolvedEvent = convertGrpcEvent(resp.getEvent()!);
+      const resolved = convertGrpcEvent(resp.getEvent()!);
       handler.onEvent(report, resolved);
     }
   });

@@ -75,27 +75,6 @@ export type WriteResult = {
 };
 
 /**
- * A structure representing a single event or an resolved link event.
- */
-export type ResolvedEvent = {
-  /**
-   * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
-   */
-  event?: RecordedEvent;
-
-  /**
-   *
-   The link event if this ResolvedEvent is a link event.
-   */
-  link?: RecordedEvent;
-
-  /**
-   * Commit position of the record.
-   */
-  commitPosition?: bigint;
-};
-
-/**
  * Represents a previously written event.
  */
 export interface RecordedEventBase {
@@ -123,11 +102,6 @@ export interface RecordedEventBase {
    * Representing when this event was created in the database system.
    */
   created: number;
-
-  /**
-   * Position of this event in the transaction log.
-   */
-  position: Position;
 }
 
 export interface JSONRecordedEvent extends RecordedEventBase {
@@ -164,15 +138,74 @@ export interface BinaryRecordedEvent extends RecordedEventBase {
   metadata: Uint8Array;
 }
 
-export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
+export interface AllStreamJSONRecordedEvent extends JSONRecordedEvent {
+  /**
+   * Position of this event in the transaction log.
+   */
+  position: Position;
+}
 
-export type SubscriptionHandler = {
-  onEvent: (report: SubscriptionReport, event: ResolvedEvent) => void;
+export interface AllStreamBinaryRecordedEvent extends BinaryRecordedEvent {
+  /**
+   * Position of this event in the transaction log.
+   */
+  position: Position;
+}
+
+export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
+export type AllStreamRecordedEvent =
+  | AllStreamJSONRecordedEvent
+  | AllStreamBinaryRecordedEvent;
+
+/**
+ * A structure representing a single event or an resolved link event.
+ */
+export type ResolvedEvent = {
+  /**
+   * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
+   */
+  event?: RecordedEvent;
+
+  /**
+   *
+   The link event if this ResolvedEvent is a link event.
+   */
+  link?: RecordedEvent;
+
+  /**
+   * Commit position of the record.
+   */
+  commitPosition?: bigint;
+};
+
+/**
+ * A structure representing a single event or an resolved link event.
+ */
+export type AllStreamResolvedEvent = {
+  /**
+   * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
+   */
+  event?: AllStreamRecordedEvent;
+
+  /**
+   *
+   The link event if this ResolvedEvent is a link event.
+   */
+  link?: AllStreamRecordedEvent;
+
+  /**
+   * Commit position of the record.
+   */
+  commitPosition?: bigint;
+};
+
+export interface SubscriptionHandler<T> {
+  onEvent: (report: SubscriptionReport, event: T) => void;
   onEnd?: () => void;
   onConfirmation?: () => void;
   onError?: (error: Error) => void;
   onClose?: () => void;
-};
+}
 
 export type PersistentSubscriptionHandler = {
   onEvent: (report: PersistentReport, event: ResolvedEvent) => void;

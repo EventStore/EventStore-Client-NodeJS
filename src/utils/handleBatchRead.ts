@@ -1,15 +1,14 @@
 import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { ReadResp } from "../../generated/streams_pb";
 
-import { ResolvedEvent } from "../types";
 import { convertToCommandError, StreamNotFoundError } from "./CommandError";
-import { convertGrpcEvent } from "./convertGrpcEvent";
 
-export function handleBatchRead(
-  stream: ClientReadableStream<ReadResp>
-): Promise<ResolvedEvent[]> {
-  return new Promise<ResolvedEvent[]>((resolve, reject) => {
-    const resolvedEvents: ResolvedEvent[] = [];
+export const handleBatchRead = <T>(
+  stream: ClientReadableStream<ReadResp>,
+  convertGrpcEvent: (e: ReadResp.ReadEvent) => T
+): Promise<T[]> =>
+  new Promise<T[]>((resolve, reject) => {
+    const resolvedEvents: T[] = [];
     let streamNotFound: ReadResp.StreamNotFound | undefined;
 
     stream.on("data", (resp: ReadResp) => {
@@ -38,4 +37,3 @@ export function handleBatchRead(
       return reject(convertToCommandError(error));
     });
   });
-}
