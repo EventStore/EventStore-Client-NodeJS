@@ -3218,9 +3218,9 @@ proto.event_store.client.projections.StatisticsResp.Details.prototype.toObject =
  */
 proto.event_store.client.projections.StatisticsResp.Details.toObject = function(includeInstance, msg) {
   var f, obj = {
-    coreprocessingtime: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    version: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    epoch: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    coreprocessingtime: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    version: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    epoch: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     effectivename: jspb.Message.getFieldWithDefault(msg, 4, ""),
     writesinprogress: jspb.Message.getFieldWithDefault(msg, 5, 0),
     readsinprogress: jspb.Message.getFieldWithDefault(msg, 6, 0),
@@ -3232,9 +3232,9 @@ proto.event_store.client.projections.StatisticsResp.Details.toObject = function(
     position: jspb.Message.getFieldWithDefault(msg, 12, ""),
     progress: jspb.Message.getFloatingPointFieldWithDefault(msg, 13, 0.0),
     lastcheckpoint: jspb.Message.getFieldWithDefault(msg, 14, ""),
-    eventsprocessedafterrestart: jspb.Message.getFieldWithDefault(msg, 15, 0),
+    eventsprocessedafterrestart: jspb.Message.getFieldWithDefault(msg, 15, "0"),
     checkpointstatus: jspb.Message.getFieldWithDefault(msg, 16, ""),
-    bufferedevents: jspb.Message.getFieldWithDefault(msg, 17, 0),
+    bufferedevents: jspb.Message.getFieldWithDefault(msg, 17, "0"),
     writependingeventsbeforecheckpoint: jspb.Message.getFieldWithDefault(msg, 18, 0),
     writependingeventsaftercheckpoint: jspb.Message.getFieldWithDefault(msg, 19, 0)
   };
@@ -3274,15 +3274,15 @@ proto.event_store.client.projections.StatisticsResp.Details.deserializeBinaryFro
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setCoreprocessingtime(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setVersion(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setEpoch(value);
       break;
     case 4:
@@ -3330,7 +3330,7 @@ proto.event_store.client.projections.StatisticsResp.Details.deserializeBinaryFro
       msg.setLastcheckpoint(value);
       break;
     case 15:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setEventsprocessedafterrestart(value);
       break;
     case 16:
@@ -3338,7 +3338,7 @@ proto.event_store.client.projections.StatisticsResp.Details.deserializeBinaryFro
       msg.setCheckpointstatus(value);
       break;
     case 17:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setBufferedevents(value);
       break;
     case 18:
@@ -3379,22 +3379,22 @@ proto.event_store.client.projections.StatisticsResp.Details.prototype.serializeB
 proto.event_store.client.projections.StatisticsResp.Details.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCoreprocessingtime();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       1,
       f
     );
   }
   f = message.getVersion();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       2,
       f
     );
   }
   f = message.getEpoch();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       3,
       f
     );
@@ -3477,8 +3477,8 @@ proto.event_store.client.projections.StatisticsResp.Details.serializeBinaryToWri
     );
   }
   f = message.getEventsprocessedafterrestart();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       15,
       f
     );
@@ -3491,8 +3491,8 @@ proto.event_store.client.projections.StatisticsResp.Details.serializeBinaryToWri
     );
   }
   f = message.getBufferedevents();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       17,
       f
     );
@@ -3516,55 +3516,55 @@ proto.event_store.client.projections.StatisticsResp.Details.serializeBinaryToWri
 
 /**
  * optional int64 coreProcessingTime = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.getCoreprocessingtime = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.projections.StatisticsResp.Details} returns this
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.setCoreprocessingtime = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional int64 version = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.getVersion = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.projections.StatisticsResp.Details} returns this
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.setVersion = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
 /**
  * optional int64 epoch = 3;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.getEpoch = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.projections.StatisticsResp.Details} returns this
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.setEpoch = function(value) {
-  return jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3StringIntField(this, 3, value);
 };
 
 
@@ -3768,19 +3768,19 @@ proto.event_store.client.projections.StatisticsResp.Details.prototype.setLastche
 
 /**
  * optional int64 eventsProcessedAfterRestart = 15;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.getEventsprocessedafterrestart = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 15, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 15, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.projections.StatisticsResp.Details} returns this
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.setEventsprocessedafterrestart = function(value) {
-  return jspb.Message.setProto3IntField(this, 15, value);
+  return jspb.Message.setProto3StringIntField(this, 15, value);
 };
 
 
@@ -3804,19 +3804,19 @@ proto.event_store.client.projections.StatisticsResp.Details.prototype.setCheckpo
 
 /**
  * optional int64 bufferedEvents = 17;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.getBufferedevents = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 17, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 17, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.projections.StatisticsResp.Details} returns this
  */
 proto.event_store.client.projections.StatisticsResp.Details.prototype.setBufferedevents = function(value) {
-  return jspb.Message.setProto3IntField(this, 17, value);
+  return jspb.Message.setProto3StringIntField(this, 17, value);
 };
 
 

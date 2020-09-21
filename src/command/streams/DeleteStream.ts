@@ -49,7 +49,7 @@ export class DeleteStream extends Command {
         break;
       }
       default: {
-        options.setRevision(this._revision);
+        options.setRevision(this._revision.toString(10));
         break;
       }
     }
@@ -69,8 +69,8 @@ export class DeleteStream extends Command {
           const grpcPos = resp.getPosition()!;
 
           result.position = {
-            commit: grpcPos.getCommitPosition(),
-            prepare: grpcPos.getPreparePosition(),
+            commit: BigInt(grpcPos.getCommitPosition()),
+            prepare: BigInt(grpcPos.getPreparePosition()),
           };
         }
 

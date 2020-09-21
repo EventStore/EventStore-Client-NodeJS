@@ -8,7 +8,6 @@ import {
   ResolvedEvent,
   SubscriptionReport,
   subscribeToAll,
-  readEventsFromStream,
 } from "../..";
 
 describe("subscribeToAll", () => {
@@ -164,28 +163,18 @@ describe("subscribeToAll", () => {
       expect(events.length).toBeGreaterThanOrEqual(4);
     });
 
-    // Assertion failed at new goog.asserts
-    test.skip("from position", async () => {
+    test("from position", async () => {
       const defer = new Defer();
       const FINISH_TEST = "from-position-finish";
       const MARKER_EVENT = "marker_event";
 
-      await writeEventsToStream(STREAM_NAME_B)
+      const writeResult = await writeEventsToStream(STREAM_NAME_B)
         .send(
           EventData.json(MARKER_EVENT, {
             message: "mark my words",
           }).build()
         )
         .execute(connection);
-
-      const [readMarkerResult] = await readEventsFromStream(STREAM_NAME_B)
-        .backward()
-        .fromEnd()
-        .count(1)
-        .execute(connection);
-
-      const marker = readMarkerResult.event!;
-      expect(marker.eventType).toBe(MARKER_EVENT);
 
       await writeEventsToStream(STREAM_NAME_A)
         .send(event.build(), event.build(), event.build())
@@ -216,7 +205,7 @@ describe("subscribeToAll", () => {
 
       await subscribeToAll()
         .authenticated("admin", "changeit")
-        .fromPosition(marker.position)
+        .fromPosition(writeResult.position!)
         .handler({
           onError,
           onEvent,

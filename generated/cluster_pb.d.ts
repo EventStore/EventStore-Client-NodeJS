@@ -162,8 +162,8 @@ export class PrepareOkRequest extends jspb.Message {
     getEpochNumber(): number;
     setEpochNumber(value: number): PrepareOkRequest;
 
-    getEpochPosition(): number;
-    setEpochPosition(value: number): PrepareOkRequest;
+    getEpochPosition(): string;
+    setEpochPosition(value: string): PrepareOkRequest;
 
 
     hasEpochId(): boolean;
@@ -177,14 +177,14 @@ export class PrepareOkRequest extends jspb.Message {
     getEpochLeaderInstanceId(): shared_pb.UUID | undefined;
     setEpochLeaderInstanceId(value?: shared_pb.UUID): PrepareOkRequest;
 
-    getLastCommitPosition(): number;
-    setLastCommitPosition(value: number): PrepareOkRequest;
+    getLastCommitPosition(): string;
+    setLastCommitPosition(value: string): PrepareOkRequest;
 
-    getWriterCheckpoint(): number;
-    setWriterCheckpoint(value: number): PrepareOkRequest;
+    getWriterCheckpoint(): string;
+    setWriterCheckpoint(value: string): PrepareOkRequest;
 
-    getChaserCheckpoint(): number;
-    setChaserCheckpoint(value: number): PrepareOkRequest;
+    getChaserCheckpoint(): string;
+    setChaserCheckpoint(value: string): PrepareOkRequest;
 
     getNodePriority(): number;
     setNodePriority(value: number): PrepareOkRequest;
@@ -212,12 +212,12 @@ export namespace PrepareOkRequest {
         serverId?: shared_pb.UUID.AsObject,
         serverHttp?: EndPoint.AsObject,
         epochNumber: number,
-        epochPosition: number,
+        epochPosition: string,
         epochId?: shared_pb.UUID.AsObject,
         epochLeaderInstanceId?: shared_pb.UUID.AsObject,
-        lastCommitPosition: number,
-        writerCheckpoint: number,
-        chaserCheckpoint: number,
+        lastCommitPosition: string,
+        writerCheckpoint: string,
+        chaserCheckpoint: string,
         nodePriority: number,
         clusterInfo?: ClusterInfo.AsObject,
     }
@@ -254,8 +254,8 @@ export class ProposalRequest extends jspb.Message {
     getEpochNumber(): number;
     setEpochNumber(value: number): ProposalRequest;
 
-    getEpochPosition(): number;
-    setEpochPosition(value: number): ProposalRequest;
+    getEpochPosition(): string;
+    setEpochPosition(value: string): ProposalRequest;
 
 
     hasEpochId(): boolean;
@@ -269,14 +269,14 @@ export class ProposalRequest extends jspb.Message {
     getEpochLeaderInstanceId(): shared_pb.UUID | undefined;
     setEpochLeaderInstanceId(value?: shared_pb.UUID): ProposalRequest;
 
-    getLastCommitPosition(): number;
-    setLastCommitPosition(value: number): ProposalRequest;
+    getLastCommitPosition(): string;
+    setLastCommitPosition(value: string): ProposalRequest;
 
-    getWriterCheckpoint(): number;
-    setWriterCheckpoint(value: number): ProposalRequest;
+    getWriterCheckpoint(): string;
+    setWriterCheckpoint(value: string): ProposalRequest;
 
-    getChaserCheckpoint(): number;
-    setChaserCheckpoint(value: number): ProposalRequest;
+    getChaserCheckpoint(): string;
+    setChaserCheckpoint(value: string): ProposalRequest;
 
     getNodePriority(): number;
     setNodePriority(value: number): ProposalRequest;
@@ -300,12 +300,12 @@ export namespace ProposalRequest {
         leaderHttp?: EndPoint.AsObject,
         view: number,
         epochNumber: number,
-        epochPosition: number,
+        epochPosition: string,
         epochId?: shared_pb.UUID.AsObject,
         epochLeaderInstanceId?: shared_pb.UUID.AsObject,
-        lastCommitPosition: number,
-        writerCheckpoint: number,
-        chaserCheckpoint: number,
+        lastCommitPosition: string,
+        writerCheckpoint: string,
+        chaserCheckpoint: string,
         nodePriority: number,
     }
 }
@@ -490,8 +490,8 @@ export class MemberInfo extends jspb.Message {
     getInstanceId(): shared_pb.UUID | undefined;
     setInstanceId(value?: shared_pb.UUID): MemberInfo;
 
-    getTimeStamp(): number;
-    setTimeStamp(value: number): MemberInfo;
+    getTimeStamp(): string;
+    setTimeStamp(value: string): MemberInfo;
 
     getState(): MemberInfo.VNodeState;
     setState(value: MemberInfo.VNodeState): MemberInfo;
@@ -523,17 +523,17 @@ export class MemberInfo extends jspb.Message {
     getExternalTcpUsesTls(): boolean;
     setExternalTcpUsesTls(value: boolean): MemberInfo;
 
-    getLastCommitPosition(): number;
-    setLastCommitPosition(value: number): MemberInfo;
+    getLastCommitPosition(): string;
+    setLastCommitPosition(value: string): MemberInfo;
 
-    getWriterCheckpoint(): number;
-    setWriterCheckpoint(value: number): MemberInfo;
+    getWriterCheckpoint(): string;
+    setWriterCheckpoint(value: string): MemberInfo;
 
-    getChaserCheckpoint(): number;
-    setChaserCheckpoint(value: number): MemberInfo;
+    getChaserCheckpoint(): string;
+    setChaserCheckpoint(value: string): MemberInfo;
 
-    getEpochPosition(): number;
-    setEpochPosition(value: number): MemberInfo;
+    getEpochPosition(): string;
+    setEpochPosition(value: string): MemberInfo;
 
     getEpochNumber(): number;
     setEpochNumber(value: number): MemberInfo;
@@ -573,7 +573,7 @@ export class MemberInfo extends jspb.Message {
 export namespace MemberInfo {
     export type AsObject = {
         instanceId?: shared_pb.UUID.AsObject,
-        timeStamp: number,
+        timeStamp: string,
         state: MemberInfo.VNodeState,
         isAlive: boolean,
         httpEndPoint?: EndPoint.AsObject,
@@ -581,10 +581,10 @@ export namespace MemberInfo {
         externalTcp?: EndPoint.AsObject,
         internalTcpUsesTls: boolean,
         externalTcpUsesTls: boolean,
-        lastCommitPosition: number,
-        writerCheckpoint: number,
-        chaserCheckpoint: number,
-        epochPosition: number,
+        lastCommitPosition: string,
+        writerCheckpoint: string,
+        chaserCheckpoint: string,
+        epochPosition: string,
         epochNumber: number,
         epochId?: shared_pb.UUID.AsObject,
         nodePriority: number,

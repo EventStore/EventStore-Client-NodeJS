@@ -62,7 +62,7 @@ message ReadResp {
 		RecordedEvent event = 1;
 		RecordedEvent link = 2;
 		oneof position {
-			uint64 commit_position = 3;
+			uint64 commit_position = 3 [jstype = JS_STRING];
 			event_store.client.shared.Empty no_position = 4;
 		}
 		oneof count {
@@ -72,9 +72,9 @@ message ReadResp {
 		message RecordedEvent {
 			event_store.client.shared.UUID id = 1;
 			event_store.client.shared.StreamIdentifier stream_identifier = 2;
-			uint64 stream_revision = 3;
-			uint64 prepare_position = 4;
-			uint64 commit_position = 5;
+			uint64 stream_revision = 3 [jstype = JS_STRING];
+			uint64 prepare_position = 4 [jstype = JS_STRING];
+			uint64 commit_position = 5 [jstype = JS_STRING];
 			map<string, string> metadata = 6;
 			bytes custom_metadata = 7;
 			bytes data = 8;
@@ -96,7 +96,7 @@ message CreateReq {
 
 	message Settings {
 		bool resolve_links = 1;
-		uint64 revision = 2;
+		uint64 revision = 2 [jstype = JS_STRING];
 		bool extra_statistics = 3;
 		int32 max_retry_count = 5;
 		int32 min_checkpoint_count = 7;
@@ -107,11 +107,11 @@ message CreateReq {
 		int32 history_buffer_size = 12;
 		ConsumerStrategy named_consumer_strategy = 13;
 		oneof message_timeout {
-			int64 message_timeout_ticks = 4;
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING];
 			int32 message_timeout_ms = 14;
 		}
 		oneof checkpoint_after {
-			int64 checkpoint_after_ticks = 6;
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING];
 			int32 checkpoint_after_ms = 15;
 		}
 	}
@@ -137,7 +137,7 @@ message UpdateReq {
 
 	message Settings {
 		bool resolve_links = 1;
-		uint64 revision = 2;
+		uint64 revision = 2 [jstype = JS_STRING];
 		bool extra_statistics = 3;
 		int32 max_retry_count = 5;
 		int32 min_checkpoint_count = 7;
@@ -148,11 +148,11 @@ message UpdateReq {
 		int32 history_buffer_size = 12;
 		ConsumerStrategy named_consumer_strategy = 13;
 		oneof message_timeout {
-			int64 message_timeout_ticks = 4;
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING];
 			int32 message_timeout_ms = 14;
 		}
 		oneof checkpoint_after {
-			int64 checkpoint_after_ticks = 6;
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING];
 			int32 checkpoint_after_ms = 15;
 		}
 	}

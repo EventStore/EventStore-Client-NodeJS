@@ -16,13 +16,13 @@ import { handleBatchRead } from "../../utils/handleBatchRead";
 export class ReadAllEvents extends Command {
   private _position: ReadPosition;
   private _direction: Direction;
-  private _count: number;
+  private _count: bigint;
 
   constructor() {
     super();
     this._direction = "forward";
     this._position = "start";
-    this._count = 1;
+    this._count = BigInt(1);
   }
 
   /**
@@ -79,8 +79,8 @@ export class ReadAllEvents extends Command {
    * Sets the max number of events to read
    * @param count Max number of events to read.
    */
-  count(count: number): ReadAllEvents {
-    this._count = count;
+  count(count: bigint | number): ReadAllEvents {
+    this._count = BigInt(count);
     return this;
   }
 
@@ -109,13 +109,13 @@ export class ReadAllEvents extends Command {
 
       default: {
         const pos = new ReadReq.Options.Position();
-        pos.setCommitPosition(this._position.commit);
-        pos.setPreparePosition(this._position.prepare);
+        pos.setCommitPosition(this._position.commit.toString(10));
+        pos.setPreparePosition(this._position.prepare.toString(10));
         allOptions.setPosition(pos);
         break;
       }
     }
-    options.setCount(this._count);
+    options.setCount(this._count.toString(10));
     options.setAll(allOptions);
     options.setUuidOption(uuidOption);
     options.setNoFilter(new Empty());

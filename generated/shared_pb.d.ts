@@ -40,11 +40,11 @@ export namespace UUID {
 
 
     export class Structured extends jspb.Message { 
-        getMostSignificantBits(): number;
-        setMostSignificantBits(value: number): Structured;
+        getMostSignificantBits(): string;
+        setMostSignificantBits(value: string): Structured;
 
-        getLeastSignificantBits(): number;
-        setLeastSignificantBits(value: number): Structured;
+        getLeastSignificantBits(): string;
+        setLeastSignificantBits(value: string): Structured;
 
 
         serializeBinary(): Uint8Array;
@@ -59,8 +59,8 @@ export namespace UUID {
 
     export namespace Structured {
         export type AsObject = {
-            mostSignificantBits: number,
-            leastSignificantBits: number,
+            mostSignificantBits: string,
+            leastSignificantBits: string,
         }
     }
 

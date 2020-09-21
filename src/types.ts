@@ -9,14 +9,14 @@ export { VNodeState };
  * A structure referring to a potential logical record position in the EventStoreDB transaction file.
  */
 export type Position = {
-  commit: number;
-  prepare: number;
+  commit: bigint;
+  prepare: bigint;
 };
 
 export type ReadRevision =
   | typeof constants.START
   | typeof constants.END
-  | number;
+  | bigint;
 
 export type ReadPosition =
   | typeof constants.START
@@ -44,7 +44,7 @@ export type ExpectedRevision =
   /**
    * States that the last event written to the stream should have an event number matching your expected value.
    */
-  | number;
+  | bigint;
 
 /**
  * Delete stream does not support "stream_exists". see: {@link ExpectedRevision}.
@@ -62,7 +62,7 @@ export type CurrentRevision =
   /**
    * the current event number of the last event written to the stream
    */
-  | number;
+  | bigint;
 
 /**
  * Represents the direction of read operation (both from '$all' and a regular stream).
@@ -70,7 +70,7 @@ export type CurrentRevision =
 export type Direction = typeof constants.FORWARD | typeof constants.BACKWARD;
 
 export type WriteResult = {
-  nextExpectedVersion: number;
+  nextExpectedVersion: bigint;
   position?: Position;
 };
 
@@ -92,13 +92,13 @@ export type ResolvedEvent = {
   /**
    * Commit position of the record.
    */
-  commit_position?: number;
+  commitPosition?: bigint;
 };
 
 /**
  * Represents a previously written event.
  */
-export type RecordedEvent = {
+export interface RecordedEvent {
   /**
    * The event stream that events belongs to.
    */
@@ -112,7 +112,7 @@ export type RecordedEvent = {
   /**
    * Number of this event in the stream.
    */
-  revision: number;
+  revision: bigint;
 
   /**
    * Type of this event.
@@ -143,7 +143,7 @@ export type RecordedEvent = {
    * Representing when this event was created in the database system.
    */
   created: number;
-};
+}
 
 export type SubscriptionHandler = {
   onEvent: (report: SubscriptionReport, event: ResolvedEvent) => void;

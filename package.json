@@ -12,6 +12,7 @@
     "test": "jest",
     "test:ci": "cross-env EVENTSTORE_IMAGE=github:ci jest",
     "generate": "run-s generate:*",
+    "generate:replace": "replace \"int64 ([A-z_]*) = ([0-9]*);\" \"int64 \\$1 = \\$2 [jstype = JS_STRING];\" ./protos -r --silent --include=\"*.proto\"",
     "generate:folder": "make-dir ./generated",
     "generate:js": "grpc_tools_node_protoc ./protos/*.proto --proto_path=./protos --grpc_out=grpc_js:./generated --js_out=import_style=commonjs,binary:./generated --ts_out=generate_package_definition:./generated",
     "clean": "rm -rf ./dist"
@@ -35,7 +36,12 @@
   },
   "homepage": "https://github.com/EventStore/EventStore-Client-NodeJS#readme",
   "jest": {
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "./src/__test__/tsconfig.json"
+      }
+    }
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.1.5",
@@ -58,6 +64,7 @@
     "make-dir-cli": "^2.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
+    "replace": "^1.2.0",
     "ts-jest": "^26.3.0",
     "typescript": "^4.0.2",
     "yaml": "^1.10.0"

@@ -3322,7 +3322,7 @@ proto.event_store.client.users.DetailsResp.UserDetails.DateTime.prototype.toObje
  */
 proto.event_store.client.users.DetailsResp.UserDetails.DateTime.toObject = function(includeInstance, msg) {
   var f, obj = {
-    ticksSinceEpoch: jspb.Message.getFieldWithDefault(msg, 1, 0)
+    ticksSinceEpoch: jspb.Message.getFieldWithDefault(msg, 1, "0")
   };
 
   if (includeInstance) {
@@ -3360,7 +3360,7 @@ proto.event_store.client.users.DetailsResp.UserDetails.DateTime.deserializeBinar
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setTicksSinceEpoch(value);
       break;
     default:
@@ -3393,8 +3393,8 @@ proto.event_store.client.users.DetailsResp.UserDetails.DateTime.prototype.serial
 proto.event_store.client.users.DetailsResp.UserDetails.DateTime.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getTicksSinceEpoch();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       1,
       f
     );
@@ -3404,19 +3404,19 @@ proto.event_store.client.users.DetailsResp.UserDetails.DateTime.serializeBinaryT
 
 /**
  * optional int64 ticks_since_epoch = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.users.DetailsResp.UserDetails.DateTime.prototype.getTicksSinceEpoch = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.users.DetailsResp.UserDetails.DateTime} returns this
  */
 proto.event_store.client.users.DetailsResp.UserDetails.DateTime.prototype.setTicksSinceEpoch = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 

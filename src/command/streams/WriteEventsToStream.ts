@@ -69,7 +69,7 @@ export class WriteEventsToStream extends Command {
         break;
       }
       default: {
-        options.setRevision(this._revision);
+        options.setRevision(this._revision.toString(10));
         break;
       }
     }
@@ -91,7 +91,7 @@ export class WriteEventsToStream extends Command {
 
           switch (true) {
             case grpcError.hasExpectedRevision(): {
-              expected = grpcError.getExpectedRevision()!;
+              expected = BigInt(grpcError.getExpectedRevision()!);
               break;
             }
             case grpcError.hasStreamExists(): {
@@ -108,7 +108,7 @@ export class WriteEventsToStream extends Command {
             new WrongExpectedVersionError(null as never, {
               streamName: this._stream,
               current: grpcError.hasCurrentRevision()
-                ? grpcError.getCurrentRevision()
+                ? BigInt(grpcError.getCurrentRevision())
                 : "no_stream",
               expected,
             })
@@ -117,13 +117,13 @@ export class WriteEventsToStream extends Command {
 
         if (resp.hasSuccess()) {
           const success = resp.getSuccess()!;
-          const nextExpectedVersion = success.getCurrentRevision();
+          const nextExpectedVersion = BigInt(success.getCurrentRevision());
           const grpcPosition = success.getPosition();
 
           const position = grpcPosition
             ? {
-                commit: grpcPosition.getCommitPosition(),
-                prepare: grpcPosition.getPreparePosition(),
+                commit: BigInt(grpcPosition.getCommitPosition()),
+                prepare: BigInt(grpcPosition.getPreparePosition()),
               }
             : undefined;
 

@@ -1,12 +1,7 @@
 import { Empty, StreamIdentifier } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { TombstoneReq } from "../../../generated/streams_pb";
-import {
-  DeleteResult,
-  Position,
-  ESDBConnection,
-  ExpectedRevision,
-} from "../../types";
+import { DeleteResult, ESDBConnection, ExpectedRevision } from "../../types";
 import { convertToCommandError } from "../../utils/CommandError";
 import { Command } from "../Command";
 
@@ -54,7 +49,7 @@ export class TombstoneStream extends Command {
         break;
       }
       default: {
-        options.setRevision(this._revision);
+        options.setRevision(this._revision.toString(10));
         break;
       }
     }
@@ -74,8 +69,8 @@ export class TombstoneStream extends Command {
         if (resp.hasPosition()) {
           const grpcPos = resp.getPosition()!;
           result.position = {
-            commit: grpcPos.getCommitPosition(),
-            prepare: grpcPos.getPreparePosition(),
+            commit: BigInt(grpcPos.getCommitPosition()),
+            prepare: BigInt(grpcPos.getPreparePosition()),
           };
         }
 

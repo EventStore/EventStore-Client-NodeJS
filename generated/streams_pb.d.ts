@@ -53,8 +53,8 @@ export namespace ReadReq {
 
         hasCount(): boolean;
         clearCount(): void;
-        getCount(): number;
-        setCount(value: number): Options;
+        getCount(): string;
+        setCount(value: string): Options;
 
 
         hasSubscription(): boolean;
@@ -101,7 +101,7 @@ export namespace ReadReq {
             all?: ReadReq.Options.AllOptions.AsObject,
             readDirection: ReadReq.Options.ReadDirection,
             resolveLinks: boolean,
-            count: number,
+            count: string,
             subscription?: ReadReq.Options.SubscriptionOptions.AsObject,
             filter?: ReadReq.Options.FilterOptions.AsObject,
             noFilter?: shared_pb.Empty.AsObject,
@@ -119,8 +119,8 @@ export namespace ReadReq {
 
             hasRevision(): boolean;
             clearRevision(): void;
-            getRevision(): number;
-            setRevision(value: number): StreamOptions;
+            getRevision(): string;
+            setRevision(value: string): StreamOptions;
 
 
             hasStart(): boolean;
@@ -150,7 +150,7 @@ export namespace ReadReq {
         export namespace StreamOptions {
             export type AsObject = {
                 streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
-                revision: number,
+                revision: string,
                 start?: shared_pb.Empty.AsObject,
                 end?: shared_pb.Empty.AsObject,
             }
@@ -238,11 +238,11 @@ export namespace ReadReq {
         }
 
         export class Position extends jspb.Message { 
-            getCommitPosition(): number;
-            setCommitPosition(value: number): Position;
+            getCommitPosition(): string;
+            setCommitPosition(value: string): Position;
 
-            getPreparePosition(): number;
-            setPreparePosition(value: number): Position;
+            getPreparePosition(): string;
+            setPreparePosition(value: string): Position;
 
 
             serializeBinary(): Uint8Array;
@@ -257,8 +257,8 @@ export namespace ReadReq {
 
         export namespace Position {
             export type AsObject = {
-                commitPosition: number,
-                preparePosition: number,
+                commitPosition: string,
+                preparePosition: string,
             }
         }
 
@@ -506,8 +506,8 @@ export namespace ReadResp {
 
         hasCommitPosition(): boolean;
         clearCommitPosition(): void;
-        getCommitPosition(): number;
-        setCommitPosition(value: number): ReadEvent;
+        getCommitPosition(): string;
+        setCommitPosition(value: string): ReadEvent;
 
 
         hasNoPosition(): boolean;
@@ -532,7 +532,7 @@ export namespace ReadResp {
         export type AsObject = {
             event?: ReadResp.ReadEvent.RecordedEvent.AsObject,
             link?: ReadResp.ReadEvent.RecordedEvent.AsObject,
-            commitPosition: number,
+            commitPosition: string,
             noPosition?: shared_pb.Empty.AsObject,
         }
 
@@ -550,14 +550,14 @@ export namespace ReadResp {
             getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
             setStreamIdentifier(value?: shared_pb.StreamIdentifier): RecordedEvent;
 
-            getStreamRevision(): number;
-            setStreamRevision(value: number): RecordedEvent;
+            getStreamRevision(): string;
+            setStreamRevision(value: string): RecordedEvent;
 
-            getPreparePosition(): number;
-            setPreparePosition(value: number): RecordedEvent;
+            getPreparePosition(): string;
+            setPreparePosition(value: string): RecordedEvent;
 
-            getCommitPosition(): number;
-            setCommitPosition(value: number): RecordedEvent;
+            getCommitPosition(): string;
+            setCommitPosition(value: string): RecordedEvent;
 
 
             getMetadataMap(): jspb.Map<string, string>;
@@ -588,9 +588,9 @@ export namespace ReadResp {
             export type AsObject = {
                 id?: shared_pb.UUID.AsObject,
                 streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
-                streamRevision: number,
-                preparePosition: number,
-                commitPosition: number,
+                streamRevision: string,
+                preparePosition: string,
+                commitPosition: string,
 
                 metadataMap: Array<[string, string]>,
                 customMetadata: Uint8Array | string,
@@ -632,11 +632,11 @@ export namespace ReadResp {
     }
 
     export class Checkpoint extends jspb.Message { 
-        getCommitPosition(): number;
-        setCommitPosition(value: number): Checkpoint;
+        getCommitPosition(): string;
+        setCommitPosition(value: string): Checkpoint;
 
-        getPreparePosition(): number;
-        setPreparePosition(value: number): Checkpoint;
+        getPreparePosition(): string;
+        setPreparePosition(value: string): Checkpoint;
 
 
         serializeBinary(): Uint8Array;
@@ -651,8 +651,8 @@ export namespace ReadResp {
 
     export namespace Checkpoint {
         export type AsObject = {
-            commitPosition: number,
-            preparePosition: number,
+            commitPosition: string,
+            preparePosition: string,
         }
     }
 
@@ -739,8 +739,8 @@ export namespace AppendReq {
 
         hasRevision(): boolean;
         clearRevision(): void;
-        getRevision(): number;
-        setRevision(value: number): Options;
+        getRevision(): string;
+        setRevision(value: string): Options;
 
 
         hasNoStream(): boolean;
@@ -776,7 +776,7 @@ export namespace AppendReq {
     export namespace Options {
         export type AsObject = {
             streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
-            revision: number,
+            revision: string,
             noStream?: shared_pb.Empty.AsObject,
             any?: shared_pb.Empty.AsObject,
             streamExists?: shared_pb.Empty.AsObject,
@@ -885,11 +885,11 @@ export namespace AppendResp {
 
 
     export class Position extends jspb.Message { 
-        getCommitPosition(): number;
-        setCommitPosition(value: number): Position;
+        getCommitPosition(): string;
+        setCommitPosition(value: string): Position;
 
-        getPreparePosition(): number;
-        setPreparePosition(value: number): Position;
+        getPreparePosition(): string;
+        setPreparePosition(value: string): Position;
 
 
         serializeBinary(): Uint8Array;
@@ -904,8 +904,8 @@ export namespace AppendResp {
 
     export namespace Position {
         export type AsObject = {
-            commitPosition: number,
-            preparePosition: number,
+            commitPosition: string,
+            preparePosition: string,
         }
     }
 
@@ -913,8 +913,8 @@ export namespace AppendResp {
 
         hasCurrentRevision(): boolean;
         clearCurrentRevision(): void;
-        getCurrentRevision(): number;
-        setCurrentRevision(value: number): Success;
+        getCurrentRevision(): string;
+        setCurrentRevision(value: string): Success;
 
 
         hasNoStream(): boolean;
@@ -950,7 +950,7 @@ export namespace AppendResp {
 
     export namespace Success {
         export type AsObject = {
-            currentRevision: number,
+            currentRevision: string,
             noStream?: shared_pb.Empty.AsObject,
             position?: AppendResp.Position.AsObject,
             noPosition?: shared_pb.Empty.AsObject,
@@ -980,8 +980,8 @@ export namespace AppendResp {
 
         hasCurrentRevision(): boolean;
         clearCurrentRevision(): void;
-        getCurrentRevision(): number;
-        setCurrentRevision(value: number): WrongExpectedVersion;
+        getCurrentRevision(): string;
+        setCurrentRevision(value: string): WrongExpectedVersion;
 
 
         hasNoStream(): boolean;
@@ -992,8 +992,8 @@ export namespace AppendResp {
 
         hasExpectedRevision(): boolean;
         clearExpectedRevision(): void;
-        getExpectedRevision(): number;
-        setExpectedRevision(value: number): WrongExpectedVersion;
+        getExpectedRevision(): string;
+        setExpectedRevision(value: string): WrongExpectedVersion;
 
 
         hasAny(): boolean;
@@ -1023,9 +1023,9 @@ export namespace AppendResp {
 
     export namespace WrongExpectedVersion {
         export type AsObject = {
-            currentRevision: number,
+            currentRevision: string,
             noStream?: shared_pb.Empty.AsObject,
-            expectedRevision: number,
+            expectedRevision: string,
             any?: shared_pb.Empty.AsObject,
             streamExists?: shared_pb.Empty.AsObject,
         }
@@ -1098,8 +1098,8 @@ export namespace DeleteReq {
 
         hasRevision(): boolean;
         clearRevision(): void;
-        getRevision(): number;
-        setRevision(value: number): Options;
+        getRevision(): string;
+        setRevision(value: string): Options;
 
 
         hasNoStream(): boolean;
@@ -1135,7 +1135,7 @@ export namespace DeleteReq {
     export namespace Options {
         export type AsObject = {
             streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
-            revision: number,
+            revision: string,
             noStream?: shared_pb.Empty.AsObject,
             any?: shared_pb.Empty.AsObject,
             streamExists?: shared_pb.Empty.AsObject,
@@ -1192,11 +1192,11 @@ export namespace DeleteResp {
 
 
     export class Position extends jspb.Message { 
-        getCommitPosition(): number;
-        setCommitPosition(value: number): Position;
+        getCommitPosition(): string;
+        setCommitPosition(value: string): Position;
 
-        getPreparePosition(): number;
-        setPreparePosition(value: number): Position;
+        getPreparePosition(): string;
+        setPreparePosition(value: string): Position;
 
 
         serializeBinary(): Uint8Array;
@@ -1211,8 +1211,8 @@ export namespace DeleteResp {
 
     export namespace Position {
         export type AsObject = {
-            commitPosition: number,
-            preparePosition: number,
+            commitPosition: string,
+            preparePosition: string,
         }
     }
 
@@ -1262,8 +1262,8 @@ export namespace TombstoneReq {
 
         hasRevision(): boolean;
         clearRevision(): void;
-        getRevision(): number;
-        setRevision(value: number): Options;
+        getRevision(): string;
+        setRevision(value: string): Options;
 
 
         hasNoStream(): boolean;
@@ -1299,7 +1299,7 @@ export namespace TombstoneReq {
     export namespace Options {
         export type AsObject = {
             streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
-            revision: number,
+            revision: string,
             noStream?: shared_pb.Empty.AsObject,
             any?: shared_pb.Empty.AsObject,
             streamExists?: shared_pb.Empty.AsObject,
@@ -1356,11 +1356,11 @@ export namespace TombstoneResp {
 
 
     export class Position extends jspb.Message { 
-        getCommitPosition(): number;
-        setCommitPosition(value: number): Position;
+        getCommitPosition(): string;
+        setCommitPosition(value: string): Position;
 
-        getPreparePosition(): number;
-        setPreparePosition(value: number): Position;
+        getPreparePosition(): string;
+        setPreparePosition(value: string): Position;
 
 
         serializeBinary(): Uint8Array;
@@ -1375,8 +1375,8 @@ export namespace TombstoneResp {
 
     export namespace Position {
         export type AsObject = {
-            commitPosition: number,
-            preparePosition: number,
+            commitPosition: string,
+            preparePosition: string,
         }
     }
 

@@ -468,8 +468,8 @@ export namespace DetailsResp {
 
 
         export class DateTime extends jspb.Message { 
-            getTicksSinceEpoch(): number;
-            setTicksSinceEpoch(value: number): DateTime;
+            getTicksSinceEpoch(): string;
+            setTicksSinceEpoch(value: string): DateTime;
 
 
             serializeBinary(): Uint8Array;
@@ -484,7 +484,7 @@ export namespace DetailsResp {
 
         export namespace DateTime {
             export type AsObject = {
-                ticksSinceEpoch: number,
+                ticksSinceEpoch: string,
             }
         }
 

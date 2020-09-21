@@ -2,11 +2,10 @@ import { ClientReadableStream } from "@grpc/grpc-js";
 import { ReadResp } from "../../generated/streams_pb";
 import {
   SubscriptionHandler,
-  RecordedEvent,
   ResolvedEvent,
   SubscriptionReport,
 } from "../types";
-import { convertGrpcRecord } from "./convertGrpcRecord";
+import { convertGrpcEvent } from "./convertGrpcEvent";
 
 export class SubscriptionReportImpl implements SubscriptionReport {
   private _stream: ClientReadableStream<ReadResp>;
@@ -31,24 +30,7 @@ export function handleOneWaySubscription(
     }
 
     if (resp.hasEvent()) {
-      const grpcEvent = resp.getEvent()!;
-      let event: RecordedEvent | undefined;
-      let link: RecordedEvent | undefined;
-
-      if (grpcEvent.hasEvent()) {
-        event = convertGrpcRecord(grpcEvent.getEvent()!);
-      }
-
-      if (grpcEvent.hasLink()) {
-        link = convertGrpcRecord(grpcEvent.getLink()!);
-      }
-
-      const resolved: ResolvedEvent = {
-        event,
-        link,
-        commit_position: grpcEvent.getCommitPosition(),
-      };
-
+      const resolved: ResolvedEvent = convertGrpcEvent(resp.getEvent()!);
       handler.onEvent(report, resolved);
     }
   });

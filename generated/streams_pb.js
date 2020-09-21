@@ -904,7 +904,7 @@ proto.event_store.client.streams.ReadReq.Options.toObject = function(includeInst
     all: (f = msg.getAll()) && proto.event_store.client.streams.ReadReq.Options.AllOptions.toObject(includeInstance, f),
     readDirection: jspb.Message.getFieldWithDefault(msg, 3, 0),
     resolveLinks: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    count: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    count: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     subscription: (f = msg.getSubscription()) && proto.event_store.client.streams.ReadReq.Options.SubscriptionOptions.toObject(includeInstance, f),
     filter: (f = msg.getFilter()) && proto.event_store.client.streams.ReadReq.Options.FilterOptions.toObject(includeInstance, f),
     noFilter: (f = msg.getNoFilter()) && shared_pb.Empty.toObject(includeInstance, f),
@@ -964,7 +964,7 @@ proto.event_store.client.streams.ReadReq.Options.deserializeBinaryFromReader = f
       msg.setResolveLinks(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCount(value);
       break;
     case 6:
@@ -1046,9 +1046,9 @@ proto.event_store.client.streams.ReadReq.Options.serializeBinaryToWriter = funct
       f
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 5));
+  f = /** @type {string} */ (jspb.Message.getField(message, 5));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       5,
       f
     );
@@ -1156,7 +1156,7 @@ proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.toObjec
 proto.event_store.client.streams.ReadReq.Options.StreamOptions.toObject = function(includeInstance, msg) {
   var f, obj = {
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
     end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f)
   };
@@ -1201,7 +1201,7 @@ proto.event_store.client.streams.ReadReq.Options.StreamOptions.deserializeBinary
       msg.setStreamIdentifier(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setRevision(value);
       break;
     case 3:
@@ -1251,9 +1251,9 @@ proto.event_store.client.streams.ReadReq.Options.StreamOptions.serializeBinaryTo
       shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       2,
       f
     );
@@ -1316,15 +1316,15 @@ proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.hasStre
 
 /**
  * optional uint64 revision = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.getRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadReq.Options.StreamOptions} returns this
  */
 proto.event_store.client.streams.ReadReq.Options.StreamOptions.prototype.setRevision = function(value) {
@@ -1837,8 +1837,8 @@ proto.event_store.client.streams.ReadReq.Options.Position.prototype.toObject = f
  */
 proto.event_store.client.streams.ReadReq.Options.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
   };
 
   if (includeInstance) {
@@ -1876,11 +1876,11 @@ proto.event_store.client.streams.ReadReq.Options.Position.deserializeBinaryFromR
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     default:
@@ -1913,15 +1913,15 @@ proto.event_store.client.streams.ReadReq.Options.Position.prototype.serializeBin
 proto.event_store.client.streams.ReadReq.Options.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       1,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -1931,37 +1931,37 @@ proto.event_store.client.streams.ReadReq.Options.Position.serializeBinaryToWrite
 
 /**
  * optional uint64 commit_position = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadReq.Options.Position.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadReq.Options.Position} returns this
  */
 proto.event_store.client.streams.ReadReq.Options.Position.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadReq.Options.Position.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadReq.Options.Position} returns this
  */
 proto.event_store.client.streams.ReadReq.Options.Position.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -2864,15 +2864,15 @@ proto.event_store.client.streams.ReadReq.Options.prototype.setResolveLinks = fun
 
 /**
  * optional uint64 count = 5;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadReq.Options.prototype.getCount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadReq.Options} returns this
  */
 proto.event_store.client.streams.ReadReq.Options.prototype.setCount = function(value) {
@@ -3327,7 +3327,7 @@ proto.event_store.client.streams.ReadResp.ReadEvent.toObject = function(includeI
   var f, obj = {
     event: (f = msg.getEvent()) && proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
     link: (f = msg.getLink()) && proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject(includeInstance, f),
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f)
   };
 
@@ -3376,7 +3376,7 @@ proto.event_store.client.streams.ReadResp.ReadEvent.deserializeBinaryFromReader 
       msg.setLink(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 4:
@@ -3429,9 +3429,9 @@ proto.event_store.client.streams.ReadResp.ReadEvent.serializeBinaryToWriter = fu
       proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       3,
       f
     );
@@ -3481,9 +3481,9 @@ proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.toObject = fun
   var f, obj = {
     id: (f = msg.getId()) && shared_pb.UUID.toObject(includeInstance, f),
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
-    streamRevision: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    streamRevision: jspb.Message.getFieldWithDefault(msg, 3, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 4, "0"),
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     metadataMap: (f = msg.getMetadataMap()) ? f.toObject(includeInstance, undefined) : [],
     customMetadata: msg.getCustomMetadata_asB64(),
     data: msg.getData_asB64()
@@ -3534,15 +3534,15 @@ proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.deserializeBin
       msg.setStreamIdentifier(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setStreamRevision(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 6:
@@ -3605,22 +3605,22 @@ proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.serializeBinar
     );
   }
   f = message.getStreamRevision();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       3,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       4,
       f
     );
   }
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       5,
       f
     );
@@ -3722,55 +3722,55 @@ proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.hasS
 
 /**
  * optional uint64 stream_revision = 3;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamRevision = function(value) {
-  return jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3StringIntField(this, 3, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 4;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 4, value);
+  return jspb.Message.setProto3StringIntField(this, 4, value);
 };
 
 
 /**
  * optional uint64 commit_position = 5;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent} returns this
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.RecordedEvent.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3StringIntField(this, 5, value);
 };
 
 
@@ -3956,15 +3956,15 @@ proto.event_store.client.streams.ReadResp.ReadEvent.prototype.hasLink = function
 
 /**
  * optional uint64 commit_position = 3;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadResp.ReadEvent} returns this
  */
 proto.event_store.client.streams.ReadResp.ReadEvent.prototype.setCommitPosition = function(value) {
@@ -4189,8 +4189,8 @@ proto.event_store.client.streams.ReadResp.Checkpoint.prototype.toObject = functi
  */
 proto.event_store.client.streams.ReadResp.Checkpoint.toObject = function(includeInstance, msg) {
   var f, obj = {
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
   };
 
   if (includeInstance) {
@@ -4228,11 +4228,11 @@ proto.event_store.client.streams.ReadResp.Checkpoint.deserializeBinaryFromReader
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     default:
@@ -4265,15 +4265,15 @@ proto.event_store.client.streams.ReadResp.Checkpoint.prototype.serializeBinary =
 proto.event_store.client.streams.ReadResp.Checkpoint.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       1,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -4283,37 +4283,37 @@ proto.event_store.client.streams.ReadResp.Checkpoint.serializeBinaryToWriter = f
 
 /**
  * optional uint64 commit_position = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadResp.Checkpoint.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadResp.Checkpoint} returns this
  */
 proto.event_store.client.streams.ReadResp.Checkpoint.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.ReadResp.Checkpoint.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.ReadResp.Checkpoint} returns this
  */
 proto.event_store.client.streams.ReadResp.Checkpoint.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -4831,7 +4831,7 @@ proto.event_store.client.streams.AppendReq.Options.prototype.toObject = function
 proto.event_store.client.streams.AppendReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
     any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
     streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
@@ -4877,7 +4877,7 @@ proto.event_store.client.streams.AppendReq.Options.deserializeBinaryFromReader =
       msg.setStreamIdentifier(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setRevision(value);
       break;
     case 3:
@@ -4932,9 +4932,9 @@ proto.event_store.client.streams.AppendReq.Options.serializeBinaryToWriter = fun
       shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       2,
       f
     );
@@ -5005,15 +5005,15 @@ proto.event_store.client.streams.AppendReq.Options.prototype.hasStreamIdentifier
 
 /**
  * optional uint64 revision = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.AppendReq.Options.prototype.getRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.AppendReq.Options} returns this
  */
 proto.event_store.client.streams.AppendReq.Options.prototype.setRevision = function(value) {
@@ -5702,8 +5702,8 @@ proto.event_store.client.streams.AppendResp.Position.prototype.toObject = functi
  */
 proto.event_store.client.streams.AppendResp.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
   };
 
   if (includeInstance) {
@@ -5741,11 +5741,11 @@ proto.event_store.client.streams.AppendResp.Position.deserializeBinaryFromReader
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     default:
@@ -5778,15 +5778,15 @@ proto.event_store.client.streams.AppendResp.Position.prototype.serializeBinary =
 proto.event_store.client.streams.AppendResp.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       1,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -5796,37 +5796,37 @@ proto.event_store.client.streams.AppendResp.Position.serializeBinaryToWriter = f
 
 /**
  * optional uint64 commit_position = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.AppendResp.Position.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.AppendResp.Position} returns this
  */
 proto.event_store.client.streams.AppendResp.Position.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.AppendResp.Position.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.AppendResp.Position} returns this
  */
 proto.event_store.client.streams.AppendResp.Position.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -5904,7 +5904,7 @@ proto.event_store.client.streams.AppendResp.Success.prototype.toObject = functio
  */
 proto.event_store.client.streams.AppendResp.Success.toObject = function(includeInstance, msg) {
   var f, obj = {
-    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, "0"),
     noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
     position: (f = msg.getPosition()) && proto.event_store.client.streams.AppendResp.Position.toObject(includeInstance, f),
     noPosition: (f = msg.getNoPosition()) && shared_pb.Empty.toObject(includeInstance, f)
@@ -5945,7 +5945,7 @@ proto.event_store.client.streams.AppendResp.Success.deserializeBinaryFromReader 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCurrentRevision(value);
       break;
     case 2:
@@ -5992,9 +5992,9 @@ proto.event_store.client.streams.AppendResp.Success.prototype.serializeBinary = 
  */
 proto.event_store.client.streams.AppendResp.Success.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(message, 1));
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       1,
       f
     );
@@ -6028,15 +6028,15 @@ proto.event_store.client.streams.AppendResp.Success.serializeBinaryToWriter = fu
 
 /**
  * optional uint64 current_revision = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.AppendResp.Success.prototype.getCurrentRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.AppendResp.Success} returns this
  */
 proto.event_store.client.streams.AppendResp.Success.prototype.setCurrentRevision = function(value) {
@@ -6248,9 +6248,9 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.toObj
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.toObject = function(includeInstance, msg) {
   var f, obj = {
-    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, "0"),
     noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
-    expectedRevision: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    expectedRevision: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
     streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
   };
@@ -6290,7 +6290,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBina
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCurrentRevision(value);
       break;
     case 2:
@@ -6299,7 +6299,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBina
       msg.setNoStream(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setExpectedRevision(value);
       break;
     case 4:
@@ -6341,9 +6341,9 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.seria
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {number} */ (jspb.Message.getField(message, 1));
+  f = /** @type {string} */ (jspb.Message.getField(message, 1));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       1,
       f
     );
@@ -6356,9 +6356,9 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       shared_pb.Empty.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       3,
       f
     );
@@ -6384,15 +6384,15 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
 
 /**
  * optional uint64 current_revision = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentRevision = function(value) {
@@ -6457,15 +6457,15 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasNo
 
 /**
  * optional uint64 expected_revision = 3;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedRevision = function(value) {
@@ -6814,7 +6814,7 @@ proto.event_store.client.streams.DeleteReq.Options.prototype.toObject = function
 proto.event_store.client.streams.DeleteReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
     any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
     streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
@@ -6860,7 +6860,7 @@ proto.event_store.client.streams.DeleteReq.Options.deserializeBinaryFromReader =
       msg.setStreamIdentifier(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setRevision(value);
       break;
     case 3:
@@ -6915,9 +6915,9 @@ proto.event_store.client.streams.DeleteReq.Options.serializeBinaryToWriter = fun
       shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       2,
       f
     );
@@ -6988,15 +6988,15 @@ proto.event_store.client.streams.DeleteReq.Options.prototype.hasStreamIdentifier
 
 /**
  * optional uint64 revision = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.DeleteReq.Options.prototype.getRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.DeleteReq.Options} returns this
  */
 proto.event_store.client.streams.DeleteReq.Options.prototype.setRevision = function(value) {
@@ -7356,8 +7356,8 @@ proto.event_store.client.streams.DeleteResp.Position.prototype.toObject = functi
  */
 proto.event_store.client.streams.DeleteResp.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
   };
 
   if (includeInstance) {
@@ -7395,11 +7395,11 @@ proto.event_store.client.streams.DeleteResp.Position.deserializeBinaryFromReader
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     default:
@@ -7432,15 +7432,15 @@ proto.event_store.client.streams.DeleteResp.Position.prototype.serializeBinary =
 proto.event_store.client.streams.DeleteResp.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       1,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -7450,37 +7450,37 @@ proto.event_store.client.streams.DeleteResp.Position.serializeBinaryToWriter = f
 
 /**
  * optional uint64 commit_position = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.DeleteResp.Position.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.DeleteResp.Position} returns this
  */
 proto.event_store.client.streams.DeleteResp.Position.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.DeleteResp.Position.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.DeleteResp.Position} returns this
  */
 proto.event_store.client.streams.DeleteResp.Position.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -7733,7 +7733,7 @@ proto.event_store.client.streams.TombstoneReq.Options.prototype.toObject = funct
 proto.event_store.client.streams.TombstoneReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
-    revision: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     noStream: (f = msg.getNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
     any: (f = msg.getAny()) && shared_pb.Empty.toObject(includeInstance, f),
     streamExists: (f = msg.getStreamExists()) && shared_pb.Empty.toObject(includeInstance, f)
@@ -7779,7 +7779,7 @@ proto.event_store.client.streams.TombstoneReq.Options.deserializeBinaryFromReade
       msg.setStreamIdentifier(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setRevision(value);
       break;
     case 3:
@@ -7834,9 +7834,9 @@ proto.event_store.client.streams.TombstoneReq.Options.serializeBinaryToWriter = 
       shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
-  f = /** @type {number} */ (jspb.Message.getField(message, 2));
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
   if (f != null) {
-    writer.writeUint64(
+    writer.writeUint64String(
       2,
       f
     );
@@ -7907,15 +7907,15 @@ proto.event_store.client.streams.TombstoneReq.Options.prototype.hasStreamIdentif
 
 /**
  * optional uint64 revision = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.TombstoneReq.Options.prototype.getRevision = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.TombstoneReq.Options} returns this
  */
 proto.event_store.client.streams.TombstoneReq.Options.prototype.setRevision = function(value) {
@@ -8275,8 +8275,8 @@ proto.event_store.client.streams.TombstoneResp.Position.prototype.toObject = fun
  */
 proto.event_store.client.streams.TombstoneResp.Position.toObject = function(includeInstance, msg) {
   var f, obj = {
-    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, 0)
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
   };
 
   if (includeInstance) {
@@ -8314,11 +8314,11 @@ proto.event_store.client.streams.TombstoneResp.Position.deserializeBinaryFromRea
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setCommitPosition(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setPreparePosition(value);
       break;
     default:
@@ -8351,15 +8351,15 @@ proto.event_store.client.streams.TombstoneResp.Position.prototype.serializeBinar
 proto.event_store.client.streams.TombstoneResp.Position.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCommitPosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       1,
       f
     );
   }
   f = message.getPreparePosition();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -8369,37 +8369,37 @@ proto.event_store.client.streams.TombstoneResp.Position.serializeBinaryToWriter 
 
 /**
  * optional uint64 commit_position = 1;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.TombstoneResp.Position.prototype.getCommitPosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.TombstoneResp.Position} returns this
  */
 proto.event_store.client.streams.TombstoneResp.Position.prototype.setCommitPosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 1, value);
+  return jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional uint64 prepare_position = 2;
- * @return {number}
+ * @return {string}
  */
 proto.event_store.client.streams.TombstoneResp.Position.prototype.getPreparePosition = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.event_store.client.streams.TombstoneResp.Position} returns this
  */
 proto.event_store.client.streams.TombstoneResp.Position.prototype.setPreparePosition = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 

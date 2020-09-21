@@ -446,14 +446,14 @@ export namespace StatisticsResp {
 
 
     export class Details extends jspb.Message { 
-        getCoreprocessingtime(): number;
-        setCoreprocessingtime(value: number): Details;
+        getCoreprocessingtime(): string;
+        setCoreprocessingtime(value: string): Details;
 
-        getVersion(): number;
-        setVersion(value: number): Details;
+        getVersion(): string;
+        setVersion(value: string): Details;
 
-        getEpoch(): number;
-        setEpoch(value: number): Details;
+        getEpoch(): string;
+        setEpoch(value: string): Details;
 
         getEffectivename(): string;
         setEffectivename(value: string): Details;
@@ -488,14 +488,14 @@ export namespace StatisticsResp {
         getLastcheckpoint(): string;
         setLastcheckpoint(value: string): Details;
 
-        getEventsprocessedafterrestart(): number;
-        setEventsprocessedafterrestart(value: number): Details;
+        getEventsprocessedafterrestart(): string;
+        setEventsprocessedafterrestart(value: string): Details;
 
         getCheckpointstatus(): string;
         setCheckpointstatus(value: string): Details;
 
-        getBufferedevents(): number;
-        setBufferedevents(value: number): Details;
+        getBufferedevents(): string;
+        setBufferedevents(value: string): Details;
 
         getWritependingeventsbeforecheckpoint(): number;
         setWritependingeventsbeforecheckpoint(value: number): Details;
@@ -516,9 +516,9 @@ export namespace StatisticsResp {
 
     export namespace Details {
         export type AsObject = {
-            coreprocessingtime: number,
-            version: number,
-            epoch: number,
+            coreprocessingtime: string,
+            version: string,
+            epoch: string,
             effectivename: string,
             writesinprogress: number,
             readsinprogress: number,
@@ -530,9 +530,9 @@ export namespace StatisticsResp {
             position: string,
             progress: number,
             lastcheckpoint: string,
-            eventsprocessedafterrestart: number,
+            eventsprocessedafterrestart: string,
             checkpointstatus: string,
-            bufferedevents: number,
+            bufferedevents: string,
             writependingeventsbeforecheckpoint: number,
             writependingeventsaftercheckpoint: number,
         }
