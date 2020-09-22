@@ -19,7 +19,8 @@ $ npm install --save @eventstore/db-client
 ## EventStoreDB Server Compatibility
 
 This client is compatible with version `20.6.1` upwards. 
-Server setup instructions can be found here: [EventStoreDB Docs], follow the docker setup for the simplest configuration.
+
+Server setup instructions can be found here [EventStoreDB Docs], follow the docker setup for the simplest configuration.
 
 ## Example
 
