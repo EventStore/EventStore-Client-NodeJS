@@ -6,6 +6,8 @@ EventStoreDB is the open-source, functional database with Complex Event Processi
 
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
+Note: This client is currently under active development and further API changes are expected. Feedback is very welcome.
+ 
 ## Installation
 
 ```shell script
