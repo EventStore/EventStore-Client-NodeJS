@@ -16,9 +16,10 @@ $ yarn add @eventstore/db-client
 $ npm install --save @eventstore/db-client
 ```
 
-## EventStoreDB Server Compatability
+## EventStoreDB Server Compatibility
 
-This client is compatable with version 20.6.1 upwards. See [EventStoreDB Docs] for how to get started.
+This client is compatible with version `20.6.1` upwards. 
+Server setup instructions can be found here: [EventStoreDB Docs], follow the docker setup for the simplest configuration.
 
 ## Example
 
