@@ -6,6 +6,98 @@ EventStoreDB is the open-source, functional database with Complex Event Processi
 
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
+## Installation
+
+```shell script
+# Yarn
+$ yarn add @eventstore/db-client
+
+# NPM
+$ npm install --save @eventstore/db-client
+```
+
+## EventStoreDB Server Compatibility
+
+This client is compatible with version `20.6.1` upwards. 
+
+Server setup instructions can be found here [EventStoreDB Docs], follow the docker setup for the simplest configuration.
+
+## Example
+
+The following snippet showcases a simple example where we form a connection, then write and read events from the server.
+
+###### Javascript example:
+
+```javascript
+const {
+  EventData,
+  EventStoreConnection,
+  writeEventsToStream,
+  readEventsFromStream,
+} = require("@eventstore/db-client");
+
+const connection = EventStoreConnection.builder()
+  .insecure()
+  .singleNodeConnection("localhost:2113");
+
+async function simpleTest() {
+  const streamName = "es_supported_clients";
+
+  const event = EventData.json("grpc-client", {
+    languages: ["typescript", "javascript"],
+    runtime: "NodeJS",
+  }).build();
+
+  const writeResult = await writeEventsToStream(streamName)
+    .send(event)
+    .execute(connection);
+
+  const events = await readEventsFromStream(streamName)
+    .fromStart()
+    .forward()
+    .count(10)
+    .execute(connection);
+
+  events.forEach(doSomethingProductive);
+}
+```
+
+###### Typescript example:
+
+```typescript
+import {
+  EventData,
+  EventStoreConnection,
+  writeEventsToStream,
+  readEventsFromStream,
+} from "@eventstore/db-client";
+
+const connection = EventStoreConnection.builder()
+  .insecure()
+  .singleNodeConnection("localhost:2113");
+
+async function simpleTest(): Promise<void> {
+  const streamName = "es_supported_clients";
+
+  const event = EventData.json("grpc-client", {
+    languages: ["typescript", "javascript"],
+    runtime: "NodeJS",
+  }).build();
+
+  const writeResult = await writeEventsToStream(streamName)
+    .send(event)
+    .execute(connection);
+
+  const events = await readEventsFromStream(streamName)
+    .fromStart()
+    .forward()
+    .count(10)
+    .execute(connection);
+
+  events.forEach(doSomethingProductive);
+}
+```
+
 ## Build from source
 
 This project uses [Yarn] as a build tool. The following shell command lines should get you started:
@@ -15,75 +107,18 @@ $ yarn
 $ yarn build
 ```
 
-## Example
+## Run tests
 
-The following snippet is not runnable as-is but showcases a simple example where we write and read events from the
-server. This snippet expects the server to be started like this:
+Tests are written using [Jest] and require [Docker] and [Docker Compose] to be installed.
 
 ```shell script
-# Server version 20.6.1
-$ eventstored --insecure
+$ yarn test
 ```
 
-###### Typescript example:
-```typescript
-import { EventData, EventStoreConnection } from '@eventstore/db-client';
+Specific docker images can be specified via the enviroment variable `EVENTSTORE_IMAGE`.
 
-async function simpleExample(): Promise<void> {
-    const connection = EventStoreConnection.builder()
-        .insecure()
-        .build("localhost:2113")
-        .streams();
-
-    const streamName = 'es_supported_clients';
-    const evt = EventData.json('grpc-client', {
-        languages: ['typescript', 'javascript'],
-        runtime: "NodeJS"
-    }).build();
-
-    const writeResult = await connection
-        .writeEvents(streamName)
-        .send([evt]);
-
-    const readResult = await connection
-        .readStream(streamName)
-        .fromStart()
-        .forward()
-        .execute(10);
-
-    readResult.events!.forEach(doSomethingProductive);
-}
-```
-
-###### Javascript example:
-
-```javascript
-const { EventData, EventStoreConnection } = require("@eventstore/db-client");
-
-async function simpleTest() {
-    const connection = EventStoreConnection.builder()
-        .insecure()
-        .build("localhost:2113")
-        .streams();
-
-    const streamName = 'es_supported_clients';
-    const evt = EventData.json('grpc-client', {
-        languages: ['typescript', 'javascript'],
-        runtime: 'NodeJS',
-    }).build();
-
-    const writeResult = await connection
-        .writeEvents(streamName)
-        .send([evt]);
-
-    const readResult = await connection
-        .readStream(streamName)
-        .fromStart()
-        .forward()
-        .execute(10);
-
-    readResult.events.forEach(doSomethingProductive);
-}
+```shell script
+$ yarn cross-env EVENTSTORE_IMAGE=77d63f3f0ab3 jest
 ```
 
 ## Support
@@ -104,7 +139,10 @@ We have a community discussion space at [EventStoreDB Discuss].
 
 Development is done on the `master` branch. We attempt to do our best to ensure that the history remains clean and to do so, we generally ask contributors to squash their commits into a set or single logical commit.
 
-[EventStoreDB Support]: https://eventstore.com/support/
-[EventStoreDB Docs]: https://developers.eventstore.com/
-[EventStoreDB Discuss]: https://discuss.eventstore.com/
-[Yarn]: https://yarnpkg.com/
+[eventstoredb support]: https://eventstore.com/support/
+[eventstoredb docs]: https://developers.eventstore.com/server/20.6/server/installation/
+[eventstoredb discuss]: https://discuss.eventstore.com/
+[yarn]: https://yarnpkg.com/
+[jest]: https://jestjs.io/
+[docker]: https://www.docker.com/
+[docker compose]: https://docs.docker.com/compose/
