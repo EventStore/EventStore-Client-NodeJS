@@ -978,16 +978,46 @@ export namespace AppendResp {
 
     export class WrongExpectedVersion extends jspb.Message { 
 
+        hasCurrentRevision2060(): boolean;
+        clearCurrentRevision2060(): void;
+        getCurrentRevision2060(): number;
+        setCurrentRevision2060(value: number): WrongExpectedVersion;
+
+
+        hasNoStream2060(): boolean;
+        clearNoStream2060(): void;
+        getNoStream2060(): shared_pb.Empty | undefined;
+        setNoStream2060(value?: shared_pb.Empty): WrongExpectedVersion;
+
+
+        hasExpectedRevision2060(): boolean;
+        clearExpectedRevision2060(): void;
+        getExpectedRevision2060(): number;
+        setExpectedRevision2060(value: number): WrongExpectedVersion;
+
+
+        hasAny2060(): boolean;
+        clearAny2060(): void;
+        getAny2060(): shared_pb.Empty | undefined;
+        setAny2060(value?: shared_pb.Empty): WrongExpectedVersion;
+
+
+        hasStreamExists2060(): boolean;
+        clearStreamExists2060(): void;
+        getStreamExists2060(): shared_pb.Empty | undefined;
+        setStreamExists2060(value?: shared_pb.Empty): WrongExpectedVersion;
+
+
         hasCurrentRevision(): boolean;
         clearCurrentRevision(): void;
         getCurrentRevision(): string;
         setCurrentRevision(value: string): WrongExpectedVersion;
 
 
-        hasNoStream(): boolean;
-        clearNoStream(): void;
-        getNoStream(): shared_pb.Empty | undefined;
-        setNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
+        hasCurrentNoStream(): boolean;
+        clearCurrentNoStream(): void;
+        getCurrentNoStream(): shared_pb.Empty | undefined;
+        setCurrentNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
 
 
         hasExpectedRevision(): boolean;
@@ -996,18 +1026,26 @@ export namespace AppendResp {
         setExpectedRevision(value: string): WrongExpectedVersion;
 
 
-        hasAny(): boolean;
-        clearAny(): void;
-        getAny(): shared_pb.Empty | undefined;
-        setAny(value?: shared_pb.Empty): WrongExpectedVersion;
+        hasExpectedAny(): boolean;
+        clearExpectedAny(): void;
+        getExpectedAny(): shared_pb.Empty | undefined;
+        setExpectedAny(value?: shared_pb.Empty): WrongExpectedVersion;
 
 
-        hasStreamExists(): boolean;
-        clearStreamExists(): void;
-        getStreamExists(): shared_pb.Empty | undefined;
-        setStreamExists(value?: shared_pb.Empty): WrongExpectedVersion;
+        hasExpectedStreamExists(): boolean;
+        clearExpectedStreamExists(): void;
+        getExpectedStreamExists(): shared_pb.Empty | undefined;
+        setExpectedStreamExists(value?: shared_pb.Empty): WrongExpectedVersion;
 
 
+        hasExpectedNoStream(): boolean;
+        clearExpectedNoStream(): void;
+        getExpectedNoStream(): shared_pb.Empty | undefined;
+        setExpectedNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
+
+
+        getCurrentRevisionOption2060Case(): WrongExpectedVersion.CurrentRevisionOption2060Case;
+        getExpectedRevisionOption2060Case(): WrongExpectedVersion.ExpectedRevisionOption2060Case;
         getCurrentRevisionOptionCase(): WrongExpectedVersion.CurrentRevisionOptionCase;
         getExpectedRevisionOptionCase(): WrongExpectedVersion.ExpectedRevisionOptionCase;
 
@@ -1023,30 +1061,58 @@ export namespace AppendResp {
 
     export namespace WrongExpectedVersion {
         export type AsObject = {
+            currentRevision2060: number,
+            noStream2060?: shared_pb.Empty.AsObject,
+            expectedRevision2060: number,
+            any2060?: shared_pb.Empty.AsObject,
+            streamExists2060?: shared_pb.Empty.AsObject,
             currentRevision: string,
-            noStream?: shared_pb.Empty.AsObject,
+            currentNoStream?: shared_pb.Empty.AsObject,
             expectedRevision: string,
-            any?: shared_pb.Empty.AsObject,
-            streamExists?: shared_pb.Empty.AsObject,
+            expectedAny?: shared_pb.Empty.AsObject,
+            expectedStreamExists?: shared_pb.Empty.AsObject,
+            expectedNoStream?: shared_pb.Empty.AsObject,
+        }
+
+        export enum CurrentRevisionOption2060Case {
+            CURRENT_REVISION_OPTION_20_6_0_NOT_SET = 0,
+        
+    CURRENT_REVISION_20_6_0 = 1,
+
+    NO_STREAM_20_6_0 = 2,
+
+        }
+
+        export enum ExpectedRevisionOption2060Case {
+            EXPECTED_REVISION_OPTION_20_6_0_NOT_SET = 0,
+        
+    EXPECTED_REVISION_20_6_0 = 3,
+
+    ANY_20_6_0 = 4,
+
+    STREAM_EXISTS_20_6_0 = 5,
+
         }
 
         export enum CurrentRevisionOptionCase {
             CURRENT_REVISION_OPTION_NOT_SET = 0,
         
-    CURRENT_REVISION = 1,
+    CURRENT_REVISION = 6,
 
-    NO_STREAM = 2,
+    CURRENT_NO_STREAM = 7,
 
         }
 
         export enum ExpectedRevisionOptionCase {
             EXPECTED_REVISION_OPTION_NOT_SET = 0,
         
-    EXPECTED_REVISION = 3,
+    EXPECTED_REVISION = 8,
 
-    ANY = 4,
+    EXPECTED_ANY = 9,
 
-    STREAM_EXISTS = 5,
+    EXPECTED_STREAM_EXISTS = 10,
+
+    EXPECTED_NO_STREAM = 11,
 
         }
 
