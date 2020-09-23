@@ -89,8 +89,6 @@ export class WriteEventsToStream extends Command {
 
           let expected: ExpectedRevision = "any";
 
-          console.log(grpcError.toObject());
-
           switch (true) {
             case grpcError.hasExpectedRevision(): {
               expected = BigInt(grpcError.getExpectedRevision()!);

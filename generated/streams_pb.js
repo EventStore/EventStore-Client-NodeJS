@@ -26,7 +26,9 @@ goog.exportSymbol('proto.event_store.client.streams.AppendResp.Success', null, g
 goog.exportSymbol('proto.event_store.client.streams.AppendResp.Success.CurrentRevisionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.streams.AppendResp.Success.PositionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOption2060Case', null, global);
 goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOption2060Case', null, global);
 goog.exportSymbol('proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.streams.DeleteReq', null, global);
 goog.exportSymbol('proto.event_store.client.streams.DeleteReq.Options', null, global);
@@ -6182,22 +6184,55 @@ proto.event_store.client.streams.AppendResp.Success.prototype.hasNoPosition = fu
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_ = [[1,2],[3,4,5,6]];
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_ = [[1,2],[3,4,5],[6,7],[8,9,10,11]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOption2060Case = {
+  CURRENT_REVISION_OPTION_20_6_0_NOT_SET: 0,
+  CURRENT_REVISION_20_6_0: 1,
+  NO_STREAM_20_6_0: 2
+};
+
+/**
+ * @return {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOption2060Case}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevisionOption2060Case = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOption2060Case} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0]));
+};
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOption2060Case = {
+  EXPECTED_REVISION_OPTION_20_6_0_NOT_SET: 0,
+  EXPECTED_REVISION_20_6_0: 3,
+  ANY_20_6_0: 4,
+  STREAM_EXISTS_20_6_0: 5
+};
+
+/**
+ * @return {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOption2060Case}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevisionOption2060Case = function() {
+  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOption2060Case} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1]));
+};
 
 /**
  * @enum {number}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase = {
   CURRENT_REVISION_OPTION_NOT_SET: 0,
-  CURRENT_REVISION: 1,
-  CURRENT_NO_STREAM: 2
+  CURRENT_REVISION: 6,
+  CURRENT_NO_STREAM: 7
 };
 
 /**
  * @return {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevisionOptionCase = function() {
-  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0]));
+  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.CurrentRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[2]));
 };
 
 /**
@@ -6205,17 +6240,17 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCu
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase = {
   EXPECTED_REVISION_OPTION_NOT_SET: 0,
-  EXPECTED_REVISION: 3,
-  EXPECTED_ANY: 4,
-  EXPECTED_STREAM_EXISTS: 5,
-  EXPECTED_NO_STREAM: 6
+  EXPECTED_REVISION: 8,
+  EXPECTED_ANY: 9,
+  EXPECTED_STREAM_EXISTS: 10,
+  EXPECTED_NO_STREAM: 11
 };
 
 /**
  * @return {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevisionOptionCase = function() {
-  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1]));
+  return /** @type {proto.event_store.client.streams.AppendResp.WrongExpectedVersion.ExpectedRevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[3]));
 };
 
 
@@ -6249,9 +6284,14 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.toObj
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.toObject = function(includeInstance, msg) {
   var f, obj = {
-    currentRevision: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    currentRevision2060: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    noStream2060: (f = msg.getNoStream2060()) && shared_pb.Empty.toObject(includeInstance, f),
+    expectedRevision2060: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    any2060: (f = msg.getAny2060()) && shared_pb.Empty.toObject(includeInstance, f),
+    streamExists2060: (f = msg.getStreamExists2060()) && shared_pb.Empty.toObject(includeInstance, f),
+    currentRevision: jspb.Message.getFieldWithDefault(msg, 6, "0"),
     currentNoStream: (f = msg.getCurrentNoStream()) && shared_pb.Empty.toObject(includeInstance, f),
-    expectedRevision: jspb.Message.getFieldWithDefault(msg, 3, "0"),
+    expectedRevision: jspb.Message.getFieldWithDefault(msg, 8, "0"),
     expectedAny: (f = msg.getExpectedAny()) && shared_pb.Empty.toObject(includeInstance, f),
     expectedStreamExists: (f = msg.getExpectedStreamExists()) && shared_pb.Empty.toObject(includeInstance, f),
     expectedNoStream: (f = msg.getExpectedNoStream()) && shared_pb.Empty.toObject(includeInstance, f)
@@ -6292,29 +6332,52 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.deserializeBina
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readUint64String());
-      msg.setCurrentRevision(value);
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setCurrentRevision2060(value);
       break;
     case 2:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
-      msg.setCurrentNoStream(value);
+      msg.setNoStream2060(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readUint64String());
-      msg.setExpectedRevision(value);
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setExpectedRevision2060(value);
       break;
     case 4:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
-      msg.setExpectedAny(value);
+      msg.setAny2060(value);
       break;
     case 5:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
-      msg.setExpectedStreamExists(value);
+      msg.setStreamExists2060(value);
       break;
     case 6:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setCurrentRevision(value);
+      break;
+    case 7:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setCurrentNoStream(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setExpectedRevision(value);
+      break;
+    case 9:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setExpectedAny(value);
+      break;
+    case 10:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setExpectedStreamExists(value);
+      break;
+    case 11:
       var value = new shared_pb.Empty;
       reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
       msg.setExpectedNoStream(value);
@@ -6348,14 +6411,14 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.seria
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = /** @type {string} */ (jspb.Message.getField(message, 1));
+  f = /** @type {number} */ (jspb.Message.getField(message, 1));
   if (f != null) {
-    writer.writeUint64String(
+    writer.writeUint64(
       1,
       f
     );
   }
-  f = message.getCurrentNoStream();
+  f = message.getNoStream2060();
   if (f != null) {
     writer.writeMessage(
       2,
@@ -6363,14 +6426,14 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       shared_pb.Empty.serializeBinaryToWriter
     );
   }
-  f = /** @type {string} */ (jspb.Message.getField(message, 3));
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeUint64String(
+    writer.writeUint64(
       3,
       f
     );
   }
-  f = message.getExpectedAny();
+  f = message.getAny2060();
   if (f != null) {
     writer.writeMessage(
       4,
@@ -6378,7 +6441,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       shared_pb.Empty.serializeBinaryToWriter
     );
   }
-  f = message.getExpectedStreamExists();
+  f = message.getStreamExists2060();
   if (f != null) {
     writer.writeMessage(
       5,
@@ -6386,10 +6449,48 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
       shared_pb.Empty.serializeBinaryToWriter
     );
   }
+  f = /** @type {string} */ (jspb.Message.getField(message, 6));
+  if (f != null) {
+    writer.writeUint64String(
+      6,
+      f
+    );
+  }
+  f = message.getCurrentNoStream();
+  if (f != null) {
+    writer.writeMessage(
+      7,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 8));
+  if (f != null) {
+    writer.writeUint64String(
+      8,
+      f
+    );
+  }
+  f = message.getExpectedAny();
+  if (f != null) {
+    writer.writeMessage(
+      9,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getExpectedStreamExists();
+  if (f != null) {
+    writer.writeMessage(
+      10,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
   f = message.getExpectedNoStream();
   if (f != null) {
     writer.writeMessage(
-      6,
+      11,
       f,
       shared_pb.Empty.serializeBinaryToWriter
     );
@@ -6398,19 +6499,19 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.serializeBinary
 
 
 /**
- * optional uint64 current_revision = 1;
- * @return {string}
+ * optional uint64 current_revision_20_6_0 = 1;
+ * @return {number}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevision = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevision2060 = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /**
- * @param {string} value
+ * @param {number} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentRevision = function(value) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentRevision2060 = function(value) {
   return jspb.Message.setOneofField(this, 1, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], value);
 };
 
@@ -6419,7 +6520,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCu
  * Clears the field making it undefined.
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearCurrentRevision = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearCurrentRevision2060 = function() {
   return jspb.Message.setOneofField(this, 1, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], undefined);
 };
 
@@ -6428,16 +6529,16 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCurrentRevision = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCurrentRevision2060 = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * optional event_store.client.shared.Empty current_no_stream = 2;
+ * optional event_store.client.shared.Empty no_stream_20_6_0 = 2;
  * @return {?proto.event_store.client.shared.Empty}
  */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentNoStream = function() {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getNoStream2060 = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
@@ -6447,8 +6548,191 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCu
  * @param {?proto.event_store.client.shared.Empty|undefined} value
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
-proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentNoStream = function(value) {
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setNoStream2060 = function(value) {
   return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearNoStream2060 = function() {
+  return this.setNoStream2060(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasNoStream2060 = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional uint64 expected_revision_20_6_0 = 3;
+ * @return {number}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevision2060 = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedRevision2060 = function(value) {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearExpectedRevision2060 = function() {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedRevision2060 = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty any_20_6_0 = 4;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getAny2060 = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setAny2060 = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearAny2060 = function() {
+  return this.setAny2060(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasAny2060 = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty stream_exists_20_6_0 = 5;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getStreamExists2060 = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setStreamExists2060 = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearStreamExists2060 = function() {
+  return this.setStreamExists2060(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasStreamExists2060 = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional uint64 current_revision = 6;
+ * @return {string}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentRevision = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentRevision = function(value) {
+  return jspb.Message.setOneofField(this, 6, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[2], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearCurrentRevision = function() {
+  return jspb.Message.setOneofField(this, 6, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[2], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCurrentRevision = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional event_store.client.shared.Empty current_no_stream = 7;
+ * @return {?proto.event_store.client.shared.Empty}
+ */
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getCurrentNoStream = function() {
+  return /** @type{?proto.event_store.client.shared.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 7));
+};
+
+
+/**
+ * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
+*/
+proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setCurrentNoStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 7, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[2], value);
 };
 
 
@@ -6466,16 +6750,16 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * @return {boolean}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasCurrentNoStream = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * optional uint64 expected_revision = 3;
+ * optional uint64 expected_revision = 8;
  * @return {string}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedRevision = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, "0"));
 };
 
 
@@ -6484,7 +6768,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getEx
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedRevision = function(value) {
-  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+  return jspb.Message.setOneofField(this, 8, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[3], value);
 };
 
 
@@ -6493,7 +6777,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setEx
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clearExpectedRevision = function() {
-  return jspb.Message.setOneofField(this, 3, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], undefined);
+  return jspb.Message.setOneofField(this, 8, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[3], undefined);
 };
 
 
@@ -6502,17 +6786,17 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * @return {boolean}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedRevision = function() {
-  return jspb.Message.getField(this, 3) != null;
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
 /**
- * optional event_store.client.shared.Empty expected_any = 4;
+ * optional event_store.client.shared.Empty expected_any = 9;
  * @return {?proto.event_store.client.shared.Empty}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedAny = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
-    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 9));
 };
 
 
@@ -6521,7 +6805,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getEx
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedAny = function(value) {
-  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+  return jspb.Message.setOneofWrapperField(this, 9, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[3], value);
 };
 
 
@@ -6539,17 +6823,17 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * @return {boolean}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedAny = function() {
-  return jspb.Message.getField(this, 4) != null;
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
 /**
- * optional event_store.client.shared.Empty expected_stream_exists = 5;
+ * optional event_store.client.shared.Empty expected_stream_exists = 10;
  * @return {?proto.event_store.client.shared.Empty}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedStreamExists = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
-    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 10));
 };
 
 
@@ -6558,7 +6842,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getEx
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedStreamExists = function(value) {
-  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+  return jspb.Message.setOneofWrapperField(this, 10, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[3], value);
 };
 
 
@@ -6576,17 +6860,17 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * @return {boolean}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedStreamExists = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
 /**
- * optional event_store.client.shared.Empty expected_no_stream = 6;
+ * optional event_store.client.shared.Empty expected_no_stream = 11;
  * @return {?proto.event_store.client.shared.Empty}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getExpectedNoStream = function() {
   return /** @type{?proto.event_store.client.shared.Empty} */ (
-    jspb.Message.getWrapperField(this, shared_pb.Empty, 6));
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 11));
 };
 
 
@@ -6595,7 +6879,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.getEx
  * @return {!proto.event_store.client.streams.AppendResp.WrongExpectedVersion} returns this
 */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.setExpectedNoStream = function(value) {
-  return jspb.Message.setOneofWrapperField(this, 6, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[1], value);
+  return jspb.Message.setOneofWrapperField(this, 11, proto.event_store.client.streams.AppendResp.WrongExpectedVersion.oneofGroups_[3], value);
 };
 
 
@@ -6613,7 +6897,7 @@ proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.clear
  * @return {boolean}
  */
 proto.event_store.client.streams.AppendResp.WrongExpectedVersion.prototype.hasExpectedNoStream = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.getField(this, 11) != null;
 };
 
 
