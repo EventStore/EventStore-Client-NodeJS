@@ -105,6 +105,7 @@ dist
 
 .idea
 .DS_Store
+.npmrc
 package-lock.json
 
 src/__test__/utils/instances
