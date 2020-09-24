@@ -1,12 +1,10 @@
-import { createTestNode } from "../utils";
+import { createTestNode, testEvents } from "../utils";
 
 import {
   writeEventsToStream,
   ESDBConnection,
   EventStoreConnection,
-  EventData,
   readAllEvents,
-  readEventsFromStream,
 } from "../..";
 
 describe("readAllEvents", () => {
@@ -21,16 +19,12 @@ describe("readAllEvents", () => {
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
-    const event = EventData.json("an_event", {
-      message: "test",
-    }).build();
-
     await writeEventsToStream(STREAM_NAME_A)
-      .send(event, event, event, event)
+      .send(...testEvents())
       .execute(connection);
 
     await writeEventsToStream(STREAM_NAME_B)
-      .send(event, event, event, event)
+      .send(...testEvents())
       .execute(connection);
   });
 
@@ -56,11 +50,11 @@ describe("readAllEvents", () => {
       expect(filteredEvents[0].event?.streamId).toBe(STREAM_NAME_A);
     });
 
-    // server bug, position is returned incorrectly
-    test.skip("from position", async () => {
-      const [eventToExtract] = await readEventsFromStream(STREAM_NAME_A)
-        .fromRevision(1n)
-        .count(1)
+    test("from position", async () => {
+      const [, , eventToExtract] = await readAllEvents()
+        .authenticated("admin", "changeit")
+        .fromStart()
+        .count(3)
         .execute(connection);
 
       const { position } = eventToExtract.event!;
