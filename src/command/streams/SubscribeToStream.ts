@@ -7,21 +7,24 @@ import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
 import {
-  SubscriptionHandler,
+  SubscriptionListeners,
   ESDBConnection,
   ReadRevision,
   ResolvedEvent,
+  SubscriptionReport,
+  Subscription,
 } from "../../types";
 import { Command } from "../Command";
-import { handleOneWaySubscription } from "../../utils/handleOneWaySubscription";
+import { OneWaySubscription } from "../../utils/OneWaySubscription";
 import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
+
+type StreamListeners = SubscriptionListeners<ResolvedEvent, SubscriptionReport>;
 
 export class SubscribeToStream extends Command {
   private _stream: string;
   private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
-  // TODO: handle no handler
-  private _handler!: SubscriptionHandler<ResolvedEvent>;
+  private _listeners: Partial<StreamListeners> = {};
 
   constructor(stream: string) {
     super();
@@ -73,12 +76,24 @@ export class SubscribeToStream extends Command {
     return this;
   }
 
-  /**
-   * Sets the handler for the subscription
-   * @param handler Set of callbacks used during the subscription lifecycle.
-   */
-  handler(handler: SubscriptionHandler<ResolvedEvent>): SubscribeToStream {
-    this._handler = handler;
+  onEvent(listener: StreamListeners["event"]): SubscribeToStream {
+    this._listeners.event = listener;
+    return this;
+  }
+  onEnd(listener: StreamListeners["end"]): SubscribeToStream {
+    this._listeners.end = listener;
+    return this;
+  }
+  onConfirmation(listener: StreamListeners["confirmation"]): SubscribeToStream {
+    this._listeners.confirmation = listener;
+    return this;
+  }
+  onError(listener: StreamListeners["error"]): SubscribeToStream {
+    this._listeners.error = listener;
+    return this;
+  }
+  onClose(listener: StreamListeners["close"]): SubscribeToStream {
+    this._listeners.close = listener;
     return this;
   }
 
@@ -86,7 +101,9 @@ export class SubscribeToStream extends Command {
    * Starts the subscription immediately.
    */
 
-  async execute(connection: ESDBConnection): Promise<void> {
+  async execute(
+    connection: ESDBConnection
+  ): Promise<Subscription<ResolvedEvent, SubscriptionReport>> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();
@@ -129,6 +146,7 @@ export class SubscribeToStream extends Command {
 
     const client = await connection._client(StreamsClient);
     const stream = client.read(req, this.metadata, callOptions);
-    handleOneWaySubscription(stream, this._handler, convertGrpcEvent);
+
+    return new OneWaySubscription(stream, this._listeners, convertGrpcEvent);
   }
 }
