@@ -24,7 +24,7 @@ export class SubscribeToAll extends Command {
   private _position: ReadPosition;
   private _resolveLinkTos: boolean;
   private _filter?: Filter;
-  private _listeners: Listeners<AllStreamResolvedEvent> = {
+  private _listeners: Listeners<AllStreamResolvedEvent, SubscriptionReport> = {
     event: new Set(),
     end: new Set(),
     confirmation: new Set(),

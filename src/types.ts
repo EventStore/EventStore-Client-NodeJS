@@ -223,8 +223,8 @@ export type ConsumerStrategy =
   | typeof constants.PINNED;
 
 export interface PersistentReport {
-  ack(ids: string[]): void;
-  nack(action: PersistentAction, reason: string, ids: string[]): void;
+  ack(...ids: string[]): void;
+  nack(action: PersistentAction, reason: string, ...ids: string[]): void;
   unsubscribe(): void;
 }
 
@@ -282,7 +282,7 @@ export interface SubscriptionListeners<E, R> {
   [constants.CLOSE_EVENT]: () => void;
 }
 
-export type Listeners<E, R = SubscriptionReport> = {
+export type Listeners<E, R> = {
   [P in keyof SubscriptionListeners<E, R>]: Set<SubscriptionListeners<E, R>[P]>;
 };
 

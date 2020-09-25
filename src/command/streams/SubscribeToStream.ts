@@ -24,7 +24,7 @@ export class SubscribeToStream extends Command {
   private _stream: string;
   private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
-  private _listeners: Listeners<ResolvedEvent> = {
+  private _listeners: Listeners<ResolvedEvent, SubscriptionReport> = {
     event: new Set(),
     end: new Set(),
     confirmation: new Set(),

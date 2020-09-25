@@ -14,7 +14,7 @@ import { convertToCommandError } from "./CommandError";
 
 export class OneWaySubscription<E>
   implements Subscription<E, SubscriptionReport> {
-  private _listeners: Listeners<E> = {
+  private _listeners: Listeners<E, SubscriptionReport> = {
     event: new Set(),
     end: new Set(),
     confirmation: new Set(),
@@ -27,7 +27,7 @@ export class OneWaySubscription<E>
 
   constructor(
     stream: ClientReadableStream<ReadResp>,
-    listeners: Listeners<E>,
+    listeners: Listeners<E, SubscriptionReport>,
     convertGrpcEvent: (event: ReadResp.ReadEvent) => E
   ) {
     this._stream = stream;
@@ -58,7 +58,7 @@ export class OneWaySubscription<E>
     });
   }
 
-  on = <Name extends SubscriptionEvent>(
+  public on = <Name extends SubscriptionEvent>(
     event: Name,
     handler: SubscriptionListeners<E, SubscriptionReport>[Name]
   ): OneWaySubscription<E> => {
@@ -66,7 +66,7 @@ export class OneWaySubscription<E>
     return this;
   };
 
-  once = <Name extends SubscriptionEvent>(
+  public once = <Name extends SubscriptionEvent>(
     event: Name,
     handler: SubscriptionListeners<E, SubscriptionReport>[Name]
   ): OneWaySubscription<E> => {
@@ -79,7 +79,7 @@ export class OneWaySubscription<E>
     return this;
   };
 
-  off = <Name extends SubscriptionEvent>(
+  public off = <Name extends SubscriptionEvent>(
     event: Name,
     handler: SubscriptionListeners<E, SubscriptionReport>[Name]
   ): OneWaySubscription<E> => {
