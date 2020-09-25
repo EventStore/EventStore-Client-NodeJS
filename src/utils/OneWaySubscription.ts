@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
 
 import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
@@ -7,14 +6,11 @@ import { ReadResp } from "../../generated/streams_pb";
 import {
   Subscription,
   SubscriptionReport,
-  SubscriptionListeners,
   SubscriptionEvent,
+  Listeners,
+  SubscriptionListeners,
 } from "../types";
 import { convertToCommandError } from "./CommandError";
-
-type Listeners<E, R = SubscriptionReport> = {
-  [P in keyof SubscriptionListeners<E, R>]: Set<SubscriptionListeners<E, R>[P]>;
-};
 
 export class OneWaySubscription<E>
   implements Subscription<E, SubscriptionReport> {
@@ -31,14 +27,11 @@ export class OneWaySubscription<E>
 
   constructor(
     stream: ClientReadableStream<ReadResp>,
-    listeners: Partial<SubscriptionListeners<E, SubscriptionReport>>,
+    listeners: Listeners<E>,
     convertGrpcEvent: (event: ReadResp.ReadEvent) => E
   ) {
     this._stream = stream;
-
-    for (const [key, entry] of Object.entries(listeners)) {
-      this.on(key as keyof typeof listeners, entry);
-    }
+    this._listeners = listeners;
 
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasConfirmation()) {
@@ -65,20 +58,33 @@ export class OneWaySubscription<E>
     });
   }
 
-  public on(event: SubscriptionEvent, handler: any): void {
-    this._listeners[event]?.add(handler);
-  }
-
-  public once = (event: SubscriptionEvent, handler: any): void => {
-    const listener = (...args: unknown[]) => {
-      this.off(event, listener);
-      return handler(...args);
-    };
-    this.on(event, listener);
+  on = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<E, SubscriptionReport>[Name]
+  ): OneWaySubscription<E> => {
+    this._listeners[event]?.add(handler as never);
+    return this;
   };
 
-  public off = (event: SubscriptionEvent, handler: any): void => {
-    this._listeners[event]?.delete(handler);
+  once = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<E, SubscriptionReport>[Name]
+  ): OneWaySubscription<E> => {
+    const listener = (...args: unknown[]) => {
+      this.off(event, listener);
+      // eslint-disable-next-line
+      return (handler as any)(...args);
+    };
+    this.on(event, listener);
+    return this;
+  };
+
+  off = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<E, SubscriptionReport>[Name]
+  ): OneWaySubscription<E> => {
+    this._listeners[event]?.delete(handler as never);
+    return this;
   };
 
   public unsubscribe = (): void => {

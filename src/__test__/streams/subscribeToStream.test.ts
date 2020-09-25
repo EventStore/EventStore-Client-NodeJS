@@ -57,11 +57,11 @@ describe("subscribeToStream", () => {
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
         .fromStart()
-        .onError(handleError)
-        .onEvent(handleEvent)
-        .onClose(handleClose)
-        .onConfirmation(handleConfirmation)
-        .onEnd(handleEnd)
+        .on("error", handleError)
+        .on("event", handleEvent)
+        .on("close", handleClose)
+        .on("confirmation", handleConfirmation)
+        .on("end", handleEnd)
         .execute(connection);
 
       await delay(500);
@@ -101,11 +101,11 @@ describe("subscribeToStream", () => {
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
         .fromEnd()
-        .onError(handleError)
-        .onEvent(handleEvent)
-        .onClose(handleClose)
-        .onConfirmation(handleConfirmation)
-        .onEnd(handleEnd)
+        .on("error", handleError)
+        .on("event", handleEvent)
+        .on("close", handleClose)
+        .on("confirmation", handleConfirmation)
+        .on("end", handleEnd)
         .execute(connection);
 
       await delay(500);
@@ -149,11 +149,12 @@ describe("subscribeToStream", () => {
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
         .fromRevision(2n)
-        .onError(handleError)
-        .onEvent(handleEvent)
-        .onClose(handleClose)
-        .onConfirmation(handleConfirmation)
-        .onEnd(handleEnd)
+        .on("close", handleClose)
+        .on("error", handleError)
+        .on("event", handleEvent)
+        .on("close", handleClose)
+        .on("confirmation", handleConfirmation)
+        .on("end", handleEnd)
         .execute(connection);
 
       await delay(500);

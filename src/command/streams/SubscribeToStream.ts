@@ -7,24 +7,30 @@ import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
 import {
-  SubscriptionListeners,
   ESDBConnection,
   ReadRevision,
   ResolvedEvent,
   SubscriptionReport,
   Subscription,
+  SubscriptionEvent,
+  Listeners,
+  SubscriptionListeners,
 } from "../../types";
 import { Command } from "../Command";
 import { OneWaySubscription } from "../../utils/OneWaySubscription";
 import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
 
-type StreamListeners = SubscriptionListeners<ResolvedEvent, SubscriptionReport>;
-
 export class SubscribeToStream extends Command {
   private _stream: string;
   private _revision: ReadRevision;
   private _resolveLinkTos: boolean;
-  private _listeners: Partial<StreamListeners> = {};
+  private _listeners: Listeners<ResolvedEvent> = {
+    event: new Set(),
+    end: new Set(),
+    confirmation: new Set(),
+    error: new Set(),
+    close: new Set(),
+  };
 
   constructor(stream: string) {
     super();
@@ -76,31 +82,38 @@ export class SubscribeToStream extends Command {
     return this;
   }
 
-  onEvent(listener: StreamListeners["event"]): SubscribeToStream {
-    this._listeners.event = listener;
+  on = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<ResolvedEvent, SubscriptionReport>[Name]
+  ): SubscribeToStream => {
+    this._listeners[event]?.add(handler as never);
     return this;
-  }
-  onEnd(listener: StreamListeners["end"]): SubscribeToStream {
-    this._listeners.end = listener;
+  };
+
+  once = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<ResolvedEvent, SubscriptionReport>[Name]
+  ): SubscribeToStream => {
+    const listener = (...args: unknown[]) => {
+      this.off(event, listener);
+      // eslint-disable-next-line
+      return (handler as any)(...args);
+    };
+    this.on(event, listener);
     return this;
-  }
-  onConfirmation(listener: StreamListeners["confirmation"]): SubscribeToStream {
-    this._listeners.confirmation = listener;
+  };
+
+  off = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<ResolvedEvent, SubscriptionReport>[Name]
+  ): SubscribeToStream => {
+    this._listeners[event]?.delete(handler as never);
     return this;
-  }
-  onError(listener: StreamListeners["error"]): SubscribeToStream {
-    this._listeners.error = listener;
-    return this;
-  }
-  onClose(listener: StreamListeners["close"]): SubscribeToStream {
-    this._listeners.close = listener;
-    return this;
-  }
+  };
 
   /**
    * Starts the subscription immediately.
    */
-
   async execute(
     connection: ESDBConnection
   ): Promise<Subscription<ResolvedEvent, SubscriptionReport>> {

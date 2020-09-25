@@ -282,69 +282,25 @@ export interface SubscriptionListeners<E, R> {
   [constants.CLOSE_EVENT]: () => void;
 }
 
+export type Listeners<E, R = SubscriptionReport> = {
+  [P in keyof SubscriptionListeners<E, R>]: Set<SubscriptionListeners<E, R>[P]>;
+};
+
 export interface Subscription<E, R> extends AsyncIterable<E> {
-  on(
-    name: typeof constants.EVENT_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.EVENT_EVENT]
-  ): void;
-  on(
-    name: typeof constants.END_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.END_EVENT]
-  ): void;
-  on(
-    name: typeof constants.CONFIRMATION_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.CONFIRMATION_EVENT]
-  ): void;
-  on(
-    name: typeof constants.ERROR_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.ERROR_EVENT]
-  ): void;
-  on(
-    name: typeof constants.CLOSE_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.CLOSE_EVENT]
-  ): void;
+  on<Name extends SubscriptionEvent>(
+    name: Name,
+    handler: SubscriptionListeners<E, R>[Name]
+  ): Subscription<E, R>;
 
-  once(
-    name: typeof constants.EVENT_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.EVENT_EVENT]
-  ): void;
-  once(
-    name: typeof constants.END_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.END_EVENT]
-  ): void;
-  once(
-    name: typeof constants.CONFIRMATION_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.CONFIRMATION_EVENT]
-  ): void;
-  once(
-    name: typeof constants.ERROR_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.ERROR_EVENT]
-  ): void;
-  once(
-    name: typeof constants.CLOSE_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.CLOSE_EVENT]
-  ): void;
+  once<Name extends SubscriptionEvent>(
+    name: Name,
+    handler: SubscriptionListeners<E, R>[Name]
+  ): Subscription<E, R>;
 
-  off(
-    name: typeof constants.EVENT_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.EVENT_EVENT]
-  ): void;
-  off(
-    name: typeof constants.END_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.END_EVENT]
-  ): void;
-  off(
-    name: typeof constants.CONFIRMATION_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.CONFIRMATION_EVENT]
-  ): void;
-  off(
-    name: typeof constants.ERROR_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.ERROR_EVENT]
-  ): void;
-  off(
-    name: typeof constants.CLOSE_EVENT,
-    handler: SubscriptionListeners<E, R>[typeof constants.CLOSE_EVENT]
-  ): void;
+  off<Name extends SubscriptionEvent>(
+    name: Name,
+    handler: SubscriptionListeners<E, R>[Name]
+  ): Subscription<E, R>;
 
   unsubscribe: () => void;
 }
