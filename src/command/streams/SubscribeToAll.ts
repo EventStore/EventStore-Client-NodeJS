@@ -9,17 +9,19 @@ import {
   SubscriptionHandler,
   ESDBConnection,
   ReadPosition,
+  AllStreamResolvedEvent,
 } from "../../types";
 import { Command } from "../Command";
 import { Filter } from "../../utils/Filter";
 import { handleOneWaySubscription } from "../../utils/handleOneWaySubscription";
+import { convertAllStreamGrpcEvent } from "../../utils/convertGrpcEvent";
 
 export class SubscribeToAll extends Command {
   private _position: ReadPosition;
   private _resolveLinkTos: boolean;
   private _filter?: Filter;
   // TODO: handle no handler
-  private _handler!: SubscriptionHandler;
+  private _handler!: SubscriptionHandler<AllStreamResolvedEvent>;
 
   constructor() {
     super();
@@ -83,7 +85,9 @@ export class SubscribeToAll extends Command {
    * Sets the handler for the subscription
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-  handler(handler: SubscriptionHandler): SubscribeToAll {
+  handler(
+    handler: SubscriptionHandler<AllStreamResolvedEvent>
+  ): SubscribeToAll {
     this._handler = handler;
     return this;
   }
@@ -140,6 +144,6 @@ export class SubscribeToAll extends Command {
 
     const client = await connection._client(StreamsClient);
     const stream = client.read(req, this.metadata, callOptions);
-    handleOneWaySubscription(stream, this._handler);
+    handleOneWaySubscription(stream, this._handler, convertAllStreamGrpcEvent);
   }
 }

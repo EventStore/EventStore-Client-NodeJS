@@ -7,11 +7,12 @@ import {
   ESDBConnection,
   ReadPosition,
   Direction,
-  ResolvedEvent,
+  AllStreamResolvedEvent,
 } from "../../types";
 
 import { Command } from "../Command";
 import { handleBatchRead } from "../../utils/handleBatchRead";
+import { convertAllStreamGrpcEvent } from "../../utils/convertGrpcEvent";
 
 export class ReadAllEvents extends Command {
   private _position: ReadPosition;
@@ -87,7 +88,7 @@ export class ReadAllEvents extends Command {
   /**
    * Sends asynchronously the read command to the server.
    */
-  async execute(connection: ESDBConnection): Promise<ResolvedEvent[]> {
+  async execute(connection: ESDBConnection): Promise<AllStreamResolvedEvent[]> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
 
@@ -135,6 +136,6 @@ export class ReadAllEvents extends Command {
 
     const client = await connection._client(StreamsClient);
     const stream = client.read(req, this.metadata);
-    return handleBatchRead(stream);
+    return handleBatchRead(stream, convertAllStreamGrpcEvent);
   }
 }

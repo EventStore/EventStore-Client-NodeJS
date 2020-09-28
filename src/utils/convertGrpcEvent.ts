@@ -3,11 +3,16 @@ import { ReadResp as PersistentReadResp } from "../../generated/persistent_pb";
 import StreamsEvent = StreamsReadResp.ReadEvent;
 import PersistentEvent = PersistentReadResp.ReadEvent;
 
-import { RecordedEvent, Position, ResolvedEvent } from "../types";
+import {
+  RecordedEvent,
+  Position,
+  ResolvedEvent,
+  AllStreamResolvedEvent,
+} from "../types";
 
-export const convertGrpcEvent = (
-  grpcEvent: StreamsEvent | PersistentEvent
-): ResolvedEvent => {
+type GRPCReadEvent = StreamsEvent | PersistentEvent;
+
+export const convertGrpcEvent = (grpcEvent: GRPCReadEvent): ResolvedEvent => {
   const resolved: ResolvedEvent = {};
 
   if (grpcEvent.hasEvent()) {
@@ -25,8 +30,45 @@ export const convertGrpcEvent = (
   return resolved;
 };
 
+export const convertAllStreamGrpcEvent = (
+  grpcEvent: GRPCReadEvent
+): AllStreamResolvedEvent => {
+  const resolved: AllStreamResolvedEvent = {};
+
+  if (grpcEvent.hasEvent()) {
+    const event = grpcEvent.getEvent()!;
+    resolved.event = {
+      ...convertGrpcRecord(event),
+      position: extractPosition(event),
+    };
+  }
+
+  if (grpcEvent.hasLink()) {
+    const link = grpcEvent.getEvent()!;
+    resolved.link = {
+      ...convertGrpcRecord(link),
+      position: extractPosition(link),
+    };
+  }
+
+  if (grpcEvent.hasCommitPosition()) {
+    resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
+  }
+
+  return resolved;
+};
+
+type GRPCRecordedEvent =
+  | StreamsEvent.RecordedEvent
+  | PersistentEvent.RecordedEvent;
+
+const extractPosition = (grpcRecord: GRPCRecordedEvent): Position => ({
+  commit: BigInt(grpcRecord.getCommitPosition()),
+  prepare: BigInt(grpcRecord.getPreparePosition()),
+});
+
 export const convertGrpcRecord = (
-  grpcRecord: StreamsEvent.RecordedEvent | PersistentEvent.RecordedEvent
+  grpcRecord: GRPCRecordedEvent
 ): RecordedEvent => {
   const metadataMap = grpcRecord.getMetadataMap();
 
@@ -34,11 +76,6 @@ export const convertGrpcRecord = (
   const contentType =
     metadataMap.get("content-type") ?? "application/octet-stream";
   const created = parseInt(metadataMap.get("created") ?? "0", 10);
-
-  const position: Position = {
-    commit: BigInt(grpcRecord.getCommitPosition()),
-    prepare: BigInt(grpcRecord.getPreparePosition()),
-  };
 
   if (!grpcRecord.hasStreamIdentifier()) {
     throw "Impossible situation where streamIdentifier is undefined in a recorded event";
@@ -73,7 +110,6 @@ export const convertGrpcRecord = (
       data,
       metadata,
       isJson,
-      position,
       created,
     };
   }
@@ -89,7 +125,6 @@ export const convertGrpcRecord = (
     data,
     metadata,
     isJson,
-    position,
     created,
   };
 };
