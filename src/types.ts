@@ -34,10 +34,6 @@ export type ReadPosition =
 export type ExpectedRevision =
   | typeof constants.ANY
   /**
-   * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
-   */
-  | typeof constants.STREAM_EXISTS
-  /**
    * The stream being written to should not yet exist. If it does exist, treats that as a concurrency problem.
    */
   | typeof constants.NO_STREAM
@@ -46,13 +42,15 @@ export type ExpectedRevision =
    */
   | bigint;
 
-/**
- * Delete stream does not support "stream_exists". see: {@link ExpectedRevision}.
- */
-export type DeleteStreamExpectedRevision = Exclude<
-  ExpectedRevision,
-  typeof constants.STREAM_EXISTS
->;
+export type WriteEventsExpectedRevision =
+  /**
+   * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
+   */
+  | typeof constants.STREAM_EXISTS
+  /**
+   * see: {@link ExpectedRevision}.
+   */
+  | ExpectedRevision;
 
 export type CurrentRevision =
   /**

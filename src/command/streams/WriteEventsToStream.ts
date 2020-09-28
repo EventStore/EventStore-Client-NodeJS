@@ -2,7 +2,11 @@ import { AppendReq } from "../../../generated/streams_pb";
 import { StreamIdentifier, Empty, UUID } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
-import { WriteResult, ESDBConnection, ExpectedRevision } from "../../types";
+import {
+  WriteResult,
+  ESDBConnection,
+  WriteEventsExpectedRevision,
+} from "../../types";
 import { Command } from "../Command";
 import { EventData } from "../../events";
 import {
@@ -12,7 +16,7 @@ import {
 
 export class WriteEventsToStream extends Command {
   private readonly _stream: string;
-  private _revision: ExpectedRevision;
+  private _revision: WriteEventsExpectedRevision;
   private _events: EventData[] = [];
 
   constructor(stream: string) {
@@ -25,7 +29,7 @@ export class WriteEventsToStream extends Command {
    * Asks the server to check the stream is at specific revision before writing events.
    * @param revision
    */
-  expectedRevision(revision: ExpectedRevision): WriteEventsToStream {
+  expectedRevision(revision: WriteEventsExpectedRevision): WriteEventsToStream {
     this._revision = revision;
     return this;
   }
@@ -87,7 +91,7 @@ export class WriteEventsToStream extends Command {
         if (resp.hasWrongExpectedVersion()) {
           const grpcError = resp.getWrongExpectedVersion()!;
 
-          let expected: ExpectedRevision = "any";
+          let expected: WriteEventsExpectedRevision = "any";
 
           switch (true) {
             case grpcError.hasExpectedRevision(): {

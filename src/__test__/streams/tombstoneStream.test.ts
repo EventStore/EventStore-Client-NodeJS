@@ -10,7 +10,6 @@ import {
   tombstoneStream,
   StreamDeletedError,
   NO_STREAM,
-  STREAM_EXISTS,
 } from "../..";
 
 describe("tombstoneStream", () => {
@@ -101,38 +100,6 @@ describe("tombstoneStream", () => {
 
           const result = await tombstoneStream(STREAM)
             .expectedRevision(revision)
-            .execute(connection);
-
-          expect(result).toBeDefined();
-
-          await expect(() =>
-            readEventsFromStream(STREAM).execute(connection)
-          ).rejects.toThrowError(StreamDeletedError);
-        });
-      });
-
-      // throws error: 2 UNKNOWN: Exception was thrown by handler.
-      describe.skip("exists", () => {
-        const STREAM = "expected_revision_stream_exists";
-        const NOT_A_STREAM = "i_dont_exist_hopefully";
-
-        beforeAll(async () => {
-          await writeEventsToStream(STREAM)
-            .send(event, event, event, event)
-            .execute(connection);
-        });
-
-        it("fails", async () => {
-          await expect(
-            tombstoneStream(NOT_A_STREAM)
-              .expectedRevision(STREAM_EXISTS)
-              .execute(connection)
-          ).rejects.toThrowError(`error here`);
-        });
-
-        it("succeeds", async () => {
-          const result = await tombstoneStream(STREAM)
-            .expectedRevision(STREAM_EXISTS)
             .execute(connection);
 
           expect(result).toBeDefined();
