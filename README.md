@@ -1,4 +1,6 @@
-![Github action CI workflow](https://github.com/EventStore/EventStore-Client-NodeJS/workflows/CI/badge.svg?branch=master)
+[![npm][npm-badge]][npm-badge-url]
+[![Github action CI workflow][ci-badge]][ci-badge-url]
+[![license][license-badge]][license-badge-url]
 
 # EventStoreDB NodeJS Client
 
@@ -7,7 +9,7 @@ EventStoreDB is the open-source, functional database with Complex Event Processi
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
 Note: This client is currently under active development and further API changes are expected. Feedback is very welcome.
- 
+
 ## Installation
 
 ```shell script
@@ -20,7 +22,7 @@ $ npm install --save @eventstore/db-client
 
 ## EventStoreDB Server Compatibility
 
-This client is compatible with version `20.6.1` upwards. 
+This client is compatible with version `20.6.1` upwards.
 
 Server setup instructions can be found here [EventStoreDB Docs], follow the docker setup for the simplest configuration.
 
@@ -148,3 +150,9 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 [jest]: https://jestjs.io/
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/
+[npm-badge]: https://img.shields.io/npm/v/@eventstore/db-client.svg
+[npm-badge-url]: https://www.npmjs.com/package/@eventstore/db-client
+[ci-badge]: https://github.com/EventStore/EventStore-Client-NodeJS/workflows/CI/badge.svg?branch=master
+[ci-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/actions
+[license-badge]: https://img.shields.io/npm/l/@eventstore/db-client.svg
+[license-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/LICENSE
