@@ -1,4 +1,4 @@
-import { createTestNode, Defer, delay } from "../utils";
+import { createTestNode, Defer, delay, testEvents } from "../utils";
 
 import {
   writeEventsToStream,
@@ -6,17 +6,13 @@ import {
   EventStoreConnection,
   EventData,
   ResolvedEvent,
-  SubscriptionReport,
   subscribeToStream,
+  SubscriptionReport,
 } from "../..";
 
 describe("subscribeToStream", () => {
   const node = createTestNode();
   let connection!: ESDBConnection;
-
-  const event = EventData.json("test", {
-    message: "lets test this",
-  });
 
   const finishEvent = EventData.json("finish-test", {
     message: "lets wrap this up",
@@ -29,7 +25,7 @@ describe("subscribeToStream", () => {
       .singleNodeConnection(node.uri);
 
     await writeEventsToStream("out_of_stream_name")
-      .send(event.build(), event.build(), event.build(), event.build())
+      .send(...testEvents(4))
       .execute(connection);
   });
 
@@ -43,47 +39,43 @@ describe("subscribeToStream", () => {
       const STREAM_NAME = "from_start_test_stream_name";
 
       await writeEventsToStream(STREAM_NAME)
-        .send(event.build(), event.build(), event.build(), event.build())
+        .send(...testEvents(4))
         .execute(connection);
 
-      const onError = jest.fn((error) => {
+      const handleError = jest.fn((error) => {
         defer.reject(error);
       });
-      const onClose = jest.fn();
-      const onConfirmation = jest.fn();
-      const onEnd = jest.fn();
-      const onEvent = jest.fn(
-        (_report: SubscriptionReport, event: ResolvedEvent) => {
-          if (event.event?.eventType === "finish-test") {
-            defer.resolve();
-          }
+      const handleClose = jest.fn();
+      const handleConfirmation = jest.fn();
+      const handleEnd = jest.fn();
+      const handleEvent = jest.fn((event: ResolvedEvent) => {
+        if (event.event?.eventType === "finish-test") {
+          defer.resolve();
         }
-      );
+      });
 
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
         .fromStart()
-        .handler({
-          onError,
-          onEvent,
-          onClose,
-          onConfirmation,
-          onEnd,
-        })
+        .on("error", handleError)
+        .on("event", handleEvent)
+        .on("close", handleClose)
+        .on("confirmation", handleConfirmation)
+        .on("end", handleEnd)
         .execute(connection);
 
       await delay(500);
 
       await writeEventsToStream(STREAM_NAME)
-        .send(event.build(), event.build(), event.build())
+        .send(...testEvents(3))
         .send(finishEvent.build())
         .execute(connection);
 
       await defer.promise;
 
-      expect(onError).not.toBeCalled();
-      expect(onConfirmation).toBeCalledTimes(1);
-      expect(onEvent).toBeCalledTimes(8);
+      expect(handleError).not.toBeCalled();
+      expect(handleConfirmation).toBeCalledTimes(1);
+      expect(handleEvent).toBeCalledTimes(8);
     });
 
     test("from end", async () => {
@@ -91,67 +83,64 @@ describe("subscribeToStream", () => {
       const defer = new Defer();
 
       await writeEventsToStream(STREAM_NAME)
-        .send(event.build(), event.build(), event.build(), event.build())
+        .send(...testEvents(4))
         .execute(connection);
 
-      const onError = jest.fn((error) => {
+      const handleError = jest.fn((error) => {
         defer.reject(error);
       });
-      const onClose = jest.fn();
-      const onConfirmation = jest.fn();
-      const onEnd = jest.fn();
-      const onEvent = jest.fn(
-        (_report: SubscriptionReport, event: ResolvedEvent) => {
-          if (event.event?.eventType === "finish-test") {
-            defer.resolve();
-          }
+      const handleClose = jest.fn();
+      const handleConfirmation = jest.fn();
+      const handleEnd = jest.fn();
+      const handleEvent = jest.fn((event: ResolvedEvent) => {
+        if (event.event?.eventType === "finish-test") {
+          defer.resolve();
         }
-      );
+      });
 
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
         .fromEnd()
-        .handler({
-          onError,
-          onEvent,
-          onClose,
-          onConfirmation,
-          onEnd,
-        })
+        .on("error", handleError)
+        .on("event", handleEvent)
+        .on("close", handleClose)
+        .on("confirmation", handleConfirmation)
+        .on("end", handleEnd)
         .execute(connection);
 
       await delay(500);
 
       await writeEventsToStream(STREAM_NAME)
-        .send(event.build(), event.build(), event.build())
+        .send(...testEvents(3))
         .send(finishEvent.build())
         .execute(connection);
 
       await defer.promise;
 
-      expect(onError).not.toBeCalled();
-      expect(onConfirmation).toBeCalledTimes(1);
-      expect(onEvent).toBeCalledTimes(4);
+      expect(handleError).not.toBeCalled();
+      expect(handleConfirmation).toBeCalledTimes(1);
+      expect(handleEvent).toBeCalledTimes(4);
     });
 
     test("from revision", async () => {
       const STREAM_NAME = "from_revision_test_stream_name";
 
       await writeEventsToStream(STREAM_NAME)
-        .send(event.build(), event.build(), event.build(), event.build())
+        .send(...testEvents(4))
         .execute(connection);
 
       const defer = new Defer();
 
-      const onError = jest.fn((error) => {
+      const handleError = jest.fn((error) => {
         defer.reject(error);
       });
-      const onClose = jest.fn();
-      const onConfirmation = jest.fn();
-      const onEnd = jest.fn();
-      const onEvent = jest.fn(
-        (_report: SubscriptionReport, event: ResolvedEvent) => {
+      const handleClose = jest.fn();
+      const handleConfirmation = jest.fn();
+      const handleEnd = jest.fn();
+      const handleEvent = jest.fn(
+        (event: ResolvedEvent, report: SubscriptionReport) => {
           if (event.event?.eventType === "finish-test") {
+            report.unsubscribe();
             defer.resolve();
           }
         }
@@ -160,27 +149,95 @@ describe("subscribeToStream", () => {
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
         .fromRevision(2n)
-        .handler({
-          onError,
-          onEvent,
-          onClose,
-          onConfirmation,
-          onEnd,
-        })
+        .on("close", handleClose)
+        .on("error", handleError)
+        .on("event", handleEvent)
+        .on("close", handleClose)
+        .on("confirmation", handleConfirmation)
+        .on("end", handleEnd)
         .execute(connection);
 
       await delay(500);
 
       await writeEventsToStream(STREAM_NAME)
-        .send(event.build(), event.build(), event.build())
+        .send(...testEvents(3))
         .send(finishEvent.build())
         .execute(connection);
 
       await defer.promise;
 
-      expect(onError).not.toBeCalled();
-      expect(onConfirmation).toBeCalledTimes(1);
-      expect(onEvent).toBeCalledTimes(5);
+      expect(handleConfirmation).toBeCalledTimes(1);
+      expect(handleEvent).toBeCalledTimes(5);
+      expect(handleEnd).toBeCalledTimes(1);
+      expect(handleError).not.toBeCalled();
+    });
+  });
+
+  describe("should return a subscription", () => {
+    test("async iterator", async () => {
+      const STREAM_NAME = "async_iter";
+      const doSomething = jest.fn();
+
+      await writeEventsToStream(STREAM_NAME)
+        .send(...testEvents(8))
+        .send(finishEvent.build())
+        .execute(connection);
+
+      const subscription = await subscribeToStream(STREAM_NAME)
+        .authenticated("admin", "changeit")
+        .fromStart()
+        .execute(connection);
+
+      for await (const event of subscription) {
+        doSomething(event);
+
+        if (event.event?.eventType === "finish-test") {
+          break;
+        }
+      }
+
+      expect(doSomething).toBeCalledTimes(9);
+    });
+
+    test("after the fact event listeners", async () => {
+      const STREAM_NAME = "after_the_fact";
+
+      const defer = new Defer();
+
+      await writeEventsToStream(STREAM_NAME)
+        .send(...testEvents(8))
+        .execute(connection);
+
+      const subscription = await subscribeToStream(STREAM_NAME)
+        .authenticated("admin", "changeit")
+        .fromEnd()
+        .execute(connection);
+
+      const eventListenerOne = jest.fn();
+      const eventListenerTwo = jest.fn();
+      const endListener = jest.fn();
+
+      subscription.on("event", eventListenerOne);
+      subscription.on("event", (event) => {
+        eventListenerTwo(event);
+
+        if (event.event?.eventType === "finish-test") {
+          subscription.unsubscribe();
+          defer.resolve();
+        }
+      });
+
+      subscription.on("end", endListener);
+
+      await writeEventsToStream(STREAM_NAME)
+        .send(...testEvents(5))
+        .send(finishEvent.build())
+        .execute(connection);
+
+      await defer.promise;
+
+      expect(eventListenerOne).toBeCalledTimes(6);
+      expect(eventListenerTwo).toBeCalledTimes(6);
     });
   });
 });

@@ -223,8 +223,8 @@ export type ConsumerStrategy =
   | typeof constants.PINNED;
 
 export interface PersistentReport {
-  ack(ids: string[]): void;
-  nack(action: PersistentAction, reason: string, ids: string[]): void;
+  ack(...ids: string[]): void;
+  nack(action: PersistentAction, reason: string, ...ids: string[]): void;
   unsubscribe(): void;
 }
 
@@ -265,4 +265,42 @@ export type ClientConstructor<T extends Client> = new (
 export interface ESDBConnection {
   close(): Promise<void>;
   _client<T extends Client>(c: ClientConstructor<T>): Promise<T>;
+}
+
+export type SubscriptionEvent =
+  | typeof constants.EVENT_EVENT
+  | typeof constants.END_EVENT
+  | typeof constants.CONFIRMATION_EVENT
+  | typeof constants.ERROR_EVENT
+  | typeof constants.CLOSE_EVENT;
+
+export interface SubscriptionListeners<E, R> {
+  [constants.EVENT_EVENT]: (event: E, report: R) => void;
+  [constants.END_EVENT]: () => void;
+  [constants.CONFIRMATION_EVENT]: () => void;
+  [constants.ERROR_EVENT]: (error: Error) => void;
+  [constants.CLOSE_EVENT]: () => void;
+}
+
+export type Listeners<E, R> = {
+  [P in keyof SubscriptionListeners<E, R>]: Set<SubscriptionListeners<E, R>[P]>;
+};
+
+export interface Subscription<E, R> extends AsyncIterable<E> {
+  on<Name extends SubscriptionEvent>(
+    name: Name,
+    handler: SubscriptionListeners<E, R>[Name]
+  ): Subscription<E, R>;
+
+  once<Name extends SubscriptionEvent>(
+    name: Name,
+    handler: SubscriptionListeners<E, R>[Name]
+  ): Subscription<E, R>;
+
+  off<Name extends SubscriptionEvent>(
+    name: Name,
+    handler: SubscriptionListeners<E, R>[Name]
+  ): Subscription<E, R>;
+
+  unsubscribe: () => void;
 }

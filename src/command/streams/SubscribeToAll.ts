@@ -6,22 +6,31 @@ import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 import {
   Position,
-  SubscriptionHandler,
   ESDBConnection,
   ReadPosition,
+  Listeners,
   AllStreamResolvedEvent,
+  SubscriptionEvent,
+  SubscriptionListeners,
+  SubscriptionReport,
+  Subscription,
 } from "../../types";
 import { Command } from "../Command";
 import { Filter } from "../../utils/Filter";
-import { handleOneWaySubscription } from "../../utils/handleOneWaySubscription";
+import { OneWaySubscription } from "../../utils/OneWaySubscription";
 import { convertAllStreamGrpcEvent } from "../../utils/convertGrpcEvent";
 
 export class SubscribeToAll extends Command {
   private _position: ReadPosition;
   private _resolveLinkTos: boolean;
   private _filter?: Filter;
-  // TODO: handle no handler
-  private _handler!: SubscriptionHandler<AllStreamResolvedEvent>;
+  private _listeners: Listeners<AllStreamResolvedEvent, SubscriptionReport> = {
+    event: new Set(),
+    end: new Set(),
+    confirmation: new Set(),
+    error: new Set(),
+    close: new Set(),
+  };
 
   constructor() {
     super();
@@ -81,23 +90,51 @@ export class SubscribeToAll extends Command {
     return this;
   }
 
-  /**
-   * Sets the handler for the subscription
-   * @param handler Set of callbacks used during the subscription lifecycle.
-   */
-  handler(
-    handler: SubscriptionHandler<AllStreamResolvedEvent>
-  ): SubscribeToAll {
-    this._handler = handler;
+  on = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<
+      AllStreamResolvedEvent,
+      SubscriptionReport
+    >[Name]
+  ): SubscribeToAll => {
+    this._listeners[event]?.add(handler as never);
     return this;
-  }
+  };
+
+  once = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<
+      AllStreamResolvedEvent,
+      SubscriptionReport
+    >[Name]
+  ): SubscribeToAll => {
+    const listener = (...args: unknown[]) => {
+      this.off(event, listener);
+      // eslint-disable-next-line
+      return (handler as any)(...args);
+    };
+    this.on(event, listener);
+    return this;
+  };
+
+  off = <Name extends SubscriptionEvent>(
+    event: Name,
+    handler: SubscriptionListeners<
+      AllStreamResolvedEvent,
+      SubscriptionReport
+    >[Name]
+  ): SubscribeToAll => {
+    this._listeners[event]?.delete(handler as never);
+    return this;
+  };
 
   /**
    * Starts the subscription immediately.
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-
-  async execute(connection: ESDBConnection): Promise<void> {
+  async execute(
+    connection: ESDBConnection
+  ): Promise<Subscription<AllStreamResolvedEvent, SubscriptionReport>> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const uuidOption = new UUIDOption();
@@ -144,6 +181,11 @@ export class SubscribeToAll extends Command {
 
     const client = await connection._client(StreamsClient);
     const stream = client.read(req, this.metadata, callOptions);
-    handleOneWaySubscription(stream, this._handler, convertAllStreamGrpcEvent);
+
+    return new OneWaySubscription(
+      stream,
+      this._listeners,
+      convertAllStreamGrpcEvent
+    );
   }
 }
