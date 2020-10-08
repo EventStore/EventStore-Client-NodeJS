@@ -98,7 +98,7 @@ describe("connectToPersistentSubscription", () => {
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .authenticated("admin", "changeit")
-        .fromRevision(1n)
+        .fromRevision(BigInt(1))
         .execute(connection);
 
       const defer = new Defer();
