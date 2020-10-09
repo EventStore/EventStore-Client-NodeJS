@@ -121,7 +121,7 @@ export interface JSONRecordedEvent extends RecordedEventBase {
 
 export interface BinaryRecordedEvent extends RecordedEventBase {
   /**
-   * Indicates wheter the content is internally marked as JSON.
+   * Indicates whether the content is internally marked as JSON.
    */
   isJson: false;
 

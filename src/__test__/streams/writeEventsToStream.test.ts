@@ -2,6 +2,7 @@ import { createTestNode, testEvents } from "../utils";
 
 import {
   writeEventsToStream,
+  readEventsFromStream,
   ESDBConnection,
   EventStoreConnection,
   EventData,
@@ -54,6 +55,68 @@ describe("writeEventsToStream", () => {
 
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+    });
+
+    test("with metadata for json events", async () => {
+      const STREAM_NAME = "json_metadata_stream_name";
+      const METADATA = { metaMessage: "How meta is this?" };
+      const jsonEvent: EventData = EventData.json("metadata-test-json", {
+        message: "the json message",
+        kind: "json",
+      })
+        .jsonMetadata(METADATA)
+        .build();
+
+      const result = await writeEventsToStream(STREAM_NAME)
+        .send(jsonEvent)
+        .execute(connection);
+
+      expect(result).toBeDefined();
+      expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+      const rxEvents = await readEventsFromStream(STREAM_NAME)
+        .fromStart()
+        .forward()
+        .count(1)
+        .execute(connection);
+
+      expect(rxEvents).toBeDefined();
+      expect(rxEvents.length).toEqual(1);
+      expect(rxEvents[0].event?.metadata).toBeDefined();
+      const metaJx = rxEvents[0].event!.metadata as Record<string, unknown>;
+      expect(metaJx.metaMessage).toMatch(METADATA.metaMessage);
+    });
+
+    test("with metadata for binary events", async () => {
+      const STREAM_NAME = "binary_metadata_stream_name";
+      const METADATA = "How meta is this?";
+
+      const binaryEvent: EventData = EventData.binary(
+        "metadata-test-binary",
+        Uint8Array.from(Buffer.from("the binary message"))
+      )
+        .binaryMetadata(Uint8Array.from(Buffer.from(METADATA)))
+        .build();
+
+      const result = await writeEventsToStream(STREAM_NAME)
+        .send(binaryEvent)
+        .execute(connection);
+
+      expect(result).toBeDefined();
+      expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+      const rxEvents = await readEventsFromStream(STREAM_NAME)
+        .fromStart()
+        .forward()
+        .count(1)
+        .execute(connection);
+
+      expect(rxEvents).toBeDefined();
+      expect(rxEvents.length).toEqual(1);
+      expect(rxEvents[0].event?.metadata).toBeDefined();
+      const metaBx = rxEvents[0].event!.metadata as Uint8Array;
+      const metaBxData = Buffer.from(metaBx).toString("binary");
+      expect(metaBxData).toMatch(METADATA);
     });
 
     describe("expected revision", () => {

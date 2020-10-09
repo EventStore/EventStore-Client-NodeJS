@@ -164,6 +164,20 @@ export class WriteEventsToStream extends Command {
             break;
           }
         }
+
+        switch (event.metadata?.__typename) {
+          case "json": {
+            const metadata = JSON.stringify(event.metadata.payload);
+            message.setCustomMetadata(
+              Buffer.from(metadata, "binary").toString("base64")
+            );
+            break;
+          }
+          case "binary": {
+            message.setCustomMetadata(event.metadata.payload);
+          }
+        }
+
         message.getMetadataMap().set("type", event.eventType);
         entry.setProposedMessage(message);
         sink.write(entry);
