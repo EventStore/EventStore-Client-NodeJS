@@ -28,7 +28,7 @@ jobs:
     name: Test
     strategy:
       matrix:
-        version: [ci]
+        version: [ci, latest, 20.6.1-buster-slim, 20.6.1-bionic]
     needs: build
     runs-on: ubuntu-18.04
     steps:

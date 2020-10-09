@@ -14,7 +14,7 @@ const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
 const image = (() => {
-  const version = process.env.EVENTSTORE_IMAGE ?? "github:ci";
+  const version = process.env.EVENTSTORE_IMAGE ?? "dockerhub:latest";
   switch (true) {
     case version.startsWith("local:"):
       return version.replace("local:", "");
@@ -23,6 +23,8 @@ const image = (() => {
         "github:",
         "docker.pkg.github.com/eventstore/eventstore/eventstore:"
       );
+    case version.startsWith("dockerhub:"):
+      return version.replace("dockerhub:", "eventstore/eventstore:");
     default:
       return version;
   }
