@@ -148,7 +148,7 @@ describe("subscribeToStream", () => {
 
       await subscribeToStream(STREAM_NAME)
         .authenticated("admin", "changeit")
-        .fromRevision(2n)
+        .fromRevision(BigInt(2))
         .on("close", handleClose)
         .on("error", handleError)
         .on("event", handleEvent)

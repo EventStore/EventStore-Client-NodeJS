@@ -235,7 +235,7 @@ describe("writeEventsToStream", () => {
 
             try {
               const result = await writeEventsToStream(STREAM_NAME)
-                .expectedRevision(1n)
+                .expectedRevision(BigInt(1))
                 .send(...testEvents())
                 .execute(connection);
 
@@ -245,7 +245,7 @@ describe("writeEventsToStream", () => {
 
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
-                expect(error.expectedVersion).toBe(1n);
+                expect(error.expectedVersion).toBe(BigInt(1));
                 expect(error.actualVersion).toBe(NO_STREAM);
               }
             }
@@ -262,7 +262,7 @@ describe("writeEventsToStream", () => {
 
             try {
               const result = await writeEventsToStream(STREAM_NAME)
-                .expectedRevision(nextExpectedVersion + 1n)
+                .expectedRevision(nextExpectedVersion + BigInt(1))
                 .send(...testEvents())
                 .execute(connection);
 
@@ -272,7 +272,9 @@ describe("writeEventsToStream", () => {
 
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
-                expect(error.expectedVersion).toBe(nextExpectedVersion + 1n);
+                expect(error.expectedVersion).toBe(
+                  nextExpectedVersion + BigInt(1)
+                );
                 expect(error.actualVersion).toBe(nextExpectedVersion);
               }
             }
