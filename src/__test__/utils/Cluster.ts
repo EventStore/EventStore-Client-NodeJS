@@ -7,26 +7,12 @@ import * as getPort from "get-port";
 import { upAll, down, exec } from "docker-compose";
 import { stringify } from "yaml";
 
+import { dockerImages } from "./dockerImages";
 import { EndPoint } from "../../types";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
-
-const image = (() => {
-  const version = process.env.EVENTSTORE_IMAGE ?? "github:ci";
-  switch (true) {
-    case version.startsWith("local:"):
-      return version.replace("local:", "");
-    case version.startsWith("github:"):
-      return version.replace(
-        "github:",
-        "docker.pkg.github.com/eventstore/eventstore/eventstore:"
-      );
-    default:
-      return version;
-  }
-})();
 
 const nodeList = (count: number, ipStub: string) =>
   Promise.all<ClusterLocation>(
@@ -41,8 +27,7 @@ const createCertGen = (internalIPs: ClusterLocation[], insecure: boolean) =>
     ? {}
     : {
         "cert-gen": {
-          image:
-            "docker.pkg.github.com/eventstore/es-gencert-cli/es-gencert-cli:1.0.2",
+          image: dockerImages.certGen,
           entrypoint: "bash",
           command: `-c "es-gencert-cli create-ca -out /tmp/certs/ca &&
     ${internalIPs
@@ -71,7 +56,7 @@ const createNodes = (
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
       ...acc,
       [`esdb-node-${i}`]: {
-        image,
+        image: dockerImages.esdb,
         environment: [
           `EVENTSTORE_GOSSIP_SEED=${ipAddresses
             .reduce<string[]>(
@@ -147,8 +132,8 @@ export class Cluster {
   }
 
   public up = async (): Promise<void> => {
-    // allow up to 5 minites to complete (pulling a package can take a while)
-    jest.setTimeout(300_000);
+    // allow up to 1 minute to complete
+    jest.setTimeout(60_000);
 
     await this.ready;
 
@@ -160,8 +145,9 @@ export class Cluster {
         this.retryCount -= 1;
 
         console.log(
-          `Failed to initialize cluster. Retry ${3 - this.retryCount}`,
-          error
+          `Failed to initialize cluster. Retry ${3 - this.retryCount}\n${
+            error.err
+          } `
         );
 
         await this.cleanUp();
@@ -214,7 +200,7 @@ export class Cluster {
       version: "3.5",
       services: {
         "volumes-provisioner": {
-          image: "hasnat/volumes-provisioner",
+          image: dockerImages.volumesProvisioner,
           environment: {
             PROVISION_DIRECTORIES: "1000:1000:0755:/tmp/certs",
           },

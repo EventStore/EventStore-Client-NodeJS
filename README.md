@@ -114,6 +114,7 @@ $ yarn build
 ## Run tests
 
 Tests are written using [Jest] and require [Docker] and [Docker Compose] to be installed.
+To access the github packages docker images, you need to [authenticate docker with a gitub personal access token].
 
 ```shell script
 $ yarn test
@@ -150,6 +151,7 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 [jest]: https://jestjs.io/
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/
+[authenticate docker with a gitub personal access token]: https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-with-a-personal-access-token
 [npm-badge]: https://img.shields.io/npm/v/@eventstore/db-client.svg
 [npm-badge-url]: https://www.npmjs.com/package/@eventstore/db-client
 [ci-badge]: https://github.com/EventStore/EventStore-Client-NodeJS/workflows/CI/badge.svg?branch=master
