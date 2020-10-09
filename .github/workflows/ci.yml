@@ -37,7 +37,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "14.x"
+          node-version: "12.x"
       - name: Login to GitHub Package Registry
         uses: docker/login-action@v1
         with:
