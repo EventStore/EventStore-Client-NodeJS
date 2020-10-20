@@ -12,6 +12,7 @@ import {
   ClientConstructor,
   EndPoint,
 } from "../types";
+import { debug } from "../utils/debug";
 
 /**
  * Helps constructing an EventStoreDB connection.
@@ -27,8 +28,13 @@ export class EventStoreConnectionBuilder {
     rootCertificate: Buffer | string
   ): EventStoreConnectionBuilder {
     if (typeof rootCertificate === "string") {
+      debug.connection(
+        `Importing root certificate from path "%s"`,
+        rootCertificate
+      );
       this._rootCertificate = readFileSync(rootCertificate);
     } else {
+      debug.connection("Using root certificate from buffer");
       this._rootCertificate = rootCertificate;
     }
 
@@ -147,11 +153,15 @@ export class EventStoreConnection implements ESDBConnection {
    * internal access to grpc client.
    */
   _client = async <T extends Client>(
-    Client: ClientConstructor<T>
+    Client: ClientConstructor<T>,
+    debugName: string
   ): Promise<T> => {
     if (this._clients.has(Client)) {
+      debug.connection("Using existing client for %s", debugName);
       return this._clients.get(Client) as T;
     }
+
+    debug.connection("Createing client for %s", debugName);
 
     const channelOverride: ClientOptions["channelOverride"] = await this.getChannel();
 
@@ -169,9 +179,19 @@ export class EventStoreConnection implements ESDBConnection {
   };
 
   private getChannel = async () => {
-    if (this._channel) return this._channel;
+    if (this._channel) {
+      debug.connection("Using existing connection");
+      return this._channel;
+    }
+
+    debug.connection("Creating new connection");
 
     const uri = await this.resolveUri();
+
+    debug.connection(
+      `Connecting to http${this._rootCertificate ? "s" : ""}://%s`,
+      uri
+    );
 
     const credentials = this._rootCertificate
       ? grpcCredentials.createSsl(this._rootCertificate)

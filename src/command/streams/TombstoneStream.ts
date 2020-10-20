@@ -4,6 +4,7 @@ import { TombstoneReq } from "../../../generated/streams_pb";
 import { DeleteResult, ESDBConnection, ExpectedRevision } from "../../types";
 import { convertToCommandError } from "../../utils/CommandError";
 import { Command } from "../Command";
+import { debug } from "../../utils/debug";
 
 export class TombstoneStream extends Command {
   private readonly _stream: string;
@@ -56,7 +57,10 @@ export class TombstoneStream extends Command {
 
     req.setOptions(options);
 
-    const client = await connection._client(StreamsClient);
+    debug.command("TombstoneStream: %c", this);
+    debug.command_grpc("TombstoneStream: %g", req);
+
+    const client = await connection._client(StreamsClient, "TombstoneStream");
 
     return new Promise<DeleteResult>((resolve, reject) => {
       client.tombstone(req, this.metadata, (error, resp) => {

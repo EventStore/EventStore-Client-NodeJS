@@ -264,7 +264,10 @@ export type ClientConstructor<T extends Client> = new (
 
 export interface ESDBConnection {
   close(): Promise<void>;
-  _client<T extends Client>(c: ClientConstructor<T>): Promise<T>;
+  _client<T extends Client>(
+    c: ClientConstructor<T>,
+    debugName: string
+  ): Promise<T>;
 }
 
 export type SubscriptionEvent =
