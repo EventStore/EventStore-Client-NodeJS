@@ -25,7 +25,7 @@ export const handleBatchRead = <T>(
         return reject(
           new StreamNotFoundError(
             null as never,
-            streamNotFound.getStreamIdentifier()?.getStreamname().toString()
+            streamNotFound.getStreamIdentifier()?.getStreamname()
           )
         );
       } else {

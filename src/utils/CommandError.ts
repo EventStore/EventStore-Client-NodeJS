@@ -75,15 +75,22 @@ export class StreamNotFoundError extends CommandErrorBase {
   public type: ErrorType.STREAM_NOT_FOUND = ErrorType.STREAM_NOT_FOUND;
   public streamName: string;
 
-  constructor(error?: ServiceError, streamName?: string) {
-    super(error, `${streamName} not found`);
+  static nameToString = (
+    error?: ServiceError,
+    streamName?: string | Uint8Array
+  ): string => {
+    const name = streamName ?? error?.metadata?.getMap()["stream-name"] ?? "";
+    if (typeof name === "string") return name;
+    return Buffer.from(name).toString("binary");
+  };
 
-    if (error) {
-      const metadata = error.metadata!.getMap();
-      this.streamName = metadata["stream-name"].toString();
-    } else {
-      this.streamName = streamName ?? "";
-    }
+  constructor(error?: ServiceError, streamName?: string | Uint8Array) {
+    super(
+      error,
+      `${StreamNotFoundError.nameToString(error, streamName)} not found`
+    );
+
+    this.streamName = StreamNotFoundError.nameToString(error, streamName);
   }
 }
 
