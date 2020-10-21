@@ -120,11 +120,47 @@ To access the github packages docker images, you need to [authenticate docker wi
 $ yarn test
 ```
 
+Tests can be filtered by prepending the test file or folder to the command
+
+```shell script
+$ yarn test connection // all connection tests
+$ yarn test ReadAllEvents // only the ReadAllEvents tests
+```
+
+To get debug information when running tests use the `test:debug` command.
+
+```shell script
+$ yarn test:debug // debug all tests
+$ yarn test:debug ReadAllEvents // only the ReadAllEvents tests
+```
+
 Specific docker images can be specified via the enviroment variable `EVENTSTORE_IMAGE`.
 
 ```shell script
 $ yarn cross-env EVENTSTORE_IMAGE=77d63f3f0ab3 jest
 ```
+
+See [Jest] documentation for more options.
+
+## Debugging
+
+This project uses the [debug] module internally to log information about connections, options and GRPC requests.
+To see all the internal logs, set the DEBUG environment variable to `esdb:*` when launching your app.
+Logs can be further filtered with glob patterns, for example, only connection logs: `esdb:connection`, everything but grpc logs: `esdb:*,-*:grpc`.
+
+You can set a few environment variables that will further change the behavior of the debug logging:
+
+| Name                | Purpose                                           |
+| ------------------- | ------------------------------------------------- |
+| `DEBUG`             | Enables/disables specific debugging namespaces.   |
+| `DEBUG_COLORS`      | Whether or not to use colors in the debug output. |
+| `DEBUG_DEPTH`       | Object inspection depth.                          |
+| `DEBUG_FD`          | File descriptor to write debug output to.         |
+| `DEBUG_SHOW_HIDDEN` | Shows hidden properties on inspected objects.     |
+
+**Note:** The environment variables beginning with `DEBUG_` end up being
+converted into an Options object that gets used with `%o`/`%O` formatters.
+See the Node.js documentation for [`util.inspect()`] for the complete list.
 
 ## Support
 
@@ -152,6 +188,8 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/
 [authenticate docker with a gitub personal access token]: https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-with-a-personal-access-token
+[debug]: https://github.com/visionmedia/debug
+[`util.inspect()`]: https://nodejs.org/api/util.html#util_util_inspect_object_options
 [npm-badge]: https://img.shields.io/npm/v/@eventstore/db-client.svg
 [npm-badge-url]: https://www.npmjs.com/package/@eventstore/db-client
 [ci-badge]: https://github.com/EventStore/EventStore-Client-NodeJS/workflows/CI/badge.svg?branch=master

@@ -9,6 +9,7 @@ import VNodeState = GrpcMemberInfo.VNodeState;
 import { EndPoint, MemberInfo, NodePreference } from "../types";
 import { RANDOM } from "../constants";
 import { ClusterSettings } from ".";
+import { debug } from "../utils/debug";
 
 export async function discoverEndpoint(
   settings: ClusterSettings,
@@ -20,13 +21,19 @@ export async function discoverEndpoint(
         ? settings.endpoints
         : await resolveDomainName(settings.domain);
 
+    debug.connection(`Starting discovery for candidates: %O`, candidates);
+
     for (const candidate of candidates) {
       try {
         const members = await listClusterMembers(candidate, cert);
         const preference = settings.nodePreference ?? RANDOM;
         const endpoint = determineBestNode(preference, members);
         if (endpoint) return Promise.resolve(endpoint);
-      } catch {
+      } catch (error) {
+        debug.connection(
+          `Failed to get cluster list from ${candidate.address}:${candidate.port}`,
+          error.toString()
+        );
         continue;
       }
     }
@@ -36,6 +43,8 @@ export async function discoverEndpoint(
 }
 
 function resolveDomainName(domain: string): Promise<EndPoint[]> {
+  debug.connection(`Resolving domain name ${domain}`);
+
   return new Promise((resolve, reject) => {
     dns.resolveSrv(domain, (error, addresses) => {
       if (error) return reject(error);
@@ -74,11 +83,18 @@ function determineBestNode(
     .filter(inAllowedStates)
     .sort((a, b) => a.state - b.state);
 
+  debug.connection(
+    `Determining best node with preference "%s" from members: %O`,
+    preference,
+    members
+  );
+
   let finalMember;
   switch (preference) {
     case "leader":
       finalMember = sorted.find((member) => member.state === VNodeState.LEADER);
       if (finalMember && finalMember.httpEndpoint) {
+        debug.connection(`Chose member: %O`, finalMember);
         return {
           address: finalMember.httpEndpoint.address,
           port: finalMember.httpEndpoint.port,
@@ -92,6 +108,8 @@ function determineBestNode(
         .sort(() => Math.random() - 0.5)
         .shift();
 
+      debug.connection(`Chose member: %O`, finalMember);
+
       if (finalMember && finalMember.httpEndpoint) {
         return {
           address: finalMember.httpEndpoint.address,
@@ -103,6 +121,8 @@ function determineBestNode(
     default:
     case "random":
       finalMember = sorted.sort(() => Math.random() - 0.5).shift();
+
+      debug.connection(`Chose member: %O`, finalMember);
       if (finalMember && finalMember.httpEndpoint) {
         return {
           address: finalMember.httpEndpoint.address,
@@ -126,7 +146,7 @@ function listClusterMembers(
 
   return new Promise((resolve, reject) => {
     client.read(new Empty(), (error, info) => {
-      if (error) reject(error);
+      if (error) return reject(error);
 
       const members: MemberInfo[] = [];
 
@@ -152,7 +172,7 @@ function listClusterMembers(
         members.push(member);
       }
 
-      resolve(members);
+      return resolve(members);
     });
   });
 }

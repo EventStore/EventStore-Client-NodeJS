@@ -13,6 +13,7 @@ import {
 import { Command } from "../Command";
 import { handleBatchRead } from "../../utils/handleBatchRead";
 import { convertAllStreamGrpcEvent } from "../../utils/convertGrpcEvent";
+import { debug } from "../../utils/debug";
 
 export class ReadAllEvents extends Command {
   private _position: ReadPosition;
@@ -134,7 +135,10 @@ export class ReadAllEvents extends Command {
 
     req.setOptions(options);
 
-    const client = await connection._client(StreamsClient);
+    debug.command("ReadAllEvents: %c", this);
+    debug.command_grpc("ReadAllEvents: %g", req);
+
+    const client = await connection._client(StreamsClient, "ReadAllEvents");
     const stream = client.read(req, this.metadata);
     return handleBatchRead(stream, convertAllStreamGrpcEvent);
   }

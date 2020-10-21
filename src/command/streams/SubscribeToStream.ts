@@ -19,6 +19,7 @@ import {
 import { Command } from "../Command";
 import { OneWaySubscription } from "../../utils/OneWaySubscription";
 import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
+import { debug } from "../../utils/debug";
 
 export class SubscribeToStream extends Command {
   private _stream: string;
@@ -157,7 +158,10 @@ export class SubscribeToStream extends Command {
       deadline: Infinity,
     };
 
-    const client = await connection._client(StreamsClient);
+    debug.command("SubscribeToAll: %c", this);
+    debug.command_grpc("SubscribeToAll: %g", req);
+
+    const client = await connection._client(StreamsClient, "SubscribeToAll");
     const stream = client.read(req, this.metadata, callOptions);
 
     return new OneWaySubscription(stream, this._listeners, convertGrpcEvent);

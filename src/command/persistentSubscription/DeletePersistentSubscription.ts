@@ -5,6 +5,7 @@ import { PersistentSubscriptionsClient } from "../../../generated/persistent_grp
 import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
+import { debug } from "../../utils/debug";
 
 export class DeletePersistentSubscription extends Command {
   private _stream: string;
@@ -29,7 +30,13 @@ export class DeletePersistentSubscription extends Command {
     options.setGroupName(this._group);
     req.setOptions(options);
 
-    const client = await connection._client(PersistentSubscriptionsClient);
+    debug.command("DeletePersistentSubscription: %c", this);
+    debug.command_grpc("DeletePersistentSubscription: %g", req);
+
+    const client = await connection._client(
+      PersistentSubscriptionsClient,
+      "DeletePersistentSubscription"
+    );
 
     return new Promise<void>((resolve, reject) => {
       client.delete(req, this.metadata, (error) => {

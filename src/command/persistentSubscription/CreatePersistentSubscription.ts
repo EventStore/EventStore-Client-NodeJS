@@ -5,6 +5,7 @@ import { PersistentSubscriptionsClient } from "../../../generated/persistent_grp
 import { ConsumerStrategy, ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
+import { debug } from "../../utils/debug";
 
 export class CreatePersistentSubscription extends Command {
   private _stream: string;
@@ -252,7 +253,13 @@ export class CreatePersistentSubscription extends Command {
 
     req.setOptions(options);
 
-    const client = await connection._client(PersistentSubscriptionsClient);
+    debug.command("CreatePersistentSubscription: %c", this);
+    debug.command_grpc("CreatePersistentSubscription: %g", req);
+
+    const client = await connection._client(
+      PersistentSubscriptionsClient,
+      "CreatePersistentSubscription"
+    );
 
     return new Promise<void>((resolve, reject) => {
       client.create(req, this.metadata, (error) => {
