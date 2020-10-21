@@ -5,6 +5,7 @@
     "target": "ES2019",
     "declaration": true,
     "strict": true,
+    "noUnusedLocals": true,
     "outDir": "./dist"
   },
   "include": ["./src", "./generated"],

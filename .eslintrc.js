@@ -6,5 +6,7 @@ module.exports = {
   rules: {
     "no-constant-condition": ["error", { checkLoops: false }],
     "@typescript-eslint/no-non-null-assertion": ["off"],
+    // better handled by ts itself
+    "@typescript-eslint/no-unused-vars": ["off"],
   },
 };
