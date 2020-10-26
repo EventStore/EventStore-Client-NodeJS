@@ -16,26 +16,30 @@ export async function discoverEndpoint(
   credentials: ChannelCredentials
 ): Promise<EndPoint> {
   while (true) {
-    const candidates: EndPoint[] =
-      "endpoints" in settings
-        ? settings.endpoints
-        : await resolveDomainName(settings.domain);
+    try {
+      const candidates: EndPoint[] =
+        "endpoints" in settings
+          ? settings.endpoints
+          : await resolveDomainName(settings.domain);
 
-    debug.connection(`Starting discovery for candidates: %O`, candidates);
+      debug.connection(`Starting discovery for candidates: %O`, candidates);
 
-    for (const candidate of candidates) {
-      try {
-        const members = await listClusterMembers(candidate, credentials);
-        const preference = settings.nodePreference ?? RANDOM;
-        const endpoint = determineBestNode(preference, members);
-        if (endpoint) return Promise.resolve(endpoint);
-      } catch (error) {
-        debug.connection(
-          `Failed to get cluster list from ${candidate.address}:${candidate.port}`,
-          error.toString()
-        );
-        continue;
+      for (const candidate of candidates) {
+        try {
+          const members = await listClusterMembers(candidate, credentials);
+          const preference = settings.nodePreference ?? RANDOM;
+          const endpoint = determineBestNode(preference, members);
+          if (endpoint) return Promise.resolve(endpoint);
+        } catch (error) {
+          debug.connection(
+            `Failed to get cluster list from ${candidate.address}:${candidate.port}`,
+            error.toString()
+          );
+          continue;
+        }
       }
+    } catch (error) {
+      debug.connection(`Failed to resolve dns: `, error.toString());
     }
 
     await asyncSetTimeout(500);
