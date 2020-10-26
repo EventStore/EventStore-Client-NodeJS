@@ -1,5 +1,5 @@
 import * as dns from "dns";
-import { credentials as grpcCredentials } from "@grpc/grpc-js";
+import { ChannelCredentials } from "@grpc/grpc-js";
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import { GossipClient } from "../../generated/gossip_grpc_pb";
@@ -13,7 +13,7 @@ import { debug } from "../utils/debug";
 
 export async function discoverEndpoint(
   settings: ClusterSettings,
-  cert?: Buffer
+  credentials: ChannelCredentials
 ): Promise<EndPoint> {
   while (true) {
     const candidates: EndPoint[] =
@@ -25,7 +25,7 @@ export async function discoverEndpoint(
 
     for (const candidate of candidates) {
       try {
-        const members = await listClusterMembers(candidate, cert);
+        const members = await listClusterMembers(candidate, credentials);
         const preference = settings.nodePreference ?? RANDOM;
         const endpoint = determineBestNode(preference, members);
         if (endpoint) return Promise.resolve(endpoint);
@@ -135,13 +135,9 @@ function determineBestNode(
 
 function listClusterMembers(
   seed: EndPoint,
-  cert?: Buffer
+  credentials: ChannelCredentials
 ): Promise<MemberInfo[]> {
   const uri = `${seed.address}:${seed.port}`;
-  const credentials = cert
-    ? grpcCredentials.createSsl(cert)
-    : grpcCredentials.createInsecure();
-
   const client = new GossipClient(uri, credentials);
 
   return new Promise((resolve, reject) => {

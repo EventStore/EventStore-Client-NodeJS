@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import {
   Channel,
+  ChannelCredentials,
   Client,
   ClientOptions,
   credentials as grpcCredentials,
@@ -14,17 +15,40 @@ import {
 } from "../types";
 import { debug } from "../utils/debug";
 
+export type VerifyOptions = Parameters<typeof grpcCredentials.createSsl>[3];
+
 /**
  * Helps constructing an EventStoreDB connection.
  */
 export class EventStoreConnectionBuilder {
+  private _insecure = false;
   private _rootCertificate?: Buffer;
+  private _privateKey?: Buffer;
+  private _certChain?: Buffer;
+  private _verifyOptions?: VerifyOptions;
 
   /**
-   * Enable a secured connection with the server.
+   * Use an insecure connection to the server. We do not advise using this mode while executing
+   * authenticated commands as your credentials will be visible on the network.
+   */
+  public insecure(): EventStoreConnectionBuilder {
+    this._insecure = true;
+    return this;
+  }
+
+  /**
+   * Use an secure connection to the server. Default behaviour
+   */
+  public secure(): EventStoreConnectionBuilder {
+    this._insecure = false;
+    return this;
+  }
+
+  /**
+   * Use a rool SSL Certificate
    * @param rootCertificate A filepath to a certificate file or the content of a certificated file.
    */
-  sslRootCertificate(
+  public sslRootCertificate(
     rootCertificate: Buffer | string
   ): EventStoreConnectionBuilder {
     if (typeof rootCertificate === "string") {
@@ -42,10 +66,46 @@ export class EventStoreConnectionBuilder {
   }
 
   /**
-   * Default behavior. Use an insecure connection to the server. We do not advise using this mode while executing
-   * authenticated commands as your credentials will be visible on the network.
+   * Use a private key
+   * @param privateKey A filepath to a private key or the content of a private key file.
    */
-  insecure(): EventStoreConnectionBuilder {
+  public privateKey(privateKey: Buffer | string): EventStoreConnectionBuilder {
+    if (typeof privateKey === "string") {
+      debug.connection(`Importing private key from path "%s"`, privateKey);
+      this._privateKey = readFileSync(privateKey);
+    } else {
+      debug.connection("Using private key from buffer");
+      this._privateKey = privateKey;
+    }
+
+    return this;
+  }
+
+  /**
+   * Use a certificate chain
+   * @param certChain A filepath to a certificate chain or the content of a certificate chain file.
+   */
+  public certChain(certChain: Buffer | string): EventStoreConnectionBuilder {
+    if (typeof certChain === "string") {
+      debug.connection(`Importing certificate chain from path "%s"`, certChain);
+      this._certChain = readFileSync(certChain);
+    } else {
+      debug.connection("Using certificate chain from buffer");
+      this._certChain = certChain;
+    }
+
+    return this;
+  }
+
+  /**
+   * Verify Connection Options
+   * @param VerifyOptions
+   */
+  public VerifyConnectionOptions(
+    verifyOptions: VerifyOptions
+  ): EventStoreConnectionBuilder {
+    debug.connection("Setting verifyOptions");
+    this._verifyOptions = verifyOptions;
     return this;
   }
 
@@ -53,12 +113,12 @@ export class EventStoreConnectionBuilder {
    * Creates an EventStoreDB connection.
    * @param uri The URI must not contain any protocol. Here's an valid example `localhost:2113`.
    */
-  singleNodeConnection(uri: string | EndPoint): EventStoreConnection {
+  public singleNodeConnection(uri: string | EndPoint): EventStoreConnection {
     return new EventStoreConnection(
       {
         endpoint: uri,
       },
-      this._rootCertificate
+      this.connectionCredentials()
     );
   }
 
@@ -66,7 +126,7 @@ export class EventStoreConnectionBuilder {
    * Creates an EventStoreDB connection.
    * @param endpoints An array of cluster endpoints.
    */
-  gossipClusterConnection(
+  public gossipClusterConnection(
     endpoints: EndPoint[],
     nodePreference?: NodePreference
   ): EventStoreConnection {
@@ -75,7 +135,7 @@ export class EventStoreConnectionBuilder {
         endpoints,
         nodePreference,
       },
-      this._rootCertificate
+      this.connectionCredentials()
     );
   }
 
@@ -83,7 +143,7 @@ export class EventStoreConnectionBuilder {
    * Creates an EventStoreDB connection.
    * @param domain
    */
-  dnsClusterConnection(
+  public dnsClusterConnection(
     domain: string,
     nodePreference?: NodePreference
   ): EventStoreConnection {
@@ -92,9 +152,20 @@ export class EventStoreConnectionBuilder {
         domain,
         nodePreference,
       },
-      this._rootCertificate
+      this.connectionCredentials()
     );
   }
+
+  private connectionCredentials = (): ConnectionCredentials =>
+    this._insecure
+      ? { insecure: this._insecure }
+      : {
+          insecure: this._insecure,
+          rootCertificate: this._rootCertificate,
+          privateKey: this._privateKey,
+          certChain: this._certChain,
+          verifyOptions: this._verifyOptions,
+        };
 }
 
 export type ClusterSettings =
@@ -113,6 +184,35 @@ export type ConnectionSettings =
       endpoint: EndPoint | string;
     };
 
+export type ConnectionCredentials =
+  | {
+      insecure: true;
+    }
+  | {
+      insecure: false;
+      rootCertificate?: Buffer;
+      privateKey?: Buffer;
+      certChain?: Buffer;
+      verifyOptions?: VerifyOptions;
+    };
+
+const createGRPCCredentials = (
+  settings: ConnectionCredentials
+): ChannelCredentials => {
+  debug.connection("Using credentials %O", settings);
+
+  if (settings.insecure) {
+    return grpcCredentials.createInsecure();
+  }
+
+  return grpcCredentials.createSsl(
+    settings.rootCertificate,
+    settings.privateKey,
+    settings.certChain,
+    settings.verifyOptions
+  );
+};
+
 /**
  * Represents a connection to a single node. An EventStoreDB connection maintains a full duplex connection with a
  * server. An EventStoreDB connection operates quite differently than say a SQL connection. Normally when you use an
@@ -121,14 +221,17 @@ export type ConnectionSettings =
  */
 export class EventStoreConnection implements ESDBConnection {
   private _settings: ConnectionSettings;
-  private _rootCertificate?: Buffer;
+  private _credentials: ChannelCredentials;
 
   private _channel?: Channel;
   private _clients: Map<ClientConstructor<Client>, Client>;
 
-  constructor(settings: ConnectionSettings, rootCertificate?: Buffer) {
-    this._rootCertificate = rootCertificate;
+  constructor(
+    settings: ConnectionSettings,
+    credentials: ConnectionCredentials
+  ) {
     this._settings = settings;
+    this._credentials = createGRPCCredentials(credentials);
     this._clients = new Map();
   }
 
@@ -184,20 +287,14 @@ export class EventStoreConnection implements ESDBConnection {
       return this._channel;
     }
 
-    debug.connection("Creating new connection");
-
     const uri = await this.resolveUri();
 
     debug.connection(
-      `Connecting to http${this._rootCertificate ? "s" : ""}://%s`,
+      `Connecting to http${this._credentials._isSecure() ? "" : "s"}://%s`,
       uri
     );
 
-    const credentials = this._rootCertificate
-      ? grpcCredentials.createSsl(this._rootCertificate)
-      : grpcCredentials.createInsecure();
-
-    this._channel = new Channel(uri, credentials, {});
+    this._channel = new Channel(uri, this._credentials, {});
 
     return this._channel;
   };
@@ -211,7 +308,7 @@ export class EventStoreConnection implements ESDBConnection {
 
     const { address, port } = await discoverEndpoint(
       this._settings,
-      this._rootCertificate
+      this._credentials
     );
 
     return `${address}:${port}`;
