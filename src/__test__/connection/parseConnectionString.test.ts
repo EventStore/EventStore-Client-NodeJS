@@ -6,7 +6,7 @@ describe("connection string parser", () => {
   describe("Should parse valid connection strings", () => {
     test.each(valid)("%s", (connectionString, expected) => {
       const parsed = parseConnectionString(connectionString);
-      expect(parsed).toEqual(expected);
+      expect(parsed).toStrictEqual(expected);
     });
   });
 
@@ -23,7 +23,7 @@ describe("connection string parser", () => {
     test.each(warning)("%s", (connectionString, expected) => {
       const warnSpy = jest.spyOn(console, "warn").mockImplementation();
       const parsed = parseConnectionString(connectionString);
-      expect(parsed).toEqual(expected);
+      expect(parsed).toStrictEqual(expected);
       expect(warnSpy).toHaveBeenCalled();
       expect(warnSpy.mock.calls).toMatchSnapshot();
       warnSpy.mockRestore();

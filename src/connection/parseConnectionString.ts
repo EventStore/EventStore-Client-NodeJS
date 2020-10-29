@@ -264,7 +264,7 @@ const verifyKeyValuePair = (
         throw new ParseError(connectionString, [keyFrom, to], "Integer");
       }
 
-      return { key, value };
+      return { key, value: parsedValue };
     }
     case "dnsDiscover":
     case "tls":
