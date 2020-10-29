@@ -1,6 +1,15 @@
 import { EndPoint, NodePreference } from "../types";
 import { debug } from "../utils/debug";
 
+const notCurrentlySupported = [
+  "maxDiscoverAttempts",
+  "discoveryInterval",
+  "gossipTimeout",
+  "tlsVerifyCert",
+  "throwOnAppendFailure",
+  "defaultCredentials",
+];
+
 interface Credentials {
   login: string;
   password: string;
@@ -92,6 +101,11 @@ const parseCredentials = (
   if (match.groups?.credentials) {
     nextPosition += match[0].length;
     const [login, password] = match.groups.credentials.split(":");
+
+    debug.connection(
+      `default credentials are not currently supported by this client, and will have no effect.`
+    );
+
     return parseHosts(
       connectionString,
       nextPosition,
@@ -220,6 +234,12 @@ const verifyKeyValuePair = (
   [from, to]: ParsingLocation
 ): KeyValuePair | null => {
   const keyFrom = from + `&${key}=`.length;
+
+  if (notCurrentlySupported.includes(key)) {
+    debug.connection(
+      `${key} is not currently supported by this client, and will have no effect.`
+    );
+  }
 
   switch (key) {
     case "nodePreference": {

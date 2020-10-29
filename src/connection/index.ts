@@ -14,6 +14,7 @@ import {
   EndPoint,
 } from "../types";
 import { debug } from "../utils/debug";
+import { parseConnectionString } from "./parseConnectionString";
 
 export type VerifyOptions = Parameters<typeof grpcCredentials.createSsl>[3];
 
@@ -101,7 +102,7 @@ export class EventStoreConnectionBuilder {
    * Verify Connection Options
    * @param VerifyOptions
    */
-  public VerifyConnectionOptions(
+  public verifyConnectionOptions(
     verifyOptions: VerifyOptions
   ): EventStoreConnectionBuilder {
     debug.connection("Setting verifyOptions");
@@ -240,6 +241,54 @@ export class EventStoreConnection implements ESDBConnection {
    */
   static builder(): EventStoreConnectionBuilder {
     return new EventStoreConnectionBuilder();
+  }
+
+  /**
+   * Returns a connection from a connection string.
+   * @param connectionString
+   */
+  static connectionString(
+    connectionString: TemplateStringsArray | string,
+    ...parts: string[]
+  ): EventStoreConnection {
+    const string: string = Array.isArray(connectionString)
+      ? connectionString.reduce<string>(
+          (acc, chunk, i) => `${acc}${chunk}${parts[i] ?? ""}`,
+          ""
+        )
+      : (connectionString as string);
+
+    debug.connection(`Using connection string: ${string}`);
+
+    const options = parseConnectionString(string);
+    const builder = new EventStoreConnectionBuilder();
+
+    if (options.tls) {
+      builder.secure();
+    } else {
+      builder.insecure();
+    }
+
+    if (options.dnsDiscover) {
+      const { address } = options.hosts[0];
+
+      if (options.hosts.length > 1) {
+        debug.connection(
+          `More than one address provided for discovery. Using first: ${address}.`
+        );
+      }
+
+      return builder.dnsClusterConnection(address, options.nodePreference);
+    }
+
+    if (options.hosts.length > 1) {
+      return builder.gossipClusterConnection(
+        options.hosts,
+        options.nodePreference
+      );
+    }
+
+    return builder.singleNodeConnection(options.hosts[0]);
   }
 
   /**
