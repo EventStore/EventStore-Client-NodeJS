@@ -58,6 +58,8 @@ describe("getProjectionResult", () => {
         .send(...testEvents(count, EVENT_TYPE))
         .execute(connection);
 
+      await delay(5000);
+
       const state = await getProjectionResult<number>(PROJECTION_NAME)
         .authenticated("admin", "changeit")
         .execute(connection);
@@ -156,7 +158,7 @@ describe("getProjectionResult", () => {
         )
         .execute(connection);
 
-      await delay(10000);
+      await delay(5000);
 
       const result = await getProjectionResult<CatCounter>(
         COUNTER_PROJECTION_NAME
