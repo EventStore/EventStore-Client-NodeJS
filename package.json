@@ -13,6 +13,7 @@
     "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" jest --verbose --run-in-band",
     "test:ci": "cross-env EVENTSTORE_IMAGE=github:ci jest",
     "test:latest": "cross-env EVENTSTORE_IMAGE=eventstore/eventstore:latest jest",
+    "test:flake": "jest --testSequencer=./src/__test__/utils/FlakeFinder.js",
     "generate": "run-s generate:*",
     "generate:sed": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
     "generate:folder": "shx mkdir -p ./generated",
