@@ -33,3 +33,30 @@ export const END_EVENT = "end";
 export const CONFIRMATION_EVENT = "confirmation";
 export const ERROR_EVENT = "error";
 export const CLOSE_EVENT = "close";
+
+// projection modes
+export const CONTINUOUS = "Continuous";
+export const ONE_TIME = "OneTime";
+export const TRANSIENT = "Transient";
+
+// projection status
+export const CREATING = "Creating";
+export const LOADING = "Loading";
+export const LOADED = "Loaded";
+export const PREPARING = "Preparing";
+export const PREPARED = "Prepared";
+export const STARTING = "Starting";
+export const LOADING_STOPPED = "LoadingStopped";
+export const RUNNING = "Running";
+export const STOPPING = "Stopping";
+export const ABORTING = "Aborting";
+export const STOPPED = "Stopped";
+export const COMPLETED = "Completed";
+export const ABORTED = "Aborted";
+export const FAULTED = "Faulted";
+export const DELETING = "Deleting";
+
+// processing status
+export const PAUSED = "Paused";
+export const WRITING_RESULTS = "Writing results";
+// STOPPED

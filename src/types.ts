@@ -67,10 +67,10 @@ export type CurrentRevision =
  */
 export type Direction = typeof constants.FORWARD | typeof constants.BACKWARD;
 
-export type WriteResult = {
+export interface WriteResult {
   nextExpectedVersion: bigint;
   position?: Position;
-};
+}
 
 /**
  * Represents a previously written event.
@@ -158,7 +158,7 @@ export type AllStreamRecordedEvent =
 /**
  * A structure representing a single event or an resolved link event.
  */
-export type ResolvedEvent = {
+export interface ResolvedEvent {
   /**
    * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
    */
@@ -174,12 +174,12 @@ export type ResolvedEvent = {
    * Commit position of the record.
    */
   commitPosition?: bigint;
-};
+}
 
 /**
  * A structure representing a single event or an resolved link event.
  */
-export type AllStreamResolvedEvent = {
+export interface AllStreamResolvedEvent {
   /**
    * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
    */
@@ -195,7 +195,146 @@ export type AllStreamResolvedEvent = {
    * Commit position of the record.
    */
   commitPosition?: bigint;
-};
+}
+
+export type ProjectionMode =
+  | typeof constants.CONTINUOUS
+  | typeof constants.ONE_TIME
+  | typeof constants.TRANSIENT;
+
+export type ProjectionStatus =
+  | typeof constants.CREATING
+  | typeof constants.LOADING
+  | typeof constants.LOADED
+  | typeof constants.PREPARING
+  | typeof constants.PREPARED
+  | typeof constants.STARTING
+  | typeof constants.LOADING_STOPPED
+  | typeof constants.RUNNING
+  | typeof constants.STOPPING
+  | typeof constants.ABORTING
+  | typeof constants.STOPPED
+  | typeof constants.COMPLETED
+  | typeof constants.ABORTED
+  | typeof constants.FAULTED
+  | typeof constants.DELETING;
+
+export type ProcessingStatus =
+  | typeof constants.PAUSED
+  | typeof constants.WRITING_RESULTS
+  | typeof constants.STOPPED
+  | "";
+
+/**
+ * Provides the details for a projection.
+ */
+export interface ProjectionDetails {
+  /**
+   * The CoreProcessingTime
+   * */
+  coreProcessingTime: BigInt;
+
+  /**
+   * The projection version
+   * */
+  version: BigInt;
+
+  /**
+   * The Epoch
+   * */
+  epoch: BigInt;
+
+  /**
+   * The projection EffectiveName
+   * */
+  effectiveName: string;
+
+  /**
+   * The projection WritesInProgress
+   * */
+  writesInProgress: number;
+
+  /**
+   * The projection ReadsInProgress
+   * */
+  readsInProgress: number;
+
+  /**
+   * The projection PartitionsCached
+   * */
+  partitionsCached: number;
+
+  /**
+   * The raw status of the projection.
+   * Split into {@link projectionStatus} and {@link processingStatus} for convenience.
+   * */
+  status: string;
+
+  /**
+   * The current status of the projection
+   * */
+  projectionStatus: ProjectionStatus;
+
+  /**
+   * The current status of the projection
+   * */
+  processingStatus: ProcessingStatus;
+
+  /**
+   * The projection StateReason
+   * */
+  stateReason: string;
+
+  /**
+   * The projection Name
+   * */
+  name: string;
+
+  /**
+   * The projection Mode
+   * */
+  mode: ProjectionMode;
+
+  /**
+   * The projection Position
+   * */
+  position: string;
+
+  /**
+   * The projection Progress
+   * */
+  progress: number;
+
+  /**
+   * LastCheckpoint
+   * */
+  lastCheckpoint: string;
+
+  /**
+   * The projection EventsProcessedAfterRestart
+   * */
+  eventsProcessedAfterRestart: BigInt;
+
+  /**
+   * The projection CheckpointStatus
+   * */
+  checkpointStatus: string;
+
+  /**
+   * The projection BufferedEvents
+   * */
+  bufferedEvents: BigInt;
+
+  /**
+   * The projection WritePendingEventsBeforeCheckpoint
+   * */
+  writePendingEventsBeforeCheckpoint: number;
+
+  /**
+   * The projection WritePendingEventsAfterCheckpoint
+   * */
+  writePendingEventsAfterCheckpoint: number;
+}
 
 export interface SubscriptionHandler<T> {
   onEvent: (report: SubscriptionReport, event: T) => void;

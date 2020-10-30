@@ -1,6 +1,7 @@
-import { join } from "path";
+import { join, relative } from "path";
 import * as fs from "fs";
 import { promisify } from "util";
+import * as cp from "child_process";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
@@ -13,6 +14,7 @@ import { EndPoint } from "../../types";
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
+const CPExec = promisify(cp.exec);
 
 const nodeList = (count: number, ipStub: string) =>
   Promise.all<ClusterLocation>(
@@ -108,6 +110,7 @@ export class Cluster {
   private retryCount = 3;
   private locations: ClusterLocation[] = [];
   private ready: Promise<void>;
+  private inspected = false;
 
   constructor(count: number, insecure = false, id = uuid()) {
     this.id = id;
@@ -183,6 +186,22 @@ export class Cluster {
   };
 
   public down = async (): Promise<void> => {
+    if (this.inspected) {
+      const composeFile = relative(
+        process.cwd(),
+        this.path("./docker-compose.yaml")
+      );
+
+      const folder = relative(process.cwd(), this.path());
+
+      console.log(
+        "Leaving cluster open for inspection. Dont forget to take it down: \n",
+        `docker-compose -f ${composeFile} down --volumes && rm -rf ${folder}`
+      );
+
+      return;
+    }
+
     const { exitCode } = await down({
       cwd: this.path(),
       commandOptions: ["--volumes"],
@@ -190,6 +209,23 @@ export class Cluster {
     expect(exitCode).toBe(0);
 
     await this.cleanUp();
+  };
+
+  public openInBrowser = async (): Promise<void> => {
+    const url = `http${this.insecure ? "" : "s"}://${this.uri}`;
+
+    console.log(`Opening ui: ${url}`);
+
+    const start =
+      process.platform == "darwin"
+        ? "open"
+        : process.platform == "win32"
+        ? "start"
+        : "xdg-open";
+
+    await CPExec(start + " " + url);
+
+    this.inspected = true;
   };
 
   private initialize = async (): Promise<void> => {
