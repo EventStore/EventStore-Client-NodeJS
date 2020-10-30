@@ -21,6 +21,7 @@ describe("subscribeToStream", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
@@ -55,7 +56,6 @@ describe("subscribeToStream", () => {
       });
 
       await subscribeToStream(STREAM_NAME)
-        .authenticated("admin", "changeit")
         .fromStart()
         .on("error", handleError)
         .on("event", handleEvent)
@@ -99,7 +99,6 @@ describe("subscribeToStream", () => {
       });
 
       await subscribeToStream(STREAM_NAME)
-        .authenticated("admin", "changeit")
         .fromEnd()
         .on("error", handleError)
         .on("event", handleEvent)
@@ -147,7 +146,6 @@ describe("subscribeToStream", () => {
       );
 
       await subscribeToStream(STREAM_NAME)
-        .authenticated("admin", "changeit")
         .fromRevision(BigInt(2))
         .on("close", handleClose)
         .on("error", handleError)
@@ -184,7 +182,6 @@ describe("subscribeToStream", () => {
         .execute(connection);
 
       const subscription = await subscribeToStream(STREAM_NAME)
-        .authenticated("admin", "changeit")
         .fromStart()
         .execute(connection);
 
@@ -209,7 +206,6 @@ describe("subscribeToStream", () => {
         .execute(connection);
 
       const subscription = await subscribeToStream(STREAM_NAME)
-        .authenticated("admin", "changeit")
         .fromEnd()
         .execute(connection);
 

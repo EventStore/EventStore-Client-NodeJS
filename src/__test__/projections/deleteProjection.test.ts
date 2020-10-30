@@ -31,6 +31,7 @@ describe("deleteProjection", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -42,36 +43,34 @@ describe("deleteProjection", () => {
   test("delete the projection", async () => {
     const PROJECTION_NAME = "projection_to_delete_everything";
 
-    await createContinuousProjection(PROJECTION_NAME, projection)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    await createContinuousProjection(PROJECTION_NAME, projection).execute(
+      connection
+    );
 
-    const beforeDetails = await getProjectionStatistics(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    const beforeDetails = await getProjectionStatistics(
+      PROJECTION_NAME
+    ).execute(connection);
 
     expect(beforeDetails).toBeDefined();
     expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
     await disableProjection(PROJECTION_NAME)
       .doNotWriteCheckpoint()
-      .authenticated("admin", "changeit")
+
       .execute(connection);
 
-    const disabledDetails = await getProjectionStatistics(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    const disabledDetails = await getProjectionStatistics(
+      PROJECTION_NAME
+    ).execute(connection);
 
     expect(disabledDetails).toBeDefined();
     expect(disabledDetails.projectionStatus).toBe(STOPPED);
 
-    await deleteProjection(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    await deleteProjection(PROJECTION_NAME).execute(connection);
 
-    const afterDetails = await getProjectionStatistics(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    const afterDetails = await getProjectionStatistics(PROJECTION_NAME).execute(
+      connection
+    );
 
     expect(afterDetails).toBeDefined();
     expect(afterDetails.projectionStatus).toBe(DELETING);
@@ -82,9 +81,7 @@ describe("deleteProjection", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        deleteProjection(PROJECTION_NAME)
-          .authenticated("admin", "changeit")
-          .execute(connection)
+        deleteProjection(PROJECTION_NAME).execute(connection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

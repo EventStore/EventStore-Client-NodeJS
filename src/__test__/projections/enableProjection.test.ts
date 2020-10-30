@@ -30,6 +30,7 @@ describe("enableProjection", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -41,29 +42,27 @@ describe("enableProjection", () => {
   test("enables the projection", async () => {
     const PROJECTION_NAME = "projection_to_enable";
 
-    await createContinuousProjection(PROJECTION_NAME, projection)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    await createContinuousProjection(PROJECTION_NAME, projection).execute(
+      connection
+    );
 
     await disableProjection(PROJECTION_NAME)
       .writeCheckpoint()
-      .authenticated("admin", "changeit")
+
       .execute(connection);
 
-    const beforeDetails = await getProjectionStatistics(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    const beforeDetails = await getProjectionStatistics(
+      PROJECTION_NAME
+    ).execute(connection);
 
     expect(beforeDetails).toBeDefined();
     expect(beforeDetails.projectionStatus).toBe(ABORTED);
 
-    await enableProjection(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    await enableProjection(PROJECTION_NAME).execute(connection);
 
-    const afterDetails = await getProjectionStatistics(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    const afterDetails = await getProjectionStatistics(PROJECTION_NAME).execute(
+      connection
+    );
 
     expect(afterDetails).toBeDefined();
     expect(afterDetails.projectionStatus).toBe(RUNNING);
@@ -73,9 +72,7 @@ describe("enableProjection", () => {
     const PROJECTION_NAME = "doesnt exist";
 
     await expect(
-      enableProjection(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection)
+      enableProjection(PROJECTION_NAME).execute(connection)
     ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
   });
 });

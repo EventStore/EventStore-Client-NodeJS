@@ -20,6 +20,7 @@ describe("subscribeToAll", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
@@ -66,7 +67,6 @@ describe("subscribeToAll", () => {
       );
 
       await subscribeToAll()
-        .authenticated("admin", "changeit")
         .fromStart()
         .on("error", onError)
         .on("event", onEvent)
@@ -125,7 +125,6 @@ describe("subscribeToAll", () => {
       );
 
       await subscribeToAll()
-        .authenticated("admin", "changeit")
         .fromEnd()
         .on("error", onError)
         .on("event", onEvent)
@@ -199,7 +198,6 @@ describe("subscribeToAll", () => {
       );
 
       await subscribeToAll()
-        .authenticated("admin", "changeit")
         .fromPosition(writeResult.position!)
         .on("error", onError)
         .on("event", onEvent)
@@ -241,10 +239,7 @@ describe("subscribeToAll", () => {
         message: "lets wrap this up",
       });
 
-      const subscription = await subscribeToAll()
-        .authenticated("admin", "changeit")
-        .fromEnd()
-        .execute(connection);
+      const subscription = await subscribeToAll().fromEnd().execute(connection);
 
       writeEventsToStream(STREAM_NAME)
         .send(...testEvents(8))
@@ -277,10 +272,7 @@ describe("subscribeToAll", () => {
         .send(...testEvents(8))
         .execute(connection);
 
-      const subscription = await subscribeToAll()
-        .authenticated("admin", "changeit")
-        .fromEnd()
-        .execute(connection);
+      const subscription = await subscribeToAll().fromEnd().execute(connection);
 
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();

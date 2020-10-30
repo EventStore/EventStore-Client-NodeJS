@@ -16,6 +16,7 @@ describe("readAllEvents", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
@@ -35,7 +36,6 @@ describe("readAllEvents", () => {
   describe("should successfully read from $all", () => {
     test("from start", async () => {
       const events = await readAllEvents()
-        .authenticated("admin", "changeit")
         .fromStart()
         .count(Number.MAX_SAFE_INTEGER)
         .execute(connection);
@@ -52,7 +52,6 @@ describe("readAllEvents", () => {
 
     test("from position", async () => {
       const [, , eventToExtract] = await readAllEvents()
-        .authenticated("admin", "changeit")
         .fromStart()
         .count(3)
         .execute(connection);
@@ -60,7 +59,6 @@ describe("readAllEvents", () => {
       const { position } = eventToExtract.event!;
 
       const [extracted] = await readAllEvents()
-        .authenticated("admin", "changeit")
         .fromPosition(position)
         .count(1)
         .execute(connection);
@@ -70,7 +68,6 @@ describe("readAllEvents", () => {
 
     test("backward from end", async () => {
       const events = await readAllEvents()
-        .authenticated("admin", "changeit")
         .backward()
         .fromEnd()
         .count(Number.MAX_SAFE_INTEGER)
@@ -88,7 +85,6 @@ describe("readAllEvents", () => {
 
     test("count", async () => {
       const events = await readAllEvents()
-        .authenticated("admin", "changeit")
         .fromStart()
         .count(2)
         .execute(connection);

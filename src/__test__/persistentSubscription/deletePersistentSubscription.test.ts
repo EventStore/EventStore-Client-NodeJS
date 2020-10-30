@@ -15,6 +15,7 @@ describe("deletePersistentSubscription", () => {
     await node.up();
 
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -28,14 +29,11 @@ describe("deletePersistentSubscription", () => {
     const GROUP_NAME = "test_group_name";
 
     await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-      .authenticated("admin", "changeit")
       .fromStart()
       .execute(connection);
 
     await expect(
-      deletePersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection)
+      deletePersistentSubscription(STREAM_NAME, GROUP_NAME).execute(connection)
     ).resolves.toBeUndefined();
   });
 });

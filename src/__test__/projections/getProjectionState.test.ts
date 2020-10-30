@@ -30,6 +30,7 @@ describe("getProjectionState", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -42,17 +43,17 @@ describe("getProjectionState", () => {
     const PROJECTION_NAME = "count events";
     const count = 3;
 
-    await createContinuousProjection(PROJECTION_NAME, projection)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    await createContinuousProjection(PROJECTION_NAME, projection).execute(
+      connection
+    );
 
     await writeEventsToStream(STREAM_NAME)
       .send(...testEvents(count, EVENT_TYPE))
       .execute(connection);
 
-    const state = await getProjectionState<number>(PROJECTION_NAME)
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    const state = await getProjectionState<number>(PROJECTION_NAME).execute(
+      connection
+    );
 
     expect(state).toBe(count);
   });
@@ -61,9 +62,7 @@ describe("getProjectionState", () => {
     const PROJECTION_NAME = "doesnt exist";
 
     await expect(
-      getProjectionState(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection)
+      getProjectionState(PROJECTION_NAME).execute(connection)
     ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
   });
 });

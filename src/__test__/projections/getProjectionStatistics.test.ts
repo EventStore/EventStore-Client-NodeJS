@@ -34,19 +34,20 @@ describe("getProjectionStatistics", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
     for (const name of continuousProjections) {
-      await createContinuousProjection(name, basicProjection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(name, basicProjection).execute(
+        connection
+      );
     }
 
     for (const name of transientProjections) {
-      await createTransientProjection(name, basicProjection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createTransientProjection(name, basicProjection).execute(
+        connection
+      );
     }
   });
 
@@ -58,9 +59,9 @@ describe("getProjectionStatistics", () => {
     test("continuous", async () => {
       const REQUESTED_NAME = continuousProjections[2];
 
-      const details = await getProjectionStatistics(REQUESTED_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const details = await getProjectionStatistics(REQUESTED_NAME).execute(
+        connection
+      );
 
       expect(details).toBeDefined();
       expect(details.mode).toBe(CONTINUOUS);
@@ -69,9 +70,9 @@ describe("getProjectionStatistics", () => {
 
     test("transient", async () => {
       const REQUESTED_NAME = transientProjections[1];
-      const details = await getProjectionStatistics(REQUESTED_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const details = await getProjectionStatistics(REQUESTED_NAME).execute(
+        connection
+      );
 
       expect(details).toBeDefined();
       expect(details.mode).toBe(TRANSIENT);
@@ -81,9 +82,7 @@ describe("getProjectionStatistics", () => {
     test("non-existant", async () => {
       const REQUESTED_NAME = "some-non-existant-projection";
       await expect(
-        getProjectionStatistics(REQUESTED_NAME)
-          .authenticated("admin", "changeit")
-          .execute(connection)
+        getProjectionStatistics(REQUESTED_NAME).execute(connection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

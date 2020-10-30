@@ -23,6 +23,7 @@ describe("connectToPersistentSubscription", () => {
     await node.up();
 
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -41,7 +42,6 @@ describe("connectToPersistentSubscription", () => {
         .execute(connection);
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .fromStart()
         .execute(connection);
 
@@ -66,7 +66,6 @@ describe("connectToPersistentSubscription", () => {
       );
 
       await connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
@@ -97,7 +96,6 @@ describe("connectToPersistentSubscription", () => {
         .execute(connection);
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .fromRevision(BigInt(1))
         .execute(connection);
 
@@ -122,7 +120,6 @@ describe("connectToPersistentSubscription", () => {
       );
 
       await connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
@@ -162,7 +159,6 @@ describe("connectToPersistentSubscription", () => {
         .execute(connection);
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .fromStart()
         .execute(connection);
 
@@ -201,7 +197,6 @@ describe("connectToPersistentSubscription", () => {
       );
 
       await connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
@@ -233,7 +228,6 @@ describe("connectToPersistentSubscription", () => {
         const doSomething = jest.fn();
 
         await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .authenticated("admin", "changeit")
           .fromStart()
           .execute(connection);
 
@@ -245,9 +239,7 @@ describe("connectToPersistentSubscription", () => {
         const subscription = await connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
-        )
-          .authenticated("admin", "changeit")
-          .execute(connection);
+        ).execute(connection);
 
         for await (const { event } of subscription) {
           if (!event) continue;
@@ -277,7 +269,6 @@ describe("connectToPersistentSubscription", () => {
         const retryCount = 20;
 
         await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .authenticated("admin", "changeit")
           .fromStart()
           .execute(connection);
 
@@ -290,9 +281,7 @@ describe("connectToPersistentSubscription", () => {
         const subscription = await connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
-        )
-          .authenticated("admin", "changeit")
-          .execute(connection);
+        ).execute(connection);
 
         for await (const { event } of subscription) {
           if (!event) continue;
@@ -335,16 +324,13 @@ describe("connectToPersistentSubscription", () => {
       const defer = new Defer();
 
       await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .fromStart()
         .execute(connection);
 
       const subscription = await connectToPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME
-      )
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      ).execute(connection);
 
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();
