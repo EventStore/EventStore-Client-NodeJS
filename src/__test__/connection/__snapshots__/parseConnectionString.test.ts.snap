@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`connection string parser Should throw on invalid strings esbd+discovery://localhost 1`] = `"Unexpected \\"esbd+discovery://\\" at position 0, expected esdb:// or esdb+discover://."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://host1,host2:200:300?tlsVerifyCert=false 1`] = `"Unexpected \\":300\\" at position 22, expected , or ?key=value."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://host1;host2;host3?tlsVerifyCert=false 1`] = `"Unexpected \\";\\" at position 12, expected ?key=value."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://localhost/&tlsVerifyCert=false 1`] = `"Unexpected \\"&\\" at position 17, expected ?key=value."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=sometimes 1`] = `"Unexpected \\"sometimes\\" at position 38, expected true or false."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=false&nodePreference=any 1`] = `"Unexpected \\"any\\" at position 52, expected follower or leader or random."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=false?nodePreference=follower 1`] = `"Unexpected \\"?\\" at position 36, expected &key=value."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=if you feel like it 1`] = `"Unexpected \\"if you feel like it\\" at position 31, expected true or false."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://my:great@username:UyeXx8$^PsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&tlsVerifyCert=false 1`] = `"Unexpected \\"UyeXx8\\" at position 25, expected port number."`;
+
+exports[`connection string parser Should throw on invalid strings esdb://tlsVerifyCert=false 1`] = `"Unexpected \\"=\\" at position 20, expected ?key=value."`;
+
+exports[`connection string parser Should throw on invalid strings https://console.eventstore.cloud/ 1`] = `"Unexpected \\"https://\\" at position 0, expected esdb:// or esdb+discover://."`;
+
+exports[`connection string parser Should throw on invalid strings localhost 1`] = `"Unexpected \\"l\\" at position 0, expected esdb:// or esdb+discover://."`;
+
+exports[`connection string parser Should warn on unknown keys esdb://localhost?catchOnAppendFailure=true&tlsVerifyCert=false 1`] = `
+Array [
+  Array [
+    "Unknown option key \\"catchOnAppendFailure\\", setting will be ignored.
+esdb://localhost?catchOnAppendFailure=true&tlsVerifyCert=false
+                 ^^^^^^^^^^^^^^^^^^^^",
+  ],
+]
+`;
+
+exports[`connection string parser Should warn on unknown keys esdb://localhost?someNonsense=follower&doTheThing=true 1`] = `
+Array [
+  Array [
+    "Unknown option key \\"someNonsense\\", setting will be ignored.
+esdb://localhost?someNonsense=follower&doTheThing=true
+                 ^^^^^^^^^^^^",
+  ],
+  Array [
+    "Unknown option key \\"doTheThing\\", setting will be ignored.
+esdb://localhost?someNonsense=follower&doTheThing=true
+                                       ^^^^^^^^^^",
+  ],
+]
+`;
