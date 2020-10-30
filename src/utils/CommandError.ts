@@ -349,6 +349,8 @@ export const convertToCommandError = (error: ServiceError): CommandError => {
       return new TimeoutError(error);
     case StatusCode.UNAVAILABLE:
       return new UnavailableError(error);
+    case StatusCode.UNAUTHENTICATED:
+      return new AccessDeniedError(error);
   }
 
   return new UnknownError(error);
