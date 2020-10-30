@@ -164,8 +164,11 @@ export class Cluster {
       return;
     }
 
+    const healthy = new Set();
     health: while (true) {
       for (let i = 0; i < this.count; i++) {
+        if (healthy.has(i)) continue;
+
         try {
           const { exitCode } = await exec(
             `esdb-node-${i}`,
@@ -176,10 +179,16 @@ export class Cluster {
           );
           // console.log(`--> esdb-node-${i}`, exitCode, out, err);
 
-          if (exitCode === 0) break health;
+          if (exitCode === 0) {
+            healthy.add(i);
+          }
         } catch (error) {
           // retry
           // console.log(`--> esdb-node-${i}`, error);
+        }
+
+        if (healthy.size === this.count) {
+          break health;
         }
       }
     }
