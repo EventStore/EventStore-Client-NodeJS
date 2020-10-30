@@ -19,7 +19,9 @@
     "generate:js": "grpc_tools_node_protoc ./protos/*.proto --proto_path=./protos --grpc_out=grpc_js:./generated --js_out=import_style=commonjs,binary:./generated --ts_out=generate_package_definition:./generated",
     "clean": "run-s clean:*",
     "clean:generated": "shx rm -rf ./generated",
-    "clean:dist": "shx rm -rf ./dist"
+    "clean:dist": "shx rm -rf ./dist",
+    "clean:test-instances": "shx rm -rf ./src/__test__/utils/instances",
+    "prepublishOnly": "run-s clean build test"
   },
   "files": [
     "dist/",
