@@ -293,6 +293,10 @@ export class EventStoreConnection implements ESDBConnection {
       builder.insecure();
     }
 
+    if (options.defaultCredentials) {
+      builder.defaultCredentials(options.defaultCredentials);
+    }
+
     if (options.dnsDiscover) {
       const { address } = options.hosts[0];
 

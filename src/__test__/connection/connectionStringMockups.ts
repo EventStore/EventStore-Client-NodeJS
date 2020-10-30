@@ -54,7 +54,7 @@ export const valid: Array<[
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -77,7 +77,7 @@ export const valid: Array<[
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -100,7 +100,7 @@ export const valid: Array<[
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -123,7 +123,7 @@ export const valid: Array<[
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -146,7 +146,7 @@ export const valid: Array<[
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -250,7 +250,7 @@ export const valid: Array<[
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -354,7 +354,7 @@ export const valid: Array<[
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
@@ -377,7 +377,7 @@ export const valid: Array<[
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "my:great@username",
+        username: "my:great@username",
         password: "UyeXx8$^PsOo4jG88FlCauR1Coz25q",
       },
       hosts: [
@@ -400,7 +400,7 @@ export const valid: Array<[
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
       defaultCredentials: {
-        login: "user",
+        username: "user",
         password: "pass",
       },
       hosts: [
