@@ -5,6 +5,7 @@ import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class DisableProjection extends Command {
   private _name: string;
@@ -47,13 +48,13 @@ export class DisableProjection extends Command {
     debug.command("DisableProjection: %c", this);
     debug.command_grpc("DisableProjection: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       ProjectionsClient,
       "DisableProjection"
     );
 
     return new Promise<void>((resolve, reject) => {
-      client.disable(req, this.metadata, (error) => {
+      client.disable(req, this.metadata(connection), (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();
       });

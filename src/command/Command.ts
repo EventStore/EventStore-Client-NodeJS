@@ -1,39 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { Metadata } from "@grpc/grpc-js";
-
-interface Credentials {
-  username: string;
-  password: string;
-}
+import { DEFAULT_CREDENTIALS } from "../symbols";
+import { Credentials, ESDBConnection } from "../types";
 
 export class Command {
   private _credentials?: Credentials;
   private _requiresLeader?: boolean = false;
 
-  get metadata(): Metadata {
-    const metadata = new Metadata();
-
-    if (this._credentials) {
-      const auth = Buffer.from(
-        `${this._credentials.username}:${this._credentials.password}`
-      ).toString("base64");
-      metadata.add("authorization", `Basic ${auth}`);
-    }
-
-    if (this._requiresLeader) {
-      metadata.add("requires-leader", "true");
-    }
-
-    return metadata;
-  }
-
   /**
    * Executes this command as an authenticated user.
-   * @param username
-   * @param password
+   * @param credentials
    */
-  authenticated(username: string, password: string) {
+  authenticated({ username, password }: Credentials) {
     this._credentials = { username, password };
     return this;
   }
@@ -46,4 +25,22 @@ export class Command {
     this._requiresLeader = requiresLeader;
     return this;
   }
+
+  protected metadata = (connection: ESDBConnection): Metadata => {
+    const metadata = new Metadata();
+    const credentials = this._credentials ?? connection[DEFAULT_CREDENTIALS]();
+
+    if (credentials) {
+      const auth = Buffer.from(
+        `${credentials.username}:${credentials.password}`
+      ).toString("base64");
+      metadata.add("authorization", `Basic ${auth}`);
+    }
+
+    if (this._requiresLeader) {
+      metadata.add("requires-leader", "true");
+    }
+
+    return metadata;
+  };
 }

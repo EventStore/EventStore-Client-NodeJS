@@ -6,6 +6,7 @@ import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class UpdateProjection extends Command {
   private _name: string;
@@ -55,13 +56,13 @@ export class UpdateProjection extends Command {
     debug.command("UpdateProjection: %c", this);
     debug.command_grpc("UpdateProjection: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       ProjectionsClient,
       "UpdateProjection"
     );
 
     return new Promise<void>((resolve, reject) => {
-      client.update(req, this.metadata, (error) => {
+      client.update(req, this.metadata(connection), (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();
       });

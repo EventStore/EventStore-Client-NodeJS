@@ -10,6 +10,7 @@ import { Command } from "../Command";
 import { debug } from "../../utils/debug";
 import { convertToCommandError } from "../../utils/CommandError";
 import { convertGrpcProjectionDetails } from "../../utils/convertGrpcProjectionDetails";
+import { CLIENT } from "../../symbols";
 
 export class GetProjectionStatistics extends Command {
   private _name: string;
@@ -30,12 +31,12 @@ export class GetProjectionStatistics extends Command {
     debug.command("GetProjectionStatistics: %c", this);
     debug.command_grpc("GetProjectionStatistics: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       ProjectionsClient,
       "GetProjectionStatistics"
     );
 
-    const stream = client.statistics(req, this.metadata);
+    const stream = client.statistics(req, this.metadata(connection));
 
     return new Promise((resolve, reject) => {
       let projectionDetail: ProjectionDetails;

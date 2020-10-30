@@ -12,6 +12,7 @@ import { Command } from "../Command";
 import { handleBatchRead } from "../../utils/handleBatchRead";
 import { convertGrpcEvent } from "../../utils/convertGrpcEvent";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class ReadEventsFromStream extends Command {
   private _stream: string;
@@ -156,11 +157,11 @@ export class ReadEventsFromStream extends Command {
     debug.command("ReadEventsFromStream: %c", this);
     debug.command_grpc("ReadEventsFromStream: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       StreamsClient,
       "ReadEventsFromStream"
     );
-    const stream = client.read(req, this.metadata);
+    const stream = client.read(req, this.metadata(connection));
     return handleBatchRead(stream, convertGrpcEvent);
   }
 }
