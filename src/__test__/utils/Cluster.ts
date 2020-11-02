@@ -220,21 +220,24 @@ export class Cluster {
     await this.cleanUp();
   };
 
-  public openInBrowser = async (): Promise<void> => {
+  public openInBrowser = async (launch = true): Promise<void> => {
+    this.inspected = true;
     const url = `http${this.insecure ? "" : "s"}://${this.uri}`;
 
-    console.log(`Opening ui: ${url}`);
+    if (launch) {
+      console.log(`Opening ui: ${url}`);
 
-    const start =
-      process.platform == "darwin"
-        ? "open"
-        : process.platform == "win32"
-        ? "start"
-        : "xdg-open";
+      const start =
+        process.platform == "darwin"
+          ? "open"
+          : process.platform == "win32"
+          ? "start"
+          : "xdg-open";
 
-    await CPExec(start + " " + url);
-
-    this.inspected = true;
+      await CPExec(start + " " + url);
+    } else {
+      console.log(`ui available at: ${url}`);
+    }
   };
 
   private initialize = async (): Promise<void> => {
