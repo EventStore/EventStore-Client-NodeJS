@@ -9,6 +9,7 @@ describe("restartSubsystem", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -19,7 +20,7 @@ describe("restartSubsystem", () => {
 
   test("Doesnt error", async () => {
     await expect(
-      restartSubsystem().authenticated("admin", "changeit").execute(connection)
+      restartSubsystem().execute(connection)
     ).resolves.toBeUndefined();
   });
 });

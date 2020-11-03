@@ -16,6 +16,7 @@ describe("updatePersistentSubscription", () => {
     await node.up();
 
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -29,13 +30,11 @@ describe("updatePersistentSubscription", () => {
     const GROUP_NAME = "from_start_test_group_name";
 
     await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-      .authenticated("admin", "changeit")
       .fromStart()
       .execute(connection);
 
     await expect(
       updatePersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .authenticated("admin", "changeit")
         .consumerStrategy(PINNED)
         .execute(connection)
     ).resolves.toBeUndefined();

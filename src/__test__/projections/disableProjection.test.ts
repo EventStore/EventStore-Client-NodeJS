@@ -30,6 +30,7 @@ describe("disableProjection", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -42,25 +43,25 @@ describe("disableProjection", () => {
     test("write a checkpoint", async () => {
       const PROJECTION_NAME = "projection_to_disable_with_checkpoint";
 
-      await createContinuousProjection(PROJECTION_NAME, projection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(PROJECTION_NAME, projection).execute(
+        connection
+      );
 
-      const beforeDetails = await getProjectionStatistics(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const beforeDetails = await getProjectionStatistics(
+        PROJECTION_NAME
+      ).execute(connection);
 
       expect(beforeDetails).toBeDefined();
       expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
       await disableProjection(PROJECTION_NAME)
         .writeCheckpoint()
-        .authenticated("admin", "changeit")
+
         .execute(connection);
 
-      const afterDetails = await getProjectionStatistics(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const afterDetails = await getProjectionStatistics(
+        PROJECTION_NAME
+      ).execute(connection);
 
       expect(afterDetails).toBeDefined();
       expect(afterDetails.projectionStatus).toBe(ABORTED);
@@ -69,25 +70,25 @@ describe("disableProjection", () => {
     test("do not write a checkpoint", async () => {
       const PROJECTION_NAME = "projection_to_disable_without_checkpoint";
 
-      await createContinuousProjection(PROJECTION_NAME, projection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(PROJECTION_NAME, projection).execute(
+        connection
+      );
 
-      const beforeDetails = await getProjectionStatistics(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const beforeDetails = await getProjectionStatistics(
+        PROJECTION_NAME
+      ).execute(connection);
 
       expect(beforeDetails).toBeDefined();
       expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
       await disableProjection(PROJECTION_NAME)
         .doNotWriteCheckpoint()
-        .authenticated("admin", "changeit")
+
         .execute(connection);
 
-      const afterDetails = await getProjectionStatistics(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const afterDetails = await getProjectionStatistics(
+        PROJECTION_NAME
+      ).execute(connection);
 
       expect(afterDetails).toBeDefined();
       expect(afterDetails.projectionStatus).toBe(STOPPED);
@@ -99,9 +100,7 @@ describe("disableProjection", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        disableProjection(PROJECTION_NAME)
-          .authenticated("admin", "changeit")
-          .execute(connection)
+        disableProjection(PROJECTION_NAME).execute(connection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

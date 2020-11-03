@@ -38,25 +38,24 @@ describe("list projections", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
     for (const name of continuousProjections) {
-      await createContinuousProjection(name, basicProjection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(name, basicProjection).execute(
+        connection
+      );
     }
 
     for (const _ of oneTimeProjections) {
-      await createOneTimeProjection(basicProjection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createOneTimeProjection(basicProjection).execute(connection);
     }
 
     for (const name of transientProjections) {
-      await createTransientProjection(name, basicProjection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createTransientProjection(name, basicProjection).execute(
+        connection
+      );
     }
   });
 
@@ -66,9 +65,7 @@ describe("list projections", () => {
 
   describe("lists projections", () => {
     test("listContinuousProjections", async () => {
-      const projections = await listContinuousProjections()
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const projections = await listContinuousProjections().execute(connection);
 
       // includes system projections
       expect(projections.length).toBeGreaterThan(continuousProjections.length);
@@ -83,9 +80,7 @@ describe("list projections", () => {
     });
 
     test("listOneTimeProjections", async () => {
-      const projections = await listOneTimeProjections()
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const projections = await listOneTimeProjections().execute(connection);
 
       expect(projections).toHaveLength(oneTimeProjections.length);
 
@@ -96,9 +91,7 @@ describe("list projections", () => {
     });
 
     test("listTransientProjections", async () => {
-      const projections = await listTransientProjections()
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const projections = await listTransientProjections().execute(connection);
 
       expect(projections).toHaveLength(transientProjections.length);
 

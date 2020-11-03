@@ -14,6 +14,7 @@ import {
 import { Command } from "../Command";
 import { TwoWaySubscription } from "../../utils/TwoWaySubscription";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class ConnectToPersistentSubscription extends Command {
   private _streamName: string;
@@ -92,11 +93,11 @@ export class ConnectToPersistentSubscription extends Command {
     debug.command("ConnectToPersistentSubscription: %c", this);
     debug.command_grpc("ConnectToPersistentSubscription: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       PersistentSubscriptionsClient,
       "ConnectToPersistentSubscription"
     );
-    const stream = client.read(this.metadata, {
+    const stream = client.read(this.metadata(connection), {
       deadline: Infinity,
     });
     stream.write(req);

@@ -13,6 +13,7 @@ describe("createContinuousProjection", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -37,7 +38,6 @@ describe("createContinuousProjection", () => {
         `
       )
         .trackEmittedStreams()
-        .authenticated("admin", "changeit")
         .execute(connection)
     ).resolves.toBeUndefined();
   });
@@ -57,7 +57,6 @@ describe("createContinuousProjection", () => {
         `
       )
         .doNotTrackEmittedStreams()
-        .authenticated("admin", "changeit")
         .execute(connection)
     ).resolves.toBeUndefined();
   });

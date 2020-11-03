@@ -5,8 +5,8 @@ import {
   EventStoreConnection,
   createContinuousProjection,
   UnknownError,
+  updateProjection,
 } from "../..";
-import { updateProjection } from "../../command";
 
 describe("resetProjection", () => {
   const node = createTestNode();
@@ -26,6 +26,7 @@ describe("resetProjection", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -49,25 +50,23 @@ describe("resetProjection", () => {
           });
       `;
 
-      await createContinuousProjection(PROJECTION_NAME, projection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(PROJECTION_NAME, projection).execute(
+        connection
+      );
 
-      await updateProjection(PROJECTION_NAME, after)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await updateProjection(PROJECTION_NAME, after).execute(connection);
     });
 
     test("track Emitted Streams", async () => {
       const PROJECTION_NAME = "projection_to_update_tracking";
 
-      await createContinuousProjection(PROJECTION_NAME, projection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(PROJECTION_NAME, projection).execute(
+        connection
+      );
 
       await updateProjection(PROJECTION_NAME, projection)
         .trackEmittedStreams()
-        .authenticated("admin", "changeit")
+
         .execute(connection);
     });
   });
@@ -77,9 +76,7 @@ describe("resetProjection", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        updateProjection(PROJECTION_NAME, projection)
-          .authenticated("admin", "changeit")
-          .execute(connection)
+        updateProjection(PROJECTION_NAME, projection).execute(connection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

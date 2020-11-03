@@ -20,6 +20,7 @@ import { Filter } from "../../utils/Filter";
 import { OneWaySubscription } from "../../utils/OneWaySubscription";
 import { convertAllStreamGrpcEvent } from "../../utils/convertGrpcEvent";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class SubscribeToAll extends Command {
   private _position: ReadPosition;
@@ -183,8 +184,8 @@ export class SubscribeToAll extends Command {
     debug.command("SubscribeToAll: %c", this);
     debug.command_grpc("SubscribeToAll: %g", req);
 
-    const client = await connection._client(StreamsClient, "SubscribeToAll");
-    const stream = client.read(req, this.metadata, callOptions);
+    const client = await connection[CLIENT](StreamsClient, "SubscribeToAll");
+    const stream = client.read(req, this.metadata(connection), callOptions);
 
     return new OneWaySubscription(
       stream,

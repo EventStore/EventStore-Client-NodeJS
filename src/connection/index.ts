@@ -6,17 +6,20 @@ import {
   ClientOptions,
   credentials as grpcCredentials,
 } from "@grpc/grpc-js";
-import { discoverEndpoint } from "./discovery";
+
 import {
   NodePreference,
   ESDBConnection,
   ClientConstructor,
   EndPoint,
+  Credentials,
+  VerifyOptions,
 } from "../types";
 import { debug } from "../utils/debug";
-import { parseConnectionString } from "./parseConnectionString";
+import { CLIENT, DEFAULT_CREDENTIALS } from "../symbols";
 
-export type VerifyOptions = Parameters<typeof grpcCredentials.createSsl>[3];
+import { discoverEndpoint } from "./discovery";
+import { parseConnectionString } from "./parseConnectionString";
 
 /**
  * Helps constructing an EventStoreDB connection.
@@ -27,6 +30,19 @@ export class EventStoreConnectionBuilder {
   private _privateKey?: Buffer;
   private _certChain?: Buffer;
   private _verifyOptions?: VerifyOptions;
+  private _defaultCredentials?: Credentials;
+
+  /**
+   * Sets default credentials to be used for each command.
+   * @param credentials
+   */
+  public defaultCredentials({
+    username,
+    password,
+  }: Credentials): EventStoreConnectionBuilder {
+    this._defaultCredentials = { username, password };
+    return this;
+  }
 
   /**
    * Use an insecure connection to the server. We do not advise using this mode while executing
@@ -119,7 +135,8 @@ export class EventStoreConnectionBuilder {
       {
         endpoint: uri,
       },
-      this.connectionCredentials()
+      this.channelCredentialSettings(),
+      this._defaultCredentials
     );
   }
 
@@ -136,7 +153,8 @@ export class EventStoreConnectionBuilder {
         endpoints,
         nodePreference,
       },
-      this.connectionCredentials()
+      this.channelCredentialSettings(),
+      this._defaultCredentials
     );
   }
 
@@ -153,11 +171,12 @@ export class EventStoreConnectionBuilder {
         domain,
         nodePreference,
       },
-      this.connectionCredentials()
+      this.channelCredentialSettings(),
+      this._defaultCredentials
     );
   }
 
-  private connectionCredentials = (): ConnectionCredentials =>
+  private channelCredentialSettings = (): ChannelCredentialsSettings =>
     this._insecure
       ? { insecure: this._insecure }
       : {
@@ -185,7 +204,7 @@ export type ConnectionSettings =
       endpoint: EndPoint | string;
     };
 
-export type ConnectionCredentials =
+export type ChannelCredentialsSettings =
   | {
       insecure: true;
     }
@@ -198,7 +217,7 @@ export type ConnectionCredentials =
     };
 
 const createGRPCCredentials = (
-  settings: ConnectionCredentials
+  settings: ChannelCredentialsSettings
 ): ChannelCredentials => {
   debug.connection("Using credentials %O", settings);
 
@@ -221,18 +240,23 @@ const createGRPCCredentials = (
  * connection.
  */
 export class EventStoreConnection implements ESDBConnection {
-  private _settings: ConnectionSettings;
-  private _credentials: ChannelCredentials;
+  private _connectionSettings: ConnectionSettings;
+  private _channelCredentials: ChannelCredentials;
+  private _defaultCredentials?: Credentials;
 
   private _channel?: Channel;
   private _clients: Map<ClientConstructor<Client>, Client>;
 
   constructor(
     settings: ConnectionSettings,
-    credentials: ConnectionCredentials
+    channelCredentialsSettings: ChannelCredentialsSettings,
+    defaultCredentials?: Credentials
   ) {
-    this._settings = settings;
-    this._credentials = createGRPCCredentials(credentials);
+    this._connectionSettings = settings;
+    this._channelCredentials = createGRPCCredentials(
+      channelCredentialsSettings
+    );
+    this._defaultCredentials = defaultCredentials;
     this._clients = new Map();
   }
 
@@ -269,6 +293,10 @@ export class EventStoreConnection implements ESDBConnection {
       builder.insecure();
     }
 
+    if (options.defaultCredentials) {
+      builder.defaultCredentials(options.defaultCredentials);
+    }
+
     if (options.dnsDiscover) {
       const { address } = options.hosts[0];
 
@@ -302,9 +330,16 @@ export class EventStoreConnection implements ESDBConnection {
   };
 
   /**
+   * internal access to default credentials
+   */
+  [DEFAULT_CREDENTIALS] = (): Credentials | undefined => {
+    return this._defaultCredentials;
+  };
+
+  /**
    * internal access to grpc client.
    */
-  _client = async <T extends Client>(
+  [CLIENT] = async <T extends Client>(
     Client: ClientConstructor<T>,
     debugName: string
   ): Promise<T> => {
@@ -339,25 +374,27 @@ export class EventStoreConnection implements ESDBConnection {
     const uri = await this.resolveUri();
 
     debug.connection(
-      `Connecting to http${this._credentials._isSecure() ? "" : "s"}://%s`,
+      `Connecting to http${
+        this._channelCredentials._isSecure() ? "" : "s"
+      }://%s`,
       uri
     );
 
-    this._channel = new Channel(uri, this._credentials, {});
+    this._channel = new Channel(uri, this._channelCredentials, {});
 
     return this._channel;
   };
 
   private resolveUri = async (): Promise<string> => {
-    if ("endpoint" in this._settings) {
-      return typeof this._settings.endpoint === "string"
-        ? this._settings.endpoint
-        : `${this._settings.endpoint.address}:${this._settings.endpoint.port}`;
+    if ("endpoint" in this._connectionSettings) {
+      return typeof this._connectionSettings.endpoint === "string"
+        ? this._connectionSettings.endpoint
+        : `${this._connectionSettings.endpoint.address}:${this._connectionSettings.endpoint.port}`;
     }
 
     const { address, port } = await discoverEndpoint(
-      this._settings,
-      this._credentials
+      this._connectionSettings,
+      this._channelCredentials
     );
 
     return `${address}:${port}`;

@@ -14,6 +14,7 @@ import {
   WrongExpectedVersionError,
 } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class WriteEventsToStream extends Command {
   private readonly _stream: string;
@@ -84,13 +85,13 @@ export class WriteEventsToStream extends Command {
     debug.command("WriteEventsToStream: %c", this);
     debug.command_grpc("WriteEventsToStream: %g", header);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       StreamsClient,
       "WriteEventsToStream"
     );
 
     return new Promise<WriteResult>((resolve, reject) => {
-      const sink = client.append(this.metadata, (error, resp) => {
+      const sink = client.append(this.metadata(connection), (error, resp) => {
         if (error != null) {
           return reject(convertToCommandError(error));
         }

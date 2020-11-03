@@ -6,6 +6,7 @@ import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class DeletePersistentSubscription extends Command {
   private _stream: string;
@@ -33,13 +34,13 @@ export class DeletePersistentSubscription extends Command {
     debug.command("DeletePersistentSubscription: %c", this);
     debug.command_grpc("DeletePersistentSubscription: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       PersistentSubscriptionsClient,
       "DeletePersistentSubscription"
     );
 
     return new Promise<void>((resolve, reject) => {
-      client.delete(req, this.metadata, (error) => {
+      client.delete(req, this.metadata(connection), (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();
       });

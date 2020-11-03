@@ -13,6 +13,7 @@ describe("createOneTimeProjection", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
   });
@@ -35,9 +36,7 @@ describe("createOneTimeProjection", () => {
             }
           });
       `
-      )
-        .authenticated("admin", "changeit")
-        .execute(connection)
+      ).execute(connection)
     ).resolves.toBeUndefined();
   });
 });

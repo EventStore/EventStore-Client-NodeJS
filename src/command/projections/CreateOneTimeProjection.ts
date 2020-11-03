@@ -6,6 +6,7 @@ import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class CreateOneTimeProjection extends Command {
   private _query: string;
@@ -30,13 +31,13 @@ export class CreateOneTimeProjection extends Command {
     debug.command("CreateOneTimeProjection: %c", this);
     debug.command_grpc("CreateOneTimeProjection: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       ProjectionsClient,
       "CreateOneTimeProjection"
     );
 
     return new Promise<void>((resolve, reject) => {
-      client.create(req, this.metadata, (error) => {
+      client.create(req, this.metadata(connection), (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();
       });

@@ -5,9 +5,10 @@ import {
   writeEventsToStream,
   EventStoreConnection,
   EventData,
+  readAllEvents,
 } from "../..";
 
-describe("insecure", () => {
+describe("connectionString", () => {
   const node = createInsecureTestNode();
   const cluster = createInsecureTestCluster();
 
@@ -61,14 +62,24 @@ describe("insecure", () => {
 
         expect(readResult).toBeDefined();
       });
+
+      test("default credentials", async () => {
+        const connection = EventStoreConnection.connectionString`esdb://admin:changeit@${node.uri}?tls=false`;
+
+        await expect(
+          readAllEvents().fromStart().execute(connection)
+        ).resolves.toBeDefined();
+      });
     });
 
-    describe("singleNode", () => {
+    describe("cluster", () => {
       test("template string", async () => {
         const STREAM_NAME = "template_string_stream";
-        const connection = EventStoreConnection.connectionString`esdb://${cluster.endpoints
+        const gossipEndpoints = cluster.endpoints
           .map(({ address, port }) => `${address}:${port}`)
-          .join(",")}?tls=false&nodePreference=leader`;
+          .join(",");
+
+        const connection = EventStoreConnection.connectionString`esdb://${gossipEndpoints}?tls=false&nodePreference=leader`;
 
         const writeResult = await writeEventsToStream(STREAM_NAME)
           .send(event.build())
@@ -85,9 +96,10 @@ describe("insecure", () => {
 
       test("string argument", async () => {
         const STREAM_NAME = "string_stream";
-        const connectionString = `esdb://${cluster.endpoints
+        const gossipEndpoints = cluster.endpoints
           .map(({ address, port }) => `${address}:${port}`)
-          .join(",")}?tls=false&nodePreference=leader`;
+          .join(",");
+        const connectionString = `esdb://${gossipEndpoints}?tls=false&nodePreference=leader`;
 
         const connection = EventStoreConnection.connectionString(
           connectionString
@@ -104,6 +116,17 @@ describe("insecure", () => {
         );
 
         expect(readResult).toBeDefined();
+      });
+
+      test("default credentials", async () => {
+        const gossipEndpoints = cluster.endpoints
+          .map(({ address, port }) => `${address}:${port}`)
+          .join(",");
+        const connection = EventStoreConnection.connectionString`esdb://admin:changeit@${gossipEndpoints}?tls=false&nodePreference=leader`;
+
+        await expect(
+          readAllEvents().fromStart().execute(connection)
+        ).resolves.toBeDefined();
       });
     });
   });

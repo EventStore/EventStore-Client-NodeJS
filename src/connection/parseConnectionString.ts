@@ -1,4 +1,4 @@
-import { EndPoint, NodePreference } from "../types";
+import { Credentials, EndPoint, NodePreference } from "../types";
 import { debug } from "../utils/debug";
 
 const notCurrentlySupported = [
@@ -7,13 +7,7 @@ const notCurrentlySupported = [
   "gossipTimeout",
   "tlsVerifyCert",
   "throwOnAppendFailure",
-  "defaultCredentials",
 ];
-
-interface Credentials {
-  login: string;
-  password: string;
-}
 
 export interface ConnectionOptions {
   dnsDiscover: boolean;
@@ -100,19 +94,14 @@ const parseCredentials = (
 
   if (match.groups?.credentials) {
     nextPosition += match[0].length;
-    const [login, password] = match.groups.credentials.split(":");
-
-    debug.connection(
-      `default credentials are not currently supported by this client, and will have no effect.`
-    );
-
+    const [username, password] = match.groups.credentials.split(":");
     return parseHosts(
       connectionString,
       nextPosition,
       {
         ...options,
         defaultCredentials: {
-          login: decodeURIComponent(login),
+          username: decodeURIComponent(username),
           password: decodeURIComponent(password),
         },
       },

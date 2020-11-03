@@ -5,6 +5,7 @@ import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { debug } from "../../utils/debug";
 import { convertToCommandError } from "../../utils/CommandError";
+import { CLIENT } from "../../symbols";
 
 export class GetProjectionResult<S = unknown> extends Command {
   private _name: string;
@@ -38,13 +39,13 @@ export class GetProjectionResult<S = unknown> extends Command {
     debug.command("GetProjectionResult: %c", this);
     debug.command_grpc("GetProjectionResult: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       ProjectionsClient,
       "GetProjectionResult"
     );
 
     return new Promise<S>((resolve, reject) => {
-      client.result(req, this.metadata, (error, response) => {
+      client.result(req, this.metadata(connection), (error, response) => {
         if (error) return reject(convertToCommandError(error));
         return resolve(response.getResult()?.toJavaScript() as S);
       });

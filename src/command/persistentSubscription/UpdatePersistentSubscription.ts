@@ -6,6 +6,7 @@ import { ConsumerStrategy, ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class UpdatePersistentSubscription extends Command {
   private _stream: string;
@@ -240,13 +241,13 @@ export class UpdatePersistentSubscription extends Command {
     debug.command("UpdatePersistentSubscription: %c", this);
     debug.command_grpc("UpdatePersistentSubscription: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       PersistentSubscriptionsClient,
       "UpdatePersistentSubscription"
     );
 
     return new Promise<void>((resolve, reject) => {
-      client.update(req, this.metadata, (error) => {
+      client.update(req, this.metadata(connection), (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();
       });

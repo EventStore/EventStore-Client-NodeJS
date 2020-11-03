@@ -5,6 +5,7 @@ import { ESDBConnection } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class DeleteProjection extends Command {
   private _name: string;
@@ -85,13 +86,13 @@ export class DeleteProjection extends Command {
     debug.command("DeleteProjection: %c", this);
     debug.command_grpc("DeleteProjection: %g", req);
 
-    const client = await connection._client(
+    const client = await connection[CLIENT](
       ProjectionsClient,
       "DeleteProjection"
     );
 
     return new Promise<void>((resolve, reject) => {
-      client.delete(req, this.metadata, (error) => {
+      client.delete(req, this.metadata(connection), (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();
       });

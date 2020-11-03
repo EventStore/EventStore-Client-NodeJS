@@ -5,6 +5,7 @@ import { DeleteResult, ESDBConnection, ExpectedRevision } from "../../types";
 import { Command } from "../Command";
 import { convertToCommandError } from "../../utils/CommandError";
 import { debug } from "../../utils/debug";
+import { CLIENT } from "../../symbols";
 
 export class DeleteStream extends Command {
   private readonly _stream: string;
@@ -56,9 +57,9 @@ export class DeleteStream extends Command {
     debug.command("DeleteStream: %c", this);
     debug.command_grpc("DeleteStream: %g", req);
 
-    const client = await connection._client(StreamsClient, "DeleteStream");
+    const client = await connection[CLIENT](StreamsClient, "DeleteStream");
     return new Promise<DeleteResult>((resolve, reject) => {
-      client.delete(req, this.metadata, (error, resp) => {
+      client.delete(req, this.metadata(connection), (error, resp) => {
         if (error) {
           return reject(convertToCommandError(error));
         }

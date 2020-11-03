@@ -5,12 +5,13 @@ import {
   EventStoreConnection,
   createContinuousProjection,
   writeEventsToStream,
-  UnknownError,
+  enableProjection,
+  getProjectionStatistics,
   getProjectionResult,
+  UnknownError,
   EventData,
+  RUNNING,
 } from "../..";
-import { enableProjection, getProjectionStatistics } from "../../command";
-import { RUNNING } from "../../constants";
 
 describe("getProjectionResult", () => {
   const node = createTestNode();
@@ -19,12 +20,11 @@ describe("getProjectionResult", () => {
   beforeAll(async () => {
     await node.up();
     connection = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
       .sslRootCertificate(node.certPath)
       .singleNodeConnection(node.uri);
 
-    await enableProjection("$by_category")
-      .authenticated("admin", "changeit")
-      .execute(connection);
+    await enableProjection("$by_category").execute(connection);
   });
 
   afterAll(async () => {
@@ -50,9 +50,9 @@ describe("getProjectionResult", () => {
 
       const count = 12;
 
-      await createContinuousProjection(PROJECTION_NAME, projection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(PROJECTION_NAME, projection).execute(
+        connection
+      );
 
       await writeEventsToStream(STREAM_NAME)
         .send(...testEvents(count, EVENT_TYPE))
@@ -60,9 +60,9 @@ describe("getProjectionResult", () => {
 
       await delay(5000);
 
-      const state = await getProjectionResult<number>(PROJECTION_NAME)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const state = await getProjectionResult<number>(PROJECTION_NAME).execute(
+        connection
+      );
 
       expect(state).toBe(count);
     });
@@ -118,32 +118,29 @@ describe("getProjectionResult", () => {
         paritionProjection
       )
         .trackEmittedStreams()
-        .authenticated("admin", "changeit")
+
         .execute(connection);
 
       const partitionStats = await getProjectionStatistics(
         PARTITION_PROJECTION_NAME
-      )
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      ).execute(connection);
 
       expect(partitionStats.projectionStatus).toBe(RUNNING);
 
-      await createContinuousProjection(COUNTER_PROJECTION_NAME, countProjection)
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      await createContinuousProjection(
+        COUNTER_PROJECTION_NAME,
+        countProjection
+      ).execute(connection);
 
       const counterStats = await getProjectionStatistics(
         COUNTER_PROJECTION_NAME
-      )
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      ).execute(connection);
 
       expect(counterStats.projectionStatus).toBe(RUNNING);
 
-      const byCategoryStats = await getProjectionStatistics("$by_category")
-        .authenticated("admin", "changeit")
-        .execute(connection);
+      const byCategoryStats = await getProjectionStatistics(
+        "$by_category"
+      ).execute(connection);
 
       expect(byCategoryStats.projectionStatus).toBe(RUNNING);
 
@@ -164,7 +161,7 @@ describe("getProjectionResult", () => {
         COUNTER_PROJECTION_NAME
       )
         .fromPartition(`cat-${MR_WHISKERS}`)
-        .authenticated("admin", "changeit")
+
         .execute(connection);
 
       expect(result).toMatchObject({
@@ -179,9 +176,7 @@ describe("getProjectionResult", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        getProjectionResult(PROJECTION_NAME)
-          .authenticated("admin", "changeit")
-          .execute(connection)
+        getProjectionResult(PROJECTION_NAME).execute(connection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

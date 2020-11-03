@@ -3,6 +3,7 @@ import { Client, ChannelCredentials, ClientOptions } from "@grpc/grpc-js";
 import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
 import * as constants from "./constants";
+import { CLIENT, DEFAULT_CREDENTIALS } from "./symbols";
 export { VNodeState };
 
 /**
@@ -395,6 +396,8 @@ export type MemberInfo = {
   httpEndpoint?: EndPoint;
 };
 
+export type VerifyOptions = Parameters<typeof ChannelCredentials.createSsl>[3];
+
 export type ClientConstructor<T extends Client> = new (
   address: string,
   credentials: ChannelCredentials,
@@ -403,7 +406,8 @@ export type ClientConstructor<T extends Client> = new (
 
 export interface ESDBConnection {
   close(): Promise<void>;
-  _client<T extends Client>(
+  [DEFAULT_CREDENTIALS](): Credentials | undefined;
+  [CLIENT]<T extends Client>(
     c: ClientConstructor<T>,
     debugName: string
   ): Promise<T>;
@@ -422,6 +426,11 @@ export interface SubscriptionListeners<E, R> {
   [constants.CONFIRMATION_EVENT]: () => void;
   [constants.ERROR_EVENT]: (error: Error) => void;
   [constants.CLOSE_EVENT]: () => void;
+}
+
+export interface Credentials {
+  username: string;
+  password: string;
 }
 
 export type Listeners<E, R> = {
