@@ -122,7 +122,7 @@ const parseHosts = (
   const expected = "host";
   const match = connectionString
     .substring(position)
-    .match(/^(?:(?<host>[^$–_+!?*‘(),;?[\]{}|\\”%~#<>=&]+)[,/]?)/);
+    .match(/^(?:(?<host>[^$+!?*'(),;[\]{}|"%~#<>=&]+)[,/]?)/);
 
   if (!match && mustMatch) {
     throw new ParseError(connectionString, [position, nextPosition], expected);
