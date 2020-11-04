@@ -24,7 +24,11 @@ const nodeList = (count: number, ipStub: string) =>
     }))
   );
 
-const createCertGen = (internalIPs: ClusterLocation[], insecure: boolean) =>
+const createCertGen = (
+  internalIPs: ClusterLocation[],
+  domain: string,
+  insecure: boolean
+) =>
   insecure
     ? {}
     : {
@@ -35,7 +39,7 @@ const createCertGen = (internalIPs: ClusterLocation[], insecure: boolean) =>
     ${internalIPs
       .map(
         ({ ipv4_address }, i) =>
-          `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address}`
+          `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address} -dns-names ${domain}`
       )
       .join(" && ")}"`,
           user: "1000:1000",
@@ -123,7 +127,7 @@ export class Cluster {
     if (this.insecure) throw new Error("No Cert for insecure cluster");
     return this.path("./certs/ca/ca.crt");
   }
-  public domain = "127.0.0.1";
+  public domain = "client.bespin.dev";
   public get uri(): string {
     return `${this.domain}:${this.locations[0].port}`;
   }
@@ -255,7 +259,7 @@ export class Cluster {
           volumes: ["./certs:/tmp/certs"],
           network_mode: "none",
         },
-        ...createCertGen(this.locations, this.insecure),
+        ...createCertGen(this.locations, this.domain, this.insecure),
         ...createNodes(this.locations, this.domain, this.insecure),
       },
       networks: {
