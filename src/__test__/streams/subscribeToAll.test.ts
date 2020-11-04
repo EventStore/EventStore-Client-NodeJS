@@ -232,14 +232,25 @@ describe("subscribeToAll", () => {
     test("async iterator", async () => {
       const STREAM_NAME = "async_iter";
       const FINISH_TEST = "finish_async_iterator";
+      const MARKER_EVENT = "async_iter_marker";
       const doSomething = jest.fn();
       const doSomethingElse = jest.fn();
+
+      const markerEvent = EventData.json(MARKER_EVENT, {
+        message: "mark",
+      });
 
       const finishEvent = EventData.json(FINISH_TEST, {
         message: "lets wrap this up",
       });
 
-      const subscription = await subscribeToAll().fromEnd().execute(connection);
+      const writeResult = await writeEventsToStream(STREAM_NAME_B)
+        .send(markerEvent.build())
+        .execute(connection);
+
+      const subscription = await subscribeToAll()
+        .fromPosition(writeResult.position!)
+        .execute(connection);
 
       writeEventsToStream(STREAM_NAME)
         .send(...testEvents(8))
@@ -265,6 +276,15 @@ describe("subscribeToAll", () => {
     test("after the fact event listeners", async () => {
       const STREAM_NAME = "after_the_fact";
       const FINISH_TEST = "finish_after_the_fact";
+      const MARKER_EVENT = "after_the_fact_marker";
+
+      const markerEvent = EventData.json(MARKER_EVENT, {
+        message: "mark",
+      });
+
+      const finishEvent = EventData.json(FINISH_TEST, {
+        message: "lets wrap this up",
+      });
 
       const defer = new Defer();
 
@@ -272,7 +292,13 @@ describe("subscribeToAll", () => {
         .send(...testEvents(8))
         .execute(connection);
 
-      const subscription = await subscribeToAll().fromEnd().execute(connection);
+      const writeResult = await writeEventsToStream(STREAM_NAME)
+        .send(markerEvent.build())
+        .execute(connection);
+
+      const subscription = await subscribeToAll()
+        .fromPosition(writeResult.position!)
+        .execute(connection);
 
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();
@@ -294,10 +320,6 @@ describe("subscribeToAll", () => {
         .once("event", onceListener)
         .on("end", endListener)
         .off("event", offListener);
-
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
-      });
 
       await writeEventsToStream(STREAM_NAME)
         .send(...testEvents(5))
