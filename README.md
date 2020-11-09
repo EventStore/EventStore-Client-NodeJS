@@ -24,7 +24,7 @@ $ npm install --save @eventstore/db-client
 
 This client is compatible with version `20.6.1` upwards.
 
-Server setup instructions can be found here [EventStoreDB Docs], follow the docker setup for the simplest configuration.
+Server setup instructions can be found in the [Event Store Docs], follow the docker setup for the simplest configuration.
 
 ## Example
 
@@ -164,25 +164,25 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 
 ## Support
 
-Information on support can be found here: [EventStoreDB Support]
+Information on support can be found on our website: [Event Store Support]
 
 ## Documentation
 
-Documentation for EventStoreDB can be found here: [EventStoreDB Docs]
+Documentation for EventStoreDB can be found in [Event Store Docs]
 
 Bear in mind that this client is not yet properly documented. We are working hard on a new version of the documentation.
 
 ## Community
 
-We have a community discussion space at [EventStoreDB Discuss].
+We have a community discussion space at [Event Store Discuss].
 
 ## Contributing
 
 Development is done on the `master` branch. We attempt to do our best to ensure that the history remains clean and to do so, we generally ask contributors to squash their commits into a set or single logical commit.
 
-[eventstoredb support]: https://eventstore.com/support/
-[eventstoredb docs]: https://developers.eventstore.com/server/20.6/server/installation/
-[eventstoredb discuss]: https://discuss.eventstore.com/
+[event_store support]: https://eventstore.com/support/
+[event_store docs]: https://developers.eventstore.com/server/20.6/server/installation/
+[event_store discuss]: https://discuss.eventstore.com/
 [yarn]: https://yarnpkg.com/
 [jest]: https://jestjs.io/
 [docker]: https://www.docker.com/
