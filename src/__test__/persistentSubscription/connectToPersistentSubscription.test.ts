@@ -1,4 +1,10 @@
-import { createTestNode, Defer, delay, testEvents } from "../utils";
+import {
+  createTestNode,
+  Defer,
+  delay,
+  testEvents,
+  postEventViaHttpApi,
+} from "../utils";
 
 import {
   EventStoreConnection,
@@ -400,5 +406,55 @@ describe("connectToPersistentSubscription", () => {
       expect(eventListenerOne).toBeCalledTimes(6);
       expect(eventListenerTwo).toBeCalledTimes(6);
     });
+  });
+
+  test("malformed events", async () => {
+    const STREAM_NAME = "malformed_json";
+    const GROUP_NAME = "malformed_json_group_name";
+    const doSomething = jest.fn();
+
+    await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
+      .fromStart()
+      .execute(connection);
+
+    await writeEventsToStream(STREAM_NAME)
+      .send(...testEvents(3, "test 1"))
+      .execute(connection);
+
+    const malformedData = "****";
+
+    await postEventViaHttpApi(node, {
+      contentType: "application/json",
+      eventType: "malformed-event",
+      stream: STREAM_NAME,
+      data: malformedData,
+    });
+
+    await writeEventsToStream(STREAM_NAME)
+      .send(...testEvents(3, "test 2"))
+      .send(finishEvent.build())
+      .execute(connection);
+
+    const subscription = await connectToPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME
+    ).execute(connection);
+
+    for await (const { event } of subscription) {
+      if (!event) continue;
+
+      doSomething(event);
+      subscription.ack(event.id);
+
+      if (event.eventType === "malformed-event") {
+        expect(event.data).toBe(malformedData);
+      }
+
+      if (event?.eventType === "finish-test") {
+        break;
+      }
+    }
+
+    expect(doSomething).toBeCalledTimes(8);
   });
 });

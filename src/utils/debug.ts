@@ -20,10 +20,11 @@ const base = createDebug("esdb");
 const command = base.extend("command");
 const command_grpc = command.extend("grpc");
 const connection = base.extend("connection");
+const events = base.extend("events");
 
 export const debug = {
-  base,
   command,
   command_grpc,
   connection,
+  events,
 };

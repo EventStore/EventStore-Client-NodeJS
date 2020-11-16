@@ -85,7 +85,7 @@ describe("readEventsFromStream", () => {
         expect(event.isJson).toBe(false);
         expect(event.eventType).toBe("binary-test");
 
-        expect(Buffer.from(event.data).toString()).toBe("hello: 1");
+        expect(Buffer.from(event.data as string).toString()).toBe("hello: 1");
       });
     });
 

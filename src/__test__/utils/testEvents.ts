@@ -1,5 +1,10 @@
 import { EventData } from "../..";
 
+export interface TestEventData {
+  message: "test";
+  index: number;
+}
+
 export const testEvents = (count = 4, eventType = "test"): EventData[] =>
   Array.from({ length: count }, (_, i) =>
     EventData.json(eventType, {
