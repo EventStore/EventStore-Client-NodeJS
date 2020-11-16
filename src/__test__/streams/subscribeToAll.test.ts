@@ -308,10 +308,9 @@ describe("subscribeToAll", () => {
           doSomethingElse(event);
         }
 
-        if (event.event?.eventType === 'test') {
-          console.log(event)
+        if (event.event?.eventType === "test") {
           // example of awaiting an async function when iterating over the async iterator
-          await delay(10)
+          await delay(10);
         }
 
         if (event.event?.eventType === FINISH_TEST) {

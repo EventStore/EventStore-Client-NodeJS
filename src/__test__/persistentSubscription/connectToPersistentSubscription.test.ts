@@ -1,4 +1,4 @@
-import { createTestNode, Defer, testEvents } from "../utils";
+import { createTestNode, Defer, delay, testEvents } from "../utils";
 
 import {
   EventStoreConnection,
@@ -314,6 +314,45 @@ describe("connectToPersistentSubscription", () => {
             // finish test event
             1
         );
+      });
+
+      test("ack with async function", async () => {
+        const STREAM_NAME = "async_iter_ack_fun";
+        const GROUP_NAME = "async_iter_ack_fun_group_name";
+        const doSomething = jest.fn();
+
+        await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
+          .fromStart()
+          .execute(connection);
+
+        await writeEventsToStream(STREAM_NAME)
+          .send(...testEvents(99))
+          .send(finishEvent.build())
+          .execute(connection);
+
+        const subscription = await connectToPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME
+        ).execute(connection);
+
+        for await (const { event } of subscription) {
+          if (!event) continue;
+
+          if (event?.eventType === "test") {
+            // example of awaiting an async function when iterating over the async iterator
+            await delay(10);
+          }
+
+          doSomething(event);
+
+          subscription.ack(event.id);
+
+          if (event?.eventType === "finish-test") {
+            break;
+          }
+        }
+
+        expect(doSomething).toBeCalledTimes(100);
       });
     });
 
