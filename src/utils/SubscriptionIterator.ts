@@ -1,6 +1,7 @@
 import { Subscription } from "../types";
 
 export class SubscriptionIterator<E, R> implements AsyncIterator<E> {
+  #maxQueueLength = 10;
   #queue: Array<E> = [];
   #subscription: Subscription<E, R>;
   #running = true;
@@ -29,7 +30,12 @@ export class SubscriptionIterator<E, R> implements AsyncIterator<E> {
 
   #nextResult = async (): Promise<IteratorResult<E, never>> => {
     if (this.#queue.length) {
-      return { value: this.#queue.pop()! };
+      const event = this.#queue.pop()!;
+
+      if (this.#queue.length < this.#maxQueueLength) {
+        this.#subscription.resume();
+      }
+      return { value: event };
     }
 
     if (!this.#running) {
@@ -49,6 +55,10 @@ export class SubscriptionIterator<E, R> implements AsyncIterator<E> {
 
   #queueEvent = (e: E): void => {
     this.#queue.unshift(e);
+
+    if (this.#queue.length >= this.#maxQueueLength) {
+      this.#subscription.pause();
+    }
   };
 
   #onEnd = (): void => {

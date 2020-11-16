@@ -90,6 +90,18 @@ export class OneWaySubscription<E>
     this._stream.cancel();
   };
 
+  public get isPaused(): boolean {
+    return this._stream.isPaused();
+  }
+
+  public pause = (): void => {
+    this._stream.pause();
+  };
+
+  public resume = (): void => {
+    this._stream.resume();
+  };
+
   /** Iterate the events asynchronously */
   public [Symbol.asyncIterator] = (): AsyncIterator<E> => {
     return new SubscriptionIterator(this);

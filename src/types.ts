@@ -455,5 +455,9 @@ export interface Subscription<E, R> {
 
   unsubscribe: () => void;
 
+  isPaused: boolean;
+  pause: () => void;
+  resume: () => void;
+
   [Symbol.asyncIterator](): AsyncIterator<E>;
 }

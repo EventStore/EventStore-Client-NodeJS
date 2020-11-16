@@ -297,9 +297,11 @@ describe("subscribeToAll", () => {
         .execute(connection);
 
       writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(8))
+        .send(...testEvents(999))
         .send(finishEvent.build())
         .execute(connection);
+
+      const readEvents = new Set<number>();
 
       for await (const event of subscription) {
         doSomething(event);
@@ -311,6 +313,10 @@ describe("subscribeToAll", () => {
         if (event.event?.eventType === "test") {
           // example of awaiting an async function when iterating over the async iterator
           await delay(10);
+
+          if (event.event.isJson) {
+            readEvents.add(event.event.data.index as number);
+          }
         }
 
         if (event.event?.eventType === FINISH_TEST) {
@@ -319,7 +325,9 @@ describe("subscribeToAll", () => {
       }
 
       expect(doSomething).toBeCalled();
-      expect(doSomethingElse).toBeCalledTimes(9);
+      // unique numbers from 0 -> 998
+      expect(readEvents.size).toBe(999);
+      expect(doSomethingElse).toBeCalledTimes(1000);
     });
 
     test("after the fact event listeners", async () => {
