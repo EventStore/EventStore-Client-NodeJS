@@ -180,9 +180,9 @@ We have a community discussion space at [Event Store Discuss].
 
 Development is done on the `master` branch. We attempt to do our best to ensure that the history remains clean and to do so, we generally ask contributors to squash their commits into a set or single logical commit.
 
-[event_store support]: https://eventstore.com/support/
-[event_store docs]: https://developers.eventstore.com/server/20.6/server/installation/
-[event_store discuss]: https://discuss.eventstore.com/
+[event store support]: https://eventstore.com/support/
+[event store docs]: https://developers.eventstore.com/server/20.6/server/installation/
+[event store discuss]: https://discuss.eventstore.com/
 [yarn]: https://yarnpkg.com/
 [jest]: https://jestjs.io/
 [docker]: https://www.docker.com/
