@@ -16,6 +16,7 @@ import {
 } from "../types";
 import { convertGrpcEvent } from "./convertGrpcEvent";
 import { convertToCommandError } from "./CommandError";
+import { SubscriptionIterator } from "./SubscriptionIterator";
 
 export class TwoWaySubscription
   implements Subscription<ResolvedEvent, PersistentReport> {
@@ -27,8 +28,6 @@ export class TwoWaySubscription
     close: new Set(),
   };
   private _stream: ClientDuplexStream<ReadReq, ReadResp>;
-  private _running = true;
-  private _resolve?: (event: ResolvedEvent | null) => void;
 
   constructor(
     stream: ClientDuplexStream<ReadReq, ReadResp>,
@@ -149,42 +148,10 @@ export class TwoWaySubscription
   public unsubscribe = (): void => {
     this._stream.end();
     this._stream.cancel();
-    this._running = false;
-
-    if (this._resolve) this._resolve(null);
-  };
-
-  public async return(): Promise<IteratorReturnResult<never>> {
-    this.unsubscribe();
-    return { done: true } as IteratorReturnResult<never>;
-  }
-
-  public next = (): Promise<IteratorResult<ResolvedEvent, never>> => {
-    return new Promise<IteratorResult<ResolvedEvent, never>>(
-      (resolve, reject) => {
-        if (this._resolve) {
-          return reject(
-            new Error(
-              "Cannot iterate to the next while previous is still active."
-            )
-          );
-        }
-        if (!this._running) {
-          return resolve({ done: true } as IteratorReturnResult<never>);
-        }
-
-        this._resolve = (e) => {
-          resolve({ value: e } as IteratorYieldResult<ResolvedEvent>);
-          delete this._resolve;
-        };
-
-        this.once("event", this._resolve);
-      }
-    );
   };
 
   /** Iterate the events asynchronously */
-  public [Symbol.asyncIterator] = (): TwoWaySubscription => {
-    return this;
+  public [Symbol.asyncIterator] = (): AsyncIterator<ResolvedEvent> => {
+    return new SubscriptionIterator(this);
   };
 }

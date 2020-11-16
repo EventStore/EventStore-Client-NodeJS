@@ -437,7 +437,7 @@ export type Listeners<E, R> = {
   [P in keyof SubscriptionListeners<E, R>]: Set<SubscriptionListeners<E, R>[P]>;
 };
 
-export interface Subscription<E, R> extends AsyncIterable<E> {
+export interface Subscription<E, R> {
   on<Name extends SubscriptionEvent>(
     name: Name,
     handler: SubscriptionListeners<E, R>[Name]
@@ -454,4 +454,6 @@ export interface Subscription<E, R> extends AsyncIterable<E> {
   ): Subscription<E, R>;
 
   unsubscribe: () => void;
+
+  [Symbol.asyncIterator](): AsyncIterator<E>;
 }

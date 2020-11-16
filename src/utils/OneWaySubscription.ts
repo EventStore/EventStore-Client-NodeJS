@@ -11,6 +11,7 @@ import {
   SubscriptionListeners,
 } from "../types";
 import { convertToCommandError } from "./CommandError";
+import { SubscriptionIterator } from "./SubscriptionIterator";
 
 export class OneWaySubscription<E>
   implements Subscription<E, SubscriptionReport> {
@@ -22,8 +23,6 @@ export class OneWaySubscription<E>
     close: new Set(),
   };
   private _stream: ClientReadableStream<ReadResp>;
-  private _running = true;
-  private _resolve?: (event: E | null) => void;
 
   constructor(
     stream: ClientReadableStream<ReadResp>,
@@ -89,40 +88,10 @@ export class OneWaySubscription<E>
 
   public unsubscribe = (): void => {
     this._stream.cancel();
-    this._running = false;
-
-    if (this._resolve) this._resolve(null);
-  };
-
-  public async return(): Promise<IteratorReturnResult<E>> {
-    this.unsubscribe();
-    return { done: true } as IteratorReturnResult<E>;
-  }
-
-  public next = (): Promise<IteratorResult<E, never>> => {
-    return new Promise<IteratorResult<E, never>>((resolve, reject) => {
-      if (this._resolve) {
-        return reject(
-          new Error(
-            "Cannot iterate to the next while previous is still active."
-          )
-        );
-      }
-      if (!this._running) {
-        return resolve({ done: true } as IteratorReturnResult<never>);
-      }
-
-      this._resolve = (e) => {
-        resolve({ value: e } as IteratorYieldResult<E>);
-        delete this._resolve;
-      };
-
-      this.once("event", this._resolve);
-    });
   };
 
   /** Iterate the events asynchronously */
-  public [Symbol.asyncIterator] = (): OneWaySubscription<E> => {
-    return this;
+  public [Symbol.asyncIterator] = (): AsyncIterator<E> => {
+    return new SubscriptionIterator(this);
   };
 }
