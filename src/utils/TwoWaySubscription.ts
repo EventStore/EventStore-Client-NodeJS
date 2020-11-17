@@ -16,7 +16,7 @@ import {
 } from "../types";
 import { convertGrpcEvent } from "./convertGrpcEvent";
 import { convertToCommandError } from "./CommandError";
-import { SubscriptionIterator } from "./SubscriptionIterator";
+import { EventsOnlyStream } from "./EventsOnlyStream";
 
 export class TwoWaySubscription
   implements Subscription<ResolvedEvent, PersistentReport> {
@@ -164,6 +164,8 @@ export class TwoWaySubscription
 
   /** Iterate the events asynchronously */
   public [Symbol.asyncIterator] = (): AsyncIterator<ResolvedEvent> => {
-    return new SubscriptionIterator(this);
+    return this._stream
+      .pipe(new EventsOnlyStream(convertGrpcEvent))
+      [Symbol.asyncIterator]();
   };
 }

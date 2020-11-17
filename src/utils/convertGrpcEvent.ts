@@ -2,6 +2,8 @@ import { ReadResp as StreamsReadResp } from "../../generated/streams_pb";
 import { ReadResp as PersistentReadResp } from "../../generated/persistent_pb";
 import StreamsEvent = StreamsReadResp.ReadEvent;
 import PersistentEvent = PersistentReadResp.ReadEvent;
+import StreamsRecordedEvent = StreamsEvent.RecordedEvent;
+import PersistentRecordedEvent = PersistentEvent.RecordedEvent;
 
 import {
   RecordedEvent,
@@ -10,9 +12,15 @@ import {
   AllStreamResolvedEvent,
 } from "../types";
 
-type GRPCReadEvent = StreamsEvent | PersistentEvent;
+export type GRPCReadResp = StreamsReadResp | PersistentReadResp;
+export type GRPCReadEvent = StreamsEvent | PersistentEvent;
+export type GRPCRecordedEvent = StreamsRecordedEvent | PersistentRecordedEvent;
 
-export const convertGrpcEvent = (grpcEvent: GRPCReadEvent): ResolvedEvent => {
+export type ConvertGrpcEvent<E> = (grpcEvent: GRPCReadEvent) => E;
+
+export const convertGrpcEvent: ConvertGrpcEvent<ResolvedEvent> = (
+  grpcEvent
+) => {
   const resolved: ResolvedEvent = {};
 
   if (grpcEvent.hasEvent()) {
@@ -30,9 +38,9 @@ export const convertGrpcEvent = (grpcEvent: GRPCReadEvent): ResolvedEvent => {
   return resolved;
 };
 
-export const convertAllStreamGrpcEvent = (
-  grpcEvent: GRPCReadEvent
-): AllStreamResolvedEvent => {
+export const convertAllStreamGrpcEvent: ConvertGrpcEvent<AllStreamResolvedEvent> = (
+  grpcEvent
+) => {
   const resolved: AllStreamResolvedEvent = {};
 
   if (grpcEvent.hasEvent()) {
@@ -57,10 +65,6 @@ export const convertAllStreamGrpcEvent = (
 
   return resolved;
 };
-
-type GRPCRecordedEvent =
-  | StreamsEvent.RecordedEvent
-  | PersistentEvent.RecordedEvent;
 
 const extractPosition = (grpcRecord: GRPCRecordedEvent): Position => ({
   commit: BigInt(grpcRecord.getCommitPosition()),

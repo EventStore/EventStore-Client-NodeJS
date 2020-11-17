@@ -5,6 +5,8 @@ module.exports = {
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   rules: {
     "no-constant-condition": ["error", { checkLoops: false }],
+    // prettier decides
+    "no-unexpected-multiline": ["off"],
     "@typescript-eslint/no-non-null-assertion": ["off"],
     // better handled by ts itself
     "@typescript-eslint/no-unused-vars": ["off"],

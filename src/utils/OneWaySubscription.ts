@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
-
 import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 import { ReadResp } from "../../generated/streams_pb";
@@ -11,7 +9,8 @@ import {
   SubscriptionListeners,
 } from "../types";
 import { convertToCommandError } from "./CommandError";
-import { SubscriptionIterator } from "./SubscriptionIterator";
+import { ConvertGrpcEvent } from "./convertGrpcEvent";
+import { EventsOnlyStream } from "./EventsOnlyStream";
 
 export class OneWaySubscription<E>
   implements Subscription<E, SubscriptionReport> {
@@ -23,16 +22,18 @@ export class OneWaySubscription<E>
     close: new Set(),
   };
   private _stream: ClientReadableStream<ReadResp>;
+  private _convertGrpcEvent: ConvertGrpcEvent<E>;
 
   constructor(
     stream: ClientReadableStream<ReadResp>,
     listeners: Listeners<E, SubscriptionReport>,
-    convertGrpcEvent: (event: ReadResp.ReadEvent) => E
+    convertGrpcEvent: ConvertGrpcEvent<E>
   ) {
     this._stream = stream;
     this._listeners = listeners;
+    this._convertGrpcEvent = convertGrpcEvent;
 
-    stream.on("data", (resp: ReadResp) => {
+    this._stream.on("data", (resp: ReadResp) => {
       if (resp.hasConfirmation()) {
         this._listeners.confirmation.forEach((fn) => fn());
       }
@@ -46,11 +47,11 @@ export class OneWaySubscription<E>
       }
     });
 
-    stream.on("end", () => {
+    this._stream.on("end", () => {
       this._listeners.end.forEach((fn) => fn());
     });
 
-    stream.on("error", (err: ServiceError) => {
+    this._stream.on("error", (err: ServiceError) => {
       if (err.code === Status.CANCELLED) return;
       const error = convertToCommandError(err);
       this._listeners.error.forEach((fn) => fn(error));
@@ -104,6 +105,8 @@ export class OneWaySubscription<E>
 
   /** Iterate the events asynchronously */
   public [Symbol.asyncIterator] = (): AsyncIterator<E> => {
-    return new SubscriptionIterator(this);
+    return this._stream
+      .pipe(new EventsOnlyStream(this._convertGrpcEvent))
+      [Symbol.asyncIterator]();
   };
 }
