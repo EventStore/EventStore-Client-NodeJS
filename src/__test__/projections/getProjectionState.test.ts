@@ -1,4 +1,4 @@
-import { createTestNode, testEvents } from "../utils";
+import { createTestNode, delay, testEvents } from "../utils";
 
 import {
   ESDBConnection,
@@ -50,6 +50,8 @@ describe("getProjectionState", () => {
     await writeEventsToStream(STREAM_NAME)
       .send(...testEvents(count, EVENT_TYPE))
       .execute(connection);
+
+    await delay(5000);
 
     const state = await getProjectionState<number>(PROJECTION_NAME).execute(
       connection
