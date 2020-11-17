@@ -297,7 +297,7 @@ describe("subscribeToAll", () => {
         .execute(connection);
 
       writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(999))
+        .send(...testEvents(99))
         .send(finishEvent.build())
         .execute(connection);
 
@@ -325,9 +325,9 @@ describe("subscribeToAll", () => {
       }
 
       expect(doSomething).toBeCalled();
-      // unique numbers from 0 -> 998
-      expect(readEvents.size).toBe(999);
-      expect(doSomethingElse).toBeCalledTimes(1000);
+      // unique numbers from 0 -> 98
+      expect(readEvents.size).toBe(99);
+      expect(doSomethingElse).toBeCalledTimes(100);
     });
 
     test("after the fact event listeners", async () => {
