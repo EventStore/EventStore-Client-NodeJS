@@ -112,7 +112,7 @@ export interface JSONRecordedEvent extends RecordedEventBase {
   /**
    * Payload of this event.
    */
-  data: Record<string, unknown>;
+  data: unknown;
 
   /**
    * Representing the metadata associated with this event.

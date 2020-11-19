@@ -5,6 +5,7 @@ import PersistentEvent = PersistentReadResp.ReadEvent;
 import StreamsRecordedEvent = StreamsEvent.RecordedEvent;
 import PersistentRecordedEvent = PersistentEvent.RecordedEvent;
 
+import { debug } from "./debug";
 import {
   RecordedEvent,
   Position,
@@ -71,6 +72,20 @@ const extractPosition = (grpcRecord: GRPCRecordedEvent): Position => ({
   prepare: BigInt(grpcRecord.getPreparePosition()),
 });
 
+const safeParseJSON = <T = unknown>(
+  str: string,
+  fallback: (str: string) => T,
+  errorMessage: string
+): T => {
+  try {
+    const parsed = JSON.parse(str);
+    return parsed;
+  } catch (error) {
+    debug.events(errorMessage);
+    return fallback(str);
+  }
+};
+
 export const convertGrpcRecord = (
   grpcRecord: GRPCRecordedEvent
 ): RecordedEvent => {
@@ -98,13 +113,24 @@ export const convertGrpcRecord = (
   const isJson = contentType === "application/json";
 
   if (isJson) {
-    const data = JSON.parse(
-      Buffer.from(grpcRecord.getData()).toString("binary")
-    );
+    const dataStr = Buffer.from(grpcRecord.getData()).toString("binary");
+
     const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString(
       "binary"
     );
-    const metadata = metadataStr.length > 0 ? JSON.parse(metadataStr) : {};
+
+    const data = safeParseJSON(
+      dataStr,
+      (d) => d,
+      `Malformed JSON data in event ${id}`
+    );
+    const metadata = metadataStr.length
+      ? safeParseJSON(
+          metadataStr,
+          (_raw) => ({ _raw }),
+          `Malformed JSON metadata in event ${id}`
+        )
+      : {};
 
     return {
       streamId,

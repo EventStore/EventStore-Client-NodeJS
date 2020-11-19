@@ -1,4 +1,10 @@
-import { createTestNode, Defer, delay, testEvents } from "../utils";
+import {
+  createTestNode,
+  Defer,
+  delay,
+  TestEventData,
+  testEvents,
+} from "../utils";
 
 import {
   writeEventsToStream,
@@ -315,7 +321,7 @@ describe("subscribeToAll", () => {
           await delay(10);
 
           if (event.event.isJson) {
-            readEvents.add(event.event.data.index as number);
+            readEvents.add((event.event.data as TestEventData).index);
           }
         }
 
