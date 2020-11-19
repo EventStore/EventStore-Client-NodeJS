@@ -230,9 +230,9 @@ describe("subscribeToAll", () => {
 
   describe("should return a subscription", () => {
     test("async iterator", async () => {
-      const STREAM_NAME = "async_iter";
-      const FINISH_TEST = "finish_async_iterator";
-      const MARKER_EVENT = "async_iter_marker";
+      const STREAM_NAME = "async_iter_sync_fun";
+      const FINISH_TEST = "finish_async_iterator_sync_fun";
+      const MARKER_EVENT = "async_iter_sync_fun_marker";
       const doSomething = jest.fn();
       const doSomethingElse = jest.fn();
 
@@ -271,6 +271,63 @@ describe("subscribeToAll", () => {
 
       expect(doSomething).toBeCalled();
       expect(doSomethingElse).toBeCalledTimes(9);
+    });
+
+    test("async iterator with async function", async () => {
+      const STREAM_NAME = "async_iter_async_fun";
+      const FINISH_TEST = "finish_async_iterator_async_fun";
+      const MARKER_EVENT = "async_iter_async_fun_marker";
+      const doSomething = jest.fn();
+      const doSomethingElse = jest.fn();
+
+      const markerEvent = EventData.json(MARKER_EVENT, {
+        message: "mark",
+      });
+
+      const finishEvent = EventData.json(FINISH_TEST, {
+        message: "lets wrap this up",
+      });
+
+      const writeResult = await writeEventsToStream(STREAM_NAME_B)
+        .send(markerEvent.build())
+        .execute(connection);
+
+      const subscription = await subscribeToAll()
+        .fromPosition(writeResult.position!)
+        .execute(connection);
+
+      writeEventsToStream(STREAM_NAME)
+        .send(...testEvents(99))
+        .send(finishEvent.build())
+        .execute(connection);
+
+      const readEvents = new Set<number>();
+
+      for await (const event of subscription) {
+        doSomething(event);
+
+        if (!event.event?.eventType.startsWith("$")) {
+          doSomethingElse(event);
+        }
+
+        if (event.event?.eventType === "test") {
+          // example of awaiting an async function when iterating over the async iterator
+          await delay(10);
+
+          if (event.event.isJson) {
+            readEvents.add(event.event.data.index as number);
+          }
+        }
+
+        if (event.event?.eventType === FINISH_TEST) {
+          break;
+        }
+      }
+
+      expect(doSomething).toBeCalled();
+      // unique numbers from 0 -> 98
+      expect(readEvents.size).toBe(99);
+      expect(doSomethingElse).toBeCalledTimes(100);
     });
 
     test("after the fact event listeners", async () => {

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
-
 import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 import { ReadResp } from "../../generated/streams_pb";
@@ -11,6 +9,8 @@ import {
   SubscriptionListeners,
 } from "../types";
 import { convertToCommandError } from "./CommandError";
+import { ConvertGrpcEvent } from "./convertGrpcEvent";
+import { EventsOnlyStream } from "./EventsOnlyStream";
 
 export class OneWaySubscription<E>
   implements Subscription<E, SubscriptionReport> {
@@ -22,18 +22,18 @@ export class OneWaySubscription<E>
     close: new Set(),
   };
   private _stream: ClientReadableStream<ReadResp>;
-  private _running = true;
-  private _resolve?: (event: E | null) => void;
+  private _convertGrpcEvent: ConvertGrpcEvent<E>;
 
   constructor(
     stream: ClientReadableStream<ReadResp>,
     listeners: Listeners<E, SubscriptionReport>,
-    convertGrpcEvent: (event: ReadResp.ReadEvent) => E
+    convertGrpcEvent: ConvertGrpcEvent<E>
   ) {
     this._stream = stream;
     this._listeners = listeners;
+    this._convertGrpcEvent = convertGrpcEvent;
 
-    stream.on("data", (resp: ReadResp) => {
+    this._stream.on("data", (resp: ReadResp) => {
       if (resp.hasConfirmation()) {
         this._listeners.confirmation.forEach((fn) => fn());
       }
@@ -47,11 +47,11 @@ export class OneWaySubscription<E>
       }
     });
 
-    stream.on("end", () => {
+    this._stream.on("end", () => {
       this._listeners.end.forEach((fn) => fn());
     });
 
-    stream.on("error", (err: ServiceError) => {
+    this._stream.on("error", (err: ServiceError) => {
       if (err.code === Status.CANCELLED) return;
       const error = convertToCommandError(err);
       this._listeners.error.forEach((fn) => fn(error));
@@ -89,40 +89,24 @@ export class OneWaySubscription<E>
 
   public unsubscribe = (): void => {
     this._stream.cancel();
-    this._running = false;
-
-    if (this._resolve) this._resolve(null);
   };
 
-  public async return(): Promise<IteratorReturnResult<E>> {
-    this.unsubscribe();
-    return { done: true } as IteratorReturnResult<E>;
+  public get isPaused(): boolean {
+    return this._stream.isPaused();
   }
 
-  public next = (): Promise<IteratorResult<E, never>> => {
-    return new Promise<IteratorResult<E, never>>((resolve, reject) => {
-      if (this._resolve) {
-        return reject(
-          new Error(
-            "Cannot iterate to the next while previous is still active."
-          )
-        );
-      }
-      if (!this._running) {
-        return resolve({ done: true } as IteratorReturnResult<never>);
-      }
+  public pause = (): void => {
+    this._stream.pause();
+  };
 
-      this._resolve = (e) => {
-        resolve({ value: e } as IteratorYieldResult<E>);
-        delete this._resolve;
-      };
-
-      this.once("event", this._resolve);
-    });
+  public resume = (): void => {
+    this._stream.resume();
   };
 
   /** Iterate the events asynchronously */
-  public [Symbol.asyncIterator] = (): OneWaySubscription<E> => {
-    return this;
+  public [Symbol.asyncIterator] = (): AsyncIterator<E> => {
+    return this._stream
+      .pipe(new EventsOnlyStream(this._convertGrpcEvent))
+      [Symbol.asyncIterator]();
   };
 }
