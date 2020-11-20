@@ -13,7 +13,7 @@ import {
   SubscriptionEvent,
   SubscriptionListeners,
   SubscriptionReport,
-  Subscription,
+  AllStreamSubscription,
 } from "../../types";
 import { Command } from "../Command";
 import { Filter } from "../../utils/Filter";
@@ -134,9 +134,7 @@ export class SubscribeToAll extends Command {
    * Starts the subscription immediately.
    * @param handler Set of callbacks used during the subscription lifecycle.
    */
-  async execute(
-    connection: ESDBConnection
-  ): Promise<Subscription<AllStreamResolvedEvent, SubscriptionReport>> {
+  async execute(connection: ESDBConnection): Promise<AllStreamSubscription> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const uuidOption = new UUIDOption();
