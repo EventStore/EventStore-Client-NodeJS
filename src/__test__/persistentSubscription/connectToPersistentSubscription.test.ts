@@ -1,5 +1,5 @@
 import {
-  createTestNode,
+  createTestCluster,
   Defer,
   delay,
   testEvents,
@@ -15,10 +15,12 @@ import {
   PersistentReport,
   ResolvedEvent,
   ESDBConnection,
+  NotLeaderError,
+  PersistentSubscription,
 } from "../..";
 
 describe("connectToPersistentSubscription", () => {
-  const node = createTestNode();
+  const cluster = createTestCluster();
   let connection!: ESDBConnection;
 
   const finishEvent = EventData.json("finish-test", {
@@ -26,16 +28,16 @@ describe("connectToPersistentSubscription", () => {
   });
 
   beforeAll(async () => {
-    await node.up();
+    await cluster.up();
 
     connection = EventStoreConnection.builder()
       .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+      .sslRootCertificate(cluster.certPath)
+      .gossipClusterConnection(cluster.endpoints, "leader");
   });
 
   afterAll(async () => {
-    await node.down();
+    await cluster.down();
   });
 
   describe("should connect to a persistant subscription", () => {
@@ -423,7 +425,7 @@ describe("connectToPersistentSubscription", () => {
 
     const malformedData = "****";
 
-    await postEventViaHttpApi(node, {
+    await postEventViaHttpApi(cluster, {
       contentType: "application/json",
       eventType: "malformed-event",
       stream: STREAM_NAME,
@@ -456,5 +458,82 @@ describe("connectToPersistentSubscription", () => {
     }
 
     expect(doSomething).toBeCalledTimes(8);
+  });
+
+  test("should throw on follower node", async () => {
+    const connectionBuilder = EventStoreConnection.builder()
+      .defaultCredentials({ username: "admin", password: "changeit" })
+      .sslRootCertificate(cluster.certPath);
+
+    // Create connection to a follower node
+    const followerConnection = connectionBuilder.gossipClusterConnection(
+      cluster.endpoints,
+      "follower"
+    );
+
+    const STREAM_NAME = "follower_node_test";
+    const GROUP_NAME = "follower_node_test";
+    const doSomething = jest.fn();
+    const confirmThatErrorWasThrown = jest.fn();
+
+    const createAndConnectWithAutoReconnect = async (
+      connection: ESDBConnection
+    ): Promise<PersistentSubscription> => {
+      try {
+        await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
+          .fromStart()
+          .execute(connection);
+
+        const subscription = await connectToPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME
+        ).execute(connection);
+
+        return subscription;
+      } catch (error) {
+        confirmThatErrorWasThrown(error);
+
+        // Our command is good, but must be executed on the leader
+        if (error instanceof NotLeaderError) {
+          // Create new connection to the reported leader node
+          const leaderConnection = connectionBuilder.singleNodeConnection(
+            error.leader
+          );
+
+          // try again with new connection
+          return createAndConnectWithAutoReconnect(leaderConnection);
+        }
+
+        // other errors can be passed up the chain
+        throw error;
+      }
+    };
+
+    await writeEventsToStream(STREAM_NAME)
+      .send(...testEvents(99))
+      .send(finishEvent.build())
+      .execute(followerConnection);
+
+    const subscription = await createAndConnectWithAutoReconnect(
+      followerConnection
+    );
+
+    for await (const { event } of subscription) {
+      if (!event) continue;
+
+      doSomething(event);
+      subscription.ack(event.id);
+
+      if (event?.eventType === "finish-test") {
+        break;
+      }
+    }
+
+    expect(doSomething).toBeCalledTimes(100);
+
+    expect(confirmThatErrorWasThrown).toBeCalledTimes(1);
+    expect(confirmThatErrorWasThrown.mock.calls[0][0]).toBeInstanceOf(
+      NotLeaderError
+    );
   });
 });

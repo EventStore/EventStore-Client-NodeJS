@@ -461,3 +461,15 @@ export interface Subscription<E, R> {
 
   [Symbol.asyncIterator](): AsyncIterator<E>;
 }
+
+export interface PersistentSubscription
+  extends Subscription<ResolvedEvent, PersistentReport>,
+    PersistentReport {}
+
+export interface StreamSubscription
+  extends Subscription<ResolvedEvent, SubscriptionReport>,
+    SubscriptionReport {}
+
+export interface AllStreamSubscription
+  extends Subscription<AllStreamResolvedEvent, SubscriptionReport>,
+    SubscriptionReport {}

@@ -11,10 +11,10 @@ import {
   ReadRevision,
   ResolvedEvent,
   SubscriptionReport,
-  Subscription,
   SubscriptionEvent,
   Listeners,
   SubscriptionListeners,
+  StreamSubscription,
 } from "../../types";
 import { Command } from "../Command";
 import { OneWaySubscription } from "../../utils/OneWaySubscription";
@@ -116,9 +116,7 @@ export class SubscribeToStream extends Command {
   /**
    * Starts the subscription immediately.
    */
-  async execute(
-    connection: ESDBConnection
-  ): Promise<Subscription<ResolvedEvent, SubscriptionReport>> {
+  async execute(connection: ESDBConnection): Promise<StreamSubscription> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();

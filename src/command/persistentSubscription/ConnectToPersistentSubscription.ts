@@ -10,6 +10,7 @@ import {
   SubscriptionEvent,
   SubscriptionListeners,
   PersistentReport,
+  PersistentSubscription,
 } from "../../types";
 import { Command } from "../Command";
 import { TwoWaySubscription } from "../../utils/TwoWaySubscription";
@@ -76,7 +77,7 @@ export class ConnectToPersistentSubscription extends Command {
   /**
    * Starts the subscription immediately.
    */
-  async execute(connection: ESDBConnection): Promise<TwoWaySubscription> {
+  async execute(connection: ESDBConnection): Promise<PersistentSubscription> {
     const req = new ReadReq();
     const options = new ReadReq.Options();
     const identifier = new StreamIdentifier();
