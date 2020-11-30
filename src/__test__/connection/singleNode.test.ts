@@ -1,16 +1,11 @@
 import { createTestNode } from "../utils";
 
-import {
-  readEventsFromStream,
-  writeEventsToStream,
-  EventStoreConnection,
-  EventData,
-} from "../..";
+import { EventStoreDBClient, jsonEvent } from "../..";
 
 describe("singleNodeConnection", () => {
   const node = createTestNode();
   const STREAM_NAME = "test_stream_name";
-  const event = EventData.json("test", { message: "test" });
+  const event = jsonEvent({ eventType: "test", payload: { message: "test" } });
 
   beforeAll(async () => {
     await node.up();
@@ -21,20 +16,15 @@ describe("singleNodeConnection", () => {
   });
 
   test("should successfully connect", async () => {
-    const connection = EventStoreConnection.builder()
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
-
-    const writeResult = await writeEventsToStream(STREAM_NAME)
-      .send(event.build())
-      .execute(connection);
-
-    expect(writeResult).toBeDefined();
-
-    const readResult = await readEventsFromStream(STREAM_NAME).execute(
-      connection
+    const client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate }
     );
 
+    const writeResult = await client.writeEventsToStream(STREAM_NAME, event);
+    const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+
+    expect(writeResult).toBeDefined();
     expect(readResult).toBeDefined();
   });
 });

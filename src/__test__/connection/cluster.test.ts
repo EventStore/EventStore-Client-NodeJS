@@ -1,16 +1,11 @@
 import { createTestCluster } from "../utils";
 
-import {
-  readEventsFromStream,
-  writeEventsToStream,
-  EventStoreConnection,
-  EventData,
-} from "../..";
+import { jsonEvent, EventStoreDBClient } from "../..";
 
 describe("cluster", () => {
   const cluster = createTestCluster();
   const STREAM_NAME = "test_stream_name";
-  const event = EventData.json("test", { message: "test" });
+  const event = jsonEvent({ eventType: "test", payload: { message: "test" } });
 
   beforeAll(async () => {
     await cluster.up();
@@ -21,20 +16,15 @@ describe("cluster", () => {
   });
 
   test("should successfully connect", async () => {
-    const connection = EventStoreConnection.builder()
-      .sslRootCertificate(cluster.certPath)
-      .gossipClusterConnection(cluster.endpoints);
-
-    const writeResult = await writeEventsToStream(STREAM_NAME)
-      .send(event.build())
-      .execute(connection);
-
-    expect(writeResult).toBeDefined();
-
-    const readResult = await readEventsFromStream(STREAM_NAME).execute(
-      connection
+    const client = new EventStoreDBClient(
+      { endpoints: cluster.endpoints },
+      { rootCertificate: cluster.rootCertificate }
     );
 
+    const writeResult = await client.writeEventsToStream(STREAM_NAME, event);
+    const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+
+    expect(writeResult).toBeDefined();
     expect(readResult).toBeDefined();
   });
 });

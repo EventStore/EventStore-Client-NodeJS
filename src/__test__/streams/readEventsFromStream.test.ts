@@ -1,55 +1,30 @@
-import { createTestNode } from "../utils";
+import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
 
-import {
-  readEventsFromStream,
-  writeEventsToStream,
-  ESDBConnection,
-  EventStoreConnection,
-  EventData,
-} from "../..";
+import { EventStoreDBClient, BACKWARD, END } from "../..";
 
 describe("readEventsFromStream", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
   const STREAM_NAME = "test_stream_name";
   const OUT_OF_STREAM_NAME = "out_of_stream_name";
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
-
-    const jsonEvents = Array.from({ length: 4 }, (_, i) =>
-      EventData.json("json-test", { message: "test", index: i }).build()
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
-    const binaryEvents = Array.from({ length: 4 }, (_, i) =>
-      EventData.binary(
-        "binary-test",
-        Uint8Array.from(Buffer.from(`hello: ${i}`))
-      ).build()
+    await client.writeEventsToStream(STREAM_NAME, [
+      ...jsonTestEvents(4, "json-test"),
+      ...binaryTestEvents(4, "binary-test"),
+    ]);
+
+    await client.writeEventsToStream(
+      OUT_OF_STREAM_NAME,
+      jsonTestEvents(5, "out-of-stream-test")
     );
-
-    await writeEventsToStream(STREAM_NAME)
-      .send(...jsonEvents)
-      .send(...binaryEvents)
-      .execute(connection);
-
-    const outOfStreamEvent = EventData.json("out-of-stream-test", {
-      message: "outOfStream",
-    }).build();
-
-    await writeEventsToStream(OUT_OF_STREAM_NAME)
-      .send(
-        outOfStreamEvent,
-        outOfStreamEvent,
-        outOfStreamEvent,
-        outOfStreamEvent,
-        outOfStreamEvent
-      )
-      .execute(connection);
   });
 
   afterAll(async () => {
@@ -59,10 +34,11 @@ describe("readEventsFromStream", () => {
   describe("should successfully read from stream", () => {
     describe("Event types", () => {
       test("json event", async () => {
-        const [resolvedEvent] = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(BigInt(1))
-          .count(1)
-          .execute(connection);
+        const [resolvedEvent] = await client.readEventsFromStream(
+          STREAM_NAME,
+          1,
+          { fromRevision: BigInt(1) }
+        );
 
         const event = resolvedEvent.event!;
 
@@ -75,10 +51,11 @@ describe("readEventsFromStream", () => {
       });
 
       test("binary event", async () => {
-        const [resolvedEvent] = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(BigInt(5))
-          .count(1)
-          .execute(connection);
+        const [resolvedEvent] = await client.readEventsFromStream(
+          STREAM_NAME,
+          1,
+          { fromRevision: BigInt(5) }
+        );
 
         const event = resolvedEvent.event!;
 
@@ -91,47 +68,54 @@ describe("readEventsFromStream", () => {
 
     describe("options", () => {
       test("from start", async () => {
-        const events = await readEventsFromStream(STREAM_NAME)
-          .fromStart()
-          .count(Number.MAX_SAFE_INTEGER)
-          .execute(connection);
+        const events = await client.readEventsFromStream(
+          STREAM_NAME,
+          Number.MAX_SAFE_INTEGER
+        );
 
         expect(events.length).toBe(8);
       });
 
       test("from revision", async () => {
-        const events = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(BigInt(1))
-          .count(Number.MAX_SAFE_INTEGER)
-          .execute(connection);
+        const events = await client.readEventsFromStream(
+          STREAM_NAME,
+          Number.MAX_SAFE_INTEGER,
+          {
+            fromRevision: BigInt(1),
+          }
+        );
 
         expect(events.length).toBe(7);
       });
 
       test("backward from end", async () => {
-        const events = await readEventsFromStream(STREAM_NAME)
-          .fromEnd()
-          .backward()
-          .count(Number.MAX_SAFE_INTEGER)
-          .execute(connection);
+        const events = await client.readEventsFromStream(
+          STREAM_NAME,
+          Number.MAX_SAFE_INTEGER,
+          {
+            direction: BACKWARD,
+            fromRevision: END,
+          }
+        );
 
         expect(events.length).toBe(8);
       });
 
       test("backward from revision", async () => {
-        const events = await readEventsFromStream(STREAM_NAME)
-          .fromRevision(BigInt(1))
-          .backward()
-          .count(Number.MAX_SAFE_INTEGER)
-          .execute(connection);
+        const events = await client.readEventsFromStream(
+          STREAM_NAME,
+          Number.MAX_SAFE_INTEGER,
+          {
+            direction: BACKWARD,
+            fromRevision: BigInt(1),
+          }
+        );
 
         expect(events.length).toBe(2);
       });
 
       test("count", async () => {
-        const events = await readEventsFromStream(STREAM_NAME)
-          .count(2)
-          .execute(connection);
+        const events = await client.readEventsFromStream(STREAM_NAME, 2);
 
         expect(events.length).toBe(2);
       });

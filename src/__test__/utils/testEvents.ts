@@ -1,14 +1,25 @@
-import { EventData } from "../..";
+import { EventData, jsonEvent, binaryEvent } from "../..";
 
 export interface TestEventData {
   message: "test";
   index: number;
 }
 
-export const testEvents = (count = 4, eventType = "test"): EventData[] =>
+export const jsonTestEvents = (count = 4, eventType = "test"): EventData[] =>
   Array.from({ length: count }, (_, i) =>
-    EventData.json(eventType, {
-      message: "test",
-      index: i,
-    }).build()
+    jsonEvent({
+      eventType,
+      payload: {
+        message: "test",
+        index: i,
+      },
+    })
+  );
+
+export const binaryTestEvents = (count = 4, eventType = "test"): EventData[] =>
+  Array.from({ length: count }, (_, i) =>
+    binaryEvent({
+      eventType,
+      payload: Buffer.from(`hello: ${i}`),
+    })
   );
