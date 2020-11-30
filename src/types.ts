@@ -1,10 +1,24 @@
-import { Client, ChannelCredentials, ClientOptions } from "@grpc/grpc-js";
+import {
+  Client as GRPCClient,
+  ClientOptions as GRPCClientOptions,
+  ChannelCredentials,
+} from "@grpc/grpc-js";
 
 import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
 import * as constants from "./constants";
-import { CLIENT, DEFAULT_CREDENTIALS } from "./symbols";
 export { VNodeState };
+
+export interface BaseOptions {
+  /**
+   * Overwrite the default credentials
+   */
+  credentials?: Credentials;
+  /**
+   * Command requires a leader node
+   */
+  requiresLeader?: boolean;
+}
 
 /**
  * A structure referring to a potential logical record position in the EventStoreDB transaction file.
@@ -353,9 +367,9 @@ export type PersistentSubscriptionHandler = {
   onClose?: () => void;
 };
 
-export type DeleteResult = {
+export interface DeleteResult {
   position?: Position;
-};
+}
 
 export type ConsumerStrategy =
   | typeof constants.DISPATCH_TO_SINGLE
@@ -383,35 +397,26 @@ export type NodePreference =
   | typeof constants.FOLLOWER
   | typeof constants.LEADER;
 
-export type EndPoint = {
+export interface EndPoint {
   address: string;
   port: number;
-};
+}
 
-export type MemberInfo = {
+export interface MemberInfo {
   instanceId?: string;
   timeStamp: number;
   state: VNodeState;
   isAlive: boolean;
   httpEndpoint?: EndPoint;
-};
+}
 
 export type VerifyOptions = Parameters<typeof ChannelCredentials.createSsl>[3];
 
-export type ClientConstructor<T extends Client> = new (
+export type GRPCClientConstructor<T extends GRPCClient> = new (
   address: string,
   credentials: ChannelCredentials,
-  options?: Partial<ClientOptions>
+  options?: Partial<GRPCClientOptions>
 ) => T;
-
-export interface ESDBConnection {
-  close(): Promise<void>;
-  [DEFAULT_CREDENTIALS](): Credentials | undefined;
-  [CLIENT]<T extends Client>(
-    c: ClientConstructor<T>,
-    debugName: string
-  ): Promise<T>;
-}
 
 export type SubscriptionEvent =
   | typeof constants.EVENT_EVENT
