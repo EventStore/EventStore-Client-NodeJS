@@ -1,5 +1,5 @@
 import { Credentials, EndPoint, NodePreference } from "../types";
-import { debug } from "../utils/debug";
+import { debug } from "../utils";
 
 const notCurrentlySupported = [
   "maxDiscoverAttempts",

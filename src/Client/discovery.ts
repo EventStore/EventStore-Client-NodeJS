@@ -6,13 +6,21 @@ import { GossipClient } from "../../generated/gossip_grpc_pb";
 import { Empty } from "../../generated/shared_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
 
-import { EndPoint, MemberInfo, NodePreference } from "../types";
+import { EndPoint, NodePreference } from "../types";
 import { RANDOM } from "../constants";
-import { ClusterSettings } from ".";
-import { debug } from "../utils/debug";
+import { debug } from "../utils";
+import { DNSClusterOptions, GossipClusterOptions } from ".";
+
+export type MemberInfo = {
+  instanceId?: string;
+  timeStamp: number;
+  state: VNodeState;
+  isAlive: boolean;
+  httpEndpoint?: EndPoint;
+};
 
 export async function discoverEndpoint(
-  settings: ClusterSettings,
+  settings: DNSClusterOptions | GossipClusterOptions,
   credentials: ChannelCredentials
 ): Promise<EndPoint> {
   while (true) {
@@ -42,7 +50,7 @@ export async function discoverEndpoint(
       debug.connection(`Failed to resolve dns: `, error.toString());
     }
 
-    await asyncSetTimeout(500);
+    await delay(500);
   }
 }
 
@@ -69,14 +77,6 @@ function inAllowedStates(member: MemberInfo): boolean {
     default:
       return true;
   }
-}
-
-function asyncSetTimeout(timeout: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, timeout);
-  });
 }
 
 function determineBestNode(
@@ -176,3 +176,6 @@ function listClusterMembers(
     });
   });
 }
+
+export const delay = (timeout: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, timeout));
