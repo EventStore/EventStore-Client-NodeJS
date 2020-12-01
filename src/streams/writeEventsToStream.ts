@@ -4,7 +4,11 @@ import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
 import { ANY } from "../constants";
-import { BaseOptions, Position, WriteEventsExpectedRevision } from "../types";
+import {
+  BaseOptions,
+  WriteResult,
+  WriteEventsExpectedRevision,
+} from "../types";
 import { EventData } from "../events";
 import {
   convertToCommandError,
@@ -18,11 +22,6 @@ export interface WriteEventsToStreamOptions extends BaseOptions {
    * @defaultValue ANY
    */
   expectedRevision?: WriteEventsExpectedRevision;
-}
-
-export interface WriteResult {
-  nextExpectedVersion: bigint;
-  position?: Position;
 }
 
 declare module "../Client" {

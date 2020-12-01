@@ -6,8 +6,7 @@ import UUIDOption = ReadReq.Options.UUIDOption;
 import { Client } from "../Client";
 import { BACKWARD, END, FORWARD, START } from "../constants";
 import { BaseOptions, Direction, ReadRevision, ResolvedEvent } from "../types";
-import { debug, handleBatchRead } from "../utils";
-import { convertGrpcEvent } from "../utils/convertGrpcEvent";
+import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
 
 export interface ReadEventsFromStreamOptions extends BaseOptions {
   /**
