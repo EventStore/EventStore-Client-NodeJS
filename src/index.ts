@@ -1,4 +1,5 @@
 import "./streams";
+import "./persistentSubscription";
 
 export { Client as EventStoreDBClient } from "./Client";
 export * from "./events";

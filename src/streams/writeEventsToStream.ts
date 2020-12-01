@@ -28,12 +28,12 @@ declare module "../Client" {
   interface Client {
     /**
      * Sends events to a given stream.
-     * @param stream A stream name.
+     * @param streamName A stream name.
      * @param events Events or event to write
      * @param options Writing options
      */
     writeEventsToStream(
-      stream: string,
+      streamName: string,
       events: EventData | EventData[],
       options?: WriteEventsToStreamOptions
     ): Promise<WriteResult>;
@@ -42,7 +42,7 @@ declare module "../Client" {
 
 Client.prototype.writeEventsToStream = async function (
   this: Client,
-  stream: string,
+  streamName: string,
   event: EventData | EventData[],
   { expectedRevision = ANY, ...baseOptions }: WriteEventsToStreamOptions = {}
 ): Promise<WriteResult> {
@@ -52,7 +52,7 @@ Client.prototype.writeEventsToStream = async function (
   const options = new AppendReq.Options();
   const identifier = new StreamIdentifier();
 
-  identifier.setStreamname(Buffer.from(stream).toString("base64"));
+  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
   options.setStreamIdentifier(identifier);
 
   switch (expectedRevision) {
@@ -109,7 +109,7 @@ Client.prototype.writeEventsToStream = async function (
 
         return reject(
           new WrongExpectedVersionError(null as never, {
-            streamName: stream,
+            streamName: streamName,
             current: grpcError.hasCurrentRevision()
               ? BigInt(grpcError.getCurrentRevision())
               : "no_stream",

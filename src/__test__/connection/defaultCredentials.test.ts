@@ -2,7 +2,7 @@ import { createTestNode } from "../utils";
 
 import { EventStoreDBClient, AccessDeniedError } from "../..";
 
-describe.skip("defaultCredentials", () => {
+describe("defaultCredentials", () => {
   const node = createTestNode();
 
   beforeAll(async () => {

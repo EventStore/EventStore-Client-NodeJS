@@ -19,11 +19,11 @@ declare module "../Client" {
   interface Client {
     /**
      * Soft-deletes a stream.
-     * @param stream A stream name.
+     * @param streamName A stream name.
      * @param options Deletion options
      */
     deleteStream(
-      stream: string,
+      streamName: string,
       options?: DeleteStreamOptions
     ): Promise<DeleteResult>;
   }
@@ -31,13 +31,13 @@ declare module "../Client" {
 
 Client.prototype.deleteStream = async function (
   this: Client,
-  stream: string,
+  streamName: string,
   { expectedRevision = ANY, ...baseOptions }: DeleteStreamOptions = {}
 ): Promise<DeleteResult> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
   const identifier = new StreamIdentifier();
-  identifier.setStreamname(Buffer.from(stream).toString("base64"));
+  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
 
   options.setStreamIdentifier(identifier);
 

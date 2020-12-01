@@ -19,11 +19,11 @@ declare module "../Client" {
   interface Client {
     /**
      * Hard-deletes a stream.
-     * @param stream A stream name.
+     * @param streamName A stream name.
      * @param options Tombstoneing options
      */
     tombstoneStream(
-      stream: string,
+      streamName: string,
       options?: TombstoneStreamOptions
     ): Promise<DeleteResult>;
   }
@@ -31,13 +31,13 @@ declare module "../Client" {
 
 Client.prototype.tombstoneStream = async function (
   this: Client,
-  stream: string,
+  streamName: string,
   { expectedRevision = ANY, ...baseOptions }: TombstoneStreamOptions = {}
 ): Promise<DeleteResult> {
   const req = new TombstoneReq();
   const options = new TombstoneReq.Options();
   const identifier = new StreamIdentifier();
-  identifier.setStreamname(Buffer.from(stream).toString("base64"));
+  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
 
   options.setStreamIdentifier(identifier);
 

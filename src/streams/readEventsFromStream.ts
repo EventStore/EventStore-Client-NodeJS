@@ -32,12 +32,12 @@ declare module "../Client" {
   interface Client {
     /**
      * Sends events to a given stream.
-     * @param stream A stream name.
-     * @param events Events or event to write
+     * @param streamName A stream name.
+     * @param count Amount to read
      * @param options Writing options
      */
     readEventsFromStream(
-      stream: string,
+      streamName: string,
       count: number | BigInt,
       options?: ReadEventsFromStreamOptions
     ): Promise<ResolvedEvent[]>;
@@ -46,7 +46,7 @@ declare module "../Client" {
 
 Client.prototype.readEventsFromStream = async function (
   this: Client,
-  stream: string,
+  streamName: string,
   count: number | BigInt,
   {
     fromRevision = START,
@@ -58,7 +58,7 @@ Client.prototype.readEventsFromStream = async function (
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
-  identifier.setStreamname(Buffer.from(stream).toString("base64"));
+  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
 
   const uuidOption = new UUIDOption();
   uuidOption.setString(new Empty());

@@ -20,32 +20,27 @@ import { EventsOnlyStream } from "./EventsOnlyStream";
 
 export class TwoWaySubscription
   implements Subscription<ResolvedEvent, PersistentReport> {
-  private _listeners: Listeners<ResolvedEvent, PersistentReport> = {
+  #listeners: Listeners<ResolvedEvent, PersistentReport> = {
     event: new Set(),
     end: new Set(),
     confirmation: new Set(),
     error: new Set(),
     close: new Set(),
   };
-  private _stream: ClientDuplexStream<ReadReq, ReadResp>;
+  #stream: ClientDuplexStream<ReadReq, ReadResp>;
 
-  constructor(
-    stream: ClientDuplexStream<ReadReq, ReadResp>,
-    listeners: Listeners<ResolvedEvent, PersistentReport>
-  ) {
-    this._stream = stream;
-    this._listeners = listeners;
-    this._stream = stream;
+  constructor(stream: ClientDuplexStream<ReadReq, ReadResp>) {
+    this.#stream = stream;
 
     stream.on("data", (resp: ReadResp) => {
       if (resp.hasSubscriptionConfirmation()) {
-        this._listeners.confirmation.forEach((fn) => fn());
+        this.#listeners.confirmation.forEach((fn) => fn());
       }
 
       if (resp.hasEvent()) {
         const resolved = convertGrpcEvent(resp.getEvent()!);
 
-        this._listeners.event.forEach((fn) =>
+        this.#listeners.event.forEach((fn) =>
           fn(resolved, {
             ack: this.ack,
             nack: this.nack,
@@ -56,13 +51,13 @@ export class TwoWaySubscription
     });
 
     stream.on("end", () => {
-      this._listeners.end.forEach((fn) => fn());
+      this.#listeners.end.forEach((fn) => fn());
     });
 
     stream.on("error", (err: ServiceError) => {
       if (err.code === Status.CANCELLED) return;
       const error = convertToCommandError(err);
-      this._listeners.error.forEach((fn) => fn(error));
+      this.#listeners.error.forEach((fn) => fn(error));
     });
   }
 
@@ -77,7 +72,7 @@ export class TwoWaySubscription
     }
 
     req.setAck(ack);
-    this._stream.write(req);
+    this.#stream.write(req);
   };
 
   public nack = (
@@ -113,14 +108,14 @@ export class TwoWaySubscription
 
     req.setNack(nack);
 
-    this._stream.write(req);
+    this.#stream.write(req);
   };
 
   public on = <Name extends SubscriptionEvent>(
     event: Name,
     handler: SubscriptionListeners<ResolvedEvent, PersistentReport>[Name]
   ): TwoWaySubscription => {
-    this._listeners[event]?.add(handler as never);
+    this.#listeners[event]?.add(handler as never);
     return this;
   };
 
@@ -141,30 +136,30 @@ export class TwoWaySubscription
     event: Name,
     handler: SubscriptionListeners<ResolvedEvent, PersistentReport>[Name]
   ): TwoWaySubscription => {
-    this._listeners[event]?.delete(handler as never);
+    this.#listeners[event]?.delete(handler as never);
     return this;
   };
 
   public unsubscribe = (): void => {
-    this._stream.end();
-    this._stream.cancel();
+    this.#stream.end();
+    this.#stream.cancel();
   };
 
   public get isPaused(): boolean {
-    return this._stream.isPaused();
+    return this.#stream.isPaused();
   }
 
   public pause = (): void => {
-    this._stream.pause();
+    this.#stream.pause();
   };
 
   public resume = (): void => {
-    this._stream.resume();
+    this.#stream.resume();
   };
 
   /** Iterate the events asynchronously */
   public [Symbol.asyncIterator] = (): AsyncIterator<ResolvedEvent> => {
-    return this._stream
+    return this.#stream
       .pipe(new EventsOnlyStream(convertGrpcEvent))
       [Symbol.asyncIterator]();
   };

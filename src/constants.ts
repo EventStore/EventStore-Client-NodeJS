@@ -64,3 +64,6 @@ export const WRITING_RESULTS = "Writing results";
 // filter
 export const STREAM_NAME = "streamName";
 export const EVENT_TYPE = "eventType";
+
+// max subscriber count
+export const UNLIMITED = "unlimited";

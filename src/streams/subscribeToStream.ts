@@ -30,11 +30,11 @@ declare module "../Client" {
   interface Client {
     /**
      * Sends events to a given stream.
-     * @param stream A stream name.
+     * @param streamName A stream name.
      * @param options Writing options
      */
     subscribeToStream(
-      stream: string,
+      streamName: string,
       options?: SubscribeToStreamOptions
     ): Promise<StreamSubscription>;
   }
@@ -42,7 +42,7 @@ declare module "../Client" {
 
 Client.prototype.subscribeToStream = async function (
   this: Client,
-  stream: string,
+  streamName: string,
   {
     fromRevision = START,
     resolveLinks = false,
@@ -52,7 +52,7 @@ Client.prototype.subscribeToStream = async function (
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
-  identifier.setStreamname(Buffer.from(stream).toString("base64"));
+  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
 
   const uuidOption = new UUIDOption();
   uuidOption.setString(new Empty());
