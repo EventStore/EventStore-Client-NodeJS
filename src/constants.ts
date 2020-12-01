@@ -60,3 +60,7 @@ export const DELETING = "Deleting";
 export const PAUSED = "Paused";
 export const WRITING_RESULTS = "Writing results";
 // STOPPED
+
+// filter
+export const STREAM_NAME = "streamName";
+export const EVENT_TYPE = "eventType";

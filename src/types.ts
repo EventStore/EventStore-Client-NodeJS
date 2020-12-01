@@ -433,6 +433,18 @@ export interface SubscriptionListeners<E, R> {
   [constants.CLOSE_EVENT]: () => void;
 }
 
+export type FilterOn =
+  | typeof constants.EVENT_TYPE
+  | typeof constants.STREAM_NAME;
+
+export interface Filter {
+  filterOn: FilterOn;
+  max?: number;
+  checkpointIntervalMul?: number;
+  regex?: string;
+  prefixes?: string[];
+}
+
 export interface Credentials {
   username: string;
   password: string;
