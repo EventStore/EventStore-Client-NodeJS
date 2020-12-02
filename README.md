@@ -34,33 +34,33 @@ The following snippet showcases a simple example where we form a connection, the
 
 ```javascript
 const {
-  EventData,
-  EventStoreConnection,
-  writeEventsToStream,
-  readEventsFromStream,
+  EventStoreDBClient,
+  jsonEvent,
+  FORWARD,
+  START,
 } = require("@eventstore/db-client");
 
-const connection = EventStoreConnection.builder()
-  .insecure()
-  .singleNodeConnection("localhost:2113");
+const client = new EventStoreDBClient({
+  endpoint: "localhost:2113",
+});
 
 async function simpleTest() {
   const streamName = "es_supported_clients";
 
-  const event = EventData.json("grpc-client", {
-    languages: ["typescript", "javascript"],
-    runtime: "NodeJS",
-  }).build();
+  const event = jsonEvent({
+    eventType: "grpc-client",
+    payload: {
+      languages: ["typescript", "javascript"],
+      runtime: "NodeJS",
+    },
+  });
 
-  const writeResult = await writeEventsToStream(streamName)
-    .send(event)
-    .execute(connection);
+  const writeResult = await client.writeEventsToStream(streamName, [event]);
 
-  const events = await readEventsFromStream(streamName)
-    .fromStart()
-    .forward()
-    .count(10)
-    .execute(connection);
+  const events = await client.readEventsFromStream(streamName, 10, {
+    fromRevision: START,
+    direction: FORWARD,
+  });
 
   events.forEach(doSomethingProductive);
 }
@@ -70,33 +70,33 @@ async function simpleTest() {
 
 ```typescript
 import {
-  EventData,
-  EventStoreConnection,
-  writeEventsToStream,
-  readEventsFromStream,
+  EventStoreDBClient,
+  jsonEvent,
+  FORWARD,
+  START,
 } from "@eventstore/db-client";
 
-const connection = EventStoreConnection.builder()
-  .insecure()
-  .singleNodeConnection("localhost:2113");
+const client = new EventStoreDBClient({
+  endpoint: "localhost:2113",
+});
 
 async function simpleTest(): Promise<void> {
   const streamName = "es_supported_clients";
 
-  const event = EventData.json("grpc-client", {
-    languages: ["typescript", "javascript"],
-    runtime: "NodeJS",
-  }).build();
+  const event = jsonEvent({
+    eventType: "grpc-client",
+    payload: {
+      languages: ["typescript", "javascript"],
+      runtime: "NodeJS",
+    },
+  });
 
-  const writeResult = await writeEventsToStream(streamName)
-    .send(event)
-    .execute(connection);
+  const writeResult = await client.writeEventsToStream(streamName, [event]);
 
-  const events = await readEventsFromStream(streamName)
-    .fromStart()
-    .forward()
-    .count(10)
-    .execute(connection);
+  const events = await client.readEventsFromStream(streamName, 10, {
+    fromRevision: START,
+    direction: FORWARD,
+  });
 
   events.forEach(doSomethingProductive);
 }
