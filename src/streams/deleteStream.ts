@@ -58,10 +58,13 @@ Client.prototype.deleteStream = async function (
 
   req.setOptions(options);
 
-  debug.command("DeleteStream: %c", this);
-  debug.command_grpc("DeleteStream: %g", req);
+  debug.command("deleteStream: %O", {
+    streamName,
+    options: { expectedRevision, ...baseOptions },
+  });
+  debug.command_grpc("deleteStream: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "DeleteStream");
+  const client = await this.getGRPCClient(StreamsClient, "deleteStream");
 
   return new Promise<DeleteResult>((resolve, reject) => {
     client.delete(req, this.metadata(baseOptions), (error, resp) => {

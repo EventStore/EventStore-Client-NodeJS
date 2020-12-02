@@ -36,12 +36,15 @@ Client.prototype.getProjectionStatistics = async function (
   options.setName(projectionName);
   req.setOptions(options);
 
-  debug.command("GetProjectionStatistics: %c", this);
-  debug.command_grpc("GetProjectionStatistics: %g", req);
+  debug.command("getProjectionStatistics: %O", {
+    projectionName,
+    options: baseOptions,
+  });
+  debug.command_grpc("getProjectionStatistics: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "GetProjectionStatistics"
+    "getProjectionStatistics"
   );
 
   const stream = client.statistics(req, this.metadata(baseOptions));

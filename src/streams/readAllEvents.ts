@@ -95,10 +95,17 @@ Client.prototype.readAllEvents = async function (
 
   req.setOptions(options);
 
-  debug.command("ReadAllEvents: %c", this);
-  debug.command_grpc("ReadAllEvents: %g", req);
+  debug.command("readAllEvents: %O", {
+    count,
+    options: {
+      fromPosition,
+      direction,
+      ...baseOptions,
+    },
+  });
+  debug.command_grpc("readAllEvents: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "ReadAllEvents");
+  const client = await this.getGRPCClient(StreamsClient, "readAllEvents");
   const stream = client.read(req, this.metadata(baseOptions));
   return handleBatchRead(stream, convertAllStreamGrpcEvent);
 };

@@ -40,70 +40,58 @@ Client.prototype.updatePersistentSubscription = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  {
-    resolveLinks,
-    extraStats,
-    fromRevision,
-    messageTimeout,
-    maxRetryCount,
-    checkpointAfter,
-    minCheckpointCount,
-    maxCheckpointCount,
-    maxSubscriberCount,
-    liveBufferSize,
-    readBatchSize,
-    historyBufferSize,
-    strategy,
-  }: PersistentSubscriptionSettings,
+  settings: PersistentSubscriptionSettings,
   baseOptions: BaseOptions = {}
 ): Promise<void> {
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
   const identifier = new StreamIdentifier();
-  const settings = new UpdateReq.Settings();
+  const reqSettings = new UpdateReq.Settings();
 
-  settings.setResolveLinks(resolveLinks);
-  switch (fromRevision) {
+  reqSettings.setResolveLinks(settings.resolveLinks);
+  switch (settings.fromRevision) {
     case START: {
-      settings.setRevision(BigInt(0).toString(10));
+      reqSettings.setRevision(BigInt(0).toString(10));
       break;
     }
     default: {
-      settings.setRevision(fromRevision.toString(10));
+      reqSettings.setRevision(settings.fromRevision.toString(10));
       break;
     }
   }
-  settings.setExtraStatistics(extraStats);
-  settings.setMessageTimeoutMs(messageTimeout);
-  settings.setCheckpointAfterMs(checkpointAfter);
-  settings.setMaxRetryCount(maxRetryCount);
-  settings.setMinCheckpointCount(minCheckpointCount);
-  settings.setMaxCheckpointCount(maxCheckpointCount);
-  switch (maxSubscriberCount) {
+  reqSettings.setExtraStatistics(settings.extraStats);
+  reqSettings.setMessageTimeoutMs(settings.messageTimeout);
+  reqSettings.setCheckpointAfterMs(settings.checkpointAfter);
+  reqSettings.setMaxRetryCount(settings.maxRetryCount);
+  reqSettings.setMinCheckpointCount(settings.minCheckpointCount);
+  reqSettings.setMaxCheckpointCount(settings.maxCheckpointCount);
+  switch (settings.maxSubscriberCount) {
     case UNLIMITED: {
-      settings.setMaxSubscriberCount(0);
+      reqSettings.setMaxSubscriberCount(0);
       break;
     }
     default: {
-      settings.setMaxSubscriberCount(maxSubscriberCount);
+      reqSettings.setMaxSubscriberCount(settings.maxSubscriberCount);
       break;
     }
   }
-  settings.setLiveBufferSize(liveBufferSize);
-  settings.setReadBatchSize(readBatchSize);
-  settings.setHistoryBufferSize(historyBufferSize);
+  reqSettings.setLiveBufferSize(settings.liveBufferSize);
+  reqSettings.setReadBatchSize(settings.readBatchSize);
+  reqSettings.setHistoryBufferSize(settings.historyBufferSize);
 
-  switch (strategy) {
+  switch (settings.strategy) {
     case DISPATCH_TO_SINGLE:
-      settings.setNamedConsumerStrategy(
+      reqSettings.setNamedConsumerStrategy(
         CreateReq.ConsumerStrategy.DISPATCHTOSINGLE
       );
       break;
     case PINNED:
-      settings.setNamedConsumerStrategy(CreateReq.ConsumerStrategy.PINNED);
+      reqSettings.setNamedConsumerStrategy(CreateReq.ConsumerStrategy.PINNED);
       break;
     case ROUND_ROBIN:
-      settings.setNamedConsumerStrategy(CreateReq.ConsumerStrategy.ROUNDROBIN);
+      reqSettings.setNamedConsumerStrategy(
+        CreateReq.ConsumerStrategy.ROUNDROBIN
+      );
       break;
   }
 
@@ -111,16 +99,21 @@ Client.prototype.updatePersistentSubscription = async function (
 
   options.setGroupName(groupName);
   options.setStreamIdentifier(identifier);
-  options.setSettings(settings);
+  options.setSettings(reqSettings);
 
   req.setOptions(options);
 
-  debug.command("UpdatePersistentSubscription: %c", this);
-  debug.command_grpc("UpdatePersistentSubscription: %g", req);
+  debug.command("updatePersistentSubscription: %O", {
+    streamName,
+    groupName,
+    settings,
+    options: baseOptions,
+  });
+  debug.command_grpc("updatePersistentSubscription: %g", req);
 
   const client = await this.getGRPCClient(
     PersistentSubscriptionsClient,
-    "UpdatePersistentSubscription"
+    "updatePersistentSubscription"
   );
 
   return new Promise<void>((resolve, reject) => {

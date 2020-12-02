@@ -100,12 +100,21 @@ Client.prototype.readEventsFromStream = async function (
 
   req.setOptions(options);
 
-  debug.command("ReadEventsFromStream: %c", this);
-  debug.command_grpc("ReadEventsFromStream: %g", req);
+  debug.command("readEventsFromStream: %O", {
+    streamName,
+    count,
+    options: {
+      fromRevision,
+      resolveLinks,
+      direction,
+      ...baseOptions,
+    },
+  });
+  debug.command_grpc("readEventsFromStream: %g", req);
 
   const client = await this.getGRPCClient(
     StreamsClient,
-    "ReadEventsFromStream"
+    "readEventsFromStream"
   );
   const readableStream = client.read(req, this.metadata(baseOptions));
   return handleBatchRead(readableStream, convertGrpcEvent);

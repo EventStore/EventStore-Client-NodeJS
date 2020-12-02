@@ -40,7 +40,11 @@ Client.prototype.createTransientProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("createTransientProjection: %c", this);
+  debug.command("createTransientProjection: %O", {
+    projectionName,
+    query,
+    options: baseOptions,
+  });
   debug.command_grpc("createTransientProjection: %g", req);
 
   const client = await this.getGRPCClient(

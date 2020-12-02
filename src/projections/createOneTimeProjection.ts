@@ -48,7 +48,10 @@ Client.prototype.createOneTimeProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("createOneTimeProjection: %c", this);
+  debug.command("createOneTimeProjection: %O", {
+    queryString,
+    options: typeof baseOptions !== "string" ? baseOptions : {},
+  });
   debug.command_grpc("createOneTimeProjection: %g", req);
 
   const client = await this.getGRPCClient(

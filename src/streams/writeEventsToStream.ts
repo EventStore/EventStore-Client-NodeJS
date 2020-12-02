@@ -76,10 +76,14 @@ Client.prototype.writeEventsToStream = async function (
 
   header.setOptions(options);
 
-  debug.command("WriteEventsToStream: %c", this);
-  debug.command_grpc("WriteEventsToStream: %g", header);
+  debug.command("writeEventsToStream: %O", {
+    streamName,
+    events,
+    options: { expectedRevision, ...baseOptions },
+  });
+  debug.command_grpc("writeEventsToStream: %g", header);
 
-  const client = await this.getGRPCClient(StreamsClient, "WriteEventsToStream");
+  const client = await this.getGRPCClient(StreamsClient, "writeEventsToStream");
 
   return new Promise<WriteResult>((resolve, reject) => {
     const sink = client.append(this.metadata(baseOptions), (error, resp) => {

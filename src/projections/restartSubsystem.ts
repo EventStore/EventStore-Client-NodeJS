@@ -23,12 +23,14 @@ Client.prototype.restartSubsystem = async function (
 ): Promise<void> {
   const req = new Empty();
 
-  debug.command("RestartSubsystem: %c", this);
-  debug.command_grpc("RestartSubsystem: %g", req);
+  debug.command("restartSubsystem: %O", {
+    options: baseOptions,
+  });
+  debug.command_grpc("restartSubsystem: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "RestartSubsystem"
+    "restartSubsystem"
   );
 
   return new Promise<void>((resolve, reject) => {

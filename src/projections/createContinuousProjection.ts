@@ -50,12 +50,19 @@ Client.prototype.createContinuousProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("CreateContinuousProjection: %c", this);
-  debug.command_grpc("CreateContinuousProjection: %g", req);
+  debug.command("createContinuousProjection: %O", {
+    projectionName,
+    query,
+    options: {
+      trackEmittedStreams,
+      ...baseOptions,
+    },
+  });
+  debug.command_grpc("createContinuousProjection: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "CreateContinuousProjection"
+    "createContinuousProjection"
   );
 
   return new Promise<void>((resolve, reject) => {

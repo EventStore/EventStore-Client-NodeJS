@@ -53,12 +53,19 @@ Client.prototype.connectToPersistentSubscription = async function (
   options.setUuidOption(uuidOption);
   req.setOptions(options);
 
-  debug.command("ConnectToPersistentSubscription: %c", this);
-  debug.command_grpc("ConnectToPersistentSubscription: %g", req);
+  debug.command("connectToPersistentSubscription: %O", {
+    streamName,
+    groupName,
+    options: {
+      bufferSize,
+      ...baseOptions,
+    },
+  });
+  debug.command_grpc("connectToPersistentSubscription: %g", req);
 
   const client = await this.getGRPCClient(
     PersistentSubscriptionsClient,
-    "ConnectToPersistentSubscription"
+    "connectToPersistentSubscription"
   );
   const stream = client.read(this.metadata(baseOptions), {
     deadline: Infinity,

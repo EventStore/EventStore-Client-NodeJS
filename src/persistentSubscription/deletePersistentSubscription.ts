@@ -39,12 +39,16 @@ Client.prototype.deletePersistentSubscription = async function (
   options.setGroupName(groupName);
   req.setOptions(options);
 
-  debug.command("DeletePersistentSubscription: %c", this);
-  debug.command_grpc("DeletePersistentSubscription: %g", req);
+  debug.command("deletePersistentSubscription: %O", {
+    streamName,
+    groupName,
+    options: baseOptions,
+  });
+  debug.command_grpc("deletePersistentSubscription: %g", req);
 
   const client = await this.getGRPCClient(
     PersistentSubscriptionsClient,
-    "DeletePersistentSubscription"
+    "deletePersistentSubscription"
   );
 
   return new Promise<void>((resolve, reject) => {

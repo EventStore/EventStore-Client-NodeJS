@@ -33,12 +33,15 @@ Client.prototype.enableProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("EnableProjection: %c", this);
-  debug.command_grpc("EnableProjection: %g", req);
+  debug.command("enableProjection: %O", {
+    projectionName,
+    options: baseOptions,
+  });
+  debug.command_grpc("enableProjection: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "EnableProjection"
+    "enableProjection"
   );
 
   return new Promise<void>((resolve, reject) => {

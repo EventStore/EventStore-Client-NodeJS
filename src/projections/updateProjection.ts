@@ -50,12 +50,16 @@ Client.prototype.updateProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("UpdateProjection: %c", this);
-  debug.command_grpc("UpdateProjection: %g", req);
+  debug.command("updateProjection: %O", {
+    projectionName,
+    query,
+    options: { trackEmittedStreams, ...baseOptions },
+  });
+  debug.command_grpc("updateProjection: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "UpdateProjection"
+    "updateProjection"
   );
 
   return new Promise<void>((resolve, reject) => {

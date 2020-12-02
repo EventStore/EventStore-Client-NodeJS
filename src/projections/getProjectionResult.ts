@@ -29,24 +29,27 @@ declare module "../Client" {
 Client.prototype.getProjectionResult = async function <T = unknown>(
   this: Client,
   projectionName: string,
-  {
-    fromPartition: partition = "",
-    ...baseOptions
-  }: GetProjectionResultOptions = {}
+  { fromPartition = "", ...baseOptions }: GetProjectionResultOptions = {}
 ): Promise<T> {
   const req = new ResultReq();
   const options = new ResultReq.Options();
   options.setName(projectionName);
-  options.setPartition(partition);
+  options.setPartition(fromPartition);
 
   req.setOptions(options);
 
-  debug.command("GetProjectionResult: %c", this);
-  debug.command_grpc("GetProjectionResult: %g", req);
+  debug.command("getProjectionResult: %O", {
+    projectionName,
+    options: {
+      fromPartition,
+      ...baseOptions,
+    },
+  });
+  debug.command_grpc("getProjectionResult: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "GetProjectionResult"
+    "getProjectionResult"
   );
 
   return new Promise<T>((resolve, reject) => {

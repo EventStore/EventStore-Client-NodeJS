@@ -59,7 +59,15 @@ Client.prototype.deleteProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("deleteProjection: %c", this);
+  debug.command("deleteProjection: %O", {
+    projectionName,
+    options: {
+      deleteEmittedStreams,
+      deleteStateStream,
+      deleteCheckpointStream,
+      ...baseOptions,
+    },
+  });
   debug.command_grpc("deleteProjection: %g", req);
 
   const client = await this.getGRPCClient(

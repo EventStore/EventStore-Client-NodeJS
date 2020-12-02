@@ -50,7 +50,9 @@ const fetchAndTransformProjectionList = async function (
   const req = new StatisticsReq();
   req.setOptions(options);
 
-  debug.command("%s: %c", debugName, this);
+  debug.command("%s: %O", debugName, {
+    options: baseOptions,
+  });
   debug.command_grpc("%s: %g", debugName, req);
 
   const client = await this.getGRPCClient(ProjectionsClient, debugName);
@@ -99,7 +101,7 @@ Client.prototype.listOneTimeProjections = async function (
 
   return fetchAndTransformProjectionList.call(
     this,
-    "listContinuousProjections",
+    "listOneTimeProjections",
     baseOptions,
     options
   );
@@ -114,7 +116,7 @@ Client.prototype.listTransientProjections = async function (
 
   return fetchAndTransformProjectionList.call(
     this,
-    "listContinuousProjections",
+    "listTransientProjections",
     baseOptions,
     options
   );

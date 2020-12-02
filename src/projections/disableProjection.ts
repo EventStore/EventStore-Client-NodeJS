@@ -40,7 +40,10 @@ Client.prototype.disableProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("disableProjection: %c", this);
+  debug.command("disableProjection: %O", {
+    projectionName,
+    options: { writeCheckpoint, ...baseOptions },
+  });
   debug.command_grpc("disableProjection: %g", req);
 
   const client = await this.getGRPCClient(

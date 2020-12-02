@@ -31,12 +31,15 @@ Client.prototype.getProjectionState = async function <T = unknown>(
   options.setName(projectionName);
   req.setOptions(options);
 
-  debug.command("GetProjectionState: %c", this);
-  debug.command_grpc("GetProjectionState: %g", req);
+  debug.command("getProjectionState: %O", {
+    projectionName,
+    options: baseOptions,
+  });
+  debug.command_grpc("getProjectionState: %g", req);
 
   const client = await this.getGRPCClient(
     ProjectionsClient,
-    "GetProjectionState"
+    "getProjectionState"
   );
 
   return new Promise<T>((resolve, reject) => {

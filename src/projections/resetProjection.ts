@@ -41,10 +41,13 @@ Client.prototype.resetProjection = async function (
 
   req.setOptions(options);
 
-  debug.command("ResetProjection: %c", this);
-  debug.command_grpc("ResetProjection: %g", req);
+  debug.command("resetProjection: %O", {
+    projectionName,
+    options: { writeCheckpoint, ...baseOptions },
+  });
+  debug.command_grpc("resetProjection: %g", req);
 
-  const client = await this.getGRPCClient(ProjectionsClient, "ResetProjection");
+  const client = await this.getGRPCClient(ProjectionsClient, "resetProjection");
 
   return new Promise<void>((resolve, reject) => {
     client.reset(req, this.metadata(baseOptions), (error) => {

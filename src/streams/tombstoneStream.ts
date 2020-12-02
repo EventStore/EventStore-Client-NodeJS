@@ -62,10 +62,13 @@ Client.prototype.tombstoneStream = async function (
 
   req.setOptions(options);
 
-  debug.command("TombstoneStream: %c", this);
-  debug.command_grpc("TombstoneStream: %g", req);
+  debug.command("tombstoneStream: %O", {
+    streamName,
+    options: { expectedRevision, ...baseOptions },
+  });
+  debug.command_grpc("tombstoneStream: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "TombstoneStream");
+  const client = await this.getGRPCClient(StreamsClient, "tombstoneStream");
 
   return new Promise<DeleteResult>((resolve, reject) => {
     client.tombstone(req, this.metadata(baseOptions), (error, resp) => {
