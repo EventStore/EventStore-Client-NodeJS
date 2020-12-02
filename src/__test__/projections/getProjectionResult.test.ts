@@ -1,30 +1,20 @@
-import { createTestNode, delay, testEvents } from "../utils";
+import { createTestNode, delay, jsonTestEvents } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createContinuousProjection,
-  writeEventsToStream,
-  enableProjection,
-  getProjectionStatistics,
-  getProjectionResult,
-  UnknownError,
-  EventData,
-  RUNNING,
-} from "../..";
+import { UnknownError, RUNNING, EventStoreDBClient, jsonEvent } from "../..";
 
 describe("getProjectionResult", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
 
-    await enableProjection("$by_category").execute(connection);
+    await client.enableProjection("$by_category");
   });
 
   afterAll(async () => {
@@ -50,19 +40,16 @@ describe("getProjectionResult", () => {
 
       const count = 12;
 
-      await createContinuousProjection(PROJECTION_NAME, projection).execute(
-        connection
-      );
+      await client.createContinuousProjection(PROJECTION_NAME, projection);
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(count, EVENT_TYPE))
-        .execute(connection);
+      await client.writeEventsToStream(
+        STREAM_NAME,
+        jsonTestEvents(count, EVENT_TYPE)
+      );
 
       await delay(5000);
 
-      const state = await getProjectionResult<number>(PROJECTION_NAME).execute(
-        connection
-      );
+      const state = await client.getProjectionResult<number>(PROJECTION_NAME);
 
       expect(state).toBe(count);
     });
@@ -108,61 +95,59 @@ describe("getProjectionResult", () => {
           });
       `;
 
-      const createCatEvent = (catName: string, eventType: string) =>
-        EventData.json(eventType, {
-          catName,
-        }).build();
+      const createCatEvent = (catName: string, eventType: string) => {
+        return jsonEvent({
+          eventType,
+          payload: {
+            catName,
+          },
+        });
+      };
 
-      await createContinuousProjection(
+      await client.createContinuousProjection(
         PARTITION_PROJECTION_NAME,
-        paritionProjection
-      )
-        .trackEmittedStreams()
+        paritionProjection,
+        { trackEmittedStreams: true }
+      );
 
-        .execute(connection);
-
-      const partitionStats = await getProjectionStatistics(
+      const partitionStats = await client.getProjectionStatistics(
         PARTITION_PROJECTION_NAME
-      ).execute(connection);
+      );
 
       expect(partitionStats.projectionStatus).toBe(RUNNING);
 
-      await createContinuousProjection(
+      await client.createContinuousProjection(
         COUNTER_PROJECTION_NAME,
         countProjection
-      ).execute(connection);
+      );
 
-      const counterStats = await getProjectionStatistics(
+      const counterStats = await client.getProjectionStatistics(
         COUNTER_PROJECTION_NAME
-      ).execute(connection);
+      );
 
       expect(counterStats.projectionStatus).toBe(RUNNING);
 
-      const byCategoryStats = await getProjectionStatistics(
+      const byCategoryStats = await client.getProjectionStatistics(
         "$by_category"
-      ).execute(connection);
+      );
 
       expect(byCategoryStats.projectionStatus).toBe(RUNNING);
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(
-          createCatEvent(MR_WHISKERS, NAPPED_EVENT),
-          createCatEvent(SMUDGES, NAPPED_EVENT),
-          createCatEvent(MR_WHISKERS, SNACKED_EVENT),
-          createCatEvent(PEANUT_BUTTER, NAPPED_EVENT),
-          createCatEvent(MR_WHISKERS, NAPPED_EVENT),
-          createCatEvent(PEANUT_BUTTER, SNACKED_EVENT)
-        )
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, [
+        createCatEvent(MR_WHISKERS, NAPPED_EVENT),
+        createCatEvent(SMUDGES, NAPPED_EVENT),
+        createCatEvent(MR_WHISKERS, SNACKED_EVENT),
+        createCatEvent(PEANUT_BUTTER, NAPPED_EVENT),
+        createCatEvent(MR_WHISKERS, NAPPED_EVENT),
+        createCatEvent(PEANUT_BUTTER, SNACKED_EVENT),
+      ]);
 
       await delay(5000);
 
-      const result = await getProjectionResult<CatCounter>(
-        COUNTER_PROJECTION_NAME
-      )
-        .fromPartition(`cat-${MR_WHISKERS}`)
-
-        .execute(connection);
+      const result = await client.getProjectionResult<CatCounter>(
+        COUNTER_PROJECTION_NAME,
+        { fromPartition: `cat-${MR_WHISKERS}` }
+      );
 
       expect(result).toMatchObject({
         naps: 2,
@@ -176,7 +161,7 @@ describe("getProjectionResult", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        getProjectionResult(PROJECTION_NAME).execute(connection)
+        client.getProjectionResult(PROJECTION_NAME)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

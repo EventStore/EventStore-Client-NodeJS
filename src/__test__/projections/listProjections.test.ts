@@ -1,22 +1,10 @@
 import { createTestNode } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createOneTimeProjection,
-  createContinuousProjection,
-  createTransientProjection,
-  listContinuousProjections,
-  listOneTimeProjections,
-  listTransientProjections,
-  CONTINUOUS,
-  ONE_TIME,
-  TRANSIENT,
-} from "../..";
+import { CONTINUOUS, EventStoreDBClient, ONE_TIME, TRANSIENT } from "../..";
 
 describe("list projections", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   const basicProjection = `
   fromAll()
@@ -37,25 +25,22 @@ describe("list projections", () => {
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
 
     for (const name of continuousProjections) {
-      await createContinuousProjection(name, basicProjection).execute(
-        connection
-      );
+      await client.createContinuousProjection(name, basicProjection);
     }
 
     for (const _ of oneTimeProjections) {
-      await createOneTimeProjection(basicProjection).execute(connection);
+      await client.createOneTimeProjection(basicProjection);
     }
 
     for (const name of transientProjections) {
-      await createTransientProjection(name, basicProjection).execute(
-        connection
-      );
+      await client.createTransientProjection(name, basicProjection);
     }
   });
 
@@ -65,7 +50,7 @@ describe("list projections", () => {
 
   describe("lists projections", () => {
     test("listContinuousProjections", async () => {
-      const projections = await listContinuousProjections().execute(connection);
+      const projections = await client.listContinuousProjections();
 
       // includes system projections
       expect(projections.length).toBeGreaterThan(continuousProjections.length);
@@ -80,7 +65,7 @@ describe("list projections", () => {
     });
 
     test("listOneTimeProjections", async () => {
-      const projections = await listOneTimeProjections().execute(connection);
+      const projections = await client.listOneTimeProjections();
 
       expect(projections).toHaveLength(oneTimeProjections.length);
 
@@ -91,7 +76,7 @@ describe("list projections", () => {
     });
 
     test("listTransientProjections", async () => {
-      const projections = await listTransientProjections().execute(connection);
+      const projections = await client.listTransientProjections();
 
       expect(projections).toHaveLength(transientProjections.length);
 

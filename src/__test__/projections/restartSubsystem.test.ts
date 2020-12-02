@@ -1,17 +1,18 @@
 import { createTestNode } from "../utils";
 
-import { ESDBConnection, EventStoreConnection, restartSubsystem } from "../..";
+import { EventStoreDBClient } from "../..";
 
 describe("restartSubsystem", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -19,8 +20,6 @@ describe("restartSubsystem", () => {
   });
 
   test("Doesnt error", async () => {
-    await expect(
-      restartSubsystem().execute(connection)
-    ).resolves.toBeUndefined();
+    await expect(client.restartSubsystem()).resolves.toBeUndefined();
   });
 });

@@ -1,21 +1,18 @@
 import { createTestNode } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createContinuousProjection,
-} from "../..";
+import { EventStoreDBClient } from "../..";
 
 describe("createContinuousProjection", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -26,7 +23,7 @@ describe("createContinuousProjection", () => {
     const PROJECTION_NAME = "track and field";
 
     await expect(
-      createContinuousProjection(
+      client.createContinuousProjection(
         PROJECTION_NAME,
         `
         fromAll()
@@ -35,17 +32,18 @@ describe("createContinuousProjection", () => {
               return {};
             }
           });
-        `
+        `,
+        {
+          trackEmittedStreams: true,
+        }
       )
-        .trackEmittedStreams()
-        .execute(connection)
     ).resolves.toBeUndefined();
   });
 
   test("do not track", async () => {
     const PROJECTION_NAME = "do not track";
     await expect(
-      createContinuousProjection(
+      client.createContinuousProjection(
         PROJECTION_NAME,
         `
         fromAll()
@@ -54,10 +52,9 @@ describe("createContinuousProjection", () => {
               return {};
             }
           });
-        `
+        `,
+        { trackEmittedStreams: false }
       )
-        .doNotTrackEmittedStreams()
-        .execute(connection)
     ).resolves.toBeUndefined();
   });
 });

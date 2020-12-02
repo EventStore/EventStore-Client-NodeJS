@@ -1,5 +1,6 @@
 export * from "./CommandError";
 export * from "./convertGrpcEvent";
+export * from "./convertGrpcProjectionDetails";
 export * from "./debug";
 export * from "./filter";
 export * from "./handleBatchRead";

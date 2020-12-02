@@ -1,37 +1,55 @@
 import { createTestNode } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createOneTimeProjection,
-} from "../..";
+import { EventStoreDBClient } from "../..";
 
 describe("createOneTimeProjection", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
     await node.down();
   });
 
-  it("succeeds", async () => {
-    await expect(
-      createOneTimeProjection(`
+  describe("string", () => {
+    it("succeeds", async () => {
+      await expect(
+        client.createOneTimeProjection(
+          `
         fromAll()
           .when({
             $init: function (state, ev) {
               return {};
             }
           });
-      `).execute(connection)
-    ).resolves.toBeUndefined();
+      `
+        )
+      ).resolves.toBeUndefined();
+    });
+  });
+
+  describe("template string", () => {
+    it("succeeds", async () => {
+      const INIT = "$init";
+
+      await expect(
+        client.createOneTimeProjection`
+          fromAll()
+            .when({
+              ${INIT}: function (state, ev) {
+                return {};
+              }
+            });
+        `
+      ).resolves.toBeUndefined();
+    });
   });
 });
