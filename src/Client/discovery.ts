@@ -1,4 +1,3 @@
-import * as dns from "dns";
 import { ChannelCredentials } from "@grpc/grpc-js";
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
@@ -28,7 +27,7 @@ export async function discoverEndpoint(
       const candidates: EndPoint[] =
         "endpoints" in settings
           ? settings.endpoints
-          : await resolveDomainName(settings.domain);
+          : [{ address: settings.domain, port: settings.port }];
 
       debug.connection(`Starting discovery for candidates: %O`, candidates);
 
@@ -52,22 +51,6 @@ export async function discoverEndpoint(
 
     await delay(500);
   }
-}
-
-function resolveDomainName(domain: string): Promise<EndPoint[]> {
-  debug.connection(`Resolving domain name ${domain}`);
-
-  return new Promise((resolve, reject) => {
-    dns.resolveSrv(domain, (error, addresses) => {
-      if (error) return reject(error);
-      return resolve(
-        addresses.map<EndPoint>((record) => ({
-          address: record.name,
-          port: record.port,
-        }))
-      );
-    });
-  });
 }
 
 function inAllowedStates(member: MemberInfo): boolean {

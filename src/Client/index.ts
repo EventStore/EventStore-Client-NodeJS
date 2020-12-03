@@ -20,6 +20,7 @@ import { parseConnectionString } from "./parseConnectionString";
 
 export interface DNSClusterOptions {
   domain: string;
+  port: number;
   nodePreference?: NodePreference;
 }
 
@@ -77,7 +78,7 @@ export class Client {
     };
 
     if (options.dnsDiscover) {
-      const { address } = options.hosts[0];
+      const { address, port } = options.hosts[0];
 
       if (options.hosts.length > 1) {
         debug.connection(
@@ -88,6 +89,7 @@ export class Client {
       return new Client(
         {
           domain: address,
+          port: port,
           nodePreference: options.nodePreference,
         },
         channelCredentials,
