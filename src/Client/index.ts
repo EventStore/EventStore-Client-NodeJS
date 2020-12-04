@@ -19,8 +19,7 @@ import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 
 export interface DNSClusterOptions {
-  domain: string;
-  port: number;
+  discover: EndPoint;
   nodePreference?: NodePreference;
 }
 
@@ -78,18 +77,17 @@ export class Client {
     };
 
     if (options.dnsDiscover) {
-      const { address, port } = options.hosts[0];
+      const [discover] = options.hosts;
 
       if (options.hosts.length > 1) {
         debug.connection(
-          `More than one address provided for discovery. Using first: ${address}.`
+          `More than one address provided for discovery. Using first: ${discover.address}:${discover.port}.`
         );
       }
 
       return new Client(
         {
-          domain: address,
-          port: port,
+          discover,
           nodePreference: options.nodePreference,
         },
         channelCredentials,

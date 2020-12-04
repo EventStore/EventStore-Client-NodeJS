@@ -25,9 +25,7 @@ export async function discoverEndpoint(
   while (true) {
     try {
       const candidates: EndPoint[] =
-        "endpoints" in settings
-          ? settings.endpoints
-          : [{ address: settings.domain, port: settings.port }];
+        "endpoints" in settings ? settings.endpoints : [settings.discover];
 
       debug.connection(`Starting discovery for candidates: %O`, candidates);
 
