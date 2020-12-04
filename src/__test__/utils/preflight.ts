@@ -1,5 +1,6 @@
 import { exec as ex } from "child_process";
 import { promisify } from "util";
+import { config as loadDotEnv } from "dotenv";
 import { dockerImages } from "./dockerImages";
 
 const exec = promisify(ex);
@@ -44,6 +45,7 @@ const pullImages = async () => {
 };
 
 module.exports = async () => {
+  loadDotEnv();
   await checkFor("docker");
   await checkFor("docker-compose");
   await pullImages();
