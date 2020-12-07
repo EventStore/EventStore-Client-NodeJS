@@ -1,17 +1,5 @@
 import createDebug from "debug";
 
-createDebug.formatters.c = function (v) {
-  const fields = Object.entries(v).reduce((acc, [key, value]) => {
-    if (!key.startsWith("_")) return acc;
-    return {
-      ...acc,
-      [key.substring(1)]: value,
-    };
-  }, {});
-
-  return createDebug.formatters.O.call(this, fields);
-};
-
 createDebug.formatters.g = function (v) {
   return createDebug.formatters.O.call(this, v.toObject());
 };

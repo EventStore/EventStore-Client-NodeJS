@@ -1,23 +1,22 @@
 import { createTestNode } from "../utils";
 
-import {
-  EventStoreConnection,
-  createPersistentSubscription,
-  ESDBConnection,
-  deletePersistentSubscription,
-} from "../..";
+import { EventStoreDBClient } from "../..";
+import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
 
 describe("deletePersistentSubscription", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      {
+        endpoint: node.uri,
+      },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -28,12 +27,14 @@ describe("deletePersistentSubscription", () => {
     const STREAM_NAME = "test_stream_name";
     const GROUP_NAME = "test_group_name";
 
-    await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-      .fromStart()
-      .execute(connection);
+    await client.createPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionSettingsFromDefaults()
+    );
 
     await expect(
-      deletePersistentSubscription(STREAM_NAME, GROUP_NAME).execute(connection)
+      client.deletePersistentSubscription(STREAM_NAME, GROUP_NAME)
     ).resolves.toBeUndefined();
   });
 });

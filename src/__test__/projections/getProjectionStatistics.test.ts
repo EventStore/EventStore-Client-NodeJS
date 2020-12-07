@@ -1,19 +1,10 @@
 import { createTestNode } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createContinuousProjection,
-  createTransientProjection,
-  getProjectionStatistics,
-  CONTINUOUS,
-  TRANSIENT,
-  UnknownError,
-} from "../..";
+import { CONTINUOUS, EventStoreDBClient, TRANSIENT, UnknownError } from "../..";
 
 describe("getProjectionStatistics", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   const basicProjection = `
   fromAll()
@@ -33,21 +24,18 @@ describe("getProjectionStatistics", () => {
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
 
     for (const name of continuousProjections) {
-      await createContinuousProjection(name, basicProjection).execute(
-        connection
-      );
+      await client.createContinuousProjection(name, basicProjection);
     }
 
     for (const name of transientProjections) {
-      await createTransientProjection(name, basicProjection).execute(
-        connection
-      );
+      await client.createTransientProjection(name, basicProjection);
     }
   });
 
@@ -59,9 +47,7 @@ describe("getProjectionStatistics", () => {
     test("continuous", async () => {
       const REQUESTED_NAME = continuousProjections[2];
 
-      const details = await getProjectionStatistics(REQUESTED_NAME).execute(
-        connection
-      );
+      const details = await client.getProjectionStatistics(REQUESTED_NAME);
 
       expect(details).toBeDefined();
       expect(details.mode).toBe(CONTINUOUS);
@@ -70,9 +56,7 @@ describe("getProjectionStatistics", () => {
 
     test("transient", async () => {
       const REQUESTED_NAME = transientProjections[1];
-      const details = await getProjectionStatistics(REQUESTED_NAME).execute(
-        connection
-      );
+      const details = await client.getProjectionStatistics(REQUESTED_NAME);
 
       expect(details).toBeDefined();
       expect(details.mode).toBe(TRANSIENT);
@@ -82,7 +66,7 @@ describe("getProjectionStatistics", () => {
     test("non-existant", async () => {
       const REQUESTED_NAME = "some-non-existant-projection";
       await expect(
-        getProjectionStatistics(REQUESTED_NAME).execute(connection)
+        client.getProjectionStatistics(REQUESTED_NAME)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

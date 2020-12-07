@@ -1,24 +1,22 @@
 import { createTestNode } from "../utils";
 
-import {
-  EventStoreConnection,
-  createPersistentSubscription,
-  updatePersistentSubscription,
-  ESDBConnection,
-  PINNED,
-} from "../..";
+import { PINNED, EventStoreDBClient } from "../..";
+import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
 
 describe("updatePersistentSubscription", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      {
+        endpoint: node.uri,
+      },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -28,15 +26,21 @@ describe("updatePersistentSubscription", () => {
   test("should update a persistant subscription", async () => {
     const STREAM_NAME = "from_start_test_stream_name";
     const GROUP_NAME = "from_start_test_group_name";
+    const settings = persistentSubscriptionSettingsFromDefaults({
+      fromRevision: BigInt(1),
+    });
 
-    await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-      .fromStart()
-      .execute(connection);
+    await client.createPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME,
+      settings
+    );
 
     await expect(
-      updatePersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .consumerStrategy(PINNED)
-        .execute(connection)
+      client.updatePersistentSubscription(STREAM_NAME, GROUP_NAME, {
+        ...settings,
+        strategy: PINNED,
+      })
     ).resolves.toBeUndefined();
   });
 });

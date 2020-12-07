@@ -1,31 +1,23 @@
-import { createTestNode } from "../utils";
+import { createTestNode, jsonTestEvents } from "../utils";
 
 import {
-  writeEventsToStream,
-  ESDBConnection,
-  EventStoreConnection,
-  EventData,
-  readEventsFromStream,
+  EventStoreDBClient,
   WrongExpectedVersionError,
-  deleteStream,
+  NO_STREAM,
+  StreamNotFoundError,
 } from "../..";
-import { NO_STREAM } from "../../constants";
-import { StreamNotFoundError } from "../../utils/CommandError";
 
 describe("deleteStream", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
-
-  const event = EventData.json("an_event", {
-    message: "test",
-  }).build();
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -37,19 +29,18 @@ describe("deleteStream", () => {
       const ANY_REVISION_STREAM = "any_revision_stream";
 
       beforeAll(async () => {
-        await writeEventsToStream(ANY_REVISION_STREAM)
-          .send(event, event, event, event)
-          .execute(connection);
+        await client.writeEventsToStream(
+          ANY_REVISION_STREAM,
+          jsonTestEvents(4)
+        );
       });
 
       it("succeeds", async () => {
-        const result = await deleteStream(ANY_REVISION_STREAM).execute(
-          connection
-        );
+        const result = await client.deleteStream(ANY_REVISION_STREAM);
         expect(result).toBeDefined();
 
         await expect(
-          readEventsFromStream(ANY_REVISION_STREAM).execute(connection)
+          client.readEventsFromStream(ANY_REVISION_STREAM, 10)
         ).rejects.toThrowError(StreamNotFoundError);
       });
     });
@@ -59,16 +50,14 @@ describe("deleteStream", () => {
         const STREAM = "expected_revision_stream_exact";
 
         beforeAll(async () => {
-          await writeEventsToStream(STREAM)
-            .send(event, event, event, event)
-            .execute(connection);
+          await client.writeEventsToStream(STREAM, jsonTestEvents(4));
         });
 
         it("fails", async () => {
           try {
-            const result = await deleteStream(STREAM)
-              .expectedRevision(BigInt(2))
-              .execute(connection);
+            const result = await client.deleteStream(STREAM, {
+              expectedRevision: BigInt(2),
+            });
 
             expect(result).toBe("Unreachable");
           } catch (error) {
@@ -81,22 +70,21 @@ describe("deleteStream", () => {
         });
 
         it("succeeds", async () => {
-          const events = await readEventsFromStream(STREAM)
-            .fromEnd()
-            .backward()
-            .count(1)
-            .execute(connection);
+          const events = await client.readEventsFromStream(STREAM, 1, {
+            direction: "backward",
+            fromRevision: "end",
+          });
 
-          const revision = events[0].event!.revision;
+          const expectedRevision = events[0].event!.revision;
 
-          const result = await deleteStream(STREAM)
-            .expectedRevision(revision)
-            .execute(connection);
+          const result = await client.deleteStream(STREAM, {
+            expectedRevision,
+          });
 
           expect(result).toBeDefined();
 
           await expect(
-            readEventsFromStream(STREAM).execute(connection)
+            client.readEventsFromStream(STREAM, 1)
           ).rejects.toThrowError(StreamNotFoundError);
         });
       });
@@ -106,16 +94,14 @@ describe("deleteStream", () => {
         const STREAM = "i_exist_hopefully";
 
         beforeAll(async () => {
-          await writeEventsToStream(STREAM)
-            .send(event, event, event, event)
-            .execute(connection);
+          await client.writeEventsToStream(STREAM, jsonTestEvents(4));
         });
 
         it("fails", async () => {
           try {
-            const result = await deleteStream(STREAM)
-              .expectedRevision(NO_STREAM)
-              .execute(connection);
+            const result = await client.deleteStream(STREAM, {
+              expectedRevision: NO_STREAM,
+            });
 
             expect(result).toBe("Unreachable");
           } catch (error) {
@@ -128,9 +114,9 @@ describe("deleteStream", () => {
         });
 
         it("succeeds", async () => {
-          const result = await deleteStream(NOT_A_STREAM)
-            .expectedRevision(NO_STREAM)
-            .execute(connection);
+          const result = await client.deleteStream(NOT_A_STREAM, {
+            expectedRevision: NO_STREAM,
+          });
 
           expect(result).toBeDefined();
         });

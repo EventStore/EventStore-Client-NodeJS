@@ -1,4 +1,4 @@
-import { parseConnectionString } from "../../connection/parseConnectionString";
+import { parseConnectionString } from "../../Client/parseConnectionString";
 
 import { valid, invalid, warning } from "./connectionStringMockups";
 

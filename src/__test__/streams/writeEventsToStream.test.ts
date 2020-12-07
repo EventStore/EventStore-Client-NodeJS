@@ -1,25 +1,21 @@
-import { createTestNode, testEvents } from "../utils";
+import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
 
-import {
-  writeEventsToStream,
-  readEventsFromStream,
-  ESDBConnection,
-  EventStoreConnection,
-  EventData,
-} from "../..";
+import { EventStoreDBClient, jsonEvent } from "../..";
 import { WrongExpectedVersionError } from "../../utils/CommandError";
 import { ANY, NO_STREAM, STREAM_EXISTS } from "../../constants";
+import { binaryEvent } from "../../events";
 
 describe("writeEventsToStream", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -29,30 +25,22 @@ describe("writeEventsToStream", () => {
   describe("should successfully write to stream", () => {
     test("json events", async () => {
       const STREAM_NAME = "json_stream_name";
-      const events = Array.from({ length: 4 }, (_, i) =>
-        EventData.json("json-test", { message: "test", index: i }).build()
+
+      const result = await client.writeEventsToStream(
+        STREAM_NAME,
+        jsonTestEvents()
       );
-
-      const result = await writeEventsToStream(STREAM_NAME)
-        .send(...events)
-        .execute(connection);
-
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
     });
 
     test("binary events", async () => {
       const STREAM_NAME = "binary_stream_name";
-      const events = Array.from({ length: 4 }, (_, i) =>
-        EventData.binary(
-          "binary-test",
-          Uint8Array.from(Buffer.from(`hello: ${i}`))
-        ).build()
-      );
 
-      const result = await writeEventsToStream(STREAM_NAME)
-        .send(...events)
-        .execute(connection);
+      const result = await client.writeEventsToStream(
+        STREAM_NAME,
+        binaryTestEvents()
+      );
 
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
@@ -61,25 +49,21 @@ describe("writeEventsToStream", () => {
     test("with metadata for json events", async () => {
       const STREAM_NAME = "json_metadata_stream_name";
       const METADATA = { metaMessage: "How meta is this?" };
-      const jsonEvent: EventData = EventData.json("metadata-test-json", {
-        message: "the json message",
-        kind: "json",
-      })
-        .jsonMetadata(METADATA)
-        .build();
+      const event = jsonEvent({
+        eventType: "metadata-test-json",
+        payload: {
+          message: "the json message",
+          kind: "json",
+        },
+        metadata: METADATA,
+      });
 
-      const result = await writeEventsToStream(STREAM_NAME)
-        .send(jsonEvent)
-        .execute(connection);
+      const result = await client.writeEventsToStream(STREAM_NAME, event);
 
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
 
-      const rxEvents = await readEventsFromStream(STREAM_NAME)
-        .fromStart()
-        .forward()
-        .count(1)
-        .execute(connection);
+      const rxEvents = await client.readEventsFromStream(STREAM_NAME, 1);
 
       expect(rxEvents).toBeDefined();
       expect(rxEvents.length).toEqual(1);
@@ -92,25 +76,18 @@ describe("writeEventsToStream", () => {
       const STREAM_NAME = "binary_metadata_stream_name";
       const METADATA = "How meta is this?";
 
-      const binaryEvent: EventData = EventData.binary(
-        "metadata-test-binary",
-        Uint8Array.from(Buffer.from("the binary message"))
-      )
-        .binaryMetadata(Uint8Array.from(Buffer.from(METADATA)))
-        .build();
+      const event = binaryEvent({
+        eventType: "metadata-test-binary",
+        payload: Buffer.from("the binary message"),
+        metadata: Buffer.from(METADATA),
+      });
 
-      const result = await writeEventsToStream(STREAM_NAME)
-        .send(binaryEvent)
-        .execute(connection);
+      const result = await client.writeEventsToStream(STREAM_NAME, event);
 
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
 
-      const rxEvents = await readEventsFromStream(STREAM_NAME)
-        .fromStart()
-        .forward()
-        .count(1)
-        .execute(connection);
+      const rxEvents = await client.readEventsFromStream(STREAM_NAME, 1);
 
       expect(rxEvents).toBeDefined();
       expect(rxEvents.length).toEqual(1);
@@ -125,10 +102,13 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "any_stream_doesnt_matter";
 
-          const result = await writeEventsToStream(STREAM_NAME)
-            .expectedRevision(ANY)
-            .send(...testEvents())
-            .execute(connection);
+          const result = await client.writeEventsToStream(
+            STREAM_NAME,
+            jsonTestEvents(),
+            {
+              expectedRevision: ANY,
+            }
+          );
 
           expect(result).toBeDefined();
           expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
@@ -139,10 +119,13 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "no_stream_here";
 
-          const result = await writeEventsToStream(STREAM_NAME)
-            .expectedRevision(NO_STREAM)
-            .send(...testEvents())
-            .execute(connection);
+          const result = await client.writeEventsToStream(
+            STREAM_NAME,
+            jsonTestEvents(),
+            {
+              expectedRevision: NO_STREAM,
+            }
+          );
 
           expect(result).toBeDefined();
           expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
@@ -151,15 +134,16 @@ describe("writeEventsToStream", () => {
         test("fails", async () => {
           const STREAM_NAME = "no_stream_here_but_there_is";
 
-          await writeEventsToStream(STREAM_NAME)
-            .send(...testEvents())
-            .execute(connection);
+          await client.writeEventsToStream(STREAM_NAME, jsonTestEvents());
 
           try {
-            const result = await writeEventsToStream(STREAM_NAME)
-              .expectedRevision("no_stream")
-              .send(...testEvents())
-              .execute(connection);
+            const result = await client.writeEventsToStream(
+              STREAM_NAME,
+              jsonTestEvents(),
+              {
+                expectedRevision: "no_stream",
+              }
+            );
 
             expect(result).toBe("unreachable");
           } catch (error) {
@@ -178,15 +162,15 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "stream_should_exist";
 
-          await writeEventsToStream(STREAM_NAME)
-            .send(...testEvents())
-            .execute(connection);
+          await client.writeEventsToStream(STREAM_NAME, jsonTestEvents());
 
-          const result = await writeEventsToStream(STREAM_NAME)
-            .expectedRevision(STREAM_EXISTS)
-            .send(...testEvents())
-            .execute(connection);
-
+          const result = await client.writeEventsToStream(
+            STREAM_NAME,
+            jsonTestEvents(),
+            {
+              expectedRevision: STREAM_EXISTS,
+            }
+          );
           expect(result).toBeDefined();
           expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
         });
@@ -195,10 +179,13 @@ describe("writeEventsToStream", () => {
           const STREAM_NAME = "stream_should_exist_but_doesnt";
 
           try {
-            const result = await writeEventsToStream(STREAM_NAME)
-              .expectedRevision(STREAM_EXISTS)
-              .send(...testEvents())
-              .execute(connection);
+            const result = await client.writeEventsToStream(
+              STREAM_NAME,
+              jsonTestEvents(),
+              {
+                expectedRevision: STREAM_EXISTS,
+              }
+            );
 
             expect(result).toBe("unreachable");
           } catch (error) {
@@ -217,14 +204,18 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "stream_should_be_at_nextExpectedRevision";
 
-          const { nextExpectedVersion } = await writeEventsToStream(STREAM_NAME)
-            .send(...testEvents())
-            .execute(connection);
+          const { nextExpectedVersion } = await client.writeEventsToStream(
+            STREAM_NAME,
+            jsonTestEvents()
+          );
 
-          const result = await writeEventsToStream(STREAM_NAME)
-            .expectedRevision(nextExpectedVersion)
-            .send(...testEvents())
-            .execute(connection);
+          const result = await client.writeEventsToStream(
+            STREAM_NAME,
+            jsonTestEvents(),
+            {
+              expectedRevision: nextExpectedVersion,
+            }
+          );
 
           expect(result).toBeDefined();
           expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
@@ -235,10 +226,11 @@ describe("writeEventsToStream", () => {
             const STREAM_NAME = "stream_should_be_at_revision_but_doesnt_exist";
 
             try {
-              const result = await writeEventsToStream(STREAM_NAME)
-                .expectedRevision(BigInt(1))
-                .send(...testEvents())
-                .execute(connection);
+              const result = await client.writeEventsToStream(
+                STREAM_NAME,
+                jsonTestEvents(),
+                { expectedRevision: BigInt(1) }
+              );
 
               expect(result).toBe("unreachable");
             } catch (error) {
@@ -255,17 +247,19 @@ describe("writeEventsToStream", () => {
           test("wrong version", async () => {
             const STREAM_NAME = "stream_should_be_at_revision_but_isnt";
 
-            const { nextExpectedVersion } = await writeEventsToStream(
-              STREAM_NAME
-            )
-              .send(...testEvents())
-              .execute(connection);
+            const { nextExpectedVersion } = await client.writeEventsToStream(
+              STREAM_NAME,
+              jsonTestEvents()
+            );
 
             try {
-              const result = await writeEventsToStream(STREAM_NAME)
-                .expectedRevision(nextExpectedVersion + BigInt(1))
-                .send(...testEvents())
-                .execute(connection);
+              const result = await client.writeEventsToStream(
+                STREAM_NAME,
+                jsonTestEvents(),
+                {
+                  expectedRevision: nextExpectedVersion + BigInt(1),
+                }
+              );
 
               expect(result).toBe("unreachable");
             } catch (error) {

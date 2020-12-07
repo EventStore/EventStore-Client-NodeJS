@@ -1,32 +1,23 @@
-import { createTestNode, testEvents } from "../utils";
+import { createTestNode, jsonTestEvents } from "../utils";
 
-import {
-  writeEventsToStream,
-  ESDBConnection,
-  EventStoreConnection,
-  readAllEvents,
-} from "../..";
+import { EventStoreDBClient, BACKWARD, END, START } from "../..";
 
 describe("readAllEvents", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
   const STREAM_NAME_A = "stream_name_a";
   const STREAM_NAME_B = "stream_name_b";
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
 
-    await writeEventsToStream(STREAM_NAME_A)
-      .send(...testEvents())
-      .execute(connection);
-
-    await writeEventsToStream(STREAM_NAME_B)
-      .send(...testEvents())
-      .execute(connection);
+    await client.writeEventsToStream(STREAM_NAME_A, jsonTestEvents());
+    await client.writeEventsToStream(STREAM_NAME_B, jsonTestEvents());
   });
 
   afterAll(async () => {
@@ -35,10 +26,9 @@ describe("readAllEvents", () => {
 
   describe("should successfully read from $all", () => {
     test("from start", async () => {
-      const events = await readAllEvents()
-        .fromStart()
-        .count(Number.MAX_SAFE_INTEGER)
-        .execute(connection);
+      const events = await client.readAllEvents(Number.MAX_SAFE_INTEGER, {
+        fromPosition: START,
+      });
 
       expect(events).toBeDefined();
       expect(events.length).toBeGreaterThan(8);
@@ -51,27 +41,22 @@ describe("readAllEvents", () => {
     });
 
     test("from position", async () => {
-      const [, , eventToExtract] = await readAllEvents()
-        .fromStart()
-        .count(3)
-        .execute(connection);
+      const [, , eventToExtract] = await client.readAllEvents(3);
 
       const { position } = eventToExtract.event!;
 
-      const [extracted] = await readAllEvents()
-        .fromPosition(position)
-        .count(1)
-        .execute(connection);
+      const [extracted] = await client.readAllEvents(1, {
+        fromPosition: position,
+      });
 
       expect(extracted).toEqual(eventToExtract);
     });
 
     test("backward from end", async () => {
-      const events = await readAllEvents()
-        .backward()
-        .fromEnd()
-        .count(Number.MAX_SAFE_INTEGER)
-        .execute(connection);
+      const events = await client.readAllEvents(Number.MAX_SAFE_INTEGER, {
+        direction: BACKWARD,
+        fromPosition: END,
+      });
 
       expect(events).toBeDefined();
       expect(events.length).toBeGreaterThan(8);
@@ -84,11 +69,7 @@ describe("readAllEvents", () => {
     });
 
     test("count", async () => {
-      const events = await readAllEvents()
-        .fromStart()
-        .count(2)
-        .execute(connection);
-
+      const events = await client.readAllEvents(2);
       expect(events.length).toBe(2);
     });
   });

@@ -14,47 +14,45 @@ import { EventsOnlyStream } from "./EventsOnlyStream";
 
 export class OneWaySubscription<E>
   implements Subscription<E, SubscriptionReport> {
-  private _listeners: Listeners<E, SubscriptionReport> = {
+  #listeners: Listeners<E, SubscriptionReport> = {
     event: new Set(),
     end: new Set(),
     confirmation: new Set(),
     error: new Set(),
     close: new Set(),
   };
-  private _stream: ClientReadableStream<ReadResp>;
-  private _convertGrpcEvent: ConvertGrpcEvent<E>;
+  #stream: ClientReadableStream<ReadResp>;
+  #convertGrpcEvent: ConvertGrpcEvent<E>;
 
   constructor(
-    stream: ClientReadableStream<ReadResp>,
-    listeners: Listeners<E, SubscriptionReport>,
+    readStream: ClientReadableStream<ReadResp>,
     convertGrpcEvent: ConvertGrpcEvent<E>
   ) {
-    this._stream = stream;
-    this._listeners = listeners;
-    this._convertGrpcEvent = convertGrpcEvent;
+    this.#convertGrpcEvent = convertGrpcEvent;
+    this.#stream = readStream;
 
-    this._stream.on("data", (resp: ReadResp) => {
+    this.#stream.on("data", (resp: ReadResp) => {
       if (resp.hasConfirmation()) {
-        this._listeners.confirmation.forEach((fn) => fn());
+        this.#listeners.confirmation.forEach((fn) => fn());
       }
 
       if (resp.hasEvent()) {
-        const resolved = convertGrpcEvent(resp.getEvent()!);
+        const resolved = this.#convertGrpcEvent(resp.getEvent()!);
 
-        this._listeners.event.forEach((fn) =>
+        this.#listeners.event.forEach((fn) =>
           fn(resolved, { unsubscribe: this.unsubscribe })
         );
       }
     });
 
-    this._stream.on("end", () => {
-      this._listeners.end.forEach((fn) => fn());
+    this.#stream.on("end", () => {
+      this.#listeners.end.forEach((fn) => fn());
     });
 
-    this._stream.on("error", (err: ServiceError) => {
+    this.#stream.on("error", (err: ServiceError) => {
       if (err.code === Status.CANCELLED) return;
       const error = convertToCommandError(err);
-      this._listeners.error.forEach((fn) => fn(error));
+      this.#listeners.error.forEach((fn) => fn(error));
     });
   }
 
@@ -62,7 +60,7 @@ export class OneWaySubscription<E>
     event: Name,
     handler: SubscriptionListeners<E, SubscriptionReport>[Name]
   ): OneWaySubscription<E> => {
-    this._listeners[event]?.add(handler as never);
+    this.#listeners[event]?.add(handler as never);
     return this;
   };
 
@@ -83,30 +81,30 @@ export class OneWaySubscription<E>
     event: Name,
     handler: SubscriptionListeners<E, SubscriptionReport>[Name]
   ): OneWaySubscription<E> => {
-    this._listeners[event]?.delete(handler as never);
+    this.#listeners[event]?.delete(handler as never);
     return this;
   };
 
   public unsubscribe = (): void => {
-    this._stream.cancel();
+    this.#stream.cancel();
   };
 
   public get isPaused(): boolean {
-    return this._stream.isPaused();
+    return this.#stream.isPaused();
   }
 
   public pause = (): void => {
-    this._stream.pause();
+    this.#stream.pause();
   };
 
   public resume = (): void => {
-    this._stream.resume();
+    this.#stream.resume();
   };
 
   /** Iterate the events asynchronously */
   public [Symbol.asyncIterator] = (): AsyncIterator<E> => {
-    return this._stream
-      .pipe(new EventsOnlyStream(this._convertGrpcEvent))
+    return this.#stream
+      .pipe(new EventsOnlyStream(this.#convertGrpcEvent))
       [Symbol.asyncIterator]();
   };
 }

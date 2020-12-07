@@ -1,16 +1,10 @@
 import { createTestNode } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createContinuousProjection,
-  UnknownError,
-  updateProjection,
-} from "../..";
+import { EventStoreDBClient, UnknownError } from "../..";
 
 describe("resetProjection", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   const projection = `
     fromAll()
@@ -25,10 +19,11 @@ describe("resetProjection", () => {
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -49,34 +44,24 @@ describe("resetProjection", () => {
             },
           });
       `;
-
-      await createContinuousProjection(PROJECTION_NAME, projection).execute(
-        connection
-      );
-
-      await updateProjection(PROJECTION_NAME, after).execute(connection);
+      await client.createContinuousProjection(PROJECTION_NAME, projection);
+      await client.updateProjection(PROJECTION_NAME, after);
     });
 
     test("track Emitted Streams", async () => {
       const PROJECTION_NAME = "projection_to_update_tracking";
-
-      await createContinuousProjection(PROJECTION_NAME, projection).execute(
-        connection
-      );
-
-      await updateProjection(PROJECTION_NAME, projection)
-        .trackEmittedStreams()
-
-        .execute(connection);
+      await client.createContinuousProjection(PROJECTION_NAME, projection);
+      await client.updateProjection(PROJECTION_NAME, projection, {
+        trackEmittedStreams: true,
+      });
     });
   });
 
   describe("errors", () => {
     test("projection doesnt exist", async () => {
       const PROJECTION_NAME = "doesnt exist";
-
       await expect(
-        updateProjection(PROJECTION_NAME, projection).execute(connection)
+        client.updateProjection(PROJECTION_NAME, projection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

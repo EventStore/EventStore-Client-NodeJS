@@ -13,6 +13,7 @@ import { EndPoint } from "../../types";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
+const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const CPExec = promisify(cp.exec);
 
@@ -112,6 +113,7 @@ export class Cluster {
   private count: number;
   private insecure: boolean;
   private ipStub!: string;
+  private cert?: Buffer;
   private retryCount = 3;
   private locations: ClusterLocation[] = [];
   private ready: Promise<void>;
@@ -124,6 +126,12 @@ export class Cluster {
     this.ready = this.initialize();
   }
 
+  public get rootCertificate(): Buffer {
+    if (this.insecure || !this.cert) {
+      throw new Error("No Cert for insecure cluster");
+    }
+    return this.cert;
+  }
   public get certPath(): string {
     if (this.insecure) throw new Error("No Cert for insecure cluster");
     return this.path("./certs/ca/ca.crt");
@@ -196,6 +204,10 @@ export class Cluster {
           break health;
         }
       }
+    }
+
+    if (!this.insecure) {
+      this.cert = await readFile(this.certPath);
     }
   };
 

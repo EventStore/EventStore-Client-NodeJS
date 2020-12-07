@@ -2,38 +2,41 @@ import {
   createTestCluster,
   Defer,
   delay,
-  testEvents,
+  jsonTestEvents,
   postEventViaHttpApi,
 } from "../utils";
 
 import {
-  EventStoreConnection,
-  createPersistentSubscription,
-  connectToPersistentSubscription,
-  writeEventsToStream,
-  EventData,
   PersistentReport,
   ResolvedEvent,
-  ESDBConnection,
   NotLeaderError,
   PersistentSubscription,
+  EventStoreDBClient,
 } from "../..";
+import { jsonEvent } from "../../events";
+import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
+import { START } from "../../constants";
 
 describe("connectToPersistentSubscription", () => {
   const cluster = createTestCluster();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
-  const finishEvent = EventData.json("finish-test", {
-    message: "lets wrap this up",
-  });
+  const finishEvent = () =>
+    jsonEvent({
+      eventType: "finish-test",
+      payload: {
+        message: "lets wrap this up",
+      },
+    });
 
   beforeAll(async () => {
     await cluster.up();
 
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(cluster.certPath)
-      .gossipClusterConnection(cluster.endpoints, "leader");
+    client = new EventStoreDBClient(
+      { endpoints: cluster.endpoints, nodePreference: "leader" },
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -45,13 +48,14 @@ describe("connectToPersistentSubscription", () => {
       const STREAM_NAME = "from_start_test_stream_name";
       const GROUP_NAME = "from_start_test_group_name";
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(20))
-        .execute(connection);
-
-      await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .fromStart()
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(20));
+      await client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults({
+          fromRevision: START,
+        })
+      );
 
       const defer = new Defer();
 
@@ -73,18 +77,22 @@ describe("connectToPersistentSubscription", () => {
         }
       );
 
-      await connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+      const subscription = await client.connectToPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME
+      );
+
+      subscription
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
-        .on("end", onEnd)
-        .execute(connection);
+        .on("end", onEnd);
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(3))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(3),
+        finishEvent(),
+      ]);
 
       await defer.promise;
 
@@ -99,13 +107,14 @@ describe("connectToPersistentSubscription", () => {
       const STREAM_NAME = "from_revision_test_stream_name";
       const GROUP_NAME = "from_revision_test_group_name";
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(4))
-        .execute(connection);
-
-      await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .fromRevision(BigInt(1))
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(4));
+      await client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults({
+          fromRevision: BigInt(1),
+        })
+      );
 
       const defer = new Defer();
 
@@ -127,18 +136,22 @@ describe("connectToPersistentSubscription", () => {
         }
       );
 
-      await connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+      const subscription = await client.connectToPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME
+      );
+
+      subscription
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
-        .on("end", onEnd)
-        .execute(connection);
+        .on("end", onEnd);
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(3))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(3),
+        finishEvent(),
+      ]);
 
       await defer.promise;
 
@@ -160,15 +173,17 @@ describe("connectToPersistentSubscription", () => {
       const skipCount = 20;
       const retryCount = 20;
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(skipCount))
-        .send(...testEvents(retryCount))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(skipCount),
+        ...jsonTestEvents(skipCount),
+        finishEvent(),
+      ]);
 
-      await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .fromStart()
-        .execute(connection);
+      await client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults()
+      );
 
       const defer = new Defer();
 
@@ -204,13 +219,17 @@ describe("connectToPersistentSubscription", () => {
         }
       );
 
-      await connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+      const subscription = await client.connectToPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME
+      );
+
+      subscription
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
-        .on("end", onEnd)
-        .execute(connection);
+        .on("end", onEnd);
 
       await defer.promise;
 
@@ -235,19 +254,21 @@ describe("connectToPersistentSubscription", () => {
         const GROUP_NAME = "async_iter_ack_group_name";
         const doSomething = jest.fn();
 
-        await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .fromStart()
-          .execute(connection);
+        await client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults()
+        );
 
-        await writeEventsToStream(STREAM_NAME)
-          .send(...testEvents(99))
-          .send(finishEvent.build())
-          .execute(connection);
+        await client.writeEventsToStream(STREAM_NAME, [
+          ...jsonTestEvents(99),
+          finishEvent(),
+        ]);
 
-        const subscription = await connectToPersistentSubscription(
+        const subscription = await client.connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
-        ).execute(connection);
+        );
 
         for await (const { event } of subscription) {
           if (!event) continue;
@@ -276,20 +297,22 @@ describe("connectToPersistentSubscription", () => {
         const skipCount = 20;
         const retryCount = 20;
 
-        await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .fromStart()
-          .execute(connection);
+        await client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults()
+        );
 
-        await writeEventsToStream(STREAM_NAME)
-          .send(...testEvents(skipCount, "skip-event"))
-          .send(...testEvents(retryCount, "retry-event"))
-          .send(finishEvent.build())
-          .execute(connection);
+        await client.writeEventsToStream(STREAM_NAME, [
+          ...jsonTestEvents(skipCount, "skip-event"),
+          ...jsonTestEvents(retryCount, "retry-event"),
+          finishEvent(),
+        ]);
 
-        const subscription = await connectToPersistentSubscription(
+        const subscription = await client.connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
-        ).execute(connection);
+        );
 
         for await (const { event } of subscription) {
           if (!event) continue;
@@ -329,19 +352,21 @@ describe("connectToPersistentSubscription", () => {
         const GROUP_NAME = "async_iter_ack_fun_group_name";
         const doSomething = jest.fn();
 
-        await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .fromStart()
-          .execute(connection);
+        await client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults()
+        );
 
-        await writeEventsToStream(STREAM_NAME)
-          .send(...testEvents(99))
-          .send(finishEvent.build())
-          .execute(connection);
+        await client.writeEventsToStream(STREAM_NAME, [
+          ...jsonTestEvents(99),
+          finishEvent(),
+        ]);
 
-        const subscription = await connectToPersistentSubscription(
+        const subscription = await client.connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
-        ).execute(connection);
+        );
 
         for await (const { event } of subscription) {
           if (!event) continue;
@@ -370,14 +395,16 @@ describe("connectToPersistentSubscription", () => {
 
       const defer = new Defer();
 
-      await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-        .fromStart()
-        .execute(connection);
+      await client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults()
+      );
 
-      const subscription = await connectToPersistentSubscription(
+      const subscription = await client.connectToPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME
-      ).execute(connection);
+      );
 
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();
@@ -398,10 +425,10 @@ describe("connectToPersistentSubscription", () => {
         })
         .on("end", endListener);
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(5))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(5),
+        finishEvent(),
+      ]);
 
       await defer.promise;
 
@@ -415,13 +442,13 @@ describe("connectToPersistentSubscription", () => {
     const GROUP_NAME = "malformed_json_group_name";
     const doSomething = jest.fn();
 
-    await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-      .fromStart()
-      .execute(connection);
+    await client.createPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionSettingsFromDefaults()
+    );
 
-    await writeEventsToStream(STREAM_NAME)
-      .send(...testEvents(3, "test 1"))
-      .execute(connection);
+    await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
 
     const malformedData = "****";
 
@@ -432,15 +459,15 @@ describe("connectToPersistentSubscription", () => {
       data: malformedData,
     });
 
-    await writeEventsToStream(STREAM_NAME)
-      .send(...testEvents(3, "test 2"))
-      .send(finishEvent.build())
-      .execute(connection);
+    await client.writeEventsToStream(STREAM_NAME, [
+      ...jsonTestEvents(3, "test 2"),
+      finishEvent(),
+    ]);
 
-    const subscription = await connectToPersistentSubscription(
+    const subscription = await client.connectToPersistentSubscription(
       STREAM_NAME,
       GROUP_NAME
-    ).execute(connection);
+    );
 
     for await (const { event } of subscription) {
       if (!event) continue;
@@ -461,14 +488,14 @@ describe("connectToPersistentSubscription", () => {
   });
 
   test("should throw on follower node", async () => {
-    const connectionBuilder = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(cluster.certPath);
-
     // Create connection to a follower node
-    const followerConnection = connectionBuilder.gossipClusterConnection(
-      cluster.endpoints,
-      "follower"
+    const followerClient = new EventStoreDBClient(
+      {
+        endpoints: cluster.endpoints,
+        nodePreference: "follower",
+      },
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     const STREAM_NAME = "follower_node_test";
@@ -477,17 +504,19 @@ describe("connectToPersistentSubscription", () => {
     const confirmThatErrorWasThrown = jest.fn();
 
     const createAndConnectWithAutoReconnect = async (
-      connection: ESDBConnection
+      client: EventStoreDBClient
     ): Promise<PersistentSubscription> => {
       try {
-        await createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .fromStart()
-          .execute(connection);
+        await client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults()
+        );
 
-        const subscription = await connectToPersistentSubscription(
+        const subscription = await client.connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
-        ).execute(connection);
+        );
 
         return subscription;
       } catch (error) {
@@ -495,13 +524,17 @@ describe("connectToPersistentSubscription", () => {
 
         // Our command is good, but must be executed on the leader
         if (error instanceof NotLeaderError) {
-          // Create new connection to the reported leader node
-          const leaderConnection = connectionBuilder.singleNodeConnection(
-            error.leader
+          // Create new client connected to the reported leader node
+          const leaderClient = new EventStoreDBClient(
+            {
+              endpoint: error.leader,
+            },
+            { rootCertificate: cluster.rootCertificate },
+            { username: "admin", password: "changeit" }
           );
 
           // try again with new connection
-          return createAndConnectWithAutoReconnect(leaderConnection);
+          return createAndConnectWithAutoReconnect(leaderClient);
         }
 
         // other errors can be passed up the chain
@@ -509,13 +542,13 @@ describe("connectToPersistentSubscription", () => {
       }
     };
 
-    await writeEventsToStream(STREAM_NAME)
-      .send(...testEvents(99))
-      .send(finishEvent.build())
-      .execute(followerConnection);
+    await followerClient.writeEventsToStream(STREAM_NAME, [
+      ...jsonTestEvents(99),
+      finishEvent(),
+    ]);
 
     const subscription = await createAndConnectWithAutoReconnect(
-      followerConnection
+      followerClient
     );
 
     for await (const { event } of subscription) {

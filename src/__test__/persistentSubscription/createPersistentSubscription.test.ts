@@ -1,22 +1,22 @@
 import { createTestNode } from "../utils";
 
-import {
-  EventStoreConnection,
-  createPersistentSubscription,
-  ESDBConnection,
-} from "../..";
+import { EventStoreDBClient } from "../..";
+import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
 
 describe("createPersistentSubscription", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      {
+        endpoint: node.uri,
+      },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -28,9 +28,11 @@ describe("createPersistentSubscription", () => {
       const STREAM_NAME = "stream_name_from_start";
       const GROUP_NAME = "group_name_from_start";
       await expect(
-        createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .fromStart()
-          .execute(connection)
+        client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults()
+        )
       ).resolves.toBeUndefined();
     });
 
@@ -38,9 +40,13 @@ describe("createPersistentSubscription", () => {
       const STREAM_NAME = "stream_name_from_revision";
       const GROUP_NAME = "group_name_from_revision";
       await expect(
-        createPersistentSubscription(STREAM_NAME, GROUP_NAME)
-          .fromRevision(BigInt(1))
-          .execute(connection)
+        client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults({
+            fromRevision: BigInt(1),
+          })
+        )
       ).resolves.toBeUndefined();
     });
   });

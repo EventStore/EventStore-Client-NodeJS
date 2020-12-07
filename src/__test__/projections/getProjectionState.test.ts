@@ -1,17 +1,10 @@
-import { createTestNode, delay, testEvents } from "../utils";
+import { createTestNode, delay, jsonTestEvents } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createContinuousProjection,
-  getProjectionState,
-  writeEventsToStream,
-  UnknownError,
-} from "../..";
+import { EventStoreDBClient, UnknownError } from "../..";
 
 describe("getProjectionState", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   const EVENT_TYPE = "count_this";
   const STREAM_NAME = "some_stream_name";
@@ -29,10 +22,11 @@ describe("getProjectionState", () => {
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -43,19 +37,16 @@ describe("getProjectionState", () => {
     const PROJECTION_NAME = "count events";
     const count = 3;
 
-    await createContinuousProjection(PROJECTION_NAME, projection).execute(
-      connection
-    );
+    await client.createContinuousProjection(PROJECTION_NAME, projection);
 
-    await writeEventsToStream(STREAM_NAME)
-      .send(...testEvents(count, EVENT_TYPE))
-      .execute(connection);
+    await client.writeEventsToStream(
+      STREAM_NAME,
+      jsonTestEvents(count, EVENT_TYPE)
+    );
 
     await delay(5000);
 
-    const state = await getProjectionState<number>(PROJECTION_NAME).execute(
-      connection
-    );
+    const state = await client.getProjectionState<number>(PROJECTION_NAME);
 
     expect(state).toBe(count);
   });
@@ -64,7 +55,7 @@ describe("getProjectionState", () => {
     const PROJECTION_NAME = "doesnt exist";
 
     await expect(
-      getProjectionState(PROJECTION_NAME).execute(connection)
+      client.getProjectionState(PROJECTION_NAME)
     ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
   });
 });

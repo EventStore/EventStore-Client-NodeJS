@@ -1,19 +1,18 @@
 import { createTestCluster } from "../utils";
 
 import {
-  readEventsFromStream,
-  writeEventsToStream,
-  EventStoreConnection,
-  EventData,
+  jsonEvent,
   FOLLOWER,
   ErrorType,
   NotLeaderError,
+  EventStoreDBClient,
 } from "../..";
+import { BACKWARD, END } from "../../constants";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();
   const STREAM_NAME = "test_stream_name";
-  const event = EventData.json("test", { message: "test" });
+  const event = jsonEvent({ eventType: "test", payload: { message: "test" } });
 
   beforeAll(async () => {
     await cluster.up();
@@ -24,24 +23,31 @@ describe("not-leader", () => {
   });
 
   test("should get an error here", async () => {
-    const connection = EventStoreConnection.builder()
-      .sslRootCertificate(cluster.certPath)
-      .gossipClusterConnection(cluster.endpoints, FOLLOWER);
+    const followerClient = new EventStoreDBClient(
+      {
+        endpoints: cluster.endpoints,
+        nodePreference: FOLLOWER,
+      },
+      { rootCertificate: cluster.rootCertificate }
+    );
 
-    const writeResult = await writeEventsToStream(STREAM_NAME)
-      .send(event.build())
-      .execute(connection);
+    const writeResult = await followerClient.writeEventsToStream(
+      STREAM_NAME,
+      event
+    );
 
     expect(writeResult).toBeDefined();
 
-    const readFromStream = readEventsFromStream(STREAM_NAME)
-      .count(10)
-      .backward()
-      .fromEnd()
-      .requiresLeader();
+    const readFromTestStream = (client: EventStoreDBClient) => {
+      return client.readEventsFromStream(STREAM_NAME, 10, {
+        direction: BACKWARD,
+        fromRevision: END,
+        requiresLeader: true,
+      });
+    };
 
     try {
-      const readResult = await readFromStream.execute(connection);
+      const readResult = await readFromTestStream(followerClient);
 
       expect(readResult).toBe("unreachable");
     } catch (error) {
@@ -52,11 +58,14 @@ describe("not-leader", () => {
         expect(error.leader).toBeDefined();
         expect(cluster.endpoints).toContainEqual(error.leader);
 
-        const connection = EventStoreConnection.builder()
-          .sslRootCertificate(cluster.certPath)
-          .singleNodeConnection(error.leader);
+        const leaderClient = new EventStoreDBClient(
+          {
+            endpoint: error.leader,
+          },
+          { rootCertificate: cluster.rootCertificate }
+        );
 
-        const readResult = await readFromStream.execute(connection);
+        const readResult = await readFromTestStream(leaderClient);
 
         expect(readResult).toBeDefined();
       }

@@ -1,6 +1,6 @@
 import { createTestNode } from "../utils";
 
-import { AccessDeniedError, EventStoreConnection, readAllEvents } from "../..";
+import { EventStoreDBClient, AccessDeniedError } from "../..";
 
 describe("defaultCredentials", () => {
   const node = createTestNode();
@@ -15,38 +15,32 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const connection = EventStoreConnection.builder()
-        .defaultCredentials({ username: "admin", password: "changeit" })
-        .sslRootCertificate(node.certPath)
-        .singleNodeConnection(node.uri);
-
+      const client = new EventStoreDBClient(
+        { endpoint: node.uri },
+        { rootCertificate: node.rootCertificate },
+        { username: "admin", password: "changeit" }
+      );
+      await expect(client.readAllEvents(10)).resolves.toBeDefined();
       await expect(
-        readAllEvents().fromStart().execute(connection)
-      ).resolves.toBeDefined();
-
-      await expect(
-        readAllEvents()
-          .authenticated({ username: "AzureDiamond", password: "hunter2" })
-          .fromStart()
-          .execute(connection)
+        client.readAllEvents(10, {
+          credentials: { username: "AzureDiamond", password: "hunter2" },
+        })
       ).rejects.toThrowError(AccessDeniedError);
     });
 
     test("good override", async () => {
-      const connection = EventStoreConnection.builder()
-        .defaultCredentials({ username: "AzureDiamond", password: "hunter2" })
-        .sslRootCertificate(node.certPath)
-        .singleNodeConnection(node.uri);
-
+      const client = new EventStoreDBClient(
+        { endpoint: node.uri },
+        { rootCertificate: node.rootCertificate },
+        { username: "AzureDiamond", password: "hunter2" }
+      );
+      await expect(client.readAllEvents(10)).rejects.toThrowError(
+        AccessDeniedError
+      );
       await expect(
-        readAllEvents().fromStart().execute(connection)
-      ).rejects.toThrowError(AccessDeniedError);
-
-      await expect(
-        readAllEvents()
-          .authenticated({ username: "admin", password: "changeit" })
-          .fromStart()
-          .execute(connection)
+        client.readAllEvents(10, {
+          credentials: { username: "admin", password: "changeit" },
+        })
       ).resolves.toBeDefined();
     });
   });

@@ -1,21 +1,18 @@
 import { createTestNode } from "../utils";
 
-import {
-  ESDBConnection,
-  EventStoreConnection,
-  createTransientProjection,
-} from "../..";
+import { EventStoreDBClient } from "../..";
 
 describe("createOneTimeProjection", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
   });
 
   afterAll(async () => {
@@ -26,7 +23,7 @@ describe("createOneTimeProjection", () => {
     const PROJECTION_NAME = "transient";
 
     await expect(
-      createTransientProjection(
+      client.createTransientProjection(
         PROJECTION_NAME,
         `
         fromAll()
@@ -35,8 +32,8 @@ describe("createOneTimeProjection", () => {
               return {};
             }
           });
-      `
-      ).execute(connection)
+        `
+      )
     ).resolves.toBeUndefined();
   });
 });

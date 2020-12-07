@@ -2,41 +2,35 @@ import {
   createTestNode,
   Defer,
   delay,
+  jsonTestEvents,
   TestEventData,
-  testEvents,
 } from "../utils";
 
 import {
-  writeEventsToStream,
-  ESDBConnection,
-  EventStoreConnection,
-  EventData,
+  EventStoreDBClient,
+  jsonEvent,
   ResolvedEvent,
   SubscriptionReport,
-  subscribeToAll,
 } from "../..";
+import { END } from "../../constants";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();
-  let connection!: ESDBConnection;
+  let client!: EventStoreDBClient;
 
   const STREAM_NAME_A = "stream_name_a";
   const STREAM_NAME_B = "stream_name_b";
 
   beforeAll(async () => {
     await node.up();
-    connection = EventStoreConnection.builder()
-      .defaultCredentials({ username: "admin", password: "changeit" })
-      .sslRootCertificate(node.certPath)
-      .singleNodeConnection(node.uri);
+    client = new EventStoreDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
 
-    await writeEventsToStream(STREAM_NAME_A)
-      .send(...testEvents(4))
-      .execute(connection);
-
-    await writeEventsToStream(STREAM_NAME_B)
-      .send(...testEvents(4))
-      .execute(connection);
+    await client.writeEventsToStream(STREAM_NAME_A, jsonTestEvents(4));
+    await client.writeEventsToStream(STREAM_NAME_B, jsonTestEvents(4));
   });
 
   afterAll(async () => {
@@ -72,23 +66,26 @@ describe("subscribeToAll", () => {
         }
       );
 
-      await subscribeToAll()
-        .fromStart()
+      const subscription = await client.subscribeToAll();
+
+      subscription
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
-        .on("end", onEnd)
-        .execute(connection);
+        .on("end", onEnd);
 
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
+      const finishEvent = jsonEvent({
+        eventType: FINISH_TEST,
+        payload: {
+          message: "lets wrap this up",
+        },
       });
 
-      await writeEventsToStream(STREAM_NAME_A)
-        .send(...testEvents(3))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME_A, [
+        ...jsonTestEvents(3),
+        finishEvent,
+      ]);
 
       await defer.promise;
 
@@ -130,25 +127,28 @@ describe("subscribeToAll", () => {
         }
       );
 
-      await subscribeToAll()
-        .fromEnd()
+      const subscription = await client.subscribeToAll({ fromPosition: END });
+
+      subscription
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
-        .on("end", onEnd)
-        .execute(connection);
+        .on("end", onEnd);
 
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
+      const finishEvent = jsonEvent({
+        eventType: FINISH_TEST,
+        payload: {
+          message: "lets wrap this up",
+        },
       });
 
       await delay(500);
 
-      await writeEventsToStream(STREAM_NAME_A)
-        .send(...testEvents(3))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME_A, [
+        ...jsonTestEvents(3),
+        finishEvent,
+      ]);
 
       await defer.promise;
 
@@ -167,17 +167,15 @@ describe("subscribeToAll", () => {
       const FINISH_TEST = "from-position-finish";
       const MARKER_EVENT = "marker_event";
 
-      const writeResult = await writeEventsToStream(STREAM_NAME_B)
-        .send(
-          EventData.json(MARKER_EVENT, {
-            message: "mark my words",
-          }).build()
-        )
-        .execute(connection);
+      const writeResult = await client.writeEventsToStream(
+        STREAM_NAME_B,
+        jsonEvent({
+          eventType: MARKER_EVENT,
+          payload: { message: "mark my words" },
+        })
+      );
 
-      await writeEventsToStream(STREAM_NAME_A)
-        .send(...testEvents(3))
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME_A, jsonTestEvents(3));
 
       const events: ResolvedEvent[] = [];
       const filteredEvents: ResolvedEvent[] = [];
@@ -203,23 +201,28 @@ describe("subscribeToAll", () => {
         }
       );
 
-      await subscribeToAll()
-        .fromPosition(writeResult.position!)
+      const subscription = await client.subscribeToAll({
+        fromPosition: writeResult.position,
+      });
+
+      subscription
         .on("error", onError)
         .on("event", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
-        .on("end", onEnd)
-        .execute(connection);
+        .on("end", onEnd);
 
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
+      const finishEvent = jsonEvent({
+        eventType: FINISH_TEST,
+        payload: {
+          message: "lets wrap this up",
+        },
       });
 
-      await writeEventsToStream(STREAM_NAME_B)
-        .send(...testEvents(3))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME_A, [
+        ...jsonTestEvents(3),
+        finishEvent,
+      ]);
 
       await defer.promise;
 
@@ -242,26 +245,33 @@ describe("subscribeToAll", () => {
       const doSomething = jest.fn();
       const doSomethingElse = jest.fn();
 
-      const markerEvent = EventData.json(MARKER_EVENT, {
-        message: "mark",
+      const markerEvent = jsonEvent({
+        eventType: MARKER_EVENT,
+        payload: {
+          message: "mark",
+        },
       });
 
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
+      const finishEvent = jsonEvent({
+        eventType: FINISH_TEST,
+        payload: {
+          message: "lets wrap this up",
+        },
       });
 
-      const writeResult = await writeEventsToStream(STREAM_NAME_B)
-        .send(markerEvent.build())
-        .execute(connection);
+      const writeResult = await client.writeEventsToStream(
+        STREAM_NAME_B,
+        markerEvent
+      );
 
-      const subscription = await subscribeToAll()
-        .fromPosition(writeResult.position!)
-        .execute(connection);
+      const subscription = await client.subscribeToAll({
+        fromPosition: writeResult.position,
+      });
 
-      writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(8))
-        .send(finishEvent.build())
-        .execute(connection);
+      client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(8),
+        finishEvent,
+      ]);
 
       for await (const event of subscription) {
         doSomething(event);
@@ -286,26 +296,33 @@ describe("subscribeToAll", () => {
       const doSomething = jest.fn();
       const doSomethingElse = jest.fn();
 
-      const markerEvent = EventData.json(MARKER_EVENT, {
-        message: "mark",
+      const markerEvent = jsonEvent({
+        eventType: MARKER_EVENT,
+        payload: {
+          message: "mark",
+        },
       });
 
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
+      const finishEvent = jsonEvent({
+        eventType: FINISH_TEST,
+        payload: {
+          message: "lets wrap this up",
+        },
       });
 
-      const writeResult = await writeEventsToStream(STREAM_NAME_B)
-        .send(markerEvent.build())
-        .execute(connection);
+      const writeResult = await client.writeEventsToStream(
+        STREAM_NAME_B,
+        markerEvent
+      );
 
-      const subscription = await subscribeToAll()
-        .fromPosition(writeResult.position!)
-        .execute(connection);
+      const subscription = await client.subscribeToAll({
+        fromPosition: writeResult.position,
+      });
 
-      writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(99))
-        .send(finishEvent.build())
-        .execute(connection);
+      client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(99),
+        finishEvent,
+      ]);
 
       const readEvents = new Set<number>();
 
@@ -341,27 +358,32 @@ describe("subscribeToAll", () => {
       const FINISH_TEST = "finish_after_the_fact";
       const MARKER_EVENT = "after_the_fact_marker";
 
-      const markerEvent = EventData.json(MARKER_EVENT, {
-        message: "mark",
+      const markerEvent = jsonEvent({
+        eventType: MARKER_EVENT,
+        payload: {
+          message: "mark",
+        },
       });
 
-      const finishEvent = EventData.json(FINISH_TEST, {
-        message: "lets wrap this up",
+      const finishEvent = jsonEvent({
+        eventType: FINISH_TEST,
+        payload: {
+          message: "lets wrap this up",
+        },
       });
 
       const defer = new Defer();
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(8))
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(8));
 
-      const writeResult = await writeEventsToStream(STREAM_NAME)
-        .send(markerEvent.build())
-        .execute(connection);
+      const writeResult = await client.writeEventsToStream(
+        STREAM_NAME,
+        markerEvent
+      );
 
-      const subscription = await subscribeToAll()
-        .fromPosition(writeResult.position!)
-        .execute(connection);
+      const subscription = await client.subscribeToAll({
+        fromPosition: writeResult.position,
+      });
 
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();
@@ -384,10 +406,10 @@ describe("subscribeToAll", () => {
         .on("end", endListener)
         .off("event", offListener);
 
-      await writeEventsToStream(STREAM_NAME)
-        .send(...testEvents(5))
-        .send(finishEvent.build())
-        .execute(connection);
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(5),
+        finishEvent,
+      ]);
 
       await defer.promise;
 
