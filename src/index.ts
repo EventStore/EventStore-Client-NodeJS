@@ -7,5 +7,6 @@ export * from "./events";
 export * from "./constants";
 export * from "./types";
 
-// export * from "./utils/Filter";
+export * from "./utils/filter";
 export * from "./utils/CommandError";
+export * from "./utils/persistentSubscriptionSettings";

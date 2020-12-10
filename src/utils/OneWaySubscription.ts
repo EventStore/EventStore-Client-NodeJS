@@ -1,110 +1,60 @@
+import { Transform, TransformCallback, TransformOptions } from "stream";
+
 import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
+
 import { ReadResp } from "../../generated/streams_pb";
-import {
-  Subscription,
-  SubscriptionReport,
-  SubscriptionEvent,
-  Listeners,
-  SubscriptionListeners,
-} from "../types";
-import { convertToCommandError } from "./CommandError";
-import { ConvertGrpcEvent } from "./convertGrpcEvent";
-import { EventsOnlyStream } from "./EventsOnlyStream";
+
+import { ConvertGrpcEvent, convertToCommandError } from ".";
+import { ReadableSubscription } from "../types";
+
+type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
 export class OneWaySubscription<E>
-  implements Subscription<E, SubscriptionReport> {
-  #listeners: Listeners<E, SubscriptionReport> = {
-    event: new Set(),
-    end: new Set(),
-    confirmation: new Set(),
-    error: new Set(),
-    close: new Set(),
-  };
-  #stream: ClientReadableStream<ReadResp>;
+  extends Transform
+  implements ReadableSubscription<E> {
   #convertGrpcEvent: ConvertGrpcEvent<E>;
+  #grpcStream: Promise<ClientReadableStream<ReadResp>>;
 
   constructor(
-    readStream: ClientReadableStream<ReadResp>,
-    convertGrpcEvent: ConvertGrpcEvent<E>
+    createGRPCStream: CreateGRPCStream,
+    convertGrpcEvent: ConvertGrpcEvent<E>,
+    options: TransformOptions
   ) {
+    super({ ...options, objectMode: true });
     this.#convertGrpcEvent = convertGrpcEvent;
-    this.#stream = readStream;
-
-    this.#stream.on("data", (resp: ReadResp) => {
-      if (resp.hasConfirmation()) {
-        this.#listeners.confirmation.forEach((fn) => fn());
-      }
-
-      if (resp.hasEvent()) {
-        const resolved = this.#convertGrpcEvent(resp.getEvent()!);
-
-        this.#listeners.event.forEach((fn) =>
-          fn(resolved, { unsubscribe: this.unsubscribe })
-        );
-      }
-    });
-
-    this.#stream.on("end", () => {
-      this.#listeners.end.forEach((fn) => fn());
-    });
-
-    this.#stream.on("error", (err: ServiceError) => {
-      if (err.code === Status.CANCELLED) return;
-      const error = convertToCommandError(err);
-      this.#listeners.error.forEach((fn) => fn(error));
-    });
+    this.#grpcStream = createGRPCStream();
+    this.initialize();
   }
 
-  public on = <Name extends SubscriptionEvent>(
-    event: Name,
-    handler: SubscriptionListeners<E, SubscriptionReport>[Name]
-  ): OneWaySubscription<E> => {
-    this.#listeners[event]?.add(handler as never);
-    return this;
+  private initialize = async () => {
+    try {
+      (await this.#grpcStream)
+        .on("error", (err: ServiceError) => {
+          if (err.code === Status.CANCELLED) return;
+          const error = convertToCommandError(err);
+          this.emit("error", error);
+        })
+        .pipe(this);
+    } catch (error) {
+      this.emit("error", error);
+    }
   };
 
-  public once = <Name extends SubscriptionEvent>(
-    event: Name,
-    handler: SubscriptionListeners<E, SubscriptionReport>[Name]
-  ): OneWaySubscription<E> => {
-    const listener = (...args: unknown[]) => {
-      this.off(event, listener);
-      // eslint-disable-next-line
-      return (handler as any)(...args);
-    };
-    this.on(event, listener);
-    return this;
-  };
+  _transform(resp: ReadResp, _encoding: string, next: TransformCallback): void {
+    if (resp.hasConfirmation?.()) {
+      this.emit("confirmation");
+    }
 
-  public off = <Name extends SubscriptionEvent>(
-    event: Name,
-    handler: SubscriptionListeners<E, SubscriptionReport>[Name]
-  ): OneWaySubscription<E> => {
-    this.#listeners[event]?.delete(handler as never);
-    return this;
-  };
+    if (resp.hasEvent?.()) {
+      const resolved = this.#convertGrpcEvent(resp.getEvent()!);
+      return next(null, resolved);
+    }
 
-  public unsubscribe = (): void => {
-    this.#stream.cancel();
-  };
-
-  public get isPaused(): boolean {
-    return this.#stream.isPaused();
+    next();
   }
 
-  public pause = (): void => {
-    this.#stream.pause();
-  };
-
-  public resume = (): void => {
-    this.#stream.resume();
-  };
-
-  /** Iterate the events asynchronously */
-  public [Symbol.asyncIterator] = (): AsyncIterator<E> => {
-    return this.#stream
-      .pipe(new EventsOnlyStream(this.#convertGrpcEvent))
-      [Symbol.asyncIterator]();
-  };
+  public async unsubscribe(): Promise<void> {
+    return (await this.#grpcStream).cancel();
+  }
 }

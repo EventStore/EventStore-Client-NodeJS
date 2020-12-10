@@ -1,67 +1,58 @@
-import { ServiceError, ClientDuplexStream } from "@grpc/grpc-js";
+import { Transform, TransformCallback, TransformOptions } from "stream";
+
+import { ClientDuplexStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 
 import { UUID } from "../../generated/shared_pb";
 import { ReadReq, ReadResp } from "../../generated/persistent_pb";
 import Action = ReadReq.Nack.Action;
 
-import {
-  Subscription,
-  SubscriptionEvent,
-  Listeners,
-  SubscriptionListeners,
-  ResolvedEvent,
-  PersistentAction,
-  PersistentReport,
-} from "../types";
-import { convertGrpcEvent } from "./convertGrpcEvent";
-import { convertToCommandError } from "./CommandError";
-import { EventsOnlyStream } from "./EventsOnlyStream";
+import { convertToCommandError, convertGrpcEvent } from ".";
+import { PersistentAction, PersistentSubscription } from "../types";
+
+type CreateGRPCStream = () => Promise<ClientDuplexStream<ReadReq, ReadResp>>;
 
 export class TwoWaySubscription
-  implements Subscription<ResolvedEvent, PersistentReport> {
-  #listeners: Listeners<ResolvedEvent, PersistentReport> = {
-    event: new Set(),
-    end: new Set(),
-    confirmation: new Set(),
-    error: new Set(),
-    close: new Set(),
-  };
-  #stream: ClientDuplexStream<ReadReq, ReadResp>;
+  extends Transform
+  implements PersistentSubscription {
+  #grpcStream: Promise<ClientDuplexStream<ReadReq, ReadResp>>;
 
-  constructor(stream: ClientDuplexStream<ReadReq, ReadResp>) {
-    this.#stream = stream;
-
-    stream.on("data", (resp: ReadResp) => {
-      if (resp.hasSubscriptionConfirmation()) {
-        this.#listeners.confirmation.forEach((fn) => fn());
-      }
-
-      if (resp.hasEvent()) {
-        const resolved = convertGrpcEvent(resp.getEvent()!);
-
-        this.#listeners.event.forEach((fn) =>
-          fn(resolved, {
-            ack: this.ack,
-            nack: this.nack,
-            unsubscribe: this.unsubscribe,
-          })
-        );
-      }
-    });
-
-    stream.on("end", () => {
-      this.#listeners.end.forEach((fn) => fn());
-    });
-
-    stream.on("error", (err: ServiceError) => {
-      if (err.code === Status.CANCELLED) return;
-      const error = convertToCommandError(err);
-      this.#listeners.error.forEach((fn) => fn(error));
-    });
+  constructor(createGRPCStream: CreateGRPCStream, options: TransformOptions) {
+    super({ ...options, objectMode: true });
+    this.#grpcStream = createGRPCStream();
+    this.initialize();
   }
 
-  public ack = (...ids: string[]): void => {
+  private initialize = async () => {
+    try {
+      (await this.#grpcStream)
+        .on("error", (err: ServiceError) => {
+          if (err.code === Status.CANCELLED) return;
+          console.log(err);
+          const error = convertToCommandError(err);
+          this.emit("error", error);
+        })
+        .pipe(this);
+    } catch (error) {
+      this.emit("error", error);
+    }
+  };
+
+  _transform(resp: ReadResp, _encoding: string, next: TransformCallback): void {
+    if (resp.hasSubscriptionConfirmation()) {
+      this.emit("confirmation");
+    }
+
+    if (resp.hasEvent()) {
+      const resolved = convertGrpcEvent(resp.getEvent()!);
+      next(null, resolved);
+      return;
+    }
+
+    next();
+  }
+
+  public async ack(...ids: string[]): Promise<void> {
     const req = new ReadReq();
     const ack = new ReadReq.Ack();
 
@@ -72,14 +63,22 @@ export class TwoWaySubscription
     }
 
     req.setAck(ack);
-    this.#stream.write(req);
-  };
 
-  public nack = (
+    const stream = await this.#grpcStream;
+    return new Promise((resolve, reject) => {
+      try {
+        stream.write(req, resolve);
+      } catch (error) {
+        reject(convertToCommandError(error));
+      }
+    });
+  }
+
+  public async nack(
     action: PersistentAction,
     reason: string,
     ...ids: string[]
-  ): void => {
+  ): Promise<void> {
     const req = new ReadReq();
     const nack = new ReadReq.Nack();
 
@@ -108,59 +107,17 @@ export class TwoWaySubscription
 
     req.setNack(nack);
 
-    this.#stream.write(req);
-  };
-
-  public on = <Name extends SubscriptionEvent>(
-    event: Name,
-    handler: SubscriptionListeners<ResolvedEvent, PersistentReport>[Name]
-  ): TwoWaySubscription => {
-    this.#listeners[event]?.add(handler as never);
-    return this;
-  };
-
-  public once = <Name extends SubscriptionEvent>(
-    event: Name,
-    handler: SubscriptionListeners<ResolvedEvent, PersistentReport>[Name]
-  ): TwoWaySubscription => {
-    const listener = (...args: unknown[]) => {
-      this.off(event, listener);
-      // eslint-disable-next-line
-      return (handler as any)(...args);
-    };
-    this.on(event, listener);
-    return this;
-  };
-
-  public off = <Name extends SubscriptionEvent>(
-    event: Name,
-    handler: SubscriptionListeners<ResolvedEvent, PersistentReport>[Name]
-  ): TwoWaySubscription => {
-    this.#listeners[event]?.delete(handler as never);
-    return this;
-  };
-
-  public unsubscribe = (): void => {
-    this.#stream.end();
-    this.#stream.cancel();
-  };
-
-  public get isPaused(): boolean {
-    return this.#stream.isPaused();
+    const stream = await this.#grpcStream;
+    return new Promise((resolve, reject) => {
+      try {
+        stream.write(req, resolve);
+      } catch (error) {
+        reject(convertToCommandError(error));
+      }
+    });
   }
 
-  public pause = (): void => {
-    this.#stream.pause();
-  };
-
-  public resume = (): void => {
-    this.#stream.resume();
-  };
-
-  /** Iterate the events asynchronously */
-  public [Symbol.asyncIterator] = (): AsyncIterator<ResolvedEvent> => {
-    return this.#stream
-      .pipe(new EventsOnlyStream(convertGrpcEvent))
-      [Symbol.asyncIterator]();
-  };
+  public async unsubscribe(): Promise<void> {
+    return (await this.#grpcStream).cancel();
+  }
 }

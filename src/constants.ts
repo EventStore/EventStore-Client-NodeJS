@@ -27,13 +27,6 @@ export const RETRY = "retry";
 export const SKIP = "skip";
 export const STOP = "stop";
 
-// subscription events
-export const EVENT_EVENT = "event";
-export const END_EVENT = "end";
-export const CONFIRMATION_EVENT = "confirmation";
-export const ERROR_EVENT = "error";
-export const CLOSE_EVENT = "close";
-
 // projection modes
 export const CONTINUOUS = "Continuous";
 export const ONE_TIME = "OneTime";

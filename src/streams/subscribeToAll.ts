@@ -1,4 +1,7 @@
+import { ReadableOptions } from "stream";
+
 import { CallOptions } from "@grpc/grpc-js";
+
 import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
@@ -13,7 +16,7 @@ import {
   BaseOptions,
   Filter,
 } from "../types";
-import { OneWaySubscription, convertAllStreamGrpcEvent, debug } from "../utils";
+import { convertAllStreamGrpcEvent, debug, OneWaySubscription } from "../utils";
 import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 
@@ -43,21 +46,20 @@ declare module "../Client" {
      * @param stream A stream name.
      * @param options Writing options
      */
-    subscribeToAll(
-      options?: SubscribeToAllOptions
-    ): Promise<AllStreamSubscription>;
+    subscribeToAll(options?: SubscribeToAllOptions): AllStreamSubscription;
   }
 }
 
-Client.prototype.subscribeToAll = async function (
+Client.prototype.subscribeToAll = function (
   this: Client,
   {
     fromPosition = START,
     resolveLinks = false,
     filter,
     ...baseOptions
-  }: SubscribeToAllOptions = {}
-): Promise<AllStreamSubscription> {
+  }: SubscribeToAllOptions = {},
+  readableOptions: ReadableOptions = {}
+): AllStreamSubscription {
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const uuidOption = new UUIDOption();
@@ -144,8 +146,12 @@ Client.prototype.subscribeToAll = async function (
   });
   debug.command_grpc("subscribeToAll: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "subscribeToAll");
-  const readStream = client.read(req, this.metadata(baseOptions), callOptions);
-
-  return new OneWaySubscription(readStream, convertAllStreamGrpcEvent);
+  return new OneWaySubscription(
+    async () => {
+      const client = await this.getGRPCClient(StreamsClient, "subscribeToAll");
+      return client.read(req, this.metadata(baseOptions), callOptions);
+    },
+    convertAllStreamGrpcEvent,
+    readableOptions
+  );
 };

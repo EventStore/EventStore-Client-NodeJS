@@ -1,3 +1,4 @@
+import { Readable } from "stream";
 import {
   Client as GRPCClient,
   ClientOptions as GRPCClientOptions,
@@ -351,22 +352,6 @@ export interface ProjectionDetails {
   writePendingEventsAfterCheckpoint: number;
 }
 
-export interface SubscriptionHandler<T> {
-  onEvent: (report: SubscriptionReport, event: T) => void;
-  onEnd?: () => void;
-  onConfirmation?: () => void;
-  onError?: (error: Error) => void;
-  onClose?: () => void;
-}
-
-export type PersistentSubscriptionHandler = {
-  onEvent: (report: PersistentReport, event: ResolvedEvent) => void;
-  onEnd?: () => void;
-  onConfirmation?: () => void;
-  onError?: (error: Error) => void;
-  onClose?: () => void;
-};
-
 export interface DeleteResult {
   position?: Position;
 }
@@ -375,16 +360,6 @@ export type ConsumerStrategy =
   | typeof constants.DISPATCH_TO_SINGLE
   | typeof constants.ROUND_ROBIN
   | typeof constants.PINNED;
-
-export interface PersistentReport {
-  ack(...ids: string[]): void;
-  nack(action: PersistentAction, reason: string, ...ids: string[]): void;
-  unsubscribe(): void;
-}
-
-export interface SubscriptionReport {
-  unsubscribe(): void;
-}
 
 export type PersistentAction =
   | typeof constants.PARK
@@ -418,21 +393,6 @@ export type GRPCClientConstructor<T extends GRPCClient> = new (
   options?: Partial<GRPCClientOptions>
 ) => T;
 
-export type SubscriptionEvent =
-  | typeof constants.EVENT_EVENT
-  | typeof constants.END_EVENT
-  | typeof constants.CONFIRMATION_EVENT
-  | typeof constants.ERROR_EVENT
-  | typeof constants.CLOSE_EVENT;
-
-export interface SubscriptionListeners<E, R> {
-  [constants.EVENT_EVENT]: (event: E, report: R) => void;
-  [constants.END_EVENT]: () => void;
-  [constants.CONFIRMATION_EVENT]: () => void;
-  [constants.ERROR_EVENT]: (error: Error) => void;
-  [constants.CLOSE_EVENT]: () => void;
-}
-
 export type FilterOn =
   | typeof constants.EVENT_TYPE
   | typeof constants.STREAM_NAME;
@@ -450,43 +410,65 @@ export interface Credentials {
   password: string;
 }
 
-export type Listeners<E, R> = {
-  [P in keyof SubscriptionListeners<E, R>]: Set<SubscriptionListeners<E, R>[P]>;
-};
+export interface ReadableSubscription<E> extends Readable {
+  unsubscribe(): Promise<void>;
 
-export interface Subscription<E, R> {
-  on<Name extends SubscriptionEvent>(
-    name: Name,
-    handler: SubscriptionListeners<E, R>[Name]
-  ): Subscription<E, R>;
+  addListener(event: "close", listener: () => void): this;
+  addListener(event: "data", listener: (event: E) => void): this;
+  addListener(event: "end", listener: () => void): this;
+  addListener(event: "readable", listener: () => void): this;
+  addListener(event: "error", listener: (err: Error) => void): this;
+  addListener(event: "confirmation", listener: () => void): this;
 
-  once<Name extends SubscriptionEvent>(
-    name: Name,
-    handler: SubscriptionListeners<E, R>[Name]
-  ): Subscription<E, R>;
+  on(event: "close", listener: () => void): this;
+  on(event: "data", listener: (event: E) => void): this;
+  on(event: "end", listener: () => void): this;
+  on(event: "readable", listener: () => void): this;
+  on(event: "error", listener: (err: Error) => void): this;
+  on(event: "confirmation", listener: () => void): this;
 
-  off<Name extends SubscriptionEvent>(
-    name: Name,
-    handler: SubscriptionListeners<E, R>[Name]
-  ): Subscription<E, R>;
+  once(event: "close", listener: () => void): this;
+  once(event: "data", listener: (event: E) => void): this;
+  once(event: "end", listener: () => void): this;
+  once(event: "readable", listener: () => void): this;
+  once(event: "error", listener: (err: Error) => void): this;
+  once(event: "confirmation", listener: () => void): this;
 
-  unsubscribe: () => void;
+  prependListener(event: "close", listener: () => void): this;
+  prependListener(event: "data", listener: (event: E) => void): this;
+  prependListener(event: "end", listener: () => void): this;
+  prependListener(event: "readable", listener: () => void): this;
+  prependListener(event: "error", listener: (err: Error) => void): this;
+  prependListener(event: "confirmation", listener: () => void): this;
 
-  isPaused: boolean;
-  pause: () => void;
-  resume: () => void;
+  prependOnceListener(event: "close", listener: () => void): this;
+  prependOnceListener(event: "data", listener: (event: E) => void): this;
+  prependOnceListener(event: "end", listener: () => void): this;
+  prependOnceListener(event: "readable", listener: () => void): this;
+  prependOnceListener(event: "error", listener: (err: Error) => void): this;
+  prependOnceListener(event: "confirmation", listener: () => void): this;
 
-  [Symbol.asyncIterator](): AsyncIterator<E>;
+  removeListener(event: "close", listener: () => void): this;
+  removeListener(event: "data", listener: (event: E) => void): this;
+  removeListener(event: "end", listener: () => void): this;
+  removeListener(event: "readable", listener: () => void): this;
+  removeListener(event: "error", listener: (err: Error) => void): this;
+  removeListener(event: "confirmation", listener: () => void): this;
+
+  [Symbol.asyncIterator](): AsyncIterableIterator<E>;
 }
 
 export interface PersistentSubscription
-  extends Subscription<ResolvedEvent, PersistentReport>,
-    PersistentReport {}
+  extends ReadableSubscription<ResolvedEvent> {
+  ack(...ids: string[]): Promise<void>;
+  nack(
+    action: PersistentAction,
+    reason: string,
+    ...ids: string[]
+  ): Promise<void>;
+}
 
-export interface StreamSubscription
-  extends Subscription<ResolvedEvent, SubscriptionReport>,
-    SubscriptionReport {}
-
-export interface AllStreamSubscription
-  extends Subscription<AllStreamResolvedEvent, SubscriptionReport>,
-    SubscriptionReport {}
+export type StreamSubscription = ReadableSubscription<ResolvedEvent>;
+export type AllStreamSubscription = ReadableSubscription<
+  AllStreamResolvedEvent
+>;

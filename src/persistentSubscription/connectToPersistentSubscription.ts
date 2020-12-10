@@ -1,3 +1,5 @@
+import { DuplexOptions } from "stream";
+
 import { StreamIdentifier, Empty } from "../../generated/shared_pb";
 import { ReadReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
@@ -26,20 +28,22 @@ declare module "../Client" {
     connectToPersistentSubscription(
       streamName: string,
       groupName: string,
-      options?: ConnectToPersistentSubscriptionOptions
-    ): Promise<PersistentSubscription>;
+      options?: ConnectToPersistentSubscriptionOptions,
+      duplexOptions?: DuplexOptions
+    ): PersistentSubscription;
   }
 }
 
-Client.prototype.connectToPersistentSubscription = async function (
+Client.prototype.connectToPersistentSubscription = function (
   this: Client,
   streamName: string,
   groupName: string,
   {
     bufferSize = 10,
     ...baseOptions
-  }: ConnectToPersistentSubscriptionOptions = {}
-): Promise<PersistentSubscription> {
+  }: ConnectToPersistentSubscriptionOptions = {},
+  duplexOptions: DuplexOptions = {}
+): PersistentSubscription {
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
@@ -63,14 +67,15 @@ Client.prototype.connectToPersistentSubscription = async function (
   });
   debug.command_grpc("connectToPersistentSubscription: %g", req);
 
-  const client = await this.getGRPCClient(
-    PersistentSubscriptionsClient,
-    "connectToPersistentSubscription"
-  );
-  const stream = client.read(this.metadata(baseOptions), {
-    deadline: Infinity,
-  });
-  stream.write(req);
-
-  return new TwoWaySubscription(stream);
+  return new TwoWaySubscription(async () => {
+    const client = await this.getGRPCClient(
+      PersistentSubscriptionsClient,
+      "connectToPersistentSubscription"
+    );
+    const stream = client.read(this.metadata(baseOptions), {
+      deadline: Infinity,
+    });
+    stream.write(req);
+    return stream;
+  }, duplexOptions);
 };

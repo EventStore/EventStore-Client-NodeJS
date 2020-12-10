@@ -1,12 +1,10 @@
+import { pipeline, Writable, Readable } from "stream";
+import { promisify } from "util";
 import { createTestNode, Defer, delay, jsonTestEvents } from "../utils";
 
-import {
-  EventStoreDBClient,
-  ResolvedEvent,
-  SubscriptionReport,
-  jsonEvent,
-  END,
-} from "../..";
+import { EventStoreDBClient, ResolvedEvent, jsonEvent, END } from "../..";
+
+const asyncPipeline = promisify(pipeline);
 
 describe("subscribeToStream", () => {
   const node = createTestNode();
@@ -46,18 +44,17 @@ describe("subscribeToStream", () => {
       });
       const handleClose = jest.fn();
       const handleConfirmation = jest.fn();
-      const handleEnd = jest.fn();
+      const handleEnd = jest.fn(defer.resolve);
       const handleEvent = jest.fn((event: ResolvedEvent) => {
         if (event.event?.eventType === "finish-test") {
-          defer.resolve();
+          subscription.unsubscribe();
         }
       });
 
-      const subscription = await client.subscribeToStream(STREAM_NAME);
-
-      subscription
+      const subscription = client
+        .subscribeToStream(STREAM_NAME)
         .on("error", handleError)
-        .on("event", handleEvent)
+        .on("data", handleEvent)
         .on("close", handleClose)
         .on("confirmation", handleConfirmation)
         .on("end", handleEnd);
@@ -87,20 +84,19 @@ describe("subscribeToStream", () => {
       });
       const handleClose = jest.fn();
       const handleConfirmation = jest.fn();
-      const handleEnd = jest.fn();
+      const handleEnd = jest.fn(defer.resolve);
       const handleEvent = jest.fn((event: ResolvedEvent) => {
         if (event.event?.eventType === "finish-test") {
-          defer.resolve();
+          subscription.unsubscribe();
         }
       });
 
-      const subscription = await client.subscribeToStream(STREAM_NAME, {
-        fromRevision: END,
-      });
-
-      subscription
+      const subscription = client
+        .subscribeToStream(STREAM_NAME, {
+          fromRevision: END,
+        })
         .on("error", handleError)
-        .on("event", handleEvent)
+        .on("data", handleEvent)
         .on("close", handleClose)
         .on("confirmation", handleConfirmation)
         .on("end", handleEnd);
@@ -131,24 +127,20 @@ describe("subscribeToStream", () => {
       });
       const handleClose = jest.fn();
       const handleConfirmation = jest.fn();
-      const handleEnd = jest.fn();
-      const handleEvent = jest.fn(
-        (event: ResolvedEvent, report: SubscriptionReport) => {
-          if (event.event?.eventType === "finish-test") {
-            report.unsubscribe();
-            defer.resolve();
-          }
+      const handleEnd = jest.fn(defer.resolve);
+      const handleEvent = jest.fn((event: ResolvedEvent) => {
+        if (event.event?.eventType === "finish-test") {
+          subscription.unsubscribe();
         }
-      );
-
-      const subscription = await client.subscribeToStream(STREAM_NAME, {
-        fromRevision: BigInt(2),
       });
 
-      subscription
+      const subscription = client
+        .subscribeToStream(STREAM_NAME, {
+          fromRevision: BigInt(2),
+        })
         .on("close", handleClose)
         .on("error", handleError)
-        .on("event", handleEvent)
+        .on("data", handleEvent)
         .on("close", handleClose)
         .on("confirmation", handleConfirmation)
         .on("end", handleEnd);
@@ -169,7 +161,7 @@ describe("subscribeToStream", () => {
     });
   });
 
-  describe("should return a subscription", () => {
+  describe("should return a readableStream", () => {
     test("async iterator", async () => {
       const STREAM_NAME = "async_iter";
       const doSomething = jest.fn();
@@ -179,9 +171,7 @@ describe("subscribeToStream", () => {
         finishEvent(),
       ]);
 
-      const subscription = await client.subscribeToStream(STREAM_NAME);
-
-      for await (const event of subscription) {
+      for await (const event of client.subscribeToStream(STREAM_NAME)) {
         doSomething(event);
 
         if (event.event?.eventType === "finish-test") {
@@ -190,6 +180,33 @@ describe("subscribeToStream", () => {
       }
 
       expect(doSomething).toBeCalledTimes(9);
+    });
+
+    test("pipeline", async () => {
+      const STREAM_NAME = "pipeline test";
+
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(8),
+        finishEvent(),
+      ]);
+
+      const subscription = client.subscribeToStream(STREAM_NAME);
+
+      const writeStream = new (class extends Writable {
+        public ids: string[] = [];
+        _write({ event }: ResolvedEvent, _encoding: string, done: () => void) {
+          this.ids.push(event!.id);
+          if (event?.eventType === "finish-test") {
+            subscription.unsubscribe().then(done);
+          } else {
+            done();
+          }
+        }
+      })({ objectMode: true });
+
+      await asyncPipeline(subscription as Readable, writeStream);
+
+      expect(writeStream.ids).toHaveLength(9);
     });
   });
 });
