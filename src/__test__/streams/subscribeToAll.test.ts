@@ -1,3 +1,5 @@
+import { pipeline, Writable, Readable } from "stream";
+import { promisify } from "util";
 import {
   createTestNode,
   Defer,
@@ -6,13 +8,9 @@ import {
   TestEventData,
 } from "../utils";
 
-import {
-  EventStoreDBClient,
-  jsonEvent,
-  ResolvedEvent,
-  SubscriptionReport,
-} from "../..";
-import { END } from "../../constants";
+import { EventStoreDBClient, jsonEvent, ResolvedEvent, END } from "../..";
+
+const asyncPipeline = promisify(pipeline);
 
 describe("subscribeToAll", () => {
   const node = createTestNode();
@@ -50,27 +48,23 @@ describe("subscribeToAll", () => {
       });
       const onClose = jest.fn();
       const onConfirmation = jest.fn();
-      const onEnd = jest.fn();
-      const onEvent = jest.fn(
-        (event: ResolvedEvent, report: SubscriptionReport) => {
-          events.push(event);
+      const onEnd = jest.fn(defer.resolve);
+      const onEvent = jest.fn(async (event: ResolvedEvent) => {
+        events.push(event);
 
-          if (!event.event?.eventType.startsWith("$")) {
-            filteredEvents.push(event);
-          }
-
-          if (event.event?.eventType === FINISH_TEST) {
-            report.unsubscribe();
-            defer.resolve();
-          }
+        if (!event.event?.eventType.startsWith("$")) {
+          filteredEvents.push(event);
         }
-      );
 
-      const subscription = await client.subscribeToAll();
+        if (event.event?.eventType === FINISH_TEST) {
+          subscription.unsubscribe();
+        }
+      });
 
-      subscription
+      const subscription = client
+        .subscribeToAll()
         .on("error", onError)
-        .on("event", onEvent)
+        .on("data", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
         .on("end", onEnd);
@@ -111,27 +105,23 @@ describe("subscribeToAll", () => {
       });
       const onClose = jest.fn();
       const onConfirmation = jest.fn();
-      const onEnd = jest.fn();
-      const onEvent = jest.fn(
-        (event: ResolvedEvent, report: SubscriptionReport) => {
-          events.push(event);
+      const onEnd = jest.fn(defer.resolve);
+      const onEvent = jest.fn((event: ResolvedEvent) => {
+        events.push(event);
 
-          if (!event.event?.eventType.startsWith("$")) {
-            filteredEvents.push(event);
-          }
-
-          if (event.event?.eventType === FINISH_TEST) {
-            defer.resolve();
-            report.unsubscribe();
-          }
+        if (!event.event?.eventType.startsWith("$")) {
+          filteredEvents.push(event);
         }
-      );
 
-      const subscription = await client.subscribeToAll({ fromPosition: END });
+        if (event.event?.eventType === FINISH_TEST) {
+          subscription.unsubscribe();
+        }
+      });
 
-      subscription
+      const subscription = client
+        .subscribeToAll({ fromPosition: END })
         .on("error", onError)
-        .on("event", onEvent)
+        .on("data", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
         .on("end", onEnd);
@@ -185,29 +175,25 @@ describe("subscribeToAll", () => {
       });
       const onClose = jest.fn();
       const onConfirmation = jest.fn();
-      const onEnd = jest.fn();
-      const onEvent = jest.fn(
-        (event: ResolvedEvent, report: SubscriptionReport) => {
-          events.push(event);
+      const onEnd = jest.fn(defer.resolve);
+      const onEvent = jest.fn((event: ResolvedEvent) => {
+        events.push(event);
 
-          if (!event.event?.eventType.startsWith("$")) {
-            filteredEvents.push(event);
-          }
-
-          if (event.event?.eventType === FINISH_TEST) {
-            defer.resolve();
-            report.unsubscribe();
-          }
+        if (!event.event?.eventType.startsWith("$")) {
+          filteredEvents.push(event);
         }
-      );
 
-      const subscription = await client.subscribeToAll({
-        fromPosition: writeResult.position,
+        if (event.event?.eventType === FINISH_TEST) {
+          subscription.unsubscribe();
+        }
       });
 
-      subscription
+      const subscription = client
+        .subscribeToAll({
+          fromPosition: writeResult.position,
+        })
         .on("error", onError)
-        .on("event", onEvent)
+        .on("data", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
         .on("end", onEnd);
@@ -237,7 +223,7 @@ describe("subscribeToAll", () => {
     });
   });
 
-  describe("should return a subscription", () => {
+  describe("should return a readable stream", () => {
     test("async iterator", async () => {
       const STREAM_NAME = "async_iter_sync_fun";
       const FINISH_TEST = "finish_async_iterator_sync_fun";
@@ -264,14 +250,14 @@ describe("subscribeToAll", () => {
         markerEvent
       );
 
-      const subscription = await client.subscribeToAll({
-        fromPosition: writeResult.position,
-      });
-
       client.writeEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(8),
         finishEvent,
       ]);
+
+      const subscription = client.subscribeToAll({
+        fromPosition: writeResult.position,
+      });
 
       for await (const event of subscription) {
         doSomething(event);
@@ -315,7 +301,7 @@ describe("subscribeToAll", () => {
         markerEvent
       );
 
-      const subscription = await client.subscribeToAll({
+      const subscription = client.subscribeToAll({
         fromPosition: writeResult.position,
       });
 
@@ -381,30 +367,28 @@ describe("subscribeToAll", () => {
         markerEvent
       );
 
-      const subscription = await client.subscribeToAll({
-        fromPosition: writeResult.position,
-      });
-
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();
-      const endListener = jest.fn();
+      const endListener = jest.fn(defer.resolve);
       const onceListener = jest.fn();
       const offListener = jest.fn();
 
-      subscription
-        .on("event", eventListenerOne)
-        .on("event", (event) => {
+      const subscription = client
+        .subscribeToAll({
+          fromPosition: writeResult.position,
+        })
+        .on("data", eventListenerOne)
+        .on("data", (event) => {
           eventListenerTwo(event);
 
           if (event.event?.eventType === FINISH_TEST) {
             subscription.unsubscribe();
-            defer.resolve();
           }
         })
-        .on("event", offListener)
-        .once("event", onceListener)
+        .on("data", offListener)
+        .once("data", onceListener)
         .on("end", endListener)
-        .off("event", offListener);
+        .off("data", offListener);
 
       await client.writeEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(5),
@@ -418,6 +402,39 @@ describe("subscribeToAll", () => {
       expect(onceListener).toBeCalledTimes(1);
       expect(endListener).toBeCalledTimes(1);
       expect(offListener).not.toBeCalled();
+    });
+
+    test("pipeline", async () => {
+      const STREAM_NAME = "pipeline test";
+      const FINISH_TEST = "finish_pipeline";
+
+      await client.writeEventsToStream(STREAM_NAME, [
+        ...jsonTestEvents(8),
+        jsonEvent({
+          eventType: FINISH_TEST,
+          payload: {
+            message: "lets wrap this up",
+          },
+        }),
+      ]);
+
+      const subscription = client.subscribeToStream(STREAM_NAME);
+
+      const writeStream = new (class extends Writable {
+        public ids: string[] = [];
+        _write({ event }: ResolvedEvent, _encoding: string, done: () => void) {
+          this.ids.push(event!.id);
+          if (event?.eventType === FINISH_TEST) {
+            subscription.unsubscribe().then(done);
+          } else {
+            done();
+          }
+        }
+      })({ objectMode: true });
+
+      await asyncPipeline(subscription as Readable, writeStream);
+
+      expect(writeStream.ids).toHaveLength(9);
     });
   });
 });
