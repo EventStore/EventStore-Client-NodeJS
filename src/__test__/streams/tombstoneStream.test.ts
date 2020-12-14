@@ -29,7 +29,10 @@ describe("tombstoneStream", () => {
       const ANY_REVISION_STREAM = "any_revision_stream";
 
       beforeAll(async () => {
-        await client.appendEventsToStream(ANY_REVISION_STREAM, jsonTestEvents());
+        await client.appendEventsToStream(
+          ANY_REVISION_STREAM,
+          jsonTestEvents()
+        );
       });
 
       it("succeeds", async () => {

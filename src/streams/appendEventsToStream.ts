@@ -83,7 +83,10 @@ Client.prototype.appendEventsToStream = async function (
   });
   debug.command_grpc("appendEventsToStream: %g", header);
 
-  const client = await this.getGRPCClient(StreamsClient, "appendEventsToStream");
+  const client = await this.getGRPCClient(
+    StreamsClient,
+    "appendEventsToStream"
+  );
 
   return new Promise<AppendResult>((resolve, reject) => {
     const sink = client.append(this.metadata(baseOptions), (error, resp) => {
