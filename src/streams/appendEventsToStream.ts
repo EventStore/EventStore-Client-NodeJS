@@ -6,8 +6,8 @@ import { Client } from "../Client";
 import { ANY } from "../constants";
 import {
   BaseOptions,
-  WriteResult,
-  WriteEventsExpectedRevision,
+  AppendResult,
+  AppendEventsExpectedRevision,
 } from "../types";
 import { EventData } from "../events";
 import {
@@ -16,36 +16,36 @@ import {
   WrongExpectedVersionError,
 } from "../utils";
 
-export interface WriteEventsToStreamOptions extends BaseOptions {
+export interface AppendEventsToStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
    * @defaultValue ANY
    */
-  expectedRevision?: WriteEventsExpectedRevision;
+  expectedRevision?: AppendEventsExpectedRevision;
 }
 
 declare module "../Client" {
   interface Client {
     /**
-     * Sends events to a given stream.
+     * Appends events to a given stream.
      * @param streamName A stream name.
      * @param events Events or event to write
      * @param options Writing options
      */
-    writeEventsToStream(
+    appendEventsToStream(
       streamName: string,
       events: EventData | EventData[],
-      options?: WriteEventsToStreamOptions
-    ): Promise<WriteResult>;
+      options?: AppendEventsToStreamOptions
+    ): Promise<AppendResult>;
   }
 }
 
-Client.prototype.writeEventsToStream = async function (
+Client.prototype.appendEventsToStream = async function (
   this: Client,
   streamName: string,
   event: EventData | EventData[],
-  { expectedRevision = ANY, ...baseOptions }: WriteEventsToStreamOptions = {}
-): Promise<WriteResult> {
+  { expectedRevision = ANY, ...baseOptions }: AppendEventsToStreamOptions = {}
+): Promise<AppendResult> {
   const events = Array.isArray(event) ? event : [event];
 
   const header = new AppendReq();
@@ -76,16 +76,19 @@ Client.prototype.writeEventsToStream = async function (
 
   header.setOptions(options);
 
-  debug.command("writeEventsToStream: %O", {
+  debug.command("appendEventsToStream: %O", {
     streamName,
     events,
     options: { expectedRevision, ...baseOptions },
   });
-  debug.command_grpc("writeEventsToStream: %g", header);
+  debug.command_grpc("appendEventsToStream: %g", header);
 
-  const client = await this.getGRPCClient(StreamsClient, "writeEventsToStream");
+  const client = await this.getGRPCClient(
+    StreamsClient,
+    "appendEventsToStream"
+  );
 
-  return new Promise<WriteResult>((resolve, reject) => {
+  return new Promise<AppendResult>((resolve, reject) => {
     const sink = client.append(this.metadata(baseOptions), (error, resp) => {
       if (error != null) {
         return reject(convertToCommandError(error));
@@ -94,7 +97,7 @@ Client.prototype.writeEventsToStream = async function (
       if (resp.hasWrongExpectedVersion()) {
         const grpcError = resp.getWrongExpectedVersion()!;
 
-        let expected: WriteEventsExpectedRevision = "any";
+        let expected: AppendEventsExpectedRevision = "any";
 
         switch (true) {
           case grpcError.hasExpectedRevision(): {

@@ -40,38 +40,38 @@ optionalDescribe(process.env.EVENTSTORE_CLOUD_ID != null)(
       test("should successfully connect", async () => {
         const client = createClient();
 
-        const writeResult = await client.writeEventsToStream(
+        const appendResult = await client.appendEventsToStream(
           STREAM_NAME,
           event
         );
         const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
 
-        expect(writeResult).toBeDefined();
+        expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
       });
 
       describe("should connect to specified preference", () => {
         test("leader", async () => {
           const client = createClient("leader");
-          const writeResult = await client.writeEventsToStream(
+          const appendResult = await client.appendEventsToStream(
             `${clientType}-leader-test`,
             jsonTestEvents(),
             { requiresLeader: true }
           );
 
-          expect(writeResult).toBeDefined();
+          expect(appendResult).toBeDefined();
         });
 
         test("follower", async () => {
           const client = createClient("follower");
 
           try {
-            const writeResult = await client.writeEventsToStream(
+            const appendResult = await client.appendEventsToStream(
               `${clientType}-leader-test`,
               jsonTestEvents(),
               { requiresLeader: true }
             );
-            expect(writeResult).toBe("unreachable");
+            expect(appendResult).toBe("unreachable");
           } catch (error) {
             expect(error).toBeInstanceOf(NotLeaderError);
           }

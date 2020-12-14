@@ -28,7 +28,7 @@ Server setup instructions can be found in the [Event Store Docs], follow the doc
 
 ## Example
 
-The following snippet showcases a simple example where we form a connection, then write and read events from the server.
+The following snippet showcases a simple example where we form a connection, then append and read events from the server.
 
 ###### Javascript example:
 
@@ -55,7 +55,7 @@ async function simpleTest() {
     },
   });
 
-  const writeResult = await client.writeEventsToStream(streamName, [event]);
+  const appendResult = await client.appendEventsToStream(streamName, [event]);
 
   const events = await client.readEventsFromStream(streamName, 10, {
     fromRevision: START,
@@ -91,7 +91,7 @@ async function simpleTest(): Promise<void> {
     },
   });
 
-  const writeResult = await client.writeEventsToStream(streamName, [event]);
+  const appendResult = await client.appendEventsToStream(streamName, [event]);
 
   const events = await client.readEventsFromStream(streamName, 10, {
     fromRevision: START,
