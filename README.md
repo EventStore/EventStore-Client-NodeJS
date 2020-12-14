@@ -28,7 +28,7 @@ Server setup instructions can be found in the [Event Store Docs], follow the doc
 
 ## Example
 
-The following snippet showcases a simple example where we form a connection, then write and read events from the server.
+The following snippet showcases a simple example where we form a connection, then append and read events from the server.
 
 ###### Javascript example:
 

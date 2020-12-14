@@ -27,7 +27,7 @@ export interface AppendEventsToStreamOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Sends events to a given stream.
+     * Appends events to a given stream.
      * @param streamName A stream name.
      * @param events Events or event to write
      * @param options Writing options
