@@ -29,7 +29,7 @@ describe("tombstoneStream", () => {
       const ANY_REVISION_STREAM = "any_revision_stream";
 
       beforeAll(async () => {
-        await client.writeEventsToStream(ANY_REVISION_STREAM, jsonTestEvents());
+        await client.appendEventsToStream(ANY_REVISION_STREAM, jsonTestEvents());
       });
 
       it("succeeds", async () => {
@@ -58,7 +58,7 @@ describe("tombstoneStream", () => {
         const STREAM = "expected_revision_stream_exact";
 
         beforeAll(async () => {
-          await client.writeEventsToStream(STREAM, jsonTestEvents());
+          await client.appendEventsToStream(STREAM, jsonTestEvents());
         });
 
         it("fails", async () => {
@@ -102,7 +102,7 @@ describe("tombstoneStream", () => {
         const STREAM = "i_exist_hopefully";
 
         beforeAll(async () => {
-          await client.writeEventsToStream(STREAM, jsonTestEvents());
+          await client.appendEventsToStream(STREAM, jsonTestEvents());
         });
 
         it("fails", async () => {

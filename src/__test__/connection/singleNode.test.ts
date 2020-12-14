@@ -21,10 +21,10 @@ describe("singleNodeConnection", () => {
       { rootCertificate: node.rootCertificate }
     );
 
-    const writeResult = await client.writeEventsToStream(STREAM_NAME, event);
+    const appendResult = await client.appendEventsToStream(STREAM_NAME, event);
     const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
 
-    expect(writeResult).toBeDefined();
+    expect(appendResult).toBeDefined();
     expect(readResult).toBeDefined();
   });
 });

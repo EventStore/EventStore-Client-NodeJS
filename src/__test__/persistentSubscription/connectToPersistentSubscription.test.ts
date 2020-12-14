@@ -51,7 +51,7 @@ describe("connectToPersistentSubscription", () => {
       const STREAM_NAME = "from_start_test_stream_name";
       const GROUP_NAME = "from_start_test_group_name";
 
-      await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(20));
+      await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(20));
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
@@ -86,7 +86,7 @@ describe("connectToPersistentSubscription", () => {
         .on("confirmation", onConfirmation)
         .on("end", onEnd);
 
-      await client.writeEventsToStream(STREAM_NAME, [
+      await client.appendEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(3),
         finishEvent(),
       ]);
@@ -104,7 +104,7 @@ describe("connectToPersistentSubscription", () => {
       const STREAM_NAME = "from_revision_test_stream_name";
       const GROUP_NAME = "from_revision_test_group_name";
 
-      await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(4));
+      await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(4));
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
@@ -139,7 +139,7 @@ describe("connectToPersistentSubscription", () => {
         .on("confirmation", onConfirmation)
         .on("end", onEnd);
 
-      await client.writeEventsToStream(STREAM_NAME, [
+      await client.appendEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(3),
         finishEvent(),
       ]);
@@ -164,7 +164,7 @@ describe("connectToPersistentSubscription", () => {
       const skipCount = 20;
       const retryCount = 20;
 
-      await client.writeEventsToStream(STREAM_NAME, [
+      await client.appendEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(skipCount),
         ...jsonTestEvents(skipCount),
         finishEvent(),
@@ -245,7 +245,7 @@ describe("connectToPersistentSubscription", () => {
           persistentSubscriptionSettingsFromDefaults()
         );
 
-        await client.writeEventsToStream(STREAM_NAME, [
+        await client.appendEventsToStream(STREAM_NAME, [
           ...jsonTestEvents(99),
           finishEvent(),
         ]);
@@ -288,7 +288,7 @@ describe("connectToPersistentSubscription", () => {
           persistentSubscriptionSettingsFromDefaults()
         );
 
-        await client.writeEventsToStream(STREAM_NAME, [
+        await client.appendEventsToStream(STREAM_NAME, [
           ...jsonTestEvents(skipCount, "skip-event"),
           ...jsonTestEvents(retryCount, "retry-event"),
           finishEvent(),
@@ -343,7 +343,7 @@ describe("connectToPersistentSubscription", () => {
           persistentSubscriptionSettingsFromDefaults()
         );
 
-        await client.writeEventsToStream(STREAM_NAME, [
+        await client.appendEventsToStream(STREAM_NAME, [
           ...jsonTestEvents(99),
           finishEvent(),
         ]);
@@ -412,7 +412,7 @@ describe("connectToPersistentSubscription", () => {
         .on("error", (err) => console.log("aag", err))
         .on("end", endListener);
 
-      await client.writeEventsToStream(STREAM_NAME, [
+      await client.appendEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(5),
         finishEvent(),
       ]);
@@ -434,7 +434,7 @@ describe("connectToPersistentSubscription", () => {
         persistentSubscriptionSettingsFromDefaults()
       );
 
-      await client.writeEventsToStream(STREAM_NAME, [
+      await client.appendEventsToStream(STREAM_NAME, [
         ...jsonTestEvents(8),
         jsonEvent({
           eventType: FINISH_TEST,
@@ -490,7 +490,7 @@ describe("connectToPersistentSubscription", () => {
       persistentSubscriptionSettingsFromDefaults()
     );
 
-    await client.writeEventsToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
+    await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
 
     const malformedData = "****";
 
@@ -501,7 +501,7 @@ describe("connectToPersistentSubscription", () => {
       data: malformedData,
     });
 
-    await client.writeEventsToStream(STREAM_NAME, [
+    await client.appendEventsToStream(STREAM_NAME, [
       ...jsonTestEvents(3, "test 2"),
       finishEvent(),
     ]);
@@ -579,7 +579,7 @@ describe("connectToPersistentSubscription", () => {
       }
     };
 
-    await followerClient.writeEventsToStream(STREAM_NAME, [
+    await followerClient.appendEventsToStream(STREAM_NAME, [
       ...jsonTestEvents(99),
       finishEvent(),
     ]);
