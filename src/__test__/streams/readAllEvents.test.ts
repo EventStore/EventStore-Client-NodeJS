@@ -16,8 +16,8 @@ describe("readAllEvents", () => {
       { username: "admin", password: "changeit" }
     );
 
-    await client.writeEventsToStream(STREAM_NAME_A, jsonTestEvents());
-    await client.writeEventsToStream(STREAM_NAME_B, jsonTestEvents());
+    await client.appendEventsToStream(STREAM_NAME_A, jsonTestEvents());
+    await client.appendEventsToStream(STREAM_NAME_B, jsonTestEvents());
   });
 
   afterAll(async () => {

@@ -58,7 +58,7 @@ export type ExpectedRevision =
    */
   | bigint;
 
-export type WriteEventsExpectedRevision =
+export type AppendEventsExpectedRevision =
   /**
    * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
    */
@@ -83,7 +83,7 @@ export type CurrentRevision =
  */
 export type Direction = typeof constants.FORWARD | typeof constants.BACKWARD;
 
-export interface WriteResult {
+export interface AppendResult {
   nextExpectedVersion: bigint;
   position?: Position;
 }

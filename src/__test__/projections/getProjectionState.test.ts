@@ -39,7 +39,7 @@ describe("getProjectionState", () => {
 
     await client.createContinuousProjection(PROJECTION_NAME, projection);
 
-    await client.writeEventsToStream(
+    await client.appendEventsToStream(
       STREAM_NAME,
       jsonTestEvents(count, EVENT_TYPE)
     );

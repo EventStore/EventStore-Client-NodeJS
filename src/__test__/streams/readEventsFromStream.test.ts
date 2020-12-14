@@ -16,12 +16,12 @@ describe("readEventsFromStream", () => {
       { username: "admin", password: "changeit" }
     );
 
-    await client.writeEventsToStream(STREAM_NAME, [
+    await client.appendEventsToStream(STREAM_NAME, [
       ...jsonTestEvents(4, "json-test"),
       ...binaryTestEvents(4, "binary-test"),
     ]);
 
-    await client.writeEventsToStream(
+    await client.appendEventsToStream(
       OUT_OF_STREAM_NAME,
       jsonTestEvents(5, "out-of-stream-test")
     );

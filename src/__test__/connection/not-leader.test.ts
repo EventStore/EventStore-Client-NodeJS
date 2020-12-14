@@ -31,12 +31,12 @@ describe("not-leader", () => {
       { rootCertificate: cluster.rootCertificate }
     );
 
-    const writeResult = await followerClient.writeEventsToStream(
+    const appendResult = await followerClient.appendEventsToStream(
       STREAM_NAME,
       event
     );
 
-    expect(writeResult).toBeDefined();
+    expect(appendResult).toBeDefined();
 
     const readFromTestStream = (client: EventStoreDBClient) => {
       return client.readEventsFromStream(STREAM_NAME, 10, {

@@ -5,7 +5,7 @@ import { WrongExpectedVersionError } from "../../utils/CommandError";
 import { ANY, NO_STREAM, STREAM_EXISTS } from "../../constants";
 import { binaryEvent } from "../../events";
 
-describe("writeEventsToStream", () => {
+describe("appendEventsToStream", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -26,7 +26,7 @@ describe("writeEventsToStream", () => {
     test("json events", async () => {
       const STREAM_NAME = "json_stream_name";
 
-      const result = await client.writeEventsToStream(
+      const result = await client.appendEventsToStream(
         STREAM_NAME,
         jsonTestEvents()
       );
@@ -37,7 +37,7 @@ describe("writeEventsToStream", () => {
     test("binary events", async () => {
       const STREAM_NAME = "binary_stream_name";
 
-      const result = await client.writeEventsToStream(
+      const result = await client.appendEventsToStream(
         STREAM_NAME,
         binaryTestEvents()
       );
@@ -58,7 +58,7 @@ describe("writeEventsToStream", () => {
         metadata: METADATA,
       });
 
-      const result = await client.writeEventsToStream(STREAM_NAME, event);
+      const result = await client.appendEventsToStream(STREAM_NAME, event);
 
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
@@ -82,7 +82,7 @@ describe("writeEventsToStream", () => {
         metadata: Buffer.from(METADATA),
       });
 
-      const result = await client.writeEventsToStream(STREAM_NAME, event);
+      const result = await client.appendEventsToStream(STREAM_NAME, event);
 
       expect(result).toBeDefined();
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
@@ -102,7 +102,7 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "any_stream_doesnt_matter";
 
-          const result = await client.writeEventsToStream(
+          const result = await client.appendEventsToStream(
             STREAM_NAME,
             jsonTestEvents(),
             {
@@ -119,7 +119,7 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "no_stream_here";
 
-          const result = await client.writeEventsToStream(
+          const result = await client.appendEventsToStream(
             STREAM_NAME,
             jsonTestEvents(),
             {
@@ -134,10 +134,10 @@ describe("writeEventsToStream", () => {
         test("fails", async () => {
           const STREAM_NAME = "no_stream_here_but_there_is";
 
-          await client.writeEventsToStream(STREAM_NAME, jsonTestEvents());
+          await client.appendEventsToStream(STREAM_NAME, jsonTestEvents());
 
           try {
-            const result = await client.writeEventsToStream(
+            const result = await client.appendEventsToStream(
               STREAM_NAME,
               jsonTestEvents(),
               {
@@ -162,9 +162,9 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "stream_should_exist";
 
-          await client.writeEventsToStream(STREAM_NAME, jsonTestEvents());
+          await client.appendEventsToStream(STREAM_NAME, jsonTestEvents());
 
-          const result = await client.writeEventsToStream(
+          const result = await client.appendEventsToStream(
             STREAM_NAME,
             jsonTestEvents(),
             {
@@ -179,7 +179,7 @@ describe("writeEventsToStream", () => {
           const STREAM_NAME = "stream_should_exist_but_doesnt";
 
           try {
-            const result = await client.writeEventsToStream(
+            const result = await client.appendEventsToStream(
               STREAM_NAME,
               jsonTestEvents(),
               {
@@ -204,12 +204,12 @@ describe("writeEventsToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "stream_should_be_at_nextExpectedRevision";
 
-          const { nextExpectedVersion } = await client.writeEventsToStream(
+          const { nextExpectedVersion } = await client.appendEventsToStream(
             STREAM_NAME,
             jsonTestEvents()
           );
 
-          const result = await client.writeEventsToStream(
+          const result = await client.appendEventsToStream(
             STREAM_NAME,
             jsonTestEvents(),
             {
@@ -226,7 +226,7 @@ describe("writeEventsToStream", () => {
             const STREAM_NAME = "stream_should_be_at_revision_but_doesnt_exist";
 
             try {
-              const result = await client.writeEventsToStream(
+              const result = await client.appendEventsToStream(
                 STREAM_NAME,
                 jsonTestEvents(),
                 { expectedRevision: BigInt(1) }
@@ -247,13 +247,13 @@ describe("writeEventsToStream", () => {
           test("wrong version", async () => {
             const STREAM_NAME = "stream_should_be_at_revision_but_isnt";
 
-            const { nextExpectedVersion } = await client.writeEventsToStream(
+            const { nextExpectedVersion } = await client.appendEventsToStream(
               STREAM_NAME,
               jsonTestEvents()
             );
 
             try {
-              const result = await client.writeEventsToStream(
+              const result = await client.appendEventsToStream(
                 STREAM_NAME,
                 jsonTestEvents(),
                 {

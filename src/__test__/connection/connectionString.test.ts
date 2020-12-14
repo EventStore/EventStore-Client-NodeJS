@@ -25,13 +25,13 @@ describe("connectionString", () => {
         const STREAM_NAME = "template_string_stream";
         const client = EventStoreDBClient.connectionString`esdb://${node.uri}?tls=false`;
 
-        const writeResult = await client.writeEventsToStream(
+        const appendResult = await client.appendEventsToStream(
           STREAM_NAME,
           testEvent()
         );
         const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
 
-        expect(writeResult).toBeDefined();
+        expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
       });
 
@@ -42,13 +42,13 @@ describe("connectionString", () => {
           `esdb://${node.uri}?tls=false`
         );
 
-        const writeResult = await client.writeEventsToStream(
+        const appendResult = await client.appendEventsToStream(
           STREAM_NAME,
           testEvent()
         );
         const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
 
-        expect(writeResult).toBeDefined();
+        expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
       });
 
@@ -67,14 +67,14 @@ describe("connectionString", () => {
 
         const client = EventStoreDBClient.connectionString`esdb://${gossipEndpoints}?tls=false&nodePreference=leader`;
 
-        const writeResult = await client.writeEventsToStream(
+        const appendResult = await client.appendEventsToStream(
           STREAM_NAME,
           testEvent()
         );
 
         const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
 
-        expect(writeResult).toBeDefined();
+        expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
       });
 
@@ -87,13 +87,13 @@ describe("connectionString", () => {
 
         const client = EventStoreDBClient.connectionString(connectionString);
 
-        const writeResult = await client.writeEventsToStream(
+        const appendResult = await client.appendEventsToStream(
           STREAM_NAME,
           testEvent()
         );
         const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
 
-        expect(writeResult).toBeDefined();
+        expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
       });
 
