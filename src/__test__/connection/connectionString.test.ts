@@ -54,7 +54,7 @@ describe("connectionString", () => {
 
       // test("default credentials", async () => {
       //   const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=false`;
-      //   await expect(client.readAllEvents()).resolves.toBeDefined();
+      //   await expect(client.readAll()).resolves.toBeDefined();
       // });
     });
 
@@ -104,7 +104,7 @@ describe("connectionString", () => {
 
       //   const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${gossipEndpoints}?tls=false&nodePreference=leader`;
 
-      //   await expect(client.readAllEvents()).resolves.toBeDefined();
+      //   await expect(client.readAll()).resolves.toBeDefined();
       // });
     });
   });

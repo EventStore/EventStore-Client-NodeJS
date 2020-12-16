@@ -124,14 +124,14 @@ Tests can be filtered by prepending the test file or folder to the command
 
 ```shell script
 $ yarn test connection // all connection tests
-$ yarn test ReadAllEvents // only the ReadAllEvents tests
+$ yarn test ReadAll // only the ReadAll tests
 ```
 
 To get debug information when running tests use the `test:debug` command.
 
 ```shell script
 $ yarn test:debug // debug all tests
-$ yarn test:debug ReadAllEvents // only the ReadAllEvents tests
+$ yarn test:debug ReadAll // only the ReadAll tests
 ```
 
 Specific docker images can be specified via the enviroment variable `EVENTSTORE_IMAGE`.

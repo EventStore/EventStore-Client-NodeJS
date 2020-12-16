@@ -13,7 +13,7 @@ import { debug, convertAllStreamGrpcEvent, handleBatchRead } from "../utils";
 import { BACKWARD, FORWARD, START } from "../constants";
 import { Client } from "../Client";
 
-export interface ReadAllEventsOptions extends BaseOptions {
+export interface ReadAllOptions extends BaseOptions {
   /**
    * Starts the read at the given position.
    * @defaultValue START
@@ -34,21 +34,21 @@ declare module "../Client" {
      * @param count The number of events to read
      * @param options Reading options
      */
-    readAllEvents(
+    readAll(
       count: number | BigInt,
-      options?: ReadAllEventsOptions
+      options?: ReadAllOptions
     ): Promise<AllStreamResolvedEvent[]>;
   }
 }
 
-Client.prototype.readAllEvents = async function (
+Client.prototype.readAll = async function (
   this: Client,
   count: number | BigInt,
   {
     fromPosition = START,
     direction = FORWARD,
     ...baseOptions
-  }: ReadAllEventsOptions = {}
+  }: ReadAllOptions = {}
 ): Promise<AllStreamResolvedEvent[]> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
@@ -95,7 +95,7 @@ Client.prototype.readAllEvents = async function (
 
   req.setOptions(options);
 
-  debug.command("readAllEvents: %O", {
+  debug.command("readAll: %O", {
     count,
     options: {
       fromPosition,
@@ -103,9 +103,9 @@ Client.prototype.readAllEvents = async function (
       ...baseOptions,
     },
   });
-  debug.command_grpc("readAllEvents: %g", req);
+  debug.command_grpc("readAll: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "readAllEvents");
+  const client = await this.getGRPCClient(StreamsClient, "readAll");
   const stream = client.read(req, this.metadata(baseOptions));
   return handleBatchRead(stream, convertAllStreamGrpcEvent);
 };
