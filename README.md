@@ -57,7 +57,7 @@ async function simpleTest() {
 
   const appendResult = await client.appendEventsToStream(streamName, [event]);
 
-  const events = await client.readEventsFromStream(streamName, 10, {
+  const events = await client.readStream(streamName, 10, {
     fromRevision: START,
     direction: FORWARD,
   });
@@ -93,7 +93,7 @@ async function simpleTest(): Promise<void> {
 
   const appendResult = await client.appendEventsToStream(streamName, [event]);
 
-  const events = await client.readEventsFromStream(streamName, 10, {
+  const events = await client.readStream(streamName, 10, {
     fromRevision: START,
     direction: FORWARD,
   });

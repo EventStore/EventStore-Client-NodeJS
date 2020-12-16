@@ -44,7 +44,7 @@ optionalDescribe(process.env.EVENTSTORE_CLOUD_ID != null)(
           STREAM_NAME,
           event
         );
-        const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, 10);
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();

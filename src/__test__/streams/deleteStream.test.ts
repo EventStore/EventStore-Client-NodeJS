@@ -40,7 +40,7 @@ describe("deleteStream", () => {
         expect(result).toBeDefined();
 
         await expect(
-          client.readEventsFromStream(ANY_REVISION_STREAM, 10)
+          client.readStream(ANY_REVISION_STREAM, 10)
         ).rejects.toThrowError(StreamNotFoundError);
       });
     });
@@ -70,7 +70,7 @@ describe("deleteStream", () => {
         });
 
         it("succeeds", async () => {
-          const events = await client.readEventsFromStream(STREAM, 1, {
+          const events = await client.readStream(STREAM, 1, {
             direction: "backward",
             fromRevision: "end",
           });
@@ -83,9 +83,9 @@ describe("deleteStream", () => {
 
           expect(result).toBeDefined();
 
-          await expect(
-            client.readEventsFromStream(STREAM, 1)
-          ).rejects.toThrowError(StreamNotFoundError);
+          await expect(client.readStream(STREAM, 1)).rejects.toThrowError(
+            StreamNotFoundError
+          );
         });
       });
 
