@@ -8,7 +8,7 @@ import { BACKWARD, END, FORWARD, START } from "../constants";
 import { BaseOptions, Direction, ReadRevision, ResolvedEvent } from "../types";
 import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
 
-export interface ReadEventsFromStreamOptions extends BaseOptions {
+export interface ReadStreamOptions extends BaseOptions {
   /**
    * Starts the read at the given event revision.
    * @defaultValue START
@@ -36,15 +36,15 @@ declare module "../Client" {
      * @param count Amount to read
      * @param options Writing options
      */
-    readEventsFromStream(
+    readStream(
       streamName: string,
       count: number | BigInt,
-      options?: ReadEventsFromStreamOptions
+      options?: ReadStreamOptions
     ): Promise<ResolvedEvent[]>;
   }
 }
 
-Client.prototype.readEventsFromStream = async function (
+Client.prototype.readStream = async function (
   this: Client,
   streamName: string,
   count: number | BigInt,
@@ -53,7 +53,7 @@ Client.prototype.readEventsFromStream = async function (
     resolveLinks = false,
     direction = FORWARD,
     ...baseOptions
-  }: ReadEventsFromStreamOptions = {}
+  }: ReadStreamOptions = {}
 ): Promise<ResolvedEvent[]> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
@@ -100,7 +100,7 @@ Client.prototype.readEventsFromStream = async function (
 
   req.setOptions(options);
 
-  debug.command("readEventsFromStream: %O", {
+  debug.command("readStream: %O", {
     streamName,
     count,
     options: {
@@ -110,12 +110,9 @@ Client.prototype.readEventsFromStream = async function (
       ...baseOptions,
     },
   });
-  debug.command_grpc("readEventsFromStream: %g", req);
+  debug.command_grpc("readStream: %g", req);
 
-  const client = await this.getGRPCClient(
-    StreamsClient,
-    "readEventsFromStream"
-  );
+  const client = await this.getGRPCClient(StreamsClient, "readStream");
   const readableStream = client.read(req, this.metadata(baseOptions));
   return handleBatchRead(readableStream, convertGrpcEvent);
 };

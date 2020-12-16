@@ -40,10 +40,7 @@ describe("tombstoneStream", () => {
         expect(result).toBeDefined();
 
         try {
-          const result = await client.readEventsFromStream(
-            ANY_REVISION_STREAM,
-            10
-          );
+          const result = await client.readStream(ANY_REVISION_STREAM, 10);
 
           expect(result).toBe("Unreachable");
         } catch (error) {
@@ -81,7 +78,7 @@ describe("tombstoneStream", () => {
         });
 
         it("succeeds", async () => {
-          const [resolvedEvent] = await client.readEventsFromStream(STREAM, 1, {
+          const [resolvedEvent] = await client.readStream(STREAM, 1, {
             direction: BACKWARD,
             fromRevision: END,
           });
@@ -95,7 +92,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           await expect(() =>
-            client.readEventsFromStream(STREAM, 10)
+            client.readStream(STREAM, 10)
           ).rejects.toThrowError(StreamDeletedError);
         });
       });
@@ -131,7 +128,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           await expect(() =>
-            client.readEventsFromStream(NOT_A_STREAM, 10)
+            client.readStream(NOT_A_STREAM, 10)
           ).rejects.toThrowError(StreamDeletedError);
         });
       });

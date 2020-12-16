@@ -22,7 +22,7 @@ describe("singleNodeConnection", () => {
     );
 
     const appendResult = await client.appendEventsToStream(STREAM_NAME, event);
-    const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+    const readResult = await client.readStream(STREAM_NAME, 10);
 
     expect(appendResult).toBeDefined();
     expect(readResult).toBeDefined();

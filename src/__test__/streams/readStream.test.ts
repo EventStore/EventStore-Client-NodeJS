@@ -2,7 +2,7 @@ import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
 
 import { EventStoreDBClient, BACKWARD, END } from "../..";
 
-describe("readEventsFromStream", () => {
+describe("readStream", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
   const STREAM_NAME = "test_stream_name";
@@ -34,11 +34,9 @@ describe("readEventsFromStream", () => {
   describe("should successfully read from stream", () => {
     describe("Event types", () => {
       test("json event", async () => {
-        const [resolvedEvent] = await client.readEventsFromStream(
-          STREAM_NAME,
-          1,
-          { fromRevision: BigInt(1) }
-        );
+        const [resolvedEvent] = await client.readStream(STREAM_NAME, 1, {
+          fromRevision: BigInt(1),
+        });
 
         const event = resolvedEvent.event!;
 
@@ -51,11 +49,9 @@ describe("readEventsFromStream", () => {
       });
 
       test("binary event", async () => {
-        const [resolvedEvent] = await client.readEventsFromStream(
-          STREAM_NAME,
-          1,
-          { fromRevision: BigInt(5) }
-        );
+        const [resolvedEvent] = await client.readStream(STREAM_NAME, 1, {
+          fromRevision: BigInt(5),
+        });
 
         const event = resolvedEvent.event!;
 
@@ -68,7 +64,7 @@ describe("readEventsFromStream", () => {
 
     describe("options", () => {
       test("from start", async () => {
-        const events = await client.readEventsFromStream(
+        const events = await client.readStream(
           STREAM_NAME,
           Number.MAX_SAFE_INTEGER
         );
@@ -77,7 +73,7 @@ describe("readEventsFromStream", () => {
       });
 
       test("from revision", async () => {
-        const events = await client.readEventsFromStream(
+        const events = await client.readStream(
           STREAM_NAME,
           Number.MAX_SAFE_INTEGER,
           {
@@ -89,7 +85,7 @@ describe("readEventsFromStream", () => {
       });
 
       test("backward from end", async () => {
-        const events = await client.readEventsFromStream(
+        const events = await client.readStream(
           STREAM_NAME,
           Number.MAX_SAFE_INTEGER,
           {
@@ -102,7 +98,7 @@ describe("readEventsFromStream", () => {
       });
 
       test("backward from revision", async () => {
-        const events = await client.readEventsFromStream(
+        const events = await client.readStream(
           STREAM_NAME,
           Number.MAX_SAFE_INTEGER,
           {
@@ -115,7 +111,7 @@ describe("readEventsFromStream", () => {
       });
 
       test("count", async () => {
-        const events = await client.readEventsFromStream(STREAM_NAME, 2);
+        const events = await client.readStream(STREAM_NAME, 2);
 
         expect(events.length).toBe(2);
       });

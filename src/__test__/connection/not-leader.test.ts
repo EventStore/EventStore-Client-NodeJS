@@ -39,7 +39,7 @@ describe("not-leader", () => {
     expect(appendResult).toBeDefined();
 
     const readFromTestStream = (client: EventStoreDBClient) => {
-      return client.readEventsFromStream(STREAM_NAME, 10, {
+      return client.readStream(STREAM_NAME, 10, {
         direction: BACKWARD,
         fromRevision: END,
         requiresLeader: true,

@@ -29,7 +29,7 @@ describe("connectionString", () => {
           STREAM_NAME,
           testEvent()
         );
-        const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, 10);
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -46,7 +46,7 @@ describe("connectionString", () => {
           STREAM_NAME,
           testEvent()
         );
-        const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, 10);
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -72,7 +72,7 @@ describe("connectionString", () => {
           testEvent()
         );
 
-        const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, 10);
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -91,7 +91,7 @@ describe("connectionString", () => {
           STREAM_NAME,
           testEvent()
         );
-        const readResult = await client.readEventsFromStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, 10);
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
