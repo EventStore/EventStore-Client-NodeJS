@@ -1,4 +1,4 @@
-export * from "./appendEventsToStream";
+export * from "./appendToStream";
 export * from "./deleteStream";
 export * from "./readAll";
 export * from "./readStream";

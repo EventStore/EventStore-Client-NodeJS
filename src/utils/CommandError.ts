@@ -1,9 +1,5 @@
 import { status as StatusCode, ServiceError } from "@grpc/grpc-js";
-import {
-  CurrentRevision,
-  EndPoint,
-  AppendEventsExpectedRevision,
-} from "../types";
+import { CurrentRevision, EndPoint, AppendExpectedRevision } from "../types";
 
 export enum ErrorType {
   TIMEOUT = "timeout",
@@ -130,7 +126,7 @@ export class ScavengeNotFoundError extends CommandErrorBase {
 
 interface WrongExpectedVersion {
   streamName: string;
-  expected: AppendEventsExpectedRevision;
+  expected: AppendExpectedRevision;
   current: CurrentRevision;
 }
 
@@ -138,7 +134,7 @@ export class WrongExpectedVersionError extends CommandErrorBase {
   public type: ErrorType.WRONG_EXPECTED_VERSION =
     ErrorType.WRONG_EXPECTED_VERSION;
   public streamName: string;
-  public expectedVersion: AppendEventsExpectedRevision;
+  public expectedVersion: AppendExpectedRevision;
   public actualVersion: CurrentRevision;
 
   constructor(error?: ServiceError, versions?: WrongExpectedVersion) {

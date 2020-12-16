@@ -55,7 +55,7 @@ async function simpleTest() {
     },
   });
 
-  const appendResult = await client.appendEventsToStream(streamName, [event]);
+  const appendResult = await client.appendToStream(streamName, [event]);
 
   const events = await client.readStream(streamName, 10, {
     fromRevision: START,
@@ -91,7 +91,7 @@ async function simpleTest(): Promise<void> {
     },
   });
 
-  const appendResult = await client.appendEventsToStream(streamName, [event]);
+  const appendResult = await client.appendToStream(streamName, [event]);
 
   const events = await client.readStream(streamName, 10, {
     fromRevision: START,

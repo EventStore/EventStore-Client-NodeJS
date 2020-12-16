@@ -25,7 +25,7 @@ describe("connectionString", () => {
         const STREAM_NAME = "template_string_stream";
         const client = EventStoreDBClient.connectionString`esdb://${node.uri}?tls=false`;
 
-        const appendResult = await client.appendEventsToStream(
+        const appendResult = await client.appendToStream(
           STREAM_NAME,
           testEvent()
         );
@@ -42,7 +42,7 @@ describe("connectionString", () => {
           `esdb://${node.uri}?tls=false`
         );
 
-        const appendResult = await client.appendEventsToStream(
+        const appendResult = await client.appendToStream(
           STREAM_NAME,
           testEvent()
         );
@@ -67,7 +67,7 @@ describe("connectionString", () => {
 
         const client = EventStoreDBClient.connectionString`esdb://${gossipEndpoints}?tls=false&nodePreference=leader`;
 
-        const appendResult = await client.appendEventsToStream(
+        const appendResult = await client.appendToStream(
           STREAM_NAME,
           testEvent()
         );
@@ -87,7 +87,7 @@ describe("connectionString", () => {
 
         const client = EventStoreDBClient.connectionString(connectionString);
 
-        const appendResult = await client.appendEventsToStream(
+        const appendResult = await client.appendToStream(
           STREAM_NAME,
           testEvent()
         );

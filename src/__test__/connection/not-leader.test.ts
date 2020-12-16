@@ -31,7 +31,7 @@ describe("not-leader", () => {
       { rootCertificate: cluster.rootCertificate }
     );
 
-    const appendResult = await followerClient.appendEventsToStream(
+    const appendResult = await followerClient.appendToStream(
       STREAM_NAME,
       event
     );

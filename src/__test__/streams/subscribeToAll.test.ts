@@ -27,8 +27,8 @@ describe("subscribeToAll", () => {
       { username: "admin", password: "changeit" }
     );
 
-    await client.appendEventsToStream(STREAM_NAME_A, jsonTestEvents(4));
-    await client.appendEventsToStream(STREAM_NAME_B, jsonTestEvents(4));
+    await client.appendToStream(STREAM_NAME_A, jsonTestEvents(4));
+    await client.appendToStream(STREAM_NAME_B, jsonTestEvents(4));
   });
 
   afterAll(async () => {
@@ -76,7 +76,7 @@ describe("subscribeToAll", () => {
         },
       });
 
-      await client.appendEventsToStream(STREAM_NAME_A, [
+      await client.appendToStream(STREAM_NAME_A, [
         ...jsonTestEvents(3),
         finishEvent,
       ]);
@@ -135,7 +135,7 @@ describe("subscribeToAll", () => {
 
       await delay(500);
 
-      await client.appendEventsToStream(STREAM_NAME_A, [
+      await client.appendToStream(STREAM_NAME_A, [
         ...jsonTestEvents(3),
         finishEvent,
       ]);
@@ -157,7 +157,7 @@ describe("subscribeToAll", () => {
       const FINISH_TEST = "from-position-finish";
       const MARKER_EVENT = "marker_event";
 
-      const appendResult = await client.appendEventsToStream(
+      const appendResult = await client.appendToStream(
         STREAM_NAME_B,
         jsonEvent({
           eventType: MARKER_EVENT,
@@ -165,7 +165,7 @@ describe("subscribeToAll", () => {
         })
       );
 
-      await client.appendEventsToStream(STREAM_NAME_A, jsonTestEvents(3));
+      await client.appendToStream(STREAM_NAME_A, jsonTestEvents(3));
 
       const events: ResolvedEvent[] = [];
       const filteredEvents: ResolvedEvent[] = [];
@@ -205,7 +205,7 @@ describe("subscribeToAll", () => {
         },
       });
 
-      await client.appendEventsToStream(STREAM_NAME_A, [
+      await client.appendToStream(STREAM_NAME_A, [
         ...jsonTestEvents(3),
         finishEvent,
       ]);
@@ -245,15 +245,12 @@ describe("subscribeToAll", () => {
         },
       });
 
-      const appendResult = await client.appendEventsToStream(
+      const appendResult = await client.appendToStream(
         STREAM_NAME_B,
         markerEvent
       );
 
-      client.appendEventsToStream(STREAM_NAME, [
-        ...jsonTestEvents(8),
-        finishEvent,
-      ]);
+      client.appendToStream(STREAM_NAME, [...jsonTestEvents(8), finishEvent]);
 
       const subscription = client.subscribeToAll({
         fromPosition: appendResult.position,
@@ -296,7 +293,7 @@ describe("subscribeToAll", () => {
         },
       });
 
-      const appendResult = await client.appendEventsToStream(
+      const appendResult = await client.appendToStream(
         STREAM_NAME_B,
         markerEvent
       );
@@ -305,10 +302,7 @@ describe("subscribeToAll", () => {
         fromPosition: appendResult.position,
       });
 
-      client.appendEventsToStream(STREAM_NAME, [
-        ...jsonTestEvents(99),
-        finishEvent,
-      ]);
+      client.appendToStream(STREAM_NAME, [...jsonTestEvents(99), finishEvent]);
 
       const readEvents = new Set<number>();
 
@@ -360,9 +354,9 @@ describe("subscribeToAll", () => {
 
       const defer = new Defer();
 
-      await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(8));
+      await client.appendToStream(STREAM_NAME, jsonTestEvents(8));
 
-      const appendResult = await client.appendEventsToStream(
+      const appendResult = await client.appendToStream(
         STREAM_NAME,
         markerEvent
       );
@@ -390,7 +384,7 @@ describe("subscribeToAll", () => {
         .on("end", endListener)
         .off("data", offListener);
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(5),
         finishEvent,
       ]);
@@ -408,7 +402,7 @@ describe("subscribeToAll", () => {
       const STREAM_NAME = "pipeline test";
       const FINISH_TEST = "finish_pipeline";
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(8),
         jsonEvent({
           eventType: FINISH_TEST,
