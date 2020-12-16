@@ -4,11 +4,7 @@ import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
 import { ANY } from "../constants";
-import {
-  BaseOptions,
-  AppendResult,
-  AppendEventsExpectedRevision,
-} from "../types";
+import { BaseOptions, AppendResult, AppendExpectedRevision } from "../types";
 import { EventData } from "../events";
 import {
   convertToCommandError,
@@ -16,12 +12,12 @@ import {
   WrongExpectedVersionError,
 } from "../utils";
 
-export interface AppendEventsToStreamOptions extends BaseOptions {
+export interface appendToStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
    * @defaultValue ANY
    */
-  expectedRevision?: AppendEventsExpectedRevision;
+  expectedRevision?: AppendExpectedRevision;
 }
 
 declare module "../Client" {
@@ -32,19 +28,19 @@ declare module "../Client" {
      * @param events Events or event to write
      * @param options Writing options
      */
-    appendEventsToStream(
+    appendToStream(
       streamName: string,
       events: EventData | EventData[],
-      options?: AppendEventsToStreamOptions
+      options?: appendToStreamOptions
     ): Promise<AppendResult>;
   }
 }
 
-Client.prototype.appendEventsToStream = async function (
+Client.prototype.appendToStream = async function (
   this: Client,
   streamName: string,
   event: EventData | EventData[],
-  { expectedRevision = ANY, ...baseOptions }: AppendEventsToStreamOptions = {}
+  { expectedRevision = ANY, ...baseOptions }: appendToStreamOptions = {}
 ): Promise<AppendResult> {
   const events = Array.isArray(event) ? event : [event];
 
@@ -76,17 +72,14 @@ Client.prototype.appendEventsToStream = async function (
 
   header.setOptions(options);
 
-  debug.command("appendEventsToStream: %O", {
+  debug.command("appendToStream: %O", {
     streamName,
     events,
     options: { expectedRevision, ...baseOptions },
   });
-  debug.command_grpc("appendEventsToStream: %g", header);
+  debug.command_grpc("appendToStream: %g", header);
 
-  const client = await this.getGRPCClient(
-    StreamsClient,
-    "appendEventsToStream"
-  );
+  const client = await this.getGRPCClient(StreamsClient, "appendToStream");
 
   return new Promise<AppendResult>((resolve, reject) => {
     const sink = client.append(this.metadata(baseOptions), (error, resp) => {
@@ -97,7 +90,7 @@ Client.prototype.appendEventsToStream = async function (
       if (resp.hasWrongExpectedVersion()) {
         const grpcError = resp.getWrongExpectedVersion()!;
 
-        let expected: AppendEventsExpectedRevision = "any";
+        let expected: AppendExpectedRevision = "any";
 
         switch (true) {
           case grpcError.hasExpectedRevision(): {

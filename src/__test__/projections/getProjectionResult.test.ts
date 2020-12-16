@@ -42,7 +42,7 @@ describe("getProjectionResult", () => {
 
       await client.createContinuousProjection(PROJECTION_NAME, projection);
 
-      await client.appendEventsToStream(
+      await client.appendToStream(
         STREAM_NAME,
         jsonTestEvents(count, EVENT_TYPE)
       );
@@ -133,7 +133,7 @@ describe("getProjectionResult", () => {
 
       expect(byCategoryStats.projectionStatus).toBe(RUNNING);
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         createCatEvent(MR_WHISKERS, NAPPED_EVENT),
         createCatEvent(SMUDGES, NAPPED_EVENT),
         createCatEvent(MR_WHISKERS, SNACKED_EVENT),

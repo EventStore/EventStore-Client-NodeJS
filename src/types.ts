@@ -58,7 +58,7 @@ export type ExpectedRevision =
    */
   | bigint;
 
-export type AppendEventsExpectedRevision =
+export type AppendExpectedRevision =
   /**
    * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
    */

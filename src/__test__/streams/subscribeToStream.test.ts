@@ -25,7 +25,7 @@ describe("subscribeToStream", () => {
       { rootCertificate: node.rootCertificate },
       { username: "admin", password: "changeit" }
     );
-    await client.appendEventsToStream("out_of_stream_name", jsonTestEvents(4));
+    await client.appendToStream("out_of_stream_name", jsonTestEvents(4));
   });
 
   afterAll(async () => {
@@ -37,7 +37,7 @@ describe("subscribeToStream", () => {
       const defer = new Defer();
       const STREAM_NAME = "from_start_test_stream_name";
 
-      await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(4));
+      await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -61,7 +61,7 @@ describe("subscribeToStream", () => {
 
       await delay(500);
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(3),
         finishEvent(),
       ]);
@@ -77,7 +77,7 @@ describe("subscribeToStream", () => {
       const STREAM_NAME = "from_end_test_stream_name";
       const defer = new Defer();
 
-      await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(4));
+      await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -103,7 +103,7 @@ describe("subscribeToStream", () => {
 
       await delay(500);
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(3),
         finishEvent(),
       ]);
@@ -118,7 +118,7 @@ describe("subscribeToStream", () => {
     test("from revision", async () => {
       const STREAM_NAME = "from_revision_test_stream_name";
 
-      await client.appendEventsToStream(STREAM_NAME, jsonTestEvents(4));
+      await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
 
       const defer = new Defer();
 
@@ -147,7 +147,7 @@ describe("subscribeToStream", () => {
 
       await delay(500);
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(3),
         finishEvent(),
       ]);
@@ -166,7 +166,7 @@ describe("subscribeToStream", () => {
       const STREAM_NAME = "async_iter";
       const doSomething = jest.fn();
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(8),
         finishEvent(),
       ]);
@@ -185,7 +185,7 @@ describe("subscribeToStream", () => {
     test("pipeline", async () => {
       const STREAM_NAME = "pipeline test";
 
-      await client.appendEventsToStream(STREAM_NAME, [
+      await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(8),
         finishEvent(),
       ]);

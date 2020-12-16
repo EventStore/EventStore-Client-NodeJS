@@ -40,10 +40,7 @@ optionalDescribe(process.env.EVENTSTORE_CLOUD_ID != null)(
       test("should successfully connect", async () => {
         const client = createClient();
 
-        const appendResult = await client.appendEventsToStream(
-          STREAM_NAME,
-          event
-        );
+        const appendResult = await client.appendToStream(STREAM_NAME, event);
         const readResult = await client.readStream(STREAM_NAME, 10);
 
         expect(appendResult).toBeDefined();
@@ -53,7 +50,7 @@ optionalDescribe(process.env.EVENTSTORE_CLOUD_ID != null)(
       describe("should connect to specified preference", () => {
         test("leader", async () => {
           const client = createClient("leader");
-          const appendResult = await client.appendEventsToStream(
+          const appendResult = await client.appendToStream(
             `${clientType}-leader-test`,
             jsonTestEvents(),
             { requiresLeader: true }
@@ -66,7 +63,7 @@ optionalDescribe(process.env.EVENTSTORE_CLOUD_ID != null)(
           const client = createClient("follower");
 
           try {
-            const appendResult = await client.appendEventsToStream(
+            const appendResult = await client.appendToStream(
               `${clientType}-leader-test`,
               jsonTestEvents(),
               { requiresLeader: true }
