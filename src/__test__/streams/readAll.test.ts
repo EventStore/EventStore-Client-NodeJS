@@ -2,7 +2,7 @@ import { createTestNode, jsonTestEvents } from "../utils";
 
 import { EventStoreDBClient, BACKWARD, END, START } from "../..";
 
-describe("readAllEvents", () => {
+describe("readAll", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
   const STREAM_NAME_A = "stream_name_a";
@@ -26,7 +26,7 @@ describe("readAllEvents", () => {
 
   describe("should successfully read from $all", () => {
     test("from start", async () => {
-      const events = await client.readAllEvents(Number.MAX_SAFE_INTEGER, {
+      const events = await client.readAll(Number.MAX_SAFE_INTEGER, {
         fromPosition: START,
       });
 
@@ -41,11 +41,11 @@ describe("readAllEvents", () => {
     });
 
     test("from position", async () => {
-      const [, , eventToExtract] = await client.readAllEvents(3);
+      const [, , eventToExtract] = await client.readAll(3);
 
       const { position } = eventToExtract.event!;
 
-      const [extracted] = await client.readAllEvents(1, {
+      const [extracted] = await client.readAll(1, {
         fromPosition: position,
       });
 
@@ -53,7 +53,7 @@ describe("readAllEvents", () => {
     });
 
     test("backward from end", async () => {
-      const events = await client.readAllEvents(Number.MAX_SAFE_INTEGER, {
+      const events = await client.readAll(Number.MAX_SAFE_INTEGER, {
         direction: BACKWARD,
         fromPosition: END,
       });
@@ -69,7 +69,7 @@ describe("readAllEvents", () => {
     });
 
     test("count", async () => {
-      const events = await client.readAllEvents(2);
+      const events = await client.readAll(2);
       expect(events.length).toBe(2);
     });
   });

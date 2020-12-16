@@ -1,6 +1,6 @@
 export * from "./appendEventsToStream";
 export * from "./deleteStream";
-export * from "./readAllEvents";
+export * from "./readAll";
 export * from "./readEventsFromStream";
 export * from "./subscribeToAll";
 export * from "./subscribeToStream";

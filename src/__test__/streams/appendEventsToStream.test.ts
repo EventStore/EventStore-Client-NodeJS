@@ -22,7 +22,7 @@ describe("appendEventsToStream", () => {
     await node.down();
   });
 
-  describe("should successfully write to stream", () => {
+  describe("should successfully append to stream", () => {
     test("json events", async () => {
       const STREAM_NAME = "json_stream_name";
 
