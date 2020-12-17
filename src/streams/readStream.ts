@@ -34,7 +34,7 @@ declare module "../Client" {
      * Sends events to a given stream.
      * @param streamName A stream name.
      * @param count Amount to read
-     * @param options Writing options
+     * @param options Reading options
      */
     readStream(
       streamName: string,
