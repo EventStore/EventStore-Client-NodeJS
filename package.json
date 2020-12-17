@@ -9,6 +9,7 @@
     "lint": "run-s -c lint:*",
     "lint:prettier": "prettier --check \"src/**/**/!(*.d).{ts,json}\"",
     "lint:eslint": "eslint \"src/**/*.ts\"",
+    "prettier:fix": "prettier --write \"src/**/**/!(*.d).{ts,json}\"",
     "test": "jest",
     "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" jest --verbose --run-in-band",
     "test:ci": "cross-env EVENTSTORE_IMAGE=github:ci jest",
