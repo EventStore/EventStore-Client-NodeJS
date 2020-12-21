@@ -52,10 +52,10 @@ describe("connectionString", () => {
         expect(readResult).toBeDefined();
       });
 
-      // test("default credentials", async () => {
-      //   const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=false`;
-      //   await expect(client.readAll()).resolves.toBeDefined();
-      // });
+      test("default credentials", async () => {
+        const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=false`;
+        await expect(client.readAll(10)).resolves.toBeDefined();
+      });
     });
 
     describe("cluster", () => {
@@ -97,15 +97,15 @@ describe("connectionString", () => {
         expect(readResult).toBeDefined();
       });
 
-      // test("default credentials", async () => {
-      //   const gossipEndpoints = cluster.endpoints
-      //     .map(({ address, port }) => `${address}:${port}`)
-      //     .join(",");
+      test("default credentials", async () => {
+        const gossipEndpoints = cluster.endpoints
+          .map(({ address, port }) => `${address}:${port}`)
+          .join(",");
 
-      //   const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${gossipEndpoints}?tls=false&nodePreference=leader`;
+        const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${gossipEndpoints}?tls=false&nodePreference=leader`;
 
-      //   await expect(client.readAll()).resolves.toBeDefined();
-      // });
+        await expect(client.readAll(10)).resolves.toBeDefined();
+      });
     });
   });
 });
