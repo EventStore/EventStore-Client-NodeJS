@@ -3,6 +3,7 @@
   "version": "0.0.0-alpha.9",
   "description": "NodeJS EventStoreDB version 20+ and uses gRPC as the communication protocol.",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "run-s generate build:*",
     "build:ts": "tsc",
@@ -54,12 +55,12 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.1.5",
+    "@types/debug": "^4.1.5",
     "debug": "^4.2.0",
     "google-protobuf": "^3.13.0",
     "uuid": "^8.2.0"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.5",
     "@types/google-protobuf": "^3.7.3",
     "@types/jest": "^26.0.5",
     "@types/uuid": "^8.0.0",
