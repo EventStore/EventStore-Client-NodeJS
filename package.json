@@ -3,6 +3,7 @@
   "version": "0.0.0-alpha.9",
   "description": "NodeJS EventStoreDB version 20+ and uses gRPC as the communication protocol.",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "run-s generate build:*",
     "build:ts": "tsc",
