@@ -165,8 +165,8 @@ describe("connectToPersistentSubscription", () => {
       const retryCount = 20;
 
       await client.appendToStream(STREAM_NAME, [
-        ...jsonTestEvents(skipCount),
-        ...jsonTestEvents(skipCount),
+        ...jsonTestEvents(skipCount, "skip-event"),
+        ...jsonTestEvents(retryCount, "retry-event"),
         finishEvent(),
       ]);
 
@@ -198,14 +198,15 @@ describe("connectToPersistentSubscription", () => {
         if (!nacked.includes(event.event.id)) {
           nacked.push(event.event.id);
           await subscription.nack(
-            nacked.length < skipCount ? "skip" : "retry",
+            event.event.eventType === "skip-event" ? "skip" : "retry",
             "To test it",
             event.event.id
           );
           return;
         }
 
-        subscription.ack(event.event.id);
+        await subscription.ack(event.event.id);
+        return;
       });
 
       const subscription = client
@@ -250,7 +251,7 @@ describe("connectToPersistentSubscription", () => {
           finishEvent(),
         ]);
 
-        const subscription = await client.connectToPersistentSubscription(
+        const subscription = client.connectToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
