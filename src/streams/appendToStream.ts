@@ -12,7 +12,7 @@ import {
   WrongExpectedVersionError,
 } from "../utils";
 
-export interface appendToStreamOptions extends BaseOptions {
+export interface AppendToStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
    * @defaultValue ANY
@@ -31,7 +31,7 @@ declare module "../Client" {
     appendToStream(
       streamName: string,
       events: EventData | EventData[],
-      options?: appendToStreamOptions
+      options?: AppendToStreamOptions
     ): Promise<AppendResult>;
   }
 }
@@ -40,7 +40,7 @@ Client.prototype.appendToStream = async function (
   this: Client,
   streamName: string,
   event: EventData | EventData[],
-  { expectedRevision = ANY, ...baseOptions }: appendToStreamOptions = {}
+  { expectedRevision = ANY, ...baseOptions }: AppendToStreamOptions = {}
 ): Promise<AppendResult> {
   const events = Array.isArray(event) ? event : [event];
 
