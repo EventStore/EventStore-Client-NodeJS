@@ -5,7 +5,7 @@ import { jsonEvent, EventStoreDBClient } from "../..";
 describe("cluster", () => {
   const cluster = createTestCluster();
   const STREAM_NAME = "test_stream_name";
-  const event = jsonEvent({ eventType: "test", payload: { message: "test" } });
+  const event = jsonEvent({ type: "test", data: { message: "test" } });
 
   beforeAll(async () => {
     await cluster.up();

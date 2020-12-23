@@ -47,8 +47,8 @@ describe("appendToStream", () => {
       const STREAM_NAME = "json_metadata_stream_name";
       const METADATA = { metaMessage: "How meta is this?" };
       const event = jsonEvent({
-        eventType: "metadata-test-json",
-        payload: {
+        type: "metadata-test-json",
+        data: {
           message: "the json message",
           kind: "json",
         },
@@ -74,8 +74,8 @@ describe("appendToStream", () => {
       const METADATA = "How meta is this?";
 
       const event = binaryEvent({
-        eventType: "metadata-test-binary",
-        payload: Buffer.from("the binary message"),
+        type: "metadata-test-binary",
+        data: Buffer.from("the binary message"),
         metadata: Buffer.from(METADATA),
       });
 

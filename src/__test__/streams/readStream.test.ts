@@ -41,7 +41,7 @@ describe("readStream", () => {
         const event = resolvedEvent.event!;
 
         expect(event.isJson).toBe(true);
-        expect(event.eventType).toBe("json-test");
+        expect(event.type).toBe("json-test");
         expect(event.data).toMatchObject({
           index: 1,
           message: "test",
@@ -56,7 +56,7 @@ describe("readStream", () => {
         const event = resolvedEvent.event!;
 
         expect(event.isJson).toBe(false);
-        expect(event.eventType).toBe("binary-test");
+        expect(event.type).toBe("binary-test");
 
         expect(Buffer.from(event.data as string).toString()).toBe("hello: 1");
       });

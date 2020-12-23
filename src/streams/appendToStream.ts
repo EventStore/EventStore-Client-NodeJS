@@ -145,17 +145,17 @@ Client.prototype.appendToStream = async function (
       const id = new UUID();
       id.setString(event.id);
       message.setId(id);
-      message.getMetadataMap().set("type", event.eventType);
+      message.getMetadataMap().set("type", event.type);
       message.getMetadataMap().set("content-type", event.contentType);
 
       switch (event.contentType) {
         case "application/json": {
-          const data = JSON.stringify(event.payload);
+          const data = JSON.stringify(event.data);
           message.setData(Buffer.from(data, "binary").toString("base64"));
           break;
         }
         case "application/octet-stream": {
-          message.setData(event.payload);
+          message.setData(event.data);
           break;
         }
       }

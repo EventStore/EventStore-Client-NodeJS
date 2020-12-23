@@ -91,7 +91,7 @@ export const convertGrpcRecord = (
 ): RecordedEvent => {
   const metadataMap = grpcRecord.getMetadataMap();
 
-  const eventType = metadataMap.get("type") ?? "<no-event-type-provided>";
+  const type = metadataMap.get("type") ?? "<no-event-type-provided>";
   const contentType =
     metadataMap.get("content-type") ?? "application/octet-stream";
   const created = parseInt(metadataMap.get("created") ?? "0", 10);
@@ -136,7 +136,7 @@ export const convertGrpcRecord = (
       streamId,
       id,
       revision,
-      eventType,
+      type,
       data,
       metadata,
       isJson,
@@ -151,7 +151,7 @@ export const convertGrpcRecord = (
     streamId,
     id,
     revision,
-    eventType,
+    type,
     data,
     metadata,
     isJson,

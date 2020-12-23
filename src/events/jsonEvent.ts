@@ -9,8 +9,8 @@ export interface JSONEventData<
 > {
   id: string;
   contentType: "application/json";
-  eventType: EventType;
-  payload: Data;
+  type: EventType;
+  data: Data;
   metadata?: Metadata;
 }
 
@@ -26,13 +26,13 @@ export interface JSONEventOptions<
   /**
    * The event type
    */
-  eventType: EventType;
+  type: EventType;
   /**
-   * The payload of the event
+   * The data of the event
    */
-  payload: Data;
+  data: Data;
   /**
-   * The payload of the event
+   * The meta data of the event
    */
   metadata?: Metadata;
 }
@@ -42,8 +42,8 @@ export const jsonEvent = <
   Data extends JSONType = JSONType,
   Metadata extends JSONType = JSONType
 >({
-  eventType,
-  payload,
+  type,
+  data,
   metadata,
   id = uuid(),
 }: JSONEventOptions<EventType, Data, Metadata>): JSONEventData<
@@ -53,7 +53,7 @@ export const jsonEvent = <
 > => ({
   id,
   contentType: "application/json",
-  eventType,
-  payload,
+  type,
+  data,
   metadata,
 });

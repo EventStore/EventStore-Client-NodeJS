@@ -12,8 +12,8 @@ describe("subscribeToStream", () => {
 
   const finishEvent = () =>
     jsonEvent({
-      eventType: "finish-test",
-      payload: {
+      type: "finish-test",
+      data: {
         message: "lets wrap this up",
       },
     });
@@ -46,7 +46,7 @@ describe("subscribeToStream", () => {
       const handleConfirmation = jest.fn();
       const handleEnd = jest.fn(defer.resolve);
       const handleEvent = jest.fn((event: ResolvedEvent) => {
-        if (event.event?.eventType === "finish-test") {
+        if (event.event?.type === "finish-test") {
           subscription.unsubscribe();
         }
       });
@@ -86,7 +86,7 @@ describe("subscribeToStream", () => {
       const handleConfirmation = jest.fn();
       const handleEnd = jest.fn(defer.resolve);
       const handleEvent = jest.fn((event: ResolvedEvent) => {
-        if (event.event?.eventType === "finish-test") {
+        if (event.event?.type === "finish-test") {
           subscription.unsubscribe();
         }
       });
@@ -129,7 +129,7 @@ describe("subscribeToStream", () => {
       const handleConfirmation = jest.fn();
       const handleEnd = jest.fn(defer.resolve);
       const handleEvent = jest.fn((event: ResolvedEvent) => {
-        if (event.event?.eventType === "finish-test") {
+        if (event.event?.type === "finish-test") {
           subscription.unsubscribe();
         }
       });
@@ -174,7 +174,7 @@ describe("subscribeToStream", () => {
       for await (const event of client.subscribeToStream(STREAM_NAME)) {
         doSomething(event);
 
-        if (event.event?.eventType === "finish-test") {
+        if (event.event?.type === "finish-test") {
           break;
         }
       }
@@ -196,7 +196,7 @@ describe("subscribeToStream", () => {
         public ids: string[] = [];
         _write({ event }: ResolvedEvent, _encoding: string, done: () => void) {
           this.ids.push(event!.id);
-          if (event?.eventType === "finish-test") {
+          if (event?.type === "finish-test") {
             subscription.unsubscribe().then(done);
           } else {
             done();
