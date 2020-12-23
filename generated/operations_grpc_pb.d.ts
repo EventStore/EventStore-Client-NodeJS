@@ -20,7 +20,7 @@ interface IOperationsService extends grpc.ServiceDefinition<grpc.UntypedServiceI
 }
 
 interface IOperationsService_IStartScavenge extends grpc.MethodDefinition<operations_pb.StartScavengeReq, operations_pb.ScavengeResp> {
-    path: string; // "/event_store.client.operations.Operations/StartScavenge"
+    path: "/event_store.client.operations.Operations/StartScavenge";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<operations_pb.StartScavengeReq>;
@@ -29,7 +29,7 @@ interface IOperationsService_IStartScavenge extends grpc.MethodDefinition<operat
     responseDeserialize: grpc.deserialize<operations_pb.ScavengeResp>;
 }
 interface IOperationsService_IStopScavenge extends grpc.MethodDefinition<operations_pb.StopScavengeReq, operations_pb.ScavengeResp> {
-    path: string; // "/event_store.client.operations.Operations/StopScavenge"
+    path: "/event_store.client.operations.Operations/StopScavenge";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<operations_pb.StopScavengeReq>;
@@ -38,7 +38,7 @@ interface IOperationsService_IStopScavenge extends grpc.MethodDefinition<operati
     responseDeserialize: grpc.deserialize<operations_pb.ScavengeResp>;
 }
 interface IOperationsService_IShutdown extends grpc.MethodDefinition<shared_pb.Empty, shared_pb.Empty> {
-    path: string; // "/event_store.client.operations.Operations/Shutdown"
+    path: "/event_store.client.operations.Operations/Shutdown";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;
@@ -47,7 +47,7 @@ interface IOperationsService_IShutdown extends grpc.MethodDefinition<shared_pb.E
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IOperationsService_IMergeIndexes extends grpc.MethodDefinition<shared_pb.Empty, shared_pb.Empty> {
-    path: string; // "/event_store.client.operations.Operations/MergeIndexes"
+    path: "/event_store.client.operations.Operations/MergeIndexes";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;
@@ -56,7 +56,7 @@ interface IOperationsService_IMergeIndexes extends grpc.MethodDefinition<shared_
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IOperationsService_IResignNode extends grpc.MethodDefinition<shared_pb.Empty, shared_pb.Empty> {
-    path: string; // "/event_store.client.operations.Operations/ResignNode"
+    path: "/event_store.client.operations.Operations/ResignNode";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;
@@ -65,7 +65,7 @@ interface IOperationsService_IResignNode extends grpc.MethodDefinition<shared_pb
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IOperationsService_ISetNodePriority extends grpc.MethodDefinition<operations_pb.SetNodePriorityReq, shared_pb.Empty> {
-    path: string; // "/event_store.client.operations.Operations/SetNodePriority"
+    path: "/event_store.client.operations.Operations/SetNodePriority";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<operations_pb.SetNodePriorityReq>;
@@ -74,7 +74,7 @@ interface IOperationsService_ISetNodePriority extends grpc.MethodDefinition<oper
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IOperationsService_IRestartPersistentSubscriptions extends grpc.MethodDefinition<shared_pb.Empty, shared_pb.Empty> {
-    path: string; // "/event_store.client.operations.Operations/RestartPersistentSubscriptions"
+    path: "/event_store.client.operations.Operations/RestartPersistentSubscriptions";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;

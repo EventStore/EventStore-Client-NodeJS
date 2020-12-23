@@ -17,7 +17,7 @@ interface IStreamsService extends grpc.ServiceDefinition<grpc.UntypedServiceImpl
 }
 
 interface IStreamsService_IRead extends grpc.MethodDefinition<streams_pb.ReadReq, streams_pb.ReadResp> {
-    path: string; // "/event_store.client.streams.Streams/Read"
+    path: "/event_store.client.streams.Streams/Read";
     requestStream: false;
     responseStream: true;
     requestSerialize: grpc.serialize<streams_pb.ReadReq>;
@@ -26,7 +26,7 @@ interface IStreamsService_IRead extends grpc.MethodDefinition<streams_pb.ReadReq
     responseDeserialize: grpc.deserialize<streams_pb.ReadResp>;
 }
 interface IStreamsService_IAppend extends grpc.MethodDefinition<streams_pb.AppendReq, streams_pb.AppendResp> {
-    path: string; // "/event_store.client.streams.Streams/Append"
+    path: "/event_store.client.streams.Streams/Append";
     requestStream: true;
     responseStream: false;
     requestSerialize: grpc.serialize<streams_pb.AppendReq>;
@@ -35,7 +35,7 @@ interface IStreamsService_IAppend extends grpc.MethodDefinition<streams_pb.Appen
     responseDeserialize: grpc.deserialize<streams_pb.AppendResp>;
 }
 interface IStreamsService_IDelete extends grpc.MethodDefinition<streams_pb.DeleteReq, streams_pb.DeleteResp> {
-    path: string; // "/event_store.client.streams.Streams/Delete"
+    path: "/event_store.client.streams.Streams/Delete";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<streams_pb.DeleteReq>;
@@ -44,7 +44,7 @@ interface IStreamsService_IDelete extends grpc.MethodDefinition<streams_pb.Delet
     responseDeserialize: grpc.deserialize<streams_pb.DeleteResp>;
 }
 interface IStreamsService_ITombstone extends grpc.MethodDefinition<streams_pb.TombstoneReq, streams_pb.TombstoneResp> {
-    path: string; // "/event_store.client.streams.Streams/Tombstone"
+    path: "/event_store.client.streams.Streams/Tombstone";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<streams_pb.TombstoneReq>;

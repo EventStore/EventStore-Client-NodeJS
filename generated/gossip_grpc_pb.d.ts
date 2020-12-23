@@ -14,7 +14,7 @@ interface IGossipService extends grpc.ServiceDefinition<grpc.UntypedServiceImple
 }
 
 interface IGossipService_IRead extends grpc.MethodDefinition<shared_pb.Empty, gossip_pb.ClusterInfo> {
-    path: string; // "/event_store.client.gossip.Gossip/Read"
+    path: "/event_store.client.gossip.Gossip/Read";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;
