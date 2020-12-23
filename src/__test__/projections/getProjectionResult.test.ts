@@ -95,10 +95,10 @@ describe("getProjectionResult", () => {
           });
       `;
 
-      const createCatEvent = (catName: string, eventType: string) => {
+      const createCatEvent = (catName: string, type: string) => {
         return jsonEvent({
-          eventType,
-          payload: {
+          type,
+          data: {
             catName,
           },
         });

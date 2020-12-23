@@ -52,11 +52,11 @@ describe("subscribeToAll", () => {
       const onEvent = jest.fn(async (event: ResolvedEvent) => {
         events.push(event);
 
-        if (!event.event?.eventType.startsWith("$")) {
+        if (!event.event?.type.startsWith("$")) {
           filteredEvents.push(event);
         }
 
-        if (event.event?.eventType === FINISH_TEST) {
+        if (event.event?.type === FINISH_TEST) {
           subscription.unsubscribe();
         }
       });
@@ -70,8 +70,8 @@ describe("subscribeToAll", () => {
         .on("end", onEnd);
 
       const finishEvent = jsonEvent({
-        eventType: FINISH_TEST,
-        payload: {
+        type: FINISH_TEST,
+        data: {
           message: "lets wrap this up",
         },
       });
@@ -109,11 +109,11 @@ describe("subscribeToAll", () => {
       const onEvent = jest.fn((event: ResolvedEvent) => {
         events.push(event);
 
-        if (!event.event?.eventType.startsWith("$")) {
+        if (!event.event?.type.startsWith("$")) {
           filteredEvents.push(event);
         }
 
-        if (event.event?.eventType === FINISH_TEST) {
+        if (event.event?.type === FINISH_TEST) {
           subscription.unsubscribe();
         }
       });
@@ -127,8 +127,8 @@ describe("subscribeToAll", () => {
         .on("end", onEnd);
 
       const finishEvent = jsonEvent({
-        eventType: FINISH_TEST,
-        payload: {
+        type: FINISH_TEST,
+        data: {
           message: "lets wrap this up",
         },
       });
@@ -160,8 +160,8 @@ describe("subscribeToAll", () => {
       const appendResult = await client.appendToStream(
         STREAM_NAME_B,
         jsonEvent({
-          eventType: MARKER_EVENT,
-          payload: { message: "mark my words" },
+          type: MARKER_EVENT,
+          data: { message: "mark my words" },
         })
       );
 
@@ -179,11 +179,11 @@ describe("subscribeToAll", () => {
       const onEvent = jest.fn((event: ResolvedEvent) => {
         events.push(event);
 
-        if (!event.event?.eventType.startsWith("$")) {
+        if (!event.event?.type.startsWith("$")) {
           filteredEvents.push(event);
         }
 
-        if (event.event?.eventType === FINISH_TEST) {
+        if (event.event?.type === FINISH_TEST) {
           subscription.unsubscribe();
         }
       });
@@ -199,8 +199,8 @@ describe("subscribeToAll", () => {
         .on("end", onEnd);
 
       const finishEvent = jsonEvent({
-        eventType: FINISH_TEST,
-        payload: {
+        type: FINISH_TEST,
+        data: {
           message: "lets wrap this up",
         },
       });
@@ -232,15 +232,15 @@ describe("subscribeToAll", () => {
       const doSomethingElse = jest.fn();
 
       const markerEvent = jsonEvent({
-        eventType: MARKER_EVENT,
-        payload: {
+        type: MARKER_EVENT,
+        data: {
           message: "mark",
         },
       });
 
       const finishEvent = jsonEvent({
-        eventType: FINISH_TEST,
-        payload: {
+        type: FINISH_TEST,
+        data: {
           message: "lets wrap this up",
         },
       });
@@ -259,11 +259,11 @@ describe("subscribeToAll", () => {
       for await (const event of subscription) {
         doSomething(event);
 
-        if (!event.event?.eventType.startsWith("$")) {
+        if (!event.event?.type.startsWith("$")) {
           doSomethingElse(event);
         }
 
-        if (event.event?.eventType === FINISH_TEST) {
+        if (event.event?.type === FINISH_TEST) {
           break;
         }
       }
@@ -280,15 +280,15 @@ describe("subscribeToAll", () => {
       const doSomethingElse = jest.fn();
 
       const markerEvent = jsonEvent({
-        eventType: MARKER_EVENT,
-        payload: {
+        type: MARKER_EVENT,
+        data: {
           message: "mark",
         },
       });
 
       const finishEvent = jsonEvent({
-        eventType: FINISH_TEST,
-        payload: {
+        type: FINISH_TEST,
+        data: {
           message: "lets wrap this up",
         },
       });
@@ -309,11 +309,11 @@ describe("subscribeToAll", () => {
       for await (const event of subscription) {
         doSomething(event);
 
-        if (!event.event?.eventType.startsWith("$")) {
+        if (!event.event?.type.startsWith("$")) {
           doSomethingElse(event);
         }
 
-        if (event.event?.eventType === "test") {
+        if (event.event?.type === "test") {
           // example of awaiting an async function when iterating over the async iterator
           await delay(10);
 
@@ -322,7 +322,7 @@ describe("subscribeToAll", () => {
           }
         }
 
-        if (event.event?.eventType === FINISH_TEST) {
+        if (event.event?.type === FINISH_TEST) {
           break;
         }
       }
@@ -339,15 +339,15 @@ describe("subscribeToAll", () => {
       const MARKER_EVENT = "after_the_fact_marker";
 
       const markerEvent = jsonEvent({
-        eventType: MARKER_EVENT,
-        payload: {
+        type: MARKER_EVENT,
+        data: {
           message: "mark",
         },
       });
 
       const finishEvent = jsonEvent({
-        eventType: FINISH_TEST,
-        payload: {
+        type: FINISH_TEST,
+        data: {
           message: "lets wrap this up",
         },
       });
@@ -375,7 +375,7 @@ describe("subscribeToAll", () => {
         .on("data", (event) => {
           eventListenerTwo(event);
 
-          if (event.event?.eventType === FINISH_TEST) {
+          if (event.event?.type === FINISH_TEST) {
             subscription.unsubscribe();
           }
         })
@@ -405,8 +405,8 @@ describe("subscribeToAll", () => {
       await client.appendToStream(STREAM_NAME, [
         ...jsonTestEvents(8),
         jsonEvent({
-          eventType: FINISH_TEST,
-          payload: {
+          type: FINISH_TEST,
+          data: {
             message: "lets wrap this up",
           },
         }),
@@ -418,7 +418,7 @@ describe("subscribeToAll", () => {
         public ids: string[] = [];
         _write({ event }: ResolvedEvent, _encoding: string, done: () => void) {
           this.ids.push(event!.id);
-          if (event?.eventType === FINISH_TEST) {
+          if (event?.type === FINISH_TEST) {
             subscription.unsubscribe().then(done);
           } else {
             done();

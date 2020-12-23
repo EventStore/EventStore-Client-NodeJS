@@ -5,7 +5,7 @@ import { Cluster } from "./Cluster";
 import { EndPoint } from "../../types";
 
 interface Options {
-  eventType: string;
+  type: string;
   contentType: string;
   stream: string;
   data: unknown;
@@ -34,7 +34,7 @@ const post = (
   cert: Buffer,
   options: Options
 ): Promise<string> => {
-  const { eventType, contentType, stream, data } = options;
+  const { type, contentType, stream, data } = options;
 
   return new Promise((resolve, reject) => {
     const req = request(
@@ -43,7 +43,7 @@ const post = (
         method: "POST",
         headers: {
           "Content-Type": contentType,
-          "ES-EventType": eventType,
+          "ES-EventType": type,
         },
         ca: [cert],
       },

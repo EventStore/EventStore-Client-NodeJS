@@ -11,8 +11,8 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
   const STREAM_NAME = "test_stream_name";
   const { EVENTSTORE_CLOUD_ID } = process.env;
   const event = jsonEvent({
-    eventType: "test",
-    payload: { message: "test" },
+    type: "test",
+    data: { message: "test" },
   });
 
   describe.each([

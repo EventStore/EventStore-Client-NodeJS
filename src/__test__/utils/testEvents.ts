@@ -5,21 +5,21 @@ export interface TestEventData {
   index: number;
 }
 
-export const jsonTestEvents = (count = 4, eventType = "test"): EventData[] =>
+export const jsonTestEvents = (count = 4, type = "test"): EventData[] =>
   Array.from({ length: count }, (_, i) =>
     jsonEvent({
-      eventType,
-      payload: {
+      type,
+      data: {
         message: "test",
         index: i,
       },
     })
   );
 
-export const binaryTestEvents = (count = 4, eventType = "test"): EventData[] =>
+export const binaryTestEvents = (count = 4, type = "test"): EventData[] =>
   Array.from({ length: count }, (_, i) =>
     binaryEvent({
-      eventType,
-      payload: Buffer.from(`hello: ${i}`),
+      type,
+      data: Buffer.from(`hello: ${i}`),
     })
   );

@@ -110,7 +110,7 @@ export interface RecordedEventBase<EventType extends string = string> {
   /**
    * Type of this event.
    */
-  eventType: EventType;
+  type: EventType;
 
   /**
    * Representing when this event was created in the database system.
@@ -129,7 +129,7 @@ export interface JSONRecordedEvent<
   isJson: true;
 
   /**
-   * Payload of this event.
+   * Data of this event.
    */
   data: Data;
 
@@ -147,7 +147,7 @@ export interface BinaryRecordedEvent<EventType extends string = string>
   isJson: false;
 
   /**
-   * Payload of this event.
+   * Data of this event.
    */
   data: Uint8Array;
 
@@ -495,4 +495,6 @@ export interface PersistentSubscription
 }
 
 export type StreamSubscription = ReadableSubscription<ResolvedEvent>;
-export type AllStreamSubscription = ReadableSubscription<AllStreamResolvedEvent>;
+export type AllStreamSubscription = ReadableSubscription<
+  AllStreamResolvedEvent
+>;

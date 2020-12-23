@@ -48,8 +48,8 @@ async function simpleTest() {
   const streamName = "es_supported_clients";
 
   const event = jsonEvent({
-    eventType: "grpc-client",
-    payload: {
+    type: "grpc-client",
+    data: {
       languages: ["typescript", "javascript"],
       runtime: "NodeJS",
     },
@@ -84,8 +84,8 @@ async function simpleTest(): Promise<void> {
   const streamName = "es_supported_clients";
 
   const event = jsonEvent({
-    eventType: "grpc-client",
-    payload: {
+    type: "grpc-client",
+    data: {
       languages: ["typescript", "javascript"],
       runtime: "NodeJS",
     },

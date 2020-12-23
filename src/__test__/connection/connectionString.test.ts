@@ -7,7 +7,7 @@ describe("connectionString", () => {
   const cluster = createInsecureTestCluster();
 
   const testEvent = () =>
-    jsonEvent({ eventType: "test", payload: { message: "test" } });
+    jsonEvent({ type: "test", data: { message: "test" } });
 
   beforeAll(async () => {
     await node.up();
