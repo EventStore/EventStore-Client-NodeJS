@@ -135,18 +135,6 @@ export interface JSONRecordedEvent<T extends string = string, D = unknown, M ext
   metadata: M;
 }
 
-
-
-type EventX = JSONRecordedEvent<'RepoStarred', { userId: string, repoName: string }>
-type EventY = JSONRecordedEvent<'RepoUnstarred', { userId: string, repoName: string, reason: string }>
-
-const fun = (ev: EventX | EventY) => {
-  if (ev.eventType === '') {
-    
-  }
-}
-
-
 export interface BinaryRecordedEvent<T extends string = string> extends RecordedEventBase<T> {
   /**
    * Indicates whether the content is internally marked as JSON.
