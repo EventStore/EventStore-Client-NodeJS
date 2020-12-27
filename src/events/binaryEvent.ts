@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-export interface BinaryEventData {
+export interface BinaryEventData<T extends string = string> {
   id: string;
   contentType: "application/octet-stream";
   eventType: string;
@@ -8,7 +8,7 @@ export interface BinaryEventData {
   metadata?: Uint8Array;
 }
 
-export interface BinaryEventOptions {
+export interface BinaryEventOptions<T extends string = string> {
   /**
    * The id to this event. By default, the id will be generated.
    */
@@ -16,7 +16,7 @@ export interface BinaryEventOptions {
   /**
    * The event type
    */
-  eventType: string;
+  eventType: T;
   /**
    * The binary payload of the event
    */
@@ -27,12 +27,12 @@ export interface BinaryEventOptions {
   metadata?: Uint8Array | Buffer;
 }
 
-export const binaryEvent = ({
+export const binaryEvent = <T extends string = string>({
   eventType,
   payload,
   metadata,
   id = uuid(),
-}: BinaryEventOptions): BinaryEventData => ({
+}: BinaryEventOptions<T>): BinaryEventData<T> => ({
   id,
   contentType: "application/octet-stream",
   eventType,

@@ -91,7 +91,7 @@ export interface AppendResult {
 /**
  * Represents a previously written event.
  */
-export interface RecordedEventBase {
+export interface RecordedEventBase<T extends string = string> {
   /**
    * The event stream that events belongs to.
    */
@@ -110,7 +110,7 @@ export interface RecordedEventBase {
   /**
    * Type of this event.
    */
-  eventType: string;
+  eventType: T;
 
   /**
    * Representing when this event was created in the database system.
@@ -118,24 +118,36 @@ export interface RecordedEventBase {
   created: number;
 }
 
-export interface JSONRecordedEvent extends RecordedEventBase {
+export interface JSONRecordedEvent<T extends string = string, D = unknown, M extends Record<string, unknown>  = Record<string, unknown>> extends RecordedEventBase<T> {
   /**
-   * Indicates wheter the content is internally marked as JSON.
+   * Indicates whether the content is internally marked as JSON.
    */
   isJson: true;
 
   /**
    * Payload of this event.
    */
-  data: unknown;
+  data: D;
 
   /**
    * Representing the metadata associated with this event.
    */
-  metadata: Record<string, unknown>;
+  metadata: M;
 }
 
-export interface BinaryRecordedEvent extends RecordedEventBase {
+
+
+type EventX = JSONRecordedEvent<'RepoStarred', { userId: string, repoName: string }>
+type EventY = JSONRecordedEvent<'RepoUnstarred', { userId: string, repoName: string, reason: string }>
+
+const fun = (ev: EventX | EventY) => {
+  if (ev.eventType === '') {
+    
+  }
+}
+
+
+export interface BinaryRecordedEvent<T extends string = string> extends RecordedEventBase<T> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -152,24 +164,24 @@ export interface BinaryRecordedEvent extends RecordedEventBase {
   metadata: Uint8Array;
 }
 
-export interface AllStreamJSONRecordedEvent extends JSONRecordedEvent {
+export interface AllStreamJSONRecordedEvent<T extends string = string, D = unknown, M extends Record<string, unknown>  = Record<string, unknown>> extends JSONRecordedEvent<T, D, M> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export interface AllStreamBinaryRecordedEvent extends BinaryRecordedEvent {
+export interface AllStreamBinaryRecordedEvent<T extends string = string> extends BinaryRecordedEvent<T> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
-export type AllStreamRecordedEvent =
-  | AllStreamJSONRecordedEvent
-  | AllStreamBinaryRecordedEvent;
+export type RecordedEvent<T extends string = string> = JSONRecordedEvent<T> | BinaryRecordedEvent<T>;
+export type AllStreamRecordedEvent<T extends string = string> =
+  | AllStreamJSONRecordedEvent<T>
+  | AllStreamBinaryRecordedEvent<T>;
 
 /**
  * A structure representing a single event or an resolved link event.
@@ -181,8 +193,7 @@ export interface ResolvedEvent {
   event?: RecordedEvent;
 
   /**
-   *
-   The link event if this ResolvedEvent is a link event.
+   * The link event if this ResolvedEvent is a link event.
    */
   link?: RecordedEvent;
 
@@ -202,8 +213,7 @@ export interface AllStreamResolvedEvent {
   event?: AllStreamRecordedEvent;
 
   /**
-   *
-   The link event if this ResolvedEvent is a link event.
+   * The link event if this ResolvedEvent is a link event.
    */
   link?: AllStreamRecordedEvent;
 
