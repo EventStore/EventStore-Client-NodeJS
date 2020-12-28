@@ -29,11 +29,15 @@ jobs:
     strategy:
       matrix:
         version: [ci]
+    env:
+      # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
+      SECRETS_AVAILABLE: ${{ secrets.EVENTSTORE_CLOUD_ID != null }}
     needs: build
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
       - name: Connect to tailscale
+        if: ${{ env.SECRETS_AVAILABLE == 'true' }}
         run: |
           curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.gpg | sudo apt-key add -
           curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.list | sudo tee /etc/apt/sources.list.d/tailscale.list
@@ -58,6 +62,7 @@ jobs:
         env:
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       - name: Disconnect from tailscale
+        if: ${{ env.SECRETS_AVAILABLE == 'true' }}
         run: sudo tailscale down
 
   linting:
