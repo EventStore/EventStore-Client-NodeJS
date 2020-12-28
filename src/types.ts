@@ -91,7 +91,7 @@ export interface AppendResult {
 /**
  * Represents a previously written event.
  */
-export interface RecordedEventBase<T extends string = string> {
+export interface RecordedEventBase<EventType extends string = string> {
   /**
    * The event stream that events belongs to.
    */
@@ -110,7 +110,7 @@ export interface RecordedEventBase<T extends string = string> {
   /**
    * Type of this event.
    */
-  eventType: T;
+  eventType: EventType;
 
   /**
    * Representing when this event was created in the database system.
@@ -118,7 +118,7 @@ export interface RecordedEventBase<T extends string = string> {
   created: number;
 }
 
-export interface JSONRecordedEvent<T extends string = string, D = unknown, M extends Record<string, unknown>  = Record<string, unknown>> extends RecordedEventBase<T> {
+export interface JSONRecordedEvent<EventType extends string = string, Data = unknown, Metadata extends Record<string, unknown>  = Record<string, unknown>> extends RecordedEventBase<EventType> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -127,15 +127,15 @@ export interface JSONRecordedEvent<T extends string = string, D = unknown, M ext
   /**
    * Payload of this event.
    */
-  data: D;
+  data: Data;
 
   /**
    * Representing the metadata associated with this event.
    */
-  metadata: M;
+  metadata: Metadata;
 }
 
-export interface BinaryRecordedEvent<T extends string = string> extends RecordedEventBase<T> {
+export interface BinaryRecordedEvent<EventType extends string = string> extends RecordedEventBase<EventType> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -152,24 +152,24 @@ export interface BinaryRecordedEvent<T extends string = string> extends Recorded
   metadata: Uint8Array;
 }
 
-export interface AllStreamJSONRecordedEvent<T extends string = string, D = unknown, M extends Record<string, unknown>  = Record<string, unknown>> extends JSONRecordedEvent<T, D, M> {
+export interface AllStreamJSONRecordedEvent<EventType extends string = string, Data = unknown, Metadata extends Record<string, unknown>  = Record<string, unknown>> extends JSONRecordedEvent<EventType, Data, Metadata> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export interface AllStreamBinaryRecordedEvent<T extends string = string> extends BinaryRecordedEvent<T> {
+export interface AllStreamBinaryRecordedEvent<EventType extends string = string> extends BinaryRecordedEvent<EventType> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export type RecordedEvent<T extends string = string> = JSONRecordedEvent<T> | BinaryRecordedEvent<T>;
-export type AllStreamRecordedEvent<T extends string = string> =
-  | AllStreamJSONRecordedEvent<T>
-  | AllStreamBinaryRecordedEvent<T>;
+export type RecordedEvent<EventType extends string = string> = JSONRecordedEvent<EventType> | BinaryRecordedEvent<EventType>;
+export type AllStreamRecordedEvent<EventType extends string = string> =
+  | AllStreamJSONRecordedEvent<EventType>
+  | AllStreamBinaryRecordedEvent<EventType>;
 
 /**
  * A structure representing a single event or an resolved link event.
