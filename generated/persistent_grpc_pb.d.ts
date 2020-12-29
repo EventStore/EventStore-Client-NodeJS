@@ -17,7 +17,7 @@ interface IPersistentSubscriptionsService extends grpc.ServiceDefinition<grpc.Un
 }
 
 interface IPersistentSubscriptionsService_ICreate extends grpc.MethodDefinition<persistent_pb.CreateReq, persistent_pb.CreateResp> {
-    path: string; // "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Create"
+    path: "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Create";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<persistent_pb.CreateReq>;
@@ -26,7 +26,7 @@ interface IPersistentSubscriptionsService_ICreate extends grpc.MethodDefinition<
     responseDeserialize: grpc.deserialize<persistent_pb.CreateResp>;
 }
 interface IPersistentSubscriptionsService_IUpdate extends grpc.MethodDefinition<persistent_pb.UpdateReq, persistent_pb.UpdateResp> {
-    path: string; // "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Update"
+    path: "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Update";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<persistent_pb.UpdateReq>;
@@ -35,7 +35,7 @@ interface IPersistentSubscriptionsService_IUpdate extends grpc.MethodDefinition<
     responseDeserialize: grpc.deserialize<persistent_pb.UpdateResp>;
 }
 interface IPersistentSubscriptionsService_IDelete extends grpc.MethodDefinition<persistent_pb.DeleteReq, persistent_pb.DeleteResp> {
-    path: string; // "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Delete"
+    path: "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Delete";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<persistent_pb.DeleteReq>;
@@ -44,7 +44,7 @@ interface IPersistentSubscriptionsService_IDelete extends grpc.MethodDefinition<
     responseDeserialize: grpc.deserialize<persistent_pb.DeleteResp>;
 }
 interface IPersistentSubscriptionsService_IRead extends grpc.MethodDefinition<persistent_pb.ReadReq, persistent_pb.ReadResp> {
-    path: string; // "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Read"
+    path: "/event_store.client.persistent_subscriptions.PersistentSubscriptions/Read";
     requestStream: true;
     responseStream: true;
     requestSerialize: grpc.serialize<persistent_pb.ReadReq>;

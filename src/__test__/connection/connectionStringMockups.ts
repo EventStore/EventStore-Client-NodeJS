@@ -1,9 +1,8 @@
 import { ConnectionOptions } from "../../Client/parseConnectionString";
 
-export const valid: Array<[
-  connectionString: string,
-  expected: ConnectionOptions
-]> = [
+export const valid: Array<
+  [connectionString: string, expected: ConnectionOptions]
+> = [
   [
     "esdb://localhost",
     {
@@ -451,10 +450,9 @@ export const invalid: string[] = [
   "esdb://localhost?throwOnAppendFailure=sometimes",
 ];
 
-export const warning: Array<[
-  connectionString: string,
-  expected: ConnectionOptions
-]> = [
+export const warning: Array<
+  [connectionString: string, expected: ConnectionOptions]
+> = [
   [
     "esdb://localhost?catchOnAppendFailure=true&tlsVerifyCert=false",
     {

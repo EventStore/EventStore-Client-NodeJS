@@ -15,7 +15,7 @@ interface IGossipService extends grpc.ServiceDefinition<grpc.UntypedServiceImple
 }
 
 interface IGossipService_IUpdate extends grpc.MethodDefinition<cluster_pb.GossipRequest, cluster_pb.ClusterInfo> {
-    path: string; // "/event_store.cluster.Gossip/Update"
+    path: "/event_store.cluster.Gossip/Update";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.GossipRequest>;
@@ -24,7 +24,7 @@ interface IGossipService_IUpdate extends grpc.MethodDefinition<cluster_pb.Gossip
     responseDeserialize: grpc.deserialize<cluster_pb.ClusterInfo>;
 }
 interface IGossipService_IRead extends grpc.MethodDefinition<shared_pb.Empty, cluster_pb.ClusterInfo> {
-    path: string; // "/event_store.cluster.Gossip/Read"
+    path: "/event_store.cluster.Gossip/Read";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;
@@ -71,7 +71,7 @@ interface IElectionsService extends grpc.ServiceDefinition<grpc.UntypedServiceIm
 }
 
 interface IElectionsService_IViewChange extends grpc.MethodDefinition<cluster_pb.ViewChangeRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/ViewChange"
+    path: "/event_store.cluster.Elections/ViewChange";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.ViewChangeRequest>;
@@ -80,7 +80,7 @@ interface IElectionsService_IViewChange extends grpc.MethodDefinition<cluster_pb
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_IViewChangeProof extends grpc.MethodDefinition<cluster_pb.ViewChangeProofRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/ViewChangeProof"
+    path: "/event_store.cluster.Elections/ViewChangeProof";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.ViewChangeProofRequest>;
@@ -89,7 +89,7 @@ interface IElectionsService_IViewChangeProof extends grpc.MethodDefinition<clust
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_IPrepare extends grpc.MethodDefinition<cluster_pb.PrepareRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/Prepare"
+    path: "/event_store.cluster.Elections/Prepare";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.PrepareRequest>;
@@ -98,7 +98,7 @@ interface IElectionsService_IPrepare extends grpc.MethodDefinition<cluster_pb.Pr
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_IPrepareOk extends grpc.MethodDefinition<cluster_pb.PrepareOkRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/PrepareOk"
+    path: "/event_store.cluster.Elections/PrepareOk";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.PrepareOkRequest>;
@@ -107,7 +107,7 @@ interface IElectionsService_IPrepareOk extends grpc.MethodDefinition<cluster_pb.
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_IProposal extends grpc.MethodDefinition<cluster_pb.ProposalRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/Proposal"
+    path: "/event_store.cluster.Elections/Proposal";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.ProposalRequest>;
@@ -116,7 +116,7 @@ interface IElectionsService_IProposal extends grpc.MethodDefinition<cluster_pb.P
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_IAccept extends grpc.MethodDefinition<cluster_pb.AcceptRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/Accept"
+    path: "/event_store.cluster.Elections/Accept";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.AcceptRequest>;
@@ -125,7 +125,7 @@ interface IElectionsService_IAccept extends grpc.MethodDefinition<cluster_pb.Acc
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_ILeaderIsResigning extends grpc.MethodDefinition<cluster_pb.LeaderIsResigningRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/LeaderIsResigning"
+    path: "/event_store.cluster.Elections/LeaderIsResigning";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.LeaderIsResigningRequest>;
@@ -134,7 +134,7 @@ interface IElectionsService_ILeaderIsResigning extends grpc.MethodDefinition<clu
     responseDeserialize: grpc.deserialize<shared_pb.Empty>;
 }
 interface IElectionsService_ILeaderIsResigningOk extends grpc.MethodDefinition<cluster_pb.LeaderIsResigningOkRequest, shared_pb.Empty> {
-    path: string; // "/event_store.cluster.Elections/LeaderIsResigningOk"
+    path: "/event_store.cluster.Elections/LeaderIsResigningOk";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<cluster_pb.LeaderIsResigningOkRequest>;

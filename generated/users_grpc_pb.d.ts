@@ -20,7 +20,7 @@ interface IUsersService extends grpc.ServiceDefinition<grpc.UntypedServiceImplem
 }
 
 interface IUsersService_ICreate extends grpc.MethodDefinition<users_pb.CreateReq, users_pb.CreateResp> {
-    path: string; // "/event_store.client.users.Users/Create"
+    path: "/event_store.client.users.Users/Create";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.CreateReq>;
@@ -29,7 +29,7 @@ interface IUsersService_ICreate extends grpc.MethodDefinition<users_pb.CreateReq
     responseDeserialize: grpc.deserialize<users_pb.CreateResp>;
 }
 interface IUsersService_IUpdate extends grpc.MethodDefinition<users_pb.UpdateReq, users_pb.UpdateResp> {
-    path: string; // "/event_store.client.users.Users/Update"
+    path: "/event_store.client.users.Users/Update";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.UpdateReq>;
@@ -38,7 +38,7 @@ interface IUsersService_IUpdate extends grpc.MethodDefinition<users_pb.UpdateReq
     responseDeserialize: grpc.deserialize<users_pb.UpdateResp>;
 }
 interface IUsersService_IDelete extends grpc.MethodDefinition<users_pb.DeleteReq, users_pb.DeleteResp> {
-    path: string; // "/event_store.client.users.Users/Delete"
+    path: "/event_store.client.users.Users/Delete";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.DeleteReq>;
@@ -47,7 +47,7 @@ interface IUsersService_IDelete extends grpc.MethodDefinition<users_pb.DeleteReq
     responseDeserialize: grpc.deserialize<users_pb.DeleteResp>;
 }
 interface IUsersService_IDisable extends grpc.MethodDefinition<users_pb.DisableReq, users_pb.DisableResp> {
-    path: string; // "/event_store.client.users.Users/Disable"
+    path: "/event_store.client.users.Users/Disable";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.DisableReq>;
@@ -56,7 +56,7 @@ interface IUsersService_IDisable extends grpc.MethodDefinition<users_pb.DisableR
     responseDeserialize: grpc.deserialize<users_pb.DisableResp>;
 }
 interface IUsersService_IEnable extends grpc.MethodDefinition<users_pb.EnableReq, users_pb.EnableResp> {
-    path: string; // "/event_store.client.users.Users/Enable"
+    path: "/event_store.client.users.Users/Enable";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.EnableReq>;
@@ -65,7 +65,7 @@ interface IUsersService_IEnable extends grpc.MethodDefinition<users_pb.EnableReq
     responseDeserialize: grpc.deserialize<users_pb.EnableResp>;
 }
 interface IUsersService_IDetails extends grpc.MethodDefinition<users_pb.DetailsReq, users_pb.DetailsResp> {
-    path: string; // "/event_store.client.users.Users/Details"
+    path: "/event_store.client.users.Users/Details";
     requestStream: false;
     responseStream: true;
     requestSerialize: grpc.serialize<users_pb.DetailsReq>;
@@ -74,7 +74,7 @@ interface IUsersService_IDetails extends grpc.MethodDefinition<users_pb.DetailsR
     responseDeserialize: grpc.deserialize<users_pb.DetailsResp>;
 }
 interface IUsersService_IChangePassword extends grpc.MethodDefinition<users_pb.ChangePasswordReq, users_pb.ChangePasswordResp> {
-    path: string; // "/event_store.client.users.Users/ChangePassword"
+    path: "/event_store.client.users.Users/ChangePassword";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.ChangePasswordReq>;
@@ -83,7 +83,7 @@ interface IUsersService_IChangePassword extends grpc.MethodDefinition<users_pb.C
     responseDeserialize: grpc.deserialize<users_pb.ChangePasswordResp>;
 }
 interface IUsersService_IResetPassword extends grpc.MethodDefinition<users_pb.ResetPasswordReq, users_pb.ResetPasswordResp> {
-    path: string; // "/event_store.client.users.Users/ResetPassword"
+    path: "/event_store.client.users.Users/ResetPassword";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<users_pb.ResetPasswordReq>;
