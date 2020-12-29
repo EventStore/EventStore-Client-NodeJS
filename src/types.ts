@@ -91,7 +91,7 @@ export interface AppendResult {
 /**
  * Represents a previously written event.
  */
-export interface RecordedEventBase<EventType extends string = string> {
+export interface RecordedEventBase<Type extends string = string> {
   /**
    * The event stream that events belongs to.
    */
@@ -110,7 +110,7 @@ export interface RecordedEventBase<EventType extends string = string> {
   /**
    * Type of this event.
    */
-  type: EventType;
+  type: Type;
 
   /**
    * Representing when this event was created in the database system.
@@ -119,10 +119,10 @@ export interface RecordedEventBase<EventType extends string = string> {
 }
 
 export interface JSONRecordedEvent<
-  EventType extends string = string,
+  Type extends string = string,
   Data = unknown,
   Metadata extends Record<string, unknown> = Record<string, unknown>
-> extends RecordedEventBase<EventType> {
+> extends RecordedEventBase<Type> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -139,8 +139,8 @@ export interface JSONRecordedEvent<
   metadata: Metadata;
 }
 
-export interface BinaryRecordedEvent<EventType extends string = string>
-  extends RecordedEventBase<EventType> {
+export interface BinaryRecordedEvent<Type extends string = string>
+  extends RecordedEventBase<Type> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -158,18 +158,18 @@ export interface BinaryRecordedEvent<EventType extends string = string>
 }
 
 export interface AllStreamJSONRecordedEvent<
-  EventType extends string = string,
+  Type extends string = string,
   Data = unknown,
   Metadata extends Record<string, unknown> = Record<string, unknown>
-> extends JSONRecordedEvent<EventType, Data, Metadata> {
+> extends JSONRecordedEvent<Type, Data, Metadata> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export interface AllStreamBinaryRecordedEvent<EventType extends string = string>
-  extends BinaryRecordedEvent<EventType> {
+export interface AllStreamBinaryRecordedEvent<Type extends string = string>
+  extends BinaryRecordedEvent<Type> {
   /**
    * Position of this event in the transaction log.
    */
