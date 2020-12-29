@@ -32,7 +32,7 @@ export interface SubscribeToAllOptions extends BaseOptions {
    * resolution feature, the server will also return the event targeted by the link.
    * @defaultValue false
    */
-  resolveLinks?: boolean;
+  resolveLinkTos?: boolean;
   /**
    * Filters events or streams based upon a predicate.
    */
@@ -54,7 +54,7 @@ Client.prototype.subscribeToAll = function (
   this: Client,
   {
     fromPosition = START,
-    resolveLinks = false,
+    resolveLinkTos = false,
     filter,
     ...baseOptions
   }: SubscribeToAllOptions = {},
@@ -88,7 +88,7 @@ Client.prototype.subscribeToAll = function (
   }
 
   options.setAll(allOptions);
-  options.setResolveLinks(resolveLinks);
+  options.setResolveLinks(resolveLinkTos);
   options.setSubscription(new SubscriptionOptions());
   options.setUuidOption(uuidOption);
 
@@ -139,7 +139,7 @@ Client.prototype.subscribeToAll = function (
   debug.command("subscribeToAll: %O", {
     options: {
       fromPosition,
-      resolveLinks,
+      resolveLinkTos,
       filter,
       ...baseOptions,
     },

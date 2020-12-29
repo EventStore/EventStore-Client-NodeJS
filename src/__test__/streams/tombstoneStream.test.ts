@@ -6,7 +6,7 @@ import {
   NO_STREAM,
   EventStoreDBClient,
 } from "../..";
-import { BACKWARD, END } from "../../constants";
+import { BACKWARDS, END } from "../../constants";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {
@@ -76,7 +76,7 @@ describe("tombstoneStream", () => {
 
         it("succeeds", async () => {
           const [resolvedEvent] = await client.readStream(STREAM, 1, {
-            direction: BACKWARD,
+            direction: BACKWARDS,
             fromRevision: END,
           });
 

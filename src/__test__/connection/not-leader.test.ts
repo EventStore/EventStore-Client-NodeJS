@@ -7,7 +7,7 @@ import {
   NotLeaderError,
   EventStoreDBClient,
 } from "../..";
-import { BACKWARD, END } from "../../constants";
+import { BACKWARDS, END } from "../../constants";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();
@@ -40,7 +40,7 @@ describe("not-leader", () => {
 
     const readFromTestStream = (client: EventStoreDBClient) => {
       return client.readStream(STREAM_NAME, 10, {
-        direction: BACKWARD,
+        direction: BACKWARDS,
         fromRevision: END,
         requiresLeader: true,
       });

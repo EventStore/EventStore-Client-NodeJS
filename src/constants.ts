@@ -8,8 +8,8 @@ export const START = "start";
 export const END = "end";
 
 // directions
-export const FORWARD = "forward";
-export const BACKWARD = "backward";
+export const FORWARDS = "forwards";
+export const BACKWARDS = "backwards";
 
 // node Preference
 export const RANDOM = "random";

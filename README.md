@@ -36,7 +36,7 @@ The following snippet showcases a simple example where we form a connection, the
 const {
   EventStoreDBClient,
   jsonEvent,
-  FORWARD,
+  FORWARDS,
   START,
 } = require("@eventstore/db-client");
 
@@ -59,7 +59,7 @@ async function simpleTest() {
 
   const events = await client.readStream(streamName, 10, {
     fromRevision: START,
-    direction: FORWARD,
+    direction: FORWARDS,
   });
 
   events.forEach(doSomethingProductive);
@@ -72,7 +72,7 @@ async function simpleTest() {
 import {
   EventStoreDBClient,
   jsonEvent,
-  FORWARD,
+  FORWARDS,
   START,
 } from "@eventstore/db-client";
 
@@ -95,7 +95,7 @@ async function simpleTest(): Promise<void> {
 
   const events = await client.readStream(streamName, 10, {
     fromRevision: START,
-    direction: FORWARD,
+    direction: FORWARDS,
   });
 
   events.forEach(doSomethingProductive);

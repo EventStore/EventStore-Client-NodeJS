@@ -10,7 +10,7 @@ import {
   AllStreamResolvedEvent,
 } from "../types";
 import { debug, convertAllStreamGrpcEvent, handleBatchRead } from "../utils";
-import { BACKWARD, FORWARD, START } from "../constants";
+import { BACKWARDS, FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
 export interface ReadAllOptions extends BaseOptions {
@@ -29,7 +29,7 @@ export interface ReadAllOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Reads events from the $all. You can read forward or backward.
+     * Reads events from the $all. You can read forwards or backwards.
      * You might need to be authenticated to execute the command successfully.
      * @param count The number of events to read
      * @param options Reading options
@@ -46,7 +46,7 @@ Client.prototype.readAll = async function (
   count: number | BigInt,
   {
     fromPosition = START,
-    direction = FORWARD,
+    direction = FORWARDS,
     ...baseOptions
   }: ReadAllOptions = {}
 ): Promise<AllStreamResolvedEvent[]> {
@@ -83,11 +83,11 @@ Client.prototype.readAll = async function (
   options.setNoFilter(new Empty());
 
   switch (direction) {
-    case FORWARD: {
+    case FORWARDS: {
       options.setReadDirection(0);
       break;
     }
-    case BACKWARD: {
+    case BACKWARDS: {
       options.setReadDirection(1);
       break;
     }
