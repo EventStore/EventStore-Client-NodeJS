@@ -118,7 +118,11 @@ export interface RecordedEventBase<EventType extends string = string> {
   created: number;
 }
 
-export interface JSONRecordedEvent<EventType extends string = string, Data = unknown, Metadata extends Record<string, unknown>  = Record<string, unknown>> extends RecordedEventBase<EventType> {
+export interface JSONRecordedEvent<
+  EventType extends string = string,
+  Data = unknown,
+  Metadata extends Record<string, unknown> = Record<string, unknown>
+> extends RecordedEventBase<EventType> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -135,7 +139,8 @@ export interface JSONRecordedEvent<EventType extends string = string, Data = unk
   metadata: Metadata;
 }
 
-export interface BinaryRecordedEvent<EventType extends string = string> extends RecordedEventBase<EventType> {
+export interface BinaryRecordedEvent<EventType extends string = string>
+  extends RecordedEventBase<EventType> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -152,21 +157,28 @@ export interface BinaryRecordedEvent<EventType extends string = string> extends 
   metadata: Uint8Array;
 }
 
-export interface AllStreamJSONRecordedEvent<EventType extends string = string, Data = unknown, Metadata extends Record<string, unknown>  = Record<string, unknown>> extends JSONRecordedEvent<EventType, Data, Metadata> {
+export interface AllStreamJSONRecordedEvent<
+  EventType extends string = string,
+  Data = unknown,
+  Metadata extends Record<string, unknown> = Record<string, unknown>
+> extends JSONRecordedEvent<EventType, Data, Metadata> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export interface AllStreamBinaryRecordedEvent<EventType extends string = string> extends BinaryRecordedEvent<EventType> {
+export interface AllStreamBinaryRecordedEvent<EventType extends string = string>
+  extends BinaryRecordedEvent<EventType> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export type RecordedEvent<EventType extends string = string> = JSONRecordedEvent<EventType> | BinaryRecordedEvent<EventType>;
+export type RecordedEvent<EventType extends string = string> =
+  | JSONRecordedEvent<EventType>
+  | BinaryRecordedEvent<EventType>;
 export type AllStreamRecordedEvent<EventType extends string = string> =
   | AllStreamJSONRecordedEvent<EventType>
   | AllStreamBinaryRecordedEvent<EventType>;
@@ -485,4 +497,6 @@ export interface PersistentSubscription
 }
 
 export type StreamSubscription = ReadableSubscription<ResolvedEvent>;
-export type AllStreamSubscription = ReadableSubscription<AllStreamResolvedEvent>;
+export type AllStreamSubscription = ReadableSubscription<
+  AllStreamResolvedEvent
+>;
