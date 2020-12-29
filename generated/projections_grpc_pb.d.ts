@@ -24,7 +24,7 @@ interface IProjectionsService extends grpc.ServiceDefinition<grpc.UntypedService
 }
 
 interface IProjectionsService_ICreate extends grpc.MethodDefinition<projections_pb.CreateReq, projections_pb.CreateResp> {
-    path: string; // "/event_store.client.projections.Projections/Create"
+    path: "/event_store.client.projections.Projections/Create";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.CreateReq>;
@@ -33,7 +33,7 @@ interface IProjectionsService_ICreate extends grpc.MethodDefinition<projections_
     responseDeserialize: grpc.deserialize<projections_pb.CreateResp>;
 }
 interface IProjectionsService_IUpdate extends grpc.MethodDefinition<projections_pb.UpdateReq, projections_pb.UpdateResp> {
-    path: string; // "/event_store.client.projections.Projections/Update"
+    path: "/event_store.client.projections.Projections/Update";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.UpdateReq>;
@@ -42,7 +42,7 @@ interface IProjectionsService_IUpdate extends grpc.MethodDefinition<projections_
     responseDeserialize: grpc.deserialize<projections_pb.UpdateResp>;
 }
 interface IProjectionsService_IDelete extends grpc.MethodDefinition<projections_pb.DeleteReq, projections_pb.DeleteResp> {
-    path: string; // "/event_store.client.projections.Projections/Delete"
+    path: "/event_store.client.projections.Projections/Delete";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.DeleteReq>;
@@ -51,7 +51,7 @@ interface IProjectionsService_IDelete extends grpc.MethodDefinition<projections_
     responseDeserialize: grpc.deserialize<projections_pb.DeleteResp>;
 }
 interface IProjectionsService_IStatistics extends grpc.MethodDefinition<projections_pb.StatisticsReq, projections_pb.StatisticsResp> {
-    path: string; // "/event_store.client.projections.Projections/Statistics"
+    path: "/event_store.client.projections.Projections/Statistics";
     requestStream: false;
     responseStream: true;
     requestSerialize: grpc.serialize<projections_pb.StatisticsReq>;
@@ -60,7 +60,7 @@ interface IProjectionsService_IStatistics extends grpc.MethodDefinition<projecti
     responseDeserialize: grpc.deserialize<projections_pb.StatisticsResp>;
 }
 interface IProjectionsService_IDisable extends grpc.MethodDefinition<projections_pb.DisableReq, projections_pb.DisableResp> {
-    path: string; // "/event_store.client.projections.Projections/Disable"
+    path: "/event_store.client.projections.Projections/Disable";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.DisableReq>;
@@ -69,7 +69,7 @@ interface IProjectionsService_IDisable extends grpc.MethodDefinition<projections
     responseDeserialize: grpc.deserialize<projections_pb.DisableResp>;
 }
 interface IProjectionsService_IEnable extends grpc.MethodDefinition<projections_pb.EnableReq, projections_pb.EnableResp> {
-    path: string; // "/event_store.client.projections.Projections/Enable"
+    path: "/event_store.client.projections.Projections/Enable";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.EnableReq>;
@@ -78,7 +78,7 @@ interface IProjectionsService_IEnable extends grpc.MethodDefinition<projections_
     responseDeserialize: grpc.deserialize<projections_pb.EnableResp>;
 }
 interface IProjectionsService_IReset extends grpc.MethodDefinition<projections_pb.ResetReq, projections_pb.ResetResp> {
-    path: string; // "/event_store.client.projections.Projections/Reset"
+    path: "/event_store.client.projections.Projections/Reset";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.ResetReq>;
@@ -87,7 +87,7 @@ interface IProjectionsService_IReset extends grpc.MethodDefinition<projections_p
     responseDeserialize: grpc.deserialize<projections_pb.ResetResp>;
 }
 interface IProjectionsService_IState extends grpc.MethodDefinition<projections_pb.StateReq, projections_pb.StateResp> {
-    path: string; // "/event_store.client.projections.Projections/State"
+    path: "/event_store.client.projections.Projections/State";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.StateReq>;
@@ -96,7 +96,7 @@ interface IProjectionsService_IState extends grpc.MethodDefinition<projections_p
     responseDeserialize: grpc.deserialize<projections_pb.StateResp>;
 }
 interface IProjectionsService_IResult extends grpc.MethodDefinition<projections_pb.ResultReq, projections_pb.ResultResp> {
-    path: string; // "/event_store.client.projections.Projections/Result"
+    path: "/event_store.client.projections.Projections/Result";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<projections_pb.ResultReq>;
@@ -105,7 +105,7 @@ interface IProjectionsService_IResult extends grpc.MethodDefinition<projections_
     responseDeserialize: grpc.deserialize<projections_pb.ResultResp>;
 }
 interface IProjectionsService_IRestartSubsystem extends grpc.MethodDefinition<shared_pb.Empty, shared_pb.Empty> {
-    path: string; // "/event_store.client.projections.Projections/RestartSubsystem"
+    path: "/event_store.client.projections.Projections/RestartSubsystem";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<shared_pb.Empty>;
