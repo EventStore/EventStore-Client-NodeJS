@@ -497,6 +497,4 @@ export interface PersistentSubscription
 }
 
 export type StreamSubscription = ReadableSubscription<ResolvedEvent>;
-export type AllStreamSubscription = ReadableSubscription<
-  AllStreamResolvedEvent
->;
+export type AllStreamSubscription = ReadableSubscription<AllStreamResolvedEvent>;
