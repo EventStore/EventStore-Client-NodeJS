@@ -6,6 +6,7 @@ import {
   NO_STREAM,
   StreamNotFoundError,
 } from "../..";
+import { BACKWARDS } from "../../constants";
 
 describe("deleteStream", () => {
   const node = createTestNode();
@@ -68,7 +69,7 @@ describe("deleteStream", () => {
 
         it("succeeds", async () => {
           const events = await client.readStream(STREAM, 1, {
-            direction: "backward",
+            direction: BACKWARDS,
             fromRevision: "end",
           });
 

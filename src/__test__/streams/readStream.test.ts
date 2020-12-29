@@ -1,6 +1,6 @@
 import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
 
-import { EventStoreDBClient, BACKWARD, END } from "../..";
+import { EventStoreDBClient, BACKWARDS, END } from "../..";
 
 describe("readStream", () => {
   const node = createTestNode();
@@ -84,12 +84,12 @@ describe("readStream", () => {
         expect(events.length).toBe(7);
       });
 
-      test("backward from end", async () => {
+      test("backwards from end", async () => {
         const events = await client.readStream(
           STREAM_NAME,
           Number.MAX_SAFE_INTEGER,
           {
-            direction: BACKWARD,
+            direction: BACKWARDS,
             fromRevision: END,
           }
         );
@@ -97,12 +97,12 @@ describe("readStream", () => {
         expect(events.length).toBe(8);
       });
 
-      test("backward from revision", async () => {
+      test("backwards from revision", async () => {
         const events = await client.readStream(
           STREAM_NAME,
           Number.MAX_SAFE_INTEGER,
           {
-            direction: BACKWARD,
+            direction: BACKWARDS,
             fromRevision: BigInt(1),
           }
         );

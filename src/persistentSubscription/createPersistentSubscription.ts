@@ -50,7 +50,7 @@ Client.prototype.createPersistentSubscription = async function (
   const identifier = new StreamIdentifier();
   const reqSettings = new CreateReq.Settings();
 
-  reqSettings.setResolveLinks(settings.resolveLinks);
+  reqSettings.setResolveLinks(settings.resolveLinkTos);
   switch (settings.fromRevision) {
     case START: {
       reqSettings.setRevision(BigInt(0).toString(10));

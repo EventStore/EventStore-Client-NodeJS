@@ -81,7 +81,7 @@ export type CurrentRevision =
 /**
  * Represents the direction of read operation (both from '$all' and a regular stream).
  */
-export type Direction = typeof constants.FORWARD | typeof constants.BACKWARD;
+export type Direction = typeof constants.FORWARDS | typeof constants.BACKWARDS;
 
 export interface AppendResult {
   nextExpectedVersion: bigint;

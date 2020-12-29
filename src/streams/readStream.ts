@@ -4,7 +4,7 @@ import { ReadReq } from "../../generated/streams_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 
 import { Client } from "../Client";
-import { BACKWARD, END, FORWARD, START } from "../constants";
+import { BACKWARDS, END, FORWARDS, START } from "../constants";
 import { BaseOptions, Direction, ReadRevision, ResolvedEvent } from "../types";
 import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
 
@@ -20,7 +20,7 @@ export interface ReadStreamOptions extends BaseOptions {
    * resolution feature, the server will also return the event targeted by the link.
    * @defaultValue false
    */
-  resolveLinks?: boolean;
+  resolveLinkTos?: boolean;
   /**
    *  Sets the read direction of the stream
    * @defaultValue FORWARDS
@@ -50,8 +50,8 @@ Client.prototype.readStream = async function (
   count: number | BigInt,
   {
     fromRevision = START,
-    resolveLinks = false,
-    direction = FORWARD,
+    resolveLinkTos = false,
+    direction = FORWARDS,
     ...baseOptions
   }: ReadStreamOptions = {}
 ): Promise<ResolvedEvent[]> {
@@ -82,17 +82,17 @@ Client.prototype.readStream = async function (
   }
 
   options.setStream(streamOptions);
-  options.setResolveLinks(resolveLinks);
+  options.setResolveLinks(resolveLinkTos);
   options.setCount(count.toString(10));
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
 
   switch (direction) {
-    case FORWARD: {
+    case FORWARDS: {
       options.setReadDirection(0);
       break;
     }
-    case BACKWARD: {
+    case BACKWARDS: {
       options.setReadDirection(1);
       break;
     }
@@ -105,7 +105,7 @@ Client.prototype.readStream = async function (
     count,
     options: {
       fromRevision,
-      resolveLinks,
+      resolveLinkTos,
       direction,
       ...baseOptions,
     },

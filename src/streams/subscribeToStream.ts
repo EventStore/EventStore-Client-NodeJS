@@ -24,7 +24,7 @@ export interface SubscribeToStreamOptions extends BaseOptions {
    * resolution feature, the server will also return the event targeted by the link.
    * @defaultValue false
    */
-  resolveLinks?: boolean;
+  resolveLinkTos?: boolean;
 }
 
 declare module "../Client" {
@@ -47,7 +47,7 @@ Client.prototype.subscribeToStream = function (
   streamName: string,
   {
     fromRevision = START,
-    resolveLinks = false,
+    resolveLinkTos = false,
     ...baseOptions
   }: SubscribeToStreamOptions = {},
   readableOptions: ReadableOptions = {}
@@ -81,7 +81,7 @@ Client.prototype.subscribeToStream = function (
   }
 
   options.setStream(streamOptions);
-  options.setResolveLinks(resolveLinks);
+  options.setResolveLinks(resolveLinkTos);
   options.setSubscription(new SubscriptionOptions());
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
@@ -96,7 +96,7 @@ Client.prototype.subscribeToStream = function (
     streamName,
     options: {
       fromRevision,
-      resolveLinks,
+      resolveLinkTos,
       ...baseOptions,
     },
   });

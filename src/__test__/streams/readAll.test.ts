@@ -1,6 +1,6 @@
 import { createTestNode, jsonTestEvents } from "../utils";
 
-import { EventStoreDBClient, BACKWARD, END, START } from "../..";
+import { EventStoreDBClient, BACKWARDS, END, START } from "../..";
 
 describe("readAll", () => {
   const node = createTestNode();
@@ -52,9 +52,9 @@ describe("readAll", () => {
       expect(extracted).toEqual(eventToExtract);
     });
 
-    test("backward from end", async () => {
+    test("backwards from end", async () => {
       const events = await client.readAll(Number.MAX_SAFE_INTEGER, {
-        direction: BACKWARD,
+        direction: BACKWARDS,
         fromPosition: END,
       });
 

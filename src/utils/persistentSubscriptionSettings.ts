@@ -8,7 +8,7 @@ export interface PersistentSubscriptionSettings {
    * resolution feature, the server will also return the event targeted by the link.
    * @defaultValue false
    */
-  resolveLinks: boolean;
+  resolveLinkTos: boolean;
 
   /**
    * Starts the read at the given event revision.
@@ -87,7 +87,7 @@ export interface PersistentSubscriptionSettings {
 export const persistentSubscriptionSettingsFromDefaults = (
   changes: Partial<PersistentSubscriptionSettings> = {}
 ): PersistentSubscriptionSettings => ({
-  resolveLinks: false,
+  resolveLinkTos: false,
   extraStats: false,
   fromRevision: START,
   messageTimeout: 30_000,
