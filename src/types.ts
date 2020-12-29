@@ -176,9 +176,7 @@ export interface AllStreamBinaryRecordedEvent<EventType extends string = string>
   position: Position;
 }
 
-export type RecordedEvent =
-  | JSONRecordedEvent<string>
-  | BinaryRecordedEvent<string>;
+export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
 export type AllStreamRecordedEvent =
   | AllStreamJSONRecordedEvent<string>
   | AllStreamBinaryRecordedEvent<string>;
