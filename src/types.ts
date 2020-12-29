@@ -178,8 +178,8 @@ export interface AllStreamBinaryRecordedEvent<EventType extends string = string>
 
 export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
 export type AllStreamRecordedEvent =
-  | AllStreamJSONRecordedEvent<string>
-  | AllStreamBinaryRecordedEvent<string>;
+  | AllStreamJSONRecordedEvent
+  | AllStreamBinaryRecordedEvent;
 
 /**
  * A structure representing a single event or an resolved link event.
