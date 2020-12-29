@@ -91,7 +91,7 @@ export interface AppendResult {
 /**
  * Represents a previously written event.
  */
-export interface RecordedEventBase {
+export interface RecordedEventBase<EventType extends string = string> {
   /**
    * The event stream that events belongs to.
    */
@@ -110,7 +110,7 @@ export interface RecordedEventBase {
   /**
    * Type of this event.
    */
-  eventType: string;
+  eventType: EventType;
 
   /**
    * Representing when this event was created in the database system.
@@ -118,24 +118,29 @@ export interface RecordedEventBase {
   created: number;
 }
 
-export interface JSONRecordedEvent extends RecordedEventBase {
+export interface JSONRecordedEvent<
+  EventType extends string = string,
+  Data = unknown,
+  Metadata extends Record<string, unknown> = Record<string, unknown>
+> extends RecordedEventBase<EventType> {
   /**
-   * Indicates wheter the content is internally marked as JSON.
+   * Indicates whether the content is internally marked as JSON.
    */
   isJson: true;
 
   /**
    * Payload of this event.
    */
-  data: unknown;
+  data: Data;
 
   /**
    * Representing the metadata associated with this event.
    */
-  metadata: Record<string, unknown>;
+  metadata: Metadata;
 }
 
-export interface BinaryRecordedEvent extends RecordedEventBase {
+export interface BinaryRecordedEvent<EventType extends string = string>
+  extends RecordedEventBase<EventType> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -152,14 +157,19 @@ export interface BinaryRecordedEvent extends RecordedEventBase {
   metadata: Uint8Array;
 }
 
-export interface AllStreamJSONRecordedEvent extends JSONRecordedEvent {
+export interface AllStreamJSONRecordedEvent<
+  EventType extends string = string,
+  Data = unknown,
+  Metadata extends Record<string, unknown> = Record<string, unknown>
+> extends JSONRecordedEvent<EventType, Data, Metadata> {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
 }
 
-export interface AllStreamBinaryRecordedEvent extends BinaryRecordedEvent {
+export interface AllStreamBinaryRecordedEvent<EventType extends string = string>
+  extends BinaryRecordedEvent<EventType> {
   /**
    * Position of this event in the transaction log.
    */
@@ -181,8 +191,7 @@ export interface ResolvedEvent {
   event?: RecordedEvent;
 
   /**
-   *
-   The link event if this ResolvedEvent is a link event.
+   * The link event if this ResolvedEvent is a link event.
    */
   link?: RecordedEvent;
 
@@ -202,8 +211,7 @@ export interface AllStreamResolvedEvent {
   event?: AllStreamRecordedEvent;
 
   /**
-   *
-   The link event if this ResolvedEvent is a link event.
+   * The link event if this ResolvedEvent is a link event.
    */
   link?: AllStreamRecordedEvent;
 
