@@ -43,7 +43,7 @@ const post = (
         method: "POST",
         headers: {
           "Content-Type": contentType,
-          "ES-Type": type,
+          "ES-EventType": type,
         },
         ca: [cert],
       },
