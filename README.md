@@ -114,7 +114,21 @@ $ yarn build
 ## Run tests
 
 Tests are written using [Jest] and require [Docker] and [Docker Compose] to be installed.
-To access the github packages docker images, you need to [authenticate docker with a gitub personal access token].
+To access the github packages docker images, you need to authenticate docker with a gitub personal access token. It should be [generated](https://github.com/settings/tokens/new). Select at least following scopes:
+- `repo`
+- `read:packages`
+- `write:packages`
+
+Then login to github docker registry with:
+```shell script
+$ docker login https://docker.pkg.github.com -u YOUR_GITHUB_USERNAME
+```
+
+and providing your personal access token as a password. 
+
+Check full instructions in the ["Authenticating to GitHub packages"](https://docs.github.com/en/free-pro-team@latest/packages/guides/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages) guide.
+
+Then run test with:
 
 ```shell script
 $ yarn test
