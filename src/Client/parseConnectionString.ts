@@ -9,6 +9,17 @@ const notCurrentlySupported = [
   "throwOnAppendFailure",
 ];
 
+const lowerToKey: Record<string, keyof ConnectionOptions> = {
+  dnsdiscover: "dnsDiscover",
+  maxdiscoverattempts: "maxDiscoverAttempts",
+  discoveryinterval: "discoveryInterval",
+  gossiptimeout: "gossipTimeout",
+  nodepreference: "nodePreference",
+  tls: "tls",
+  tlsverifycert: "tlsVerifyCert",
+  throwonappendfailure: "throwOnAppendFailure",
+};
+
 export interface ConnectionOptions {
   dnsDiscover: boolean;
   maxDiscoverAttempts: number;
@@ -218,11 +229,12 @@ interface KeyValuePair {
 }
 
 const verifyKeyValuePair = (
-  { key, value }: RawKeyPair,
+  { key: rawKey, value }: RawKeyPair,
   connectionString: string,
   [from, to]: ParsingLocation
 ): KeyValuePair | null => {
-  const keyFrom = from + `&${key}=`.length;
+  const keyFrom = from + `&${rawKey}=`.length;
+  const key = lowerToKey[rawKey.toLowerCase()] ?? rawKey;
 
   if (notCurrentlySupported.includes(key)) {
     debug.connection(
