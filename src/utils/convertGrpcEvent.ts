@@ -86,6 +86,16 @@ const safeParseJSON = <T = unknown>(
   }
 };
 
+const parseMetadata = (grpcRecord: GRPCRecordedEvent, id: string) => {
+  const metadata = grpcRecord.getCustomMetadata_asU8();
+  if (!metadata.length) return;
+  try {
+    return JSON.parse(Buffer.from(metadata).toString("binary"));
+  } catch (error) {
+    return metadata;
+  }
+};
+
 export const convertGrpcRecord = (
   grpcRecord: GRPCRecordedEvent
 ): RecordedEvent => {
@@ -107,30 +117,18 @@ export const convertGrpcRecord = (
     throw "Impossible situation where id is undefined in a recorded event";
   }
   const id = grpcRecord.getId()!.getString();
-
   const revision = BigInt(grpcRecord.getStreamRevision());
-
+  const metadata = parseMetadata(grpcRecord, id);
   const isJson = contentType === "application/json";
 
   if (isJson) {
     const dataStr = Buffer.from(grpcRecord.getData()).toString("binary");
-
-    const metadataStr = Buffer.from(grpcRecord.getCustomMetadata()).toString(
-      "binary"
-    );
 
     const data = safeParseJSON(
       dataStr,
       (d) => d,
       `Malformed JSON data in event ${id}`
     );
-    const metadata = metadataStr.length
-      ? safeParseJSON(
-          metadataStr,
-          (_raw) => ({ _raw }),
-          `Malformed JSON metadata in event ${id}`
-        )
-      : {};
 
     return {
       streamId,
@@ -145,7 +143,6 @@ export const convertGrpcRecord = (
   }
 
   const data = grpcRecord.getData_asU8();
-  const metadata = grpcRecord.getCustomMetadata_asU8();
 
   return {
     streamId,

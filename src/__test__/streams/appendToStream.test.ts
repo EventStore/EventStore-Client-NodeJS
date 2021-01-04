@@ -43,55 +43,209 @@ describe("appendToStream", () => {
       expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
     });
 
-    test("with metadata for json events", async () => {
-      const STREAM_NAME = "json_metadata_stream_name";
-      const METADATA = { metaMessage: "How meta is this?" };
-      const event = jsonEvent({
-        type: "metadata-test-json",
-        data: {
-          message: "the json message",
-          kind: "json",
-        },
-        metadata: METADATA,
+    describe("metadata", () => {
+      describe("json", () => {
+        const METADATA = { metaMessage: "How meta is this?" };
+
+        test("json events", async () => {
+          const STREAM_NAME = "metadata_json_json";
+          const event = jsonEvent({
+            type: "metadata-test",
+            data: {
+              message: "the json message",
+              kind: "json",
+            },
+            metadata: METADATA,
+          });
+
+          const result = await client.appendToStream(STREAM_NAME, event);
+
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeDefined();
+          const metaJx = rxEvents[0].event!.metadata as Record<string, unknown>;
+          expect(metaJx.metaMessage).toMatch(METADATA.metaMessage);
+        });
+
+        test("binary events", async () => {
+          const STREAM_NAME = "metadata_json_binary";
+          const event = binaryEvent({
+            type: "metadata-test",
+            data: Buffer.from("the binary message"),
+            metadata: METADATA,
+          });
+
+          const result = await client.appendToStream(STREAM_NAME, event);
+
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeDefined();
+
+          const metaJx = rxEvents[0].event!.metadata as Record<string, unknown>;
+          expect(metaJx.metaMessage).toMatch(METADATA.metaMessage);
+        });
       });
 
-      const result = await client.appendToStream(STREAM_NAME, event);
+      describe("buffer", () => {
+        const MESSAGE = "How meta is this?";
+        const METADATA = Buffer.from(MESSAGE);
 
-      expect(result).toBeDefined();
-      expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+        test("json events", async () => {
+          const STREAM_NAME = "metadata_buffer_json";
+          const event = jsonEvent({
+            type: "metadata-test",
+            data: {
+              message: "the json message",
+              kind: "json",
+            },
+            metadata: METADATA,
+          });
 
-      const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const result = await client.appendToStream(STREAM_NAME, event);
 
-      expect(rxEvents).toBeDefined();
-      expect(rxEvents.length).toEqual(1);
-      expect(rxEvents[0].event?.metadata).toBeDefined();
-      const metaJx = rxEvents[0].event!.metadata as Record<string, unknown>;
-      expect(metaJx.metaMessage).toMatch(METADATA.metaMessage);
-    });
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
 
-    test("with metadata for binary events", async () => {
-      const STREAM_NAME = "binary_metadata_stream_name";
-      const METADATA = "How meta is this?";
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
 
-      const event = binaryEvent({
-        type: "metadata-test-binary",
-        data: Buffer.from("the binary message"),
-        metadata: Buffer.from(METADATA),
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeDefined();
+          const metaBx = rxEvents[0].event!.metadata as Uint8Array;
+          const metaBxData = Buffer.from(metaBx).toString("binary");
+          expect(metaBxData).toMatch(MESSAGE);
+        });
+
+        test("binary events", async () => {
+          const STREAM_NAME = "metadata_buffer_binary";
+          const event = binaryEvent({
+            type: "metadata-test",
+            data: Buffer.from("the binary message"),
+            metadata: METADATA,
+          });
+
+          const result = await client.appendToStream(STREAM_NAME, event);
+
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeDefined();
+          const metaBx = rxEvents[0].event!.metadata as Uint8Array;
+          const metaBxData = Buffer.from(metaBx).toString("binary");
+          expect(metaBxData).toMatch(MESSAGE);
+        });
       });
 
-      const result = await client.appendToStream(STREAM_NAME, event);
+      describe("Uint8Array", () => {
+        const MESSAGE = "How Uint8Array is this?";
+        const METADATA = Uint8Array.from(Buffer.from(MESSAGE));
 
-      expect(result).toBeDefined();
-      expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+        test("json events", async () => {
+          const STREAM_NAME = "metadata_Uint8Array_json";
+          const event = jsonEvent({
+            type: "metadata-test",
+            data: {
+              message: "the json message",
+              kind: "json",
+            },
+            metadata: METADATA,
+          });
 
-      const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const result = await client.appendToStream(STREAM_NAME, event);
 
-      expect(rxEvents).toBeDefined();
-      expect(rxEvents.length).toEqual(1);
-      expect(rxEvents[0].event?.metadata).toBeDefined();
-      const metaBx = rxEvents[0].event!.metadata as Uint8Array;
-      const metaBxData = Buffer.from(metaBx).toString("binary");
-      expect(metaBxData).toMatch(METADATA);
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeDefined();
+          const metaBx = rxEvents[0].event!.metadata as Uint8Array;
+          const metaBxData = Buffer.from(metaBx).toString("binary");
+          expect(metaBxData).toMatch(MESSAGE);
+        });
+
+        test("binary events", async () => {
+          const STREAM_NAME = "metadata_Uint8Array_binary";
+          const event = binaryEvent({
+            type: "metadata-test",
+            data: Buffer.from("the binary message"),
+            metadata: METADATA,
+          });
+
+          const result = await client.appendToStream(STREAM_NAME, event);
+
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeDefined();
+          const metaBx = rxEvents[0].event!.metadata as Uint8Array;
+          const metaBxData = Buffer.from(metaBx).toString("binary");
+          expect(metaBxData).toMatch(MESSAGE);
+        });
+      });
+
+      describe("undefined", () => {
+        test("json events", async () => {
+          const STREAM_NAME = "metadata_undefined_json";
+          const event = jsonEvent({
+            type: "metadata-test",
+            data: {
+              message: "the json message",
+              kind: "json",
+            },
+          });
+
+          const result = await client.appendToStream(STREAM_NAME, event);
+
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeUndefined();
+        });
+
+        test("binary events", async () => {
+          const STREAM_NAME = "metadata_undefined_binary";
+          const event = binaryEvent({
+            type: "metadata-test",
+            data: Buffer.from("the binary message"),
+          });
+
+          const result = await client.appendToStream(STREAM_NAME, event);
+
+          expect(result).toBeDefined();
+          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+
+          const rxEvents = await client.readStream(STREAM_NAME, 1);
+
+          expect(rxEvents).toBeDefined();
+          expect(rxEvents.length).toEqual(1);
+          expect(rxEvents[0].event?.metadata).toBeUndefined();
+        });
+      });
     });
 
     describe("expected revision", () => {
