@@ -18,14 +18,31 @@ import { debug } from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 
-export interface DNSClusterOptions {
-  discover: EndPoint;
+interface DiscoveryOptions {
+  /**
+   * How many times to attempt connection before throwing
+   */
+  maxDiscoverAttempts?: number;
+  /**
+   * How long to wait before retrying (in milliseconds)
+   */
+  discoveryInterval?: number;
+  /**
+   * How long to wait for the request to time out (in seconds)
+   */
+  gossipTimeout?: number;
+  /**
+   * Preferred node type
+   */
   nodePreference?: NodePreference;
 }
 
-export interface GossipClusterOptions {
+export interface DNSClusterOptions extends DiscoveryOptions {
+  discover: EndPoint;
+}
+
+export interface GossipClusterOptions extends DiscoveryOptions {
   endpoints: EndPoint[];
-  nodePreference?: NodePreference;
 }
 
 export interface SingleNodeOptions {
@@ -89,6 +106,9 @@ export class Client {
         {
           discover,
           nodePreference: options.nodePreference,
+          discoveryInterval: options.discoveryInterval,
+          gossipTimeout: options.gossipTimeout,
+          maxDiscoverAttempts: options.maxDiscoverAttempts,
         },
         channelCredentials,
         options.defaultCredentials
@@ -100,6 +120,9 @@ export class Client {
         {
           endpoints: options.hosts,
           nodePreference: options.nodePreference,
+          discoveryInterval: options.discoveryInterval,
+          gossipTimeout: options.gossipTimeout,
+          maxDiscoverAttempts: options.maxDiscoverAttempts,
         },
         channelCredentials,
         options.defaultCredentials
