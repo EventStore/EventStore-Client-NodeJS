@@ -107,15 +107,27 @@ Client.prototype.appendToStream = async function (
           }
         }
 
-        return reject(
-          new WrongExpectedVersionError(null as never, {
-            streamName: streamName,
-            current: grpcError.hasCurrentRevision()
-              ? BigInt(grpcError.getCurrentRevision())
-              : "no_stream",
-            expected,
-          })
-        );
+        if (this.throwOnAppendFailure) {
+          return reject(
+            new WrongExpectedVersionError(null as never, {
+              streamName: streamName,
+              current: grpcError.hasCurrentRevision()
+                ? BigInt(grpcError.getCurrentRevision())
+                : "no_stream",
+              expected,
+            })
+          );
+        }
+
+        const nextExpectedVersion = grpcError.hasCurrentRevision()
+          ? BigInt(grpcError.getCurrentRevision())
+          : BigInt(-1);
+
+        return resolve({
+          success: false,
+          nextExpectedVersion,
+          position: undefined,
+        });
       }
 
       if (resp.hasSuccess()) {
@@ -131,6 +143,7 @@ Client.prototype.appendToStream = async function (
           : undefined;
 
         return resolve({
+          success: true,
           nextExpectedVersion,
           position,
         });

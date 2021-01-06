@@ -18,6 +18,10 @@ import { debug } from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 
+interface ClientOptions {
+  throwOnAppendFailure?: boolean;
+}
+
 interface DiscoveryOptions {
   /**
    * How many times to attempt connection before throwing
@@ -37,15 +41,15 @@ interface DiscoveryOptions {
   nodePreference?: NodePreference;
 }
 
-export interface DNSClusterOptions extends DiscoveryOptions {
+export interface DNSClusterOptions extends DiscoveryOptions, ClientOptions {
   discover: EndPoint;
 }
 
-export interface GossipClusterOptions extends DiscoveryOptions {
+export interface GossipClusterOptions extends DiscoveryOptions, ClientOptions {
   endpoints: EndPoint[];
 }
 
-export interface SingleNodeOptions {
+export interface SingleNodeOptions extends ClientOptions {
   endpoint: EndPoint | string;
 }
 
@@ -63,6 +67,7 @@ interface ChannelCredentialOptions {
 }
 
 export class Client {
+  #throwOnAppendFailure: boolean;
   #connectionSettings: ConnectionTypeOptions;
   #channelCredentials: ChannelCredentials;
   #defaultCredentials?: Credentials;
@@ -154,10 +159,14 @@ export class Client {
     defaultUserCredentials?: Credentials
   );
   constructor(
-    connectionSettings: ConnectionTypeOptions,
+    {
+      throwOnAppendFailure = true,
+      ...connectionSettings
+    }: ConnectionTypeOptions,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
     defaultUserCredentials?: Credentials
   ) {
+    this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#connectionSettings = connectionSettings;
     this.#defaultCredentials = defaultUserCredentials;
 
@@ -262,4 +271,8 @@ export class Client {
 
     return metadata;
   };
+
+  protected get throwOnAppendFailure(): boolean {
+    return this.#throwOnAppendFailure;
+  }
 }

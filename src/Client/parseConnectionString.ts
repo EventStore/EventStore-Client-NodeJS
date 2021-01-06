@@ -1,7 +1,7 @@
 import { Credentials, EndPoint, NodePreference } from "../types";
 import { debug } from "../utils";
 
-const notCurrentlySupported = ["tlsVerifyCert", "throwOnAppendFailure"];
+const notCurrentlySupported = ["tlsVerifyCert"];
 
 const lowerToKey: Record<string, keyof ConnectionOptions> = {
   dnsdiscover: "dnsDiscover",
