@@ -91,7 +91,7 @@ export interface AppendResult {
 /**
  * Represents a previously written event.
  */
-export interface RecordedEventBase<Type extends string = string> {
+interface RecordedEventBase<Type extends string, Metadata> {
   /**
    * The event stream that events belongs to.
    */
@@ -116,13 +116,18 @@ export interface RecordedEventBase<Type extends string = string> {
    * Representing when this event was created in the database system.
    */
   created: number;
+
+  /**
+   * Representing the metadata associated with this event.
+   */
+  metadata: Metadata;
 }
 
 export interface JSONRecordedEvent<
   Type extends string = string,
   Data = unknown,
-  Metadata extends Record<string, unknown> = Record<string, unknown>
-> extends RecordedEventBase<Type> {
+  Metadata = unknown
+> extends RecordedEventBase<Type, Metadata> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -132,15 +137,12 @@ export interface JSONRecordedEvent<
    * Data of this event.
    */
   data: Data;
-
-  /**
-   * Representing the metadata associated with this event.
-   */
-  metadata: Metadata;
 }
 
-export interface BinaryRecordedEvent<Type extends string = string>
-  extends RecordedEventBase<Type> {
+export interface BinaryRecordedEvent<
+  Type extends string = string,
+  Metadata = unknown
+> extends RecordedEventBase<Type, Metadata> {
   /**
    * Indicates whether the content is internally marked as JSON.
    */
@@ -150,17 +152,12 @@ export interface BinaryRecordedEvent<Type extends string = string>
    * Data of this event.
    */
   data: Uint8Array;
-
-  /**
-   * Representing the metadata associated with this event.
-   */
-  metadata: Uint8Array;
 }
 
 export interface AllStreamJSONRecordedEvent<
   Type extends string = string,
   Data = unknown,
-  Metadata extends Record<string, unknown> = Record<string, unknown>
+  Metadata = unknown
 > extends JSONRecordedEvent<Type, Data, Metadata> {
   /**
    * Position of this event in the transaction log.
@@ -168,8 +165,10 @@ export interface AllStreamJSONRecordedEvent<
   position: Position;
 }
 
-export interface AllStreamBinaryRecordedEvent<Type extends string = string>
-  extends BinaryRecordedEvent<Type> {
+export interface AllStreamBinaryRecordedEvent<
+  Type extends string = string,
+  Metadata = unknown
+> extends BinaryRecordedEvent<Type, Metadata> {
   /**
    * Position of this event in the transaction log.
    */

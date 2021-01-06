@@ -1,14 +1,22 @@
 import { v4 as uuid } from "uuid";
+import { convertMetadata } from "./convertMetadata";
+import { MetadataType } from "./types";
 
-export interface BinaryEventData<Type extends string = string> {
+export interface BinaryEventData<
+  Type extends string = string,
+  Metadata extends MetadataType = MetadataType
+> {
   id: string;
   contentType: "application/octet-stream";
   type: Type;
   data: Uint8Array;
-  metadata?: Uint8Array;
+  metadata?: Metadata;
 }
 
-export interface BinaryEventOptions<Type extends string = string> {
+export interface BinaryEventOptions<
+  Type extends string = string,
+  Metadata extends MetadataType = MetadataType | Buffer
+> {
   /**
    * The id to this event. By default, the id will be generated.
    */
@@ -24,18 +32,21 @@ export interface BinaryEventOptions<Type extends string = string> {
   /**
    * The binary metadata of the event
    */
-  metadata?: Uint8Array | Buffer;
+  metadata?: Metadata;
 }
 
-export const binaryEvent = <Type extends string = string>({
+export const binaryEvent = <
+  Type extends string = string,
+  Metadata extends MetadataType = MetadataType
+>({
   type,
   data,
   metadata,
   id = uuid(),
-}: BinaryEventOptions<Type>): BinaryEventData<Type> => ({
+}: BinaryEventOptions<Type, Metadata>): BinaryEventData<Type, Metadata> => ({
   id,
   contentType: "application/octet-stream",
   type,
   data: Uint8Array.from(data),
-  metadata: metadata ? Uint8Array.from(metadata) : undefined,
+  metadata: convertMetadata<Metadata>(metadata),
 });

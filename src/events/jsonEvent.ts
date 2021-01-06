@@ -1,11 +1,11 @@
 import { v4 as uuid } from "uuid";
-
-export type JSONType = Record<string | number, unknown> | unknown[];
+import { convertMetadata } from "./convertMetadata";
+import { JSONType, MetadataType } from "./types";
 
 export interface JSONEventData<
   Type extends string = string,
   Data extends JSONType = JSONType,
-  Metadata extends JSONType = JSONType
+  Metadata extends MetadataType = MetadataType
 > {
   id: string;
   contentType: "application/json";
@@ -17,7 +17,7 @@ export interface JSONEventData<
 export interface JSONEventOptions<
   Type extends string = string,
   Data extends JSONType = JSONType,
-  Metadata extends JSONType = JSONType
+  Metadata extends MetadataType = MetadataType | Buffer
 > {
   /**
    * The id to this event. By default, the id will be generated.
@@ -40,7 +40,7 @@ export interface JSONEventOptions<
 export const jsonEvent = <
   Type extends string = string,
   Data extends JSONType = JSONType,
-  Metadata extends JSONType = JSONType
+  Metadata extends MetadataType = MetadataType
 >({
   type,
   data,
@@ -55,5 +55,5 @@ export const jsonEvent = <
   contentType: "application/json",
   type,
   data,
-  metadata,
+  metadata: convertMetadata<Metadata>(metadata),
 });

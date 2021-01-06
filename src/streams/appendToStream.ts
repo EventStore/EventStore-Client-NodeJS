@@ -161,18 +161,13 @@ Client.prototype.appendToStream = async function (
       }
 
       if (event.metadata) {
-        switch (event.contentType) {
-          case "application/json": {
-            const metadata = JSON.stringify(event.metadata);
-            message.setCustomMetadata(
-              Buffer.from(metadata, "binary").toString("base64")
-            );
-            break;
-          }
-          case "application/octet-stream": {
-            message.setCustomMetadata(event.metadata);
-            break;
-          }
+        if (event.metadata.constructor === Uint8Array) {
+          message.setCustomMetadata(event.metadata);
+        } else {
+          const metadata = JSON.stringify(event.metadata);
+          message.setCustomMetadata(
+            Buffer.from(metadata, "binary").toString("base64")
+          );
         }
       }
 
