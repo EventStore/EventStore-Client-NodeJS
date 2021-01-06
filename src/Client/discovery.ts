@@ -1,4 +1,4 @@
-import { ChannelCredentials } from "@grpc/grpc-js";
+import { ChannelCredentials, Metadata } from "@grpc/grpc-js";
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import { GossipClient } from "../../generated/gossip_grpc_pb";
@@ -19,10 +19,19 @@ export type MemberInfo = {
 };
 
 export async function discoverEndpoint(
-  settings: DNSClusterOptions | GossipClusterOptions,
+  {
+    discoveryInterval = 100,
+    maxDiscoverAttempts = 10,
+    gossipTimeout = 5,
+    ...settings
+  }: DNSClusterOptions | GossipClusterOptions,
   credentials: ChannelCredentials
 ): Promise<EndPoint> {
-  while (true) {
+  let discoverAttempts = 0;
+
+  while (discoverAttempts < maxDiscoverAttempts) {
+    discoverAttempts++;
+
     try {
       const candidates: EndPoint[] =
         "endpoints" in settings ? settings.endpoints : [settings.discover];
@@ -31,7 +40,11 @@ export async function discoverEndpoint(
 
       for (const candidate of candidates) {
         try {
-          const members = await listClusterMembers(candidate, credentials);
+          const members = await listClusterMembers(
+            candidate,
+            credentials,
+            createDeadline(gossipTimeout)
+          );
           const preference = settings.nodePreference ?? RANDOM;
           const endpoint = determineBestNode(preference, members);
           if (endpoint) return Promise.resolve(endpoint);
@@ -47,8 +60,10 @@ export async function discoverEndpoint(
       debug.connection(`Failed to resolve dns: `, error.toString());
     }
 
-    await delay(500);
+    await delay(discoveryInterval);
   }
+
+  throw new Error(`Failed to discover after ${discoverAttempts} attempts.`);
 }
 
 function inAllowedStates(member: MemberInfo): boolean {
@@ -118,15 +133,21 @@ function determineBestNode(
   }
 }
 
+function createDeadline(seconds: number) {
+  const deadline = new Date();
+  deadline.setSeconds(deadline.getSeconds() + seconds);
+  return deadline;
+}
+
 function listClusterMembers(
   seed: EndPoint,
-  credentials: ChannelCredentials
+  credentials: ChannelCredentials,
+  deadline: Date
 ): Promise<MemberInfo[]> {
   const uri = `${seed.address}:${seed.port}`;
-  const client = new GossipClient(uri, credentials);
-
+  const client = new GossipClient(uri, credentials, {});
   return new Promise((resolve, reject) => {
-    client.read(new Empty(), (error, info) => {
+    client.read(new Empty(), new Metadata(), { deadline }, (error, info) => {
       if (error) return reject(error);
 
       const members: MemberInfo[] = [];
