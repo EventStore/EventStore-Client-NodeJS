@@ -84,6 +84,7 @@ export type CurrentRevision =
 export type Direction = typeof constants.FORWARDS | typeof constants.BACKWARDS;
 
 export interface AppendResult {
+  success: boolean;
   nextExpectedVersion: bigint;
   position?: Position;
 }

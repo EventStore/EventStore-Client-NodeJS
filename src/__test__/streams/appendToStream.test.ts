@@ -429,4 +429,66 @@ describe("appendToStream", () => {
       });
     });
   });
+
+  describe("throwOnAppendFailure", () => {
+    test("throws on true", async () => {
+      const throwingClient = new EventStoreDBClient(
+        { endpoint: node.uri, throwOnAppendFailure: true },
+        { rootCertificate: node.rootCertificate },
+        { username: "admin", password: "changeit" }
+      );
+
+      const STREAM_NAME = "throwing__no_stream_here_but_there_is";
+
+      await throwingClient.appendToStream(STREAM_NAME, jsonTestEvents());
+
+      try {
+        const result = await throwingClient.appendToStream(
+          STREAM_NAME,
+          jsonTestEvents(),
+          {
+            expectedRevision: "no_stream",
+          }
+        );
+
+        expect(result).toBe("unreachable");
+      } catch (error) {
+        expect(error).toBeInstanceOf(WrongExpectedVersionError);
+
+        if (error instanceof WrongExpectedVersionError) {
+          expect(error.streamName).toBe(STREAM_NAME);
+          expect(error.expectedVersion).toBe(NO_STREAM);
+          expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+        }
+      }
+    });
+
+    test("returns failure result on false", async () => {
+      const nonThrowingClient = new EventStoreDBClient(
+        { endpoint: node.uri, throwOnAppendFailure: false },
+        { rootCertificate: node.rootCertificate },
+        { username: "admin", password: "changeit" }
+      );
+
+      const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";
+
+      await nonThrowingClient.appendToStream(STREAM_NAME, jsonTestEvents());
+
+      const result = await nonThrowingClient.appendToStream(
+        STREAM_NAME,
+        jsonTestEvents(),
+        {
+          expectedRevision: "no_stream",
+        }
+      );
+
+      expect(result.success).toBe(false);
+
+      if (result.success) {
+        expect(result).toBe("unreachable");
+      } else {
+        expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(1);
+      }
+    });
+  });
 });
