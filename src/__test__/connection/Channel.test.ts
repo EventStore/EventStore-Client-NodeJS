@@ -1,0 +1,41 @@
+import { createTestCluster, jsonTestEvents } from "../utils";
+import { EventStoreDBClient } from "../..";
+
+describe("Channel", () => {
+  const cluster = createTestCluster();
+
+  beforeAll(async () => {
+    await cluster.up();
+  });
+
+  afterAll(async () => {
+    await cluster.down();
+  });
+
+  test("a single client should connect to a single node", async () => {
+    const client = new EventStoreDBClient(
+      {
+        endpoints: cluster.endpoints,
+        nodePreference: "random",
+      },
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
+    );
+
+    /*
+     Spying on an internal api is more implementation specific than
+     I would like, but there is no easy way to check this.
+    */
+    const discovery = jest.spyOn(client, "resolveUri" as never);
+
+    const promises: Promise<unknown>[] = [
+      client.appendToStream("stream_1", jsonTestEvents()),
+      client.readAll(1, { fromPosition: "start", direction: "forwards" }),
+      client.appendToStream("stream_2", jsonTestEvents()),
+    ];
+
+    await Promise.all(promises);
+
+    expect(discovery).toBeCalledTimes(1);
+  });
+});

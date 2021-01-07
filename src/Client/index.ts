@@ -68,7 +68,10 @@ export class Client {
   #defaultCredentials?: Credentials;
 
   #channel?: Promise<Channel>;
-  #grpcClients: Map<GRPCClientConstructor<GRPCClient>, GRPCClient> = new Map();
+  #grpcClients: Map<
+    GRPCClientConstructor<GRPCClient>,
+    Promise<GRPCClient>
+  > = new Map();
 
   /**
    * Returns a connection from a connection string.
@@ -187,11 +190,17 @@ export class Client {
   ): Promise<T> => {
     if (this.#grpcClients.has(Client)) {
       debug.connection("Using existing grpc client for %s", debugName);
-      return this.#grpcClients.get(Client) as T;
+    } else {
+      debug.connection("Createing client for %s", debugName);
+      this.#grpcClients.set(Client, this.createGRPCClient(Client));
     }
 
-    debug.connection("Createing client for %s", debugName);
+    return this.#grpcClients.get(Client) as Promise<T>;
+  };
 
+  private createGRPCClient = async <T extends GRPCClient>(
+    Client: GRPCClientConstructor<T>
+  ): Promise<T> => {
     const channelOverride: GRPCClientOptions["channelOverride"] = await this.getChannel();
 
     const client = new Client(
@@ -201,8 +210,6 @@ export class Client {
         channelOverride,
       } as GRPCClientOptions
     );
-
-    this.#grpcClients.set(Client, client);
 
     return client;
   };
