@@ -67,7 +67,7 @@ export class Client {
   #channelCredentials: ChannelCredentials;
   #defaultCredentials?: Credentials;
 
-  #channel?: Channel;
+  #channel?: Promise<Channel>;
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, GRPCClient> = new Map();
 
   /**
@@ -207,12 +207,18 @@ export class Client {
     return client;
   };
 
-  private getChannel = async () => {
+  private getChannel = async (): Promise<Channel> => {
     if (this.#channel) {
       debug.connection("Using existing connection");
       return this.#channel;
     }
 
+    this.#channel = this.createChannel();
+
+    return this.#channel;
+  };
+
+  private createChannel = async (): Promise<Channel> => {
     const uri = await this.resolveUri();
 
     debug.connection(
@@ -222,9 +228,7 @@ export class Client {
       uri
     );
 
-    this.#channel = new Channel(uri, this.#channelCredentials, {});
-
-    return this.#channel;
+    return new Channel(uri, this.#channelCredentials, {});
   };
 
   private resolveUri = async (): Promise<string> => {
