@@ -119,20 +119,20 @@ Client.prototype.appendToStream = async function (
           );
         }
 
-        const nextExpectedVersion = grpcError.hasCurrentRevision()
+        const nextExpectedRevision = grpcError.hasCurrentRevision()
           ? BigInt(grpcError.getCurrentRevision())
           : BigInt(-1);
 
         return resolve({
           success: false,
-          nextExpectedVersion,
+          nextExpectedRevision,
           position: undefined,
         });
       }
 
       if (resp.hasSuccess()) {
         const success = resp.getSuccess()!;
-        const nextExpectedVersion = BigInt(success.getCurrentRevision());
+        const nextExpectedRevision = BigInt(success.getCurrentRevision());
         const grpcPosition = success.getPosition();
 
         const position = grpcPosition
@@ -144,7 +144,7 @@ Client.prototype.appendToStream = async function (
 
         return resolve({
           success: true,
-          nextExpectedVersion,
+          nextExpectedRevision,
           position,
         });
       }

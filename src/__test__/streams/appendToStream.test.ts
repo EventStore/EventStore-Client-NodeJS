@@ -28,7 +28,7 @@ describe("appendToStream", () => {
 
       const result = await client.appendToStream(STREAM_NAME, jsonTestEvents());
       expect(result).toBeDefined();
-      expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+      expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
     });
 
     test("binary events", async () => {
@@ -40,7 +40,7 @@ describe("appendToStream", () => {
       );
 
       expect(result).toBeDefined();
-      expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+      expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
     });
 
     describe("metadata", () => {
@@ -61,7 +61,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -83,7 +83,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -114,7 +114,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -137,7 +137,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -168,7 +168,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -191,7 +191,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -218,7 +218,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -237,7 +237,7 @@ describe("appendToStream", () => {
           const result = await client.appendToStream(STREAM_NAME, event);
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           const rxEvents = await client.readStream(STREAM_NAME, 1);
 
@@ -262,7 +262,7 @@ describe("appendToStream", () => {
           );
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
         });
       });
 
@@ -279,7 +279,7 @@ describe("appendToStream", () => {
           );
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
         });
 
         test("fails", async () => {
@@ -323,7 +323,7 @@ describe("appendToStream", () => {
             }
           );
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
         });
 
         test("fails", async () => {
@@ -355,7 +355,7 @@ describe("appendToStream", () => {
         test("succeeds", async () => {
           const STREAM_NAME = "stream_should_be_at_nextExpectedRevision";
 
-          const { nextExpectedVersion } = await client.appendToStream(
+          const { nextExpectedRevision } = await client.appendToStream(
             STREAM_NAME,
             jsonTestEvents()
           );
@@ -364,12 +364,12 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: nextExpectedVersion,
+              expectedRevision: nextExpectedRevision,
             }
           );
 
           expect(result).toBeDefined();
-          expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(0);
+          expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
         });
 
         describe("fails", () => {
@@ -398,7 +398,7 @@ describe("appendToStream", () => {
           test("wrong version", async () => {
             const STREAM_NAME = "stream_should_be_at_revision_but_isnt";
 
-            const { nextExpectedVersion } = await client.appendToStream(
+            const { nextExpectedRevision } = await client.appendToStream(
               STREAM_NAME,
               jsonTestEvents()
             );
@@ -408,7 +408,7 @@ describe("appendToStream", () => {
                 STREAM_NAME,
                 jsonTestEvents(),
                 {
-                  expectedRevision: nextExpectedVersion + BigInt(1),
+                  expectedRevision: nextExpectedRevision + BigInt(1),
                 }
               );
 
@@ -419,9 +419,9 @@ describe("appendToStream", () => {
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
                 expect(error.expectedVersion).toBe(
-                  nextExpectedVersion + BigInt(1)
+                  nextExpectedRevision + BigInt(1)
                 );
-                expect(error.actualVersion).toBe(nextExpectedVersion);
+                expect(error.actualVersion).toBe(nextExpectedRevision);
               }
             }
           });
@@ -487,7 +487,7 @@ describe("appendToStream", () => {
       if (result.success) {
         expect(result).toBe("unreachable");
       } else {
-        expect(result.nextExpectedVersion).toBeGreaterThanOrEqual(1);
+        expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(1);
       }
     });
   });

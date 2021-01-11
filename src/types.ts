@@ -84,8 +84,17 @@ export type CurrentRevision =
 export type Direction = typeof constants.FORWARDS | typeof constants.BACKWARDS;
 
 export interface AppendResult {
+  /**
+   * If the append was successful. Only relevent if `throwOnAppendFailure` is set to false.
+   */
   success: boolean;
-  nextExpectedVersion: bigint;
+  /**
+   * The current revision of the stream, to be passed as the `expectedRevision` in the next call.
+   */
+  nextExpectedRevision: bigint;
+  /**
+   * The logical record position in the EventStoreDB transaction file
+   */
   position?: Position;
 }
 
