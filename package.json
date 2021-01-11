@@ -59,13 +59,13 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.2.2",
     "@types/debug": "^4.1.5",
-    "@types/google-protobuf": "^3.7.4",
     "@types/node": "^12.12.47",
     "debug": "^4.3.1",
     "google-protobuf": "^3.14.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/google-protobuf": "^3.7.4",
     "@types/jest": "^26.0.19",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
