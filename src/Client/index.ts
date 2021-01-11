@@ -72,8 +72,11 @@ export class Client {
   #channelCredentials: ChannelCredentials;
   #defaultCredentials?: Credentials;
 
-  #channel?: Channel;
-  #grpcClients: Map<GRPCClientConstructor<GRPCClient>, GRPCClient> = new Map();
+  #channel?: Promise<Channel>;
+  #grpcClients: Map<
+    GRPCClientConstructor<GRPCClient>,
+    Promise<GRPCClient>
+  > = new Map();
 
   /**
    * Returns a connection from a connection string.
@@ -196,11 +199,17 @@ export class Client {
   ): Promise<T> => {
     if (this.#grpcClients.has(Client)) {
       debug.connection("Using existing grpc client for %s", debugName);
-      return this.#grpcClients.get(Client) as T;
+    } else {
+      debug.connection("Createing client for %s", debugName);
+      this.#grpcClients.set(Client, this.createGRPCClient(Client));
     }
 
-    debug.connection("Createing client for %s", debugName);
+    return this.#grpcClients.get(Client) as Promise<T>;
+  };
 
+  private createGRPCClient = async <T extends GRPCClient>(
+    Client: GRPCClientConstructor<T>
+  ): Promise<T> => {
     const channelOverride: GRPCClientOptions["channelOverride"] = await this.getChannel();
 
     const client = new Client(
@@ -211,17 +220,21 @@ export class Client {
       } as GRPCClientOptions
     );
 
-    this.#grpcClients.set(Client, client);
-
     return client;
   };
 
-  private getChannel = async () => {
+  private getChannel = async (): Promise<Channel> => {
     if (this.#channel) {
       debug.connection("Using existing connection");
       return this.#channel;
     }
 
+    this.#channel = this.createChannel();
+
+    return this.#channel;
+  };
+
+  private createChannel = async (): Promise<Channel> => {
     const uri = await this.resolveUri();
 
     debug.connection(
@@ -231,9 +244,7 @@ export class Client {
       uri
     );
 
-    this.#channel = new Channel(uri, this.#channelCredentials, {});
-
-    return this.#channel;
+    return new Channel(uri, this.#channelCredentials, {});
   };
 
   private resolveUri = async (): Promise<string> => {
