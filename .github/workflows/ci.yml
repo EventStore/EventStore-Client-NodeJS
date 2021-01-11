@@ -65,9 +65,50 @@ jobs:
         if: ${{ env.SECRETS_AVAILABLE == 'true' }}
         run: sudo tailscale down
 
+  package:
+    name: Package compiles as a dependency
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v1
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Install
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Create package
+        id: package
+        run: |
+          echo "::set-output name=package::$(echo $PWD)$(echo "/")$(npm pack)"
+          echo "::set-output name=file::$(echo $PWD)$(echo "/.github/files/package_check.txt")"
+      - name: Create test project
+        run: |
+          cd ../
+          mkdir ./temp
+          cd ./temp
+          yarn init -y
+          yarn add ${{ steps.package.outputs.package }}
+          yarn add --dev typescript
+          cp ${{ steps.package.outputs.file }} ./main.ts
+      - name: Test project compiles
+        working-directory: ../temp
+        run: yarn tsc main.ts
+          --alwaysStrict
+          --noImplicitAny
+          --noImplicitReturns
+          --strictNullChecks
+          --module system
+          --moduleResolution node
+          --target es2018
+          --lib es2020
+          --types node
   linting:
     name: Linting
-    needs: tests
+    needs: build
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
