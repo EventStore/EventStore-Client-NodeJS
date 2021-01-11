@@ -1,0 +1,8 @@
+import { EventStoreDBClient, jsonEvent } from "@eventstore/db-client";
+
+const client = EventStoreDBClient.connectionString`esdb://eventstore:2113`;
+
+client.appendToStream(
+  "test",
+  jsonEvent({ data: { test: "data" }, type: "event-type" })
+);
