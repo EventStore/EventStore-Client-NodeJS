@@ -12,7 +12,7 @@
     "lint:eslint": "eslint \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/**/!(*.d).{ts,json}\"",
     "test": "jest",
-    "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" jest --verbose --run-in-band",
+    "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" DEBUG_DEPTH=6 jest --verbose --run-in-band",
     "test:ci": "cross-env EVENTSTORE_IMAGE=github:ci jest",
     "test:latest": "cross-env EVENTSTORE_IMAGE=eventstore/eventstore:latest jest",
     "test:flake": "jest --testSequencer=./src/__test__/utils/FlakeFinder.js",

@@ -414,13 +414,38 @@ export type FilterOn =
   | typeof constants.EVENT_TYPE
   | typeof constants.STREAM_NAME;
 
-export interface Filter {
+export interface FilterBase {
+  /**
+   * What to filter on
+   * */
   filterOn: FilterOn;
-  max?: number;
-  checkpointIntervalMul?: number;
-  regex?: string;
-  prefixes?: string[];
+  /**
+   * Sets how often the checkpointReached callback is called.
+   * Must be greater than 0
+   * */
+  checkpointInterval: number;
+  /**
+   * The maximum number of events that are filtered out before the page is returned
+   * Must be greater than 0, if supplied
+   * */
+  maxSearchWindow?: number;
 }
+
+export interface RegexFilter extends FilterBase {
+  /**
+   * A regex to filter by
+   * */
+  regex: string;
+}
+
+export interface PrefixesFilter extends FilterBase {
+  /**
+   * a list of prefixes to filter on
+   * */
+  prefixes: string[];
+}
+
+export type Filter = RegexFilter | PrefixesFilter;
 
 export interface Credentials {
   username: string;

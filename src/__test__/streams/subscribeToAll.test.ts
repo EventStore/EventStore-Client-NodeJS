@@ -8,7 +8,15 @@ import {
   TestEventData,
 } from "../utils";
 
-import { EventStoreDBClient, jsonEvent, ResolvedEvent, END } from "../..";
+import {
+  EventStoreDBClient,
+  jsonEvent,
+  ResolvedEvent,
+  END,
+  streamNameFilter,
+  START,
+  eventTypeFilter,
+} from "../..";
 
 const asyncPipeline = promisify(pipeline);
 
@@ -23,7 +31,9 @@ describe("subscribeToAll", () => {
     await node.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate },
+      {
+        rootCertificate: node.rootCertificate,
+      },
       { username: "admin", password: "changeit" }
     );
 
@@ -429,6 +439,110 @@ describe("subscribeToAll", () => {
       await asyncPipeline(subscription as Readable, writeStream);
 
       expect(writeStream.ids).toHaveLength(9);
+    });
+  });
+
+  describe("should accept a filter", () => {
+    describe("streamName", () => {
+      test.each`
+        name          | filter                                                             | streamName
+        ${"prefixes"} | ${streamNameFilter({ prefixes: ["prefix_filter_streamname"] })}    | ${(k: string) => `prefix_filter_streamname_${k}`}
+        ${"regex"}    | ${streamNameFilter({ regex: "^[0-9]*_regex_filter_streamname_" })} | ${(k: string) => `${Math.floor(Math.random() * 1000)}_regex_filter_streamname_${k}`}
+      `("$name", async ({ filter, streamName }) => {
+        const STREAM_NAME_A = streamName("a");
+        const STREAM_NAME_B = streamName("b");
+
+        const FINISH_TEST = "finish_streamName_filter_test";
+        const doSomething = jest.fn();
+
+        const finishEvent = jsonEvent({
+          type: FINISH_TEST,
+          data: {
+            message: "lets wrap this up",
+          },
+        });
+
+        await client.appendToStream(STREAM_NAME_A, jsonTestEvents(8));
+        await client.appendToStream(STREAM_NAME_B, jsonTestEvents(8));
+        await client.appendToStream(STREAM_NAME_A, [
+          ...jsonTestEvents(8),
+          finishEvent,
+        ]);
+
+        const subscription = client.subscribeToAll({
+          fromPosition: START,
+          filter,
+        });
+
+        for await (const event of subscription) {
+          doSomething(event);
+
+          if (event.event?.type === FINISH_TEST) {
+            break;
+          }
+        }
+
+        expect(doSomething).toBeCalledTimes(
+          8 + // a
+            8 + // b
+            8 + // a
+            1 // finish
+        );
+      });
+    });
+
+    describe("eventType", () => {
+      test.each`
+        name          | filter                                                                  | eventType
+        ${"prefixes"} | ${eventTypeFilter({ prefixes: ["prefix_filter_eventType"] })}           | ${(k: string) => `prefix_filter_eventType_${k}`}
+        ${"regex"}    | ${eventTypeFilter({ regex: "^[0-9]*_regex_filter_eventType_[A-z]*$" })} | ${(k: string) => `${Math.floor(Math.random() * 1000)}_regex_filter_eventType_${k}`}
+      `("$name", async ({ name, filter, eventType }) => {
+        const STREAM_NAME_A = `filter_eventType_${name}_a`;
+        const STREAM_NAME_B = `filter_eventType_${name}_b`;
+
+        const FINISH_TEST = eventType("finish");
+        const doSomething = jest.fn();
+
+        const finishEvent = jsonEvent({
+          type: FINISH_TEST,
+          data: {
+            message: "lets wrap this up",
+          },
+        });
+
+        await client.appendToStream(
+          STREAM_NAME_A,
+          jsonTestEvents(8, eventType("a"))
+        );
+        await client.appendToStream(
+          STREAM_NAME_B,
+          jsonTestEvents(8, eventType("b"))
+        );
+        await client.appendToStream(STREAM_NAME_A, [
+          ...jsonTestEvents(8, eventType("c")),
+          finishEvent,
+        ]);
+
+        const subscription = client.subscribeToAll({
+          fromPosition: START,
+          filter,
+        });
+
+        for await (const event of subscription) {
+          doSomething(event);
+
+          if (event.event?.type === FINISH_TEST) {
+            break;
+          }
+        }
+
+        expect(doSomething).toBeCalledTimes(
+          8 + // a
+            8 + // b
+            8 + // a
+            1 // finish
+        );
+      });
     });
   });
 });
