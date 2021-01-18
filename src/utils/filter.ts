@@ -67,3 +67,6 @@ const createFilterOn = (filterOn: FilterOn) => {
 
 export const streamNameFilter = createFilterOn(STREAM_NAME);
 export const eventTypeFilter = createFilterOn(EVENT_TYPE);
+export const excludeSystemEvents = (
+  options: Omit<RegexOptions, "regex"> = {}
+): RegexFilter => eventTypeFilter({ regex: "^[^$].*", ...options });

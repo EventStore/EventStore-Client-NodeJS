@@ -16,6 +16,7 @@ import {
   streamNameFilter,
   START,
   eventTypeFilter,
+  excludeSystemEvents,
 } from "../..";
 
 const asyncPipeline = promisify(pipeline);
@@ -543,6 +544,45 @@ describe("subscribeToAll", () => {
             1 // finish
         );
       });
+    });
+
+    test("excludeSystemEvents", async () => {
+      const STREAM_NAME = "exclude_system_events_stream";
+      const FINISH_TEST = "finish_exclude_system_events";
+      const doSomething = jest.fn();
+      const doSomethingWithNonSystemEvent = jest.fn();
+
+      const finishEvent = jsonEvent({
+        type: FINISH_TEST,
+        data: {
+          message: "lets wrap this up",
+        },
+      });
+
+      client.appendToStream(STREAM_NAME, [...jsonTestEvents(8), finishEvent]);
+
+      const subscription = client.subscribeToAll({
+        fromPosition: START,
+        filter: excludeSystemEvents(),
+      });
+
+      for await (const event of subscription) {
+        doSomething(event);
+
+        if (!event.event?.type.startsWith("$")) {
+          doSomethingWithNonSystemEvent(event);
+        }
+
+        if (event.event?.type === FINISH_TEST) {
+          break;
+        }
+      }
+
+      // We run from the start, so could be more
+      expect(doSomething.mock.calls.length).toBeGreaterThanOrEqual(9);
+      expect(doSomethingWithNonSystemEvent).toBeCalledTimes(
+        doSomething.mock.calls.length
+      );
     });
   });
 });
