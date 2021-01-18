@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import createDebug from "debug";
 
 createDebug.formatters.g = function (v) {
