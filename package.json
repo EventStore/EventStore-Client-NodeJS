@@ -54,7 +54,11 @@
       "ts-jest": {
         "tsconfig": "./src/__test__/tsconfig.json"
       }
-    }
+    },
+    "collectCoverageFrom": [
+      "./src/**/*",
+      "!./src/__test__/**/*"
+    ]
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.2.2",

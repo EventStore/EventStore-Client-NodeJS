@@ -58,7 +58,7 @@ jobs:
       - name: Install
         run: yarn
       - name: Run Tests
-        run: yarn test:${{ matrix.version }} --ci
+        run: yarn test:${{ matrix.version }} --ci --coverage
         env:
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       - name: Disconnect from tailscale

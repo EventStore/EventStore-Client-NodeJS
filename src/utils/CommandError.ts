@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { status as StatusCode, ServiceError } from "@grpc/grpc-js";
 import { CurrentRevision, EndPoint, AppendExpectedRevision } from "../types";
 
