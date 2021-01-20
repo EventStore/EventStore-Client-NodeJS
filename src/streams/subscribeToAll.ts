@@ -95,25 +95,15 @@ Client.prototype.subscribeToAll = function (
   if (filter) {
     const expr = new GRPCExpression();
 
-    if (filter.prefixes) {
+    if ("prefixes" in filter) {
       expr.setPrefixList(filter.prefixes);
     }
 
-    if (filter.regex) {
+    if ("regex" in filter) {
       expr.setRegex(filter.regex);
     }
 
     const filterOptions = new GRPCFilterOptions();
-
-    if (filter.max) {
-      filterOptions.setMax(filter.max);
-    }
-
-    if (filter.checkpointIntervalMul) {
-      filterOptions.setCheckpointintervalmultiplier(
-        filter.checkpointIntervalMul
-      );
-    }
 
     switch (filter.filterOn) {
       case STREAM_NAME: {
@@ -125,6 +115,22 @@ Client.prototype.subscribeToAll = function (
         break;
       }
     }
+
+    if (typeof filter.maxSearchWindow === "number") {
+      if (filter.maxSearchWindow <= 0) {
+        throw new Error("CheckpointInterval must be greater than 0.");
+      }
+      filterOptions.setMax(filter.maxSearchWindow);
+    } else {
+      filterOptions.setCount(new Empty());
+    }
+
+    if (filter.checkpointInterval <= 0) {
+      throw new Error("CheckpointInterval must be greater than 0.");
+    }
+
+    filterOptions.setCheckpointintervalmultiplier(filter.checkpointInterval);
+
     options.setFilter(filterOptions);
   } else {
     options.setNoFilter(new Empty());
