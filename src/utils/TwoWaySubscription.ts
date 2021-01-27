@@ -118,6 +118,15 @@ export class TwoWaySubscription
   }
 
   public async unsubscribe(): Promise<void> {
-    return (await this.#grpcStream).cancel();
+    const stream = await this.#grpcStream;
+
+    return new Promise((resolve) => {
+      // https://github.com/grpc/grpc-node/issues/1464
+      // https://github.com/grpc/grpc-node/issues/1652
+      setImmediate(() => {
+        stream.cancel();
+        resolve();
+      });
+    });
   }
 }
