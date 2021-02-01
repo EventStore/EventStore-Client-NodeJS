@@ -33,12 +33,12 @@ declare module "../Client" {
     /**
      * Sends events to a given stream.
      * @param streamName A stream name.
-     * @param count Amount to read
+     * @param maxCount Amount to read
      * @param options Reading options
      */
     readStream(
       streamName: string,
-      count: number | BigInt,
+      maxCount?: number | BigInt,
       options?: ReadStreamOptions
     ): Promise<ResolvedEvent[]>;
   }
@@ -47,7 +47,7 @@ declare module "../Client" {
 Client.prototype.readStream = async function (
   this: Client,
   streamName: string,
-  count: number | BigInt,
+  maxCount?: number | BigInt,
   {
     fromRevision = START,
     resolveLinkTos = false,
@@ -83,7 +83,7 @@ Client.prototype.readStream = async function (
 
   options.setStream(streamOptions);
   options.setResolveLinks(resolveLinkTos);
-  options.setCount(count.toString(10));
+  options.setCount((maxCount ?? Number.MAX_SAFE_INTEGER).toString(10));
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
 
@@ -102,7 +102,7 @@ Client.prototype.readStream = async function (
 
   debug.command("readStream: %O", {
     streamName,
-    count,
+    maxCount: maxCount,
     options: {
       fromRevision,
       resolveLinkTos,
