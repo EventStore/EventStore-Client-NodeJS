@@ -38,7 +38,7 @@ describe("deleteStream", () => {
         expect(result).toBeDefined();
 
         await expect(
-          client.readStream(ANY_REVISION_STREAM, 10)
+          client.readStream(ANY_REVISION_STREAM, { maxCount: 10 })
         ).rejects.toThrowError(StreamNotFoundError);
       });
     });
@@ -68,7 +68,8 @@ describe("deleteStream", () => {
         });
 
         it("succeeds", async () => {
-          const events = await client.readStream(STREAM, 1, {
+          const events = await client.readStream(STREAM, {
+            maxCount: 1,
             direction: BACKWARDS,
             fromRevision: "end",
           });
@@ -81,9 +82,9 @@ describe("deleteStream", () => {
 
           expect(result).toBeDefined();
 
-          await expect(client.readStream(STREAM, 1)).rejects.toThrowError(
-            StreamNotFoundError
-          );
+          await expect(
+            client.readStream(STREAM, { maxCount: 1 })
+          ).rejects.toThrowError(StreamNotFoundError);
         });
       });
 

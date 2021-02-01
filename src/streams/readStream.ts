@@ -10,6 +10,11 @@ import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**
+   * The number of events to read.
+   * @defaultValue Number.MAX_SAFE_INTEGER
+   */
+  maxCount?: number | BigInt;
+  /**
    * Starts the read at the given event revision.
    * @defaultValue START
    */
@@ -33,12 +38,10 @@ declare module "../Client" {
     /**
      * Sends events to a given stream.
      * @param streamName A stream name.
-     * @param maxCount Amount to read
      * @param options Reading options
      */
     readStream(
       streamName: string,
-      maxCount?: number | BigInt,
       options?: ReadStreamOptions
     ): Promise<ResolvedEvent[]>;
   }
@@ -47,8 +50,8 @@ declare module "../Client" {
 Client.prototype.readStream = async function (
   this: Client,
   streamName: string,
-  maxCount?: number | BigInt,
   {
+    maxCount = Number.MAX_SAFE_INTEGER,
     fromRevision = START,
     resolveLinkTos = false,
     direction = FORWARDS,
@@ -83,7 +86,7 @@ Client.prototype.readStream = async function (
 
   options.setStream(streamOptions);
   options.setResolveLinks(resolveLinkTos);
-  options.setCount((maxCount ?? Number.MAX_SAFE_INTEGER).toString(10));
+  options.setCount(maxCount.toString(10));
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
 
@@ -102,7 +105,7 @@ Client.prototype.readStream = async function (
 
   debug.command("readStream: %O", {
     streamName,
-    maxCount: maxCount,
+    maxCount,
     options: {
       fromRevision,
       resolveLinkTos,

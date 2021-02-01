@@ -63,7 +63,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -85,7 +87,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -116,7 +120,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -139,7 +145,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -170,7 +178,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -193,7 +203,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -220,7 +232,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);
@@ -239,7 +253,9 @@ describe("appendToStream", () => {
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-          const rxEvents = await client.readStream(STREAM_NAME, 1);
+          const rxEvents = await client.readStream(STREAM_NAME, {
+            maxCount: 1,
+          });
 
           expect(rxEvents).toBeDefined();
           expect(rxEvents.length).toEqual(1);

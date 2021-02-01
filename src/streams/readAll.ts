@@ -15,6 +15,11 @@ import { Client } from "../Client";
 
 export interface ReadAllOptions extends BaseOptions {
   /**
+   * The number of events to read.
+   * @defaultValue Number.MAX_SAFE_INTEGER
+   */
+  maxCount?: number | BigInt;
+  /**
    * Starts the read at the given position.
    * @defaultValue START
    */
@@ -31,20 +36,16 @@ declare module "../Client" {
     /**
      * Reads events from the $all. You can read forwards or backwards.
      * You might need to be authenticated to execute the command successfully.
-     * @param maxCount The number of events to read
      * @param options Reading options
      */
-    readAll(
-      maxCount?: number | BigInt,
-      options?: ReadAllOptions
-    ): Promise<AllStreamResolvedEvent[]>;
+    readAll(options?: ReadAllOptions): Promise<AllStreamResolvedEvent[]>;
   }
 }
 
 Client.prototype.readAll = async function (
   this: Client,
-  maxCount?: number | BigInt,
   {
+    maxCount = Number.MAX_SAFE_INTEGER,
     fromPosition = START,
     direction = FORWARDS,
     ...baseOptions
@@ -77,7 +78,7 @@ Client.prototype.readAll = async function (
       break;
     }
   }
-  options.setCount((maxCount ?? Number.MAX_SAFE_INTEGER).toString(10));
+  options.setCount(maxCount.toString(10));
   options.setAll(allOptions);
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
@@ -96,7 +97,7 @@ Client.prototype.readAll = async function (
   req.setOptions(options);
 
   debug.command("readAll: %O", {
-    maxCount: maxCount,
+    maxCount,
     options: {
       fromPosition,
       direction,
