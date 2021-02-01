@@ -29,7 +29,9 @@ describe("connectionString", () => {
           STREAM_NAME,
           testEvent()
         );
-        const readResult = await client.readStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, {
+          maxCount: 10,
+        });
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -46,7 +48,9 @@ describe("connectionString", () => {
           STREAM_NAME,
           testEvent()
         );
-        const readResult = await client.readStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, {
+          maxCount: 10,
+        });
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -54,7 +58,7 @@ describe("connectionString", () => {
 
       test("default credentials", async () => {
         const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=false`;
-        await expect(client.readAll(10)).resolves.toBeDefined();
+        await expect(client.readAll({ maxCount: 10 })).resolves.toBeDefined();
       });
     });
 
@@ -72,7 +76,9 @@ describe("connectionString", () => {
           testEvent()
         );
 
-        const readResult = await client.readStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, {
+          maxCount: 10,
+        });
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -91,7 +97,9 @@ describe("connectionString", () => {
           STREAM_NAME,
           testEvent()
         );
-        const readResult = await client.readStream(STREAM_NAME, 10);
+        const readResult = await client.readStream(STREAM_NAME, {
+          maxCount: 10,
+        });
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -104,7 +112,7 @@ describe("connectionString", () => {
 
         const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${gossipEndpoints}?tls=false&nodePreference=leader`;
 
-        await expect(client.readAll(10)).resolves.toBeDefined();
+        await expect(client.readAll({ maxCount: 10 })).resolves.toBeDefined();
       });
     });
   });

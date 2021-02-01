@@ -22,7 +22,7 @@ describe("cluster", () => {
     );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
-    const readResult = await client.readStream(STREAM_NAME, 10);
+    const readResult = await client.readStream(STREAM_NAME, { maxCount: 10 });
 
     expect(appendResult).toBeDefined();
     expect(readResult).toBeDefined();

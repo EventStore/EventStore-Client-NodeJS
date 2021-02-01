@@ -34,7 +34,8 @@ describe("readStream", () => {
   describe("should successfully read from stream", () => {
     describe("Event types", () => {
       test("json event", async () => {
-        const [resolvedEvent] = await client.readStream(STREAM_NAME, 1, {
+        const [resolvedEvent] = await client.readStream(STREAM_NAME, {
+          maxCount: 1,
           fromRevision: BigInt(1),
         });
 
@@ -49,7 +50,8 @@ describe("readStream", () => {
       });
 
       test("binary event", async () => {
-        const [resolvedEvent] = await client.readStream(STREAM_NAME, 1, {
+        const [resolvedEvent] = await client.readStream(STREAM_NAME, {
+          maxCount: 1,
           fromRevision: BigInt(5),
         });
 
@@ -64,53 +66,39 @@ describe("readStream", () => {
 
     describe("options", () => {
       test("from start", async () => {
-        const events = await client.readStream(
-          STREAM_NAME
-        );
+        const events = await client.readStream(STREAM_NAME);
 
         expect(events.length).toBe(8);
       });
 
       test("from revision", async () => {
-        const events = await client.readStream(
-          STREAM_NAME,
-          Number.MAX_SAFE_INTEGER,
-          {
-            fromRevision: BigInt(1),
-          }
-        );
+        const events = await client.readStream(STREAM_NAME, {
+          fromRevision: BigInt(1),
+        });
 
         expect(events.length).toBe(7);
       });
 
       test("backwards from end", async () => {
-        const events = await client.readStream(
-          STREAM_NAME,
-          Number.MAX_SAFE_INTEGER,
-          {
-            direction: BACKWARDS,
-            fromRevision: END,
-          }
-        );
+        const events = await client.readStream(STREAM_NAME, {
+          direction: BACKWARDS,
+          fromRevision: END,
+        });
 
         expect(events.length).toBe(8);
       });
 
       test("backwards from revision", async () => {
-        const events = await client.readStream(
-          STREAM_NAME,
-          Number.MAX_SAFE_INTEGER,
-          {
-            direction: BACKWARDS,
-            fromRevision: BigInt(1),
-          }
-        );
+        const events = await client.readStream(STREAM_NAME, {
+          direction: BACKWARDS,
+          fromRevision: BigInt(1),
+        });
 
         expect(events.length).toBe(2);
       });
 
       test("count", async () => {
-        const events = await client.readStream(STREAM_NAME, 2);
+        const events = await client.readStream(STREAM_NAME, { maxCount: 2 });
 
         expect(events.length).toBe(2);
       });

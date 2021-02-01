@@ -1,6 +1,6 @@
 import { createTestNode, jsonTestEvents } from "../utils";
 
-import { EventStoreDBClient, BACKWARDS, END, START } from "../..";
+import { EventStoreDBClient, BACKWARDS, END } from "../..";
 
 describe("readAll", () => {
   const node = createTestNode();
@@ -39,11 +39,12 @@ describe("readAll", () => {
     });
 
     test("from position", async () => {
-      const [, , eventToExtract] = await client.readAll(3);
+      const [, , eventToExtract] = await client.readAll({ maxCount: 3 });
 
       const { position } = eventToExtract.event!;
 
-      const [extracted] = await client.readAll(1, {
+      const [extracted] = await client.readAll({
+        maxCount: 1,
         fromPosition: position,
       });
 
@@ -51,7 +52,7 @@ describe("readAll", () => {
     });
 
     test("backwards from end", async () => {
-      const events = await client.readAll(Number.MAX_SAFE_INTEGER, {
+      const events = await client.readAll({
         direction: BACKWARDS,
         fromPosition: END,
       });
@@ -67,7 +68,7 @@ describe("readAll", () => {
     });
 
     test("count", async () => {
-      const events = await client.readAll(2);
+      const events = await client.readAll({ maxCount: 2 });
       expect(events.length).toBe(2);
     });
   });
