@@ -26,9 +26,7 @@ describe("readAll", () => {
 
   describe("should successfully read from $all", () => {
     test("from start", async () => {
-      const events = await client.readAll(Number.MAX_SAFE_INTEGER, {
-        fromPosition: START,
-      });
+      const events = await client.readAll();
 
       expect(events).toBeDefined();
       expect(events.length).toBeGreaterThan(8);

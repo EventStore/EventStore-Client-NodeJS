@@ -31,11 +31,11 @@ declare module "../Client" {
     /**
      * Reads events from the $all. You can read forwards or backwards.
      * You might need to be authenticated to execute the command successfully.
-     * @param count The number of events to read
+     * @param maxCount The number of events to read
      * @param options Reading options
      */
     readAll(
-      count: number | BigInt,
+      maxCount?: number | BigInt,
       options?: ReadAllOptions
     ): Promise<AllStreamResolvedEvent[]>;
   }
@@ -43,7 +43,7 @@ declare module "../Client" {
 
 Client.prototype.readAll = async function (
   this: Client,
-  count: number | BigInt,
+  maxCount?: number | BigInt,
   {
     fromPosition = START,
     direction = FORWARDS,
@@ -77,7 +77,7 @@ Client.prototype.readAll = async function (
       break;
     }
   }
-  options.setCount(count.toString(10));
+  options.setCount((maxCount ?? Number.MAX_SAFE_INTEGER).toString(10));
   options.setAll(allOptions);
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
@@ -96,7 +96,7 @@ Client.prototype.readAll = async function (
   req.setOptions(options);
 
   debug.command("readAll: %O", {
-    count,
+    maxCount: maxCount,
     options: {
       fromPosition,
       direction,

@@ -65,8 +65,7 @@ describe("readStream", () => {
     describe("options", () => {
       test("from start", async () => {
         const events = await client.readStream(
-          STREAM_NAME,
-          Number.MAX_SAFE_INTEGER
+          STREAM_NAME
         );
 
         expect(events.length).toBe(8);
