@@ -72,6 +72,7 @@ export class Client {
   #throwOnAppendFailure: boolean;
   #connectionSettings: ConnectionTypeOptions;
   #channelCredentials: ChannelCredentials;
+  #insecure: boolean;
   #defaultCredentials?: Credentials;
 
   #channel?: Promise<Channel>;
@@ -173,9 +174,10 @@ export class Client {
   ) {
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#connectionSettings = connectionSettings;
+    this.#insecure = !!channelCredentials.insecure;
     this.#defaultCredentials = defaultUserCredentials;
 
-    if (channelCredentials.insecure) {
+    if (this.#insecure) {
       debug.connection("Using insecure channel");
       this.#channelCredentials = grpcCredentials.createInsecure();
     } else {
@@ -272,8 +274,16 @@ export class Client {
     typeof grpcCredentials.createFromMetadataGenerator
   >[0] => (_, cb) => {
     const metadata = new Metadata();
-    const auth = Buffer.from(`${username}:${password}`).toString("base64");
-    metadata.add("authorization", `Basic ${auth}`);
+
+    if (this.#insecure) {
+      debug.connection(
+        "Credentials are unsupported in insecure mode, and will be ignored."
+      );
+    } else {
+      const auth = Buffer.from(`${username}:${password}`).toString("base64");
+      metadata.add("authorization", `Basic ${auth}`);
+    }
+
     return cb(null, metadata);
   };
 
