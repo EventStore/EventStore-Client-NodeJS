@@ -1,7 +1,5 @@
 import { ReadableOptions } from "stream";
 
-import { CallOptions } from "@grpc/grpc-js";
-
 import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
@@ -138,10 +136,6 @@ Client.prototype.subscribeToAll = function (
 
   req.setOptions(options);
 
-  const callOptions: CallOptions = {
-    deadline: Infinity,
-  };
-
   debug.command("subscribeToAll: %O", {
     options: {
       fromPosition,
@@ -155,7 +149,12 @@ Client.prototype.subscribeToAll = function (
   return new OneWaySubscription(
     async () => {
       const client = await this.getGRPCClient(StreamsClient, "subscribeToAll");
-      return client.read(req, this.metadata(baseOptions), callOptions);
+      return client.read(
+        req,
+        ...this.callArguments(baseOptions, {
+          deadline: Infinity,
+        })
+      );
     },
     convertAllStreamGrpcEvent,
     readableOptions

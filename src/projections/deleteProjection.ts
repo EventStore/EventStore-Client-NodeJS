@@ -76,7 +76,7 @@ Client.prototype.deleteProjection = async function (
   );
 
   return new Promise<void>((resolve, reject) => {
-    client.delete(req, this.metadata(baseOptions), (error) => {
+    client.delete(req, ...this.callArguments(baseOptions), (error) => {
       if (error) return reject(convertToCommandError(error));
       return resolve();
     });

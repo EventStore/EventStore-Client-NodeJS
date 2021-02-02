@@ -62,7 +62,7 @@ Client.prototype.createOneTimeProjection = async function (
   return new Promise<void>((resolve, reject) => {
     client.create(
       req,
-      this.metadata(typeof baseOptions === "string" ? {} : baseOptions),
+      ...this.callArguments(typeof baseOptions === "string" ? {} : baseOptions),
       (error) => {
         if (error) return reject(convertToCommandError(error));
         return resolve();

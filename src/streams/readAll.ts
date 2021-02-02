@@ -106,6 +106,6 @@ Client.prototype.readAll = async function (
   debug.command_grpc("readAll: %g", req);
 
   const client = await this.getGRPCClient(StreamsClient, "readAll");
-  const stream = client.read(req, this.metadata(baseOptions));
+  const stream = client.read(req, ...this.callArguments(baseOptions));
   return handleBatchRead(stream, convertAllStreamGrpcEvent);
 };

@@ -67,7 +67,7 @@ Client.prototype.deleteStream = async function (
   const client = await this.getGRPCClient(StreamsClient, "deleteStream");
 
   return new Promise<DeleteResult>((resolve, reject) => {
-    client.delete(req, this.metadata(baseOptions), (error, resp) => {
+    client.delete(req, ...this.callArguments(baseOptions), (error, resp) => {
       if (error) {
         return reject(convertToCommandError(error));
       }

@@ -1,5 +1,4 @@
 import { ReadableOptions } from "stream";
-import { CallOptions } from "@grpc/grpc-js";
 
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
@@ -88,10 +87,6 @@ Client.prototype.subscribeToStream = function (
 
   req.setOptions(options);
 
-  const callOptions: CallOptions = {
-    deadline: Infinity,
-  };
-
   debug.command("subscribeToStream: %O", {
     streamName,
     options: {
@@ -108,7 +103,12 @@ Client.prototype.subscribeToStream = function (
         StreamsClient,
         "subscribeToStream"
       );
-      return client.read(req, this.metadata(baseOptions), callOptions);
+      return client.read(
+        req,
+        ...this.callArguments(baseOptions, {
+          deadline: Infinity,
+        })
+      );
     },
     convertGrpcEvent,
     readableOptions

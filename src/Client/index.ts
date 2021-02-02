@@ -1,4 +1,6 @@
 import {
+  CallCredentials as grpcCallCredentials,
+  CallOptions,
   Channel,
   ChannelCredentials,
   Client as GRPCClient,
@@ -263,24 +265,36 @@ export class Client {
     return `${address}:${port}`;
   };
 
-  protected metadata = ({
-    credentials = this.#defaultCredentials,
-    requiresLeader,
-  }: BaseOptions): Metadata => {
+  private createCredentialsMetadataGenerator = ({
+    username,
+    password,
+  }: Credentials): Parameters<
+    typeof grpcCredentials.createFromMetadataGenerator
+  >[0] => (_, cb) => {
     const metadata = new Metadata();
+    const auth = Buffer.from(`${username}:${password}`).toString("base64");
+    metadata.add("authorization", `Basic ${auth}`);
+    return cb(null, metadata);
+  };
 
-    if (credentials) {
-      const auth = Buffer.from(
-        `${credentials.username}:${credentials.password}`
-      ).toString("base64");
-      metadata.add("authorization", `Basic ${auth}`);
-    }
+  protected callArguments = (
+    { credentials = this.#defaultCredentials, requiresLeader }: BaseOptions,
+    callOptions?: CallOptions
+  ): [Metadata, CallOptions] => {
+    const metadata = new Metadata();
+    const options = callOptions ? { ...callOptions } : {};
 
     if (requiresLeader) {
       metadata.add("requires-leader", "true");
     }
 
-    return metadata;
+    if (credentials) {
+      options.credentials = grpcCallCredentials.createFromMetadataGenerator(
+        this.createCredentialsMetadataGenerator(credentials)
+      );
+    }
+
+    return [metadata, options];
   };
 
   protected get throwOnAppendFailure(): boolean {

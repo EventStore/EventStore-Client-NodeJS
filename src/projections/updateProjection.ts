@@ -63,7 +63,7 @@ Client.prototype.updateProjection = async function (
   );
 
   return new Promise<void>((resolve, reject) => {
-    client.update(req, this.metadata(baseOptions), (error) => {
+    client.update(req, ...this.callArguments(baseOptions), (error) => {
       if (error) return reject(convertToCommandError(error));
       return resolve();
     });
