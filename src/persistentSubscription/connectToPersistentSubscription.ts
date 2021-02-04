@@ -72,9 +72,11 @@ Client.prototype.connectToPersistentSubscription = function (
       PersistentSubscriptionsClient,
       "connectToPersistentSubscription"
     );
-    const stream = client.read(this.metadata(baseOptions), {
-      deadline: Infinity,
-    });
+    const stream = client.read(
+      ...this.callArguments(baseOptions, {
+        deadline: Infinity,
+      })
+    );
     stream.write(req);
     return stream;
   }, duplexOptions);

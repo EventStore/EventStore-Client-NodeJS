@@ -53,9 +53,13 @@ Client.prototype.getProjectionResult = async function <T = unknown>(
   );
 
   return new Promise<T>((resolve, reject) => {
-    client.result(req, this.metadata(baseOptions), (error, response) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve(response.getResult()?.toJavaScript() as T);
-    });
+    client.result(
+      req,
+      ...this.callArguments(baseOptions),
+      (error, response) => {
+        if (error) return reject(convertToCommandError(error));
+        return resolve(response.getResult()?.toJavaScript() as T);
+      }
+    );
   });
 };

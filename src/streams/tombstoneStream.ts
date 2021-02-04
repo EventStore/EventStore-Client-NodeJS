@@ -71,7 +71,7 @@ Client.prototype.tombstoneStream = async function (
   const client = await this.getGRPCClient(StreamsClient, "tombstoneStream");
 
   return new Promise<DeleteResult>((resolve, reject) => {
-    client.tombstone(req, this.metadata(baseOptions), (error, resp) => {
+    client.tombstone(req, ...this.callArguments(baseOptions), (error, resp) => {
       if (error) {
         return reject(convertToCommandError(error));
       }

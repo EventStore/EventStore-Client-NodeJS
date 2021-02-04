@@ -66,7 +66,7 @@ Client.prototype.createContinuousProjection = async function (
   );
 
   return new Promise<void>((resolve, reject) => {
-    client.create(req, this.metadata(baseOptions), (error) => {
+    client.create(req, ...this.callArguments(baseOptions), (error) => {
       if (error) return reject(convertToCommandError(error));
       return resolve();
     });

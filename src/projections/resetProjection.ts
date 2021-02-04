@@ -50,7 +50,7 @@ Client.prototype.resetProjection = async function (
   const client = await this.getGRPCClient(ProjectionsClient, "resetProjection");
 
   return new Promise<void>((resolve, reject) => {
-    client.reset(req, this.metadata(baseOptions), (error) => {
+    client.reset(req, ...this.callArguments(baseOptions), (error) => {
       if (error) return reject(convertToCommandError(error));
       return resolve();
     });

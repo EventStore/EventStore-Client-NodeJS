@@ -34,9 +34,13 @@ Client.prototype.restartSubsystem = async function (
   );
 
   return new Promise<void>((resolve, reject) => {
-    client.restartSubsystem(req, this.metadata(baseOptions), (error) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve();
-    });
+    client.restartSubsystem(
+      req,
+      ...this.callArguments(baseOptions),
+      (error) => {
+        if (error) return reject(convertToCommandError(error));
+        return resolve();
+      }
+    );
   });
 };

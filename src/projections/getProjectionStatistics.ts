@@ -47,7 +47,7 @@ Client.prototype.getProjectionStatistics = async function (
     "getProjectionStatistics"
   );
 
-  const stream = client.statistics(req, this.metadata(baseOptions));
+  const stream = client.statistics(req, ...this.callArguments(baseOptions));
 
   return new Promise((resolve, reject) => {
     let projectionDetail: ProjectionDetails;

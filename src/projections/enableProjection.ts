@@ -45,7 +45,7 @@ Client.prototype.enableProjection = async function (
   );
 
   return new Promise<void>((resolve, reject) => {
-    client.enable(req, this.metadata(baseOptions), (error) => {
+    client.enable(req, ...this.callArguments(baseOptions), (error) => {
       if (error) return reject(convertToCommandError(error));
       return resolve();
     });

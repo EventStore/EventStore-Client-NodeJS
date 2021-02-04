@@ -43,7 +43,7 @@ Client.prototype.getProjectionState = async function <T = unknown>(
   );
 
   return new Promise<T>((resolve, reject) => {
-    client.state(req, this.metadata(baseOptions), (error, response) => {
+    client.state(req, ...this.callArguments(baseOptions), (error, response) => {
       if (error) return reject(convertToCommandError(error));
       return resolve(response.getState()?.toJavaScript() as T);
     });

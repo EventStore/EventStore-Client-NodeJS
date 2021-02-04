@@ -57,7 +57,7 @@ const fetchAndTransformProjectionList = async function (
 
   const client = await this.getGRPCClient(ProjectionsClient, debugName);
 
-  const stream = client.statistics(req, this.metadata(baseOptions));
+  const stream = client.statistics(req, ...this.callArguments(baseOptions));
 
   return new Promise((resolve, reject) => {
     const projectionDetails: ProjectionDetails[] = [];
