@@ -8,6 +8,8 @@ exports[`connection string parser Should throw on invalid strings esdb://host1;h
 
 exports[`connection string parser Should throw on invalid strings esdb://localhost/&tlsVerifyCert=false 1`] = `"Unexpected \\"&\\" at position 17, expected ?key=value."`;
 
+exports[`connection string parser Should throw on invalid strings esdb://localhost?keepAlive=please 1`] = `"Unexpected \\"please\\" at position 27, expected Integer."`;
+
 exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=sometimes 1`] = `"Unexpected \\"sometimes\\" at position 38, expected true or false."`;
 
 exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=false&nodePreference=any 1`] = `"Unexpected \\"any\\" at position 52, expected follower or leader or random."`;

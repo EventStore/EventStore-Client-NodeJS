@@ -21,6 +21,15 @@ import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 
 interface ClientOptions {
+  /**
+   * The optional amount of time to wait after which a keepalive ping is sent on the transport. (in ms)
+   * @default 10_000
+   */
+  keepAlive?: number | false;
+  /**
+   * Whether or not to immediately throw an exception when an append fails.
+   * @default true
+   */
   throwOnAppendFailure?: boolean;
 }
 
@@ -73,6 +82,7 @@ export class Client {
   #connectionSettings: ConnectionTypeOptions;
   #channelCredentials: ChannelCredentials;
   #insecure: boolean;
+  #keepAlive: number | false;
   #defaultCredentials?: Credentials;
 
   #channel?: Promise<Channel>;
@@ -120,6 +130,8 @@ export class Client {
           discoveryInterval: options.discoveryInterval,
           gossipTimeout: options.gossipTimeout,
           maxDiscoverAttempts: options.maxDiscoverAttempts,
+          throwOnAppendFailure: options.throwOnAppendFailure,
+          keepAlive: options.keepAlive,
         },
         channelCredentials,
         options.defaultCredentials
@@ -134,6 +146,8 @@ export class Client {
           discoveryInterval: options.discoveryInterval,
           gossipTimeout: options.gossipTimeout,
           maxDiscoverAttempts: options.maxDiscoverAttempts,
+          throwOnAppendFailure: options.throwOnAppendFailure,
+          keepAlive: options.keepAlive,
         },
         channelCredentials,
         options.defaultCredentials
@@ -143,6 +157,8 @@ export class Client {
     return new Client(
       {
         endpoint: options.hosts[0],
+        throwOnAppendFailure: options.throwOnAppendFailure,
+        keepAlive: options.keepAlive,
       },
       channelCredentials,
       options.defaultCredentials
@@ -167,12 +183,14 @@ export class Client {
   constructor(
     {
       throwOnAppendFailure = true,
+      keepAlive = 10_000,
       ...connectionSettings
     }: ConnectionTypeOptions,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
     defaultUserCredentials?: Credentials
   ) {
     this.#throwOnAppendFailure = throwOnAppendFailure;
+    this.#keepAlive = keepAlive;
     this.#connectionSettings = connectionSettings;
     this.#insecure = !!channelCredentials.insecure;
     this.#defaultCredentials = defaultUserCredentials;
@@ -248,7 +266,15 @@ export class Client {
       uri
     );
 
-    return new Channel(uri, this.#channelCredentials, {});
+    return new Channel(
+      uri,
+      this.#channelCredentials,
+      this.#keepAlive && this.#keepAlive > 0
+        ? {
+            "grpc.keepalive_time_ms": this.#keepAlive,
+          }
+        : {}
+    );
   };
 
   private resolveUri = async (): Promise<string> => {

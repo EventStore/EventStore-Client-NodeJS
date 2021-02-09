@@ -415,7 +415,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=false&throwOnAppendFailure=false",
+    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=false&throwOnAppendFailure=false&keepAlive=10000",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -425,6 +425,7 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
+      keepAlive: 10000,
       hosts: [
         {
           address: "host",
@@ -434,7 +435,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false",
+    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false&KEEPALIVE=200",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -444,6 +445,7 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
+      keepAlive: 200,
       hosts: [
         {
           address: "host",
@@ -467,6 +469,7 @@ export const invalid: string[] = [
   "esdb://localhost?tlsVerifyCert=false&nodePreference=any",
   "esdb://localhost?tlsVerifyCert=if you feel like it",
   "esdb://localhost?throwOnAppendFailure=sometimes",
+  "esdb://localhost?keepAlive=please",
 ];
 
 export const warning: Array<
