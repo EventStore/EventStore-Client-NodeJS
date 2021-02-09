@@ -4,11 +4,14 @@ import {
   ClientOptions as GRPCClientOptions,
   ChannelCredentials,
 } from "@grpc/grpc-js";
+import { ResolvedEvent, AllStreamResolvedEvent, EventType } from "./events";
 
-import { MemberInfo as GrpcMemberInfo } from "../generated/gossip_pb";
+import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
-import * as constants from "./constants";
+import * as constants from "../constants";
+
 export { VNodeState };
+export * from "./events";
 
 export interface BaseOptions {
   /**
@@ -96,138 +99,6 @@ export interface AppendResult {
    * The logical record position in the EventStoreDB transaction file
    */
   position?: Position;
-}
-
-/**
- * Represents a previously written event.
- */
-interface RecordedEventBase<Type extends string, Metadata> {
-  /**
-   * The event stream that events belongs to.
-   */
-  streamId: string;
-
-  /**
-   * Unique identifier representing this event. UUID format.
-   */
-  id: string;
-
-  /**
-   * Number of this event in the stream.
-   */
-  revision: bigint;
-
-  /**
-   * Type of this event.
-   */
-  type: Type;
-
-  /**
-   * Representing when this event was created in the database system.
-   */
-  created: number;
-
-  /**
-   * Representing the metadata associated with this event.
-   */
-  metadata: Metadata;
-}
-
-export interface JSONRecordedEvent<
-  Type extends string = string,
-  Data = unknown,
-  Metadata = unknown
-> extends RecordedEventBase<Type, Metadata> {
-  /**
-   * Indicates whether the content is internally marked as JSON.
-   */
-  isJson: true;
-
-  /**
-   * Data of this event.
-   */
-  data: Data;
-}
-
-export interface BinaryRecordedEvent<
-  Type extends string = string,
-  Metadata = unknown
-> extends RecordedEventBase<Type, Metadata> {
-  /**
-   * Indicates whether the content is internally marked as JSON.
-   */
-  isJson: false;
-
-  /**
-   * Data of this event.
-   */
-  data: Uint8Array;
-}
-
-export interface AllStreamJSONRecordedEvent<
-  Type extends string = string,
-  Data = unknown,
-  Metadata = unknown
-> extends JSONRecordedEvent<Type, Data, Metadata> {
-  /**
-   * Position of this event in the transaction log.
-   */
-  position: Position;
-}
-
-export interface AllStreamBinaryRecordedEvent<
-  Type extends string = string,
-  Metadata = unknown
-> extends BinaryRecordedEvent<Type, Metadata> {
-  /**
-   * Position of this event in the transaction log.
-   */
-  position: Position;
-}
-
-export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
-export type AllStreamRecordedEvent =
-  | AllStreamJSONRecordedEvent
-  | AllStreamBinaryRecordedEvent;
-
-/**
- * A structure representing a single event or an resolved link event.
- */
-export interface ResolvedEvent {
-  /**
-   * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
-   */
-  event?: RecordedEvent;
-
-  /**
-   * The link event if this ResolvedEvent is a link event.
-   */
-  link?: RecordedEvent;
-
-  /**
-   * Commit position of the record.
-   */
-  commitPosition?: bigint;
-}
-
-/**
- * A structure representing a single event or an resolved link event.
- */
-export interface AllStreamResolvedEvent {
-  /**
-   * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
-   */
-  event?: AllStreamRecordedEvent;
-
-  /**
-   * The link event if this ResolvedEvent is a link event.
-   */
-  link?: AllStreamRecordedEvent;
-
-  /**
-   * Commit position of the record.
-   */
-  commitPosition?: bigint;
 }
 
 export type ProjectionMode =
@@ -518,8 +389,8 @@ export interface ReadableSubscription<E> extends Readable {
   [Symbol.asyncIterator](): AsyncIterableIterator<E>;
 }
 
-export interface PersistentSubscription
-  extends ReadableSubscription<ResolvedEvent> {
+export interface PersistentSubscription<E extends EventType = EventType>
+  extends ReadableSubscription<ResolvedEvent<E>> {
   ack(...ids: string[]): Promise<void>;
   nack(
     action: PersistentAction,
@@ -528,5 +399,7 @@ export interface PersistentSubscription
   ): Promise<void>;
 }
 
-export type StreamSubscription = ReadableSubscription<ResolvedEvent>;
+export type StreamSubscription<
+  E extends EventType = EventType
+> = ReadableSubscription<ResolvedEvent<E>>;
 export type AllStreamSubscription = ReadableSubscription<AllStreamResolvedEvent>;

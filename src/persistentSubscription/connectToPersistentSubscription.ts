@@ -5,7 +5,7 @@ import { ReadReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 
-import { PersistentSubscription, BaseOptions } from "../types";
+import { PersistentSubscription, BaseOptions, EventType } from "../types";
 import { TwoWaySubscription, debug } from "../utils";
 import { Client } from "../Client";
 
@@ -25,16 +25,18 @@ declare module "../Client" {
      * @param group A group name
      * @param options Connection options
      */
-    connectToPersistentSubscription(
+    connectToPersistentSubscription<E extends EventType = EventType>(
       streamName: string,
       groupName: string,
       options?: ConnectToPersistentSubscriptionOptions,
       duplexOptions?: DuplexOptions
-    ): PersistentSubscription;
+    ): PersistentSubscription<E>;
   }
 }
 
-Client.prototype.connectToPersistentSubscription = function (
+Client.prototype.connectToPersistentSubscription = function <
+  E extends EventType = EventType
+>(
   this: Client,
   streamName: string,
   groupName: string,
@@ -43,7 +45,7 @@ Client.prototype.connectToPersistentSubscription = function (
     ...baseOptions
   }: ConnectToPersistentSubscriptionOptions = {},
   duplexOptions: DuplexOptions = {}
-): PersistentSubscription {
+): PersistentSubscription<E> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();

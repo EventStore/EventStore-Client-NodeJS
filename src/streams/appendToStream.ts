@@ -4,8 +4,13 @@ import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
 import { ANY } from "../constants";
-import { BaseOptions, AppendResult, AppendExpectedRevision } from "../types";
-import { EventData } from "../events";
+import {
+  BaseOptions,
+  AppendResult,
+  AppendExpectedRevision,
+  EventData,
+} from "../types";
+
 import {
   convertToCommandError,
   debug,

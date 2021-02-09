@@ -6,7 +6,12 @@ import { Empty, StreamIdentifier } from "../../generated/shared_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
-import { ReadRevision, StreamSubscription, BaseOptions } from "../types";
+import {
+  ReadRevision,
+  StreamSubscription,
+  BaseOptions,
+  EventType,
+} from "../types";
 import { Client } from "../Client";
 import { END, START } from "../constants";
 import { debug, convertGrpcEvent, OneWaySubscription } from "../utils";
@@ -33,15 +38,17 @@ declare module "../Client" {
      * @param streamName A stream name.
      * @param options Writing options
      */
-    subscribeToStream(
+    subscribeToStream<KnownEventType extends EventType = EventType>(
       streamName: string,
       options?: SubscribeToStreamOptions,
       readableOptions?: ReadableOptions
-    ): StreamSubscription;
+    ): StreamSubscription<KnownEventType>;
   }
 }
 
-Client.prototype.subscribeToStream = function (
+Client.prototype.subscribeToStream = function <
+  KnownEventType extends EventType = EventType
+>(
   this: Client,
   streamName: string,
   {
@@ -50,7 +57,7 @@ Client.prototype.subscribeToStream = function (
     ...baseOptions
   }: SubscribeToStreamOptions = {},
   readableOptions: ReadableOptions = {}
-): StreamSubscription {
+): StreamSubscription<KnownEventType> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
