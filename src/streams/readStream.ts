@@ -5,7 +5,13 @@ import UUIDOption = ReadReq.Options.UUIDOption;
 
 import { Client } from "../Client";
 import { BACKWARDS, END, FORWARDS, START } from "../constants";
-import { BaseOptions, Direction, ReadRevision, ResolvedEvent } from "../types";
+import {
+  BaseOptions,
+  Direction,
+  EventType,
+  ReadRevision,
+  ResolvedEvent,
+} from "../types";
 import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
 
 export interface ReadStreamOptions extends BaseOptions {
@@ -40,14 +46,16 @@ declare module "../Client" {
      * @param streamName A stream name.
      * @param options Reading options
      */
-    readStream(
+    readStream<KnownEventType extends EventType = EventType>(
       streamName: string,
       options?: ReadStreamOptions
-    ): Promise<ResolvedEvent[]>;
+    ): Promise<ResolvedEvent<KnownEventType>[]>;
   }
 }
 
-Client.prototype.readStream = async function (
+Client.prototype.readStream = async function <
+  KnownEventType extends EventType = EventType
+>(
   this: Client,
   streamName: string,
   {
@@ -57,7 +65,7 @@ Client.prototype.readStream = async function (
     direction = FORWARDS,
     ...baseOptions
   }: ReadStreamOptions = {}
-): Promise<ResolvedEvent[]> {
+): Promise<ResolvedEvent<KnownEventType>[]> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
@@ -117,5 +125,6 @@ Client.prototype.readStream = async function (
 
   const client = await this.getGRPCClient(StreamsClient, "readStream");
   const readableStream = client.read(req, ...this.callArguments(baseOptions));
-  return handleBatchRead(readableStream, convertGrpcEvent);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return handleBatchRead<ResolvedEvent<any>>(readableStream, convertGrpcEvent);
 };

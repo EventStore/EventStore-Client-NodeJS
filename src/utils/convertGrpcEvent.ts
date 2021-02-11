@@ -7,10 +7,11 @@ import PersistentRecordedEvent = PersistentEvent.RecordedEvent;
 
 import { debug } from "./debug";
 import {
-  RecordedEvent,
-  Position,
-  ResolvedEvent,
   AllStreamResolvedEvent,
+  JSONType,
+  Position,
+  RecordedEvent,
+  ResolvedEvent,
 } from "../types";
 
 export type GRPCReadResp = StreamsReadResp | PersistentReadResp;
@@ -124,7 +125,7 @@ export const convertGrpcRecord = (
   if (isJson) {
     const dataStr = Buffer.from(grpcRecord.getData()).toString("binary");
 
-    const data = safeParseJSON(
+    const data = safeParseJSON<JSONType>(
       dataStr,
       (d) => d,
       `Malformed JSON data in event ${id}`

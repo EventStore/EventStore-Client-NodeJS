@@ -329,7 +329,9 @@ describe("subscribeToAll", () => {
           await delay(10);
 
           if (event.event.isJson) {
-            readEvents.add((event.event.data as TestEventData).index);
+            readEvents.add(
+              ((event.event.data as unknown) as TestEventData).index
+            );
           }
         }
 

@@ -1,24 +1,25 @@
 import { v4 as uuid } from "uuid";
+import { JSONEventData, JSONEventType, MetadataType } from "../types";
 import { convertMetadata } from "./convertMetadata";
-import { JSONType, MetadataType } from "./types";
 
-export interface JSONEventData<
-  Type extends string = string,
-  Data extends JSONType = JSONType,
-  Metadata extends MetadataType = MetadataType
-> {
-  id: string;
-  contentType: "application/json";
-  type: Type;
-  data: Data;
-  metadata?: Metadata;
-}
+// https://github.com/Microsoft/TypeScript/issues/12400
+type OptionalMetadata<
+  E extends JSONEventType
+> = E["metadata"] extends MetadataType
+  ? {
+      /**
+       * The metadata of the event
+       */
+      metadata: E["metadata"];
+    }
+  : {
+      /**
+       * The metadata of the event
+       */
+      metadata?: E["metadata"];
+    };
 
-export interface JSONEventOptions<
-  Type extends string = string,
-  Data extends JSONType = JSONType,
-  Metadata extends MetadataType = MetadataType | Buffer
-> {
+export type JSONEventOptions<E extends JSONEventType> = {
   /**
    * The id to this event. By default, the id will be generated.
    */
@@ -26,34 +27,24 @@ export interface JSONEventOptions<
   /**
    * The event type
    */
-  type: Type;
+  type: E["type"];
   /**
    * The data of the event
    */
-  data: Data;
-  /**
-   * The meta data of the event
-   */
-  metadata?: Metadata;
-}
+  data: E["data"];
+} & OptionalMetadata<E>;
 
-export const jsonEvent = <
-  Type extends string = string,
-  Data extends JSONType = JSONType,
-  Metadata extends MetadataType = MetadataType
->({
+export const jsonEvent = <E extends JSONEventType>({
   type,
   data,
   metadata,
   id = uuid(),
-}: JSONEventOptions<Type, Data, Metadata>): JSONEventData<
-  Type,
-  Data,
-  Metadata
-> => ({
+}: JSONEventOptions<E>): JSONEventData<E> => ({
   id,
   contentType: "application/json",
   type,
-  data,
-  metadata: convertMetadata<Metadata>(metadata),
+  data: data as JSONEventData<E>["data"],
+  metadata: convertMetadata<E["metadata"]>(
+    metadata
+  ) as JSONEventData<E>["metadata"],
 });
