@@ -12,7 +12,8 @@ const lowerToKey: Record<string, keyof ConnectionOptions> = {
   tls: "tls",
   tlsverifycert: "tlsVerifyCert",
   throwonappendfailure: "throwOnAppendFailure",
-  keepalive: "keepAlive",
+  keepaliveinterval: "keepAliveInterval",
+  keepalivetimeout: "keepAliveTimeout",
 };
 
 export interface ConnectionOptions {
@@ -24,7 +25,9 @@ export interface ConnectionOptions {
   tls: boolean;
   tlsVerifyCert: boolean;
   throwOnAppendFailure: boolean;
-  keepAlive?: number;
+  keepAliveInterval: number;
+  keepAliveTimeout: number;
+
   defaultCredentials?: Credentials;
   hosts: EndPoint[];
 }
@@ -37,6 +40,8 @@ const defaultConnectionOptions: ConnectionOptions = {
   nodePreference: "random",
   tls: true,
   tlsVerifyCert: true,
+  keepAliveInterval: 10_000,
+  keepAliveTimeout: 10_000,
   throwOnAppendFailure: true,
   hosts: [],
 };
@@ -255,7 +260,8 @@ const verifyKeyValuePair = (
     case "maxDiscoverAttempts":
     case "discoveryInterval":
     case "gossipTimeout":
-    case "keepAlive": {
+    case "keepAliveInterval":
+    case "keepAliveTimeout": {
       const parsedValue = parseInt(value);
 
       if (Number.isNaN(parsedValue)) {
