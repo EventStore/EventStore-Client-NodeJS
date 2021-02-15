@@ -527,6 +527,7 @@ export const invalid: string[] = [
   "esdb://localhost?tlsVerifyCert=if you feel like it",
   "esdb://localhost?throwOnAppendFailure=sometimes",
   "esdb://localhost?keepAliveTimeout=please",
+  "esdb://localhost?keepAliveInterval=XXIV",
 ];
 
 export const warning: Array<

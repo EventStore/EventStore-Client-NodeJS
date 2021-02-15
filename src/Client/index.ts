@@ -106,7 +106,7 @@ export class Client {
    */
   static connectionString(
     connectionString: TemplateStringsArray | string,
-    ...parts: string[]
+    ...parts: Array<string | number | boolean>
   ): Client {
     const string: string = Array.isArray(connectionString)
       ? connectionString.reduce<string>(
@@ -211,6 +211,12 @@ export class Client {
     if (keepAliveTimeout < -1) {
       throw new Error(
         `Invalid keepAliveTimeout "${keepAliveTimeout}". Please provide a positive integer, or -1 to disable.`
+      );
+    }
+
+    if (keepAliveInterval > -1 && keepAliveInterval < 10_000) {
+      console.warn(
+        `Specified KeepAliveInterval of ${keepAliveInterval} is less than recommended 10_000 ms.`
       );
     }
 
