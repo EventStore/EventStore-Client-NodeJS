@@ -21,6 +21,22 @@ import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 
 interface ClientOptions {
+  /**
+   * The amount of time (in milliseconds) to wait after which a keepalive ping is sent on the transport.
+   * Use -1 to disable.
+   * @default 10_000
+   */
+  keepAliveInterval?: number;
+  /**
+   * The amount of time (in milliseconds) the sender of the keepalive ping waits for an acknowledgement.
+   * If it does not receive an acknowledgment within this time, it will close the connection.
+   * @default 10_000
+   */
+  keepAliveTimeout?: number;
+  /**
+   * Whether or not to immediately throw an exception when an append fails.
+   * @default true
+   */
   throwOnAppendFailure?: boolean;
 }
 
@@ -73,6 +89,9 @@ export class Client {
   #connectionSettings: ConnectionTypeOptions;
   #channelCredentials: ChannelCredentials;
   #insecure: boolean;
+  #keepAliveInterval: number;
+  #keepAliveTimeout: number;
+
   #defaultCredentials?: Credentials;
 
   #channel?: Promise<Channel>;
@@ -87,7 +106,7 @@ export class Client {
    */
   static connectionString(
     connectionString: TemplateStringsArray | string,
-    ...parts: string[]
+    ...parts: Array<string | number | boolean>
   ): Client {
     const string: string = Array.isArray(connectionString)
       ? connectionString.reduce<string>(
@@ -120,6 +139,9 @@ export class Client {
           discoveryInterval: options.discoveryInterval,
           gossipTimeout: options.gossipTimeout,
           maxDiscoverAttempts: options.maxDiscoverAttempts,
+          throwOnAppendFailure: options.throwOnAppendFailure,
+          keepAliveInterval: options.keepAliveInterval,
+          keepAliveTimeout: options.keepAliveTimeout,
         },
         channelCredentials,
         options.defaultCredentials
@@ -134,6 +156,9 @@ export class Client {
           discoveryInterval: options.discoveryInterval,
           gossipTimeout: options.gossipTimeout,
           maxDiscoverAttempts: options.maxDiscoverAttempts,
+          throwOnAppendFailure: options.throwOnAppendFailure,
+          keepAliveInterval: options.keepAliveInterval,
+          keepAliveTimeout: options.keepAliveTimeout,
         },
         channelCredentials,
         options.defaultCredentials
@@ -143,6 +168,9 @@ export class Client {
     return new Client(
       {
         endpoint: options.hosts[0],
+        throwOnAppendFailure: options.throwOnAppendFailure,
+        keepAliveInterval: options.keepAliveInterval,
+        keepAliveTimeout: options.keepAliveTimeout,
       },
       channelCredentials,
       options.defaultCredentials
@@ -167,12 +195,34 @@ export class Client {
   constructor(
     {
       throwOnAppendFailure = true,
+      keepAliveInterval = 10_000,
+      keepAliveTimeout = 10_000,
       ...connectionSettings
     }: ConnectionTypeOptions,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
     defaultUserCredentials?: Credentials
   ) {
+    if (keepAliveInterval < -1) {
+      throw new Error(
+        `Invalid keepAliveInterval "${keepAliveInterval}". Please provide a positive integer, or -1 to disable.`
+      );
+    }
+
+    if (keepAliveTimeout < -1) {
+      throw new Error(
+        `Invalid keepAliveTimeout "${keepAliveTimeout}". Please provide a positive integer, or -1 to disable.`
+      );
+    }
+
+    if (keepAliveInterval > -1 && keepAliveInterval < 10_000) {
+      console.warn(
+        `Specified KeepAliveInterval of ${keepAliveInterval} is less than recommended 10_000 ms.`
+      );
+    }
+
     this.#throwOnAppendFailure = throwOnAppendFailure;
+    this.#keepAliveInterval = keepAliveInterval;
+    this.#keepAliveTimeout = keepAliveTimeout;
     this.#connectionSettings = connectionSettings;
     this.#insecure = !!channelCredentials.insecure;
     this.#defaultCredentials = defaultUserCredentials;
@@ -248,7 +298,14 @@ export class Client {
       uri
     );
 
-    return new Channel(uri, this.#channelCredentials, {});
+    return new Channel(uri, this.#channelCredentials, {
+      "grpc.keepalive_time_ms":
+        this.#keepAliveInterval < 0
+          ? Number.MAX_VALUE
+          : this.#keepAliveInterval,
+      "grpc.keepalive_timeout_ms":
+        this.#keepAliveTimeout < 0 ? Number.MAX_VALUE : this.#keepAliveTimeout,
+    });
   };
 
   private resolveUri = async (): Promise<string> => {

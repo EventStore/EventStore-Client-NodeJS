@@ -14,6 +14,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
@@ -33,6 +35,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
@@ -52,6 +56,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -75,6 +81,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -98,6 +106,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -121,6 +131,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -144,6 +156,8 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -167,6 +181,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -194,6 +210,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -221,6 +239,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "bubaqp2rh41uf5akmj0g-0.mesdb.eventstore.cloud",
@@ -248,6 +268,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -279,6 +301,8 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -306,6 +330,8 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "127.0.0.1",
@@ -325,6 +351,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -352,10 +380,33 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
       },
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
+    "esdb://host?keepAliveInterval=-1&keepAliveTimeout=-1",
+    {
+      dnsDiscover: false,
+      maxDiscoverAttempts: 3,
+      discoveryInterval: 500,
+      gossipTimeout: 3000,
+      nodePreference: "random",
+      tls: true,
+      tlsVerifyCert: true,
+      throwOnAppendFailure: true,
+      keepAliveInterval: -1,
+      keepAliveTimeout: -1,
       hosts: [
         {
           address: "host",
@@ -375,6 +426,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "my:great@username",
         password: "UyeXx8$^PsOo4jG88FlCauR1Coz25q",
@@ -398,6 +451,8 @@ export const valid: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -415,7 +470,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=false&throwOnAppendFailure=false",
+    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=false&throwOnAppendFailure=false&keepAliveInterval=10",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -425,6 +480,8 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
+      keepAliveInterval: 10,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host",
@@ -434,7 +491,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false",
+    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false&KEEPALIVEinterval=200",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -444,6 +501,8 @@ export const valid: Array<
       tls: false,
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
+      keepAliveInterval: 200,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host",
@@ -467,6 +526,8 @@ export const invalid: string[] = [
   "esdb://localhost?tlsVerifyCert=false&nodePreference=any",
   "esdb://localhost?tlsVerifyCert=if you feel like it",
   "esdb://localhost?throwOnAppendFailure=sometimes",
+  "esdb://localhost?keepAliveTimeout=please",
+  "esdb://localhost?keepAliveInterval=XXIV",
 ];
 
 export const warning: Array<
@@ -483,6 +544,8 @@ export const warning: Array<
       tls: true,
       tlsVerifyCert: false,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
@@ -502,6 +565,8 @@ export const warning: Array<
       tls: true,
       tlsVerifyCert: true,
       throwOnAppendFailure: true,
+      keepAliveInterval: 10_000,
+      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
