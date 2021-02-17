@@ -116,7 +116,7 @@ Client.prototype.subscribeToAll = function (
 
     if (typeof filter.maxSearchWindow === "number") {
       if (filter.maxSearchWindow <= 0) {
-        throw new Error("CheckpointInterval must be greater than 0.");
+        throw new Error("MaxSearchWindow must be greater than 0.");
       }
       filterOptions.setMax(filter.maxSearchWindow);
     } else {
