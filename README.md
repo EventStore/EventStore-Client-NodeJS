@@ -8,8 +8,6 @@ EventStoreDB is the open-source, functional database with Complex Event Processi
 
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
-Note: This client is currently under active development and further API changes are expected. Feedback is very welcome.
-
 ## Installation
 
 ```shell script
@@ -115,16 +113,18 @@ $ yarn build
 
 Tests are written using [Jest] and require [Docker] and [Docker Compose] to be installed.
 To access the github packages docker images, you need to authenticate docker with a gitub personal access token. It should be [generated](https://github.com/settings/tokens/new). Select at least following scopes:
+
 - `repo`
 - `read:packages`
 - `write:packages`
 
 Then login to github docker registry with:
+
 ```shell script
 $ docker login https://docker.pkg.github.com -u YOUR_GITHUB_USERNAME
 ```
 
-and providing your personal access token as a password. 
+and providing your personal access token as a password.
 
 Check full instructions in the ["Authenticating to GitHub packages"](https://docs.github.com/en/free-pro-team@latest/packages/guides/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages) guide.
 
