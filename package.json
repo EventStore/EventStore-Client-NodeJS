@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
   },
-  "homepage": "https://github.com/EventStore/EventStore-Client-NodeJS#readme",
+  "homepage": "https://developers.eventstore.com/clients/grpc/getting-started?codeLanguage=NodeJS",
   "engines": {
     "node": "^12.18.3 || >=14"
   },
