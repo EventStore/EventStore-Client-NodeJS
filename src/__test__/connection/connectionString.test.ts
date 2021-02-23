@@ -69,7 +69,11 @@ describe("connectionString", () => {
           .map(({ address, port }) => `${address}:${port}`)
           .join(",");
 
-        const client = EventStoreDBClient.connectionString`esdb://${gossipEndpoints}?tls=false&nodePreference=leader`;
+        const client = EventStoreDBClient.connectionString`
+          esdb://${gossipEndpoints}
+            ?tls=false
+            &nodePreference=leader
+        `;
 
         const appendResult = await client.appendToStream(
           STREAM_NAME,

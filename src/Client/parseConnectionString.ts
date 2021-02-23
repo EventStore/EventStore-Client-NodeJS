@@ -106,7 +106,7 @@ const parseCredentials = (
 
   if (match.groups?.credentials) {
     nextPosition += match[0].length;
-    const [username, password] = match.groups.credentials.split(":");
+    const [username, password] = match.groups.credentials.trim().split(":");
     return parseHosts(
       connectionString,
       nextPosition,
@@ -143,7 +143,11 @@ const parseHosts = (
   if (match && match.groups?.host) {
     nextPosition += match[0].length;
 
-    const [address, rawPort = "2113", ...rest] = match.groups?.host.split(":");
+    const [
+      address,
+      rawPort = "2113",
+      ...rest
+    ] = match.groups?.host.trim().split(":");
 
     if (rest.length) {
       throw new ParseError(
@@ -153,7 +157,7 @@ const parseHosts = (
       );
     }
 
-    const port = parseInt(rawPort);
+    const port = parseInt(rawPort.trim());
 
     if (Number.isNaN(port)) {
       throw new ParseError(
@@ -230,12 +234,13 @@ interface KeyValuePair {
 }
 
 const verifyKeyValuePair = (
-  { key: rawKey, value }: RawKeyPair,
+  { key: rawKey, value: rawValue }: RawKeyPair,
   connectionString: string,
   [from, to]: ParsingLocation
 ): KeyValuePair | null => {
   const keyFrom = from + `&${rawKey}=`.length;
-  const key = lowerToKey[rawKey.toLowerCase()] ?? rawKey;
+  const key = lowerToKey[rawKey.trim().toLowerCase()] ?? rawKey;
+  const value = rawValue.trim();
 
   if (notCurrentlySupported.includes(key)) {
     debug.connection(

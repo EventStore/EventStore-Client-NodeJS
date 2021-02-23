@@ -511,6 +511,37 @@ export const valid: Array<
       ],
     },
   ],
+  [
+    `esdb://     host
+      ?    MaxDiscoverAttempts=200
+      &discoveryinterval=1000
+      &GOSSIPTIMEOUT=1
+      &nOdEpReFeReNcE=leader
+      &TLS=false
+      &TlsVerifyCert=false
+      &
+      THROWOnAppendFailure
+      =
+      false      &   KEEPALIVEinterval=200`,
+    {
+      dnsDiscover: false,
+      maxDiscoverAttempts: 200,
+      discoveryInterval: 1000,
+      gossipTimeout: 1,
+      nodePreference: "leader",
+      tls: false,
+      tlsVerifyCert: false,
+      throwOnAppendFailure: false,
+      keepAliveInterval: 200,
+      keepAliveTimeout: 10_000,
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
 ];
 
 export const invalid: string[] = [
