@@ -55,9 +55,10 @@ async function simpleTest() {
 
   const appendResult = await client.appendToStream(streamName, [event]);
 
-  const events = await client.readStream(streamName, 10, {
+  const events = await client.readStream(streamName, {
     fromRevision: START,
     direction: FORWARDS,
+    maxCount: 10,
   });
 
   events.forEach(doSomethingProductive);
@@ -91,9 +92,10 @@ async function simpleTest(): Promise<void> {
 
   const appendResult = await client.appendToStream(streamName, [event]);
 
-  const events = await client.readStream(streamName, 10, {
+  const events = await client.readStream(streamName, {
     fromRevision: START,
     direction: FORWARDS,
+    maxCount: 10,
   });
 
   events.forEach(doSomethingProductive);
