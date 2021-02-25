@@ -10,8 +10,8 @@ export interface RestartSubsystemOptions extends BaseOptions {}
 declare module "../Client" {
   interface Client {
     /**
-     * Restarts the entire projection subsystem
-     * @param options Restart subsystem options
+     * Restarts the entire projection subsystem.
+     * @param options Restart subsystem options.
      */
     restartSubsystem(options?: RestartSubsystemOptions): Promise<void>;
   }

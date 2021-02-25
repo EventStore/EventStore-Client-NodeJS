@@ -9,8 +9,8 @@ import { convertToCommandError, debug } from "../utils";
 
 export interface TombstoneStreamOptions extends BaseOptions {
   /**
-   * Asks the server to check the stream is at specific revision before deleting
-   * @defaultValue ANY
+   * Asks the server to check the stream is at specific revision before deleting.
+   * @default ANY
    */
   expectedRevision?: ExpectedRevision;
 }
@@ -20,7 +20,7 @@ declare module "../Client" {
     /**
      * Hard-deletes a stream.
      * @param streamName A stream name.
-     * @param options Tombstoneing options
+     * @param options Tombstoneing options.
      */
     tombstoneStream(
       streamName: string,

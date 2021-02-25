@@ -7,7 +7,7 @@ import { debug, convertToCommandError } from "../utils";
 
 export interface GetProjectionResultOptions extends BaseOptions {
   /**
-   * Sets partition
+   * Sets partition.
    */
   fromPartition?: string;
 }
@@ -15,9 +15,9 @@ export interface GetProjectionResultOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Gets the result of a projection
-     * @param projectionName The name of the projection
-     * @param options Get result options
+     * Gets the result of a projection.
+     * @param projectionName The name of the projection.
+     * @param options Get result options.
      */
     getProjectionResult<T = unknown>(
       projectionName: string,

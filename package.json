@@ -78,6 +78,7 @@
     "docker-compose": "^0.23.5",
     "dotenv": "^8.2.0",
     "eslint": "^7.16.0",
+    "eslint-plugin-jsdoc": "^32.2.0",
     "get-port": "^5.1.1",
     "grpc-tools": "^1.10.0",
     "grpc_tools_node_protoc_ts": "^5.0.1",

@@ -13,8 +13,8 @@ declare module "../Client" {
     /**
      * Deletes a persistent subscription.
      * @param streamName A stream name.
-     * @param groupName A group name
-     * @param options deletion options
+     * @param groupName A group name.
+     * @param options Deletion options.
      */
     deletePersistentSubscription(
       streamName: string,

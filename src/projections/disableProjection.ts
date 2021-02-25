@@ -7,8 +7,8 @@ import { debug, convertToCommandError } from "../utils";
 
 export interface DisableProjectionOptions extends BaseOptions {
   /**
-   * If a checkpoint should be written
-   * @defaultValue true
+   * If a checkpoint should be written.
+   * @default true
    */
   writeCheckpoint?: boolean;
 }
@@ -17,8 +17,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Disables a projection.
-     * @param projectionName The name of the projection to disable
-     * @param options Disable projection options
+     * @param projectionName The name of the projection to disable.
+     * @param options Disable projection options.
      */
     disableProjection(
       projectionName: string,

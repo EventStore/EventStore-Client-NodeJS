@@ -7,20 +7,20 @@ import { debug, convertToCommandError } from "../utils";
 
 export interface DeleteProjectionOptions extends BaseOptions {
   /**
-   * Deletes emitted streams
-   * @defaultValue true
+   * Deletes emitted streams.
+   * @default true
    */
   deleteEmittedStreams?: boolean;
 
   /**
-   * Deletes state stream
-   * @defaultValue true
+   * Deletes state stream.
+   * @default true
    */
   deleteStateStream?: boolean;
 
   /**
-   * Deletes checkpoint stream
-   * @defaultValue true
+   * Deletes checkpoint stream.
+   * @default true
    */
   deleteCheckpointStream?: boolean;
 }
@@ -29,8 +29,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Deletes a projection.
-     * @param projectionName The name of the projection to delete
-     * @param options Delete projection options
+     * @param projectionName The name of the projection to delete.
+     * @param options Delete projection options.
      */
     deleteProjection(
       projectionName: string,

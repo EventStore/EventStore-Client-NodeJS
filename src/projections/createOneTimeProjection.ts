@@ -12,8 +12,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Creates a one time projection.
-     * @param query The query to run
-     * @param options Deletion options
+     * @param query The query to run.
+     * @param options Deletion options.
      */
     createOneTimeProjection(
       query: string,

@@ -42,19 +42,19 @@ interface ClientOptions {
 
 interface DiscoveryOptions {
   /**
-   * How many times to attempt connection before throwing
+   * How many times to attempt connection before throwing.
    */
   maxDiscoverAttempts?: number;
   /**
-   * How long to wait before retrying (in milliseconds)
+   * How long to wait before retrying (in milliseconds).
    */
   discoveryInterval?: number;
   /**
-   * How long to wait for the request to time out (in seconds)
+   * How long to wait for the request to time out (in seconds).
    */
   gossipTimeout?: number;
   /**
-   * Preferred node type
+   * Preferred node type.
    */
   nodePreference?: NodePreference;
 }
@@ -100,9 +100,10 @@ export class Client {
     Promise<GRPCClient>
   > = new Map();
 
+  // eslint-disable-next-line jsdoc/require-param
   /**
    * Returns a connection from a connection string.
-   * @param connectionString
+   * @param connectionString The connection string for your database.
    */
   static connectionString(
     connectionString: TemplateStringsArray | string,
@@ -244,9 +245,7 @@ export class Client {
     }
   }
 
-  /**
-   * internal access to grpc client.
-   */
+  // Internal access to grpc client.
   protected getGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>,
     debugName: string

@@ -8,13 +8,13 @@ type OptionalMetadata<
 > = E["metadata"] extends MetadataType
   ? {
       /**
-       * The metadata of the event
+       * The metadata of the event.
        */
       metadata: E["metadata"];
     }
   : {
       /**
-       * The metadata of the event
+       * The metadata of the event.
        */
       metadata?: E["metadata"];
     };
@@ -25,11 +25,11 @@ export type BinaryEventOptions<E extends BinaryEventType> = {
    */
   id?: string;
   /**
-   * The event type
+   * The event type.
    */
   type: E["type"];
   /**
-   * The binary data of the event
+   * The binary data of the event.
    */
   data: Uint8Array | Buffer;
 } & OptionalMetadata<E>;

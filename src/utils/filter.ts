@@ -4,26 +4,26 @@ import { FilterOn, Filter, RegexFilter, PrefixesFilter } from "../types";
 interface FilterOptionsBase {
   /**
    * Sets how often the checkpointReached callback is called.
-   * Must be greater than 0
+   * Must be greater than 0.
    * */
   checkpointInterval?: number;
   /**
    * The maximum number of events that are filtered out before the page is returned
-   * Must be greater than 0, if supplied
+   * Must be greater than 0, if supplied.
    * */
   maxSearchWindow?: number;
 }
 
 interface RegexOptions extends FilterOptionsBase {
   /**
-   * A regex to filter by
+   * A regex to filter by.
    * */
   regex: string;
 }
 
 interface PrefixesOptions extends FilterOptionsBase {
   /**
-   * a list of prefixes to filter on
+   * A list of prefixes to filter on.
    * */
   prefixes: string[];
 }

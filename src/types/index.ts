@@ -15,11 +15,11 @@ export * from "./events";
 
 export interface BaseOptions {
   /**
-   * Overwrite the default credentials
+   * Overwrite the default credentials.
    */
   credentials?: Credentials;
   /**
-   * Command requires a leader node
+   * Command requires a leader node.
    */
   requiresLeader?: boolean;
 }
@@ -67,7 +67,7 @@ export type AppendExpectedRevision =
    */
   | typeof constants.STREAM_EXISTS
   /**
-   * see: {@link ExpectedRevision}.
+   * @see {@link ExpectedRevision}.
    */
   | ExpectedRevision;
 
@@ -77,7 +77,7 @@ export type CurrentRevision =
    */
   | typeof constants.NO_STREAM
   /**
-   * the current event number of the last event written to the stream
+   * The current event number of the last event written to the stream.
    */
   | bigint;
 
@@ -96,7 +96,7 @@ export interface AppendResult {
    */
   nextExpectedRevision: bigint;
   /**
-   * The logical record position in the EventStoreDB transaction file
+   * The logical record position in the EventStoreDB transaction file.
    */
   position?: Position;
 }
@@ -134,37 +134,37 @@ export type ProcessingStatus =
  */
 export interface ProjectionDetails {
   /**
-   * The CoreProcessingTime
+   * The CoreProcessingTime.
    * */
   coreProcessingTime: BigInt;
 
   /**
-   * The projection version
+   * The projection version.
    * */
   version: BigInt;
 
   /**
-   * The Epoch
+   * The Epoch.
    * */
   epoch: BigInt;
 
   /**
-   * The projection EffectiveName
+   * The projection EffectiveName.
    * */
   effectiveName: string;
 
   /**
-   * The projection WritesInProgress
+   * The projection WritesInProgress.
    * */
   writesInProgress: number;
 
   /**
-   * The projection ReadsInProgress
+   * The projection ReadsInProgress.
    * */
   readsInProgress: number;
 
   /**
-   * The projection PartitionsCached
+   * The projection PartitionsCached.
    * */
   partitionsCached: number;
 
@@ -175,67 +175,67 @@ export interface ProjectionDetails {
   status: string;
 
   /**
-   * The current status of the projection
+   * The current status of the projection.
    * */
   projectionStatus: ProjectionStatus;
 
   /**
-   * The current status of the projection
+   * The current status of the projection.
    * */
   processingStatus: ProcessingStatus;
 
   /**
-   * The projection StateReason
+   * The projection StateReason.
    * */
   stateReason: string;
 
   /**
-   * The projection Name
+   * The projection Name.
    * */
   name: string;
 
   /**
-   * The projection Mode
+   * The projection Mode.
    * */
   mode: ProjectionMode;
 
   /**
-   * The projection Position
+   * The projection Position.
    * */
   position: string;
 
   /**
-   * The projection Progress
+   * The projection Progress.
    * */
   progress: number;
 
   /**
-   * LastCheckpoint
+   * LastCheckpoint.
    * */
   lastCheckpoint: string;
 
   /**
-   * The projection EventsProcessedAfterRestart
+   * The projection EventsProcessedAfterRestart.
    * */
   eventsProcessedAfterRestart: BigInt;
 
   /**
-   * The projection CheckpointStatus
+   * The projection CheckpointStatus.
    * */
   checkpointStatus: string;
 
   /**
-   * The projection BufferedEvents
+   * The projection BufferedEvents.
    * */
   bufferedEvents: BigInt;
 
   /**
-   * The projection WritePendingEventsBeforeCheckpoint
+   * The projection WritePendingEventsBeforeCheckpoint.
    * */
   writePendingEventsBeforeCheckpoint: number;
 
   /**
-   * The projection WritePendingEventsAfterCheckpoint
+   * The projection WritePendingEventsAfterCheckpoint.
    * */
   writePendingEventsAfterCheckpoint: number;
 }
@@ -287,31 +287,31 @@ export type FilterOn =
 
 export interface FilterBase {
   /**
-   * What to filter on
+   * What to filter on.
    * */
   filterOn: FilterOn;
   /**
    * Sets how often the checkpointReached callback is called.
-   * Must be greater than 0
+   * Must be greater than 0.
    * */
   checkpointInterval: number;
   /**
    * The maximum number of events that are filtered out before the page is returned
-   * Must be greater than 0, if supplied
+   * Must be greater than 0, if supplied.
    * */
   maxSearchWindow?: number;
 }
 
 export interface RegexFilter extends FilterBase {
   /**
-   * A regex to filter by
+   * A regex to filter by.
    * */
   regex: string;
 }
 
 export interface PrefixesFilter extends FilterBase {
   /**
-   * a list of prefixes to filter on
+   * A list of prefixes to filter on.
    * */
   prefixes: string[];
 }

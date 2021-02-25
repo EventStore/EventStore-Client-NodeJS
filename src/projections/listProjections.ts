@@ -16,24 +16,24 @@ interface ListProjectionsOptions extends BaseOptions {}
 declare module "../Client" {
   interface Client {
     /**
-     * lists continuous projections
-     * @param options List projections options
+     * Lists continuous projections.
+     * @param options List projections options.
      */
     listContinuousProjections(
       options?: ListProjectionsOptions
     ): Promise<ProjectionDetails[]>;
 
     /**
-     * lists one time projections
-     * @param options List projections options
+     * Lists one time projections.
+     * @param options List projections options.
      */
     listOneTimeProjections(
       options?: ListProjectionsOptions
     ): Promise<ProjectionDetails[]>;
 
     /**
-     * lists transient projections
-     * @param options List projections options
+     * Lists transient projections.
+     * @param options List projections options.
      */
     listTransientProjections(
       options?: ListProjectionsOptions

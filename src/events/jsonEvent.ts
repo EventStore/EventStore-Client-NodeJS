@@ -8,13 +8,13 @@ type OptionalMetadata<
 > = E["metadata"] extends MetadataType
   ? {
       /**
-       * The metadata of the event
+       * The metadata of the event.
        */
       metadata: E["metadata"];
     }
   : {
       /**
-       * The metadata of the event
+       * The metadata of the event.
        */
       metadata?: E["metadata"];
     };
@@ -25,11 +25,11 @@ export type JSONEventOptions<E extends JSONEventType> = {
    */
   id?: string;
   /**
-   * The event type
+   * The event type.
    */
   type: E["type"];
   /**
-   * The data of the event
+   * The data of the event.
    */
   data: E["data"];
 } & OptionalMetadata<E>;
