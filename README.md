@@ -73,32 +73,81 @@ import {
   jsonEvent,
   FORWARDS,
   START,
+  JSONEventType,
 } from "@eventstore/db-client";
 
 const client = new EventStoreDBClient({
   endpoint: "localhost:2113",
 });
 
-async function simpleTest(): Promise<void> {
-  const streamName = "es_supported_clients";
+interface Reservation {
+  reservationId: string;
+  movieId: string;
+  userId: string;
+  seatId: string;
+}
 
-  const event = jsonEvent({
-    type: "grpc-client",
+type SeatReservedEvent = JSONEventType<
+  "seat-reserved",
+  {
+    reservationId: string;
+    movieId: string;
+    userId: string;
+    seatId: string;
+  }
+>;
+
+type SeatChangedEvent = JSONEventType<
+  "seat-changed",
+  {
+    reservationId: string;
+    newSeatId: string;
+  }
+>;
+
+type ReservationEvents = SeatReservedEvent | SeatChangedEvent;
+
+async function simpleTest(): Promise<void> {
+  const streamName = "booking-abc123";
+
+  const event = jsonEvent<SeatReservedEvent>({
+    type: "seat-reserved",
     data: {
-      languages: ["typescript", "javascript"],
-      runtime: "NodeJS",
+      reservationId: "abc123",
+      movieId: "tt0368226",
+      userId: "nm0802995",
+      seatId: "4b",
     },
   });
 
-  const appendResult = await client.appendToStream(streamName, [event]);
+  const appendResult = await client.appendToStream(streamName, event);
 
-  const events = await client.readStream(streamName, {
+  const events = await client.readStream<ReservationEvents>(streamName, {
     fromRevision: START,
     direction: FORWARDS,
     maxCount: 10,
   });
 
-  events.forEach(doSomethingProductive);
+  const reservation = events.reduce<Partial<Reservation>>((acc, { event }) => {
+    switch (event?.type) {
+      case "seat-reserved":
+        return {
+          ...acc,
+          reservationId: event.data.reservationId,
+          movieId: event.data.movieId,
+          seatId: event.data.seatId,
+          userId: event.data.userId,
+        };
+      case "seat-changed": {
+        return {
+          ...acc,
+          seatId: event.data.newSeatId,
+        };
+      }
+      default:
+        return acc;
+    }
+  }, {});
 }
 ```
 
