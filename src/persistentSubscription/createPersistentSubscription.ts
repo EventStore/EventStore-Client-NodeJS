@@ -24,10 +24,10 @@ declare module "../Client" {
      * server remembers where the read offset is at. This allows for many different modes of operations compared to a
      * regular subscription where the client holds the read offset. The pair stream name and group must be unique.
      * @param streamName A stream name.
-     * @param groupName A group name
-     * @link persistentSubscriptionSettingsFromDefaults
+     * @param groupName A group name.
      * @param settings PersistentSubscription settings.
-     * @param options command options
+     * @see {@link persistentSubscriptionSettingsFromDefaults}
+     * @param options Command options.
      */
     createPersistentSubscription(
       streamName: string,

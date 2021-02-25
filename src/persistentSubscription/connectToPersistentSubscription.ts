@@ -12,7 +12,7 @@ import { Client } from "../Client";
 export interface ConnectToPersistentSubscriptionOptions extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
-   * @defaultValue 10
+   * @default 10
    */
   bufferSize?: number;
 }
@@ -22,8 +22,8 @@ declare module "../Client" {
     /**
      * Connects to a persistent subscription.
      * @param stream A stream name.
-     * @param group A group name
-     * @param options Connection options
+     * @param group A group name.
+     * @param options Connection options.
      */
     connectToPersistentSubscription<E extends EventType = EventType>(
       streamName: string,

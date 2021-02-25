@@ -16,17 +16,17 @@ import { Client } from "../Client";
 export interface ReadAllOptions extends BaseOptions {
   /**
    * The number of events to read.
-   * @defaultValue Number.MAX_SAFE_INTEGER
+   * @default Number.MAX_SAFE_INTEGER
    */
   maxCount?: number | BigInt;
   /**
    * Starts the read at the given position.
-   * @defaultValue START
+   * @default START
    */
   fromPosition?: ReadPosition;
   /**
-   *  Sets the read direction of the streamconnection
-   * @defaultValue FORWARDS
+   * Sets the read direction of the streamconnection.
+   * @default FORWARDS
    */
   direction?: Direction;
 }
@@ -36,7 +36,7 @@ declare module "../Client" {
     /**
      * Reads events from the $all. You can read forwards or backwards.
      * You might need to be authenticated to execute the command successfully.
-     * @param options Reading options
+     * @param options Reading options.
      */
     readAll(options?: ReadAllOptions): Promise<AllStreamResolvedEvent[]>;
   }

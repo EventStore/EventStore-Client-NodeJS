@@ -17,24 +17,24 @@ import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
 export interface ReadStreamOptions extends BaseOptions {
   /**
    * The number of events to read.
-   * @defaultValue Number.MAX_SAFE_INTEGER
+   * @default Number.MAX_SAFE_INTEGER
    */
   maxCount?: number | BigInt;
   /**
    * Starts the read at the given event revision.
-   * @defaultValue START
+   * @default START
    */
   fromRevision?: ReadRevision;
   /**
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
-   * @defaultValue false
+   * @default false
    */
   resolveLinkTos?: boolean;
   /**
-   *  Sets the read direction of the stream
-   * @defaultValue FORWARDS
+   * Sets the read direction of the stream.
+   * @default FORWARDS
    */
   direction?: Direction;
 }
@@ -44,7 +44,7 @@ declare module "../Client" {
     /**
      * Sends events to a given stream.
      * @param streamName A stream name.
-     * @param options Reading options
+     * @param options Reading options.
      */
     readStream<KnownEventType extends EventType = EventType>(
       streamName: string,

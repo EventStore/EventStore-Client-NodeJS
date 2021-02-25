@@ -21,14 +21,14 @@ import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 export interface SubscribeToAllOptions extends BaseOptions {
   /**
    * Starts the read at the given position.
-   * @defaultValue START
+   * @default START
    */
   fromPosition?: ReadPosition;
   /**
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
-   * @defaultValue false
+   * @default false
    */
   resolveLinkTos?: boolean;
   /**
@@ -40,11 +40,14 @@ export interface SubscribeToAllOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Sends events to a given stream.
-     * @param stream A stream name.
-     * @param options Writing options
+     * Subscribe to events on the $all stream.
+     * @param options Subscription options.
+     * @param readableOptions Readable stream options.
      */
-    subscribeToAll(options?: SubscribeToAllOptions): AllStreamSubscription;
+    subscribeToAll(
+      options?: SubscribeToAllOptions,
+      readableOptions?: ReadableOptions
+    ): AllStreamSubscription;
   }
 }
 

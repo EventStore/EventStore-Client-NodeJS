@@ -11,9 +11,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Creates a transient projection.
-     * @param projectionName The name of the projection
-     * @param query The query to run
-     * @param options Transient projection options
+     * @param projectionName The name of the projection.
+     * @param query The query to run.
+     * @param options Transient projection options.
      */
     createTransientProjection(
       projectionName: string,

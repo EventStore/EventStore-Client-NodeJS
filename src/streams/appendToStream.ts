@@ -20,7 +20,7 @@ import {
 export interface AppendToStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
-   * @defaultValue ANY
+   * @default ANY
    */
   expectedRevision?: AppendExpectedRevision;
 }
@@ -30,8 +30,8 @@ declare module "../Client" {
     /**
      * Appends events to a given stream.
      * @param streamName A stream name.
-     * @param events Events or event to write
-     * @param options Writing options
+     * @param events Events or event to write.
+     * @param options Writing options.
      */
     appendToStream(
       streamName: string,

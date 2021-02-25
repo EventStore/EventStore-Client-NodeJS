@@ -8,8 +8,8 @@ import { debug, convertToCommandError } from "../utils";
 
 export interface UpdateProjectionOptions extends BaseOptions {
   /**
-   * Enables tracking emitted streams
-   * @defaultValue undefined
+   * Enables tracking emitted streams.
+   * @default undefined
    */
   trackEmittedStreams?: boolean | undefined;
 }
@@ -17,9 +17,9 @@ export interface UpdateProjectionOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Updates a projection
-     * @param projectionName The name of the projection
-     * @param query The query to run
+     * Updates a projection.
+     * @param projectionName The name of the projection.
+     * @param query The query to run.
      * @param options Projection options.
      */
     updateProjection(
