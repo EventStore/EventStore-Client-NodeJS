@@ -43,7 +43,7 @@ jobs:
           curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.list | sudo tee /etc/apt/sources.list.d/tailscale.list
           sudo apt-get update
           sudo apt-get install tailscale
-          sudo tailscale up --authkey ${{ secrets.TAILSCALE_AUTH }} --hostname "node-client-ci-$(date +'%Y-%m-%dT%H:%M:%S')" --accept-routes
+          sudo tailscale up --authkey ${{ secrets.TAILSCALE_AUTH }} --hostname "node-client-ci-$(date +'%Y-%m-%dT%H:%M:%S')" --advertise-tags=tag:ci --accept-routes
       # Install up to date version of node
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -62,7 +62,7 @@ jobs:
         env:
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       - name: Disconnect from tailscale
-        if: ${{ env.SECRETS_AVAILABLE == 'true' }}
+        if: ${{ always() && env.SECRETS_AVAILABLE == 'true' }}
         run: sudo tailscale down
 
   package:
