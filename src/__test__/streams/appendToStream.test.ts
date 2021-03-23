@@ -31,6 +31,29 @@ describe("appendToStream", () => {
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
     });
 
+    test("unicode string in json event", async () => {
+      const eventType = "TestEncode";
+      const streamName = "encode1";
+      const killer = "CC ‐ 1830";
+
+      const client = new EventStoreDBClient(
+        { endpoint: node.uri },
+        { rootCertificate: node.rootCertificate }
+      );
+
+      await client.appendToStream(
+        streamName,
+        jsonEvent({
+          type: eventType,
+          data: killer,
+        })
+      );
+
+      const [event] = await client.readStream(streamName);
+
+      expect(event.event?.data).toStrictEqual(killer);
+    });
+
     test("binary events", async () => {
       const STREAM_NAME = "binary_stream_name";
 

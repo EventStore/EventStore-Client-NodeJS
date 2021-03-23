@@ -172,7 +172,7 @@ Client.prototype.appendToStream = async function (
       switch (event.contentType) {
         case "application/json": {
           const data = JSON.stringify(event.data);
-          message.setData(Buffer.from(data, "binary").toString("base64"));
+          message.setData(Buffer.from(data, "utf8").toString("base64"));
           break;
         }
         case "application/octet-stream": {
@@ -187,7 +187,7 @@ Client.prototype.appendToStream = async function (
         } else {
           const metadata = JSON.stringify(event.metadata);
           message.setCustomMetadata(
-            Buffer.from(metadata, "binary").toString("base64")
+            Buffer.from(metadata, "utf8").toString("base64")
           );
         }
       }
