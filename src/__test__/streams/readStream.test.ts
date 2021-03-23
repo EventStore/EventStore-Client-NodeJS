@@ -1,4 +1,9 @@
-import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
+import {
+  binaryTestEvents,
+  createTestNode,
+  jsonTestEventMessage,
+  jsonTestEvents,
+} from "../utils";
 
 import { EventStoreDBClient, BACKWARDS, END } from "../..";
 
@@ -45,7 +50,7 @@ describe("readStream", () => {
         expect(event.type).toBe("json-test");
         expect(event.data).toMatchObject({
           index: 1,
-          message: "test",
+          message: jsonTestEventMessage,
         });
       });
 

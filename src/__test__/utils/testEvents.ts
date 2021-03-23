@@ -5,12 +5,14 @@ export interface TestEventData {
   index: number;
 }
 
+export const jsonTestEventMessage = "CC ‐ 1830";
+
 export const jsonTestEvents = (count = 4, type = "test"): EventData[] =>
   Array.from({ length: count }, (_, i) =>
     jsonEvent({
       type,
       data: {
-        message: "test",
+        message: jsonTestEventMessage,
         index: i,
       },
     })
