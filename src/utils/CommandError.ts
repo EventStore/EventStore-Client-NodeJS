@@ -79,7 +79,7 @@ export class StreamNotFoundError extends CommandErrorBase {
   ): string => {
     const name = streamName ?? error?.metadata?.getMap()["stream-name"] ?? "";
     if (typeof name === "string") return name;
-    return Buffer.from(name).toString("binary");
+    return Buffer.from(name).toString("utf8");
   };
 
   constructor(error?: ServiceError, streamName?: string | Uint8Array) {
