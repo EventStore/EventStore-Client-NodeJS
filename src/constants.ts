@@ -60,3 +60,31 @@ export const EVENT_TYPE = "eventType";
 
 // max subscriber count
 export const UNLIMITED = "unlimited";
+
+// system streams
+
+/**
+ * A stream containing links pointing to each stream in the EventStoreDB.
+ */
+export const STREAMS_STREAM = "$streams";
+
+/**
+ * A stream containing system settings.
+ */
+export const SETTINGS_STREAM = "$settings";
+
+/**
+ * A stream containing statistics.
+ */
+export const STATS_STREAM_PREFIX = "$stats";
+
+// acl defaults
+
+/**
+ * The user default acl stream.
+ */
+export const USER_STREAM_ACL = "$userStreamAcl";
+/**
+ * The system stream defaults acl stream.
+ */
+export const SYSTEM_STREAM_ACL = "$systemStreamAcl";
