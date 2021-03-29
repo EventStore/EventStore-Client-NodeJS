@@ -6,4 +6,5 @@ export * from "./filter";
 export * from "./handleBatchRead";
 export * from "./OneWaySubscription";
 export * from "./persistentSubscriptionSettings";
+export * from "./systemStreams";
 export * from "./TwoWaySubscription";
