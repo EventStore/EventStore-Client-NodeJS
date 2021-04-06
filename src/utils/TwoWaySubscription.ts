@@ -28,7 +28,6 @@ export class TwoWaySubscription
       (await this.#grpcStream)
         .on("error", (err: ServiceError) => {
           if (err.code === Status.CANCELLED) return;
-          console.log(err);
           const error = convertToCommandError(err);
           this.emit("error", error);
         })
