@@ -16,6 +16,7 @@ import {
   jsonEvent,
   persistentSubscriptionSettingsFromDefaults,
   START,
+  END,
 } from "../..";
 
 const asyncPipeline = promisify(pipeline);
@@ -151,6 +152,59 @@ describe("connectToPersistentSubscription", () => {
 
       // 4 pre-write + 4 after - 1 (start from revision)
       expect(onEvent).toBeCalledTimes(7);
+    });
+
+    test("from end", async () => {
+      const STREAM_NAME = "from_end_test_stream_name";
+      const GROUP_NAME = "from_end_test_group_name";
+
+      await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
+      await client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults({
+          fromRevision: END,
+        })
+      );
+
+      const defer = new Defer();
+
+      const onError = jest.fn((error) => {
+        defer.reject(error);
+      });
+      const onClose = jest.fn();
+      const onConfirmation = jest.fn();
+      const onEnd = jest.fn();
+      const onEvent = jest.fn(async (event: ResolvedEvent) => {
+        if (event.event) {
+          await subscription.ack(event.event.id);
+        }
+
+        if (event.event?.type === "finish-test") {
+          defer.resolve();
+        }
+      });
+
+      const subscription = client
+        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .on("error", onError)
+        .on("data", onEvent)
+        .on("close", onClose)
+        .on("confirmation", onConfirmation)
+        .on("end", onEnd);
+
+      await client.appendToStream(STREAM_NAME, [
+        ...jsonTestEvents(3),
+        finishEvent(),
+      ]);
+
+      await defer.promise;
+
+      expect(onError).not.toBeCalled();
+      expect(onConfirmation).toBeCalledTimes(1);
+
+      // 4 pre-write + 4 after - 4 (start from end)
+      expect(onEvent).toBeCalledTimes(4);
     });
 
     test("nack", async () => {

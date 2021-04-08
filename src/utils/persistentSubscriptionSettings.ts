@@ -1,4 +1,4 @@
-import { ROUND_ROBIN, START, UNLIMITED } from "../constants";
+import { END, ROUND_ROBIN, START, UNLIMITED } from "../constants";
 import { ConsumerStrategy } from "../types";
 
 export interface PersistentSubscriptionSettings {
@@ -14,7 +14,7 @@ export interface PersistentSubscriptionSettings {
    * Starts the read at the given event revision.
    * @default START
    */
-  fromRevision: typeof START | bigint;
+  fromRevision: typeof START | typeof END | bigint;
 
   /**
    * Enables in depth latency statistics should be tracked on this subscription.

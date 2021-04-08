@@ -11,6 +11,7 @@ import {
 import { Client } from "../Client";
 import {
   DISPATCH_TO_SINGLE,
+  END,
   PINNED,
   ROUND_ROBIN,
   START,
@@ -54,6 +55,11 @@ Client.prototype.createPersistentSubscription = async function (
   switch (settings.fromRevision) {
     case START: {
       reqSettings.setRevision(BigInt(0).toString(10));
+      break;
+    }
+    case END: {
+      // This is the largest possible value of UInt64
+      reqSettings.setRevision("18446744073709551615");
       break;
     }
     default: {
