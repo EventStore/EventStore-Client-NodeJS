@@ -7,15 +7,6 @@ export const valid: Array<
     "esdb://localhost",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
@@ -28,15 +19,6 @@ export const valid: Array<
     "esdb://localhost:2114",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
@@ -49,15 +31,6 @@ export const valid: Array<
     "esdb://user:pass@localhost:2114",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -74,15 +47,6 @@ export const valid: Array<
     "esdb://user:pass@localhost:2114/",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -99,40 +63,7 @@ export const valid: Array<
     "esdb://user:pass@localhost:2114/?tlsVerifyCert=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
       tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
-      defaultCredentials: {
-        username: "user",
-        password: "pass",
-      },
-      hosts: [
-        {
-          address: "localhost",
-          port: 2114,
-        },
-      ],
-    },
-  ],
-  [
-    "esdb://user:pass@localhost:2114?tlsVerifyCert=false",
-    {
-      dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -149,15 +80,7 @@ export const valid: Array<
     "esdb://user:pass@localhost:2114?tls=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
       tls: false,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -174,15 +97,6 @@ export const valid: Array<
     "esdb://host1,host2,host3",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -203,15 +117,6 @@ export const valid: Array<
     "esdb://host1:1234,host2:4321,host3:3231",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -232,15 +137,6 @@ export const valid: Array<
     "esdb://bubaqp2rh41uf5akmj0g-0.mesdb.eventstore.cloud:2113,bubaqp2rh41uf5akmj0g-1.mesdb.eventstore.cloud:2113,bubaqp2rh41uf5akmj0g-2.mesdb.eventstore.cloud:2113",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "bubaqp2rh41uf5akmj0g-0.mesdb.eventstore.cloud",
@@ -261,15 +157,7 @@ export const valid: Array<
     "esdb://user:pass@host1:1234,host2:4321,host3:3231?nodePreference=follower",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
       nodePreference: "follower",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -294,15 +182,7 @@ export const valid: Array<
     "esdb://host1,host2,host3?tls=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
       tls: false,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -323,15 +203,7 @@ export const valid: Array<
     "esdb://127.0.0.1:21573?tls=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
       tls: false,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "127.0.0.1",
@@ -344,15 +216,7 @@ export const valid: Array<
     "esdb://host1,host2,host3?tlsVerifyCert=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
       tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host1",
@@ -373,15 +237,8 @@ export const valid: Array<
     "esdb+discover://user:pass@host?nodePreference=follower&tlsVerifyCert=false",
     {
       dnsDiscover: true,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
       nodePreference: "follower",
-      tls: true,
       tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -398,13 +255,6 @@ export const valid: Array<
     "esdb://host?keepAliveInterval=-1&keepAliveTimeout=-1",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
       keepAliveInterval: -1,
       keepAliveTimeout: -1,
       hosts: [
@@ -419,15 +269,8 @@ export const valid: Array<
     "esdb://my%3Agreat%40username:UyeXx8%24%5EPsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&tlsVerifyCert=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
       nodePreference: "follower",
-      tls: true,
       tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "my:great@username",
         password: "UyeXx8$^PsOo4jG88FlCauR1Coz25q",
@@ -444,15 +287,8 @@ export const valid: Array<
     "esdb+discover://user:pass@морда-кошки.ru,ощущение-картофеля.ru?nodePreference=follower&tlsVerifyCert=false",
     {
       dnsDiscover: true,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
       nodePreference: "follower",
-      tls: true,
       tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -481,7 +317,6 @@ export const valid: Array<
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
       keepAliveInterval: 10,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host",
@@ -502,7 +337,6 @@ export const valid: Array<
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
       keepAliveInterval: 200,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host",
@@ -533,7 +367,6 @@ export const valid: Array<
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
       keepAliveInterval: 200,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "host",
@@ -568,15 +401,7 @@ export const warning: Array<
     "esdb://localhost?catchOnAppendFailure=true&tlsVerifyCert=false",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
       tlsVerifyCert: false,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",
@@ -589,15 +414,6 @@ export const warning: Array<
     "esdb://localhost?someNonsense=follower&doTheThing=true",
     {
       dnsDiscover: false,
-      maxDiscoverAttempts: 3,
-      discoveryInterval: 500,
-      gossipTimeout: 3000,
-      nodePreference: "random",
-      tls: true,
-      tlsVerifyCert: true,
-      throwOnAppendFailure: true,
-      keepAliveInterval: 10_000,
-      keepAliveTimeout: 10_000,
       hosts: [
         {
           address: "localhost",

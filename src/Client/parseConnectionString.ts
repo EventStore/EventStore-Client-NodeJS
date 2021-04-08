@@ -1,10 +1,31 @@
 import { Credentials, EndPoint, NodePreference } from "../types";
 import { debug } from "../utils";
 
+export interface QueryOptions {
+  maxDiscoverAttempts?: number;
+  discoveryInterval?: number;
+  gossipTimeout?: number;
+  nodePreference?: NodePreference;
+  tls?: boolean;
+  tlsVerifyCert?: boolean;
+  throwOnAppendFailure?: boolean;
+  keepAliveInterval?: number;
+  keepAliveTimeout?: number;
+}
+
+export interface ConnectionOptions extends QueryOptions {
+  dnsDiscover: boolean;
+  defaultCredentials?: Credentials;
+  hosts: EndPoint[];
+}
+
+type ParsingLocation = [from: number, to: number];
+
 const notCurrentlySupported = ["tlsVerifyCert"];
 
-const lowerToKey: Record<string, keyof ConnectionOptions> = {
-  dnsdiscover: "dnsDiscover",
+const lowerToKey: {
+  [K in keyof QueryOptions as Lowercase<K>]: K;
+} = {
   maxdiscoverattempts: "maxDiscoverAttempts",
   discoveryinterval: "discoveryInterval",
   gossiptimeout: "gossipTimeout",
@@ -16,44 +37,13 @@ const lowerToKey: Record<string, keyof ConnectionOptions> = {
   keepalivetimeout: "keepAliveTimeout",
 };
 
-export interface ConnectionOptions {
-  dnsDiscover: boolean;
-  maxDiscoverAttempts: number;
-  discoveryInterval: number;
-  gossipTimeout: number;
-  nodePreference: NodePreference;
-  tls: boolean;
-  tlsVerifyCert: boolean;
-  throwOnAppendFailure: boolean;
-  keepAliveInterval: number;
-  keepAliveTimeout: number;
-
-  defaultCredentials?: Credentials;
-  hosts: EndPoint[];
-}
-
-const defaultConnectionOptions: ConnectionOptions = {
-  dnsDiscover: false,
-  maxDiscoverAttempts: 3,
-  discoveryInterval: 500,
-  gossipTimeout: 3000,
-  nodePreference: "random",
-  tls: true,
-  tlsVerifyCert: true,
-  keepAliveInterval: 10_000,
-  keepAliveTimeout: 10_000,
-  throwOnAppendFailure: true,
-  hosts: [],
-};
-
-type ParsingLocation = [from: number, to: number];
-
 export const parseConnectionString = (
   connectionString: string
-): ConnectionOptions => {
-  const options = Object.assign({}, defaultConnectionOptions);
-  return parseProtocol(connectionString.trim().replace(/\/+$/, ""), 0, options);
-};
+): ConnectionOptions =>
+  parseProtocol(connectionString.trim().replace(/\/+$/, ""), 0, {
+    dnsDiscover: false,
+    hosts: [],
+  });
 
 const parseProtocol = (
   connectionString: string,
@@ -239,7 +229,9 @@ const verifyKeyValuePair = (
   [from, to]: ParsingLocation
 ): KeyValuePair | null => {
   const keyFrom = from + `&${rawKey}=`.length;
-  const key = lowerToKey[rawKey.trim().toLowerCase()] ?? rawKey;
+  const key =
+    lowerToKey[rawKey.trim().toLowerCase() as Lowercase<keyof QueryOptions>] ??
+    rawKey;
   const value = rawValue.trim();
 
   if (notCurrentlySupported.includes(key)) {
