@@ -1,33 +1,77 @@
-import { createInsecureTestCluster, createInsecureTestNode } from "../utils";
+import {
+  createInsecureTestCluster,
+  createInsecureTestNode,
+  createTestCluster,
+  createTestNode,
+  jsonTestEvents,
+} from "../utils";
 
-import { EventStoreDBClient, jsonEvent } from "../..";
+import { EventStoreDBClient } from "../..";
 
 describe("connectionString", () => {
-  const node = createInsecureTestNode();
-  const cluster = createInsecureTestCluster();
-
-  const testEvent = () =>
-    jsonEvent({ type: "test", data: { message: "test" } });
+  const insecureSingleNode = createInsecureTestNode();
+  const insecureCluster = createInsecureTestCluster();
+  const secureSingleNode = createTestNode();
+  const secureCluster = createTestCluster();
 
   beforeAll(async () => {
-    await node.up();
-    await cluster.up();
+    await Promise.all([
+      insecureSingleNode.up(),
+      insecureCluster.up(),
+      secureSingleNode.up(),
+      secureCluster.up(),
+    ]);
   });
 
   afterAll(async () => {
-    await node.down();
-    await cluster.down();
+    await Promise.all([
+      insecureSingleNode.down(),
+      insecureCluster.down(),
+      secureSingleNode.down(),
+      secureCluster.down(),
+    ]);
   });
 
   describe("should successfully connect with connection string", () => {
-    describe("singleNode", () => {
+    describe.each([
+      [
+        "Secure Single Node", // name
+        () => secureSingleNode.uri, // create uri
+        () => `tlsCAFile=${secureSingleNode.certPath}`, // create query string
+        "ssn", // stream prefix
+      ],
+      [
+        "Secure Cluster",
+        () =>
+          secureCluster.endpoints
+            .map(({ address, port }) => `${address}:${port}`)
+            .join(","),
+        () => `tlsCAFile=${secureCluster.certPath}`,
+        "sc",
+      ],
+      [
+        "Insecure Single Node",
+        () => insecureSingleNode.uri,
+        () => `tls=false`,
+        "isn",
+      ],
+      [
+        "Insecure Cluster",
+        () =>
+          insecureCluster.endpoints
+            .map(({ address, port }) => `${address}:${port}`)
+            .join(","),
+        () => `tls=false`,
+        "ic",
+      ],
+    ])("%s", (_, uri, query, prefix) => {
       test("template string", async () => {
-        const STREAM_NAME = "template_string_stream";
-        const client = EventStoreDBClient.connectionString`esdb://${node.uri}?tls=false`;
+        const STREAM_NAME = `${prefix}_template_string_stream`;
+        const client = EventStoreDBClient.connectionString`esdb://${uri()}?${query()}`;
 
         const appendResult = await client.appendToStream(
           STREAM_NAME,
-          testEvent()
+          jsonTestEvents()
         );
         const readResult = await client.readStream(STREAM_NAME, {
           maxCount: 10,
@@ -38,15 +82,15 @@ describe("connectionString", () => {
       });
 
       test("string argument", async () => {
-        const STREAM_NAME = "string_stream";
+        const STREAM_NAME = `${prefix}_string_stream`;
 
         const client = EventStoreDBClient.connectionString(
-          `esdb://${node.uri}?tls=false`
+          `esdb://${uri()}?${query()}`
         );
 
         const appendResult = await client.appendToStream(
           STREAM_NAME,
-          testEvent()
+          jsonTestEvents()
         );
         const readResult = await client.readStream(STREAM_NAME, {
           maxCount: 10,
@@ -57,65 +101,7 @@ describe("connectionString", () => {
       });
 
       test("default credentials", async () => {
-        const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=false`;
-        await expect(client.readAll({ maxCount: 10 })).resolves.toBeDefined();
-      });
-    });
-
-    describe("cluster", () => {
-      test("template string", async () => {
-        const STREAM_NAME = "template_string_stream";
-        const gossipEndpoints = cluster.endpoints
-          .map(({ address, port }) => `${address}:${port}`)
-          .join(",");
-
-        const client = EventStoreDBClient.connectionString`
-          esdb://${gossipEndpoints}
-            ?tls=false
-            &nodePreference=leader
-        `;
-
-        const appendResult = await client.appendToStream(
-          STREAM_NAME,
-          testEvent()
-        );
-
-        const readResult = await client.readStream(STREAM_NAME, {
-          maxCount: 10,
-        });
-
-        expect(appendResult).toBeDefined();
-        expect(readResult).toBeDefined();
-      });
-
-      test("string argument", async () => {
-        const STREAM_NAME = "string_stream";
-        const gossipEndpoints = cluster.endpoints
-          .map(({ address, port }) => `${address}:${port}`)
-          .join(",");
-        const connectionString = `esdb://${gossipEndpoints}?tls=false&nodePreference=leader`;
-
-        const client = EventStoreDBClient.connectionString(connectionString);
-
-        const appendResult = await client.appendToStream(
-          STREAM_NAME,
-          testEvent()
-        );
-        const readResult = await client.readStream(STREAM_NAME, {
-          maxCount: 10,
-        });
-
-        expect(appendResult).toBeDefined();
-        expect(readResult).toBeDefined();
-      });
-
-      test("default credentials", async () => {
-        const gossipEndpoints = cluster.endpoints
-          .map(({ address, port }) => `${address}:${port}`)
-          .join(",");
-
-        const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${gossipEndpoints}?tls=false&nodePreference=leader`;
-
+        const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${uri()}?${query()}`;
         await expect(client.readAll({ maxCount: 10 })).resolves.toBeDefined();
       });
     });

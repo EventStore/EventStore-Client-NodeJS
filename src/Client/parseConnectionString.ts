@@ -8,6 +8,7 @@ export interface QueryOptions {
   nodePreference?: NodePreference;
   tls?: boolean;
   tlsVerifyCert?: boolean;
+  tlsCAFile?: string;
   throwOnAppendFailure?: boolean;
   keepAliveInterval?: number;
   keepAliveTimeout?: number;
@@ -32,6 +33,7 @@ const lowerToKey: {
   nodepreference: "nodePreference",
   tls: "tls",
   tlsverifycert: "tlsVerifyCert",
+  tlscafile: "tlsCAFile",
   throwonappendfailure: "throwOnAppendFailure",
   keepaliveinterval: "keepAliveInterval",
   keepalivetimeout: "keepAliveTimeout",
@@ -253,6 +255,9 @@ const verifyKeyValuePair = (
       }
 
       return { key, value };
+    }
+    case "tlsCAFile": {
+      return { key, value: value };
     }
     case "maxDiscoverAttempts":
     case "discoveryInterval":

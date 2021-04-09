@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tlsCAFile If a file was not found, error should be thrown 1`] = `"Failed to load certificate file. File was not found."`;
