@@ -306,7 +306,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=false&throwOnAppendFailure=false&keepAliveInterval=10",
+    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=false&throwOnAppendFailure=false&keepAliveInterval=10&timeoutAfter=10000000",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -317,6 +317,7 @@ export const valid: Array<
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
       keepAliveInterval: 10,
+      timeoutAfter: 10_000_000,
       hosts: [
         {
           address: "host",
@@ -326,7 +327,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false&KEEPALIVEinterval=200",
+    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false&KEEPALIVEinterval=200&TIMEOUTaFTER=12",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -337,6 +338,7 @@ export const valid: Array<
       tlsVerifyCert: false,
       throwOnAppendFailure: false,
       keepAliveInterval: 200,
+      timeoutAfter: 12,
       hosts: [
         {
           address: "host",

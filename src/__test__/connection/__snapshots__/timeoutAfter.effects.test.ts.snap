@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timeoutAfter should time out a call call options 1`] = `"4 DEADLINE_EXCEEDED: Deadline exceeded"`;
+
+exports[`timeoutAfter should time out a call call options override 1`] = `"4 DEADLINE_EXCEEDED: Deadline exceeded"`;
+
+exports[`timeoutAfter should time out a call client settings 1`] = `"4 DEADLINE_EXCEEDED: Deadline exceeded"`;

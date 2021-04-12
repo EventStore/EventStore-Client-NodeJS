@@ -38,6 +38,11 @@ interface ClientOptions {
    * @default true
    */
   throwOnAppendFailure?: boolean;
+  /**
+   * An optional length of time (in milliseconds) to use for gRPC deadlines.
+   * @default 5_000
+   */
+  timeoutAfter?: number;
 }
 
 interface DiscoveryOptions {
@@ -91,6 +96,7 @@ export class Client {
   #insecure: boolean;
   #keepAliveInterval: number;
   #keepAliveTimeout: number;
+  #timeoutAfter: number;
 
   #defaultCredentials?: Credentials;
 
@@ -143,6 +149,7 @@ export class Client {
           throwOnAppendFailure: options.throwOnAppendFailure,
           keepAliveInterval: options.keepAliveInterval,
           keepAliveTimeout: options.keepAliveTimeout,
+          timeoutAfter: options.timeoutAfter,
         },
         channelCredentials,
         options.defaultCredentials
@@ -160,6 +167,7 @@ export class Client {
           throwOnAppendFailure: options.throwOnAppendFailure,
           keepAliveInterval: options.keepAliveInterval,
           keepAliveTimeout: options.keepAliveTimeout,
+          timeoutAfter: options.timeoutAfter,
         },
         channelCredentials,
         options.defaultCredentials
@@ -172,6 +180,7 @@ export class Client {
         throwOnAppendFailure: options.throwOnAppendFailure,
         keepAliveInterval: options.keepAliveInterval,
         keepAliveTimeout: options.keepAliveTimeout,
+        timeoutAfter: options.timeoutAfter,
       },
       channelCredentials,
       options.defaultCredentials
@@ -198,6 +207,7 @@ export class Client {
       throwOnAppendFailure = true,
       keepAliveInterval = 10_000,
       keepAliveTimeout = 10_000,
+      timeoutAfter = 5_000,
       ...connectionSettings
     }: ConnectionTypeOptions,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
@@ -221,9 +231,16 @@ export class Client {
       );
     }
 
+    if (timeoutAfter <= 0) {
+      throw new Error(
+        `Invalid timeoutAfter "${timeoutAfter}". Please provide a positive integer.`
+      );
+    }
+
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#keepAliveInterval = keepAliveInterval;
     this.#keepAliveTimeout = keepAliveTimeout;
+    this.#timeoutAfter = timeoutAfter;
     this.#connectionSettings = connectionSettings;
     this.#insecure = !!channelCredentials.insecure;
     this.#defaultCredentials = defaultUserCredentials;
@@ -344,7 +361,11 @@ export class Client {
   };
 
   protected callArguments = (
-    { credentials = this.#defaultCredentials, requiresLeader }: BaseOptions,
+    {
+      credentials = this.#defaultCredentials,
+      requiresLeader,
+      timeoutAfter = this.#timeoutAfter,
+    }: BaseOptions,
     callOptions?: CallOptions
   ): [Metadata, CallOptions] => {
     const metadata = new Metadata();
@@ -358,6 +379,10 @@ export class Client {
       options.credentials = grpcCallCredentials.createFromMetadataGenerator(
         this.createCredentialsMetadataGenerator(credentials)
       );
+    }
+
+    if (timeoutAfter != null) {
+      options.deadline = Date.now() + timeoutAfter;
     }
 
     return [metadata, options];

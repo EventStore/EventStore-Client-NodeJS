@@ -11,6 +11,7 @@ export interface QueryOptions {
   throwOnAppendFailure?: boolean;
   keepAliveInterval?: number;
   keepAliveTimeout?: number;
+  timeoutAfter?: number;
 }
 
 export interface ConnectionOptions extends QueryOptions {
@@ -35,6 +36,7 @@ const lowerToKey: {
   throwonappendfailure: "throwOnAppendFailure",
   keepaliveinterval: "keepAliveInterval",
   keepalivetimeout: "keepAliveTimeout",
+  timeoutafter: "timeoutAfter",
 };
 
 export const parseConnectionString = (
@@ -258,7 +260,8 @@ const verifyKeyValuePair = (
     case "discoveryInterval":
     case "gossipTimeout":
     case "keepAliveInterval":
-    case "keepAliveTimeout": {
+    case "keepAliveTimeout":
+    case "timeoutAfter": {
       const parsedValue = parseInt(value);
 
       if (Number.isNaN(parsedValue)) {
