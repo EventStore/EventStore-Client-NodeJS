@@ -121,7 +121,7 @@ export class Client {
     const options = parseConnectionString(string);
 
     const channelCredentials: ChannelCredentialOptions = {
-      insecure: !options.tls,
+      insecure: options.tls === false,
     };
 
     if (options.dnsDiscover) {
