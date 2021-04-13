@@ -252,6 +252,58 @@ export const valid: Array<
     },
   ],
   [
+    "esdb://host?tlsCAFile=/home/user/dev/cert.ca",
+    {
+      dnsDiscover: false,
+      tlsCAFile: "/home/user/dev/cert.ca",
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
+    "esdb://host?tlsCAFile=./cert.ca",
+    {
+      dnsDiscover: false,
+      tlsCAFile: "./cert.ca",
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
+    "esdb://host?tlsCAFile=C:\\Certificates\\EventStore\\Cert.ca",
+    {
+      dnsDiscover: false,
+      tlsCAFile: "C:\\Certificates\\EventStore\\Cert.ca",
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
+    "esdb://host?tlsCAFile=..\\EventStore\\Cert.ca",
+    {
+      dnsDiscover: false,
+      tlsCAFile: "..\\EventStore\\Cert.ca",
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
     "esdb://host?keepAliveInterval=-1&keepAliveTimeout=-1",
     {
       dnsDiscover: false,

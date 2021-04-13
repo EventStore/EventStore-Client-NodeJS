@@ -1,3 +1,6 @@
+import { existsSync, readFileSync } from "fs";
+import { isAbsolute, resolve } from "path";
+
 import {
   CallCredentials as grpcCallCredentials,
   CallOptions,
@@ -123,6 +126,28 @@ export class Client {
     const channelCredentials: ChannelCredentialOptions = {
       insecure: options.tls === false,
     };
+
+    if (options.tlsCAFile) {
+      if (channelCredentials.insecure) {
+        debug.connection(
+          "tslCAFile passed to insecure connection. Will be ignored."
+        );
+      } else {
+        const resolvedPath = isAbsolute(options.tlsCAFile)
+          ? options.tlsCAFile
+          : resolve(process.cwd(), options.tlsCAFile);
+
+        debug.connection(`Resolved tslCAFile option as ${resolvedPath}`);
+
+        if (!existsSync(resolvedPath)) {
+          throw new Error(
+            "Failed to load certificate file. File was not found."
+          );
+        }
+
+        channelCredentials.rootCertificate = readFileSync(resolvedPath);
+      }
+    }
 
     if (options.dnsDiscover) {
       const [discover] = options.hosts;
