@@ -79,7 +79,7 @@ export type ConnectionTypeOptions =
   | GossipClusterOptions
   | SingleNodeOptions;
 
-interface ChannelCredentialOptions {
+export interface ChannelCredentialOptions {
   insecure?: boolean;
   rootCertificate?: Buffer;
   privateKey?: Buffer;
