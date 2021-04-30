@@ -5,7 +5,7 @@ import "./streams";
 export {
   Client as EventStoreDBClient,
   ConnectionTypeOptions,
-  ChannelCredentialOptions
+  ChannelCredentialOptions,
 } from "./Client";
 export * from "./events";
 export * from "./constants";
