@@ -94,7 +94,7 @@ interface IUsersService_IResetPassword extends grpc.MethodDefinition<users_pb.Re
 
 export const UsersService: IUsersService;
 
-export interface IUsersServer {
+export interface IUsersServer extends grpc.UntypedServiceImplementation {
     create: grpc.handleUnaryCall<users_pb.CreateReq, users_pb.CreateResp>;
     update: grpc.handleUnaryCall<users_pb.UpdateReq, users_pb.UpdateResp>;
     delete: grpc.handleUnaryCall<users_pb.DeleteReq, users_pb.DeleteResp>;

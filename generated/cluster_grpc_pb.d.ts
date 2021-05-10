@@ -35,7 +35,7 @@ interface IGossipService_IRead extends grpc.MethodDefinition<shared_pb.Empty, cl
 
 export const GossipService: IGossipService;
 
-export interface IGossipServer {
+export interface IGossipServer extends grpc.UntypedServiceImplementation {
     update: grpc.handleUnaryCall<cluster_pb.GossipRequest, cluster_pb.ClusterInfo>;
     read: grpc.handleUnaryCall<shared_pb.Empty, cluster_pb.ClusterInfo>;
 }
@@ -145,7 +145,7 @@ interface IElectionsService_ILeaderIsResigningOk extends grpc.MethodDefinition<c
 
 export const ElectionsService: IElectionsService;
 
-export interface IElectionsServer {
+export interface IElectionsServer extends grpc.UntypedServiceImplementation {
     viewChange: grpc.handleUnaryCall<cluster_pb.ViewChangeRequest, shared_pb.Empty>;
     viewChangeProof: grpc.handleUnaryCall<cluster_pb.ViewChangeProofRequest, shared_pb.Empty>;
     prepare: grpc.handleUnaryCall<cluster_pb.PrepareRequest, shared_pb.Empty>;

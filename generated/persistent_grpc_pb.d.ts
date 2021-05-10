@@ -55,7 +55,7 @@ interface IPersistentSubscriptionsService_IRead extends grpc.MethodDefinition<pe
 
 export const PersistentSubscriptionsService: IPersistentSubscriptionsService;
 
-export interface IPersistentSubscriptionsServer {
+export interface IPersistentSubscriptionsServer extends grpc.UntypedServiceImplementation {
     create: grpc.handleUnaryCall<persistent_pb.CreateReq, persistent_pb.CreateResp>;
     update: grpc.handleUnaryCall<persistent_pb.UpdateReq, persistent_pb.UpdateResp>;
     delete: grpc.handleUnaryCall<persistent_pb.DeleteReq, persistent_pb.DeleteResp>;

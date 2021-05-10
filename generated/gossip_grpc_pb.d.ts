@@ -25,7 +25,7 @@ interface IGossipService_IRead extends grpc.MethodDefinition<shared_pb.Empty, go
 
 export const GossipService: IGossipService;
 
-export interface IGossipServer {
+export interface IGossipServer extends grpc.UntypedServiceImplementation {
     read: grpc.handleUnaryCall<shared_pb.Empty, gossip_pb.ClusterInfo>;
 }
 

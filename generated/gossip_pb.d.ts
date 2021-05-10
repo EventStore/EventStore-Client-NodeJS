@@ -13,7 +13,6 @@ export class ClusterInfo extends jspb.Message {
     setMembersList(value: Array<MemberInfo>): ClusterInfo;
     addMembers(value?: MemberInfo, index?: number): MemberInfo;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ClusterInfo.AsObject;
     static toObject(includeInstance: boolean, msg: ClusterInfo): ClusterInfo.AsObject;
@@ -33,10 +32,8 @@ export namespace ClusterInfo {
 export class EndPoint extends jspb.Message { 
     getAddress(): string;
     setAddress(value: string): EndPoint;
-
     getPort(): number;
     setPort(value: number): EndPoint;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): EndPoint.AsObject;
@@ -61,22 +58,17 @@ export class MemberInfo extends jspb.Message {
     clearInstanceId(): void;
     getInstanceId(): shared_pb.UUID | undefined;
     setInstanceId(value?: shared_pb.UUID): MemberInfo;
-
     getTimeStamp(): string;
     setTimeStamp(value: string): MemberInfo;
-
     getState(): MemberInfo.VNodeState;
     setState(value: MemberInfo.VNodeState): MemberInfo;
-
     getIsAlive(): boolean;
     setIsAlive(value: boolean): MemberInfo;
-
 
     hasHttpEndPoint(): boolean;
     clearHttpEndPoint(): void;
     getHttpEndPoint(): EndPoint | undefined;
     setHttpEndPoint(value?: EndPoint): MemberInfo;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): MemberInfo.AsObject;

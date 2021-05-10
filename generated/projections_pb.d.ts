@@ -15,7 +15,6 @@ export class CreateReq extends jspb.Message {
     getOptions(): CreateReq.Options | undefined;
     setOptions(value?: CreateReq.Options): CreateReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateReq.AsObject;
     static toObject(includeInstance: boolean, msg: CreateReq): CreateReq.AsObject;
@@ -39,21 +38,17 @@ export namespace CreateReq {
         getOneTime(): shared_pb.Empty | undefined;
         setOneTime(value?: shared_pb.Empty): Options;
 
-
         hasTransient(): boolean;
         clearTransient(): void;
         getTransient(): CreateReq.Options.Transient | undefined;
         setTransient(value?: CreateReq.Options.Transient): Options;
 
-
         hasContinuous(): boolean;
         clearContinuous(): void;
         getContinuous(): CreateReq.Options.Continuous | undefined;
         setContinuous(value?: CreateReq.Options.Continuous): Options;
-
         getQuery(): string;
         setQuery(value: string): Options;
-
 
         getModeCase(): Options.ModeCase;
 
@@ -80,7 +75,6 @@ export namespace CreateReq {
             getName(): string;
             setName(value: string): Transient;
 
-
             serializeBinary(): Uint8Array;
             toObject(includeInstance?: boolean): Transient.AsObject;
             static toObject(includeInstance: boolean, msg: Transient): Transient.AsObject;
@@ -100,10 +94,8 @@ export namespace CreateReq {
         export class Continuous extends jspb.Message { 
             getName(): string;
             setName(value: string): Continuous;
-
             getTrackEmittedStreams(): boolean;
             setTrackEmittedStreams(value: boolean): Continuous;
-
 
             serializeBinary(): Uint8Array;
             toObject(includeInstance?: boolean): Continuous.AsObject;
@@ -125,13 +117,9 @@ export namespace CreateReq {
 
         export enum ModeCase {
             MODE_NOT_SET = 0,
-        
-    ONE_TIME = 1,
-
-    TRANSIENT = 2,
-
-    CONTINUOUS = 3,
-
+            ONE_TIME = 1,
+            TRANSIENT = 2,
+            CONTINUOUS = 3,
         }
 
     }
@@ -162,7 +150,6 @@ export class UpdateReq extends jspb.Message {
     getOptions(): UpdateReq.Options | undefined;
     setOptions(value?: UpdateReq.Options): UpdateReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): UpdateReq.AsObject;
     static toObject(includeInstance: boolean, msg: UpdateReq): UpdateReq.AsObject;
@@ -182,22 +169,18 @@ export namespace UpdateReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
         getQuery(): string;
         setQuery(value: string): Options;
-
 
         hasEmitEnabled(): boolean;
         clearEmitEnabled(): void;
         getEmitEnabled(): boolean;
         setEmitEnabled(value: boolean): Options;
 
-
         hasNoEmitOptions(): boolean;
         clearNoEmitOptions(): void;
         getNoEmitOptions(): shared_pb.Empty | undefined;
         setNoEmitOptions(value?: shared_pb.Empty): Options;
-
 
         getEmitOptionCase(): Options.EmitOptionCase;
 
@@ -221,11 +204,8 @@ export namespace UpdateReq {
 
         export enum EmitOptionCase {
             EMIT_OPTION_NOT_SET = 0,
-        
-    EMIT_ENABLED = 3,
-
-    NO_EMIT_OPTIONS = 4,
-
+            EMIT_ENABLED = 3,
+            NO_EMIT_OPTIONS = 4,
         }
 
     }
@@ -256,7 +236,6 @@ export class DeleteReq extends jspb.Message {
     getOptions(): DeleteReq.Options | undefined;
     setOptions(value?: DeleteReq.Options): DeleteReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DeleteReq.AsObject;
     static toObject(includeInstance: boolean, msg: DeleteReq): DeleteReq.AsObject;
@@ -276,16 +255,12 @@ export namespace DeleteReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
         getDeleteEmittedStreams(): boolean;
         setDeleteEmittedStreams(value: boolean): Options;
-
         getDeleteStateStream(): boolean;
         setDeleteStateStream(value: boolean): Options;
-
         getDeleteCheckpointStream(): boolean;
         setDeleteCheckpointStream(value: boolean): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -332,7 +307,6 @@ export class StatisticsReq extends jspb.Message {
     getOptions(): StatisticsReq.Options | undefined;
     setOptions(value?: StatisticsReq.Options): StatisticsReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StatisticsReq.AsObject;
     static toObject(includeInstance: boolean, msg: StatisticsReq): StatisticsReq.AsObject;
@@ -356,30 +330,25 @@ export namespace StatisticsReq {
         getName(): string;
         setName(value: string): Options;
 
-
         hasAll(): boolean;
         clearAll(): void;
         getAll(): shared_pb.Empty | undefined;
         setAll(value?: shared_pb.Empty): Options;
-
 
         hasTransient(): boolean;
         clearTransient(): void;
         getTransient(): shared_pb.Empty | undefined;
         setTransient(value?: shared_pb.Empty): Options;
 
-
         hasContinuous(): boolean;
         clearContinuous(): void;
         getContinuous(): shared_pb.Empty | undefined;
         setContinuous(value?: shared_pb.Empty): Options;
 
-
         hasOneTime(): boolean;
         clearOneTime(): void;
         getOneTime(): shared_pb.Empty | undefined;
         setOneTime(value?: shared_pb.Empty): Options;
-
 
         getModeCase(): Options.ModeCase;
 
@@ -404,17 +373,11 @@ export namespace StatisticsReq {
 
         export enum ModeCase {
             MODE_NOT_SET = 0,
-        
-    NAME = 1,
-
-    ALL = 2,
-
-    TRANSIENT = 3,
-
-    CONTINUOUS = 4,
-
-    ONE_TIME = 5,
-
+            NAME = 1,
+            ALL = 2,
+            TRANSIENT = 3,
+            CONTINUOUS = 4,
+            ONE_TIME = 5,
         }
 
     }
@@ -427,7 +390,6 @@ export class StatisticsResp extends jspb.Message {
     clearDetails(): void;
     getDetails(): StatisticsResp.Details | undefined;
     setDetails(value?: StatisticsResp.Details): StatisticsResp;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StatisticsResp.AsObject;
@@ -448,61 +410,42 @@ export namespace StatisticsResp {
     export class Details extends jspb.Message { 
         getCoreprocessingtime(): string;
         setCoreprocessingtime(value: string): Details;
-
         getVersion(): string;
         setVersion(value: string): Details;
-
         getEpoch(): string;
         setEpoch(value: string): Details;
-
         getEffectivename(): string;
         setEffectivename(value: string): Details;
-
         getWritesinprogress(): number;
         setWritesinprogress(value: number): Details;
-
         getReadsinprogress(): number;
         setReadsinprogress(value: number): Details;
-
         getPartitionscached(): number;
         setPartitionscached(value: number): Details;
-
         getStatus(): string;
         setStatus(value: string): Details;
-
         getStatereason(): string;
         setStatereason(value: string): Details;
-
         getName(): string;
         setName(value: string): Details;
-
         getMode(): string;
         setMode(value: string): Details;
-
         getPosition(): string;
         setPosition(value: string): Details;
-
         getProgress(): number;
         setProgress(value: number): Details;
-
         getLastcheckpoint(): string;
         setLastcheckpoint(value: string): Details;
-
         getEventsprocessedafterrestart(): string;
         setEventsprocessedafterrestart(value: string): Details;
-
         getCheckpointstatus(): string;
         setCheckpointstatus(value: string): Details;
-
         getBufferedevents(): string;
         setBufferedevents(value: string): Details;
-
         getWritependingeventsbeforecheckpoint(): number;
         setWritependingeventsbeforecheckpoint(value: number): Details;
-
         getWritependingeventsaftercheckpoint(): number;
         setWritependingeventsaftercheckpoint(value: number): Details;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Details.AsObject;
@@ -547,7 +490,6 @@ export class StateReq extends jspb.Message {
     getOptions(): StateReq.Options | undefined;
     setOptions(value?: StateReq.Options): StateReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StateReq.AsObject;
     static toObject(includeInstance: boolean, msg: StateReq): StateReq.AsObject;
@@ -567,10 +509,8 @@ export namespace StateReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
         getPartition(): string;
         setPartition(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -598,7 +538,6 @@ export class StateResp extends jspb.Message {
     getState(): google_protobuf_struct_pb.Value | undefined;
     setState(value?: google_protobuf_struct_pb.Value): StateResp;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StateResp.AsObject;
     static toObject(includeInstance: boolean, msg: StateResp): StateResp.AsObject;
@@ -622,7 +561,6 @@ export class ResultReq extends jspb.Message {
     getOptions(): ResultReq.Options | undefined;
     setOptions(value?: ResultReq.Options): ResultReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ResultReq.AsObject;
     static toObject(includeInstance: boolean, msg: ResultReq): ResultReq.AsObject;
@@ -642,10 +580,8 @@ export namespace ResultReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
         getPartition(): string;
         setPartition(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -673,7 +609,6 @@ export class ResultResp extends jspb.Message {
     getResult(): google_protobuf_struct_pb.Value | undefined;
     setResult(value?: google_protobuf_struct_pb.Value): ResultResp;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ResultResp.AsObject;
     static toObject(includeInstance: boolean, msg: ResultResp): ResultResp.AsObject;
@@ -697,7 +632,6 @@ export class ResetReq extends jspb.Message {
     getOptions(): ResetReq.Options | undefined;
     setOptions(value?: ResetReq.Options): ResetReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ResetReq.AsObject;
     static toObject(includeInstance: boolean, msg: ResetReq): ResetReq.AsObject;
@@ -717,10 +651,8 @@ export namespace ResetReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
         getWriteCheckpoint(): boolean;
         setWriteCheckpoint(value: boolean): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -765,7 +697,6 @@ export class EnableReq extends jspb.Message {
     getOptions(): EnableReq.Options | undefined;
     setOptions(value?: EnableReq.Options): EnableReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): EnableReq.AsObject;
     static toObject(includeInstance: boolean, msg: EnableReq): EnableReq.AsObject;
@@ -785,7 +716,6 @@ export namespace EnableReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -829,7 +759,6 @@ export class DisableReq extends jspb.Message {
     getOptions(): DisableReq.Options | undefined;
     setOptions(value?: DisableReq.Options): DisableReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DisableReq.AsObject;
     static toObject(includeInstance: boolean, msg: DisableReq): DisableReq.AsObject;
@@ -849,10 +778,8 @@ export namespace DisableReq {
     export class Options extends jspb.Message { 
         getName(): string;
         setName(value: string): Options;
-
         getWriteCheckpoint(): boolean;
         setWriteCheckpoint(value: boolean): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
