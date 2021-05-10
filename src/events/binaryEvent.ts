@@ -3,21 +3,20 @@ import { BinaryEventData, BinaryEventType, MetadataType } from "../types";
 import { convertMetadata } from "./convertMetadata";
 
 // https://github.com/Microsoft/TypeScript/issues/12400
-type OptionalMetadata<
-  E extends BinaryEventType
-> = E["metadata"] extends MetadataType
-  ? {
-      /**
-       * The metadata of the event.
-       */
-      metadata: E["metadata"];
-    }
-  : {
-      /**
-       * The metadata of the event.
-       */
-      metadata?: E["metadata"];
-    };
+type OptionalMetadata<E extends BinaryEventType> =
+  E["metadata"] extends MetadataType
+    ? {
+        /**
+         * The metadata of the event.
+         */
+        metadata: E["metadata"];
+      }
+    : {
+        /**
+         * The metadata of the event.
+         */
+        metadata?: E["metadata"];
+      };
 
 export type BinaryEventOptions<E extends BinaryEventType> = {
   /**

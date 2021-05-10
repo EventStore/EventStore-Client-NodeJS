@@ -40,33 +40,32 @@ export const convertGrpcEvent: ConvertGrpcEvent<ResolvedEvent> = (
   return resolved;
 };
 
-export const convertAllStreamGrpcEvent: ConvertGrpcEvent<AllStreamResolvedEvent> = (
-  grpcEvent
-) => {
-  const resolved: AllStreamResolvedEvent = {};
+export const convertAllStreamGrpcEvent: ConvertGrpcEvent<AllStreamResolvedEvent> =
+  (grpcEvent) => {
+    const resolved: AllStreamResolvedEvent = {};
 
-  if (grpcEvent.hasEvent()) {
-    const event = grpcEvent.getEvent()!;
-    resolved.event = {
-      ...convertGrpcRecord(event),
-      position: extractPosition(event),
-    };
-  }
+    if (grpcEvent.hasEvent()) {
+      const event = grpcEvent.getEvent()!;
+      resolved.event = {
+        ...convertGrpcRecord(event),
+        position: extractPosition(event),
+      };
+    }
 
-  if (grpcEvent.hasLink()) {
-    const link = grpcEvent.getEvent()!;
-    resolved.link = {
-      ...convertGrpcRecord(link),
-      position: extractPosition(link),
-    };
-  }
+    if (grpcEvent.hasLink()) {
+      const link = grpcEvent.getEvent()!;
+      resolved.link = {
+        ...convertGrpcRecord(link),
+        position: extractPosition(link),
+      };
+    }
 
-  if (grpcEvent.hasCommitPosition()) {
-    resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
-  }
+    if (grpcEvent.hasCommitPosition()) {
+      resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
+    }
 
-  return resolved;
-};
+    return resolved;
+  };
 
 const extractPosition = (grpcRecord: GRPCRecordedEvent): Position => ({
   commit: BigInt(grpcRecord.getCommitPosition()),

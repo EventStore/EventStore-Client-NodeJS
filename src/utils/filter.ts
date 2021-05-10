@@ -59,7 +59,7 @@ const createFilterOn = (filterOn: FilterOn) => {
       filter.maxSearchWindow = options.maxSearchWindow;
     }
 
-    return (filter as unknown) as Filter;
+    return filter as unknown as Filter;
   }
 
   return createFilter;

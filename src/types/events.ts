@@ -173,21 +173,19 @@ export interface AllStreamResolvedEvent {
   commitPosition?: bigint;
 }
 
-export type EventTypeToRecordedEvent<
-  T extends EventType
-> = T extends JSONEventType
-  ? JSONRecordedEvent<T>
-  : T extends BinaryEventType
-  ? BinaryRecordedEvent<T>
-  : never;
+export type EventTypeToRecordedEvent<T extends EventType> =
+  T extends JSONEventType
+    ? JSONRecordedEvent<T>
+    : T extends BinaryEventType
+    ? BinaryRecordedEvent<T>
+    : never;
 
-export type RecordedEventToEventType<
-  T extends RecordedEvent
-> = T extends JSONRecordedEvent<infer E>
-  ? E
-  : T extends BinaryRecordedEvent<infer E>
-  ? E
-  : never;
+export type RecordedEventToEventType<T extends RecordedEvent> =
+  T extends JSONRecordedEvent<infer E>
+    ? E
+    : T extends BinaryRecordedEvent<infer E>
+    ? E
+    : never;
 
 export type EventTypeToEventData<T extends EventType> = T extends JSONEventType
   ? JSONEventData<T>
@@ -203,18 +201,16 @@ export type EventDataToEventType<T extends EventData> = T extends JSONEventData<
   ? E
   : never;
 
-export type RecordedEventToEventData<
-  T extends RecordedEvent
-> = T extends JSONRecordedEvent<infer E>
-  ? JSONEventData<E>
-  : T extends BinaryRecordedEvent<infer E>
-  ? BinaryEventData<E>
-  : never;
+export type RecordedEventToEventData<T extends RecordedEvent> =
+  T extends JSONRecordedEvent<infer E>
+    ? JSONEventData<E>
+    : T extends BinaryRecordedEvent<infer E>
+    ? BinaryEventData<E>
+    : never;
 
-export type EventDataToRecordedEvent<
-  T extends EventData
-> = T extends JSONRecordedEvent<infer E>
-  ? JSONEventData<E>
-  : T extends BinaryRecordedEvent<infer E>
-  ? BinaryEventData<E>
-  : never;
+export type EventDataToRecordedEvent<T extends EventData> =
+  T extends JSONRecordedEvent<infer E>
+    ? JSONEventData<E>
+    : T extends BinaryRecordedEvent<infer E>
+    ? BinaryEventData<E>
+    : never;

@@ -135,11 +135,9 @@ const parseHosts = (
   if (match && match.groups?.host) {
     nextPosition += match[0].length;
 
-    const [
-      address,
-      rawPort = "2113",
-      ...rest
-    ] = match.groups?.host.trim().split(":");
+    const [address, rawPort = "2113", ...rest] = match.groups?.host
+      .trim()
+      .split(":");
 
     if (rest.length) {
       throw new ParseError(

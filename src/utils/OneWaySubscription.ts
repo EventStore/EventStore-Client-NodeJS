@@ -12,7 +12,8 @@ type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
 export class OneWaySubscription<E>
   extends Transform
-  implements ReadableSubscription<E> {
+  implements ReadableSubscription<E>
+{
   #convertGrpcEvent: ConvertGrpcEvent<E>;
   #grpcStream: Promise<ClientReadableStream<ReadResp>>;
 

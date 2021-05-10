@@ -81,9 +81,8 @@ describe("setStreamMetadata", () => {
         metadata
       );
 
-      const {
-        metadata: readMetadata,
-      } = await client.getStreamMetadata<CustomStreamMetadata>(STREAM_NAME);
+      const { metadata: readMetadata } =
+        await client.getStreamMetadata<CustomStreamMetadata>(STREAM_NAME);
 
       expect(readMetadata).toEqual(metadata);
       // key is accessible on type

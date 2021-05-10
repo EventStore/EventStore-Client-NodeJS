@@ -14,7 +14,8 @@ type CreateGRPCStream = () => Promise<ClientDuplexStream<ReadReq, ReadResp>>;
 
 export class TwoWaySubscription
   extends Transform
-  implements PersistentSubscription {
+  implements PersistentSubscription
+{
   #grpcStream: Promise<ClientDuplexStream<ReadReq, ReadResp>>;
 
   constructor(createGRPCStream: CreateGRPCStream, options: TransformOptions) {

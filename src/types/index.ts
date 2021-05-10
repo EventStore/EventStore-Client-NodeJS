@@ -399,7 +399,7 @@ export interface PersistentSubscription<E extends EventType = EventType>
   ): Promise<void>;
 }
 
-export type StreamSubscription<
-  E extends EventType = EventType
-> = ReadableSubscription<ResolvedEvent<E>>;
-export type AllStreamSubscription = ReadableSubscription<AllStreamResolvedEvent>;
+export type StreamSubscription<E extends EventType = EventType> =
+  ReadableSubscription<ResolvedEvent<E>>;
+export type AllStreamSubscription =
+  ReadableSubscription<AllStreamResolvedEvent>;
