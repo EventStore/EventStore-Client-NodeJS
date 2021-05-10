@@ -1,7 +1,10 @@
 import { createTestNode } from "../utils";
 
-import { EventStoreDBClient } from "../..";
-import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
+import {
+  EventStoreDBClient,
+  PersistentSubscriptionExistsError,
+  persistentSubscriptionSettingsFromDefaults,
+} from "../..";
 
 describe("createPersistentSubscription", () => {
   const node = createTestNode();
@@ -49,5 +52,26 @@ describe("createPersistentSubscription", () => {
         )
       ).resolves.toBeUndefined();
     });
+  });
+
+  test("should throw an error if subscription exists", async () => {
+    const STREAM_NAME = "stream_name_already_exists";
+    const GROUP_NAME = "group_name_already_exists";
+
+    await expect(
+      client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults()
+      )
+    ).resolves.toBeUndefined();
+
+    await expect(
+      client.createPersistentSubscription(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionSettingsFromDefaults()
+      )
+    ).rejects.toThrowError(PersistentSubscriptionExistsError);
   });
 });
