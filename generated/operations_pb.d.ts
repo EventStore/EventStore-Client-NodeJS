@@ -14,7 +14,6 @@ export class StartScavengeReq extends jspb.Message {
     getOptions(): StartScavengeReq.Options | undefined;
     setOptions(value?: StartScavengeReq.Options): StartScavengeReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StartScavengeReq.AsObject;
     static toObject(includeInstance: boolean, msg: StartScavengeReq): StartScavengeReq.AsObject;
@@ -34,10 +33,8 @@ export namespace StartScavengeReq {
     export class Options extends jspb.Message { 
         getThreadCount(): number;
         setThreadCount(value: number): Options;
-
         getStartFromChunk(): number;
         setStartFromChunk(value: number): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -65,7 +62,6 @@ export class StopScavengeReq extends jspb.Message {
     getOptions(): StopScavengeReq.Options | undefined;
     setOptions(value?: StopScavengeReq.Options): StopScavengeReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StopScavengeReq.AsObject;
     static toObject(includeInstance: boolean, msg: StopScavengeReq): StopScavengeReq.AsObject;
@@ -85,7 +81,6 @@ export namespace StopScavengeReq {
     export class Options extends jspb.Message { 
         getScavengeId(): string;
         setScavengeId(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -108,10 +103,8 @@ export namespace StopScavengeReq {
 export class ScavengeResp extends jspb.Message { 
     getScavengeId(): string;
     setScavengeId(value: string): ScavengeResp;
-
     getScavengeResult(): ScavengeResp.ScavengeResult;
     setScavengeResult(value: ScavengeResp.ScavengeResult): ScavengeResp;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ScavengeResp.AsObject;
@@ -140,7 +133,6 @@ export namespace ScavengeResp {
 export class SetNodePriorityReq extends jspb.Message { 
     getPriority(): number;
     setPriority(value: number): SetNodePriorityReq;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SetNodePriorityReq.AsObject;

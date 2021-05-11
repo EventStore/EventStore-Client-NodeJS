@@ -14,7 +14,6 @@ export class ReadReq extends jspb.Message {
     getOptions(): ReadReq.Options | undefined;
     setOptions(value?: ReadReq.Options): ReadReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ReadReq.AsObject;
     static toObject(includeInstance: boolean, msg: ReadReq): ReadReq.AsObject;
@@ -38,48 +37,39 @@ export namespace ReadReq {
         getStream(): ReadReq.Options.StreamOptions | undefined;
         setStream(value?: ReadReq.Options.StreamOptions): Options;
 
-
         hasAll(): boolean;
         clearAll(): void;
         getAll(): ReadReq.Options.AllOptions | undefined;
         setAll(value?: ReadReq.Options.AllOptions): Options;
-
         getReadDirection(): ReadReq.Options.ReadDirection;
         setReadDirection(value: ReadReq.Options.ReadDirection): Options;
-
         getResolveLinks(): boolean;
         setResolveLinks(value: boolean): Options;
-
 
         hasCount(): boolean;
         clearCount(): void;
         getCount(): string;
         setCount(value: string): Options;
 
-
         hasSubscription(): boolean;
         clearSubscription(): void;
         getSubscription(): ReadReq.Options.SubscriptionOptions | undefined;
         setSubscription(value?: ReadReq.Options.SubscriptionOptions): Options;
-
 
         hasFilter(): boolean;
         clearFilter(): void;
         getFilter(): ReadReq.Options.FilterOptions | undefined;
         setFilter(value?: ReadReq.Options.FilterOptions): Options;
 
-
         hasNoFilter(): boolean;
         clearNoFilter(): void;
         getNoFilter(): shared_pb.Empty | undefined;
         setNoFilter(value?: shared_pb.Empty): Options;
 
-
         hasUuidOption(): boolean;
         clearUuidOption(): void;
         getUuidOption(): ReadReq.Options.UUIDOption | undefined;
         setUuidOption(value?: ReadReq.Options.UUIDOption): Options;
-
 
         getStreamOptionCase(): Options.StreamOptionCase;
         getCountOptionCase(): Options.CountOptionCase;
@@ -116,24 +106,20 @@ export namespace ReadReq {
             getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
             setStreamIdentifier(value?: shared_pb.StreamIdentifier): StreamOptions;
 
-
             hasRevision(): boolean;
             clearRevision(): void;
             getRevision(): string;
             setRevision(value: string): StreamOptions;
-
 
             hasStart(): boolean;
             clearStart(): void;
             getStart(): shared_pb.Empty | undefined;
             setStart(value?: shared_pb.Empty): StreamOptions;
 
-
             hasEnd(): boolean;
             clearEnd(): void;
             getEnd(): shared_pb.Empty | undefined;
             setEnd(value?: shared_pb.Empty): StreamOptions;
-
 
             getRevisionOptionCase(): StreamOptions.RevisionOptionCase;
 
@@ -157,13 +143,9 @@ export namespace ReadReq {
 
             export enum RevisionOptionCase {
                 REVISION_OPTION_NOT_SET = 0,
-            
-    REVISION = 2,
-
-    START = 3,
-
-    END = 4,
-
+                REVISION = 2,
+                START = 3,
+                END = 4,
             }
 
         }
@@ -175,18 +157,15 @@ export namespace ReadReq {
             getPosition(): ReadReq.Options.Position | undefined;
             setPosition(value?: ReadReq.Options.Position): AllOptions;
 
-
             hasStart(): boolean;
             clearStart(): void;
             getStart(): shared_pb.Empty | undefined;
             setStart(value?: shared_pb.Empty): AllOptions;
 
-
             hasEnd(): boolean;
             clearEnd(): void;
             getEnd(): shared_pb.Empty | undefined;
             setEnd(value?: shared_pb.Empty): AllOptions;
-
 
             getAllOptionCase(): AllOptions.AllOptionCase;
 
@@ -209,13 +188,9 @@ export namespace ReadReq {
 
             export enum AllOptionCase {
                 ALL_OPTION_NOT_SET = 0,
-            
-    POSITION = 1,
-
-    START = 2,
-
-    END = 3,
-
+                POSITION = 1,
+                START = 2,
+                END = 3,
             }
 
         }
@@ -240,10 +215,8 @@ export namespace ReadReq {
         export class Position extends jspb.Message { 
             getCommitPosition(): string;
             setCommitPosition(value: string): Position;
-
             getPreparePosition(): string;
             setPreparePosition(value: string): Position;
-
 
             serializeBinary(): Uint8Array;
             toObject(includeInstance?: boolean): Position.AsObject;
@@ -269,27 +242,22 @@ export namespace ReadReq {
             getStreamIdentifier(): ReadReq.Options.FilterOptions.Expression | undefined;
             setStreamIdentifier(value?: ReadReq.Options.FilterOptions.Expression): FilterOptions;
 
-
             hasEventType(): boolean;
             clearEventType(): void;
             getEventType(): ReadReq.Options.FilterOptions.Expression | undefined;
             setEventType(value?: ReadReq.Options.FilterOptions.Expression): FilterOptions;
-
 
             hasMax(): boolean;
             clearMax(): void;
             getMax(): number;
             setMax(value: number): FilterOptions;
 
-
             hasCount(): boolean;
             clearCount(): void;
             getCount(): shared_pb.Empty | undefined;
             setCount(value?: shared_pb.Empty): FilterOptions;
-
             getCheckpointintervalmultiplier(): number;
             setCheckpointintervalmultiplier(value: number): FilterOptions;
-
 
             getFilterCase(): FilterOptions.FilterCase;
             getWindowCase(): FilterOptions.WindowCase;
@@ -317,12 +285,10 @@ export namespace ReadReq {
             export class Expression extends jspb.Message { 
                 getRegex(): string;
                 setRegex(value: string): Expression;
-
                 clearPrefixList(): void;
                 getPrefixList(): Array<string>;
                 setPrefixList(value: Array<string>): Expression;
                 addPrefix(value: string, index?: number): string;
-
 
                 serializeBinary(): Uint8Array;
                 toObject(includeInstance?: boolean): Expression.AsObject;
@@ -344,20 +310,14 @@ export namespace ReadReq {
 
             export enum FilterCase {
                 FILTER_NOT_SET = 0,
-            
-    STREAM_IDENTIFIER = 1,
-
-    EVENT_TYPE = 2,
-
+                STREAM_IDENTIFIER = 1,
+                EVENT_TYPE = 2,
             }
 
             export enum WindowCase {
                 WINDOW_NOT_SET = 0,
-            
-    MAX = 3,
-
-    COUNT = 4,
-
+                MAX = 3,
+                COUNT = 4,
             }
 
         }
@@ -369,12 +329,10 @@ export namespace ReadReq {
             getStructured(): shared_pb.Empty | undefined;
             setStructured(value?: shared_pb.Empty): UUIDOption;
 
-
             hasString(): boolean;
             clearString(): void;
             getString(): shared_pb.Empty | undefined;
             setString(value?: shared_pb.Empty): UUIDOption;
-
 
             getContentCase(): UUIDOption.ContentCase;
 
@@ -396,11 +354,8 @@ export namespace ReadReq {
 
             export enum ContentCase {
                 CONTENT_NOT_SET = 0,
-            
-    STRUCTURED = 1,
-
-    STRING = 2,
-
+                STRUCTURED = 1,
+                STRING = 2,
             }
 
         }
@@ -414,29 +369,20 @@ export namespace ReadReq {
 
         export enum StreamOptionCase {
             STREAM_OPTION_NOT_SET = 0,
-        
-    STREAM = 1,
-
-    ALL = 2,
-
+            STREAM = 1,
+            ALL = 2,
         }
 
         export enum CountOptionCase {
             COUNT_OPTION_NOT_SET = 0,
-        
-    COUNT = 5,
-
-    SUBSCRIPTION = 6,
-
+            COUNT = 5,
+            SUBSCRIPTION = 6,
         }
 
         export enum FilterOptionCase {
             FILTER_OPTION_NOT_SET = 0,
-        
-    FILTER = 7,
-
-    NO_FILTER = 8,
-
+            FILTER = 7,
+            NO_FILTER = 8,
         }
 
     }
@@ -450,24 +396,20 @@ export class ReadResp extends jspb.Message {
     getEvent(): ReadResp.ReadEvent | undefined;
     setEvent(value?: ReadResp.ReadEvent): ReadResp;
 
-
     hasConfirmation(): boolean;
     clearConfirmation(): void;
     getConfirmation(): ReadResp.SubscriptionConfirmation | undefined;
     setConfirmation(value?: ReadResp.SubscriptionConfirmation): ReadResp;
-
 
     hasCheckpoint(): boolean;
     clearCheckpoint(): void;
     getCheckpoint(): ReadResp.Checkpoint | undefined;
     setCheckpoint(value?: ReadResp.Checkpoint): ReadResp;
 
-
     hasStreamNotFound(): boolean;
     clearStreamNotFound(): void;
     getStreamNotFound(): ReadResp.StreamNotFound | undefined;
     setStreamNotFound(value?: ReadResp.StreamNotFound): ReadResp;
-
 
     getContentCase(): ReadResp.ContentCase;
 
@@ -497,24 +439,20 @@ export namespace ReadResp {
         getEvent(): ReadResp.ReadEvent.RecordedEvent | undefined;
         setEvent(value?: ReadResp.ReadEvent.RecordedEvent): ReadEvent;
 
-
         hasLink(): boolean;
         clearLink(): void;
         getLink(): ReadResp.ReadEvent.RecordedEvent | undefined;
         setLink(value?: ReadResp.ReadEvent.RecordedEvent): ReadEvent;
-
 
         hasCommitPosition(): boolean;
         clearCommitPosition(): void;
         getCommitPosition(): string;
         setCommitPosition(value: string): ReadEvent;
 
-
         hasNoPosition(): boolean;
         clearNoPosition(): void;
         getNoPosition(): shared_pb.Empty | undefined;
         setNoPosition(value?: shared_pb.Empty): ReadEvent;
-
 
         getPositionCase(): ReadEvent.PositionCase;
 
@@ -544,35 +482,27 @@ export namespace ReadResp {
             getId(): shared_pb.UUID | undefined;
             setId(value?: shared_pb.UUID): RecordedEvent;
 
-
             hasStreamIdentifier(): boolean;
             clearStreamIdentifier(): void;
             getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
             setStreamIdentifier(value?: shared_pb.StreamIdentifier): RecordedEvent;
-
             getStreamRevision(): string;
             setStreamRevision(value: string): RecordedEvent;
-
             getPreparePosition(): string;
             setPreparePosition(value: string): RecordedEvent;
-
             getCommitPosition(): string;
             setCommitPosition(value: string): RecordedEvent;
 
-
             getMetadataMap(): jspb.Map<string, string>;
             clearMetadataMap(): void;
-
             getCustomMetadata(): Uint8Array | string;
             getCustomMetadata_asU8(): Uint8Array;
             getCustomMetadata_asB64(): string;
             setCustomMetadata(value: Uint8Array | string): RecordedEvent;
-
             getData(): Uint8Array | string;
             getData_asU8(): Uint8Array;
             getData_asB64(): string;
             setData(value: Uint8Array | string): RecordedEvent;
-
 
             serializeBinary(): Uint8Array;
             toObject(includeInstance?: boolean): RecordedEvent.AsObject;
@@ -601,11 +531,8 @@ export namespace ReadResp {
 
         export enum PositionCase {
             POSITION_NOT_SET = 0,
-        
-    COMMIT_POSITION = 3,
-
-    NO_POSITION = 4,
-
+            COMMIT_POSITION = 3,
+            NO_POSITION = 4,
         }
 
     }
@@ -613,7 +540,6 @@ export namespace ReadResp {
     export class SubscriptionConfirmation extends jspb.Message { 
         getSubscriptionId(): string;
         setSubscriptionId(value: string): SubscriptionConfirmation;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): SubscriptionConfirmation.AsObject;
@@ -634,10 +560,8 @@ export namespace ReadResp {
     export class Checkpoint extends jspb.Message { 
         getCommitPosition(): string;
         setCommitPosition(value: string): Checkpoint;
-
         getPreparePosition(): string;
         setPreparePosition(value: string): Checkpoint;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Checkpoint.AsObject;
@@ -663,7 +587,6 @@ export namespace ReadResp {
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): StreamNotFound;
 
-
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): StreamNotFound.AsObject;
         static toObject(includeInstance: boolean, msg: StreamNotFound): StreamNotFound.AsObject;
@@ -683,15 +606,10 @@ export namespace ReadResp {
 
     export enum ContentCase {
         CONTENT_NOT_SET = 0,
-    
-    EVENT = 1,
-
-    CONFIRMATION = 2,
-
-    CHECKPOINT = 3,
-
-    STREAM_NOT_FOUND = 4,
-
+        EVENT = 1,
+        CONFIRMATION = 2,
+        CHECKPOINT = 3,
+        STREAM_NOT_FOUND = 4,
     }
 
 }
@@ -703,12 +621,10 @@ export class AppendReq extends jspb.Message {
     getOptions(): AppendReq.Options | undefined;
     setOptions(value?: AppendReq.Options): AppendReq;
 
-
     hasProposedMessage(): boolean;
     clearProposedMessage(): void;
     getProposedMessage(): AppendReq.ProposedMessage | undefined;
     setProposedMessage(value?: AppendReq.ProposedMessage): AppendReq;
-
 
     getContentCase(): AppendReq.ContentCase;
 
@@ -736,30 +652,25 @@ export namespace AppendReq {
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
 
-
         hasRevision(): boolean;
         clearRevision(): void;
         getRevision(): string;
         setRevision(value: string): Options;
-
 
         hasNoStream(): boolean;
         clearNoStream(): void;
         getNoStream(): shared_pb.Empty | undefined;
         setNoStream(value?: shared_pb.Empty): Options;
 
-
         hasAny(): boolean;
         clearAny(): void;
         getAny(): shared_pb.Empty | undefined;
         setAny(value?: shared_pb.Empty): Options;
 
-
         hasStreamExists(): boolean;
         clearStreamExists(): void;
         getStreamExists(): shared_pb.Empty | undefined;
         setStreamExists(value?: shared_pb.Empty): Options;
-
 
         getExpectedStreamRevisionCase(): Options.ExpectedStreamRevisionCase;
 
@@ -784,15 +695,10 @@ export namespace AppendReq {
 
         export enum ExpectedStreamRevisionCase {
             EXPECTED_STREAM_REVISION_NOT_SET = 0,
-        
-    REVISION = 2,
-
-    NO_STREAM = 3,
-
-    ANY = 4,
-
-    STREAM_EXISTS = 5,
-
+            REVISION = 2,
+            NO_STREAM = 3,
+            ANY = 4,
+            STREAM_EXISTS = 5,
         }
 
     }
@@ -804,20 +710,16 @@ export namespace AppendReq {
         getId(): shared_pb.UUID | undefined;
         setId(value?: shared_pb.UUID): ProposedMessage;
 
-
         getMetadataMap(): jspb.Map<string, string>;
         clearMetadataMap(): void;
-
         getCustomMetadata(): Uint8Array | string;
         getCustomMetadata_asU8(): Uint8Array;
         getCustomMetadata_asB64(): string;
         setCustomMetadata(value: Uint8Array | string): ProposedMessage;
-
         getData(): Uint8Array | string;
         getData_asU8(): Uint8Array;
         getData_asB64(): string;
         setData(value: Uint8Array | string): ProposedMessage;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): ProposedMessage.AsObject;
@@ -842,11 +744,8 @@ export namespace AppendReq {
 
     export enum ContentCase {
         CONTENT_NOT_SET = 0,
-    
-    OPTIONS = 1,
-
-    PROPOSED_MESSAGE = 2,
-
+        OPTIONS = 1,
+        PROPOSED_MESSAGE = 2,
     }
 
 }
@@ -858,12 +757,10 @@ export class AppendResp extends jspb.Message {
     getSuccess(): AppendResp.Success | undefined;
     setSuccess(value?: AppendResp.Success): AppendResp;
 
-
     hasWrongExpectedVersion(): boolean;
     clearWrongExpectedVersion(): void;
     getWrongExpectedVersion(): AppendResp.WrongExpectedVersion | undefined;
     setWrongExpectedVersion(value?: AppendResp.WrongExpectedVersion): AppendResp;
-
 
     getResultCase(): AppendResp.ResultCase;
 
@@ -887,10 +784,8 @@ export namespace AppendResp {
     export class Position extends jspb.Message { 
         getCommitPosition(): string;
         setCommitPosition(value: string): Position;
-
         getPreparePosition(): string;
         setPreparePosition(value: string): Position;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Position.AsObject;
@@ -916,24 +811,20 @@ export namespace AppendResp {
         getCurrentRevision(): string;
         setCurrentRevision(value: string): Success;
 
-
         hasNoStream(): boolean;
         clearNoStream(): void;
         getNoStream(): shared_pb.Empty | undefined;
         setNoStream(value?: shared_pb.Empty): Success;
-
 
         hasPosition(): boolean;
         clearPosition(): void;
         getPosition(): AppendResp.Position | undefined;
         setPosition(value?: AppendResp.Position): Success;
 
-
         hasNoPosition(): boolean;
         clearNoPosition(): void;
         getNoPosition(): shared_pb.Empty | undefined;
         setNoPosition(value?: shared_pb.Empty): Success;
-
 
         getCurrentRevisionOptionCase(): Success.CurrentRevisionOptionCase;
         getPositionOptionCase(): Success.PositionOptionCase;
@@ -958,20 +849,14 @@ export namespace AppendResp {
 
         export enum CurrentRevisionOptionCase {
             CURRENT_REVISION_OPTION_NOT_SET = 0,
-        
-    CURRENT_REVISION = 1,
-
-    NO_STREAM = 2,
-
+            CURRENT_REVISION = 1,
+            NO_STREAM = 2,
         }
 
         export enum PositionOptionCase {
             POSITION_OPTION_NOT_SET = 0,
-        
-    POSITION = 3,
-
-    NO_POSITION = 4,
-
+            POSITION = 3,
+            NO_POSITION = 4,
         }
 
     }
@@ -983,66 +868,55 @@ export namespace AppendResp {
         getCurrentRevision2060(): number;
         setCurrentRevision2060(value: number): WrongExpectedVersion;
 
-
         hasNoStream2060(): boolean;
         clearNoStream2060(): void;
         getNoStream2060(): shared_pb.Empty | undefined;
         setNoStream2060(value?: shared_pb.Empty): WrongExpectedVersion;
-
 
         hasExpectedRevision2060(): boolean;
         clearExpectedRevision2060(): void;
         getExpectedRevision2060(): number;
         setExpectedRevision2060(value: number): WrongExpectedVersion;
 
-
         hasAny2060(): boolean;
         clearAny2060(): void;
         getAny2060(): shared_pb.Empty | undefined;
         setAny2060(value?: shared_pb.Empty): WrongExpectedVersion;
-
 
         hasStreamExists2060(): boolean;
         clearStreamExists2060(): void;
         getStreamExists2060(): shared_pb.Empty | undefined;
         setStreamExists2060(value?: shared_pb.Empty): WrongExpectedVersion;
 
-
         hasCurrentRevision(): boolean;
         clearCurrentRevision(): void;
         getCurrentRevision(): string;
         setCurrentRevision(value: string): WrongExpectedVersion;
-
 
         hasCurrentNoStream(): boolean;
         clearCurrentNoStream(): void;
         getCurrentNoStream(): shared_pb.Empty | undefined;
         setCurrentNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
 
-
         hasExpectedRevision(): boolean;
         clearExpectedRevision(): void;
         getExpectedRevision(): string;
         setExpectedRevision(value: string): WrongExpectedVersion;
-
 
         hasExpectedAny(): boolean;
         clearExpectedAny(): void;
         getExpectedAny(): shared_pb.Empty | undefined;
         setExpectedAny(value?: shared_pb.Empty): WrongExpectedVersion;
 
-
         hasExpectedStreamExists(): boolean;
         clearExpectedStreamExists(): void;
         getExpectedStreamExists(): shared_pb.Empty | undefined;
         setExpectedStreamExists(value?: shared_pb.Empty): WrongExpectedVersion;
 
-
         hasExpectedNoStream(): boolean;
         clearExpectedNoStream(): void;
         getExpectedNoStream(): shared_pb.Empty | undefined;
         setExpectedNoStream(value?: shared_pb.Empty): WrongExpectedVersion;
-
 
         getCurrentRevisionOption2060Case(): WrongExpectedVersion.CurrentRevisionOption2060Case;
         getExpectedRevisionOption2060Case(): WrongExpectedVersion.ExpectedRevisionOption2060Case;
@@ -1076,44 +950,29 @@ export namespace AppendResp {
 
         export enum CurrentRevisionOption2060Case {
             CURRENT_REVISION_OPTION_20_6_0_NOT_SET = 0,
-        
-    CURRENT_REVISION_20_6_0 = 1,
-
-    NO_STREAM_20_6_0 = 2,
-
+            CURRENT_REVISION_20_6_0 = 1,
+            NO_STREAM_20_6_0 = 2,
         }
 
         export enum ExpectedRevisionOption2060Case {
             EXPECTED_REVISION_OPTION_20_6_0_NOT_SET = 0,
-        
-    EXPECTED_REVISION_20_6_0 = 3,
-
-    ANY_20_6_0 = 4,
-
-    STREAM_EXISTS_20_6_0 = 5,
-
+            EXPECTED_REVISION_20_6_0 = 3,
+            ANY_20_6_0 = 4,
+            STREAM_EXISTS_20_6_0 = 5,
         }
 
         export enum CurrentRevisionOptionCase {
             CURRENT_REVISION_OPTION_NOT_SET = 0,
-        
-    CURRENT_REVISION = 6,
-
-    CURRENT_NO_STREAM = 7,
-
+            CURRENT_REVISION = 6,
+            CURRENT_NO_STREAM = 7,
         }
 
         export enum ExpectedRevisionOptionCase {
             EXPECTED_REVISION_OPTION_NOT_SET = 0,
-        
-    EXPECTED_REVISION = 8,
-
-    EXPECTED_ANY = 9,
-
-    EXPECTED_STREAM_EXISTS = 10,
-
-    EXPECTED_NO_STREAM = 11,
-
+            EXPECTED_REVISION = 8,
+            EXPECTED_ANY = 9,
+            EXPECTED_STREAM_EXISTS = 10,
+            EXPECTED_NO_STREAM = 11,
         }
 
     }
@@ -1121,11 +980,8 @@ export namespace AppendResp {
 
     export enum ResultCase {
         RESULT_NOT_SET = 0,
-    
-    SUCCESS = 1,
-
-    WRONG_EXPECTED_VERSION = 2,
-
+        SUCCESS = 1,
+        WRONG_EXPECTED_VERSION = 2,
     }
 
 }
@@ -1136,7 +992,6 @@ export class DeleteReq extends jspb.Message {
     clearOptions(): void;
     getOptions(): DeleteReq.Options | undefined;
     setOptions(value?: DeleteReq.Options): DeleteReq;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DeleteReq.AsObject;
@@ -1161,30 +1016,25 @@ export namespace DeleteReq {
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
 
-
         hasRevision(): boolean;
         clearRevision(): void;
         getRevision(): string;
         setRevision(value: string): Options;
-
 
         hasNoStream(): boolean;
         clearNoStream(): void;
         getNoStream(): shared_pb.Empty | undefined;
         setNoStream(value?: shared_pb.Empty): Options;
 
-
         hasAny(): boolean;
         clearAny(): void;
         getAny(): shared_pb.Empty | undefined;
         setAny(value?: shared_pb.Empty): Options;
 
-
         hasStreamExists(): boolean;
         clearStreamExists(): void;
         getStreamExists(): shared_pb.Empty | undefined;
         setStreamExists(value?: shared_pb.Empty): Options;
-
 
         getExpectedStreamRevisionCase(): Options.ExpectedStreamRevisionCase;
 
@@ -1209,15 +1059,10 @@ export namespace DeleteReq {
 
         export enum ExpectedStreamRevisionCase {
             EXPECTED_STREAM_REVISION_NOT_SET = 0,
-        
-    REVISION = 2,
-
-    NO_STREAM = 3,
-
-    ANY = 4,
-
-    STREAM_EXISTS = 5,
-
+            REVISION = 2,
+            NO_STREAM = 3,
+            ANY = 4,
+            STREAM_EXISTS = 5,
         }
 
     }
@@ -1231,12 +1076,10 @@ export class DeleteResp extends jspb.Message {
     getPosition(): DeleteResp.Position | undefined;
     setPosition(value?: DeleteResp.Position): DeleteResp;
 
-
     hasNoPosition(): boolean;
     clearNoPosition(): void;
     getNoPosition(): shared_pb.Empty | undefined;
     setNoPosition(value?: shared_pb.Empty): DeleteResp;
-
 
     getPositionOptionCase(): DeleteResp.PositionOptionCase;
 
@@ -1260,10 +1103,8 @@ export namespace DeleteResp {
     export class Position extends jspb.Message { 
         getCommitPosition(): string;
         setCommitPosition(value: string): Position;
-
         getPreparePosition(): string;
         setPreparePosition(value: string): Position;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Position.AsObject;
@@ -1285,11 +1126,8 @@ export namespace DeleteResp {
 
     export enum PositionOptionCase {
         POSITION_OPTION_NOT_SET = 0,
-    
-    POSITION = 1,
-
-    NO_POSITION = 2,
-
+        POSITION = 1,
+        NO_POSITION = 2,
     }
 
 }
@@ -1300,7 +1138,6 @@ export class TombstoneReq extends jspb.Message {
     clearOptions(): void;
     getOptions(): TombstoneReq.Options | undefined;
     setOptions(value?: TombstoneReq.Options): TombstoneReq;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): TombstoneReq.AsObject;
@@ -1325,30 +1162,25 @@ export namespace TombstoneReq {
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
 
-
         hasRevision(): boolean;
         clearRevision(): void;
         getRevision(): string;
         setRevision(value: string): Options;
-
 
         hasNoStream(): boolean;
         clearNoStream(): void;
         getNoStream(): shared_pb.Empty | undefined;
         setNoStream(value?: shared_pb.Empty): Options;
 
-
         hasAny(): boolean;
         clearAny(): void;
         getAny(): shared_pb.Empty | undefined;
         setAny(value?: shared_pb.Empty): Options;
 
-
         hasStreamExists(): boolean;
         clearStreamExists(): void;
         getStreamExists(): shared_pb.Empty | undefined;
         setStreamExists(value?: shared_pb.Empty): Options;
-
 
         getExpectedStreamRevisionCase(): Options.ExpectedStreamRevisionCase;
 
@@ -1373,15 +1205,10 @@ export namespace TombstoneReq {
 
         export enum ExpectedStreamRevisionCase {
             EXPECTED_STREAM_REVISION_NOT_SET = 0,
-        
-    REVISION = 2,
-
-    NO_STREAM = 3,
-
-    ANY = 4,
-
-    STREAM_EXISTS = 5,
-
+            REVISION = 2,
+            NO_STREAM = 3,
+            ANY = 4,
+            STREAM_EXISTS = 5,
         }
 
     }
@@ -1395,12 +1222,10 @@ export class TombstoneResp extends jspb.Message {
     getPosition(): TombstoneResp.Position | undefined;
     setPosition(value?: TombstoneResp.Position): TombstoneResp;
 
-
     hasNoPosition(): boolean;
     clearNoPosition(): void;
     getNoPosition(): shared_pb.Empty | undefined;
     setNoPosition(value?: shared_pb.Empty): TombstoneResp;
-
 
     getPositionOptionCase(): TombstoneResp.PositionOptionCase;
 
@@ -1424,10 +1249,8 @@ export namespace TombstoneResp {
     export class Position extends jspb.Message { 
         getCommitPosition(): string;
         setCommitPosition(value: string): Position;
-
         getPreparePosition(): string;
         setPreparePosition(value: string): Position;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Position.AsObject;
@@ -1449,11 +1272,8 @@ export namespace TombstoneResp {
 
     export enum PositionOptionCase {
         POSITION_OPTION_NOT_SET = 0,
-    
-    POSITION = 1,
-
-    NO_POSITION = 2,
-
+        POSITION = 1,
+        NO_POSITION = 2,
     }
 
 }

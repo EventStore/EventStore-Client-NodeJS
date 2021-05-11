@@ -85,7 +85,7 @@ interface IOperationsService_IRestartPersistentSubscriptions extends grpc.Method
 
 export const OperationsService: IOperationsService;
 
-export interface IOperationsServer {
+export interface IOperationsServer extends grpc.UntypedServiceImplementation {
     startScavenge: grpc.handleUnaryCall<operations_pb.StartScavengeReq, operations_pb.ScavengeResp>;
     stopScavenge: grpc.handleUnaryCall<operations_pb.StopScavengeReq, operations_pb.ScavengeResp>;
     shutdown: grpc.handleUnaryCall<shared_pb.Empty, shared_pb.Empty>;

@@ -76,19 +76,19 @@ export type StreamMetadata<
   CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
 > = SystemStreamMetadata & CustomMetadata;
 
-const convertAcl = (keyLookup: Record<string, string>) => (
-  acl: unknown
-): unknown => {
-  if (typeof acl === "string") return acl;
-  return Object.entries(acl as Record<string, unknown>).reduce(
-    (acc, [key, value]) => {
-      if (keyLookup[key]) return { ...acc, [keyLookup[key]]: value };
-      console.warn(`Unknown key "${key}" in acl will be ignored`);
-      return acc;
-    },
-    {}
-  );
-};
+const convertAcl =
+  (keyLookup: Record<string, string>) =>
+  (acl: unknown): unknown => {
+    if (typeof acl === "string") return acl;
+    return Object.entries(acl as Record<string, unknown>).reduce(
+      (acc, [key, value]) => {
+        if (keyLookup[key]) return { ...acc, [keyLookup[key]]: value };
+        console.warn(`Unknown key "${key}" in acl will be ignored`);
+        return acc;
+      },
+      {}
+    );
+  };
 const prepareAcl = convertAcl({
   readRoles: ACL_READ,
   writeRoles: ACL_WRITE,

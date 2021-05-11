@@ -55,7 +55,7 @@ interface IStreamsService_ITombstone extends grpc.MethodDefinition<streams_pb.To
 
 export const StreamsService: IStreamsService;
 
-export interface IStreamsServer {
+export interface IStreamsServer extends grpc.UntypedServiceImplementation {
     read: grpc.handleServerStreamingCall<streams_pb.ReadReq, streams_pb.ReadResp>;
     append: handleClientStreamingCall<streams_pb.AppendReq, streams_pb.AppendResp>;
     delete: grpc.handleUnaryCall<streams_pb.DeleteReq, streams_pb.DeleteResp>;

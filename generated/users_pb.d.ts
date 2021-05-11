@@ -13,7 +13,6 @@ export class CreateReq extends jspb.Message {
     getOptions(): CreateReq.Options | undefined;
     setOptions(value?: CreateReq.Options): CreateReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateReq.AsObject;
     static toObject(includeInstance: boolean, msg: CreateReq): CreateReq.AsObject;
@@ -33,18 +32,14 @@ export namespace CreateReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
         getPassword(): string;
         setPassword(value: string): Options;
-
         getFullName(): string;
         setFullName(value: string): Options;
-
         clearGroupsList(): void;
         getGroupsList(): Array<string>;
         setGroupsList(value: Array<string>): Options;
         addGroups(value: string, index?: number): string;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -91,7 +86,6 @@ export class UpdateReq extends jspb.Message {
     getOptions(): UpdateReq.Options | undefined;
     setOptions(value?: UpdateReq.Options): UpdateReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): UpdateReq.AsObject;
     static toObject(includeInstance: boolean, msg: UpdateReq): UpdateReq.AsObject;
@@ -111,18 +105,14 @@ export namespace UpdateReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
         getPassword(): string;
         setPassword(value: string): Options;
-
         getFullName(): string;
         setFullName(value: string): Options;
-
         clearGroupsList(): void;
         getGroupsList(): Array<string>;
         setGroupsList(value: Array<string>): Options;
         addGroups(value: string, index?: number): string;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -169,7 +159,6 @@ export class DeleteReq extends jspb.Message {
     getOptions(): DeleteReq.Options | undefined;
     setOptions(value?: DeleteReq.Options): DeleteReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DeleteReq.AsObject;
     static toObject(includeInstance: boolean, msg: DeleteReq): DeleteReq.AsObject;
@@ -189,7 +178,6 @@ export namespace DeleteReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -233,7 +221,6 @@ export class EnableReq extends jspb.Message {
     getOptions(): EnableReq.Options | undefined;
     setOptions(value?: EnableReq.Options): EnableReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): EnableReq.AsObject;
     static toObject(includeInstance: boolean, msg: EnableReq): EnableReq.AsObject;
@@ -253,7 +240,6 @@ export namespace EnableReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -297,7 +283,6 @@ export class DisableReq extends jspb.Message {
     getOptions(): DisableReq.Options | undefined;
     setOptions(value?: DisableReq.Options): DisableReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DisableReq.AsObject;
     static toObject(includeInstance: boolean, msg: DisableReq): DisableReq.AsObject;
@@ -317,7 +302,6 @@ export namespace DisableReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -361,7 +345,6 @@ export class DetailsReq extends jspb.Message {
     getOptions(): DetailsReq.Options | undefined;
     setOptions(value?: DetailsReq.Options): DetailsReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DetailsReq.AsObject;
     static toObject(includeInstance: boolean, msg: DetailsReq): DetailsReq.AsObject;
@@ -381,7 +364,6 @@ export namespace DetailsReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -408,7 +390,6 @@ export class DetailsResp extends jspb.Message {
     getUserDetails(): DetailsResp.UserDetails | undefined;
     setUserDetails(value?: DetailsResp.UserDetails): DetailsResp;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DetailsResp.AsObject;
     static toObject(includeInstance: boolean, msg: DetailsResp): DetailsResp.AsObject;
@@ -428,24 +409,19 @@ export namespace DetailsResp {
     export class UserDetails extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): UserDetails;
-
         getFullName(): string;
         setFullName(value: string): UserDetails;
-
         clearGroupsList(): void;
         getGroupsList(): Array<string>;
         setGroupsList(value: Array<string>): UserDetails;
         addGroups(value: string, index?: number): string;
 
-
         hasLastUpdated(): boolean;
         clearLastUpdated(): void;
         getLastUpdated(): DetailsResp.UserDetails.DateTime | undefined;
         setLastUpdated(value?: DetailsResp.UserDetails.DateTime): UserDetails;
-
         getDisabled(): boolean;
         setDisabled(value: boolean): UserDetails;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): UserDetails.AsObject;
@@ -470,7 +446,6 @@ export namespace DetailsResp {
         export class DateTime extends jspb.Message { 
             getTicksSinceEpoch(): string;
             setTicksSinceEpoch(value: string): DateTime;
-
 
             serializeBinary(): Uint8Array;
             toObject(includeInstance?: boolean): DateTime.AsObject;
@@ -499,7 +474,6 @@ export class ChangePasswordReq extends jspb.Message {
     getOptions(): ChangePasswordReq.Options | undefined;
     setOptions(value?: ChangePasswordReq.Options): ChangePasswordReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ChangePasswordReq.AsObject;
     static toObject(includeInstance: boolean, msg: ChangePasswordReq): ChangePasswordReq.AsObject;
@@ -519,13 +493,10 @@ export namespace ChangePasswordReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
         getCurrentPassword(): string;
         setCurrentPassword(value: string): Options;
-
         getNewPassword(): string;
         setNewPassword(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -571,7 +542,6 @@ export class ResetPasswordReq extends jspb.Message {
     getOptions(): ResetPasswordReq.Options | undefined;
     setOptions(value?: ResetPasswordReq.Options): ResetPasswordReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ResetPasswordReq.AsObject;
     static toObject(includeInstance: boolean, msg: ResetPasswordReq): ResetPasswordReq.AsObject;
@@ -591,10 +561,8 @@ export namespace ResetPasswordReq {
     export class Options extends jspb.Message { 
         getLoginName(): string;
         setLoginName(value: string): Options;
-
         getNewPassword(): string;
         setNewPassword(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;

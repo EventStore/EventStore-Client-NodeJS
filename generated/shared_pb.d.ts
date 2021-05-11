@@ -13,12 +13,10 @@ export class UUID extends jspb.Message {
     getStructured(): UUID.Structured | undefined;
     setStructured(value?: UUID.Structured): UUID;
 
-
     hasString(): boolean;
     clearString(): void;
     getString(): string;
     setString(value: string): UUID;
-
 
     getValueCase(): UUID.ValueCase;
 
@@ -42,10 +40,8 @@ export namespace UUID {
     export class Structured extends jspb.Message { 
         getMostSignificantBits(): string;
         setMostSignificantBits(value: string): Structured;
-
         getLeastSignificantBits(): string;
         setLeastSignificantBits(value: string): Structured;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Structured.AsObject;
@@ -67,11 +63,8 @@ export namespace UUID {
 
     export enum ValueCase {
         VALUE_NOT_SET = 0,
-    
-    STRUCTURED = 1,
-
-    STRING = 2,
-
+        STRUCTURED = 1,
+        STRING = 2,
     }
 
 }
@@ -98,7 +91,6 @@ export class StreamIdentifier extends jspb.Message {
     getStreamname_asU8(): Uint8Array;
     getStreamname_asB64(): string;
     setStreamname(value: Uint8Array | string): StreamIdentifier;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): StreamIdentifier.AsObject;

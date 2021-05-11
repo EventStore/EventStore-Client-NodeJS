@@ -116,7 +116,7 @@ interface IProjectionsService_IRestartSubsystem extends grpc.MethodDefinition<sh
 
 export const ProjectionsService: IProjectionsService;
 
-export interface IProjectionsServer {
+export interface IProjectionsServer extends grpc.UntypedServiceImplementation {
     create: grpc.handleUnaryCall<projections_pb.CreateReq, projections_pb.CreateResp>;
     update: grpc.handleUnaryCall<projections_pb.UpdateReq, projections_pb.UpdateResp>;
     delete: grpc.handleUnaryCall<projections_pb.DeleteReq, projections_pb.DeleteResp>;

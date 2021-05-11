@@ -14,18 +14,15 @@ export class ReadReq extends jspb.Message {
     getOptions(): ReadReq.Options | undefined;
     setOptions(value?: ReadReq.Options): ReadReq;
 
-
     hasAck(): boolean;
     clearAck(): void;
     getAck(): ReadReq.Ack | undefined;
     setAck(value?: ReadReq.Ack): ReadReq;
 
-
     hasNack(): boolean;
     clearNack(): void;
     getNack(): ReadReq.Nack | undefined;
     setNack(value?: ReadReq.Nack): ReadReq;
-
 
     getContentCase(): ReadReq.ContentCase;
 
@@ -53,19 +50,15 @@ export namespace ReadReq {
         clearStreamIdentifier(): void;
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
-
         getGroupName(): string;
         setGroupName(value: string): Options;
-
         getBufferSize(): number;
         setBufferSize(value: number): Options;
-
 
         hasUuidOption(): boolean;
         clearUuidOption(): void;
         getUuidOption(): ReadReq.Options.UUIDOption | undefined;
         setUuidOption(value?: ReadReq.Options.UUIDOption): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -93,12 +86,10 @@ export namespace ReadReq {
             getStructured(): shared_pb.Empty | undefined;
             setStructured(value?: shared_pb.Empty): UUIDOption;
 
-
             hasString(): boolean;
             clearString(): void;
             getString(): shared_pb.Empty | undefined;
             setString(value?: shared_pb.Empty): UUIDOption;
-
 
             getContentCase(): UUIDOption.ContentCase;
 
@@ -120,11 +111,8 @@ export namespace ReadReq {
 
             export enum ContentCase {
                 CONTENT_NOT_SET = 0,
-            
-    STRUCTURED = 1,
-
-    STRING = 2,
-
+                STRUCTURED = 1,
+                STRING = 2,
             }
 
         }
@@ -136,12 +124,10 @@ export namespace ReadReq {
         getId_asU8(): Uint8Array;
         getId_asB64(): string;
         setId(value: Uint8Array | string): Ack;
-
         clearIdsList(): void;
         getIdsList(): Array<shared_pb.UUID>;
         setIdsList(value: Array<shared_pb.UUID>): Ack;
         addIds(value?: shared_pb.UUID, index?: number): shared_pb.UUID;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Ack.AsObject;
@@ -165,18 +151,14 @@ export namespace ReadReq {
         getId_asU8(): Uint8Array;
         getId_asB64(): string;
         setId(value: Uint8Array | string): Nack;
-
         clearIdsList(): void;
         getIdsList(): Array<shared_pb.UUID>;
         setIdsList(value: Array<shared_pb.UUID>): Nack;
         addIds(value?: shared_pb.UUID, index?: number): shared_pb.UUID;
-
         getAction(): ReadReq.Nack.Action;
         setAction(value: ReadReq.Nack.Action): Nack;
-
         getReason(): string;
         setReason(value: string): Nack;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Nack.AsObject;
@@ -209,13 +191,9 @@ export namespace ReadReq {
 
     export enum ContentCase {
         CONTENT_NOT_SET = 0,
-    
-    OPTIONS = 1,
-
-    ACK = 2,
-
-    NACK = 3,
-
+        OPTIONS = 1,
+        ACK = 2,
+        NACK = 3,
     }
 
 }
@@ -227,12 +205,10 @@ export class ReadResp extends jspb.Message {
     getEvent(): ReadResp.ReadEvent | undefined;
     setEvent(value?: ReadResp.ReadEvent): ReadResp;
 
-
     hasSubscriptionConfirmation(): boolean;
     clearSubscriptionConfirmation(): void;
     getSubscriptionConfirmation(): ReadResp.SubscriptionConfirmation | undefined;
     setSubscriptionConfirmation(value?: ReadResp.SubscriptionConfirmation): ReadResp;
-
 
     getContentCase(): ReadResp.ContentCase;
 
@@ -260,36 +236,30 @@ export namespace ReadResp {
         getEvent(): ReadResp.ReadEvent.RecordedEvent | undefined;
         setEvent(value?: ReadResp.ReadEvent.RecordedEvent): ReadEvent;
 
-
         hasLink(): boolean;
         clearLink(): void;
         getLink(): ReadResp.ReadEvent.RecordedEvent | undefined;
         setLink(value?: ReadResp.ReadEvent.RecordedEvent): ReadEvent;
-
 
         hasCommitPosition(): boolean;
         clearCommitPosition(): void;
         getCommitPosition(): string;
         setCommitPosition(value: string): ReadEvent;
 
-
         hasNoPosition(): boolean;
         clearNoPosition(): void;
         getNoPosition(): shared_pb.Empty | undefined;
         setNoPosition(value?: shared_pb.Empty): ReadEvent;
-
 
         hasRetryCount(): boolean;
         clearRetryCount(): void;
         getRetryCount(): number;
         setRetryCount(value: number): ReadEvent;
 
-
         hasNoRetryCount(): boolean;
         clearNoRetryCount(): void;
         getNoRetryCount(): shared_pb.Empty | undefined;
         setNoRetryCount(value?: shared_pb.Empty): ReadEvent;
-
 
         getPositionCase(): ReadEvent.PositionCase;
         getCountCase(): ReadEvent.CountCase;
@@ -322,35 +292,27 @@ export namespace ReadResp {
             getId(): shared_pb.UUID | undefined;
             setId(value?: shared_pb.UUID): RecordedEvent;
 
-
             hasStreamIdentifier(): boolean;
             clearStreamIdentifier(): void;
             getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
             setStreamIdentifier(value?: shared_pb.StreamIdentifier): RecordedEvent;
-
             getStreamRevision(): string;
             setStreamRevision(value: string): RecordedEvent;
-
             getPreparePosition(): string;
             setPreparePosition(value: string): RecordedEvent;
-
             getCommitPosition(): string;
             setCommitPosition(value: string): RecordedEvent;
 
-
             getMetadataMap(): jspb.Map<string, string>;
             clearMetadataMap(): void;
-
             getCustomMetadata(): Uint8Array | string;
             getCustomMetadata_asU8(): Uint8Array;
             getCustomMetadata_asB64(): string;
             setCustomMetadata(value: Uint8Array | string): RecordedEvent;
-
             getData(): Uint8Array | string;
             getData_asU8(): Uint8Array;
             getData_asB64(): string;
             setData(value: Uint8Array | string): RecordedEvent;
-
 
             serializeBinary(): Uint8Array;
             toObject(includeInstance?: boolean): RecordedEvent.AsObject;
@@ -379,20 +341,14 @@ export namespace ReadResp {
 
         export enum PositionCase {
             POSITION_NOT_SET = 0,
-        
-    COMMIT_POSITION = 3,
-
-    NO_POSITION = 4,
-
+            COMMIT_POSITION = 3,
+            NO_POSITION = 4,
         }
 
         export enum CountCase {
             COUNT_NOT_SET = 0,
-        
-    RETRY_COUNT = 5,
-
-    NO_RETRY_COUNT = 6,
-
+            RETRY_COUNT = 5,
+            NO_RETRY_COUNT = 6,
         }
 
     }
@@ -400,7 +356,6 @@ export namespace ReadResp {
     export class SubscriptionConfirmation extends jspb.Message { 
         getSubscriptionId(): string;
         setSubscriptionId(value: string): SubscriptionConfirmation;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): SubscriptionConfirmation.AsObject;
@@ -421,11 +376,8 @@ export namespace ReadResp {
 
     export enum ContentCase {
         CONTENT_NOT_SET = 0,
-    
-    EVENT = 1,
-
-    SUBSCRIPTION_CONFIRMATION = 2,
-
+        EVENT = 1,
+        SUBSCRIPTION_CONFIRMATION = 2,
     }
 
 }
@@ -436,7 +388,6 @@ export class CreateReq extends jspb.Message {
     clearOptions(): void;
     getOptions(): CreateReq.Options | undefined;
     setOptions(value?: CreateReq.Options): CreateReq;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateReq.AsObject;
@@ -460,16 +411,13 @@ export namespace CreateReq {
         clearStreamIdentifier(): void;
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
-
         getGroupName(): string;
         setGroupName(value: string): Options;
-
 
         hasSettings(): boolean;
         clearSettings(): void;
         getSettings(): CreateReq.Settings | undefined;
         setSettings(value?: CreateReq.Settings): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -492,61 +440,46 @@ export namespace CreateReq {
     export class Settings extends jspb.Message { 
         getResolveLinks(): boolean;
         setResolveLinks(value: boolean): Settings;
-
         getRevision(): string;
         setRevision(value: string): Settings;
-
         getExtraStatistics(): boolean;
         setExtraStatistics(value: boolean): Settings;
-
         getMaxRetryCount(): number;
         setMaxRetryCount(value: number): Settings;
-
         getMinCheckpointCount(): number;
         setMinCheckpointCount(value: number): Settings;
-
         getMaxCheckpointCount(): number;
         setMaxCheckpointCount(value: number): Settings;
-
         getMaxSubscriberCount(): number;
         setMaxSubscriberCount(value: number): Settings;
-
         getLiveBufferSize(): number;
         setLiveBufferSize(value: number): Settings;
-
         getReadBatchSize(): number;
         setReadBatchSize(value: number): Settings;
-
         getHistoryBufferSize(): number;
         setHistoryBufferSize(value: number): Settings;
-
         getNamedConsumerStrategy(): CreateReq.ConsumerStrategy;
         setNamedConsumerStrategy(value: CreateReq.ConsumerStrategy): Settings;
-
 
         hasMessageTimeoutTicks(): boolean;
         clearMessageTimeoutTicks(): void;
         getMessageTimeoutTicks(): string;
         setMessageTimeoutTicks(value: string): Settings;
 
-
         hasMessageTimeoutMs(): boolean;
         clearMessageTimeoutMs(): void;
         getMessageTimeoutMs(): number;
         setMessageTimeoutMs(value: number): Settings;
-
 
         hasCheckpointAfterTicks(): boolean;
         clearCheckpointAfterTicks(): void;
         getCheckpointAfterTicks(): string;
         setCheckpointAfterTicks(value: string): Settings;
 
-
         hasCheckpointAfterMs(): boolean;
         clearCheckpointAfterMs(): void;
         getCheckpointAfterMs(): number;
         setCheckpointAfterMs(value: number): Settings;
-
 
         getMessageTimeoutCase(): Settings.MessageTimeoutCase;
         getCheckpointAfterCase(): Settings.CheckpointAfterCase;
@@ -582,20 +515,14 @@ export namespace CreateReq {
 
         export enum MessageTimeoutCase {
             MESSAGE_TIMEOUT_NOT_SET = 0,
-        
-    MESSAGE_TIMEOUT_TICKS = 4,
-
-    MESSAGE_TIMEOUT_MS = 14,
-
+            MESSAGE_TIMEOUT_TICKS = 4,
+            MESSAGE_TIMEOUT_MS = 14,
         }
 
         export enum CheckpointAfterCase {
             CHECKPOINT_AFTER_NOT_SET = 0,
-        
-    CHECKPOINT_AFTER_TICKS = 6,
-
-    CHECKPOINT_AFTER_MS = 15,
-
+            CHECKPOINT_AFTER_TICKS = 6,
+            CHECKPOINT_AFTER_MS = 15,
         }
 
     }
@@ -633,7 +560,6 @@ export class UpdateReq extends jspb.Message {
     getOptions(): UpdateReq.Options | undefined;
     setOptions(value?: UpdateReq.Options): UpdateReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): UpdateReq.AsObject;
     static toObject(includeInstance: boolean, msg: UpdateReq): UpdateReq.AsObject;
@@ -656,16 +582,13 @@ export namespace UpdateReq {
         clearStreamIdentifier(): void;
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
-
         getGroupName(): string;
         setGroupName(value: string): Options;
-
 
         hasSettings(): boolean;
         clearSettings(): void;
         getSettings(): UpdateReq.Settings | undefined;
         setSettings(value?: UpdateReq.Settings): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;
@@ -688,61 +611,46 @@ export namespace UpdateReq {
     export class Settings extends jspb.Message { 
         getResolveLinks(): boolean;
         setResolveLinks(value: boolean): Settings;
-
         getRevision(): string;
         setRevision(value: string): Settings;
-
         getExtraStatistics(): boolean;
         setExtraStatistics(value: boolean): Settings;
-
         getMaxRetryCount(): number;
         setMaxRetryCount(value: number): Settings;
-
         getMinCheckpointCount(): number;
         setMinCheckpointCount(value: number): Settings;
-
         getMaxCheckpointCount(): number;
         setMaxCheckpointCount(value: number): Settings;
-
         getMaxSubscriberCount(): number;
         setMaxSubscriberCount(value: number): Settings;
-
         getLiveBufferSize(): number;
         setLiveBufferSize(value: number): Settings;
-
         getReadBatchSize(): number;
         setReadBatchSize(value: number): Settings;
-
         getHistoryBufferSize(): number;
         setHistoryBufferSize(value: number): Settings;
-
         getNamedConsumerStrategy(): UpdateReq.ConsumerStrategy;
         setNamedConsumerStrategy(value: UpdateReq.ConsumerStrategy): Settings;
-
 
         hasMessageTimeoutTicks(): boolean;
         clearMessageTimeoutTicks(): void;
         getMessageTimeoutTicks(): string;
         setMessageTimeoutTicks(value: string): Settings;
 
-
         hasMessageTimeoutMs(): boolean;
         clearMessageTimeoutMs(): void;
         getMessageTimeoutMs(): number;
         setMessageTimeoutMs(value: number): Settings;
-
 
         hasCheckpointAfterTicks(): boolean;
         clearCheckpointAfterTicks(): void;
         getCheckpointAfterTicks(): string;
         setCheckpointAfterTicks(value: string): Settings;
 
-
         hasCheckpointAfterMs(): boolean;
         clearCheckpointAfterMs(): void;
         getCheckpointAfterMs(): number;
         setCheckpointAfterMs(value: number): Settings;
-
 
         getMessageTimeoutCase(): Settings.MessageTimeoutCase;
         getCheckpointAfterCase(): Settings.CheckpointAfterCase;
@@ -778,20 +686,14 @@ export namespace UpdateReq {
 
         export enum MessageTimeoutCase {
             MESSAGE_TIMEOUT_NOT_SET = 0,
-        
-    MESSAGE_TIMEOUT_TICKS = 4,
-
-    MESSAGE_TIMEOUT_MS = 14,
-
+            MESSAGE_TIMEOUT_TICKS = 4,
+            MESSAGE_TIMEOUT_MS = 14,
         }
 
         export enum CheckpointAfterCase {
             CHECKPOINT_AFTER_NOT_SET = 0,
-        
-    CHECKPOINT_AFTER_TICKS = 6,
-
-    CHECKPOINT_AFTER_MS = 15,
-
+            CHECKPOINT_AFTER_TICKS = 6,
+            CHECKPOINT_AFTER_MS = 15,
         }
 
     }
@@ -829,7 +731,6 @@ export class DeleteReq extends jspb.Message {
     getOptions(): DeleteReq.Options | undefined;
     setOptions(value?: DeleteReq.Options): DeleteReq;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): DeleteReq.AsObject;
     static toObject(includeInstance: boolean, msg: DeleteReq): DeleteReq.AsObject;
@@ -852,10 +753,8 @@ export namespace DeleteReq {
         clearStreamIdentifier(): void;
         getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
         setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
-
         getGroupName(): string;
         setGroupName(value: string): Options;
-
 
         serializeBinary(): Uint8Array;
         toObject(includeInstance?: boolean): Options.AsObject;

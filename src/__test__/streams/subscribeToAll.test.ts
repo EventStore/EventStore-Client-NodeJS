@@ -330,7 +330,7 @@ describe("subscribeToAll", () => {
 
           if (event.event.isJson) {
             readEvents.add(
-              ((event.event.data as unknown) as TestEventData).index
+              (event.event.data as unknown as TestEventData).index
             );
           }
         }

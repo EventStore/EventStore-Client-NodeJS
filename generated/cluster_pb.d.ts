@@ -14,12 +14,10 @@ export class GossipRequest extends jspb.Message {
     getInfo(): ClusterInfo | undefined;
     setInfo(value?: ClusterInfo): GossipRequest;
 
-
     hasServer(): boolean;
     clearServer(): void;
     getServer(): EndPoint | undefined;
     setServer(value?: EndPoint): GossipRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GossipRequest.AsObject;
@@ -45,15 +43,12 @@ export class ViewChangeRequest extends jspb.Message {
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): ViewChangeRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): ViewChangeRequest;
-
     getAttemptedView(): number;
     setAttemptedView(value: number): ViewChangeRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ViewChangeRequest.AsObject;
@@ -80,15 +75,12 @@ export class ViewChangeProofRequest extends jspb.Message {
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): ViewChangeProofRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): ViewChangeProofRequest;
-
     getInstalledView(): number;
     setInstalledView(value: number): ViewChangeProofRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ViewChangeProofRequest.AsObject;
@@ -115,15 +107,12 @@ export class PrepareRequest extends jspb.Message {
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): PrepareRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): PrepareRequest;
-
     getView(): number;
     setView(value: number): PrepareRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): PrepareRequest.AsObject;
@@ -147,54 +136,42 @@ export class PrepareOkRequest extends jspb.Message {
     getView(): number;
     setView(value: number): PrepareOkRequest;
 
-
     hasServerId(): boolean;
     clearServerId(): void;
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): PrepareOkRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): PrepareOkRequest;
-
     getEpochNumber(): number;
     setEpochNumber(value: number): PrepareOkRequest;
-
     getEpochPosition(): string;
     setEpochPosition(value: string): PrepareOkRequest;
-
 
     hasEpochId(): boolean;
     clearEpochId(): void;
     getEpochId(): shared_pb.UUID | undefined;
     setEpochId(value?: shared_pb.UUID): PrepareOkRequest;
 
-
     hasEpochLeaderInstanceId(): boolean;
     clearEpochLeaderInstanceId(): void;
     getEpochLeaderInstanceId(): shared_pb.UUID | undefined;
     setEpochLeaderInstanceId(value?: shared_pb.UUID): PrepareOkRequest;
-
     getLastCommitPosition(): string;
     setLastCommitPosition(value: string): PrepareOkRequest;
-
     getWriterCheckpoint(): string;
     setWriterCheckpoint(value: string): PrepareOkRequest;
-
     getChaserCheckpoint(): string;
     setChaserCheckpoint(value: string): PrepareOkRequest;
-
     getNodePriority(): number;
     setNodePriority(value: number): PrepareOkRequest;
-
 
     hasClusterInfo(): boolean;
     clearClusterInfo(): void;
     getClusterInfo(): ClusterInfo | undefined;
     setClusterInfo(value?: ClusterInfo): PrepareOkRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): PrepareOkRequest.AsObject;
@@ -230,57 +207,44 @@ export class ProposalRequest extends jspb.Message {
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): ProposalRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): ProposalRequest;
-
 
     hasLeaderId(): boolean;
     clearLeaderId(): void;
     getLeaderId(): shared_pb.UUID | undefined;
     setLeaderId(value?: shared_pb.UUID): ProposalRequest;
 
-
     hasLeaderHttp(): boolean;
     clearLeaderHttp(): void;
     getLeaderHttp(): EndPoint | undefined;
     setLeaderHttp(value?: EndPoint): ProposalRequest;
-
     getView(): number;
     setView(value: number): ProposalRequest;
-
     getEpochNumber(): number;
     setEpochNumber(value: number): ProposalRequest;
-
     getEpochPosition(): string;
     setEpochPosition(value: string): ProposalRequest;
-
 
     hasEpochId(): boolean;
     clearEpochId(): void;
     getEpochId(): shared_pb.UUID | undefined;
     setEpochId(value?: shared_pb.UUID): ProposalRequest;
 
-
     hasEpochLeaderInstanceId(): boolean;
     clearEpochLeaderInstanceId(): void;
     getEpochLeaderInstanceId(): shared_pb.UUID | undefined;
     setEpochLeaderInstanceId(value?: shared_pb.UUID): ProposalRequest;
-
     getLastCommitPosition(): string;
     setLastCommitPosition(value: string): ProposalRequest;
-
     getWriterCheckpoint(): string;
     setWriterCheckpoint(value: string): ProposalRequest;
-
     getChaserCheckpoint(): string;
     setChaserCheckpoint(value: string): ProposalRequest;
-
     getNodePriority(): number;
     setNodePriority(value: number): ProposalRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ProposalRequest.AsObject;
@@ -317,27 +281,22 @@ export class AcceptRequest extends jspb.Message {
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): AcceptRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): AcceptRequest;
-
 
     hasLeaderId(): boolean;
     clearLeaderId(): void;
     getLeaderId(): shared_pb.UUID | undefined;
     setLeaderId(value?: shared_pb.UUID): AcceptRequest;
 
-
     hasLeaderHttp(): boolean;
     clearLeaderHttp(): void;
     getLeaderHttp(): EndPoint | undefined;
     setLeaderHttp(value?: EndPoint): AcceptRequest;
-
     getView(): number;
     setView(value: number): AcceptRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): AcceptRequest.AsObject;
@@ -366,12 +325,10 @@ export class LeaderIsResigningRequest extends jspb.Message {
     getLeaderId(): shared_pb.UUID | undefined;
     setLeaderId(value?: shared_pb.UUID): LeaderIsResigningRequest;
 
-
     hasLeaderHttp(): boolean;
     clearLeaderHttp(): void;
     getLeaderHttp(): EndPoint | undefined;
     setLeaderHttp(value?: EndPoint): LeaderIsResigningRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): LeaderIsResigningRequest.AsObject;
@@ -397,24 +354,20 @@ export class LeaderIsResigningOkRequest extends jspb.Message {
     getLeaderId(): shared_pb.UUID | undefined;
     setLeaderId(value?: shared_pb.UUID): LeaderIsResigningOkRequest;
 
-
     hasLeaderHttp(): boolean;
     clearLeaderHttp(): void;
     getLeaderHttp(): EndPoint | undefined;
     setLeaderHttp(value?: EndPoint): LeaderIsResigningOkRequest;
-
 
     hasServerId(): boolean;
     clearServerId(): void;
     getServerId(): shared_pb.UUID | undefined;
     setServerId(value?: shared_pb.UUID): LeaderIsResigningOkRequest;
 
-
     hasServerHttp(): boolean;
     clearServerHttp(): void;
     getServerHttp(): EndPoint | undefined;
     setServerHttp(value?: EndPoint): LeaderIsResigningOkRequest;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): LeaderIsResigningOkRequest.AsObject;
@@ -441,7 +394,6 @@ export class ClusterInfo extends jspb.Message {
     setMembersList(value: Array<MemberInfo>): ClusterInfo;
     addMembers(value?: MemberInfo, index?: number): MemberInfo;
 
-
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ClusterInfo.AsObject;
     static toObject(includeInstance: boolean, msg: ClusterInfo): ClusterInfo.AsObject;
@@ -461,10 +413,8 @@ export namespace ClusterInfo {
 export class EndPoint extends jspb.Message { 
     getAddress(): string;
     setAddress(value: string): EndPoint;
-
     getPort(): number;
     setPort(value: number): EndPoint;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): EndPoint.AsObject;
@@ -489,76 +439,56 @@ export class MemberInfo extends jspb.Message {
     clearInstanceId(): void;
     getInstanceId(): shared_pb.UUID | undefined;
     setInstanceId(value?: shared_pb.UUID): MemberInfo;
-
     getTimeStamp(): string;
     setTimeStamp(value: string): MemberInfo;
-
     getState(): MemberInfo.VNodeState;
     setState(value: MemberInfo.VNodeState): MemberInfo;
-
     getIsAlive(): boolean;
     setIsAlive(value: boolean): MemberInfo;
-
 
     hasHttpEndPoint(): boolean;
     clearHttpEndPoint(): void;
     getHttpEndPoint(): EndPoint | undefined;
     setHttpEndPoint(value?: EndPoint): MemberInfo;
 
-
     hasInternalTcp(): boolean;
     clearInternalTcp(): void;
     getInternalTcp(): EndPoint | undefined;
     setInternalTcp(value?: EndPoint): MemberInfo;
 
-
     hasExternalTcp(): boolean;
     clearExternalTcp(): void;
     getExternalTcp(): EndPoint | undefined;
     setExternalTcp(value?: EndPoint): MemberInfo;
-
     getInternalTcpUsesTls(): boolean;
     setInternalTcpUsesTls(value: boolean): MemberInfo;
-
     getExternalTcpUsesTls(): boolean;
     setExternalTcpUsesTls(value: boolean): MemberInfo;
-
     getLastCommitPosition(): string;
     setLastCommitPosition(value: string): MemberInfo;
-
     getWriterCheckpoint(): string;
     setWriterCheckpoint(value: string): MemberInfo;
-
     getChaserCheckpoint(): string;
     setChaserCheckpoint(value: string): MemberInfo;
-
     getEpochPosition(): string;
     setEpochPosition(value: string): MemberInfo;
-
     getEpochNumber(): number;
     setEpochNumber(value: number): MemberInfo;
-
 
     hasEpochId(): boolean;
     clearEpochId(): void;
     getEpochId(): shared_pb.UUID | undefined;
     setEpochId(value?: shared_pb.UUID): MemberInfo;
-
     getNodePriority(): number;
     setNodePriority(value: number): MemberInfo;
-
     getIsReadOnlyReplica(): boolean;
     setIsReadOnlyReplica(value: boolean): MemberInfo;
-
     getAdvertiseHostToClientAs(): string;
     setAdvertiseHostToClientAs(value: string): MemberInfo;
-
     getAdvertiseHttpPortToClientAs(): number;
     setAdvertiseHttpPortToClientAs(value: number): MemberInfo;
-
     getAdvertiseTcpPortToClientAs(): number;
     setAdvertiseTcpPortToClientAs(value: number): MemberInfo;
-
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): MemberInfo.AsObject;

@@ -98,10 +98,8 @@ export class Client {
   #defaultCredentials?: Credentials;
 
   #channel?: Promise<Channel>;
-  #grpcClients: Map<
-    GRPCClientConstructor<GRPCClient>,
-    Promise<GRPCClient>
-  > = new Map();
+  #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
+    new Map();
 
   // eslint-disable-next-line jsdoc/require-param
   /**
@@ -288,7 +286,8 @@ export class Client {
   private createGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>
   ): Promise<T> => {
-    const channelOverride: GRPCClientOptions["channelOverride"] = await this.getChannel();
+    const channelOverride: GRPCClientOptions["channelOverride"] =
+      await this.getChannel();
 
     const client = new Client(
       null as never,
@@ -348,25 +347,27 @@ export class Client {
     return `${address}:${port}`;
   };
 
-  private createCredentialsMetadataGenerator = ({
-    username,
-    password,
-  }: Credentials): Parameters<
-    typeof grpcCredentials.createFromMetadataGenerator
-  >[0] => (_, cb) => {
-    const metadata = new Metadata();
+  private createCredentialsMetadataGenerator =
+    ({
+      username,
+      password,
+    }: Credentials): Parameters<
+      typeof grpcCredentials.createFromMetadataGenerator
+    >[0] =>
+    (_, cb) => {
+      const metadata = new Metadata();
 
-    if (this.#insecure) {
-      debug.connection(
-        "Credentials are unsupported in insecure mode, and will be ignored."
-      );
-    } else {
-      const auth = Buffer.from(`${username}:${password}`).toString("base64");
-      metadata.add("authorization", `Basic ${auth}`);
-    }
+      if (this.#insecure) {
+        debug.connection(
+          "Credentials are unsupported in insecure mode, and will be ignored."
+        );
+      } else {
+        const auth = Buffer.from(`${username}:${password}`).toString("base64");
+        metadata.add("authorization", `Basic ${auth}`);
+      }
 
-    return cb(null, metadata);
-  };
+      return cb(null, metadata);
+    };
 
   protected callArguments = (
     { credentials = this.#defaultCredentials, requiresLeader }: BaseOptions,
