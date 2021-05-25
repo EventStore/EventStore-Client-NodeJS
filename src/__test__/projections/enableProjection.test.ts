@@ -1,6 +1,12 @@
 import { createTestNode } from "../utils";
 
-import { ABORTED, EventStoreDBClient, RUNNING, UnknownError } from "../..";
+import {
+  ABORTED,
+  EventStoreDBClient,
+  RUNNING,
+  STOPPED,
+  UnknownError,
+} from "../..";
 
 describe("enableProjection", () => {
   const node = createTestNode();
@@ -40,7 +46,10 @@ describe("enableProjection", () => {
     const beforeDetails = await client.getProjectionStatistics(PROJECTION_NAME);
 
     expect(beforeDetails).toBeDefined();
-    expect(beforeDetails.projectionStatus).toBe(ABORTED);
+
+    // Incorrect projection status was switched (ABORTED -> STOPPED) in
+    // https://github.com/EventStore/EventStore/pull/2944
+    expect([STOPPED, ABORTED]).toContain(beforeDetails.projectionStatus);
 
     await client.enableProjection(PROJECTION_NAME);
 

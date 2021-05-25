@@ -58,7 +58,10 @@ describe("disableProjection", () => {
       );
 
       expect(afterDetails).toBeDefined();
-      expect(afterDetails.projectionStatus).toBe(ABORTED);
+
+      // Incorrect projection status was switched (ABORTED -> STOPPED) in
+      // https://github.com/EventStore/EventStore/pull/2944
+      expect([STOPPED, ABORTED]).toContain(afterDetails.projectionStatus);
     });
 
     test("do not write a checkpoint", async () => {
@@ -82,7 +85,10 @@ describe("disableProjection", () => {
       );
 
       expect(afterDetails).toBeDefined();
-      expect(afterDetails.projectionStatus).toBe(STOPPED);
+
+      // Incorrect projection status was fixed (STOPPED -> ABORTED) in
+      // https://github.com/EventStore/EventStore/pull/2944
+      expect([ABORTED, STOPPED]).toContain(afterDetails.projectionStatus);
     });
   });
 
