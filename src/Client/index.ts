@@ -74,7 +74,16 @@ export interface SingleNodeOptions extends ClientOptions {
   endpoint: EndPoint | string;
 }
 
+/**
+ * @deprecated Will be removed in next version, please use members directly.
+ */
 export type ConnectionTypeOptions =
+  | DNSClusterOptions
+  | GossipClusterOptions
+  | SingleNodeOptions;
+
+// This type replaces ConnectionTypeOptions, is now internal.
+type ConnectionSettings =
   | DNSClusterOptions
   | GossipClusterOptions
   | SingleNodeOptions;
@@ -89,7 +98,7 @@ export interface ChannelCredentialOptions {
 
 export class Client {
   #throwOnAppendFailure: boolean;
-  #connectionSettings: ConnectionTypeOptions;
+  #connectionSettings: ConnectionSettings;
   #channelCredentials: ChannelCredentials;
   #insecure: boolean;
   #keepAliveInterval: number;
@@ -222,7 +231,7 @@ export class Client {
       keepAliveInterval = 10_000,
       keepAliveTimeout = 10_000,
       ...connectionSettings
-    }: ConnectionTypeOptions,
+    }: ConnectionSettings,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
     defaultUserCredentials?: Credentials
   ) {
