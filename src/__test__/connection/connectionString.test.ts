@@ -1,4 +1,5 @@
 import {
+  collect,
   createInsecureTestCluster,
   createInsecureTestNode,
   createTestCluster,
@@ -73,9 +74,11 @@ describe("connectionString", () => {
           STREAM_NAME,
           jsonTestEvents()
         );
-        const readResult = await client.readStream(STREAM_NAME, {
-          maxCount: 10,
-        });
+        const readResult = await collect(
+          client.readStream(STREAM_NAME, {
+            maxCount: 10,
+          })
+        );
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -92,9 +95,11 @@ describe("connectionString", () => {
           STREAM_NAME,
           jsonTestEvents()
         );
-        const readResult = await client.readStream(STREAM_NAME, {
-          maxCount: 10,
-        });
+        const readResult = await collect(
+          client.readStream(STREAM_NAME, {
+            maxCount: 10,
+          })
+        );
 
         expect(appendResult).toBeDefined();
         expect(readResult).toBeDefined();
@@ -102,7 +107,9 @@ describe("connectionString", () => {
 
       test("default credentials", async () => {
         const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${uri()}?${query()}`;
-        await expect(client.readAll({ maxCount: 10 })).resolves.toBeDefined();
+        await expect(
+          collect(client.readAll({ maxCount: 10 }))
+        ).resolves.toBeDefined();
       });
     });
   });

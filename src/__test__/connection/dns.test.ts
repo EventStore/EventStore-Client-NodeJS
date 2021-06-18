@@ -1,4 +1,4 @@
-import { jsonTestEvents, optionalDescribe } from "../utils";
+import { collect, jsonTestEvents, optionalDescribe } from "../utils";
 
 import {
   EventStoreDBClient,
@@ -39,7 +39,9 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
       const client = createClient();
 
       const appendResult = await client.appendToStream(STREAM_NAME, event);
-      const readResult = await client.readStream(STREAM_NAME, { maxCount: 10 });
+      const readResult = await collect(
+        client.readStream(STREAM_NAME, { maxCount: 10 })
+      );
 
       expect(appendResult).toBeDefined();
       expect(readResult).toBeDefined();

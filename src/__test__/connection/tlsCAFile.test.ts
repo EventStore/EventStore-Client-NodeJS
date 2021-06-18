@@ -1,4 +1,4 @@
-import { createTestNode, jsonTestEvents } from "../utils";
+import { collect, createTestNode, jsonTestEvents } from "../utils";
 import { EventStoreDBClient } from "../..";
 import { relative, resolve } from "path";
 
@@ -31,7 +31,9 @@ describe("tlsCAFile", () => {
       STREAM_NAME,
       jsonTestEvents()
     );
-    const readResult = await client.readStream(STREAM_NAME, { maxCount: 10 });
+    const readResult = await collect(
+      client.readStream(STREAM_NAME, { maxCount: 10 })
+    );
 
     expect(appendResult).toBeDefined();
     expect(readResult).toBeDefined();

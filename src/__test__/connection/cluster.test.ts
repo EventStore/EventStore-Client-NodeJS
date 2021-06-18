@@ -1,4 +1,4 @@
-import { createTestCluster } from "../utils";
+import { collect, createTestCluster } from "../utils";
 
 import { jsonEvent, EventStoreDBClient } from "../..";
 
@@ -22,7 +22,9 @@ describe("cluster", () => {
     );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
-    const readResult = await client.readStream(STREAM_NAME, { maxCount: 10 });
+    const readResult = collect(
+      client.readStream(STREAM_NAME, { maxCount: 10 })
+    );
 
     expect(appendResult).toBeDefined();
     expect(readResult).toBeDefined();
