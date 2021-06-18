@@ -1,3 +1,5 @@
+import { ReadableOptions } from "stream";
+
 import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
@@ -8,8 +10,9 @@ import {
   ReadPosition,
   Direction,
   AllStreamResolvedEvent,
+  StreamingRead,
 } from "../types";
-import { debug, convertAllStreamGrpcEvent, handleBatchRead } from "../utils";
+import { debug, convertAllStreamGrpcEvent, ReadStream } from "../utils";
 import { BACKWARDS, FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
@@ -38,19 +41,23 @@ declare module "../Client" {
      * You might need to be authenticated to execute the command successfully.
      * @param options Reading options.
      */
-    readAll(options?: ReadAllOptions): Promise<AllStreamResolvedEvent[]>;
+    readAll(
+      options?: ReadAllOptions,
+      readableOptions?: ReadableOptions
+    ): StreamingRead<AllStreamResolvedEvent>;
   }
 }
 
-Client.prototype.readAll = async function (
+Client.prototype.readAll = function (
   this: Client,
   {
     maxCount = Number.MAX_SAFE_INTEGER,
     fromPosition = START,
     direction = FORWARDS,
     ...baseOptions
-  }: ReadAllOptions = {}
-): Promise<AllStreamResolvedEvent[]> {
+  }: ReadAllOptions = {},
+  readableOptions: ReadableOptions = {}
+): StreamingRead<AllStreamResolvedEvent> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
 
@@ -106,7 +113,17 @@ Client.prototype.readAll = async function (
   });
   debug.command_grpc("readAll: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "readAll");
-  const stream = client.read(req, ...this.callArguments(baseOptions));
-  return handleBatchRead(stream, convertAllStreamGrpcEvent);
+  return new ReadStream(
+    async () => {
+      const client = await this.getGRPCClient(StreamsClient, "readAll");
+      return client.read(
+        req,
+        ...this.callArguments(baseOptions, {
+          deadline: Infinity,
+        })
+      );
+    },
+    convertAllStreamGrpcEvent,
+    readableOptions
+  );
 };
