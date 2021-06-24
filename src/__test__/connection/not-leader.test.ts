@@ -1,4 +1,4 @@
-import { createTestCluster } from "../utils";
+import { collect, createTestCluster } from "../utils";
 
 import {
   jsonEvent,
@@ -39,12 +39,14 @@ describe("not-leader", () => {
     expect(appendResult).toBeDefined();
 
     const readFromTestStream = (client: EventStoreDBClient) => {
-      return client.readStream(STREAM_NAME, {
-        maxCount: 10,
-        direction: BACKWARDS,
-        fromRevision: END,
-        requiresLeader: true,
-      });
+      return collect(
+        client.readStream(STREAM_NAME, {
+          maxCount: 10,
+          direction: BACKWARDS,
+          fromRevision: END,
+          requiresLeader: true,
+        })
+      );
     };
 
     try {

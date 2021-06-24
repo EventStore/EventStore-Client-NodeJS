@@ -1,6 +1,11 @@
 import { createTestNode, jsonTestEvents } from "../utils";
 
-import { EventStoreDBClient, BACKWARDS, END } from "../..";
+import {
+  EventStoreDBClient,
+  BACKWARDS,
+  END,
+  AllStreamResolvedEvent,
+} from "../..";
 
 describe("readAll", () => {
   const node = createTestNode();
@@ -26,50 +31,69 @@ describe("readAll", () => {
 
   describe("should successfully read from $all", () => {
     test("from start", async () => {
-      const events = await client.readAll();
+      let count = 0;
+      const notSystemStreams = [];
 
-      expect(events).toBeDefined();
-      expect(events.length).toBeGreaterThan(8);
+      for await (const { event } of client.readAll()) {
+        count++;
 
-      const filteredEvents = events.filter(
-        ({ event }) => !event?.streamId.startsWith("$")
-      );
-      expect(filteredEvents.length).toEqual(8);
-      expect(filteredEvents[0].event?.streamId).toBe(STREAM_NAME_A);
+        if (event && !event.streamId.startsWith("$")) {
+          notSystemStreams.push(event.streamId);
+        }
+      }
+
+      expect(count).toBeGreaterThan(8);
+      expect(notSystemStreams.length).toEqual(8);
+      expect(notSystemStreams[0]).toBe(STREAM_NAME_A);
     });
 
     test("from position", async () => {
-      const [, , eventToExtract] = await client.readAll({ maxCount: 3 });
+      let eventToExtract!: AllStreamResolvedEvent;
 
-      const { position } = eventToExtract.event!;
+      for await (const event of client.readAll({ maxCount: 3 })) {
+        eventToExtract = event;
+      }
+      const { position } = eventToExtract!.event!;
 
-      const [extracted] = await client.readAll({
+      let extracted!: AllStreamResolvedEvent;
+      for await (const event of client.readAll({
         maxCount: 1,
         fromPosition: position,
-      });
+      })) {
+        extracted = event;
+      }
 
       expect(extracted).toEqual(eventToExtract);
     });
 
     test("backwards from end", async () => {
-      const events = await client.readAll({
+      let count = 0;
+      const notSystemStreams = [];
+
+      for await (const { event } of client.readAll({
         direction: BACKWARDS,
         fromPosition: END,
-      });
+      })) {
+        count++;
 
-      expect(events).toBeDefined();
-      expect(events.length).toBeGreaterThan(8);
+        if (event && !event.streamId.startsWith("$")) {
+          notSystemStreams.push(event.streamId);
+        }
+      }
 
-      const filteredEvents = events.filter(
-        ({ event }) => !event?.streamId.startsWith("$")
-      );
-      expect(filteredEvents.length).toEqual(8);
-      expect(filteredEvents[0].event?.streamId).toBe(STREAM_NAME_B);
+      expect(count).toBeGreaterThan(8);
+      expect(notSystemStreams.length).toEqual(8);
+      expect(notSystemStreams[0]).toBe(STREAM_NAME_B);
     });
 
-    test("count", async () => {
-      const events = await client.readAll({ maxCount: 2 });
-      expect(events.length).toBe(2);
+    test("maxCount", async () => {
+      let count = 0;
+
+      for await (const _ of client.readAll({ maxCount: 2 })) {
+        count++;
+      }
+
+      expect(count).toBe(2);
     });
   });
 });

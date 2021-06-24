@@ -145,12 +145,15 @@ describe("setStreamMetadata", () => {
       await client.setStreamMetadata(STREAM_NAME, metadata);
       await client.appendToStream(STREAM_NAME, jsonTestEvents(20));
 
-      const events = await client.readStream(STREAM_NAME, {
+      let count = 0;
+      for await (const _ of client.readStream(STREAM_NAME, {
         fromRevision: START,
         maxCount: 200,
-      });
+      })) {
+        count++;
+      }
 
-      expect(events.length).toBe(2);
+      expect(count).toBe(2);
     });
 
     describe("disallows non integer numbers", () => {

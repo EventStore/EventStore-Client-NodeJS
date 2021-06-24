@@ -6,6 +6,7 @@ export const createInsecureTestNode = (): Cluster => new Cluster(1, true);
 export const createInsecureTestCluster = (count = 3): Cluster =>
   new Cluster(count, true);
 
+export * from "./collect";
 export * from "./Defer";
 export * from "./delay";
 export * from "./testEvents";

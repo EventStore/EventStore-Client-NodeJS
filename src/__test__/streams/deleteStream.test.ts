@@ -1,4 +1,4 @@
-import { createTestNode, jsonTestEvents } from "../utils";
+import { collect, createTestNode, jsonTestEvents } from "../utils";
 
 import {
   EventStoreDBClient,
@@ -38,7 +38,7 @@ describe("deleteStream", () => {
         expect(result).toBeDefined();
 
         await expect(
-          client.readStream(ANY_REVISION_STREAM, { maxCount: 10 })
+          collect(client.readStream(ANY_REVISION_STREAM, { maxCount: 10 }))
         ).rejects.toThrowError(StreamNotFoundError);
       });
     });
@@ -68,11 +68,13 @@ describe("deleteStream", () => {
         });
 
         it("succeeds", async () => {
-          const events = await client.readStream(STREAM, {
-            maxCount: 1,
-            direction: BACKWARDS,
-            fromRevision: "end",
-          });
+          const events = await collect(
+            client.readStream(STREAM, {
+              maxCount: 1,
+              direction: BACKWARDS,
+              fromRevision: "end",
+            })
+          );
 
           const expectedRevision = events[0].event!.revision;
 
@@ -83,7 +85,7 @@ describe("deleteStream", () => {
           expect(result).toBeDefined();
 
           await expect(
-            client.readStream(STREAM, { maxCount: 1 })
+            collect(client.readStream(STREAM, { maxCount: 1 }))
           ).rejects.toThrowError(StreamNotFoundError);
         });
       });

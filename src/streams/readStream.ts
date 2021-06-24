@@ -1,3 +1,5 @@
+import { ReadableOptions } from "stream";
+
 import { StreamIdentifier, Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
@@ -11,8 +13,9 @@ import {
   EventType,
   ReadRevision,
   ResolvedEvent,
+  StreamingRead,
 } from "../types";
-import { debug, handleBatchRead, convertGrpcEvent } from "../utils";
+import { debug, convertGrpcEvent, ReadStream } from "../utils";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**
@@ -48,12 +51,13 @@ declare module "../Client" {
      */
     readStream<KnownEventType extends EventType = EventType>(
       streamName: string,
-      options?: ReadStreamOptions
-    ): Promise<ResolvedEvent<KnownEventType>[]>;
+      options?: ReadStreamOptions,
+      readableOptions?: ReadableOptions
+    ): StreamingRead<ResolvedEvent<KnownEventType>>;
   }
 }
 
-Client.prototype.readStream = async function <
+Client.prototype.readStream = function <
   KnownEventType extends EventType = EventType
 >(
   this: Client,
@@ -64,8 +68,9 @@ Client.prototype.readStream = async function <
     resolveLinkTos = false,
     direction = FORWARDS,
     ...baseOptions
-  }: ReadStreamOptions = {}
-): Promise<ResolvedEvent<KnownEventType>[]> {
+  }: ReadStreamOptions = {},
+  readableOptions: ReadableOptions = {}
+): StreamingRead<ResolvedEvent<KnownEventType>> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
@@ -123,8 +128,17 @@ Client.prototype.readStream = async function <
   });
   debug.command_grpc("readStream: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "readStream");
-  const readableStream = client.read(req, ...this.callArguments(baseOptions));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return handleBatchRead<ResolvedEvent<any>>(readableStream, convertGrpcEvent);
+  return new ReadStream(
+    async () => {
+      const client = await this.getGRPCClient(StreamsClient, "readStream");
+      return client.read(
+        req,
+        ...this.callArguments(baseOptions, {
+          deadline: Infinity,
+        })
+      );
+    },
+    convertGrpcEvent,
+    readableOptions
+  );
 };

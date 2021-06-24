@@ -1,12 +1,13 @@
-import { createTestNode, jsonTestEvents } from "../utils";
+import { collect, createTestNode, jsonTestEvents } from "../utils";
 
 import {
   WrongExpectedVersionError,
   StreamDeletedError,
   NO_STREAM,
   EventStoreDBClient,
+  BACKWARDS,
+  END,
 } from "../..";
-import { BACKWARDS, END } from "../../constants";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {
@@ -37,11 +38,11 @@ describe("tombstoneStream", () => {
         expect(result).toBeDefined();
 
         try {
-          const result = await client.readStream(ANY_REVISION_STREAM, {
+          for await (const event of client.readStream(ANY_REVISION_STREAM, {
             maxCount: 10,
-          });
-
-          expect(result).toBe("Unreachable");
+          })) {
+            expect(event).toBe("Unreachable");
+          }
         } catch (error) {
           expect(error).toBeInstanceOf(StreamDeletedError);
 
@@ -77,13 +78,15 @@ describe("tombstoneStream", () => {
         });
 
         it("succeeds", async () => {
-          const [resolvedEvent] = await client.readStream(STREAM, {
+          let revision!: bigint;
+
+          for await (const { event } of client.readStream(STREAM, {
             maxCount: 1,
             direction: BACKWARDS,
             fromRevision: END,
-          });
-
-          const revision = resolvedEvent.event!.revision;
+          })) {
+            revision = event!.revision;
+          }
 
           const result = await client.tombstoneStream(STREAM, {
             expectedRevision: revision,
@@ -91,9 +94,21 @@ describe("tombstoneStream", () => {
 
           expect(result).toBeDefined();
 
-          await expect(() =>
-            client.readStream(STREAM, { maxCount: 10 })
-          ).rejects.toThrowError(StreamDeletedError);
+          try {
+            for await (const event of client.readStream(STREAM, {
+              maxCount: 10,
+            })) {
+              expect(event).toBeDefined();
+            }
+
+            expect(true).toBe("Unreachable");
+          } catch (error) {
+            expect(error).toBeInstanceOf(StreamDeletedError);
+
+            if (error instanceof StreamDeletedError) {
+              expect(error.streamName).toBe(STREAM);
+            }
+          }
         });
       });
 
@@ -128,7 +143,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           await expect(() =>
-            client.readStream(NOT_A_STREAM, { maxCount: 10 })
+            collect(client.readStream(NOT_A_STREAM, { maxCount: 10 }))
           ).rejects.toThrowError(StreamDeletedError);
         });
       });

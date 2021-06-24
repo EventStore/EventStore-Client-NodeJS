@@ -179,19 +179,19 @@ describe("typed events should compile", () => {
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);
 
-    const [resolvedEvent] = await client.readStream<KnownEvents>(STREAM_NAME, {
+    for await (const { event } of client.readStream<KnownEvents>(STREAM_NAME, {
       maxCount: 1,
-    });
-
-    switch (resolvedEvent.event?.type) {
-      case "my-event":
-        // `hello` exists on the data of `my-event` so we can access it deirectly
-        expect(resolvedEvent.event.data.hello).toBeDefined();
-        break;
-      case "my-other-event":
-        // @ts-expect-error `hello` doesnt exist on `my-other-event`, so this errors
-        expect(resolvedEvent.event.data.hello).not.toBeDefined();
-        break;
+    })) {
+      switch (event?.type) {
+        case "my-event":
+          // `hello` exists on the data of `my-event` so we can access it deirectly
+          expect(event.data.hello).toBeDefined();
+          break;
+        case "my-other-event":
+          // @ts-expect-error `hello` doesnt exist on `my-other-event`, so this errors
+          expect(event.data.hello).not.toBeDefined();
+          break;
+      }
     }
   });
 

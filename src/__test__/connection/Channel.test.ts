@@ -1,4 +1,4 @@
-import { createTestCluster, jsonTestEvents } from "../utils";
+import { collect, createTestCluster, jsonTestEvents } from "../utils";
 import { EventStoreDBClient } from "../..";
 
 describe("Channel", () => {
@@ -30,11 +30,13 @@ describe("Channel", () => {
 
     const promises: Promise<unknown>[] = [
       client.appendToStream("stream_1", jsonTestEvents()),
-      client.readAll({
-        maxCount: 1,
-        fromPosition: "start",
-        direction: "forwards",
-      }),
+      collect(
+        client.readAll({
+          maxCount: 1,
+          fromPosition: "start",
+          direction: "forwards",
+        })
+      ),
       client.appendToStream("stream_2", jsonTestEvents()),
     ];
 

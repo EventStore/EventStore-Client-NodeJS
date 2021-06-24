@@ -60,14 +60,18 @@ Client.prototype.getStreamMetadata = async function <
   });
 
   try {
-    const [metadataEvent] = await this.readStream(metadataStreamName, {
+    let metadataEvent;
+
+    for await (const e of this.readStream(metadataStreamName, {
       ...baseOptions,
       fromRevision: END,
       maxCount: 1,
       direction: BACKWARDS,
-    });
+    })) {
+      metadataEvent = e;
+    }
 
-    if (!metadataEvent.event || !metadataEvent.event.isJson) {
+    if (!metadataEvent || !metadataEvent.event || !metadataEvent.event.isJson) {
       return { streamName };
     }
 
