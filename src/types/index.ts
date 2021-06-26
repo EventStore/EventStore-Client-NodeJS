@@ -22,6 +22,10 @@ export interface BaseOptions {
    * Command requires a leader node.
    */
   requiresLeader?: boolean;
+  /**
+   * Overwrite default length of time (in milliseconds) for gRPC deadlines.
+   */
+  timeoutAfter?: number;
 }
 
 /**

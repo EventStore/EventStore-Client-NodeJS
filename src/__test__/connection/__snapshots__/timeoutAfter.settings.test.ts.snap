@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`timeoutAfter settings should throw on negative connectionString 1`] = `"Invalid timeoutAfter \\"-1\\". Please provide a positive integer."`;
+
+exports[`timeoutAfter settings should throw on negative connectionString 2`] = `"Invalid timeoutAfter \\"-1000000000000000\\". Please provide a positive integer."`;
+
+exports[`timeoutAfter settings should throw on negative constructor 1`] = `"Invalid timeoutAfter \\"-1\\". Please provide a positive integer."`;
+
+exports[`timeoutAfter settings should throw on negative constructor 2`] = `"Invalid timeoutAfter \\"-1000000000000000\\". Please provide a positive integer."`;
+
+exports[`timeoutAfter settings should throw on zero connectionString 1`] = `"Invalid timeoutAfter \\"0\\". Please provide a positive integer."`;
+
+exports[`timeoutAfter settings should throw on zero constructor 1`] = `"Invalid timeoutAfter \\"0\\". Please provide a positive integer."`;
