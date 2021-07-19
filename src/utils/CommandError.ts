@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { status as StatusCode, ServiceError } from "@grpc/grpc-js";
+import { status as StatusCode, ServiceError, Metadata } from "@grpc/grpc-js";
 import { CurrentRevision, EndPoint, AppendExpectedRevision } from "../types";
 
 export enum ErrorType {
@@ -302,7 +302,9 @@ export type CommandError =
   | UnavailableError
   | UnknownError;
 
-export const convertToCommandError = (error: ServiceError): CommandError => {
+export const convertToCommandError = (error: Error): CommandError | Error => {
+  if (isCommandError(error) || !isServiceError(error)) return error;
+
   const exeption = error.metadata?.getMap()["exception"]?.toString();
 
   switch (exeption) {
@@ -356,4 +358,11 @@ export const convertToCommandError = (error: ServiceError): CommandError => {
 
 export const isCommandError = (error: Error): error is CommandError => {
   return error instanceof CommandErrorBase;
+};
+
+const isServiceError = (error: Error | ServiceError): error is ServiceError => {
+  return (
+    ("metadata" in error && error.metadata instanceof Metadata) ||
+    ("code" in error && typeof error.code === "number")
+  );
 };

@@ -113,16 +113,20 @@ Client.prototype.readAll = function (
   });
   debug.command_grpc("readAll: %g", req);
 
-  return new ReadStream(
-    async () => {
-      const client = await this.getGRPCClient(StreamsClient, "readAll");
-      return client.read(
+  const createGRPCStream = this.GRPCStreamCreator(
+    StreamsClient,
+    "readAll",
+    (client) =>
+      client.read(
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
-      );
-    },
+      )
+  );
+
+  return new ReadStream(
+    createGRPCStream,
     convertAllStreamGrpcEvent,
     readableOptions
   );

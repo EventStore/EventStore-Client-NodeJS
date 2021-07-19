@@ -42,27 +42,28 @@ Client.prototype.getProjectionStatistics = async function (
   });
   debug.command_grpc("getProjectionStatistics: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "getProjectionStatistics"
+    "getProjectionStatistics",
+    (client) => {
+      const stream = client.statistics(req, ...this.callArguments(baseOptions));
+
+      return new Promise((resolve, reject) => {
+        let projectionDetail: ProjectionDetails;
+
+        stream.on("error", (error: ServiceError) => {
+          reject(convertToCommandError(error));
+        });
+
+        stream.on("data", (resp: StatisticsResp) => {
+          if (!resp.hasDetails()) return;
+          projectionDetail = convertGrpcProjectionDetails(resp.getDetails()!);
+        });
+
+        stream.on("end", () => {
+          resolve(projectionDetail);
+        });
+      });
+    }
   );
-
-  const stream = client.statistics(req, ...this.callArguments(baseOptions));
-
-  return new Promise((resolve, reject) => {
-    let projectionDetail: ProjectionDetails;
-
-    stream.on("error", (error: ServiceError) => {
-      reject(convertToCommandError(error));
-    });
-
-    stream.on("data", (resp: StatisticsResp) => {
-      if (!resp.hasDetails()) return;
-      projectionDetail = convertGrpcProjectionDetails(resp.getDetails()!);
-    });
-
-    stream.on("end", () => {
-      resolve(projectionDetail);
-    });
-  });
 };

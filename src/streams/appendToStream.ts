@@ -84,59 +84,121 @@ Client.prototype.appendToStream = async function (
   });
   debug.command_grpc("appendToStream: %g", header);
 
-  const client = await this.getGRPCClient(StreamsClient, "appendToStream");
+  return this.execute(
+    StreamsClient,
+    "appendToStream",
+    (client) =>
+      new Promise<AppendResult>((resolve, reject) => {
+        const sink = client.append(
+          ...this.callArguments(baseOptions),
+          (error, resp) => {
+            if (error != null) {
+              return reject(convertToCommandError(error));
+            }
 
-  return new Promise<AppendResult>((resolve, reject) => {
-    const sink = client.append(
-      ...this.callArguments(baseOptions),
-      (error, resp) => {
-        if (error != null) {
-          return reject(convertToCommandError(error));
-        }
+            if (resp.hasWrongExpectedVersion()) {
+              const grpcError = resp.getWrongExpectedVersion()!;
 
-        if (resp.hasWrongExpectedVersion()) {
-          const grpcError = resp.getWrongExpectedVersion()!;
+              let expected: AppendExpectedRevision = "any";
 
-          let expected: AppendExpectedRevision = "any";
+              switch (true) {
+                case grpcError.hasExpectedRevision(): {
+                  expected = BigInt(grpcError.getExpectedRevision()!);
+                  break;
+                }
+                case grpcError.hasExpectedStreamExists(): {
+                  expected = "stream_exists";
+                  break;
+                }
+                case grpcError.hasExpectedNoStream(): {
+                  expected = "no_stream";
+                  break;
+                }
+              }
 
-          switch (true) {
-            case grpcError.hasExpectedRevision(): {
-              expected = BigInt(grpcError.getExpectedRevision()!);
+              if (this.throwOnAppendFailure) {
+                return reject(
+                  new WrongExpectedVersionError(null as never, {
+                    streamName: streamName,
+                    current: grpcError.hasCurrentRevision()
+                      ? BigInt(grpcError.getCurrentRevision())
+                      : "no_stream",
+                    expected,
+                  })
+                );
+              }
+
+              const nextExpectedRevision = grpcError.hasCurrentRevision()
+                ? BigInt(grpcError.getCurrentRevision())
+                : BigInt(-1);
+
+              return resolve({
+                success: false,
+                nextExpectedRevision,
+                position: undefined,
+              });
+            }
+
+            if (resp.hasSuccess()) {
+              const success = resp.getSuccess()!;
+              const nextExpectedRevision = BigInt(success.getCurrentRevision());
+              const grpcPosition = success.getPosition();
+
+              const position = grpcPosition
+                ? {
+                    commit: BigInt(grpcPosition.getCommitPosition()),
+                    prepare: BigInt(grpcPosition.getPreparePosition()),
+                  }
+                : undefined;
+
+              return resolve({
+                success: true,
+                nextExpectedRevision,
+                position,
+              });
+            }
+          }
+        );
+
+        sink.write(header);
+
+        for (const event of events) {
+          const entry = new AppendReq();
+          const message = new AppendReq.ProposedMessage();
+          const id = new UUID();
+          id.setString(event.id);
+          message.setId(id);
+          message.getMetadataMap().set("type", event.type);
+          message.getMetadataMap().set("content-type", event.contentType);
+
+          switch (event.contentType) {
+            case "application/json": {
+              const data = JSON.stringify(event.data);
+              message.setData(Buffer.from(data, "utf8").toString("base64"));
               break;
             }
-            case grpcError.hasExpectedStreamExists(): {
-              expected = "stream_exists";
-              break;
-            }
-            case grpcError.hasExpectedNoStream(): {
-              expected = "no_stream";
+            case "application/octet-stream": {
+              message.setData(event.data);
               break;
             }
           }
 
-          if (this.throwOnAppendFailure) {
-            return reject(
-              new WrongExpectedVersionError(null as never, {
-                streamName: streamName,
-                current: grpcError.hasCurrentRevision()
-                  ? BigInt(grpcError.getCurrentRevision())
-                  : "no_stream",
-                expected,
-              })
-            );
+          if (event.metadata) {
+            if (event.metadata.constructor === Uint8Array) {
+              message.setCustomMetadata(event.metadata);
+            } else {
+              const metadata = JSON.stringify(event.metadata);
+              message.setCustomMetadata(
+                Buffer.from(metadata, "utf8").toString("base64")
+              );
+            }
           }
 
-          const nextExpectedRevision = grpcError.hasCurrentRevision()
-            ? BigInt(grpcError.getCurrentRevision())
-            : BigInt(-1);
-
-          return resolve({
-            success: false,
-            nextExpectedRevision,
-            position: undefined,
-          });
+          entry.setProposedMessage(message);
+          sink.write(entry);
         }
 
+<<<<<<< HEAD
         if (resp.hasSuccess()) {
           const success = resp.getSuccess()!;
           const nextExpectedRevision = BigInt(success.getCurrentRevision());
@@ -198,4 +260,9 @@ Client.prototype.appendToStream = async function (
 
     sink.end();
   });
+=======
+        sink.end();
+      })
+  );
+>>>>>>> 5942cd5 (Reconnect on node loss)
 };

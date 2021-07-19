@@ -46,15 +46,15 @@ Client.prototype.disableProjection = async function (
   });
   debug.command_grpc("disableProjection: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "disableProjection"
+    "disableProjection",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.disable(req, ...this.callArguments(baseOptions), (error) => {
+          if (error) return reject(convertToCommandError(error));
+          return resolve();
+        });
+      })
   );
-
-  return new Promise<void>((resolve, reject) => {
-    client.disable(req, ...this.callArguments(baseOptions), (error) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve();
-    });
-  });
 };

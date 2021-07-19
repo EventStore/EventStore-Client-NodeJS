@@ -69,17 +69,19 @@ Client.prototype.connectToPersistentSubscription = function <
   });
   debug.command_grpc("connectToPersistentSubscription: %g", req);
 
-  return new TwoWaySubscription(async () => {
-    const client = await this.getGRPCClient(
-      PersistentSubscriptionsClient,
-      "connectToPersistentSubscription"
-    );
-    const stream = client.read(
-      ...this.callArguments(baseOptions, {
-        deadline: Infinity,
-      })
-    );
-    stream.write(req);
-    return stream;
-  }, duplexOptions);
+  const createGRPCStream = this.GRPCStreamCreator(
+    PersistentSubscriptionsClient,
+    "connectToPersistentSubscription",
+    (client) => {
+      const stream = client.read(
+        ...this.callArguments(baseOptions, {
+          deadline: Infinity,
+        })
+      );
+      stream.write(req);
+      return stream;
+    }
+  );
+
+  return new TwoWaySubscription(createGRPCStream, duplexOptions);
 };

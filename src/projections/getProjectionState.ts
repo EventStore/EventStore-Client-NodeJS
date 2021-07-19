@@ -37,15 +37,19 @@ Client.prototype.getProjectionState = async function <T = unknown>(
   });
   debug.command_grpc("getProjectionState: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "getProjectionState"
+    "getProjectionState",
+    (client) =>
+      new Promise<T>((resolve, reject) => {
+        client.state(
+          req,
+          ...this.callArguments(baseOptions),
+          (error, response) => {
+            if (error) return reject(convertToCommandError(error));
+            return resolve(response.getState()?.toJavaScript() as T);
+          }
+        );
+      })
   );
-
-  return new Promise<T>((resolve, reject) => {
-    client.state(req, ...this.callArguments(baseOptions), (error, response) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve(response.getState()?.toJavaScript() as T);
-    });
-  });
 };
