@@ -70,15 +70,15 @@ Client.prototype.deleteProjection = async function (
   });
   debug.command_grpc("deleteProjection: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "deleteProjection"
+    "deleteProjection",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.delete(req, ...this.callArguments(baseOptions), (error) => {
+          if (error) return reject(convertToCommandError(error));
+          return resolve();
+        });
+      })
   );
-
-  return new Promise<void>((resolve, reject) => {
-    client.delete(req, ...this.callArguments(baseOptions), (error) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve();
-    });
-  });
 };

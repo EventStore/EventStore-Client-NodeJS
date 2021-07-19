@@ -68,25 +68,32 @@ Client.prototype.tombstoneStream = async function (
   });
   debug.command_grpc("tombstoneStream: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "tombstoneStream");
+  return this.execute(
+    StreamsClient,
+    "tombstoneStream",
+    (client) =>
+      new Promise<DeleteResult>((resolve, reject) => {
+        client.tombstone(
+          req,
+          ...this.callArguments(baseOptions),
+          (error, resp) => {
+            if (error) {
+              return reject(convertToCommandError(error));
+            }
 
-  return new Promise<DeleteResult>((resolve, reject) => {
-    client.tombstone(req, ...this.callArguments(baseOptions), (error, resp) => {
-      if (error) {
-        return reject(convertToCommandError(error));
-      }
+            const result: DeleteResult = {};
 
-      const result: DeleteResult = {};
+            if (resp.hasPosition()) {
+              const grpcPos = resp.getPosition()!;
+              result.position = {
+                commit: BigInt(grpcPos.getCommitPosition()),
+                prepare: BigInt(grpcPos.getPreparePosition()),
+              };
+            }
 
-      if (resp.hasPosition()) {
-        const grpcPos = resp.getPosition()!;
-        result.position = {
-          commit: BigInt(grpcPos.getCommitPosition()),
-          prepare: BigInt(grpcPos.getPreparePosition()),
-        };
-      }
-
-      return resolve(result);
-    });
-  });
+            return resolve(result);
+          }
+        );
+      })
+  );
 };

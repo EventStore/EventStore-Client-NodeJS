@@ -47,12 +47,15 @@ Client.prototype.resetProjection = async function (
   });
   debug.command_grpc("resetProjection: %g", req);
 
-  const client = await this.getGRPCClient(ProjectionsClient, "resetProjection");
-
-  return new Promise<void>((resolve, reject) => {
-    client.reset(req, ...this.callArguments(baseOptions), (error) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve();
-    });
-  });
+  return this.execute(
+    ProjectionsClient,
+    "resetProjection",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.reset(req, ...this.callArguments(baseOptions), (error) => {
+          if (error) return reject(convertToCommandError(error));
+          return resolve();
+        });
+      })
+  );
 };

@@ -55,24 +55,26 @@ const fetchAndTransformProjectionList = async function (
   });
   debug.command_grpc("%s: %g", debugName, req);
 
-  const client = await this.getGRPCClient(ProjectionsClient, debugName);
+  return this.execute(ProjectionsClient, debugName, (client) => {
+    const stream = client.statistics(req, ...this.callArguments(baseOptions));
 
-  const stream = client.statistics(req, ...this.callArguments(baseOptions));
+    return new Promise((resolve, reject) => {
+      const projectionDetails: ProjectionDetails[] = [];
 
-  return new Promise((resolve, reject) => {
-    const projectionDetails: ProjectionDetails[] = [];
+      stream.on("error", (error: ServiceError) => {
+        reject(convertToCommandError(error));
+      });
 
-    stream.on("error", (error: ServiceError) => {
-      reject(convertToCommandError(error));
-    });
+      stream.on("data", (resp: StatisticsResp) => {
+        if (!resp.hasDetails()) return;
+        projectionDetails.push(
+          convertGrpcProjectionDetails(resp.getDetails()!)
+        );
+      });
 
-    stream.on("data", (resp: StatisticsResp) => {
-      if (!resp.hasDetails()) return;
-      projectionDetails.push(convertGrpcProjectionDetails(resp.getDetails()!));
-    });
-
-    stream.on("end", () => {
-      resolve(projectionDetails);
+      stream.on("end", () => {
+        resolve(projectionDetails);
+      });
     });
   });
 };

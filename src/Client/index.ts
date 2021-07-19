@@ -19,9 +19,16 @@ import type {
   Credentials,
   BaseOptions,
 } from "../types";
-import { debug } from "../utils";
+import {
+  convertToCommandError,
+  debug,
+  NotLeaderError,
+  TimeoutError,
+  UnavailableError,
+} from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
+import { Stream } from "stream";
 
 interface ClientOptions {
   /**
@@ -270,7 +277,7 @@ export class Client {
   }
 
   // Internal access to grpc client.
-  protected getGRPCClient = async <T extends GRPCClient>(
+  private getGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>,
     debugName: string
   ): Promise<T> => {
@@ -282,6 +289,35 @@ export class Client {
     }
 
     return this.#grpcClients.get(Client) as Promise<T>;
+  };
+
+  // Internal handled execution
+  protected GRPCStreamCreator =
+    <Client extends GRPCClient, T extends Stream>(
+      Client: GRPCClientConstructor<Client>,
+      debugName: string,
+      creator: (client: Client) => T
+    ) =>
+    async (): Promise<T> => {
+      const client = await this.getGRPCClient(Client, debugName);
+      return creator(client).on("error", (err) =>
+        this.handleError(client, err)
+      );
+    };
+
+  // Internal handled execution
+  protected execute = async <Client extends GRPCClient, T>(
+    Client: GRPCClientConstructor<Client>,
+    debugName: string,
+    action: (client: Client) => Promise<T>
+  ): Promise<T> => {
+    const client = await this.getGRPCClient(Client, debugName);
+    try {
+      return await action(client);
+    } catch (error) {
+      this.handleError(client, error);
+      throw error;
+    }
   };
 
   private createGRPCClient = async <T extends GRPCClient>(
@@ -312,8 +348,37 @@ export class Client {
     return this.#channel;
   };
 
-  private createChannel = async (): Promise<Channel> => {
-    const uri = await this.resolveUri();
+  private shouldReconnect = (
+    err: Error
+  ): [shouldReconnect: boolean, to?: EndPoint] => {
+    const error = convertToCommandError(err);
+
+    if (error instanceof NotLeaderError) {
+      return [true, error.leader];
+    }
+
+    return [error instanceof UnavailableError || error instanceof TimeoutError];
+  };
+
+  protected handleError = async (
+    client: GRPCClient,
+    error: Error
+  ): Promise<void> => {
+    const [shouldReconnect, endpoint] = this.shouldReconnect(error);
+
+    if (!shouldReconnect) return;
+
+    const currentChannel = await this.#channel;
+    if (client.getChannel() !== currentChannel) return;
+
+    this.#grpcClients.clear();
+    this.#channel = this.createChannel(endpoint);
+  };
+
+  private createChannel = async (endpoint?: EndPoint): Promise<Channel> => {
+    const uri = endpoint
+      ? `${endpoint.address}:${endpoint.port}`
+      : await this.resolveUri();
 
     debug.connection(
       `Connecting to http${

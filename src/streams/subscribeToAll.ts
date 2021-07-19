@@ -149,16 +149,20 @@ Client.prototype.subscribeToAll = function (
   });
   debug.command_grpc("subscribeToAll: %g", req);
 
-  return new OneWaySubscription(
-    async () => {
-      const client = await this.getGRPCClient(StreamsClient, "subscribeToAll");
-      return client.read(
+  const createGRPCStream = this.GRPCStreamCreator(
+    StreamsClient,
+    "subscribeToAll",
+    (client) =>
+      client.read(
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
-      );
-    },
+      )
+  );
+
+  return new OneWaySubscription(
+    createGRPCStream,
     convertAllStreamGrpcEvent,
     readableOptions
   );

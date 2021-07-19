@@ -47,15 +47,15 @@ Client.prototype.createTransientProjection = async function (
   });
   debug.command_grpc("createTransientProjection: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "CreateTransientProjection"
+    "CreateTransientProjection",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.create(req, ...this.callArguments(baseOptions), (error) => {
+          if (error) return reject(convertToCommandError(error));
+          return resolve();
+        });
+      })
   );
-
-  return new Promise<void>((resolve, reject) => {
-    client.create(req, ...this.callArguments(baseOptions), (error) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve();
-    });
-  });
 };

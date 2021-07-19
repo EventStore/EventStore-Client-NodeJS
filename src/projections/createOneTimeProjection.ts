@@ -54,19 +54,21 @@ Client.prototype.createOneTimeProjection = async function (
   });
   debug.command_grpc("createOneTimeProjection: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "createOneTimeProjection"
+    "createOneTimeProjection",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.create(
+          req,
+          ...this.callArguments(
+            typeof baseOptions === "string" ? {} : baseOptions
+          ),
+          (error) => {
+            if (error) return reject(convertToCommandError(error));
+            return resolve();
+          }
+        );
+      })
   );
-
-  return new Promise<void>((resolve, reject) => {
-    client.create(
-      req,
-      ...this.callArguments(typeof baseOptions === "string" ? {} : baseOptions),
-      (error) => {
-        if (error) return reject(convertToCommandError(error));
-        return resolve();
-      }
-    );
-  });
 };

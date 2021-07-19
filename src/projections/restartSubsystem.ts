@@ -28,19 +28,19 @@ Client.prototype.restartSubsystem = async function (
   });
   debug.command_grpc("restartSubsystem: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     ProjectionsClient,
-    "restartSubsystem"
+    "restartSubsystem",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.restartSubsystem(
+          req,
+          ...this.callArguments(baseOptions),
+          (error) => {
+            if (error) return reject(convertToCommandError(error));
+            return resolve();
+          }
+        );
+      })
   );
-
-  return new Promise<void>((resolve, reject) => {
-    client.restartSubsystem(
-      req,
-      ...this.callArguments(baseOptions),
-      (error) => {
-        if (error) return reject(convertToCommandError(error));
-        return resolve();
-      }
-    );
-  });
 };

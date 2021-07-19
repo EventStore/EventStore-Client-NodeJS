@@ -64,26 +64,33 @@ Client.prototype.deleteStream = async function (
   });
   debug.command_grpc("deleteStream: %g", req);
 
-  const client = await this.getGRPCClient(StreamsClient, "deleteStream");
+  return this.execute(
+    StreamsClient,
+    "deleteStream",
+    (client) =>
+      new Promise<DeleteResult>((resolve, reject) => {
+        client.delete(
+          req,
+          ...this.callArguments(baseOptions),
+          (error, resp) => {
+            if (error) {
+              return reject(convertToCommandError(error));
+            }
 
-  return new Promise<DeleteResult>((resolve, reject) => {
-    client.delete(req, ...this.callArguments(baseOptions), (error, resp) => {
-      if (error) {
-        return reject(convertToCommandError(error));
-      }
+            const result: DeleteResult = {};
 
-      const result: DeleteResult = {};
+            if (resp.hasPosition()) {
+              const grpcPos = resp.getPosition()!;
 
-      if (resp.hasPosition()) {
-        const grpcPos = resp.getPosition()!;
+              result.position = {
+                commit: BigInt(grpcPos.getCommitPosition()),
+                prepare: BigInt(grpcPos.getPreparePosition()),
+              };
+            }
 
-        result.position = {
-          commit: BigInt(grpcPos.getCommitPosition()),
-          prepare: BigInt(grpcPos.getPreparePosition()),
-        };
-      }
-
-      return resolve(result);
-    });
-  });
+            return resolve(result);
+          }
+        );
+      })
+  );
 };

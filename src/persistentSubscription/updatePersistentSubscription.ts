@@ -111,15 +111,15 @@ Client.prototype.updatePersistentSubscription = async function (
   });
   debug.command_grpc("updatePersistentSubscription: %g", req);
 
-  const client = await this.getGRPCClient(
+  return this.execute(
     PersistentSubscriptionsClient,
-    "updatePersistentSubscription"
+    "updatePersistentSubscription",
+    (client) =>
+      new Promise<void>((resolve, reject) => {
+        client.update(req, ...this.callArguments(baseOptions), (error) => {
+          if (error) return reject(convertToCommandError(error));
+          return resolve();
+        });
+      })
   );
-
-  return new Promise<void>((resolve, reject) => {
-    client.update(req, ...this.callArguments(baseOptions), (error) => {
-      if (error) return reject(convertToCommandError(error));
-      return resolve();
-    });
-  });
 };
