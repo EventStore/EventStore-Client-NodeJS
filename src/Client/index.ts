@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
+import { Stream } from "stream";
 
 import {
   CallCredentials as grpcCallCredentials,
@@ -28,7 +29,6 @@ import {
 } from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
-import { Stream } from "stream";
 
 interface ClientOptions {
   /**
@@ -95,6 +95,11 @@ export interface ChannelCredentialOptions {
   verifyOptions?: Parameters<typeof ChannelCredentials.createSsl>[3];
 }
 
+interface NextChannelSettings {
+  failedEndpoint: EndPoint;
+  nextEndpoint?: EndPoint;
+}
+
 export class Client {
   #throwOnAppendFailure: boolean;
   #connectionSettings: ConnectionSettings;
@@ -105,6 +110,7 @@ export class Client {
 
   #defaultCredentials?: Credentials;
 
+  #nextChannelSettings?: NextChannelSettings;
   #channel?: Promise<Channel>;
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
     new Map();
@@ -364,21 +370,38 @@ export class Client {
     client: GRPCClient,
     error: Error
   ): Promise<void> => {
-    const [shouldReconnect, endpoint] = this.shouldReconnect(error);
+    const [shouldReconnect, nextEndpoint] = this.shouldReconnect(error);
 
     if (!shouldReconnect) return;
 
+    debug.connection("Got reconnection error", error.message);
+
+    const failedChannel = client.getChannel();
     const currentChannel = await this.#channel;
-    if (client.getChannel() !== currentChannel) return;
+    if (failedChannel !== currentChannel) {
+      debug.connection("Channel already reconnected");
+      return;
+    }
+
+    debug.connection(
+      `Reconnection required${nextEndpoint ? ` to: ${nextEndpoint}` : ""}`
+    );
+
+    const [_protocol, address, port] = failedChannel.getTarget().split(":");
 
     this.#grpcClients.clear();
-    this.#channel = this.createChannel(endpoint);
+    this.#channel = undefined;
+    this.#nextChannelSettings = {
+      failedEndpoint: {
+        address,
+        port: Number.parseInt(port),
+      },
+      nextEndpoint,
+    };
   };
 
-  private createChannel = async (endpoint?: EndPoint): Promise<Channel> => {
-    const uri = endpoint
-      ? `${endpoint.address}:${endpoint.port}`
-      : await this.resolveUri();
+  private createChannel = async (): Promise<Channel> => {
+    const uri = await this.resolveUri();
 
     debug.connection(
       `Connecting to http${
@@ -387,6 +410,7 @@ export class Client {
       uri
     );
 
+    this.#nextChannelSettings = undefined;
     return new Channel(uri, this.#channelCredentials, {
       "grpc.keepalive_time_ms":
         this.#keepAliveInterval < 0
@@ -398,6 +422,11 @@ export class Client {
   };
 
   private resolveUri = async (): Promise<string> => {
+    if (this.#nextChannelSettings?.nextEndpoint) {
+      const { address, port } = this.#nextChannelSettings.nextEndpoint;
+      return `${address}:${port}`;
+    }
+
     if ("endpoint" in this.#connectionSettings) {
       const { endpoint } = this.#connectionSettings;
       return typeof endpoint === "string"
@@ -407,7 +436,8 @@ export class Client {
 
     const { address, port } = await discoverEndpoint(
       this.#connectionSettings,
-      this.#channelCredentials
+      this.#channelCredentials,
+      this.#nextChannelSettings?.failedEndpoint
     );
 
     return `${address}:${port}`;
