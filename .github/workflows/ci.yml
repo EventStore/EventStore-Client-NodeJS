@@ -48,17 +48,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "14.x"
       - name: Login to GitHub Package Registry
         uses: docker/login-action@v1
         with:
           registry: docker.pkg.github.com
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Take ownership of directory to allow cleanup of files
+        run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - name: Install
         run: yarn
       - name: Run Tests
-        run: yarn test:${{ matrix.version }} --ci --coverage
+        run: yarn test:${{ matrix.version }} --ci --coverage --run-in-band
         env:
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       - name: Disconnect from tailscale
@@ -75,7 +77,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "14.x"
       - name: Install
         run: yarn
       - name: Build
