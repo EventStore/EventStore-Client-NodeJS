@@ -25,7 +25,8 @@ export const discoverEndpoint = async (
     gossipTimeout = 5,
     ...settings
   }: DNSClusterOptions | GossipClusterOptions,
-  credentials: ChannelCredentials
+  credentials: ChannelCredentials,
+  failedEndpoint?: EndPoint
 ): Promise<EndPoint> => {
   let discoverAttempts = 0;
 
@@ -38,7 +39,20 @@ export const discoverEndpoint = async (
 
       debug.connection(`Starting discovery for candidates: %O`, candidates);
 
-      for (const candidate of candidates) {
+      const candidateDiscoveryOrder = [...candidates]
+        .sort(shuffle)
+        .sort((a) => {
+          // Move failed endpoint to the last
+          if (
+            a.address === failedEndpoint?.address &&
+            a.port === failedEndpoint?.port
+          ) {
+            return 1;
+          }
+          return 0;
+        });
+
+      for (const candidate of candidateDiscoveryOrder) {
         try {
           const members = await listClusterMembers(
             candidate,
@@ -95,13 +109,15 @@ const getPreferedStates = (preference: NodePreference) => {
   }
 };
 
-type CompareFn = (a: MemberInfo, b: MemberInfo) => number;
-const compareByPreference = (preference: NodePreference): CompareFn => {
+type CompareFn<T> = (a: T, b: T) => number;
+const compareByPreference = (
+  preference: NodePreference
+): CompareFn<MemberInfo> => {
   const preferedStates = getPreferedStates(preference);
   return (a, b) =>
     preferedStates.indexOf(b.state) - preferedStates.indexOf(a.state);
 };
-const shuffle: CompareFn = (a, b) => Math.random() - 0.5;
+const shuffle: CompareFn<unknown> = () => Math.random() - 0.5;
 
 export const filterAndOrderMembers = (
   preference: NodePreference,
