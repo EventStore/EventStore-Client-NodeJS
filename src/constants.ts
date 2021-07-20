@@ -15,6 +15,7 @@ export const BACKWARDS = "backwards";
 export const RANDOM = "random";
 export const FOLLOWER = "follower";
 export const LEADER = "leader";
+export const READ_ONLY_REPLICA = "read_only_replica";
 
 // consumer strategy
 export const DISPATCH_TO_SINGLE = "dispatch_to_single";
