@@ -11,9 +11,9 @@ describe("cluster", () => {
     await cluster.up();
   });
 
-  afterAll(async () => {
-    await cluster.down();
-  });
+  // afterAll(async () => {
+  //   await cluster.down();
+  // });
 
   test("should successfully connect", async () => {
     const client = new EventStoreDBClient(
@@ -104,5 +104,7 @@ describe("cluster", () => {
 
     expect(discrepency).toBeLessThanOrEqual(slop);
     expect(discrepency).toBeGreaterThanOrEqual(-slop);
+
+    await cluster.down();
   });
 });
