@@ -2,10 +2,12 @@ import { join, relative } from "path";
 import * as fs from "fs";
 import { promisify } from "util";
 import * as cp from "child_process";
+// import { request } from "https";
+// import { URL } from "url";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
-import { upAll, down, exec } from "docker-compose";
+import { upAll, down, exec, stopOne } from "docker-compose";
 import { stringify } from "yaml";
 
 import { dockerImages } from "./dockerImages";
@@ -237,6 +239,18 @@ export class Cluster {
     await this.cleanUp();
   };
 
+  public killNode = async (node: EndPoint): Promise<void> => {
+    const nodeId = this.endpointToNodeId(node);
+    const response = await stopOne(nodeId, {
+      cwd: this.path(),
+    });
+
+    if (response.exitCode === 0) return;
+
+    console.log(response);
+    throw new Error("Failed to kill node");
+  };
+
   public openInBrowser = async (launch = true): Promise<void> => {
     this.inspected = true;
     const url = `http${this.insecure ? "" : "s"}://${this.uri}`;
@@ -300,6 +314,23 @@ export class Cluster {
   };
 
   private cleanUp = async () => {
-    await rmdir(this.path(), { recursive: true });
+    try {
+      await rmdir(this.path(), { recursive: true });
+    } catch (error) {
+      // TODO:
+      // removing the directory fails on github actions
+    }
+  };
+
+  private endpointToNodeId = (endpoint: EndPoint) => {
+    const index = this.locations.findIndex(
+      (location) => location.port === endpoint.port
+    );
+
+    if (index === -1) {
+      throw new Error(`unknown node ${endpoint.address}:${endpoint.port}`);
+    }
+
+    return `esdb-node-${index}`;
   };
 }
