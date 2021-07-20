@@ -6,19 +6,19 @@ import { Empty } from "../../generated/shared_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
 
 import { EndPoint, NodePreference } from "../types";
-import { RANDOM } from "../constants";
+import { FOLLOWER, LEADER, RANDOM, READ_ONLY_REPLICA } from "../constants";
 import { debug } from "../utils";
 import { DNSClusterOptions, GossipClusterOptions } from ".";
 
-export type MemberInfo = {
+export interface MemberInfo {
   instanceId?: string;
   timeStamp: number;
   state: VNodeState;
   isAlive: boolean;
   httpEndpoint?: EndPoint;
-};
+}
 
-export async function discoverEndpoint(
+export const discoverEndpoint = async (
   {
     discoveryInterval = 100,
     maxDiscoverAttempts = 10,
@@ -26,14 +26,14 @@ export async function discoverEndpoint(
     ...settings
   }: DNSClusterOptions | GossipClusterOptions,
   credentials: ChannelCredentials
-): Promise<EndPoint> {
+): Promise<EndPoint> => {
   let discoverAttempts = 0;
 
   while (discoverAttempts < maxDiscoverAttempts) {
     discoverAttempts++;
 
     try {
-      const candidates: EndPoint[] =
+      const candidates =
         "endpoints" in settings ? settings.endpoints : [settings.discover];
 
       debug.connection(`Starting discovery for candidates: %O`, candidates);
@@ -64,74 +64,75 @@ export async function discoverEndpoint(
   }
 
   throw new Error(`Failed to discover after ${discoverAttempts} attempts.`);
-}
+};
 
-function inAllowedStates(member: MemberInfo): boolean {
-  switch (member.state) {
-    case VNodeState.SHUTDOWN:
-      return false;
+const allowedStates = new Set([
+  VNodeState.FOLLOWER,
+  VNodeState.LEADER,
+  VNodeState.READONLYREPLICA,
+  VNodeState.PREREADONLYREPLICA,
+  VNodeState.READONLYLEADERLESS,
+]);
+
+export const isInAllowedState = (member: MemberInfo): boolean =>
+  member.isAlive && allowedStates.has(member.state);
+
+// getPreferedStates, higher index is better
+const getPreferedStates = (preference: NodePreference) => {
+  switch (preference) {
+    case LEADER:
+      return [VNodeState.LEADER];
+    case FOLLOWER:
+      return [VNodeState.FOLLOWER];
+    case READ_ONLY_REPLICA:
+      return [
+        VNodeState.READONLYLEADERLESS,
+        VNodeState.PREREADONLYREPLICA,
+        VNodeState.READONLYREPLICA,
+      ];
     default:
-      return true;
+      return [];
   }
-}
+};
 
-function determineBestNode(
+type CompareFn = (a: MemberInfo, b: MemberInfo) => number;
+const compareByPreference = (preference: NodePreference): CompareFn => {
+  const preferedStates = getPreferedStates(preference);
+  return (a, b) =>
+    preferedStates.indexOf(b.state) - preferedStates.indexOf(a.state);
+};
+const shuffle: CompareFn = (a, b) => Math.random() - 0.5;
+
+export const filterAndOrderMembers = (
   preference: NodePreference,
   members: MemberInfo[]
-): EndPoint | undefined {
-  const sorted = members
-    .filter(inAllowedStates)
-    .sort((a, b) => a.state - b.state);
+): MemberInfo[] =>
+  members
+    .filter(isInAllowedState)
+    .sort(shuffle)
+    .sort(compareByPreference(preference));
 
+export const determineBestNode = (
+  preference: NodePreference,
+  members: MemberInfo[]
+): EndPoint | undefined => {
   debug.connection(
     `Determining best node with preference "%s" from members: %O`,
     preference,
     members
   );
 
-  let finalMember;
-  switch (preference) {
-    case "leader":
-      finalMember = sorted.find((member) => member.state === VNodeState.LEADER);
-      if (finalMember && finalMember.httpEndpoint) {
-        debug.connection(`Chose member: %O`, finalMember);
-        return {
-          address: finalMember.httpEndpoint.address,
-          port: finalMember.httpEndpoint.port,
-        };
-      }
-      break;
+  const [chosenMember] = filterAndOrderMembers(preference, members);
 
-    case "follower":
-      finalMember = sorted
-        .filter((member) => member.state === VNodeState.FOLLOWER)
-        .sort(() => Math.random() - 0.5)
-        .shift();
+  if (!chosenMember || !chosenMember.httpEndpoint) return undefined;
 
-      debug.connection(`Chose member: %O`, finalMember);
+  debug.connection(`Chose member: %O`, chosenMember);
 
-      if (finalMember && finalMember.httpEndpoint) {
-        return {
-          address: finalMember.httpEndpoint.address,
-          port: finalMember.httpEndpoint.port,
-        };
-      }
-      break;
-
-    default:
-    case "random":
-      finalMember = sorted.sort(() => Math.random() - 0.5).shift();
-
-      debug.connection(`Chose member: %O`, finalMember);
-      if (finalMember && finalMember.httpEndpoint) {
-        return {
-          address: finalMember.httpEndpoint.address,
-          port: finalMember.httpEndpoint.port,
-        };
-      }
-      break;
-  }
-}
+  return {
+    address: chosenMember.httpEndpoint.address,
+    port: chosenMember.httpEndpoint.port,
+  };
+};
 
 function createDeadline(seconds: number) {
   const deadline = new Date();
@@ -146,6 +147,7 @@ function listClusterMembers(
 ): Promise<MemberInfo[]> {
   const uri = `${seed.address}:${seed.port}`;
   const client = new GossipClient(uri, credentials, {});
+
   return new Promise((resolve, reject) => {
     client.read(new Empty(), new Metadata(), { deadline }, (error, info) => {
       if (error) return reject(error);

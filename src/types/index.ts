@@ -258,7 +258,8 @@ export type PersistentAction =
 export type NodePreference =
   | typeof constants.RANDOM
   | typeof constants.FOLLOWER
-  | typeof constants.LEADER;
+  | typeof constants.LEADER
+  | typeof constants.READ_ONLY_REPLICA;
 
 export interface EndPoint {
   address: string;
