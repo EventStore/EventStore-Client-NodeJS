@@ -198,71 +198,7 @@ Client.prototype.appendToStream = async function (
           sink.write(entry);
         }
 
-<<<<<<< HEAD
-        if (resp.hasSuccess()) {
-          const success = resp.getSuccess()!;
-          const nextExpectedRevision = BigInt(success.getCurrentRevision());
-          const grpcPosition = success.getPosition();
-
-          const position = grpcPosition
-            ? {
-                commit: BigInt(grpcPosition.getCommitPosition()),
-                prepare: BigInt(grpcPosition.getPreparePosition()),
-              }
-            : undefined;
-
-          return resolve({
-            success: true,
-            nextExpectedRevision,
-            position,
-          });
-        }
-      }
-    );
-
-    sink.write(header);
-
-    for (const event of events) {
-      const entry = new AppendReq();
-      const message = new AppendReq.ProposedMessage();
-      const id = new UUID();
-      id.setString(event.id);
-      message.setId(id);
-      message.getMetadataMap().set("type", event.type);
-      message.getMetadataMap().set("content-type", event.contentType);
-
-      switch (event.contentType) {
-        case "application/json": {
-          const data = JSON.stringify(event.data);
-          message.setData(Uint8Array.from(Buffer.from(data, "utf8")));
-          break;
-        }
-        case "application/octet-stream": {
-          message.setData(event.data);
-          break;
-        }
-      }
-
-      if (event.metadata) {
-        if (event.metadata.constructor === Uint8Array) {
-          message.setCustomMetadata(event.metadata);
-        } else {
-          const metadata = JSON.stringify(event.metadata);
-          message.setCustomMetadata(
-            Uint8Array.from(Buffer.from(metadata, "utf8"))
-          );
-        }
-      }
-
-      entry.setProposedMessage(message);
-      sink.write(entry);
-    }
-
-    sink.end();
-  });
-=======
         sink.end();
       })
   );
->>>>>>> 5942cd5 (Reconnect on node loss)
 };
