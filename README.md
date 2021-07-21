@@ -55,13 +55,15 @@ async function simpleTest() {
 
   const appendResult = await client.appendToStream(streamName, [event]);
 
-  const events = await client.readStream(streamName, {
+  const events = client.readStream(streamName, {
     fromRevision: START,
     direction: FORWARDS,
     maxCount: 10,
   });
 
-  events.forEach(doSomethingProductive);
+  for await (const event of events) {
+    doSomethingProductive(event);
+  }
 }
 ```
 
@@ -122,32 +124,33 @@ async function simpleTest(): Promise<void> {
 
   const appendResult = await client.appendToStream(streamName, event);
 
-  const events = await client.readStream<ReservationEvents>(streamName, {
+  const events = client.readStream<ReservationEvents>(streamName, {
     fromRevision: START,
     direction: FORWARDS,
     maxCount: 10,
   });
 
-  const reservation = events.reduce<Partial<Reservation>>((acc, { event }) => {
-    switch (event?.type) {
-      case "seat-reserved":
-        return {
-          ...acc,
-          reservationId: event.data.reservationId,
-          movieId: event.data.movieId,
-          seatId: event.data.seatId,
-          userId: event.data.userId,
-        };
-      case "seat-changed": {
-        return {
-          ...acc,
-          seatId: event.data.newSeatId,
-        };
+  const reservation: Partial<Reservation> = {};
+
+  for await (const { event } of events) {
+    switch (event.type) {
+      case "seat-reserved": {
+        reservation.reservationId = event.data.reservationId;
+        reservation.movieId = event.data.movieId;
+        reservation.seatId = event.data.seatId;
+        reservation.userId = event.data.userId;
+        break;
       }
-      default:
-        return acc;
+      case "seat-changed": {
+        reservation.seatId = event.data.newSeatId;
+        break;
+      }
+      default: {
+        const _exhaustiveCheck: never = event;
+        break;
+      }
     }
-  }, {});
+  }
 }
 ```
 
