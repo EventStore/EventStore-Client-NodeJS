@@ -53,7 +53,7 @@ Client.prototype.appendToStream = async function (
   const options = new AppendReq.Options();
   const identifier = new StreamIdentifier();
 
-  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
+  identifier.setStreamname(Uint8Array.from(Buffer.from(streamName, "utf8")));
   options.setStreamIdentifier(identifier);
 
   switch (expectedRevision) {
@@ -172,7 +172,7 @@ Client.prototype.appendToStream = async function (
       switch (event.contentType) {
         case "application/json": {
           const data = JSON.stringify(event.data);
-          message.setData(Buffer.from(data, "utf8").toString("base64"));
+          message.setData(Uint8Array.from(Buffer.from(data, "utf8")));
           break;
         }
         case "application/octet-stream": {
@@ -187,7 +187,7 @@ Client.prototype.appendToStream = async function (
         } else {
           const metadata = JSON.stringify(event.metadata);
           message.setCustomMetadata(
-            Buffer.from(metadata, "utf8").toString("base64")
+            Uint8Array.from(Buffer.from(metadata, "utf8"))
           );
         }
       }
