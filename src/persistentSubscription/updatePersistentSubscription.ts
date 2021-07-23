@@ -95,7 +95,7 @@ Client.prototype.updatePersistentSubscription = async function (
       break;
   }
 
-  identifier.setStreamname(Buffer.from(streamName).toString("base64"));
+  identifier.setStreamname(Uint8Array.from(Buffer.from(streamName, "utf8")));
 
   options.setGroupName(groupName);
   options.setStreamIdentifier(identifier);
