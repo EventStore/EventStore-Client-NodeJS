@@ -4,7 +4,6 @@ import "./streams";
 
 export {
   Client as EventStoreDBClient,
-  ConnectionTypeOptions,
   DNSClusterOptions,
   GossipClusterOptions,
   SingleNodeOptions,

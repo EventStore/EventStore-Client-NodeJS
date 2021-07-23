@@ -74,14 +74,6 @@ export interface SingleNodeOptions extends ClientOptions {
   endpoint: EndPoint | string;
 }
 
-/**
- * @deprecated Will be removed in next version, please use members directly.
- */
-export type ConnectionTypeOptions =
-  | DNSClusterOptions
-  | GossipClusterOptions
-  | SingleNodeOptions;
-
 // This type replaces ConnectionTypeOptions, is now internal.
 type ConnectionSettings =
   | DNSClusterOptions
