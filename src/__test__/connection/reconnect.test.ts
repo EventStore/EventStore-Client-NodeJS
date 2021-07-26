@@ -169,6 +169,77 @@ describe("reconnect", () => {
 
     await cluster.down();
   });
+
+  test("All nodes down", async () => {
+    const cluster = createTestCluster();
+
+    await cluster.up();
+
+    const client = new EventStoreDBClient(
+      { endpoints: cluster.endpoints },
+      { rootCertificate: cluster.rootCertificate }
+    );
+
+    // make successful append to connect to node
+    const firstAppend = await client.appendToStream(
+      "my_stream",
+      jsonEvent({ type: "first-append", data: { message: "test" } })
+    );
+    expect(firstAppend).toBeDefined();
+
+    // Kill all nodes
+    for (const endpoint of cluster.endpoints) {
+      await cluster.killNode(endpoint);
+    }
+
+    // next append should fail
+    try {
+      const secondAppend = await client.appendToStream(
+        "my_stream",
+        jsonEvent({ type: "failed-append", data: { message: "test" } })
+      );
+      expect(secondAppend).toBe("Unreachable");
+    } catch (error) {
+      expect(error).toBeInstanceOf(UnavailableError);
+    }
+
+    // next append should also fail, as there is nothing to reconnect to reconnection  fail
+    try {
+      const secondAppend = await client.appendToStream(
+        "my_stream",
+        jsonEvent({ type: "failed-append", data: { message: "test" } })
+      );
+      expect(secondAppend).toBe("Unreachable");
+    } catch (error) {
+      expect(error).toMatchInlineSnapshot(
+        `[Error: Failed to discover after 10 attempts.]`
+      );
+    }
+
+    // resurrect all nodes
+    await cluster.resurrect();
+
+    // next append should succeed, as it has connected to another node
+    // but it might take a couple of tries
+    let i = 0;
+    while (++i < 20) {
+      try {
+        const reconnectedAppend = await client.appendToStream(
+          "my_stream",
+          jsonEvent({ type: "reconnect-append", data: { message: "test" } })
+        );
+        expect(reconnectedAppend).toBeDefined();
+        break;
+      } catch (error) {
+        console.log("error", error);
+        await delay(200);
+      }
+    }
+
+    expect(i).toBeLessThan(20);
+
+    await cluster.down();
+  });
 });
 
 const getCurrentConnection = async (

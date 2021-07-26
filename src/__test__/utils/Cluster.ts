@@ -2,8 +2,6 @@ import { join, relative } from "path";
 import * as fs from "fs";
 import { promisify } from "util";
 import * as cp from "child_process";
-// import { request } from "https";
-// import { URL } from "url";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
@@ -179,34 +177,7 @@ export class Cluster {
       return;
     }
 
-    const healthy = new Set();
-    health: while (true) {
-      for (let i = 0; i < this.count; i++) {
-        if (healthy.has(i)) continue;
-
-        try {
-          const { exitCode } = await exec(
-            `esdb-node-${i}`,
-            `curl --fail --insecure http${
-              this.insecure ? "" : "s"
-            }://localhost:2113/health/live`,
-            { cwd: this.path() }
-          );
-          // console.log(`--> esdb-node-${i}`, exitCode, out, err);
-
-          if (exitCode === 0) {
-            healthy.add(i);
-          }
-        } catch (error) {
-          // retry
-          // console.log(`--> esdb-node-${i}`, error);
-        }
-
-        if (healthy.size === this.count) {
-          break health;
-        }
-      }
-    }
+    await this.healthy();
 
     if (!this.insecure) {
       this.cert = await readFile(this.certPath);
@@ -249,6 +220,19 @@ export class Cluster {
 
     console.log(response);
     throw new Error("Failed to kill node");
+  };
+
+  public resurrect = async (): Promise<void> => {
+    const response = await upAll({
+      cwd: this.path(),
+    });
+
+    if (response.exitCode === 0) {
+      return this.healthy();
+    }
+
+    console.log(response);
+    throw new Error("Failed to resurrect node");
   };
 
   public openInBrowser = async (launch = true): Promise<void> => {
@@ -307,6 +291,43 @@ export class Cluster {
 
     await mkdir(this.path(), { recursive: true });
     await writeFile(this.path("./docker-compose.yaml"), stringify(config));
+  };
+
+  private healthy = async (...nodes: string[]) => {
+    nodes = !nodes.length
+      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      : nodes;
+
+    const healthy = new Set();
+
+    while (healthy.size !== nodes.length) {
+      for (const node of nodes) {
+        if (healthy.has(node)) continue;
+
+        try {
+          const response = await exec(
+            node,
+            `curl --fail --insecure http${
+              this.insecure ? "" : "s"
+            }://localhost:2113/health/live`,
+            { cwd: this.path() }
+          );
+          // console.log(
+          //   `--> ${node}`,
+          //   response.exitCode,
+          //   response.out,
+          //   response.err
+          // );
+
+          if (response.exitCode === 0) {
+            healthy.add(node);
+          }
+        } catch (error) {
+          // retry
+          // console.log(`--> ${node}`, error);
+        }
+      }
+    }
   };
 
   private path = (...parts: string[]): string => {
