@@ -434,13 +434,18 @@ export class Client {
         : `${endpoint.address}:${endpoint.port}`;
     }
 
-    const { address, port } = await discoverEndpoint(
-      this.#connectionSettings,
-      this.#channelCredentials,
-      this.#nextChannelSettings?.failedEndpoint
-    );
-
-    return `${address}:${port}`;
+    try {
+      const { address, port } = await discoverEndpoint(
+        this.#connectionSettings,
+        this.#channelCredentials,
+        this.#nextChannelSettings?.failedEndpoint
+      );
+      return `${address}:${port}`;
+    } catch (error) {
+      this.#grpcClients.clear();
+      this.#channel = undefined;
+      throw error;
+    }
   };
 
   private createCredentialsMetadataGenerator =
