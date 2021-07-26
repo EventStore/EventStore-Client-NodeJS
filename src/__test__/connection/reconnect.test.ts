@@ -4,8 +4,9 @@ import {
   jsonEvent,
   EventStoreDBClient,
   UnavailableError,
-  FOLLOWER,
+  StreamNotFoundError,
   NotLeaderError,
+  FOLLOWER,
   EndPoint,
 } from "../..";
 
@@ -237,6 +238,43 @@ describe("reconnect", () => {
     }
 
     expect(i).toBeLessThan(20);
+
+    await cluster.down();
+  });
+
+  test("no reconnection is made if error is not for reconnecting", async () => {
+    const cluster = createTestCluster();
+
+    await cluster.up();
+
+    const client = new EventStoreDBClient(
+      { endpoints: cluster.endpoints },
+      { rootCertificate: cluster.rootCertificate }
+    );
+
+    // make successful append to connect to node
+    const firstAppend = await client.appendToStream(
+      "my_stream",
+      jsonEvent({ type: "first-append", data: { message: "test" } })
+    );
+    expect(firstAppend).toBeDefined();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const priorChannel = await (client as any).getChannel();
+
+    try {
+      // attempt to read a stream that doesnt exist
+      for await (const event of client.readStream("doesn't-exist")) {
+        expect(event).toBe("unreachable");
+      }
+    } catch (error) {
+      expect(error).toBeInstanceOf(StreamNotFoundError);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const afterChannel = await (client as any).getChannel();
+
+    expect(priorChannel).toBe(afterChannel);
 
     await cluster.down();
   });
