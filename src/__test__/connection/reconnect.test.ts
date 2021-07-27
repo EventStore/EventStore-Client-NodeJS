@@ -1,6 +1,3 @@
-import { Channel } from "@grpc/grpc-js";
-import { ConnectivityState } from "@grpc/grpc-js/build/src/channel";
-
 import { createTestCluster, delay, jsonTestEvents } from "../utils";
 
 import {
@@ -11,7 +8,6 @@ import {
   NotLeaderError,
   FOLLOWER,
   EndPoint,
-  TimeoutError,
 } from "../..";
 
 describe("reconnect", () => {
@@ -279,95 +275,6 @@ describe("reconnect", () => {
     const afterChannel = await (client as any).getChannel();
 
     expect(priorChannel).toBe(afterChannel);
-
-    await cluster.down();
-  });
-
-  test("Cluster down during reconnection", async () => {
-    const cluster = createTestCluster();
-
-    await cluster.up();
-
-    const client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.rootCertificate }
-    );
-
-    // make successful append to connect to node
-    const firstAppend = await client.appendToStream(
-      "my_stream",
-      jsonEvent({ type: "first-append", data: { message: "test" } })
-    );
-    expect(firstAppend).toBeDefined();
-
-    // Kill node we are connected to
-    const activeConnection = await getCurrentConnection(client);
-    await cluster.killNode(activeConnection);
-
-    // next append should fail, triggering reconnection
-    try {
-      const secondAppend = await client.appendToStream(
-        "my_stream",
-        jsonEvent({ type: "failed-append", data: { message: "test" } })
-      );
-      expect(secondAppend).toBe("Unreachable");
-    } catch (error) {
-      expect(error).toBeInstanceOf(UnavailableError);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const channel: Channel = await (client as any).getChannel();
-
-    // channel should be IDLE, pending usage
-    expect(channel.getConnectivityState(false)).toBe(ConnectivityState.IDLE);
-
-    channel.watchConnectivityState(
-      channel.getConnectivityState(false),
-      Infinity,
-      () => {
-        // channel has transitioned to CONNECTING
-        expect(channel.getConnectivityState(false)).toBe(
-          ConnectivityState.CONNECTING
-        );
-
-        const [_protocol, address, port] = channel.getTarget().split(":");
-        // lets kill the node its connecting to
-        return cluster.killNode({
-          address,
-          port: Number.parseInt(port),
-        });
-      }
-    );
-
-    // next append should fail with a TimeoutError, due to error in reconnection
-    try {
-      const secondAppend = await client.appendToStream(
-        "my_stream",
-        jsonEvent({ type: "failed-append", data: { message: "test" } })
-      );
-
-      expect(secondAppend).toBe("Unreachable");
-    } catch (error) {
-      expect(error).toBeInstanceOf(TimeoutError);
-    }
-
-    // next append should succeed, as it has connected to another node
-    // but it might take a couple of tries
-    let i = 0;
-    while (++i < 20) {
-      try {
-        const reconnectedAppend = await client.appendToStream(
-          "my_stream",
-          jsonEvent({ type: "reconnect-append", data: { message: "test" } })
-        );
-        expect(reconnectedAppend).toBeDefined();
-        break;
-      } catch (error) {
-        await delay(200);
-      }
-    }
-
-    expect(i).toBeLessThan(20);
 
     await cluster.down();
   });
