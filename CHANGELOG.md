@@ -1,3 +1,45 @@
+## [v2.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v1.2.2...v2.0.0) (2021-07-28)
+
+### Breaking changes
+
+- `readStream` and `readAll` return a stream of events [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/2dd21e66ad903e5fc111ca2105ace51817dc5cb0)
+
+To allow for reading large numbers of events without running out of memory, `readSteam` and `readAll` now return a [readable stream](https://nodejs.org/api/stream.html#stream_readable_streams) rather than a promise of an array.
+
+Before `v1.x`:
+
+```ts
+const events = await client.readStream<MyEventTypes>(streamName);
+
+for (const event of events) {
+  doSomething(event);
+}
+```
+
+After `v2.x`:
+
+```ts
+const eventStream = client.readStream<MyEventTypes>(streamName);
+
+for await (const event of eventStream) {
+  doSomething(event);
+}
+```
+
+### Features
+
+- Reconnect on node loss [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/83e0145d3fcdf4a0713f84d5d58575148008249a)
+- `readonlyreplica` node preference [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/0c5d29e3337502a3baf32452906b08691cc17c10)
+- Faster data encoding [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/4cda18001f07f32eceb93a47644e8697fc4963ee)
+
+### Bug Fixes
+
+- Ensure member is in a connectable state during discovery [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/0c5d29e3337502a3baf32452906b08691cc17c10)
+
+### Removal of Deprecated Apis
+
+- `ConnectionTypeOptions` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5128e82a2d054aa5dd45f097d5095b60d35546da)
+
 ## [v1.2.2](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v1.2.1...v1.2.2) (2021-06-18)
 
 ### Features
