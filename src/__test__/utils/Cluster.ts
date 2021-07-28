@@ -338,8 +338,10 @@ export class Cluster {
     try {
       await rmdir(this.path(), { recursive: true });
     } catch (error) {
-      // TODO:
-      // removing the directory fails on github actions
+      if (process.env.CI) return;
+      console.log(
+        `Failed to clean up test files at "${this.path()}": ${error}`
+      );
     }
   };
 
