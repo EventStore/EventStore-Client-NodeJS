@@ -49,7 +49,16 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "testMatch": [
+      "**/samples/**/*.[jt]s?(x)",
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
     "globalSetup": "./src/__test__/utils/preflight.ts",
+    "moduleNameMapper": {
+      "@eventstore/db-client": "<rootDir>/src/index.ts",
+      "@test-utils": "<rootDir>/src/__test__/utils"
+    },
     "globals": {
       "ts-jest": {
         "tsconfig": "./src/__test__/tsconfig.json"

@@ -1,5 +1,11 @@
 {
   "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@eventstore/db-client": ["../"],
+      "@test-utils": ["./utils"]
+    }
+  },
   "include": ["**/*.test.ts"],
   "exclude": []
 }
