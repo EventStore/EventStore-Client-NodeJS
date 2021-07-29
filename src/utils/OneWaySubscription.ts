@@ -6,7 +6,7 @@ import { Status } from "@grpc/grpc-js/build/src/constants";
 import { ReadResp } from "../../generated/streams_pb";
 
 import { ConvertGrpcEvent, convertToCommandError } from ".";
-import { ReadableSubscription } from "../types";
+import { Filter, Position, ReadableSubscription } from "../types";
 
 type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
@@ -16,15 +16,18 @@ export class OneWaySubscription<E>
 {
   #convertGrpcEvent: ConvertGrpcEvent<E>;
   #grpcStream: Promise<ClientReadableStream<ReadResp>>;
+  #checkpointReached?: Filter["checkpointReached"];
 
   constructor(
     createGRPCStream: CreateGRPCStream,
     convertGrpcEvent: ConvertGrpcEvent<E>,
-    options: TransformOptions
+    options: TransformOptions,
+    checkpointReached?: Filter["checkpointReached"]
   ) {
     super({ ...options, objectMode: true });
     this.#convertGrpcEvent = convertGrpcEvent;
     this.#grpcStream = createGRPCStream();
+    this.#checkpointReached = checkpointReached;
     this.initialize();
   }
 
@@ -42,9 +45,22 @@ export class OneWaySubscription<E>
     }
   };
 
-  _transform(resp: ReadResp, _encoding: string, next: TransformCallback): void {
+  async _transform(
+    resp: ReadResp,
+    _encoding: string,
+    next: TransformCallback
+  ): Promise<void> {
     if (resp.hasConfirmation?.()) {
       this.emit("confirmation");
+    }
+
+    if (resp.hasCheckpoint?.() && this.#checkpointReached) {
+      const checkpoint = resp.getCheckpoint()!;
+      const position: Position = {
+        commit: BigInt(checkpoint.getCommitPosition()),
+        prepare: BigInt(checkpoint.getPreparePosition()),
+      };
+      await this.#checkpointReached(this, position);
     }
 
     if (resp.hasEvent?.()) {

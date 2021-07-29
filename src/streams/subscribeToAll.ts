@@ -164,6 +164,7 @@ Client.prototype.subscribeToAll = function (
   return new OneWaySubscription(
     createGRPCStream,
     convertAllStreamGrpcEvent,
-    readableOptions
+    readableOptions,
+    filter?.checkpointReached
   );
 };

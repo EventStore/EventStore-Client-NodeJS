@@ -297,6 +297,14 @@ export interface FilterBase {
    * */
   checkpointInterval: number;
   /**
+   * A callback invoked and await when a checkpoint is reached.
+   * Set the checkpointInterval to define how often this method is called.
+   * */
+  checkpointReached?: (
+    subscription: AllStreamSubscription,
+    position: Position
+  ) => Promise<void> | void;
+  /**
    * The maximum number of events that are filtered out before the page is returned
    * Must be greater than 0, if supplied.
    * */
