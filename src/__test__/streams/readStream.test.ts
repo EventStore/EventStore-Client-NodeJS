@@ -1,8 +1,21 @@
-import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
+import {
+  binaryTestEvents,
+  collect,
+  createTestNode,
+  delay,
+  jsonTestEvents,
+} from "../utils";
 
-import { EventStoreDBClient, BACKWARDS, END } from "../..";
-import { ResolvedEvent } from "../../types";
-import { StreamDeletedError, StreamNotFoundError } from "../../utils";
+import {
+  EventStoreDBClient,
+  BACKWARDS,
+  END,
+  jsonEvent,
+  StreamDeletedError,
+  StreamNotFoundError,
+  ResolvedEvent,
+  LinkEvent,
+} from "../..";
 
 describe("readStream", () => {
   const node = createTestNode();
@@ -131,6 +144,62 @@ describe("readStream", () => {
         }
 
         expect(count).toBe(2);
+      });
+
+      test("resolve link tos", async () => {
+        const FROM_STREAM_NAME = "link-from-stream";
+
+        await client.enableProjection("$by_category");
+
+        await client.createContinuousProjection(
+          "continuous",
+          `fromStream("${FROM_STREAM_NAME}").when({
+            $any: function(state, ev) {
+              linkTo('a-' + ev.data.some, ev)
+            }
+          });`,
+          { trackEmittedStreams: true }
+        );
+
+        // Append an event that will be linked
+
+        await client.appendToStream(
+          FROM_STREAM_NAME,
+          jsonEvent({ type: "linky", data: { some: "thing" } })
+        );
+
+        await delay(1000);
+
+        // by default, resolveLinkTos should be false
+        const noResolveLink = client.readStream<LinkEvent>("a-thing", {
+          maxCount: 1,
+        });
+        const [noResolveEvent] = await collect(noResolveLink);
+
+        // link event
+        expect(noResolveEvent.event).toBeDefined();
+        expect(noResolveEvent.event?.type).toBe("$>");
+
+        const doResolveLink = client.readStream("a-thing", {
+          maxCount: 1,
+          resolveLinkTos: true,
+        });
+        const [doResolveEvent] = await collect(doResolveLink);
+
+        // resolved event
+        expect(doResolveEvent.event).toBeDefined();
+        expect(doResolveEvent.event?.type).toBe("linky");
+
+        // link event
+        expect(doResolveEvent.link).toBeDefined();
+        expect(doResolveEvent.link?.type).toBe("$>");
+
+        expect(doResolveEvent.event?.id).toBe(
+          noResolveEvent.event!.metadata.$causedBy
+        );
+        expect(doResolveEvent.event?.id).toBe(
+          doResolveEvent.link!.metadata.$causedBy
+        );
       });
     });
 

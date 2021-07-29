@@ -46,6 +46,15 @@ export interface BinaryEventData<E extends BinaryEventType = BinaryEventType> {
 
 export type EventData = JSONEventData | BinaryEventData;
 
+export type LinkEvent = BinaryEventType<
+  "$>",
+  {
+    $causedBy?: string;
+    $correlationId?: string;
+    [key: string]: unknown;
+  }
+>;
+
 /**
  * Represents a previously written event.
  */
@@ -145,7 +154,7 @@ export interface ResolvedEvent<Event extends EventType = EventType> {
   /**
    * The link event if this ResolvedEvent is a link event.
    */
-  link?: EventTypeToRecordedEvent<Event>;
+  link?: EventTypeToRecordedEvent<LinkEvent>;
 
   /**
    * Commit position of the record.
@@ -165,7 +174,7 @@ export interface AllStreamResolvedEvent {
   /**
    * The link event if this ResolvedEvent is a link event.
    */
-  link?: AllStreamRecordedEvent;
+  link?: AllStreamBinaryRecordedEvent<LinkEvent>;
 
   /**
    * Commit position of the record.

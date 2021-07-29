@@ -28,6 +28,13 @@ export interface ReadAllOptions extends BaseOptions {
    */
   fromPosition?: ReadPosition;
   /**
+   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
+   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
+   * resolution feature, the server will also return the event targeted by the link.
+   * @default false
+   */
+  resolveLinkTos?: boolean;
+  /**
    * Sets the read direction of the streamconnection.
    * @default FORWARDS
    */
@@ -53,6 +60,7 @@ Client.prototype.readAll = function (
   {
     maxCount = Number.MAX_SAFE_INTEGER,
     fromPosition = START,
+    resolveLinkTos = false,
     direction = FORWARDS,
     ...baseOptions
   }: ReadAllOptions = {},
@@ -85,8 +93,10 @@ Client.prototype.readAll = function (
       break;
     }
   }
-  options.setCount(maxCount.toString(10));
+
   options.setAll(allOptions);
+  options.setResolveLinks(resolveLinkTos);
+  options.setCount(maxCount.toString(10));
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
 
