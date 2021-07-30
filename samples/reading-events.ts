@@ -101,6 +101,7 @@ describe("[sample] reading-events", () => {
       username: "admin",
       password: "changeit",
     };
+
     const events = client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: START,
@@ -186,6 +187,7 @@ describe("[sample] reading-events", () => {
       username: "admin",
       password: "changeit",
     };
+    
     const events = client.readAll({
       direction: FORWARDS,
       fromPosition: START,

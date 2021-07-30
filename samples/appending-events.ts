@@ -198,6 +198,7 @@ describe("[sample] appending-events", () => {
       username: "admin",
       password: "changeit",
     };
+    
     await client.appendToStream("some-stream", event, {
       credentials,
     });
