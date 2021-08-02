@@ -83,27 +83,31 @@ describe("[sample] server-side-filtering", () => {
     return filter;
   });
 
-  test.skip("checkpoint", async () => {
-    // TODO: https://github.com/EventStore/EventStore-Client-NodeJS/issues/187
+  test("checkpoint", async () => {
+    const doSomethingAsync = async () => {
+      // :shrug:
+    };
     // region checkpoint
-    // TODO
+    excludeSystemEvents({
+      async checkpointReached(_subscription, position) {
+        // The subscription will wait until the promise is resolved
+        await doSomethingAsync();
+        console.log(`checkpoint taken at ${position.prepare}`);
+      },
+    });
     // endregion checkpoint
   });
 
   test("checkpoint-with-interval", async () => {
     // region checkpoint-with-interval
     const filter = eventTypeFilter({
-      checkpointInterval: 1000,
       regex: "^[^$].*",
+      checkpointInterval: 1000,
+      checkpointReached(_subscription, position) {
+        console.log(`checkpoint taken at ${position.prepare}`);
+      },
     });
     // endregion checkpoint-with-interval
     return filter;
-  });
-
-  test.skip("checkpoint-with-interval", async () => {
-    // TODO: https://github.com/EventStore/EventStore-Client-NodeJS/issues/187
-    // region checkpoint-with-interval
-    // TODO
-    // endregion checkpoint-with-interval
   });
 });

@@ -1,5 +1,12 @@
 import { EVENT_TYPE, STREAM_NAME } from "../constants";
-import { FilterOn, Filter, RegexFilter, PrefixesFilter } from "../types";
+import {
+  FilterOn,
+  Filter,
+  RegexFilter,
+  PrefixesFilter,
+  Position,
+  AllStreamSubscription,
+} from "../types";
 
 interface FilterOptionsBase {
   /**
@@ -7,6 +14,14 @@ interface FilterOptionsBase {
    * Must be greater than 0.
    * */
   checkpointInterval?: number;
+  /**
+   * A callback invoked and await when a checkpoint is reached.
+   * Set the checkpointInterval to define how often this method is called.
+   * */
+  checkpointReached?: (
+    subscription: AllStreamSubscription,
+    position: Position
+  ) => Promise<void> | void;
   /**
    * The maximum number of events that are filtered out before the page is returned
    * Must be greater than 0, if supplied.
@@ -40,11 +55,13 @@ const createFilterOn = (filterOn: FilterOn) => {
   function createFilter(options: PrefixesOptions): PrefixesFilter;
   function createFilter({
     checkpointInterval = 1,
+    checkpointReached,
     ...options
   }: FilterOptions): Filter {
     const filter: Record<string, unknown> = {
       filterOn,
       checkpointInterval,
+      checkpointReached,
     };
 
     if ("regex" in options) {
