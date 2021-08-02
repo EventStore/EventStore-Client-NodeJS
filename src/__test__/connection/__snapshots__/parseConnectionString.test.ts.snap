@@ -14,7 +14,7 @@ exports[`connection string parser Should throw on invalid strings esdb://localho
 
 exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=sometimes 1`] = `"Unexpected \\"sometimes\\" at position 38, expected true or false."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=false&nodePreference=any 1`] = `"Unexpected \\"any\\" at position 52, expected follower or leader or random."`;
+exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=false&nodePreference=any 1`] = `"Unexpected \\"any\\" at position 52, expected leader or follower or read_only_replica or random."`;
 
 exports[`connection string parser Should throw on invalid strings esdb://localhost?tlsVerifyCert=false?nodePreference=follower 1`] = `"Unexpected \\"?\\" at position 36, expected &key=value."`;
 
