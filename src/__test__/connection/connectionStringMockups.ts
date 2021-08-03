@@ -252,6 +252,19 @@ export const valid: Array<
     },
   ],
   [
+    "esdb+discover://host?nodePreference=Follower",
+    {
+      dnsDiscover: true,
+      nodePreference: "follower",
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
     "esdb://host?tlsCAFile=/home/user/dev/cert.ca",
     {
       dnsDiscover: false,
@@ -385,6 +398,26 @@ export const valid: Array<
       discoveryInterval: 1000,
       gossipTimeout: 1,
       nodePreference: "leader",
+      tls: false,
+      tlsVerifyCert: false,
+      throwOnAppendFailure: false,
+      keepAliveInterval: 200,
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
+  [
+    `esdb://host?MaxDiscoverAttempts=200&discovery-interval=1000&GOSSIP_TIMEOUT=1&node_preference=ReadOnlyReplica&TLS=false&TlsVerifyCert=false&THROWOnAppendFailure=false      &   KEEPALIVEinterval=200`,
+    {
+      dnsDiscover: false,
+      maxDiscoverAttempts: 200,
+      discoveryInterval: 1000,
+      gossipTimeout: 1,
+      nodePreference: "read_only_replica",
       tls: false,
       tlsVerifyCert: false,
       throwOnAppendFailure: false,

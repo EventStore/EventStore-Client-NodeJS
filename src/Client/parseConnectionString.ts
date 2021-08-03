@@ -1,3 +1,4 @@
+import { RANDOM, FOLLOWER, LEADER, READ_ONLY_REPLICA } from "../constants";
 import { Credentials, EndPoint, NodePreference } from "../types";
 import { debug } from "../utils";
 
@@ -22,22 +23,48 @@ export interface ConnectionOptions extends QueryOptions {
 
 type ParsingLocation = [from: number, to: number];
 
+const toflatCase = (str: string) =>
+  str.trim().toLowerCase().replace(/[_-]/g, "");
+
+// This wierd key value syntax is the only way I could find ensure that every option in a union is passed
+const caseMap = <T extends string>(options: { [K in T]: K }) => {
+  const expected = Object.values<T>(options);
+
+  const mapping = new Map<string, T>(
+    expected.map((option) => [toflatCase(option), option])
+  );
+
+  function MapTo(value: string): T | undefined {
+    const flatValue = toflatCase(value);
+    return mapping.get(flatValue);
+  }
+
+  MapTo.expected = expected;
+
+  return MapTo;
+};
+
 const notCurrentlySupported = ["tlsVerifyCert"];
 
-const lowerToKey: {
-  [K in keyof QueryOptions as Lowercase<K>]: K;
-} = {
-  maxdiscoverattempts: "maxDiscoverAttempts",
-  discoveryinterval: "discoveryInterval",
-  gossiptimeout: "gossipTimeout",
-  nodepreference: "nodePreference",
+const mapToNodePreference = caseMap<NodePreference>({
+  [LEADER]: LEADER,
+  [FOLLOWER]: FOLLOWER,
+  [READ_ONLY_REPLICA]: READ_ONLY_REPLICA,
+  [RANDOM]: RANDOM,
+});
+
+const mapToQueryOption = caseMap<keyof QueryOptions>({
+  maxDiscoverAttempts: "maxDiscoverAttempts",
+  discoveryInterval: "discoveryInterval",
+  gossipTimeout: "gossipTimeout",
+  nodePreference: "nodePreference",
   tls: "tls",
-  tlsverifycert: "tlsVerifyCert",
-  tlscafile: "tlsCAFile",
-  throwonappendfailure: "throwOnAppendFailure",
-  keepaliveinterval: "keepAliveInterval",
-  keepalivetimeout: "keepAliveTimeout",
-};
+  tlsVerifyCert: "tlsVerifyCert",
+  tlsCAFile: "tlsCAFile",
+  throwOnAppendFailure: "throwOnAppendFailure",
+  keepAliveInterval: "keepAliveInterval",
+  keepAliveTimeout: "keepAliveTimeout",
+});
 
 export const parseConnectionString = (
   connectionString: string
@@ -229,9 +256,7 @@ const verifyKeyValuePair = (
   [from, to]: ParsingLocation
 ): KeyValuePair | null => {
   const keyFrom = from + `&${rawKey}=`.length;
-  const key =
-    lowerToKey[rawKey.trim().toLowerCase() as Lowercase<keyof QueryOptions>] ??
-    rawKey;
+  const key = mapToQueryOption(rawKey) ?? rawKey;
   const value = rawValue.trim();
 
   if (notCurrentlySupported.includes(key)) {
@@ -242,20 +267,20 @@ const verifyKeyValuePair = (
 
   switch (key) {
     case "nodePreference": {
-      const expected: NodePreference[] = ["follower", "leader", "random"];
+      const parsedValue = mapToNodePreference(value);
 
-      if (!expected.includes(value as NodePreference)) {
+      if (!parsedValue) {
         throw new ParseError(
           connectionString,
           [keyFrom, to],
-          expected.join(" or ")
+          mapToNodePreference.expected.join(" or ")
         );
       }
 
-      return { key, value };
+      return { key, value: parsedValue };
     }
     case "tlsCAFile": {
-      return { key, value: value };
+      return { key, value };
     }
     case "maxDiscoverAttempts":
     case "discoveryInterval":
