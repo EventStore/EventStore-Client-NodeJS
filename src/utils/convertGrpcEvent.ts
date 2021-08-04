@@ -8,9 +8,10 @@ import PersistentRecordedEvent = PersistentEvent.RecordedEvent;
 import { debug } from "./debug";
 import {
   AllStreamResolvedEvent,
-  JSONType,
+  EventType,
+  EventTypeToRecordedEvent,
+  LinkEvent,
   Position,
-  RecordedEvent,
   ResolvedEvent,
 } from "../types";
 
@@ -30,7 +31,7 @@ export const convertGrpcEvent: ConvertGrpcEvent<ResolvedEvent> = (
   }
 
   if (grpcEvent.hasLink()) {
-    resolved.link = convertGrpcRecord(grpcEvent.getLink()!);
+    resolved.link = convertGrpcRecord<LinkEvent>(grpcEvent.getLink()!);
   }
 
   if (grpcEvent.hasCommitPosition()) {
@@ -53,9 +54,9 @@ export const convertAllStreamGrpcEvent: ConvertGrpcEvent<AllStreamResolvedEvent>
     }
 
     if (grpcEvent.hasLink()) {
-      const link = grpcEvent.getEvent()!;
+      const link = grpcEvent.getLink()!;
       resolved.link = {
-        ...convertGrpcRecord(link),
+        ...convertGrpcRecord<LinkEvent>(link),
         position: extractPosition(link),
       };
     }
@@ -96,9 +97,9 @@ const parseMetadata = (grpcRecord: GRPCRecordedEvent, id: string) => {
   }
 };
 
-export const convertGrpcRecord = (
+export const convertGrpcRecord = <E extends EventType = EventType>(
   grpcRecord: GRPCRecordedEvent
-): RecordedEvent => {
+): EventTypeToRecordedEvent<E> => {
   const metadataMap = grpcRecord.getMetadataMap();
 
   const type = metadataMap.get("type") ?? "<no-event-type-provided>";
@@ -118,13 +119,13 @@ export const convertGrpcRecord = (
   }
   const id = grpcRecord.getId()!.getString();
   const revision = BigInt(grpcRecord.getStreamRevision());
-  const metadata = parseMetadata(grpcRecord, id);
+  const metadata: E["metadata"] = parseMetadata(grpcRecord, id);
   const isJson = contentType === "application/json";
 
   if (isJson) {
     const dataStr = Buffer.from(grpcRecord.getData()).toString("utf8");
 
-    const data = safeParseJSON<JSONType>(
+    const data = safeParseJSON<E["data"]>(
       dataStr,
       (d) => d,
       `Malformed JSON data in event ${id}`
@@ -139,7 +140,7 @@ export const convertGrpcRecord = (
       metadata,
       isJson,
       created,
-    };
+    } as EventTypeToRecordedEvent<E>;
   }
 
   const data = grpcRecord.getData_asU8();
@@ -153,5 +154,5 @@ export const convertGrpcRecord = (
     metadata,
     isJson,
     created,
-  };
+  } as EventTypeToRecordedEvent<E>;
 };

@@ -187,7 +187,7 @@ describe("[sample] reading-events", () => {
       username: "admin",
       password: "changeit",
     };
-    
+
     const events = client.readAll({
       direction: FORWARDS,
       fromPosition: START,
@@ -223,7 +223,7 @@ describe("[sample] reading-events", () => {
     const events = client.readAll({
       direction: BACKWARDS,
       fromPosition: END,
-      // resolveLinkTos: true,
+      resolveLinkTos: true,
       maxCount: 10,
     });
     // endregion read-from-all-stream-resolving-link-Tos
