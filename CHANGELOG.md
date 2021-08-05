@@ -1,3 +1,15 @@
+## [v2.1.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.0.0...v2.1.0) (2021-08-05)
+
+### Features
+
+- `checkpointReached` callback added to filter to allow checkpointing filtered reads to all [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/0743b3d74a08a30b7476876e70fe7edf05e76b35)
+- `LinkEvent` type added to event types [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/0183f104318a4ccf7547541b95d2f4bac6384e24)
+- `resolveLinkTos` option added to `readAll` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/0183f104318a4ccf7547541b95d2f4bac6384e24)
+
+### Bug Fixes
+
+- `parseConnectionString` allows different casings of `nodePreference` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/9f1440d89070b3f6aee82ddfd50c3793f5f61bb0)
+
 ## [v2.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v1.2.2...v2.0.0) (2021-07-28)
 
 ### Breaking changes
