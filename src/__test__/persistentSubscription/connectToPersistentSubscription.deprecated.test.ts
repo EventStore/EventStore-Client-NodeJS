@@ -24,7 +24,7 @@ import {
 
 const asyncPipeline = promisify(pipeline);
 
-describe("connectToPersistentSubscription", () => {
+describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
 
@@ -74,7 +74,7 @@ describe("connectToPersistentSubscription", () => {
       const onEnd = jest.fn();
       const onEvent = jest.fn(async (event: ResolvedEvent) => {
         if (event.event) {
-          await subscription.ack(event);
+          await subscription.ack(event.event.id);
         }
 
         if (event.event?.type === "finish-test") {
@@ -126,7 +126,9 @@ describe("connectToPersistentSubscription", () => {
       const onConfirmation = jest.fn();
       const onEnd = jest.fn();
       const onEvent = jest.fn(async (event: ResolvedEvent) => {
-        await subscription.ack(event);
+        if (event.event) {
+          await subscription.ack(event.event.id);
+        }
 
         if (event.event?.type === "finish-test") {
           defer.resolve();
@@ -177,7 +179,9 @@ describe("connectToPersistentSubscription", () => {
       const onConfirmation = jest.fn();
       const onEnd = jest.fn();
       const onEvent = jest.fn(async (event: ResolvedEvent) => {
-        await subscription.ack(event);
+        if (event.event) {
+          await subscription.ack(event.event.id);
+        }
 
         if (event.event?.type === "finish-test") {
           defer.resolve();
@@ -243,7 +247,7 @@ describe("connectToPersistentSubscription", () => {
         if (!event.event) return;
 
         if (event.event.type === "finish-test") {
-          await subscription.ack(event);
+          await subscription.ack(event.event.id);
           defer.resolve();
           return;
         }
@@ -253,12 +257,12 @@ describe("connectToPersistentSubscription", () => {
           await subscription.nack(
             event.event.type === "skip-event" ? "skip" : "retry",
             "To test it",
-            event
+            event.event.id
           );
           return;
         }
 
-        await subscription.ack(event);
+        await subscription.ack(event.event.id);
         return;
       });
 
@@ -309,11 +313,13 @@ describe("connectToPersistentSubscription", () => {
           GROUP_NAME
         );
 
-        for await (const resolvedEvent of subscription) {
-          doSomething(resolvedEvent);
-          await subscription.ack(resolvedEvent);
+        for await (const { event } of subscription) {
+          if (!event) continue;
 
-          if (resolvedEvent.event?.type === "finish-test") {
+          doSomething(event);
+          await subscription.ack(event.id);
+
+          if (event?.type === "finish-test") {
             break;
           }
         }
@@ -351,27 +357,27 @@ describe("connectToPersistentSubscription", () => {
           GROUP_NAME
         );
 
-        for await (const resolvedEvent of subscription) {
-          if (!resolvedEvent.event) continue;
+        for await (const { event } of subscription) {
+          if (!event) continue;
 
-          doSomething(resolvedEvent);
+          doSomething(event);
 
-          if (resolvedEvent.event.type === "finish-test") {
-            await subscription.ack(resolvedEvent);
+          if (event.type === "finish-test") {
+            await subscription.ack(event.id);
             break;
           }
 
-          if (!nacked.includes(resolvedEvent.event.id)) {
-            nacked.push(resolvedEvent.event.id);
+          if (!nacked.includes(event.id)) {
+            nacked.push(event.id);
             await subscription.nack(
-              resolvedEvent.event.type === "skip-event" ? "skip" : "retry",
+              event.type === "skip-event" ? "skip" : "retry",
               "To test it",
-              resolvedEvent
+              event.id
             );
             continue;
           }
 
-          await subscription.ack(resolvedEvent);
+          await subscription.ack(event.id);
         }
 
         expect(doSomething).toBeCalledTimes(
@@ -405,20 +411,19 @@ describe("connectToPersistentSubscription", () => {
           GROUP_NAME
         );
 
-        for await (const resolvedEvent of subscription) {
-          const { event } = resolvedEvent;
+        for await (const { event } of subscription) {
           if (!event) continue;
 
-          if (event.type === "test") {
+          if (event?.type === "test") {
             // example of awaiting an async function when iterating over the async iterator
             await delay(10);
           }
 
           doSomething(event);
 
-          await subscription.ack(resolvedEvent);
+          await subscription.ack(event.id);
 
-          if (event.type === "finish-test") {
+          if (event?.type === "finish-test") {
             break;
           }
         }
@@ -452,11 +457,13 @@ describe("connectToPersistentSubscription", () => {
 
       subscription
         .on("data", eventListenerOne)
-        .on("data", async (resolvedEvent) => {
-          eventListenerTwo(resolvedEvent);
-          await subscription.ack(resolvedEvent);
+        .on("data", async ({ event }) => {
+          if (!event) return;
 
-          if (resolvedEvent.event?.type === "finish-test") {
+          eventListenerTwo(event);
+          await subscription.ack(event.id);
+
+          if (event.type === "finish-test") {
             subscription.unsubscribe();
           }
         })
@@ -506,7 +513,9 @@ describe("connectToPersistentSubscription", () => {
           _encoding: string,
           done: (error: null, e: ResolvedEvent) => void
         ) {
-          subscription.ack(resolvedEvent).then(() => done(null, resolvedEvent));
+          subscription
+            .ack(resolvedEvent.event!.id)
+            .then(() => done(null, resolvedEvent));
         }
       })({ objectMode: true });
 
@@ -560,15 +569,17 @@ describe("connectToPersistentSubscription", () => {
       GROUP_NAME
     );
 
-    for await (const resolvedEvent of subscription) {
-      doSomething(resolvedEvent);
-      await subscription.ack(resolvedEvent);
+    for await (const { event } of subscription) {
+      if (!event) continue;
 
-      if (resolvedEvent.event?.type === "malformed-event") {
-        expect(resolvedEvent.event.data).toBe(malformedData);
+      doSomething(event);
+      await subscription.ack(event.id);
+
+      if (event.type === "malformed-event") {
+        expect(event.data).toBe(malformedData);
       }
 
-      if (resolvedEvent.event?.type === "finish-test") {
+      if (event.type === "finish-test") {
         break;
       }
     }
@@ -635,11 +646,13 @@ describe("connectToPersistentSubscription", () => {
       followerClient
     );
 
-    for await (const resolvedEvent of subscription) {
-      doSomething(resolvedEvent);
-      await subscription.ack(resolvedEvent);
+    for await (const { event } of subscription) {
+      if (!event) continue;
 
-      if (resolvedEvent.event?.type === "finish-test") {
+      doSomething(event);
+      await subscription.ack(event.id);
+
+      if (event?.type === "finish-test") {
         break;
       }
     }
@@ -690,18 +703,20 @@ describe("connectToPersistentSubscription", () => {
 
     const acked = new Set<string>();
 
-    for await (const resolvedEvent of subscription) {
-      if (!resolvedEvent.event) continue;
+    for await (const event of subscription) {
+      if (!event.event) continue;
 
-      doSomething(resolvedEvent);
+      doSomething(event);
 
-      expect(acked).not.toContain(resolvedEvent.event?.id);
+      expect(acked).not.toContain(event.event.id);
 
-      acked.add(resolvedEvent.event.id);
+      acked.add(event.event.id);
 
-      await subscription.ack(resolvedEvent);
+      // We must ack the id of event in the stream we are subscribed to,
+      // in this case, the link event.
+      await subscription.ack(event.link!.id);
 
-      if (resolvedEvent.event.id === FINISH_ID) {
+      if (event.event.id === FINISH_ID) {
         await subscription.unsubscribe();
       }
     }
