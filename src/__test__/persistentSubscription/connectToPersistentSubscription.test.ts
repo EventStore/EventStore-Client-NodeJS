@@ -1,5 +1,8 @@
 import { pipeline, Writable, Readable, Transform } from "stream";
 import { promisify } from "util";
+
+import { v4 as uuid } from "uuid";
+
 import {
   createTestCluster,
   Defer,
@@ -660,5 +663,64 @@ describe("connectToPersistentSubscription", () => {
     expect(confirmThatErrorWasThrown.mock.calls[0][0]).toBeInstanceOf(
       NotLeaderError
     );
+  });
+
+  test("on system stream", async () => {
+    await client.enableProjection("$by_event_type");
+
+    const FINISH_ID = uuid();
+    const EVENT_TYPE = "SourceCreatedEvent";
+    const SYSTEM_STREAM_NAME = `$et-${EVENT_TYPE}`;
+    const GROUP_NAME = "system_stream";
+
+    const STREAM_NAME = "system_stream";
+    const doSomething = jest.fn();
+
+    await client.appendToStream(STREAM_NAME, [
+      ...jsonTestEvents(99, EVENT_TYPE),
+      jsonEvent({
+        type: EVENT_TYPE,
+        id: FINISH_ID,
+        data: {
+          message: "test",
+          index: 100,
+        },
+      }),
+    ]);
+
+    await client.createPersistentSubscription(
+      SYSTEM_STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionSettingsFromDefaults({
+        resolveLinkTos: true,
+      })
+    );
+
+    const subscription = client.connectToPersistentSubscription(
+      SYSTEM_STREAM_NAME,
+      GROUP_NAME
+    );
+
+    const acked = new Set<string>();
+
+    for await (const event of subscription) {
+      if (!event.event) continue;
+
+      doSomething(event);
+
+      expect(acked).not.toContain(event.event.id);
+
+      acked.add(event.event.id);
+
+      // We must ack the id of event in the stream we are subscribed to,
+      // in this case, the link event.
+      await subscription.ack(event.link!.id);
+
+      if (event.event.id === FINISH_ID) {
+        await subscription.unsubscribe();
+      }
+    }
+
+    expect(doSomething).toBeCalledTimes(100);
   });
 });
