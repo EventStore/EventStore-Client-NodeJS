@@ -1,4 +1,9 @@
-import { binaryTestEvents, createTestNode, jsonTestEvents } from "../utils";
+import {
+  binaryTestEvents,
+  collect,
+  createTestNode,
+  jsonTestEvents,
+} from "../utils";
 
 import {
   EventStoreDBClient,
@@ -8,9 +13,9 @@ import {
   NO_STREAM,
   STREAM_EXISTS,
   binaryEvent,
+  BinaryEventType,
   JSONEventType,
 } from "../..";
-import { BinaryEventType } from "../../types";
 
 describe("appendToStream", () => {
   const node = createTestNode();
@@ -76,6 +81,41 @@ describe("appendToStream", () => {
 
       expect(result).toBeDefined();
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
+    });
+
+    test("linkTo", async () => {
+      const LINK_FROM_STREAM_NAME = "link_from_test";
+      const LINK_TO_STREAM_NAME = "link_to_test";
+
+      const LINK_REVISION = BigInt(2);
+
+      await client.appendToStream(LINK_TO_STREAM_NAME, jsonTestEvents());
+
+      await client.appendToStream(
+        LINK_FROM_STREAM_NAME,
+        binaryEvent({
+          type: "$>",
+          data: Buffer.from(`${LINK_REVISION}@${LINK_TO_STREAM_NAME}`),
+        })
+      );
+
+      const [trueEvent] = await collect(
+        client.readStream(LINK_TO_STREAM_NAME, {
+          fromRevision: LINK_REVISION,
+          maxCount: 1,
+        })
+      );
+
+      const [linkEvent] = await collect(
+        client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
+      );
+
+      expect(trueEvent.event).toBeDefined();
+      expect(trueEvent.link).not.toBeDefined();
+      expect(linkEvent.event).toBeDefined();
+      expect(linkEvent.link).toBeDefined();
+
+      expect(trueEvent.event!).toEqual(linkEvent.event!);
     });
 
     describe("metadata", () => {
