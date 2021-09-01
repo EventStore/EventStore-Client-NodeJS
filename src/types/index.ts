@@ -459,11 +459,30 @@ export interface ReadableSubscription<E> extends Readable {
 
 export interface PersistentSubscription<E extends EventType = EventType>
   extends ReadableSubscription<ResolvedEvent<E>> {
+  /**
+   * @deprecated Please pass the entire resolved event.
+   */
   ack(...ids: string[]): Promise<void>;
+  /**
+   * Acknowledge events as handled.
+   */
+  ack(...events: ResolvedEvent<E>[]): Promise<void>;
+
+  /**
+   * @deprecated Please pass the entire resolved event.
+   */
   nack(
     action: PersistentAction,
     reason: string,
     ...ids: string[]
+  ): Promise<void>;
+  /**
+   * "Not Acknowledge" the event.
+   */
+  nack(
+    action: PersistentAction,
+    reason: string,
+    ...events: ResolvedEvent<E>[]
   ): Promise<void>;
 }
 

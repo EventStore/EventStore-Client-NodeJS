@@ -8,7 +8,11 @@ import { ReadReq, ReadResp } from "../../generated/persistent_pb";
 import Action = ReadReq.Nack.Action;
 
 import { convertToCommandError, convertGrpcEvent } from ".";
-import { PersistentAction, PersistentSubscription } from "../types";
+import {
+  PersistentAction,
+  PersistentSubscription,
+  ResolvedEvent,
+} from "../types";
 
 type CreateGRPCStream = () => Promise<ClientDuplexStream<ReadReq, ReadResp>>;
 
@@ -52,11 +56,17 @@ export class TwoWaySubscription
     next();
   }
 
-  public async ack(...ids: string[]): Promise<void> {
+  public async ack(...events: Array<string | ResolvedEvent>): Promise<void> {
     const req = new ReadReq();
     const ack = new ReadReq.Ack();
 
-    for (const id of ids) {
+    for (const event of events) {
+      const id =
+        typeof event === "string" ? event : event.link?.id ?? event.event?.id;
+
+      // A resolved event will always have either link or event (or both), so this should to be unreachable
+      if (!id) throw new Error("Attempted to ack an event with no id");
+
       const uuid = new UUID();
       uuid.setString(id);
       ack.addIds(uuid);
@@ -77,7 +87,7 @@ export class TwoWaySubscription
   public async nack(
     action: PersistentAction,
     reason: string,
-    ...ids: string[]
+    ...events: Array<string | ResolvedEvent>
   ): Promise<void> {
     const req = new ReadReq();
     const nack = new ReadReq.Nack();
@@ -97,7 +107,13 @@ export class TwoWaySubscription
         break;
     }
 
-    for (const id of ids) {
+    for (const event of events) {
+      const id =
+        typeof event === "string" ? event : event.link?.id ?? event.event?.id;
+
+      // A resolved event will always have either link or event (or both), so this should to be unreachable
+      if (!id) throw new Error("Attempted to ack an event with no id");
+
       const uuid = new UUID();
       uuid.setString(id);
       nack.addIds(uuid);
