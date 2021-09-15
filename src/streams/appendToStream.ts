@@ -93,6 +93,8 @@ Client.prototype.appendToStream = async function (
           ...this.callArguments(baseOptions),
           (error, resp) => {
             if (error != null) {
+              // Make sure we don't write to the stream after it has closed.
+              sink.destroy();
               return reject(convertToCommandError(error));
             }
 
