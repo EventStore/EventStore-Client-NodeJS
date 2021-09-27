@@ -91,14 +91,11 @@ describe("deleteStream", () => {
       });
 
       describe(NO_STREAM, () => {
-        const NOT_A_STREAM = "expected_revision_stream_no_stream";
-        const STREAM = "i_exist_hopefully";
-
-        beforeAll(async () => {
-          await client.appendToStream(STREAM, jsonTestEvents(4));
-        });
-
         it("fails if stream exists", async () => {
+          const STREAM = "i_exist_hopefully";
+
+          await client.appendToStream(STREAM, jsonTestEvents(4));
+
           try {
             const result = await client.deleteStream(STREAM, {
               expectedRevision: NO_STREAM,
@@ -115,6 +112,8 @@ describe("deleteStream", () => {
         });
 
         it("fails if stream doesn't exist", async () => {
+          const NOT_A_STREAM = "expected_revision_stream_no_stream";
+
           try {
             const result = await client.deleteStream(NOT_A_STREAM, {
               expectedRevision: NO_STREAM,
@@ -130,6 +129,20 @@ describe("deleteStream", () => {
               expect(error.streamName).toBe(NOT_A_STREAM);
             }
           }
+        });
+
+        it("succeeds if stream implicityly exists", async () => {
+          const IMPLICITLY_A_STREAM = "i_exist_implicitly";
+
+          await client.setStreamMetadata(IMPLICITLY_A_STREAM, {
+            cacheControl: 10,
+          });
+
+          const result = await client.deleteStream(IMPLICITLY_A_STREAM, {
+            expectedRevision: NO_STREAM,
+          });
+
+          expect(result).toBeDefined();
         });
       });
     });
