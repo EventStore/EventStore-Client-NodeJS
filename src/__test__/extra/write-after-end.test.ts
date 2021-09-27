@@ -20,7 +20,7 @@ describe("write after end", () => {
     await node.down();
   });
 
-  test("Should not write after end", async (done) => {
+  test("Should not write after end", async () => {
     const STREAM_NAME = "json_stream_name";
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
@@ -37,6 +37,5 @@ describe("write after end", () => {
 
     // wait for any unhandled rejections
     await delay(5_000);
-    done();
   });
 });

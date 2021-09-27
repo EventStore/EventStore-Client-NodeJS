@@ -148,9 +148,6 @@ export class Cluster {
   }
 
   public up = async (): Promise<void> => {
-    // allow up to 1 minute to complete
-    jest.setTimeout(60_000);
-
     await this.ready;
 
     try {
