@@ -98,7 +98,7 @@ describe("deleteStream", () => {
           await client.appendToStream(STREAM, jsonTestEvents(4));
         });
 
-        it("fails", async () => {
+        it("fails if stream exists", async () => {
           try {
             const result = await client.deleteStream(STREAM, {
               expectedRevision: NO_STREAM,
@@ -114,12 +114,22 @@ describe("deleteStream", () => {
           }
         });
 
-        it("succeeds", async () => {
-          const result = await client.deleteStream(NOT_A_STREAM, {
-            expectedRevision: NO_STREAM,
-          });
+        it("fails if stream doesn't exist", async () => {
+          try {
+            const result = await client.deleteStream(NOT_A_STREAM, {
+              expectedRevision: NO_STREAM,
+            });
 
-          expect(result).toBeDefined();
+            // Before https://github.com/EventStore/EventStore/pull/3154 this should pass.
+            expect(result).toBeDefined();
+          } catch (error) {
+            // After https://github.com/EventStore/EventStore/pull/3154 this will throw an error.
+            expect(error).toBeInstanceOf(WrongExpectedVersionError);
+
+            if (error instanceof WrongExpectedVersionError) {
+              expect(error.streamName).toBe(NOT_A_STREAM);
+            }
+          }
         });
       });
     });
