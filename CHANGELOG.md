@@ -1,3 +1,16 @@
+## [v2.1.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.0...v2.1.1) (2021-09-29)
+
+### Bug Fixes
+
+- Ack and nack take a resolved event, rather than an event id [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/965dd70ae6ecadd1f4398e698299bea8b2aaa91e)
+- Prevent `appendToStream` from writing after the stream has closed [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/75aa47d0f9769cc77d340ed941469b609e80690f)
+
+### Deprecations
+
+- Ack and nack via event id [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/965dd70ae6ecadd1f4398e698299bea8b2aaa91e)
+  - Will be removed in `v3.0.0`.
+  - Pass entire resolved event
+
 ## [v2.1.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.0.0...v2.1.0) (2021-08-05)
 
 ### Features
