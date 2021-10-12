@@ -49,11 +49,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
-      - name: Login to GitHub Package Registry
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          registry: docker.pkg.github.com
-          username: ${{ github.repository_owner }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Install
         run: yarn
