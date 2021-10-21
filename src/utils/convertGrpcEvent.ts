@@ -111,7 +111,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
     throw "Impossible situation where streamIdentifier is undefined in a recorded event";
   }
   const streamId = Buffer.from(
-    grpcRecord.getStreamIdentifier()!.getStreamname()
+    grpcRecord.getStreamIdentifier()!.getStreamName()
   ).toString("utf8");
 
   if (!grpcRecord.hasId()) {

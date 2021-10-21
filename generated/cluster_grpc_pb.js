@@ -5,14 +5,14 @@ var grpc = require('@grpc/grpc-js');
 var cluster_pb = require('./cluster_pb.js');
 var shared_pb = require('./shared_pb.js');
 
-function serialize_event_store_client_shared_Empty(arg) {
+function serialize_event_store_client_Empty(arg) {
   if (!(arg instanceof shared_pb.Empty)) {
-    throw new Error('Expected argument of type event_store.client.shared.Empty');
+    throw new Error('Expected argument of type event_store.client.Empty');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_event_store_client_shared_Empty(buffer_arg) {
+function deserialize_event_store_client_Empty(buffer_arg) {
   return shared_pb.Empty.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
@@ -145,8 +145,8 @@ var GossipService = exports.GossipService = {
     responseStream: false,
     requestType: shared_pb.Empty,
     responseType: cluster_pb.ClusterInfo,
-    requestSerialize: serialize_event_store_client_shared_Empty,
-    requestDeserialize: deserialize_event_store_client_shared_Empty,
+    requestSerialize: serialize_event_store_client_Empty,
+    requestDeserialize: deserialize_event_store_client_Empty,
     responseSerialize: serialize_event_store_cluster_ClusterInfo,
     responseDeserialize: deserialize_event_store_cluster_ClusterInfo,
   },
@@ -162,8 +162,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_ViewChangeRequest,
     requestDeserialize: deserialize_event_store_cluster_ViewChangeRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   viewChangeProof: {
     path: '/event_store.cluster.Elections/ViewChangeProof',
@@ -173,8 +173,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_ViewChangeProofRequest,
     requestDeserialize: deserialize_event_store_cluster_ViewChangeProofRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   prepare: {
     path: '/event_store.cluster.Elections/Prepare',
@@ -184,8 +184,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_PrepareRequest,
     requestDeserialize: deserialize_event_store_cluster_PrepareRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   prepareOk: {
     path: '/event_store.cluster.Elections/PrepareOk',
@@ -195,8 +195,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_PrepareOkRequest,
     requestDeserialize: deserialize_event_store_cluster_PrepareOkRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   proposal: {
     path: '/event_store.cluster.Elections/Proposal',
@@ -206,8 +206,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_ProposalRequest,
     requestDeserialize: deserialize_event_store_cluster_ProposalRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   accept: {
     path: '/event_store.cluster.Elections/Accept',
@@ -217,8 +217,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_AcceptRequest,
     requestDeserialize: deserialize_event_store_cluster_AcceptRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   leaderIsResigning: {
     path: '/event_store.cluster.Elections/LeaderIsResigning',
@@ -228,8 +228,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_LeaderIsResigningRequest,
     requestDeserialize: deserialize_event_store_cluster_LeaderIsResigningRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   leaderIsResigningOk: {
     path: '/event_store.cluster.Elections/LeaderIsResigningOk',
@@ -239,8 +239,8 @@ var ElectionsService = exports.ElectionsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_cluster_LeaderIsResigningOkRequest,
     requestDeserialize: deserialize_event_store_cluster_LeaderIsResigningOkRequest,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
 };
 

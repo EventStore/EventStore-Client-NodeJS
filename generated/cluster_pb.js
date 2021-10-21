@@ -625,17 +625,17 @@ proto.event_store.cluster.ViewChangeRequest.serializeBinaryToWriter = function(m
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.ViewChangeRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.ViewChangeRequest} returns this
 */
 proto.event_store.cluster.ViewChangeRequest.prototype.setServerId = function(value) {
@@ -857,17 +857,17 @@ proto.event_store.cluster.ViewChangeProofRequest.serializeBinaryToWriter = funct
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.ViewChangeProofRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.ViewChangeProofRequest} returns this
 */
 proto.event_store.cluster.ViewChangeProofRequest.prototype.setServerId = function(value) {
@@ -1089,17 +1089,17 @@ proto.event_store.cluster.PrepareRequest.serializeBinaryToWriter = function(mess
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.PrepareRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.PrepareRequest} returns this
 */
 proto.event_store.cluster.PrepareRequest.prototype.setServerId = function(value) {
@@ -1453,17 +1453,17 @@ proto.event_store.cluster.PrepareOkRequest.prototype.setView = function(value) {
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 2;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 2;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 2));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
 */
 proto.event_store.cluster.PrepareOkRequest.prototype.setServerId = function(value) {
@@ -1563,17 +1563,17 @@ proto.event_store.cluster.PrepareOkRequest.prototype.setEpochPosition = function
 
 
 /**
- * optional event_store.client.shared.UUID epoch_id = 6;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID epoch_id = 6;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getEpochId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 6));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
 */
 proto.event_store.cluster.PrepareOkRequest.prototype.setEpochId = function(value) {
@@ -1600,17 +1600,17 @@ proto.event_store.cluster.PrepareOkRequest.prototype.hasEpochId = function() {
 
 
 /**
- * optional event_store.client.shared.UUID epoch_leader_instance_id = 7;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID epoch_leader_instance_id = 7;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.PrepareOkRequest.prototype.getEpochLeaderInstanceId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 7));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.PrepareOkRequest} returns this
 */
 proto.event_store.cluster.PrepareOkRequest.prototype.setEpochLeaderInstanceId = function(value) {
@@ -2014,17 +2014,17 @@ proto.event_store.cluster.ProposalRequest.serializeBinaryToWriter = function(mes
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
 */
 proto.event_store.cluster.ProposalRequest.prototype.setServerId = function(value) {
@@ -2088,17 +2088,17 @@ proto.event_store.cluster.ProposalRequest.prototype.hasServerHttp = function() {
 
 
 /**
- * optional event_store.client.shared.UUID leader_id = 3;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID leader_id = 3;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getLeaderId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 3));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
 */
 proto.event_store.cluster.ProposalRequest.prototype.setLeaderId = function(value) {
@@ -2216,17 +2216,17 @@ proto.event_store.cluster.ProposalRequest.prototype.setEpochPosition = function(
 
 
 /**
- * optional event_store.client.shared.UUID epoch_id = 8;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID epoch_id = 8;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getEpochId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 8));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
 */
 proto.event_store.cluster.ProposalRequest.prototype.setEpochId = function(value) {
@@ -2253,17 +2253,17 @@ proto.event_store.cluster.ProposalRequest.prototype.hasEpochId = function() {
 
 
 /**
- * optional event_store.client.shared.UUID epoch_leader_instance_id = 9;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID epoch_leader_instance_id = 9;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.ProposalRequest.prototype.getEpochLeaderInstanceId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 9));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.ProposalRequest} returns this
 */
 proto.event_store.cluster.ProposalRequest.prototype.setEpochLeaderInstanceId = function(value) {
@@ -2530,17 +2530,17 @@ proto.event_store.cluster.AcceptRequest.serializeBinaryToWriter = function(messa
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.AcceptRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.AcceptRequest} returns this
 */
 proto.event_store.cluster.AcceptRequest.prototype.setServerId = function(value) {
@@ -2604,17 +2604,17 @@ proto.event_store.cluster.AcceptRequest.prototype.hasServerHttp = function() {
 
 
 /**
- * optional event_store.client.shared.UUID leader_id = 3;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID leader_id = 3;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.AcceptRequest.prototype.getLeaderId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 3));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.AcceptRequest} returns this
 */
 proto.event_store.cluster.AcceptRequest.prototype.setLeaderId = function(value) {
@@ -2824,17 +2824,17 @@ proto.event_store.cluster.LeaderIsResigningRequest.serializeBinaryToWriter = fun
 
 
 /**
- * optional event_store.client.shared.UUID leader_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID leader_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.LeaderIsResigningRequest.prototype.getLeaderId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.LeaderIsResigningRequest} returns this
 */
 proto.event_store.cluster.LeaderIsResigningRequest.prototype.setLeaderId = function(value) {
@@ -3054,17 +3054,17 @@ proto.event_store.cluster.LeaderIsResigningOkRequest.serializeBinaryToWriter = f
 
 
 /**
- * optional event_store.client.shared.UUID leader_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID leader_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.LeaderIsResigningOkRequest.prototype.getLeaderId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.LeaderIsResigningOkRequest} returns this
 */
 proto.event_store.cluster.LeaderIsResigningOkRequest.prototype.setLeaderId = function(value) {
@@ -3128,17 +3128,17 @@ proto.event_store.cluster.LeaderIsResigningOkRequest.prototype.hasLeaderHttp = f
 
 
 /**
- * optional event_store.client.shared.UUID server_id = 3;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID server_id = 3;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.LeaderIsResigningOkRequest.prototype.getServerId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 3));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.LeaderIsResigningOkRequest} returns this
 */
 proto.event_store.cluster.LeaderIsResigningOkRequest.prototype.setServerId = function(value) {
@@ -3894,17 +3894,17 @@ proto.event_store.cluster.MemberInfo.VNodeState = {
 };
 
 /**
- * optional event_store.client.shared.UUID instance_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID instance_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.MemberInfo.prototype.getInstanceId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
 */
 proto.event_store.cluster.MemberInfo.prototype.setInstanceId = function(value) {
@@ -4222,17 +4222,17 @@ proto.event_store.cluster.MemberInfo.prototype.setEpochNumber = function(value) 
 
 
 /**
- * optional event_store.client.shared.UUID epoch_id = 15;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID epoch_id = 15;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.cluster.MemberInfo.prototype.getEpochId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 15));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.cluster.MemberInfo} returns this
 */
 proto.event_store.cluster.MemberInfo.prototype.setEpochId = function(value) {

@@ -53,7 +53,7 @@ Client.prototype.appendToStream = async function (
   const options = new AppendReq.Options();
   const identifier = new StreamIdentifier();
 
-  identifier.setStreamname(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
   options.setStreamIdentifier(identifier);
 
   switch (expectedRevision) {

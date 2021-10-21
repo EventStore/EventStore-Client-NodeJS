@@ -55,7 +55,7 @@ export class ReadStream<E> extends Transform implements StreamingRead<E> {
         "error",
         new StreamNotFoundError(
           null as never,
-          streamNotFound.getStreamIdentifier()?.getStreamname()
+          streamNotFound.getStreamIdentifier()?.getStreamName()
         )
       );
     }

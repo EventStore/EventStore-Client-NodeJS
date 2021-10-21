@@ -1268,17 +1268,17 @@ proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.setT
 
 
 /**
- * optional event_store.client.shared.Empty one_time = 1;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty one_time = 1;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.projections.CreateReq.Options.prototype.getOneTime = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.projections.CreateReq.Options} returns this
 */
 proto.event_store.client.projections.CreateReq.Options.prototype.setOneTime = function(value) {
@@ -1897,17 +1897,17 @@ proto.event_store.client.projections.UpdateReq.Options.prototype.hasEmitEnabled 
 
 
 /**
- * optional event_store.client.shared.Empty no_emit_options = 4;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty no_emit_options = 4;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.projections.UpdateReq.Options.prototype.getNoEmitOptions = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.projections.UpdateReq.Options} returns this
 */
 proto.event_store.client.projections.UpdateReq.Options.prototype.setNoEmitOptions = function(value) {
@@ -2891,17 +2891,17 @@ proto.event_store.client.projections.StatisticsReq.Options.prototype.hasName = f
 
 
 /**
- * optional event_store.client.shared.Empty all = 2;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty all = 2;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.getAll = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.projections.StatisticsReq.Options} returns this
 */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.setAll = function(value) {
@@ -2928,17 +2928,17 @@ proto.event_store.client.projections.StatisticsReq.Options.prototype.hasAll = fu
 
 
 /**
- * optional event_store.client.shared.Empty transient = 3;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty transient = 3;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.getTransient = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.projections.StatisticsReq.Options} returns this
 */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.setTransient = function(value) {
@@ -2965,17 +2965,17 @@ proto.event_store.client.projections.StatisticsReq.Options.prototype.hasTransien
 
 
 /**
- * optional event_store.client.shared.Empty continuous = 4;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty continuous = 4;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.getContinuous = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.projections.StatisticsReq.Options} returns this
 */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.setContinuous = function(value) {
@@ -3002,17 +3002,17 @@ proto.event_store.client.projections.StatisticsReq.Options.prototype.hasContinuo
 
 
 /**
- * optional event_store.client.shared.Empty one_time = 5;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty one_time = 5;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.getOneTime = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.projections.StatisticsReq.Options} returns this
 */
 proto.event_store.client.projections.StatisticsReq.Options.prototype.setOneTime = function(value) {
