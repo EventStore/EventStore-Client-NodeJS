@@ -4,6 +4,9 @@
 var grpc = require('@grpc/grpc-js');
 var streams_pb = require('./streams_pb.js');
 var shared_pb = require('./shared_pb.js');
+var status_pb = require('./status_pb.js');
+var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb.js');
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 
 function serialize_event_store_client_streams_AppendReq(arg) {
   if (!(arg instanceof streams_pb.AppendReq)) {
@@ -25,6 +28,28 @@ function serialize_event_store_client_streams_AppendResp(arg) {
 
 function deserialize_event_store_client_streams_AppendResp(buffer_arg) {
   return streams_pb.AppendResp.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_event_store_client_streams_BatchAppendReq(arg) {
+  if (!(arg instanceof streams_pb.BatchAppendReq)) {
+    throw new Error('Expected argument of type event_store.client.streams.BatchAppendReq');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_event_store_client_streams_BatchAppendReq(buffer_arg) {
+  return streams_pb.BatchAppendReq.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_event_store_client_streams_BatchAppendResp(arg) {
+  if (!(arg instanceof streams_pb.BatchAppendResp)) {
+    throw new Error('Expected argument of type event_store.client.streams.BatchAppendResp');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_event_store_client_streams_BatchAppendResp(buffer_arg) {
+  return streams_pb.BatchAppendResp.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_event_store_client_streams_DeleteReq(arg) {
@@ -138,6 +163,17 @@ var StreamsService = exports.StreamsService = {
     requestDeserialize: deserialize_event_store_client_streams_TombstoneReq,
     responseSerialize: serialize_event_store_client_streams_TombstoneResp,
     responseDeserialize: deserialize_event_store_client_streams_TombstoneResp,
+  },
+  batchAppend: {
+    path: '/event_store.client.streams.Streams/BatchAppend',
+    requestStream: true,
+    responseStream: true,
+    requestType: streams_pb.BatchAppendReq,
+    responseType: streams_pb.BatchAppendResp,
+    requestSerialize: serialize_event_store_client_streams_BatchAppendReq,
+    requestDeserialize: deserialize_event_store_client_streams_BatchAppendReq,
+    responseSerialize: serialize_event_store_client_streams_BatchAppendResp,
+    responseDeserialize: deserialize_event_store_client_streams_BatchAppendResp,
   },
 };
 

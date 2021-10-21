@@ -591,17 +591,17 @@ proto.event_store.client.gossip.MemberInfo.VNodeState = {
 };
 
 /**
- * optional event_store.client.shared.UUID instance_id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID instance_id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.client.gossip.MemberInfo.prototype.getInstanceId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.client.gossip.MemberInfo} returns this
 */
 proto.event_store.client.gossip.MemberInfo.prototype.setInstanceId = function(value) {

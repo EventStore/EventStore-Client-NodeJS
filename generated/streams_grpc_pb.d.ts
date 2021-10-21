@@ -8,12 +8,16 @@ import * as grpc from "@grpc/grpc-js";
 import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as streams_pb from "./streams_pb";
 import * as shared_pb from "./shared_pb";
+import * as status_pb from "./status_pb";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 interface IStreamsService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     read: IStreamsService_IRead;
     append: IStreamsService_IAppend;
     delete: IStreamsService_IDelete;
     tombstone: IStreamsService_ITombstone;
+    batchAppend: IStreamsService_IBatchAppend;
 }
 
 interface IStreamsService_IRead extends grpc.MethodDefinition<streams_pb.ReadReq, streams_pb.ReadResp> {
@@ -52,6 +56,15 @@ interface IStreamsService_ITombstone extends grpc.MethodDefinition<streams_pb.To
     responseSerialize: grpc.serialize<streams_pb.TombstoneResp>;
     responseDeserialize: grpc.deserialize<streams_pb.TombstoneResp>;
 }
+interface IStreamsService_IBatchAppend extends grpc.MethodDefinition<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp> {
+    path: "/event_store.client.streams.Streams/BatchAppend";
+    requestStream: true;
+    responseStream: true;
+    requestSerialize: grpc.serialize<streams_pb.BatchAppendReq>;
+    requestDeserialize: grpc.deserialize<streams_pb.BatchAppendReq>;
+    responseSerialize: grpc.serialize<streams_pb.BatchAppendResp>;
+    responseDeserialize: grpc.deserialize<streams_pb.BatchAppendResp>;
+}
 
 export const StreamsService: IStreamsService;
 
@@ -60,6 +73,7 @@ export interface IStreamsServer extends grpc.UntypedServiceImplementation {
     append: handleClientStreamingCall<streams_pb.AppendReq, streams_pb.AppendResp>;
     delete: grpc.handleUnaryCall<streams_pb.DeleteReq, streams_pb.DeleteResp>;
     tombstone: grpc.handleUnaryCall<streams_pb.TombstoneReq, streams_pb.TombstoneResp>;
+    batchAppend: grpc.handleBidiStreamingCall<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
 }
 
 export interface IStreamsClient {
@@ -75,6 +89,9 @@ export interface IStreamsClient {
     tombstone(request: streams_pb.TombstoneReq, callback: (error: grpc.ServiceError | null, response: streams_pb.TombstoneResp) => void): grpc.ClientUnaryCall;
     tombstone(request: streams_pb.TombstoneReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: streams_pb.TombstoneResp) => void): grpc.ClientUnaryCall;
     tombstone(request: streams_pb.TombstoneReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: streams_pb.TombstoneResp) => void): grpc.ClientUnaryCall;
+    batchAppend(): grpc.ClientDuplexStream<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
+    batchAppend(options: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
+    batchAppend(metadata: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
 }
 
 export class StreamsClient extends grpc.Client implements IStreamsClient {
@@ -91,4 +108,6 @@ export class StreamsClient extends grpc.Client implements IStreamsClient {
     public tombstone(request: streams_pb.TombstoneReq, callback: (error: grpc.ServiceError | null, response: streams_pb.TombstoneResp) => void): grpc.ClientUnaryCall;
     public tombstone(request: streams_pb.TombstoneReq, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: streams_pb.TombstoneResp) => void): grpc.ClientUnaryCall;
     public tombstone(request: streams_pb.TombstoneReq, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: streams_pb.TombstoneResp) => void): grpc.ClientUnaryCall;
+    public batchAppend(options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
+    public batchAppend(metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
 }

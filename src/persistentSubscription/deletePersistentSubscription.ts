@@ -34,7 +34,7 @@ Client.prototype.deletePersistentSubscription = async function (
   const options = new DeleteReq.Options();
   const identifier = new StreamIdentifier();
 
-  identifier.setStreamname(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
   options.setStreamIdentifier(identifier);
   options.setGroupName(groupName);
   req.setOptions(options);

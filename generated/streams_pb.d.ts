@@ -6,6 +6,9 @@
 
 import * as jspb from "google-protobuf";
 import * as shared_pb from "./shared_pb";
+import * as status_pb from "./status_pb";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class ReadReq extends jspb.Message { 
 
@@ -71,6 +74,11 @@ export namespace ReadReq {
         getUuidOption(): ReadReq.Options.UUIDOption | undefined;
         setUuidOption(value?: ReadReq.Options.UUIDOption): Options;
 
+        hasControlOption(): boolean;
+        clearControlOption(): void;
+        getControlOption(): ReadReq.Options.ControlOption | undefined;
+        setControlOption(value?: ReadReq.Options.ControlOption): Options;
+
         getStreamOptionCase(): Options.StreamOptionCase;
         getCountOptionCase(): Options.CountOptionCase;
         getFilterOptionCase(): Options.FilterOptionCase;
@@ -96,6 +104,7 @@ export namespace ReadReq {
             filter?: ReadReq.Options.FilterOptions.AsObject,
             noFilter?: shared_pb.Empty.AsObject,
             uuidOption?: ReadReq.Options.UUIDOption.AsObject,
+            controlOption?: ReadReq.Options.ControlOption.AsObject,
         }
 
 
@@ -360,6 +369,26 @@ export namespace ReadReq {
 
         }
 
+        export class ControlOption extends jspb.Message { 
+            getCompatibility(): number;
+            setCompatibility(value: number): ControlOption;
+
+            serializeBinary(): Uint8Array;
+            toObject(includeInstance?: boolean): ControlOption.AsObject;
+            static toObject(includeInstance: boolean, msg: ControlOption): ControlOption.AsObject;
+            static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+            static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+            static serializeBinaryToWriter(message: ControlOption, writer: jspb.BinaryWriter): void;
+            static deserializeBinary(bytes: Uint8Array): ControlOption;
+            static deserializeBinaryFromReader(message: ControlOption, reader: jspb.BinaryReader): ControlOption;
+        }
+
+        export namespace ControlOption {
+            export type AsObject = {
+                compatibility: number,
+            }
+        }
+
 
         export enum ReadDirection {
     FORWARDS = 0,
@@ -411,6 +440,21 @@ export class ReadResp extends jspb.Message {
     getStreamNotFound(): ReadResp.StreamNotFound | undefined;
     setStreamNotFound(value?: ReadResp.StreamNotFound): ReadResp;
 
+    hasFirstStreamPosition(): boolean;
+    clearFirstStreamPosition(): void;
+    getFirstStreamPosition(): string;
+    setFirstStreamPosition(value: string): ReadResp;
+
+    hasLastStreamPosition(): boolean;
+    clearLastStreamPosition(): void;
+    getLastStreamPosition(): string;
+    setLastStreamPosition(value: string): ReadResp;
+
+    hasLastAllStreamPosition(): boolean;
+    clearLastAllStreamPosition(): void;
+    getLastAllStreamPosition(): shared_pb.AllStreamPosition | undefined;
+    setLastAllStreamPosition(value?: shared_pb.AllStreamPosition): ReadResp;
+
     getContentCase(): ReadResp.ContentCase;
 
     serializeBinary(): Uint8Array;
@@ -429,6 +473,9 @@ export namespace ReadResp {
         confirmation?: ReadResp.SubscriptionConfirmation.AsObject,
         checkpoint?: ReadResp.Checkpoint.AsObject,
         streamNotFound?: ReadResp.StreamNotFound.AsObject,
+        firstStreamPosition: string,
+        lastStreamPosition: string,
+        lastAllStreamPosition?: shared_pb.AllStreamPosition.AsObject,
     }
 
 
@@ -610,6 +657,9 @@ export namespace ReadResp {
         CONFIRMATION = 2,
         CHECKPOINT = 3,
         STREAM_NOT_FOUND = 4,
+        FIRST_STREAM_POSITION = 5,
+        LAST_STREAM_POSITION = 6,
+        LAST_ALL_STREAM_POSITION = 7,
     }
 
 }
@@ -982,6 +1032,289 @@ export namespace AppendResp {
         RESULT_NOT_SET = 0,
         SUCCESS = 1,
         WRONG_EXPECTED_VERSION = 2,
+    }
+
+}
+
+export class BatchAppendReq extends jspb.Message { 
+
+    hasCorrelationId(): boolean;
+    clearCorrelationId(): void;
+    getCorrelationId(): shared_pb.UUID | undefined;
+    setCorrelationId(value?: shared_pb.UUID): BatchAppendReq;
+
+    hasOptions(): boolean;
+    clearOptions(): void;
+    getOptions(): BatchAppendReq.Options | undefined;
+    setOptions(value?: BatchAppendReq.Options): BatchAppendReq;
+    clearProposedMessagesList(): void;
+    getProposedMessagesList(): Array<BatchAppendReq.ProposedMessage>;
+    setProposedMessagesList(value: Array<BatchAppendReq.ProposedMessage>): BatchAppendReq;
+    addProposedMessages(value?: BatchAppendReq.ProposedMessage, index?: number): BatchAppendReq.ProposedMessage;
+    getIsFinal(): boolean;
+    setIsFinal(value: boolean): BatchAppendReq;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): BatchAppendReq.AsObject;
+    static toObject(includeInstance: boolean, msg: BatchAppendReq): BatchAppendReq.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: BatchAppendReq, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): BatchAppendReq;
+    static deserializeBinaryFromReader(message: BatchAppendReq, reader: jspb.BinaryReader): BatchAppendReq;
+}
+
+export namespace BatchAppendReq {
+    export type AsObject = {
+        correlationId?: shared_pb.UUID.AsObject,
+        options?: BatchAppendReq.Options.AsObject,
+        proposedMessagesList: Array<BatchAppendReq.ProposedMessage.AsObject>,
+        isFinal: boolean,
+    }
+
+
+    export class Options extends jspb.Message { 
+
+        hasStreamIdentifier(): boolean;
+        clearStreamIdentifier(): void;
+        getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+        setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
+
+        hasStreamPosition(): boolean;
+        clearStreamPosition(): void;
+        getStreamPosition(): string;
+        setStreamPosition(value: string): Options;
+
+        hasNoStream(): boolean;
+        clearNoStream(): void;
+        getNoStream(): google_protobuf_empty_pb.Empty | undefined;
+        setNoStream(value?: google_protobuf_empty_pb.Empty): Options;
+
+        hasAny(): boolean;
+        clearAny(): void;
+        getAny(): google_protobuf_empty_pb.Empty | undefined;
+        setAny(value?: google_protobuf_empty_pb.Empty): Options;
+
+        hasStreamExists(): boolean;
+        clearStreamExists(): void;
+        getStreamExists(): google_protobuf_empty_pb.Empty | undefined;
+        setStreamExists(value?: google_protobuf_empty_pb.Empty): Options;
+
+        hasDeadline(): boolean;
+        clearDeadline(): void;
+        getDeadline(): google_protobuf_timestamp_pb.Timestamp | undefined;
+        setDeadline(value?: google_protobuf_timestamp_pb.Timestamp): Options;
+
+        getExpectedStreamPositionCase(): Options.ExpectedStreamPositionCase;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Options.AsObject;
+        static toObject(includeInstance: boolean, msg: Options): Options.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: Options, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Options;
+        static deserializeBinaryFromReader(message: Options, reader: jspb.BinaryReader): Options;
+    }
+
+    export namespace Options {
+        export type AsObject = {
+            streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
+            streamPosition: string,
+            noStream?: google_protobuf_empty_pb.Empty.AsObject,
+            any?: google_protobuf_empty_pb.Empty.AsObject,
+            streamExists?: google_protobuf_empty_pb.Empty.AsObject,
+            deadline?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+        }
+
+        export enum ExpectedStreamPositionCase {
+            EXPECTED_STREAM_POSITION_NOT_SET = 0,
+            STREAM_POSITION = 2,
+            NO_STREAM = 3,
+            ANY = 4,
+            STREAM_EXISTS = 5,
+        }
+
+    }
+
+    export class ProposedMessage extends jspb.Message { 
+
+        hasId(): boolean;
+        clearId(): void;
+        getId(): shared_pb.UUID | undefined;
+        setId(value?: shared_pb.UUID): ProposedMessage;
+
+        getMetadataMap(): jspb.Map<string, string>;
+        clearMetadataMap(): void;
+        getCustomMetadata(): Uint8Array | string;
+        getCustomMetadata_asU8(): Uint8Array;
+        getCustomMetadata_asB64(): string;
+        setCustomMetadata(value: Uint8Array | string): ProposedMessage;
+        getData(): Uint8Array | string;
+        getData_asU8(): Uint8Array;
+        getData_asB64(): string;
+        setData(value: Uint8Array | string): ProposedMessage;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): ProposedMessage.AsObject;
+        static toObject(includeInstance: boolean, msg: ProposedMessage): ProposedMessage.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: ProposedMessage, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): ProposedMessage;
+        static deserializeBinaryFromReader(message: ProposedMessage, reader: jspb.BinaryReader): ProposedMessage;
+    }
+
+    export namespace ProposedMessage {
+        export type AsObject = {
+            id?: shared_pb.UUID.AsObject,
+
+            metadataMap: Array<[string, string]>,
+            customMetadata: Uint8Array | string,
+            data: Uint8Array | string,
+        }
+    }
+
+}
+
+export class BatchAppendResp extends jspb.Message { 
+
+    hasCorrelationId(): boolean;
+    clearCorrelationId(): void;
+    getCorrelationId(): shared_pb.UUID | undefined;
+    setCorrelationId(value?: shared_pb.UUID): BatchAppendResp;
+
+    hasError(): boolean;
+    clearError(): void;
+    getError(): status_pb.Status | undefined;
+    setError(value?: status_pb.Status): BatchAppendResp;
+
+    hasSuccess(): boolean;
+    clearSuccess(): void;
+    getSuccess(): BatchAppendResp.Success | undefined;
+    setSuccess(value?: BatchAppendResp.Success): BatchAppendResp;
+
+    hasStreamIdentifier(): boolean;
+    clearStreamIdentifier(): void;
+    getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+    setStreamIdentifier(value?: shared_pb.StreamIdentifier): BatchAppendResp;
+
+    hasStreamPosition(): boolean;
+    clearStreamPosition(): void;
+    getStreamPosition(): string;
+    setStreamPosition(value: string): BatchAppendResp;
+
+    hasNoStream(): boolean;
+    clearNoStream(): void;
+    getNoStream(): google_protobuf_empty_pb.Empty | undefined;
+    setNoStream(value?: google_protobuf_empty_pb.Empty): BatchAppendResp;
+
+    hasAny(): boolean;
+    clearAny(): void;
+    getAny(): google_protobuf_empty_pb.Empty | undefined;
+    setAny(value?: google_protobuf_empty_pb.Empty): BatchAppendResp;
+
+    hasStreamExists(): boolean;
+    clearStreamExists(): void;
+    getStreamExists(): google_protobuf_empty_pb.Empty | undefined;
+    setStreamExists(value?: google_protobuf_empty_pb.Empty): BatchAppendResp;
+
+    getResultCase(): BatchAppendResp.ResultCase;
+    getExpectedStreamPositionCase(): BatchAppendResp.ExpectedStreamPositionCase;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): BatchAppendResp.AsObject;
+    static toObject(includeInstance: boolean, msg: BatchAppendResp): BatchAppendResp.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: BatchAppendResp, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): BatchAppendResp;
+    static deserializeBinaryFromReader(message: BatchAppendResp, reader: jspb.BinaryReader): BatchAppendResp;
+}
+
+export namespace BatchAppendResp {
+    export type AsObject = {
+        correlationId?: shared_pb.UUID.AsObject,
+        error?: status_pb.Status.AsObject,
+        success?: BatchAppendResp.Success.AsObject,
+        streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
+        streamPosition: string,
+        noStream?: google_protobuf_empty_pb.Empty.AsObject,
+        any?: google_protobuf_empty_pb.Empty.AsObject,
+        streamExists?: google_protobuf_empty_pb.Empty.AsObject,
+    }
+
+
+    export class Success extends jspb.Message { 
+
+        hasCurrentRevision(): boolean;
+        clearCurrentRevision(): void;
+        getCurrentRevision(): string;
+        setCurrentRevision(value: string): Success;
+
+        hasNoStream(): boolean;
+        clearNoStream(): void;
+        getNoStream(): google_protobuf_empty_pb.Empty | undefined;
+        setNoStream(value?: google_protobuf_empty_pb.Empty): Success;
+
+        hasPosition(): boolean;
+        clearPosition(): void;
+        getPosition(): shared_pb.AllStreamPosition | undefined;
+        setPosition(value?: shared_pb.AllStreamPosition): Success;
+
+        hasNoPosition(): boolean;
+        clearNoPosition(): void;
+        getNoPosition(): google_protobuf_empty_pb.Empty | undefined;
+        setNoPosition(value?: google_protobuf_empty_pb.Empty): Success;
+
+        getCurrentRevisionOptionCase(): Success.CurrentRevisionOptionCase;
+        getPositionOptionCase(): Success.PositionOptionCase;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Success.AsObject;
+        static toObject(includeInstance: boolean, msg: Success): Success.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: Success, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Success;
+        static deserializeBinaryFromReader(message: Success, reader: jspb.BinaryReader): Success;
+    }
+
+    export namespace Success {
+        export type AsObject = {
+            currentRevision: string,
+            noStream?: google_protobuf_empty_pb.Empty.AsObject,
+            position?: shared_pb.AllStreamPosition.AsObject,
+            noPosition?: google_protobuf_empty_pb.Empty.AsObject,
+        }
+
+        export enum CurrentRevisionOptionCase {
+            CURRENT_REVISION_OPTION_NOT_SET = 0,
+            CURRENT_REVISION = 1,
+            NO_STREAM = 2,
+        }
+
+        export enum PositionOptionCase {
+            POSITION_OPTION_NOT_SET = 0,
+            POSITION = 3,
+            NO_POSITION = 4,
+        }
+
+    }
+
+
+    export enum ResultCase {
+        RESULT_NOT_SET = 0,
+        ERROR = 2,
+        SUCCESS = 3,
+    }
+
+    export enum ExpectedStreamPositionCase {
+        EXPECTED_STREAM_POSITION_NOT_SET = 0,
+        STREAM_POSITION = 5,
+        NO_STREAM = 6,
+        ANY = 7,
+        STREAM_EXISTS = 8,
     }
 
 }

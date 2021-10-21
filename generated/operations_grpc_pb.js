@@ -5,6 +5,17 @@ var grpc = require('@grpc/grpc-js');
 var operations_pb = require('./operations_pb.js');
 var shared_pb = require('./shared_pb.js');
 
+function serialize_event_store_client_Empty(arg) {
+  if (!(arg instanceof shared_pb.Empty)) {
+    throw new Error('Expected argument of type event_store.client.Empty');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_event_store_client_Empty(buffer_arg) {
+  return shared_pb.Empty.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_event_store_client_operations_ScavengeResp(arg) {
   if (!(arg instanceof operations_pb.ScavengeResp)) {
     throw new Error('Expected argument of type event_store.client.operations.ScavengeResp');
@@ -49,17 +60,6 @@ function deserialize_event_store_client_operations_StopScavengeReq(buffer_arg) {
   return operations_pb.StopScavengeReq.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_event_store_client_shared_Empty(arg) {
-  if (!(arg instanceof shared_pb.Empty)) {
-    throw new Error('Expected argument of type event_store.client.shared.Empty');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_event_store_client_shared_Empty(buffer_arg) {
-  return shared_pb.Empty.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 
 var OperationsService = exports.OperationsService = {
   startScavenge: {
@@ -90,10 +90,10 @@ var OperationsService = exports.OperationsService = {
     responseStream: false,
     requestType: shared_pb.Empty,
     responseType: shared_pb.Empty,
-    requestSerialize: serialize_event_store_client_shared_Empty,
-    requestDeserialize: deserialize_event_store_client_shared_Empty,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    requestSerialize: serialize_event_store_client_Empty,
+    requestDeserialize: deserialize_event_store_client_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   mergeIndexes: {
     path: '/event_store.client.operations.Operations/MergeIndexes',
@@ -101,10 +101,10 @@ var OperationsService = exports.OperationsService = {
     responseStream: false,
     requestType: shared_pb.Empty,
     responseType: shared_pb.Empty,
-    requestSerialize: serialize_event_store_client_shared_Empty,
-    requestDeserialize: deserialize_event_store_client_shared_Empty,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    requestSerialize: serialize_event_store_client_Empty,
+    requestDeserialize: deserialize_event_store_client_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   resignNode: {
     path: '/event_store.client.operations.Operations/ResignNode',
@@ -112,10 +112,10 @@ var OperationsService = exports.OperationsService = {
     responseStream: false,
     requestType: shared_pb.Empty,
     responseType: shared_pb.Empty,
-    requestSerialize: serialize_event_store_client_shared_Empty,
-    requestDeserialize: deserialize_event_store_client_shared_Empty,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    requestSerialize: serialize_event_store_client_Empty,
+    requestDeserialize: deserialize_event_store_client_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   setNodePriority: {
     path: '/event_store.client.operations.Operations/SetNodePriority',
@@ -125,8 +125,8 @@ var OperationsService = exports.OperationsService = {
     responseType: shared_pb.Empty,
     requestSerialize: serialize_event_store_client_operations_SetNodePriorityReq,
     requestDeserialize: deserialize_event_store_client_operations_SetNodePriorityReq,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
   restartPersistentSubscriptions: {
     path: '/event_store.client.operations.Operations/RestartPersistentSubscriptions',
@@ -134,10 +134,10 @@ var OperationsService = exports.OperationsService = {
     responseStream: false,
     requestType: shared_pb.Empty,
     responseType: shared_pb.Empty,
-    requestSerialize: serialize_event_store_client_shared_Empty,
-    requestDeserialize: deserialize_event_store_client_shared_Empty,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    requestSerialize: serialize_event_store_client_Empty,
+    requestDeserialize: deserialize_event_store_client_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
 };
 

@@ -6,6 +6,17 @@ var projections_pb = require('./projections_pb.js');
 var google_protobuf_struct_pb = require('google-protobuf/google/protobuf/struct_pb.js');
 var shared_pb = require('./shared_pb.js');
 
+function serialize_event_store_client_Empty(arg) {
+  if (!(arg instanceof shared_pb.Empty)) {
+    throw new Error('Expected argument of type event_store.client.Empty');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_event_store_client_Empty(buffer_arg) {
+  return shared_pb.Empty.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_event_store_client_projections_CreateReq(arg) {
   if (!(arg instanceof projections_pb.CreateReq)) {
     throw new Error('Expected argument of type event_store.client.projections.CreateReq');
@@ -204,17 +215,6 @@ function deserialize_event_store_client_projections_UpdateResp(buffer_arg) {
   return projections_pb.UpdateResp.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_event_store_client_shared_Empty(arg) {
-  if (!(arg instanceof shared_pb.Empty)) {
-    throw new Error('Expected argument of type event_store.client.shared.Empty');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_event_store_client_shared_Empty(buffer_arg) {
-  return shared_pb.Empty.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 
 var ProjectionsService = exports.ProjectionsService = {
   create: {
@@ -322,10 +322,10 @@ var ProjectionsService = exports.ProjectionsService = {
     responseStream: false,
     requestType: shared_pb.Empty,
     responseType: shared_pb.Empty,
-    requestSerialize: serialize_event_store_client_shared_Empty,
-    requestDeserialize: deserialize_event_store_client_shared_Empty,
-    responseSerialize: serialize_event_store_client_shared_Empty,
-    responseDeserialize: deserialize_event_store_client_shared_Empty,
+    requestSerialize: serialize_event_store_client_Empty,
+    requestDeserialize: deserialize_event_store_client_Empty,
+    responseSerialize: serialize_event_store_client_Empty,
+    responseDeserialize: deserialize_event_store_client_Empty,
   },
 };
 

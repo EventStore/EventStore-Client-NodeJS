@@ -18,14 +18,26 @@ var global = Function('return this')();
 var shared_pb = require('./shared_pb.js');
 goog.object.extend(proto, shared_pb);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.AllOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.FilterCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.WindowCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.ConsumerStrategy', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.Options.StreamOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.Position', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.Settings', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.Settings.CheckpointAfterCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.Settings.MessageTimeoutCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.RevisionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.CreateResp', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.DeleteReq', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.DeleteReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.DeleteReq.Options.StreamOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.DeleteResp', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Ack', null, global);
@@ -33,6 +45,7 @@ goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Con
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Nack', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Nack.Action', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Options.StreamOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.ContentCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadResp', null, global);
@@ -43,11 +56,17 @@ goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadResp.Re
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.ReadResp.SubscriptionConfirmation', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.AllOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.ConsumerStrategy', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.Options', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.Options.StreamOptionCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.Position', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.Settings', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.CheckpointAfterCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.MessageTimeoutCase', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions', null, global);
+goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.RevisionOptionCase', null, global);
 goog.exportSymbol('proto.event_store.client.persistent_subscriptions.UpdateResp', null, global);
 /**
  * Generated by JsPbCodeGenerator.
@@ -81,7 +100,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.ReadReq.Options.oneofGroups_);
 };
 goog.inherits(proto.event_store.client.persistent_subscriptions.ReadReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -270,7 +289,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.CreateReq.Options.oneofGroups_);
 };
 goog.inherits(proto.event_store.client.persistent_subscriptions.CreateReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -279,6 +298,111 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.event_store.client.persistent_subscriptions.CreateReq.Options.displayName = 'proto.event_store.client.persistent_subscriptions.CreateReq.Options';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.displayName = 'proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.displayName = 'proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.displayName = 'proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.repeatedFields_, null);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.displayName = 'proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.CreateReq.Position, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.CreateReq.Position.displayName = 'proto.event_store.client.persistent_subscriptions.CreateReq.Position';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -354,7 +478,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.UpdateReq.Options.oneofGroups_);
 };
 goog.inherits(proto.event_store.client.persistent_subscriptions.UpdateReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -363,6 +487,69 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.event_store.client.persistent_subscriptions.UpdateReq.Options.displayName = 'proto.event_store.client.persistent_subscriptions.UpdateReq.Options';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.displayName = 'proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.oneofGroups_);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.displayName = 'proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.event_store.client.persistent_subscriptions.UpdateReq.Position, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.event_store.client.persistent_subscriptions.UpdateReq.Position.displayName = 'proto.event_store.client.persistent_subscriptions.UpdateReq.Position';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -438,7 +625,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.event_store.client.persistent_subscriptions.DeleteReq.Options = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.event_store.client.persistent_subscriptions.DeleteReq.Options.oneofGroups_);
 };
 goog.inherits(proto.event_store.client.persistent_subscriptions.DeleteReq.Options, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -639,6 +826,32 @@ proto.event_store.client.persistent_subscriptions.ReadReq.serializeBinaryToWrite
 
 
 
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.oneofGroups_ = [[1,5]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.StreamOptionCase = {
+  STREAM_OPTION_NOT_SET: 0,
+  STREAM_IDENTIFIER: 1,
+  ALL: 5
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.ReadReq.Options.StreamOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.getStreamOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.ReadReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.ReadReq.Options.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -671,6 +884,7 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.toOb
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
+    all: (f = msg.getAll()) && shared_pb.Empty.toObject(includeInstance, f),
     groupName: jspb.Message.getFieldWithDefault(msg, 2, ""),
     bufferSize: jspb.Message.getFieldWithDefault(msg, 3, 0),
     uuidOption: (f = msg.getUuidOption()) && proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.toObject(includeInstance, f)
@@ -714,6 +928,11 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.deserializeBin
       var value = new shared_pb.StreamIdentifier;
       reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
       msg.setStreamIdentifier(value);
+      break;
+    case 5:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setAll(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -763,6 +982,14 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.serializeBinar
       1,
       f,
       shared_pb.StreamIdentifier.serializeBinaryToWriter
+    );
+  }
+  f = message.getAll();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
     );
   }
   f = message.getGroupName();
@@ -945,17 +1172,17 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.ser
 
 
 /**
- * optional event_store.client.shared.Empty structured = 1;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty structured = 1;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.prototype.getStructured = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.prototype.setStructured = function(value) {
@@ -982,17 +1209,17 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.pro
 
 
 /**
- * optional event_store.client.shared.Empty string = 2;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty string = 2;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.prototype.getString = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.prototype.setString = function(value) {
@@ -1019,21 +1246,21 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.UUIDOption.pro
 
 
 /**
- * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
- * @return {?proto.event_store.client.shared.StreamIdentifier}
+ * optional event_store.client.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.StreamIdentifier}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.getStreamIdentifier = function() {
-  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
     jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Options} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.setStreamIdentifier = function(value) {
-  return jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.persistent_subscriptions.ReadReq.Options.oneofGroups_[0], value);
 };
 
 
@@ -1052,6 +1279,43 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.clea
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.hasStreamIdentifier = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty all = 5;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.getAll = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Options} returns this
+*/
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.setAll = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.persistent_subscriptions.ReadReq.Options.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Options} returns this
+ */
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.clearAll = function() {
+  return this.setAll(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.ReadReq.Options.prototype.hasAll = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -1305,17 +1569,17 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Ack.prototype.setId = 
 
 
 /**
- * repeated event_store.client.shared.UUID ids = 2;
- * @return {!Array<!proto.event_store.client.shared.UUID>}
+ * repeated event_store.client.UUID ids = 2;
+ * @return {!Array<!proto.event_store.client.UUID>}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Ack.prototype.getIdsList = function() {
-  return /** @type{!Array<!proto.event_store.client.shared.UUID>} */ (
+  return /** @type{!Array<!proto.event_store.client.UUID>} */ (
     jspb.Message.getRepeatedWrapperField(this, shared_pb.UUID, 2));
 };
 
 
 /**
- * @param {!Array<!proto.event_store.client.shared.UUID>} value
+ * @param {!Array<!proto.event_store.client.UUID>} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Ack} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadReq.Ack.prototype.setIdsList = function(value) {
@@ -1324,12 +1588,12 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Ack.prototype.setIdsLi
 
 
 /**
- * @param {!proto.event_store.client.shared.UUID=} opt_value
+ * @param {!proto.event_store.client.UUID=} opt_value
  * @param {number=} opt_index
- * @return {!proto.event_store.client.shared.UUID}
+ * @return {!proto.event_store.client.UUID}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Ack.prototype.addIds = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.event_store.client.shared.UUID, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.event_store.client.UUID, opt_index);
 };
 
 
@@ -1554,17 +1818,17 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Nack.prototype.setId =
 
 
 /**
- * repeated event_store.client.shared.UUID ids = 2;
- * @return {!Array<!proto.event_store.client.shared.UUID>}
+ * repeated event_store.client.UUID ids = 2;
+ * @return {!Array<!proto.event_store.client.UUID>}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Nack.prototype.getIdsList = function() {
-  return /** @type{!Array<!proto.event_store.client.shared.UUID>} */ (
+  return /** @type{!Array<!proto.event_store.client.UUID>} */ (
     jspb.Message.getRepeatedWrapperField(this, shared_pb.UUID, 2));
 };
 
 
 /**
- * @param {!Array<!proto.event_store.client.shared.UUID>} value
+ * @param {!Array<!proto.event_store.client.UUID>} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadReq.Nack} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadReq.Nack.prototype.setIdsList = function(value) {
@@ -1573,12 +1837,12 @@ proto.event_store.client.persistent_subscriptions.ReadReq.Nack.prototype.setIdsL
 
 
 /**
- * @param {!proto.event_store.client.shared.UUID=} opt_value
+ * @param {!proto.event_store.client.UUID=} opt_value
  * @param {number=} opt_index
- * @return {!proto.event_store.client.shared.UUID}
+ * @return {!proto.event_store.client.UUID}
  */
 proto.event_store.client.persistent_subscriptions.ReadReq.Nack.prototype.addIds = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.event_store.client.shared.UUID, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.event_store.client.UUID, opt_index);
 };
 
 
@@ -2314,17 +2578,17 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEve
 
 
 /**
- * optional event_store.client.shared.UUID id = 1;
- * @return {?proto.event_store.client.shared.UUID}
+ * optional event_store.client.UUID id = 1;
+ * @return {?proto.event_store.client.UUID}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.getId = function() {
-  return /** @type{?proto.event_store.client.shared.UUID} */ (
+  return /** @type{?proto.event_store.client.UUID} */ (
     jspb.Message.getWrapperField(this, shared_pb.UUID, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.UUID|undefined} value
+ * @param {?proto.event_store.client.UUID|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.setId = function(value) {
@@ -2351,17 +2615,17 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEve
 
 
 /**
- * optional event_store.client.shared.StreamIdentifier stream_identifier = 2;
- * @return {?proto.event_store.client.shared.StreamIdentifier}
+ * optional event_store.client.StreamIdentifier stream_identifier = 2;
+ * @return {?proto.event_store.client.StreamIdentifier}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.getStreamIdentifier = function() {
-  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
     jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 2));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.RecordedEvent.prototype.setStreamIdentifier = function(value) {
@@ -2658,17 +2922,17 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.h
 
 
 /**
- * optional event_store.client.shared.Empty no_position = 4;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty no_position = 4;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.getNoPosition = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.setNoPosition = function(value) {
@@ -2731,17 +2995,17 @@ proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.h
 
 
 /**
- * optional event_store.client.shared.Empty no_retry_count = 6;
- * @return {?proto.event_store.client.shared.Empty}
+ * optional event_store.client.Empty no_retry_count = 6;
+ * @return {?proto.event_store.client.Empty}
  */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.getNoRetryCount = function() {
-  return /** @type{?proto.event_store.client.shared.Empty} */ (
+  return /** @type{?proto.event_store.client.Empty} */ (
     jspb.Message.getWrapperField(this, shared_pb.Empty, 6));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.Empty|undefined} value
+ * @param {?proto.event_store.client.Empty|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent} returns this
 */
 proto.event_store.client.persistent_subscriptions.ReadResp.ReadEvent.prototype.setNoRetryCount = function(value) {
@@ -3095,6 +3359,32 @@ proto.event_store.client.persistent_subscriptions.CreateReq.ConsumerStrategy = {
 };
 
 
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.oneofGroups_ = [[4,5]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.StreamOptionCase = {
+  STREAM_OPTION_NOT_SET: 0,
+  STREAM: 4,
+  ALL: 5
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.CreateReq.Options.StreamOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.getStreamOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.CreateReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.CreateReq.Options.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -3126,6 +3416,8 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.to
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
+    stream: (f = msg.getStream()) && proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.toObject(includeInstance, f),
+    all: (f = msg.getAll()) && proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.toObject(includeInstance, f),
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
     groupName: jspb.Message.getFieldWithDefault(msg, 2, ""),
     settings: (f = msg.getSettings()) && proto.event_store.client.persistent_subscriptions.CreateReq.Settings.toObject(includeInstance, f)
@@ -3165,6 +3457,16 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Options.deserializeB
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 4:
+      var value = new proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.deserializeBinaryFromReader);
+      msg.setStream(value);
+      break;
+    case 5:
+      var value = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.deserializeBinaryFromReader);
+      msg.setAll(value);
+      break;
     case 1:
       var value = new shared_pb.StreamIdentifier;
       reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
@@ -3208,6 +3510,22 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.se
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Options.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getStream();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.serializeBinaryToWriter
+    );
+  }
+  f = message.getAll();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.serializeBinaryToWriter
+    );
+  }
   f = message.getStreamIdentifier();
   if (f != null) {
     writer.writeMessage(
@@ -3235,17 +3553,91 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Options.serializeBin
 
 
 /**
- * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
- * @return {?proto.event_store.client.shared.StreamIdentifier}
+ * optional StreamOptions stream = 4;
+ * @return {?proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.getStream = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Options} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.setStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.persistent_subscriptions.CreateReq.Options.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Options} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.clearStream = function() {
+  return this.setStream(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.hasStream = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional AllOptions all = 5;
+ * @return {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.getAll = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions, 5));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Options} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.setAll = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.persistent_subscriptions.CreateReq.Options.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Options} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.clearAll = function() {
+  return this.setAll(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.hasAll = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional event_store.client.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.StreamIdentifier}
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.getStreamIdentifier = function() {
-  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
     jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Options} returns this
 */
 proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.setStreamIdentifier = function(value) {
@@ -3323,6 +3715,1451 @@ proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.cl
  */
 proto.event_store.client.persistent_subscriptions.CreateReq.Options.prototype.hasSettings = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_ = [[2,3,4]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.RevisionOptionCase = {
+  REVISION_OPTION_NOT_SET: 0,
+  REVISION: 2,
+  START: 3,
+  END: 4
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.RevisionOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.getRevisionOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.RevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions;
+  return proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setRevision(value);
+      break;
+    case 3:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setStart(value);
+      break;
+    case 4:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setEnd(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeUint64String(
+      2,
+      f
+    );
+  }
+  f = message.getStart();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getEnd();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional event_store.client.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.StreamIdentifier}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional uint64 revision = 2;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.getRevision = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.setRevision = function(value) {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.clearRevision = function() {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.hasRevision = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty start = 3;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.getStart = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.setStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.clearStart = function() {
+  return this.setStart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.hasStart = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty end = 4;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.setEnd = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.clearEnd = function() {
+  return this.setEnd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.StreamOptions.prototype.hasEnd = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_ = [[1,2,3],[4,5]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.AllOptionCase = {
+  ALL_OPTION_NOT_SET: 0,
+  POSITION: 1,
+  START: 2,
+  END: 3
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.AllOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getAllOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.AllOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[0]));
+};
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptionCase = {
+  FILTER_OPTION_NOT_SET: 0,
+  FILTER: 4,
+  NO_FILTER: 5
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getFilterOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[1]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    position: (f = msg.getPosition()) && proto.event_store.client.persistent_subscriptions.CreateReq.Position.toObject(includeInstance, f),
+    start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f),
+    filter: (f = msg.getFilter()) && proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.toObject(includeInstance, f),
+    noFilter: (f = msg.getNoFilter()) && shared_pb.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions;
+  return proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.event_store.client.persistent_subscriptions.CreateReq.Position;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.CreateReq.Position.deserializeBinaryFromReader);
+      msg.setPosition(value);
+      break;
+    case 2:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setStart(value);
+      break;
+    case 3:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setEnd(value);
+      break;
+    case 4:
+      var value = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.deserializeBinaryFromReader);
+      msg.setFilter(value);
+      break;
+    case 5:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setNoFilter(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPosition();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.event_store.client.persistent_subscriptions.CreateReq.Position.serializeBinaryToWriter
+    );
+  }
+  f = message.getStart();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getEnd();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getFilter();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.serializeBinaryToWriter
+    );
+  }
+  f = message.getNoFilter();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_ = [[1,2],[3,4]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.FilterCase = {
+  FILTER_NOT_SET: 0,
+  STREAM_IDENTIFIER: 1,
+  EVENT_TYPE: 2
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.FilterCase}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getFilterCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.FilterCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[0]));
+};
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.WindowCase = {
+  WINDOW_NOT_SET: 0,
+  MAX: 3,
+  COUNT: 4
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.WindowCase}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getWindowCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.WindowCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[1]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    streamIdentifier: (f = msg.getStreamIdentifier()) && proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.toObject(includeInstance, f),
+    eventType: (f = msg.getEventType()) && proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.toObject(includeInstance, f),
+    max: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    count: (f = msg.getCount()) && shared_pb.Empty.toObject(includeInstance, f),
+    checkpointintervalmultiplier: jspb.Message.getFieldWithDefault(msg, 5, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions;
+  return proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
+      break;
+    case 2:
+      var value = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.deserializeBinaryFromReader);
+      msg.setEventType(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setMax(value);
+      break;
+    case 4:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setCount(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setCheckpointintervalmultiplier(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.serializeBinaryToWriter
+    );
+  }
+  f = message.getEventType();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {number} */ (jspb.Message.getField(message, 3));
+  if (f != null) {
+    writer.writeUint32(
+      3,
+      f
+    );
+  }
+  f = message.getCount();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getCheckpointintervalmultiplier();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
+    );
+  }
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.repeatedFields_ = [2];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    regex: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    prefixList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression;
+  return proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRegex(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addPrefix(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getRegex();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getPrefixList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string regex = 1;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.getRegex = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.setRegex = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * repeated string prefix = 2;
+ * @return {!Array<string>}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.getPrefixList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 2));
+};
+
+
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.setPrefixList = function(value) {
+  return jspb.Message.setField(this, 2, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.addPrefix = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 2, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression.prototype.clearPrefixList = function() {
+  return this.setPrefixList([]);
+};
+
+
+/**
+ * optional Expression stream_identifier = 1;
+ * @return {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional Expression event_type = 2;
+ * @return {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getEventType = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression, 2));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.Expression|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.setEventType = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.clearEventType = function() {
+  return this.setEventType(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.hasEventType = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional uint32 max = 3;
+ * @return {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getMax = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.setMax = function(value) {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.clearMax = function() {
+  return jspb.Message.setOneofField(this, 3, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.hasMax = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty count = 4;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getCount = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.setCount = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.clearCount = function() {
+  return this.setCount(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.hasCount = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional uint32 checkpointIntervalMultiplier = 5;
+ * @return {number}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.getCheckpointintervalmultiplier = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions.prototype.setCheckpointintervalmultiplier = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional Position position = 1;
+ * @return {?proto.event_store.client.persistent_subscriptions.CreateReq.Position}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getPosition = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.CreateReq.Position} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.CreateReq.Position, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.CreateReq.Position|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.setPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.clearPosition = function() {
+  return this.setPosition(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.hasPosition = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty start = 2;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getStart = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.setStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.clearStart = function() {
+  return this.setStart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.hasStart = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty end = 3;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.setEnd = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.clearEnd = function() {
+  return this.setEnd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.hasEnd = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional FilterOptions filter = 4;
+ * @return {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getFilter = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.FilterOptions|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.setFilter = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.clearFilter = function() {
+  return this.setFilter(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.hasFilter = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty no_filter = 5;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.getNoFilter = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 5));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.setNoFilter = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.clearNoFilter = function() {
+  return this.setNoFilter(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.AllOptions.prototype.hasNoFilter = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.CreateReq.Position.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.Position} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Position}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.CreateReq.Position;
+  return proto.event_store.client.persistent_subscriptions.CreateReq.Position.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.Position} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Position}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setCommitPosition(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setPreparePosition(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.CreateReq.Position.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.CreateReq.Position} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getCommitPosition();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
+      1,
+      f
+    );
+  }
+  f = message.getPreparePosition();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional uint64 commit_position = 1;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.prototype.getCommitPosition = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Position} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3StringIntField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 prepare_position = 2;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.prototype.getPreparePosition = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.CreateReq.Position} returns this
+ */
+proto.event_store.client.persistent_subscriptions.CreateReq.Position.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -4252,6 +6089,32 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.ConsumerStrategy = {
 };
 
 
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.oneofGroups_ = [[4,5]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.StreamOptionCase = {
+  STREAM_OPTION_NOT_SET: 0,
+  STREAM: 4,
+  ALL: 5
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.UpdateReq.Options.StreamOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.getStreamOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.UpdateReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.UpdateReq.Options.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -4283,6 +6146,8 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.to
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
+    stream: (f = msg.getStream()) && proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.toObject(includeInstance, f),
+    all: (f = msg.getAll()) && proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.toObject(includeInstance, f),
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
     groupName: jspb.Message.getFieldWithDefault(msg, 2, ""),
     settings: (f = msg.getSettings()) && proto.event_store.client.persistent_subscriptions.UpdateReq.Settings.toObject(includeInstance, f)
@@ -4322,6 +6187,16 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Options.deserializeB
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 4:
+      var value = new proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.deserializeBinaryFromReader);
+      msg.setStream(value);
+      break;
+    case 5:
+      var value = new proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.deserializeBinaryFromReader);
+      msg.setAll(value);
+      break;
     case 1:
       var value = new shared_pb.StreamIdentifier;
       reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
@@ -4365,6 +6240,22 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.se
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Options.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getStream();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.serializeBinaryToWriter
+    );
+  }
+  f = message.getAll();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.serializeBinaryToWriter
+    );
+  }
   f = message.getStreamIdentifier();
   if (f != null) {
     writer.writeMessage(
@@ -4392,17 +6283,91 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Options.serializeBin
 
 
 /**
- * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
- * @return {?proto.event_store.client.shared.StreamIdentifier}
+ * optional StreamOptions stream = 4;
+ * @return {?proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.getStream = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Options} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.setStream = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.persistent_subscriptions.UpdateReq.Options.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Options} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.clearStream = function() {
+  return this.setStream(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.hasStream = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional AllOptions all = 5;
+ * @return {?proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.getAll = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions, 5));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Options} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.setAll = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 5, proto.event_store.client.persistent_subscriptions.UpdateReq.Options.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Options} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.clearAll = function() {
+  return this.setAll(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.hasAll = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional event_store.client.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.StreamIdentifier}
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.getStreamIdentifier = function() {
-  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
     jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Options} returns this
 */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.setStreamIdentifier = function(value) {
@@ -4480,6 +6445,774 @@ proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.cl
  */
 proto.event_store.client.persistent_subscriptions.UpdateReq.Options.prototype.hasSettings = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_ = [[2,3,4]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.RevisionOptionCase = {
+  REVISION_OPTION_NOT_SET: 0,
+  REVISION: 2,
+  START: 3,
+  END: 4
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.RevisionOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.getRevisionOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.RevisionOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
+    revision: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions;
+  return proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new shared_pb.StreamIdentifier;
+      reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
+      msg.setStreamIdentifier(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setRevision(value);
+      break;
+    case 3:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setStart(value);
+      break;
+    case 4:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setEnd(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStreamIdentifier();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      shared_pb.StreamIdentifier.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {string} */ (jspb.Message.getField(message, 2));
+  if (f != null) {
+    writer.writeUint64String(
+      2,
+      f
+    );
+  }
+  f = message.getStart();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getEnd();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional event_store.client.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.StreamIdentifier}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.getStreamIdentifier = function() {
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
+    jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.setStreamIdentifier = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.clearStreamIdentifier = function() {
+  return this.setStreamIdentifier(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.hasStreamIdentifier = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional uint64 revision = 2;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.getRevision = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.setRevision = function(value) {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.clearRevision = function() {
+  return jspb.Message.setOneofField(this, 2, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.hasRevision = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty start = 3;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.getStart = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.setStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.clearStart = function() {
+  return this.setStart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.hasStart = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty end = 4;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 4));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.setEnd = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 4, proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.clearEnd = function() {
+  return this.setEnd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.StreamOptions.prototype.hasEnd = function() {
+  return jspb.Message.getField(this, 4) != null;
+};
+
+
+
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.oneofGroups_ = [[1,2,3]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.AllOptionCase = {
+  ALL_OPTION_NOT_SET: 0,
+  POSITION: 1,
+  START: 2,
+  END: 3
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.AllOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.getAllOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.AllOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.oneofGroups_[0]));
+};
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    position: (f = msg.getPosition()) && proto.event_store.client.persistent_subscriptions.UpdateReq.Position.toObject(includeInstance, f),
+    start: (f = msg.getStart()) && shared_pb.Empty.toObject(includeInstance, f),
+    end: (f = msg.getEnd()) && shared_pb.Empty.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions;
+  return proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.event_store.client.persistent_subscriptions.UpdateReq.Position;
+      reader.readMessage(value,proto.event_store.client.persistent_subscriptions.UpdateReq.Position.deserializeBinaryFromReader);
+      msg.setPosition(value);
+      break;
+    case 2:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setStart(value);
+      break;
+    case 3:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setEnd(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPosition();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      proto.event_store.client.persistent_subscriptions.UpdateReq.Position.serializeBinaryToWriter
+    );
+  }
+  f = message.getStart();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+  f = message.getEnd();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional Position position = 1;
+ * @return {?proto.event_store.client.persistent_subscriptions.UpdateReq.Position}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.getPosition = function() {
+  return /** @type{?proto.event_store.client.persistent_subscriptions.UpdateReq.Position} */ (
+    jspb.Message.getWrapperField(this, proto.event_store.client.persistent_subscriptions.UpdateReq.Position, 1));
+};
+
+
+/**
+ * @param {?proto.event_store.client.persistent_subscriptions.UpdateReq.Position|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.setPosition = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.clearPosition = function() {
+  return this.setPosition(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.hasPosition = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty start = 2;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.getStart = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 2));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.setStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 2, proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.clearStart = function() {
+  return this.setStart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.hasStart = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty end = 3;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.getEnd = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} returns this
+*/
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.setEnd = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.clearEnd = function() {
+  return this.setEnd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.AllOptions.prototype.hasEnd = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.prototype.toObject = function(opt_includeInstance) {
+  return proto.event_store.client.persistent_subscriptions.UpdateReq.Position.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    commitPosition: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    preparePosition: jspb.Message.getFieldWithDefault(msg, 2, "0")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.event_store.client.persistent_subscriptions.UpdateReq.Position;
+  return proto.event_store.client.persistent_subscriptions.UpdateReq.Position.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setCommitPosition(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setPreparePosition(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.event_store.client.persistent_subscriptions.UpdateReq.Position.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getCommitPosition();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
+      1,
+      f
+    );
+  }
+  f = message.getPreparePosition();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional uint64 commit_position = 1;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.prototype.getCommitPosition = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.prototype.setCommitPosition = function(value) {
+  return jspb.Message.setProto3StringIntField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 prepare_position = 2;
+ * @return {string}
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.prototype.getPreparePosition = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.event_store.client.persistent_subscriptions.UpdateReq.Position} returns this
+ */
+proto.event_store.client.persistent_subscriptions.UpdateReq.Position.prototype.setPreparePosition = function(value) {
+  return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -5400,6 +8133,32 @@ proto.event_store.client.persistent_subscriptions.DeleteReq.serializeBinaryToWri
 
 
 
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.oneofGroups_ = [[1,3]];
+
+/**
+ * @enum {number}
+ */
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.StreamOptionCase = {
+  STREAM_OPTION_NOT_SET: 0,
+  STREAM_IDENTIFIER: 1,
+  ALL: 3
+};
+
+/**
+ * @return {proto.event_store.client.persistent_subscriptions.DeleteReq.Options.StreamOptionCase}
+ */
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.getStreamOptionCase = function() {
+  return /** @type {proto.event_store.client.persistent_subscriptions.DeleteReq.Options.StreamOptionCase} */(jspb.Message.computeOneofCase(this, proto.event_store.client.persistent_subscriptions.DeleteReq.Options.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -5432,6 +8191,7 @@ proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.to
 proto.event_store.client.persistent_subscriptions.DeleteReq.Options.toObject = function(includeInstance, msg) {
   var f, obj = {
     streamIdentifier: (f = msg.getStreamIdentifier()) && shared_pb.StreamIdentifier.toObject(includeInstance, f),
+    all: (f = msg.getAll()) && shared_pb.Empty.toObject(includeInstance, f),
     groupName: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
@@ -5474,6 +8234,11 @@ proto.event_store.client.persistent_subscriptions.DeleteReq.Options.deserializeB
       reader.readMessage(value,shared_pb.StreamIdentifier.deserializeBinaryFromReader);
       msg.setStreamIdentifier(value);
       break;
+    case 3:
+      var value = new shared_pb.Empty;
+      reader.readMessage(value,shared_pb.Empty.deserializeBinaryFromReader);
+      msg.setAll(value);
+      break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setGroupName(value);
@@ -5515,6 +8280,14 @@ proto.event_store.client.persistent_subscriptions.DeleteReq.Options.serializeBin
       shared_pb.StreamIdentifier.serializeBinaryToWriter
     );
   }
+  f = message.getAll();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      shared_pb.Empty.serializeBinaryToWriter
+    );
+  }
   f = message.getGroupName();
   if (f.length > 0) {
     writer.writeString(
@@ -5526,21 +8299,21 @@ proto.event_store.client.persistent_subscriptions.DeleteReq.Options.serializeBin
 
 
 /**
- * optional event_store.client.shared.StreamIdentifier stream_identifier = 1;
- * @return {?proto.event_store.client.shared.StreamIdentifier}
+ * optional event_store.client.StreamIdentifier stream_identifier = 1;
+ * @return {?proto.event_store.client.StreamIdentifier}
  */
 proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.getStreamIdentifier = function() {
-  return /** @type{?proto.event_store.client.shared.StreamIdentifier} */ (
+  return /** @type{?proto.event_store.client.StreamIdentifier} */ (
     jspb.Message.getWrapperField(this, shared_pb.StreamIdentifier, 1));
 };
 
 
 /**
- * @param {?proto.event_store.client.shared.StreamIdentifier|undefined} value
+ * @param {?proto.event_store.client.StreamIdentifier|undefined} value
  * @return {!proto.event_store.client.persistent_subscriptions.DeleteReq.Options} returns this
 */
 proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.setStreamIdentifier = function(value) {
-  return jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setOneofWrapperField(this, 1, proto.event_store.client.persistent_subscriptions.DeleteReq.Options.oneofGroups_[0], value);
 };
 
 
@@ -5559,6 +8332,43 @@ proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.cl
  */
 proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.hasStreamIdentifier = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional event_store.client.Empty all = 3;
+ * @return {?proto.event_store.client.Empty}
+ */
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.getAll = function() {
+  return /** @type{?proto.event_store.client.Empty} */ (
+    jspb.Message.getWrapperField(this, shared_pb.Empty, 3));
+};
+
+
+/**
+ * @param {?proto.event_store.client.Empty|undefined} value
+ * @return {!proto.event_store.client.persistent_subscriptions.DeleteReq.Options} returns this
+*/
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.setAll = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 3, proto.event_store.client.persistent_subscriptions.DeleteReq.Options.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.event_store.client.persistent_subscriptions.DeleteReq.Options} returns this
+ */
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.clearAll = function() {
+  return this.setAll(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.event_store.client.persistent_subscriptions.DeleteReq.Options.prototype.hasAll = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

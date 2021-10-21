@@ -62,7 +62,7 @@ Client.prototype.subscribeToStream = function <
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const identifier = new StreamIdentifier();
-  identifier.setStreamname(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
 
   const uuidOption = new UUIDOption();
   uuidOption.setString(new Empty());

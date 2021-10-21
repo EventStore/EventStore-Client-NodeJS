@@ -103,7 +103,7 @@ Client.prototype.createPersistentSubscription = async function (
       break;
   }
 
-  identifier.setStreamname(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
 
   options.setGroupName(groupName);
   options.setStreamIdentifier(identifier);
