@@ -11,6 +11,7 @@ import {
   ClientOptions as GRPCClientOptions,
   credentials as grpcCredentials,
   Metadata,
+  MethodDefinition,
 } from "@grpc/grpc-js";
 
 import type {
@@ -29,6 +30,7 @@ import {
 } from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
+import { ClientCapabilities } from "./ClientCapabilities";
 
 interface ClientOptions {
   /**
@@ -112,6 +114,7 @@ export class Client {
 
   #nextChannelSettings?: NextChannelSettings;
   #channel?: Promise<Channel>;
+  #clientCapabilities?: Promise<ClientCapabilities>;
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
     new Map();
 
@@ -391,6 +394,7 @@ export class Client {
 
     this.#grpcClients.clear();
     this.#channel = undefined;
+    this.#clientCapabilities = undefined;
     this.#nextChannelSettings = {
       failedEndpoint: {
         address,
@@ -489,6 +493,24 @@ export class Client {
 
     return [metadata, options];
   };
+
+  protected get capabilities(): Promise<ClientCapabilities> {
+    if (!this.#clientCapabilities) {
+      debug.command("Fetching server capabilities");
+      this.#clientCapabilities = this.execute(
+        ...ClientCapabilities.createClientCapabilities
+      );
+    }
+    return this.#clientCapabilities;
+  }
+
+  protected supports = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    method: MethodDefinition<any, any>
+  ): Promise<boolean> => (await this.capabilities).supports(method);
+
+  protected versionMatches = async (matchString: string): Promise<boolean> =>
+    (await this.capabilities).versionMatches(matchString);
 
   protected get throwOnAppendFailure(): boolean {
     return this.#throwOnAppendFailure;
