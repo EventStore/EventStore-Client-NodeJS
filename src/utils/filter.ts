@@ -12,12 +12,12 @@ interface FilterOptionsBase {
   /**
    * Sets how often the checkpointReached callback is called.
    * Must be greater than 0.
-   * */
+   */
   checkpointInterval?: number;
   /**
    * A callback invoked and await when a checkpoint is reached.
    * Set the checkpointInterval to define how often this method is called.
-   * */
+   */
   checkpointReached?: (
     subscription: AllStreamSubscription,
     position: Position
@@ -25,21 +25,21 @@ interface FilterOptionsBase {
   /**
    * The maximum number of events that are filtered out before the page is returned
    * Must be greater than 0, if supplied.
-   * */
+   */
   maxSearchWindow?: number;
 }
 
 interface RegexOptions extends FilterOptionsBase {
   /**
    * A regex to filter by.
-   * */
+   */
   regex: string;
 }
 
 interface PrefixesOptions extends FilterOptionsBase {
   /**
    * A list of prefixes to filter on.
-   * */
+   */
   prefixes: string[];
 }
 
