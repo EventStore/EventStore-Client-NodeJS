@@ -1,55 +1,24 @@
-import { AppendReq } from "../../generated/streams_pb";
-import { StreamIdentifier, Empty } from "../../generated/shared_pb";
-import { StreamsClient } from "../../generated/streams_grpc_pb";
+import { AppendReq } from "../../../generated/streams_pb";
+import { StreamIdentifier, Empty } from "../../../generated/shared_pb";
+import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
-import { Client } from "../Client";
-import { ANY } from "../constants";
-import {
-  BaseOptions,
-  AppendResult,
-  AppendExpectedRevision,
-  EventData,
-} from "../types";
+import { Client } from "../../Client";
+import { AppendResult, AppendExpectedRevision, EventData } from "../../types";
 
 import {
   convertToCommandError,
   createUUID,
   debug,
   WrongExpectedVersionError,
-} from "../utils";
+} from "../../utils";
+import { InternalAppendToStreamOptions } from ".";
 
-export interface AppendToStreamOptions extends BaseOptions {
-  /**
-   * Asks the server to check the stream is at specific revision before writing events.
-   * @default ANY
-   */
-  expectedRevision?: AppendExpectedRevision;
-}
-
-declare module "../Client" {
-  interface Client {
-    /**
-     * Appends events to a given stream.
-     * @param streamName A stream name.
-     * @param events Events or event to write.
-     * @param options Writing options.
-     */
-    appendToStream(
-      streamName: string,
-      events: EventData | EventData[],
-      options?: AppendToStreamOptions
-    ): Promise<AppendResult>;
-  }
-}
-
-Client.prototype.appendToStream = async function (
+export const append = async function (
   this: Client,
   streamName: string,
-  event: EventData | EventData[],
-  { expectedRevision = ANY, ...baseOptions }: AppendToStreamOptions = {}
+  events: EventData[],
+  { expectedRevision, ...baseOptions }: InternalAppendToStreamOptions
 ): Promise<AppendResult> {
-  const events = Array.isArray(event) ? event : [event];
-
   const header = new AppendReq();
   const options = new AppendReq.Options();
   const identifier = new StreamIdentifier();

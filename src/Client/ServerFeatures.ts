@@ -60,9 +60,9 @@ export class ServerFeatures {
       : this.#supported.has(path);
 
     if (isSupported) {
-      debug.connection("%s %s is Supported", path, feature);
+      debug.connection("%s %s is Supported", path, feature ?? "");
     } else {
-      debug.connection("%s %s is not Supported", path, feature);
+      debug.connection("%s %s is not Supported", path, feature ?? "");
     }
 
     return isSupported;

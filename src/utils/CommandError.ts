@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 
 import { status as StatusCode, ServiceError, Metadata } from "@grpc/grpc-js";
+
+import { WrongExpectedVersion } from "../../generated/shared_pb";
 import { CurrentRevision, EndPoint, AppendExpectedRevision } from "../types";
 
 export enum ErrorType {
@@ -110,10 +112,21 @@ export class StreamDeletedError extends CommandErrorBase {
   public type: ErrorType.STREAM_DELETED = ErrorType.STREAM_DELETED;
   public streamName: string;
 
-  constructor(error: ServiceError) {
+  static fromStreamName = (streamName: string) => {
+    return new StreamDeletedError(undefined, streamName);
+  };
+
+  constructor(error: ServiceError);
+  constructor(error: undefined, streamName: string);
+  constructor(error?: ServiceError, streamName?: string) {
     super(error);
-    const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
+
+    if (error) {
+      const metadata = error.metadata!.getMap();
+      this.streamName = metadata["stream-name"].toString();
+    } else {
+      this.streamName = streamName!;
+    }
   }
 }
 
@@ -128,7 +141,7 @@ export class ScavengeNotFoundError extends CommandErrorBase {
   }
 }
 
-interface WrongExpectedVersion {
+interface WrongExpectedVersionDetails {
   streamName: string;
   expected: AppendExpectedRevision;
   current: CurrentRevision;
@@ -141,7 +154,37 @@ export class WrongExpectedVersionError extends CommandErrorBase {
   public expectedVersion: AppendExpectedRevision;
   public actualVersion: CurrentRevision;
 
-  constructor(error?: ServiceError, versions?: WrongExpectedVersion) {
+  static fromWrongExpectedVersion = (
+    details: WrongExpectedVersion,
+    streamName: string
+  ) => {
+    let expected: AppendExpectedRevision = "any";
+    switch (true) {
+      case details.hasExpectedStreamPosition(): {
+        expected = BigInt(details.getExpectedStreamPosition()!);
+        break;
+      }
+      case details.hasExpectedStreamExists(): {
+        expected = "stream_exists";
+        break;
+      }
+      case details.hasExpectedNoStream(): {
+        expected = "no_stream";
+        break;
+      }
+    }
+    return new WrongExpectedVersionError(undefined, {
+      current: details.hasCurrentStreamRevision()
+        ? BigInt(details.getCurrentStreamRevision())
+        : "no_stream",
+      expected,
+      streamName,
+    });
+  };
+
+  constructor(error: ServiceError);
+  constructor(error: undefined, versions: WrongExpectedVersionDetails);
+  constructor(error?: ServiceError, versions?: WrongExpectedVersionDetails) {
     super(error);
 
     if (error) {
@@ -164,13 +207,24 @@ export class MaxAppendSizeExceededError extends CommandErrorBase {
     ErrorType.MAXIMUM_APPEND_SIZE_EXCEEDED;
   public maxAppendSize: number;
 
-  constructor(error: ServiceError) {
+  static fromMaxAppendSize = (maxAppendSize: number) => {
+    return new MaxAppendSizeExceededError(undefined, maxAppendSize);
+  };
+
+  constructor(error: ServiceError);
+  constructor(error: undefined, maxAppendSize: number);
+  constructor(error?: ServiceError, maxAppendSize?: number) {
     super(error);
-    const metadata = error.metadata!.getMap();
-    this.maxAppendSize = parseInt(
-      metadata["maximum-append-size"].toString(),
-      10
-    );
+
+    if (error) {
+      const metadata = error.metadata!.getMap();
+      this.maxAppendSize = parseInt(
+        metadata["maximum-append-size"].toString(),
+        10
+      );
+    } else {
+      this.maxAppendSize = maxAppendSize!;
+    }
   }
 }
 
