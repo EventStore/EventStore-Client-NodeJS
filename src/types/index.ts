@@ -135,108 +135,108 @@ export type ProcessingStatus =
 export interface ProjectionDetails {
   /**
    * The CoreProcessingTime.
-   * */
+   */
   coreProcessingTime: BigInt;
 
   /**
    * The projection version.
-   * */
+   */
   version: BigInt;
 
   /**
    * The Epoch.
-   * */
+   */
   epoch: BigInt;
 
   /**
    * The projection EffectiveName.
-   * */
+   */
   effectiveName: string;
 
   /**
    * The projection WritesInProgress.
-   * */
+   */
   writesInProgress: number;
 
   /**
    * The projection ReadsInProgress.
-   * */
+   */
   readsInProgress: number;
 
   /**
    * The projection PartitionsCached.
-   * */
+   */
   partitionsCached: number;
 
   /**
    * The raw status of the projection.
    * Split into {@link projectionStatus} and {@link processingStatus} for convenience.
-   * */
+   */
   status: string;
 
   /**
    * The current status of the projection.
-   * */
+   */
   projectionStatus: ProjectionStatus;
 
   /**
    * The current status of the projection.
-   * */
+   */
   processingStatus: ProcessingStatus;
 
   /**
    * The projection StateReason.
-   * */
+   */
   stateReason: string;
 
   /**
    * The projection Name.
-   * */
+   */
   name: string;
 
   /**
    * The projection Mode.
-   * */
+   */
   mode: ProjectionMode;
 
   /**
    * The projection Position.
-   * */
+   */
   position: string;
 
   /**
    * The projection Progress.
-   * */
+   */
   progress: number;
 
   /**
    * LastCheckpoint.
-   * */
+   */
   lastCheckpoint: string;
 
   /**
    * The projection EventsProcessedAfterRestart.
-   * */
+   */
   eventsProcessedAfterRestart: BigInt;
 
   /**
    * The projection CheckpointStatus.
-   * */
+   */
   checkpointStatus: string;
 
   /**
    * The projection BufferedEvents.
-   * */
+   */
   bufferedEvents: BigInt;
 
   /**
    * The projection WritePendingEventsBeforeCheckpoint.
-   * */
+   */
   writePendingEventsBeforeCheckpoint: number;
 
   /**
    * The projection WritePendingEventsAfterCheckpoint.
-   * */
+   */
   writePendingEventsAfterCheckpoint: number;
 }
 
@@ -289,17 +289,17 @@ export type FilterOn =
 export interface FilterBase {
   /**
    * What to filter on.
-   * */
+   */
   filterOn: FilterOn;
   /**
    * Sets how often the checkpointReached callback is called.
    * Must be greater than 0.
-   * */
+   */
   checkpointInterval: number;
   /**
    * A callback invoked and await when a checkpoint is reached.
    * Set the checkpointInterval to define how often this method is called.
-   * */
+   */
   checkpointReached?: (
     subscription: AllStreamSubscription,
     position: Position
@@ -307,21 +307,21 @@ export interface FilterBase {
   /**
    * The maximum number of events that are filtered out before the page is returned
    * Must be greater than 0, if supplied.
-   * */
+   */
   maxSearchWindow?: number;
 }
 
 export interface RegexFilter extends FilterBase {
   /**
    * A regex to filter by.
-   * */
+   */
   regex: string;
 }
 
 export interface PrefixesFilter extends FilterBase {
   /**
    * A list of prefixes to filter on.
-   * */
+   */
   prefixes: string[];
 }
 

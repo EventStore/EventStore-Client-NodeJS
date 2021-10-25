@@ -5,7 +5,6 @@
 /* eslint-disable */
 
 import * as grpc from "@grpc/grpc-js";
-import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as users_pb from "./users_pb";
 
 interface IUsersService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {

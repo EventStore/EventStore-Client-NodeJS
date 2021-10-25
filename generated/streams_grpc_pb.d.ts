@@ -5,7 +5,6 @@
 /* eslint-disable */
 
 import * as grpc from "@grpc/grpc-js";
-import {handleClientStreamingCall} from "@grpc/grpc-js/build/src/server-call";
 import * as streams_pb from "./streams_pb";
 import * as shared_pb from "./shared_pb";
 import * as status_pb from "./status_pb";
@@ -70,7 +69,7 @@ export const StreamsService: IStreamsService;
 
 export interface IStreamsServer extends grpc.UntypedServiceImplementation {
     read: grpc.handleServerStreamingCall<streams_pb.ReadReq, streams_pb.ReadResp>;
-    append: handleClientStreamingCall<streams_pb.AppendReq, streams_pb.AppendResp>;
+    append: grpc.handleClientStreamingCall<streams_pb.AppendReq, streams_pb.AppendResp>;
     delete: grpc.handleUnaryCall<streams_pb.DeleteReq, streams_pb.DeleteResp>;
     tombstone: grpc.handleUnaryCall<streams_pb.TombstoneReq, streams_pb.TombstoneResp>;
     batchAppend: grpc.handleBidiStreamingCall<streams_pb.BatchAppendReq, streams_pb.BatchAppendResp>;
