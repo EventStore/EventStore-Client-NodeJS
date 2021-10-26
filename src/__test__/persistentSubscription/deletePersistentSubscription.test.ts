@@ -1,7 +1,9 @@
 import { createTestNode } from "../utils";
 
-import { EventStoreDBClient } from "../..";
-import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
+import {
+  EventStoreDBClient,
+  persistentSubscriptionSettingsFromDefaults,
+} from "../..";
 
 describe("deletePersistentSubscription", () => {
   const node = createTestNode();

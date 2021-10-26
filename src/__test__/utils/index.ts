@@ -11,5 +11,6 @@ export * from "./collect";
 export * from "./Defer";
 export * from "./delay";
 export * from "./testEvents";
+export * from "./matchServerVersion";
 export * from "./optionalDescribe";
 export * from "./postEventViaHttpApi";

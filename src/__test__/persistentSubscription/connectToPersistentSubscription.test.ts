@@ -19,7 +19,6 @@ import {
   jsonEvent,
   persistentSubscriptionSettingsFromDefaults,
   START,
-  END,
 } from "../..";
 
 const asyncPipeline = promisify(pipeline);
@@ -60,7 +59,7 @@ describe("connectToPersistentSubscription", () => {
         STREAM_NAME,
         GROUP_NAME,
         persistentSubscriptionSettingsFromDefaults({
-          fromRevision: START,
+          startFrom: START,
         })
       );
 
@@ -113,7 +112,7 @@ describe("connectToPersistentSubscription", () => {
         STREAM_NAME,
         GROUP_NAME,
         persistentSubscriptionSettingsFromDefaults({
-          fromRevision: BigInt(1),
+          startFrom: BigInt(1),
         })
       );
 
@@ -163,9 +162,7 @@ describe("connectToPersistentSubscription", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
-          fromRevision: END,
-        })
+        persistentSubscriptionSettingsFromDefaults() // end is default
       );
 
       const defer = new Defer();
@@ -226,7 +223,9 @@ describe("connectToPersistentSubscription", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionSettingsFromDefaults({
+          startFrom: START,
+        })
       );
 
       const defer = new Defer();
@@ -296,7 +295,9 @@ describe("connectToPersistentSubscription", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({
+            startFrom: START,
+          })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -337,7 +338,9 @@ describe("connectToPersistentSubscription", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({
+            startFrom: START,
+          })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -392,7 +395,9 @@ describe("connectToPersistentSubscription", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({
+            startFrom: START,
+          })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -436,7 +441,9 @@ describe("connectToPersistentSubscription", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionSettingsFromDefaults({
+          startFrom: START,
+        })
       );
 
       const subscription = client.connectToPersistentSubscription(
@@ -482,7 +489,9 @@ describe("connectToPersistentSubscription", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionSettingsFromDefaults({
+          startFrom: START,
+        })
       );
 
       await client.appendToStream(STREAM_NAME, [
@@ -536,7 +545,9 @@ describe("connectToPersistentSubscription", () => {
     await client.createPersistentSubscription(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionSettingsFromDefaults({
+        startFrom: START,
+      })
     );
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
@@ -599,7 +610,9 @@ describe("connectToPersistentSubscription", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({
+            startFrom: START,
+          })
         );
 
         return client.connectToPersistentSubscription(STREAM_NAME, GROUP_NAME);

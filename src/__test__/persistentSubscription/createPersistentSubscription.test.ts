@@ -4,6 +4,7 @@ import {
   EventStoreDBClient,
   PersistentSubscriptionExistsError,
   persistentSubscriptionSettingsFromDefaults,
+  START,
 } from "../..";
 
 describe("createPersistentSubscription", () => {
@@ -34,7 +35,21 @@ describe("createPersistentSubscription", () => {
         client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({
+            startFrom: START,
+          })
+        )
+      ).resolves.toBeUndefined();
+    });
+
+    test("from end", async () => {
+      const STREAM_NAME = "stream_name_from_end";
+      const GROUP_NAME = "group_name_from_end";
+      await expect(
+        client.createPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME,
+          persistentSubscriptionSettingsFromDefaults() // end is default
         )
       ).resolves.toBeUndefined();
     });
@@ -47,7 +62,7 @@ describe("createPersistentSubscription", () => {
           STREAM_NAME,
           GROUP_NAME,
           persistentSubscriptionSettingsFromDefaults({
-            fromRevision: BigInt(1),
+            startFrom: BigInt(1),
           })
         )
       ).resolves.toBeUndefined();

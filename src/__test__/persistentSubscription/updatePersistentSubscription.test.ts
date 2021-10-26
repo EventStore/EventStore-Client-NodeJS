@@ -1,7 +1,10 @@
 import { createTestNode } from "../utils";
 
-import { PINNED, EventStoreDBClient } from "../..";
-import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
+import {
+  PINNED,
+  EventStoreDBClient,
+  persistentSubscriptionSettingsFromDefaults,
+} from "../..";
 
 describe("updatePersistentSubscription", () => {
   const node = createTestNode();
@@ -27,7 +30,7 @@ describe("updatePersistentSubscription", () => {
     const STREAM_NAME = "from_start_test_stream_name";
     const GROUP_NAME = "from_start_test_group_name";
     const settings = persistentSubscriptionSettingsFromDefaults({
-      fromRevision: BigInt(1),
+      startFrom: BigInt(1),
     });
 
     await client.createPersistentSubscription(
@@ -39,7 +42,7 @@ describe("updatePersistentSubscription", () => {
     await expect(
       client.updatePersistentSubscription(STREAM_NAME, GROUP_NAME, {
         ...settings,
-        strategy: PINNED,
+        consumerStrategyName: PINNED,
       })
     ).resolves.toBeUndefined();
   });

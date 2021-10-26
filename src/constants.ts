@@ -60,7 +60,7 @@ export const STREAM_NAME = "streamName";
 export const EVENT_TYPE = "eventType";
 
 // max subscriber count
-export const UNLIMITED = "unlimited";
+export const UNBOUNDED = "unbounded";
 
 // system streams
 

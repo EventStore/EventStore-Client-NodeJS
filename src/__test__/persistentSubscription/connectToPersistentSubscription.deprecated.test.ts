@@ -19,7 +19,6 @@ import {
   jsonEvent,
   persistentSubscriptionSettingsFromDefaults,
   START,
-  END,
 } from "../..";
 
 const asyncPipeline = promisify(pipeline);
@@ -60,7 +59,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         STREAM_NAME,
         GROUP_NAME,
         persistentSubscriptionSettingsFromDefaults({
-          fromRevision: START,
+          startFrom: START,
         })
       );
 
@@ -113,7 +112,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         STREAM_NAME,
         GROUP_NAME,
         persistentSubscriptionSettingsFromDefaults({
-          fromRevision: BigInt(1),
+          startFrom: BigInt(1),
         })
       );
 
@@ -165,9 +164,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
-          fromRevision: END,
-        })
+        persistentSubscriptionSettingsFromDefaults() // end is default
       );
 
       const defer = new Defer();
@@ -230,7 +227,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionSettingsFromDefaults({ startFrom: START })
       );
 
       const defer = new Defer();
@@ -300,7 +297,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({ startFrom: START })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -398,7 +395,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({ startFrom: START })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -441,7 +438,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionSettingsFromDefaults({ startFrom: START })
       );
 
       const subscription = client.connectToPersistentSubscription(
@@ -489,7 +486,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       await client.createPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionSettingsFromDefaults({ startFrom: START })
       );
 
       await client.appendToStream(STREAM_NAME, [
@@ -545,7 +542,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
     await client.createPersistentSubscription(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionSettingsFromDefaults({ startFrom: START })
     );
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
@@ -610,7 +607,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         await client.createPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults()
+          persistentSubscriptionSettingsFromDefaults({ startFrom: START })
         );
 
         return client.connectToPersistentSubscription(STREAM_NAME, GROUP_NAME);
@@ -693,6 +690,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       GROUP_NAME,
       persistentSubscriptionSettingsFromDefaults({
         resolveLinkTos: true,
+        startFrom: START,
       })
     );
 
