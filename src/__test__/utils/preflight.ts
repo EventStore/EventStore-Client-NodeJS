@@ -27,12 +27,6 @@ const pullImage = async (image: string) => {
     await exec(`docker pull ${image}`);
   } catch (error) {
     console.error(`\x1b[1m\x1b[91mFailed to pull ${image}\x1b[39m\x1b[22m`);
-    console.error(
-      "\x1b[1mMake sure you are logged in to docker with github.\x1b[22m"
-    );
-    console.error(
-      "Please see https://github.com/EventStore/EventStore-Client-NodeJS#run-tests for more details."
-    );
     process.exit(1);
   }
 };
