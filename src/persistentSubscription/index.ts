@@ -1,4 +1,5 @@
 export * from "./connectToPersistentSubscription";
+export * from "./connectToPersistentSubscriptionToAll";
 export * from "./createPersistentSubscription";
 export * from "./createPersistentSubscriptionToAll";
 export * from "./deletePersistentSubscription";

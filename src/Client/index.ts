@@ -305,13 +305,12 @@ export class Client {
     <Client extends GRPCClient, T extends Stream>(
       Client: GRPCClientConstructor<Client>,
       debugName: string,
-      creator: (client: Client) => T
+      creator: (client: Client) => T | Promise<T>
     ) =>
     async (): Promise<T> => {
       const client = await this.getGRPCClient(Client, debugName);
-      return creator(client).on("error", (err) =>
-        this.handleError(client, err)
-      );
+      const stream = await creator(client);
+      return stream.on("error", (err) => this.handleError(client, err));
     };
 
   // Internal handled execution

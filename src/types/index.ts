@@ -457,8 +457,7 @@ export interface ReadableSubscription<E> extends Readable {
   [Symbol.asyncIterator](): AsyncIterableIterator<E>;
 }
 
-export interface PersistentSubscription<E extends EventType = EventType>
-  extends ReadableSubscription<ResolvedEvent<E>> {
+export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
   /**
    * @deprecated Please pass the entire resolved event.
    */
@@ -466,7 +465,7 @@ export interface PersistentSubscription<E extends EventType = EventType>
   /**
    * Acknowledge events as handled.
    */
-  ack(...events: ResolvedEvent<E>[]): Promise<void>;
+  ack(...events: E[]): Promise<void>;
 
   /**
    * @deprecated Please pass the entire resolved event.
@@ -479,12 +478,13 @@ export interface PersistentSubscription<E extends EventType = EventType>
   /**
    * "Not Acknowledge" the event.
    */
-  nack(
-    action: PersistentAction,
-    reason: string,
-    ...events: ResolvedEvent<E>[]
-  ): Promise<void>;
+  nack(action: PersistentAction, reason: string, ...events: E[]): Promise<void>;
 }
+
+export type PersistentSubscription<E extends EventType = EventType> =
+  PersistentSubscriptionBase<ResolvedEvent<E>>;
+export type PersistentSubscriptionToAll =
+  PersistentSubscriptionBase<AllStreamResolvedEvent>;
 
 export type StreamSubscription<E extends EventType = EventType> =
   ReadableSubscription<ResolvedEvent<E>>;

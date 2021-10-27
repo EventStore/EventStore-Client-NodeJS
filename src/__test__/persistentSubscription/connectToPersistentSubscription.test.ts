@@ -95,6 +95,7 @@ describe("connectToPersistentSubscription", () => {
       ]);
 
       await defer.promise;
+      await subscription.unsubscribe();
 
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
@@ -146,6 +147,7 @@ describe("connectToPersistentSubscription", () => {
       ]);
 
       await defer.promise;
+      await subscription.unsubscribe();
 
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
@@ -195,6 +197,7 @@ describe("connectToPersistentSubscription", () => {
       ]);
 
       await defer.promise;
+      await subscription.unsubscribe();
 
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
@@ -270,6 +273,7 @@ describe("connectToPersistentSubscription", () => {
         .on("end", onEnd);
 
       await defer.promise;
+      await subscription.unsubscribe();
 
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
@@ -476,6 +480,7 @@ describe("connectToPersistentSubscription", () => {
       ]);
 
       await defer.promise;
+      await subscription.unsubscribe();
 
       expect(eventListenerOne).toBeCalledTimes(6);
       expect(eventListenerTwo).toBeCalledTimes(6);

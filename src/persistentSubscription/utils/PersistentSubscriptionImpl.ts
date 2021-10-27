@@ -1,29 +1,37 @@
 import { Transform, TransformCallback, TransformOptions } from "stream";
 
-import { ClientDuplexStream, ServiceError } from "@grpc/grpc-js";
-import { Status } from "@grpc/grpc-js/build/src/constants";
+import { ClientDuplexStream, ServiceError, status } from "@grpc/grpc-js";
 
-import { ReadReq, ReadResp } from "../../generated/persistent_pb";
-import Action = ReadReq.Nack.Action;
+import { ReadReq, ReadResp } from "../../../generated/persistent_pb";
 
-import { convertToCommandError, convertGrpcEvent, createUUID } from ".";
+import {
+  convertToCommandError,
+  ConvertGrpcEvent,
+  createUUID,
+} from "../../utils";
 import {
   PersistentAction,
-  PersistentSubscription,
+  PersistentSubscriptionBase,
   ResolvedEvent,
-} from "../types";
+} from "../../types";
 
 type CreateGRPCStream = () => Promise<ClientDuplexStream<ReadReq, ReadResp>>;
 
-export class TwoWaySubscription
+export class PersistentSubscriptionImpl<E>
   extends Transform
-  implements PersistentSubscription
+  implements PersistentSubscriptionBase<E>
 {
   #grpcStream: Promise<ClientDuplexStream<ReadReq, ReadResp>>;
+  #convertGrpcEvent: ConvertGrpcEvent<E>;
 
-  constructor(createGRPCStream: CreateGRPCStream, options: TransformOptions) {
+  constructor(
+    createGRPCStream: CreateGRPCStream,
+    convertGrpcEvent: ConvertGrpcEvent<E>,
+    options: TransformOptions
+  ) {
     super({ ...options, objectMode: true });
     this.#grpcStream = createGRPCStream();
+    this.#convertGrpcEvent = convertGrpcEvent;
     this.initialize();
   }
 
@@ -31,7 +39,7 @@ export class TwoWaySubscription
     try {
       (await this.#grpcStream)
         .on("error", (err: ServiceError) => {
-          if (err.code === Status.CANCELLED) return;
+          if (err.code === status.CANCELLED) return;
           const error = convertToCommandError(err);
           this.emit("error", error);
         })
@@ -47,7 +55,7 @@ export class TwoWaySubscription
     }
 
     if (resp.hasEvent()) {
-      const resolved = convertGrpcEvent(resp.getEvent()!);
+      const resolved = this.#convertGrpcEvent(resp.getEvent()!);
       next(null, resolved);
       return;
     }
@@ -92,16 +100,16 @@ export class TwoWaySubscription
 
     switch (action) {
       case "park":
-        nack.setAction(Action.PARK);
+        nack.setAction(ReadReq.Nack.Action.PARK);
         break;
       case "retry":
-        nack.setAction(Action.RETRY);
+        nack.setAction(ReadReq.Nack.Action.RETRY);
         break;
       case "skip":
-        nack.setAction(Action.SKIP);
+        nack.setAction(ReadReq.Nack.Action.SKIP);
         break;
       case "stop":
-        nack.setAction(Action.STOP);
+        nack.setAction(ReadReq.Nack.Action.STOP);
         break;
     }
 
