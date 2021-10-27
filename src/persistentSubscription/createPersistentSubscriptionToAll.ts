@@ -10,8 +10,7 @@ import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 import { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
 
-export interface CreateToPersistentSubscriptionToAllOptions
-  extends BaseOptions {
+export interface CreatePersistentSubscriptionToAllOptions extends BaseOptions {
   /**
    * Filters events or streams based upon a predicate.
    */
@@ -37,7 +36,7 @@ declare module "../Client" {
     createPersistentSubscriptionToAll(
       groupName: string,
       settings: PersistentSubscriptionToAllSettings,
-      options?: CreateToPersistentSubscriptionToAllOptions
+      options?: CreatePersistentSubscriptionToAllOptions
     ): Promise<void>;
   }
 }
@@ -50,7 +49,7 @@ Client.prototype.createPersistentSubscriptionToAll = async function (
     filter,
     skipVersionCheck = false,
     ...baseOptions
-  }: CreateToPersistentSubscriptionToAllOptions = {}
+  }: CreatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
   if (!skipVersionCheck && (await this.versionMatches("<21.10"))) {
     throw new UnsupportedError("createPersistentSubscriptionToAll", "21.10");
