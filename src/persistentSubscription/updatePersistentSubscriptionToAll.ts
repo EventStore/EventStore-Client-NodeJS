@@ -43,7 +43,7 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
   }: UpdatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
   if (!skipVersionCheck && (await this.versionMatches("<21.10"))) {
-    throw new UnsupportedError("createPersistentSubscriptionToAll", "21.10");
+    throw new UnsupportedError("updatePersistentSubscriptionToAll", "21.10");
   }
 
   const req = new UpdateReq();
