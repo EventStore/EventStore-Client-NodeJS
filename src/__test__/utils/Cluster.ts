@@ -176,6 +176,10 @@ export class Cluster {
 
     await this.healthy();
 
+    if (this.count > 1) {
+      await this.leaderElected();
+    }
+
     if (!this.insecure) {
       this.cert = await readFile(this.certPath);
     }
@@ -319,6 +323,46 @@ export class Cluster {
 
           if (response.exitCode === 0) {
             healthy.add(node);
+          }
+        } catch (error) {
+          // retry
+          // console.log(`--> ${node}`, error);
+        }
+      }
+    }
+  };
+
+  private leaderElected = async (...nodes: string[]) => {
+    nodes = !nodes.length
+      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      : nodes;
+
+    const ready = new Set();
+
+    while (ready.size !== nodes.length) {
+      for (const node of nodes) {
+        if (ready.has(node)) continue;
+
+        try {
+          const response = await exec(
+            node,
+            `curl --fail --insecure http${
+              this.insecure ? "" : "s"
+            }://localhost:2113/gossip`,
+            { cwd: this.path() }
+          );
+
+          interface Member {
+            state: "Unknown" | "Leader" | "Follower";
+          }
+
+          const { members } = JSON.parse(response.out) as { members: Member[] };
+
+          if (
+            members.every(({ state }) => state !== "Unknown") &&
+            members.some(({ state }) => state === "Leader")
+          ) {
+            ready.add(node);
           }
         } catch (error) {
           // retry

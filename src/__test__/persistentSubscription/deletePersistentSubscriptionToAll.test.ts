@@ -5,7 +5,6 @@ import { createTestNode, matchServerVersion, optionalDescribe } from "../utils";
 import {
   EventStoreDBClient,
   persistentSubscriptionToAllSettingsFromDefaults,
-  UnknownError,
   UnsupportedError,
 } from "../..";
 
@@ -38,18 +37,9 @@ describe("deletePersistentSubscriptionToAll", () => {
         await client.deletePersistentSubscriptionToAll(GROUP_NAME);
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
-      }
-    });
-
-    test("Can skip the version check, if forced", async () => {
-      const GROUP_NAME = "oh_boy";
-
-      try {
-        await client.deletePersistentSubscriptionToAll(GROUP_NAME, {
-          skipVersionCheck: true,
-        });
-      } catch (error) {
-        expect(error).toBeInstanceOf(UnknownError);
+        expect(error).toMatchInlineSnapshot(
+          `[Error: deletePersistentSubscriptionToAll requires server version 21.10 or higher.]`
+        );
       }
     });
   });

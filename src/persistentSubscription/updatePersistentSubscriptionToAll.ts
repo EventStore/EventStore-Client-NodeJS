@@ -9,12 +9,7 @@ import { BaseOptions } from "../types";
 import { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 
-export interface UpdatePersistentSubscriptionToAllOptions extends BaseOptions {
-  /**
-   * Skips server version check, possibly sending unsupported call to server.
-   */
-  skipVersionCheck?: boolean;
-}
+export interface UpdatePersistentSubscriptionToAllOptions extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
@@ -37,12 +32,9 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
   settings: PersistentSubscriptionToAllSettings,
-  {
-    skipVersionCheck,
-    ...baseOptions
-  }: UpdatePersistentSubscriptionToAllOptions = {}
+  baseOptions: UpdatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
-  if (!skipVersionCheck && (await this.versionMatches("<21.10"))) {
+  if (await this.versionMatches("<21.10")) {
     throw new UnsupportedError("updatePersistentSubscriptionToAll", "21.10");
   }
 

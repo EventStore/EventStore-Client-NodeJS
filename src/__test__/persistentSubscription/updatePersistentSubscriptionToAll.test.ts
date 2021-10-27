@@ -7,7 +7,6 @@ import {
   EventStoreDBClient,
   persistentSubscriptionToAllSettingsFromDefaults,
   UnsupportedError,
-  UnknownError,
 } from "../..";
 
 describe("updatePersistentSubscriptionToAll", () => {
@@ -42,20 +41,9 @@ describe("updatePersistentSubscriptionToAll", () => {
         );
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
-      }
-    });
-
-    test("Can skip the version check, if forced", async () => {
-      const GROUP_NAME = "oh_boy";
-
-      try {
-        await client.updatePersistentSubscriptionToAll(
-          GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults(),
-          { skipVersionCheck: true }
+        expect(error).toMatchInlineSnapshot(
+          `[Error: updatePersistentSubscriptionToAll requires server version 21.10 or higher.]`
         );
-      } catch (error) {
-        expect(error).toBeInstanceOf(UnknownError);
       }
     });
   });

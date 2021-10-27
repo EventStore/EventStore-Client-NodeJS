@@ -17,10 +17,6 @@ export interface ConnectToPersistentSubscriptionToAllOptions
    * @default 10
    */
   bufferSize?: number;
-  /**
-   * Skips server version check, possibly sending unsupported call to server.
-   */
-  skipVersionCheck?: boolean;
 }
 
 declare module "../Client" {
@@ -44,7 +40,6 @@ Client.prototype.connectToPersistentSubscriptionToAll = function (
   groupName: string,
   {
     bufferSize = 10,
-    skipVersionCheck = false,
     ...baseOptions
   }: ConnectToPersistentSubscriptionToAllOptions = {},
   duplexOptions: DuplexOptions = {}
@@ -54,7 +49,7 @@ Client.prototype.connectToPersistentSubscriptionToAll = function (
       PersistentSubscriptionsClient,
       "connectToPersistentSubscription",
       async (client) => {
-        if (!skipVersionCheck && (await this.versionMatches("<21.10"))) {
+        if (await this.versionMatches("<21.10")) {
           throw new UnsupportedError(
             "connectToPersistentSubscriptionToAll",
             "21.10"

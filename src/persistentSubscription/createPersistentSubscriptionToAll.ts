@@ -15,10 +15,6 @@ export interface CreatePersistentSubscriptionToAllOptions extends BaseOptions {
    * Filters events or streams based upon a predicate.
    */
   filter?: Filter;
-  /**
-   * Skips server version check, possibly sending unsupported call to server.
-   */
-  skipVersionCheck?: boolean;
 }
 
 declare module "../Client" {
@@ -45,13 +41,9 @@ Client.prototype.createPersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
   settings: PersistentSubscriptionToAllSettings,
-  {
-    filter,
-    skipVersionCheck = false,
-    ...baseOptions
-  }: CreatePersistentSubscriptionToAllOptions = {}
+  { filter, ...baseOptions }: CreatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
-  if (!skipVersionCheck && (await this.versionMatches("<21.10"))) {
+  if (await this.versionMatches("<21.10")) {
     throw new UnsupportedError("createPersistentSubscriptionToAll", "21.10");
   }
 

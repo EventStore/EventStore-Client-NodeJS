@@ -9,7 +9,6 @@ import {
   PersistentSubscriptionExistsError,
   persistentSubscriptionToAllSettingsFromDefaults,
   START,
-  UnknownError,
   UnsupportedError,
 } from "../..";
 
@@ -45,20 +44,9 @@ describe("createPersistentSubscriptionToAll", () => {
         );
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
-      }
-    });
-
-    test("Can skip the version check, if forced", async () => {
-      const GROUP_NAME = "oh_boy";
-
-      try {
-        await client.createPersistentSubscriptionToAll(
-          GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults(),
-          { skipVersionCheck: true }
+        expect(error).toMatchInlineSnapshot(
+          `[Error: createPersistentSubscriptionToAll requires server version 21.10 or higher.]`
         );
-      } catch (error) {
-        expect(error).toBeInstanceOf(UnknownError);
       }
     });
   });

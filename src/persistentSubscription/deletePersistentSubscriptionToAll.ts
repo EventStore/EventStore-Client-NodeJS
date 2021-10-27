@@ -6,12 +6,7 @@ import { convertToCommandError, debug, UnsupportedError } from "../utils";
 import { BaseOptions } from "../types";
 import { Client } from "../Client";
 
-export interface DeletePersistentSubscriptionToAllOptions extends BaseOptions {
-  /**
-   * Skips server version check, possibly sending unsupported call to server.
-   */
-  skipVersionCheck?: boolean;
-}
+export interface DeletePersistentSubscriptionToAllOptions extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
@@ -31,12 +26,9 @@ declare module "../Client" {
 Client.prototype.deletePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
-  {
-    skipVersionCheck,
-    ...baseOptions
-  }: DeletePersistentSubscriptionToAllOptions = {}
+  baseOptions: DeletePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
-  if (!skipVersionCheck && (await this.versionMatches("<21.10"))) {
+  if (await this.versionMatches("<21.10")) {
     throw new UnsupportedError("deletePersistentSubscriptionToAll", "21.10");
   }
 
