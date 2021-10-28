@@ -14,6 +14,7 @@ import {
   Position,
   ResolvedEvent,
 } from "../types";
+import { parseUUID } from ".";
 
 export type GRPCReadResp = StreamsReadResp | PersistentReadResp;
 export type GRPCReadEvent = StreamsEvent | PersistentEvent;
@@ -117,7 +118,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
   if (!grpcRecord.hasId()) {
     throw "Impossible situation where id is undefined in a recorded event";
   }
-  const id = grpcRecord.getId()!.getString();
+  const id = parseUUID(grpcRecord.getId()!);
   const revision = BigInt(grpcRecord.getStreamRevision());
   const metadata: E["metadata"] = parseMetadata(grpcRecord, id);
   const isJson = contentType === "application/json";

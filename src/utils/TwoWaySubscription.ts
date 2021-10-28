@@ -3,11 +3,10 @@ import { Transform, TransformCallback, TransformOptions } from "stream";
 import { ClientDuplexStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 
-import { UUID } from "../../generated/shared_pb";
 import { ReadReq, ReadResp } from "../../generated/persistent_pb";
 import Action = ReadReq.Nack.Action;
 
-import { convertToCommandError, convertGrpcEvent } from ".";
+import { convertToCommandError, convertGrpcEvent, createUUID } from ".";
 import {
   PersistentAction,
   PersistentSubscription,
@@ -67,8 +66,7 @@ export class TwoWaySubscription
       // A resolved event will always have either link or event (or both), so this should to be unreachable
       if (!id) throw new Error("Attempted to ack an event with no id");
 
-      const uuid = new UUID();
-      uuid.setString(id);
+      const uuid = createUUID(id);
       ack.addIds(uuid);
     }
 
@@ -114,8 +112,7 @@ export class TwoWaySubscription
       // A resolved event will always have either link or event (or both), so this should to be unreachable
       if (!id) throw new Error("Attempted to ack an event with no id");
 
-      const uuid = new UUID();
-      uuid.setString(id);
+      const uuid = createUUID(id);
       nack.addIds(uuid);
     }
 
