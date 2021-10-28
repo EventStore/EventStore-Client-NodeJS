@@ -157,11 +157,11 @@ export class Cluster {
       if (this.retryCount > 0) {
         this.retryCount -= 1;
 
-        console.log(
-          `Failed to initialize cluster. Retry ${3 - this.retryCount}\n${
-            error.err
-          } `
-        );
+        // console.log(
+        //   `Failed to initialize cluster. Retry ${3 - this.retryCount}\n${
+        //     error.err
+        //   } `
+        // );
 
         await this.cleanUp();
         await this.initialize();
