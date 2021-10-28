@@ -1,6 +1,9 @@
 import { Empty } from "../../generated/shared_pb";
 import { DeleteReq } from "../../generated/persistent_pb";
-import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
+import {
+  PersistentSubscriptionsClient,
+  PersistentSubscriptionsService,
+} from "../../generated/persistent_grpc_pb";
 
 import { convertToCommandError, debug, UnsupportedError } from "../utils";
 import { BaseOptions } from "../types";
@@ -26,9 +29,9 @@ declare module "../Client" {
 Client.prototype.deletePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
-  baseOptions: DeletePersistentSubscriptionToAllOptions = {}
+  { ...baseOptions }: DeletePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
-  if (await this.versionMatches("<21.10")) {
+  if (!(await this.supports(PersistentSubscriptionsService.delete, "all"))) {
     throw new UnsupportedError("deletePersistentSubscriptionToAll", "21.10");
   }
 

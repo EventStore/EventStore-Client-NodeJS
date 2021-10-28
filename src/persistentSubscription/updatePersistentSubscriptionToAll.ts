@@ -1,6 +1,9 @@
 import { Empty } from "../../generated/shared_pb";
 import { UpdateReq } from "../../generated/persistent_pb";
-import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
+import {
+  PersistentSubscriptionsClient,
+  PersistentSubscriptionsService,
+} from "../../generated/persistent_grpc_pb";
 
 import { debug, convertToCommandError, UnsupportedError } from "../utils";
 import { END, START } from "../constants";
@@ -32,9 +35,9 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
   settings: PersistentSubscriptionToAllSettings,
-  baseOptions: UpdatePersistentSubscriptionToAllOptions = {}
+  { ...baseOptions }: UpdatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
-  if (await this.versionMatches("<21.10")) {
+  if (!(await this.supports(PersistentSubscriptionsService.update, "all"))) {
     throw new UnsupportedError("updatePersistentSubscriptionToAll", "21.10");
   }
 

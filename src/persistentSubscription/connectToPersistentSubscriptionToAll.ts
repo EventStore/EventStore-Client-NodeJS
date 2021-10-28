@@ -2,7 +2,10 @@ import { DuplexOptions } from "stream";
 
 import { Empty } from "../../generated/shared_pb";
 import { ReadReq } from "../../generated/persistent_pb";
-import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
+import {
+  PersistentSubscriptionsClient,
+  PersistentSubscriptionsService,
+} from "../../generated/persistent_grpc_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 
 import { BaseOptions, PersistentSubscriptionToAll } from "../types";
@@ -49,7 +52,9 @@ Client.prototype.connectToPersistentSubscriptionToAll = function (
       PersistentSubscriptionsClient,
       "connectToPersistentSubscription",
       async (client) => {
-        if (await this.versionMatches("<21.10")) {
+        if (
+          !(await this.supports(PersistentSubscriptionsService.read, "all"))
+        ) {
           throw new UnsupportedError(
             "connectToPersistentSubscriptionToAll",
             "21.10"

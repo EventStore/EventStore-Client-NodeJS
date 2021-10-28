@@ -30,7 +30,7 @@ import {
 } from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
-import { ClientCapabilities } from "./ClientCapabilities";
+import { ServerFeatures } from "./ServerFeatures";
 
 interface ClientOptions {
   /**
@@ -114,7 +114,7 @@ export class Client {
 
   #nextChannelSettings?: NextChannelSettings;
   #channel?: Promise<Channel>;
-  #clientCapabilities?: Promise<ClientCapabilities>;
+  #serverFeatures?: Promise<ServerFeatures>;
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
     new Map();
 
@@ -393,7 +393,7 @@ export class Client {
 
     this.#grpcClients.clear();
     this.#channel = undefined;
-    this.#clientCapabilities = undefined;
+    this.#serverFeatures = undefined;
     this.#nextChannelSettings = {
       failedEndpoint: {
         address,
@@ -493,23 +493,21 @@ export class Client {
     return [metadata, options];
   };
 
-  protected get capabilities(): Promise<ClientCapabilities> {
-    if (!this.#clientCapabilities) {
+  protected get capabilities(): Promise<ServerFeatures> {
+    if (!this.#serverFeatures) {
       debug.command("Fetching server capabilities");
-      this.#clientCapabilities = this.execute(
-        ...ClientCapabilities.createClientCapabilities
+      this.#serverFeatures = this.execute(
+        ...ServerFeatures.createServerFeatures
       );
     }
-    return this.#clientCapabilities;
+    return this.#serverFeatures;
   }
 
   protected supports = async (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    method: MethodDefinition<any, any>
-  ): Promise<boolean> => (await this.capabilities).supports(method);
-
-  protected versionMatches = async (matchString: string): Promise<boolean> =>
-    (await this.capabilities).versionMatches(matchString);
+    method: MethodDefinition<any, any>,
+    feature?: string
+  ): Promise<boolean> => (await this.capabilities).supports(method, feature);
 
   protected get throwOnAppendFailure(): boolean {
     return this.#throwOnAppendFailure;
