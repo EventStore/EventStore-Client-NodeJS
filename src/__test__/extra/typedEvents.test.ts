@@ -6,8 +6,8 @@ import {
   EventStoreDBClient,
   jsonEvent,
   JSONEventType,
+  persistentSubscriptionSettingsFromDefaults,
 } from "../..";
-import { persistentSubscriptionSettingsFromDefaults } from "../../utils";
 
 describe("typed events should compile", () => {
   const node = createTestNode();
