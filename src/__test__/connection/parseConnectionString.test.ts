@@ -1,6 +1,6 @@
 import { parseConnectionString } from "../../Client/parseConnectionString";
 
-import { valid, invalid, warning } from "./connectionStringMockups";
+import { valid, invalid, warning } from "./parseConnectionStringMockups";
 
 describe("connection string parser", () => {
   describe("Should parse valid connection strings", () => {
