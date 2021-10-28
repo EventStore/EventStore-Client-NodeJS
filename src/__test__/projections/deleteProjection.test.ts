@@ -63,7 +63,7 @@ describe("deleteProjection", () => {
       // before https://github.com/EventStore/EventStore/pull/2944
       // writeCheckpoint had to be false to stop the projection
       await client.disableProjection(PROJECTION_NAME, {
-        writeCheckpoint: true,
+        writeCheckpoint: false,
       });
 
       const stoppedDetails = await client.getProjectionStatistics(
@@ -76,10 +76,17 @@ describe("deleteProjection", () => {
 
     await client.deleteProjection(PROJECTION_NAME);
 
-    const afterDetails = await client.getProjectionStatistics(PROJECTION_NAME);
+    try {
+      const afterDetails = await client.getProjectionStatistics(
+        PROJECTION_NAME
+      );
 
-    expect(afterDetails).toBeDefined();
-    expect(afterDetails.projectionStatus).toBe(DELETING);
+      expect(afterDetails).toBeDefined();
+      expect(afterDetails.projectionStatus).toBe(DELETING);
+    } catch (error) {
+      // projection is already deleted
+      expect(error).toBeInstanceOf(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+    }
   });
 
   describe("errors", () => {
