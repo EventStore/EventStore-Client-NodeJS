@@ -1,4 +1,4 @@
-name: Test against 21.6.0
+name: Test against 20.10
 
 on:
   pull_request:
@@ -10,10 +10,10 @@ on:
 
 jobs:
   test:
-    name: Test against 21.6.0
+    name: Test against 20.10.4
     uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@test-against-servers
     with:
-      version: "21.6.0-buster-slim"
+      version: "20.10.4-buster-slim"
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
