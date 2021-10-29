@@ -5,7 +5,7 @@ import {
   jsonTestEvents,
   matchServerVersion,
   optionalDescribe,
-} from "../utils";
+} from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -16,7 +16,7 @@ import {
   END,
   excludeSystemEvents,
   eventTypeFilter,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("connectToPersistentSubscriptionToAll (filters)", () => {
   const supported = matchServerVersion`>=21.10`;

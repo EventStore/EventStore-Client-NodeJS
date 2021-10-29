@@ -1,11 +1,10 @@
-import { collect, jsonTestEvents, optionalDescribe } from "../utils";
-
+import { collect, jsonTestEvents, optionalDescribe } from "@test-utils";
 import {
   EventStoreDBClient,
   jsonEvent,
   NodePreference,
   NotLeaderError,
-} from "../..";
+} from "@eventstore/db-client";
 
 optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
   const STREAM_NAME = "test_stream_name";

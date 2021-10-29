@@ -1,6 +1,5 @@
-import { collect, createInsecureTestNode } from "../utils";
-
-import { EventStoreDBClient, jsonEvent } from "../..";
+import { collect, createInsecureTestNode } from "@test-utils";
+import { EventStoreDBClient, jsonEvent } from "@eventstore/db-client";
 
 describe("insecure", () => {
   const node = createInsecureTestNode();

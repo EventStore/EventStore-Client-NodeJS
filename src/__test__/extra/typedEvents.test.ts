@@ -1,5 +1,4 @@
-import { createTestNode } from "../utils";
-
+import { createTestNode } from "@test-utils";
 import {
   binaryEvent,
   BinaryEventType,
@@ -7,7 +6,7 @@ import {
   jsonEvent,
   JSONEventType,
   persistentSubscriptionSettingsFromDefaults,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("typed events should compile", () => {
   const node = createTestNode();

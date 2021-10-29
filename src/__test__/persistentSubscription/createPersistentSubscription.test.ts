@@ -1,11 +1,11 @@
-import { createTestNode } from "../utils";
+import { createTestNode } from "@test-utils";
 
 import {
   EventStoreDBClient,
   PersistentSubscriptionExistsError,
   persistentSubscriptionSettingsFromDefaults,
   START,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("createPersistentSubscription", () => {
   const node = createTestNode();

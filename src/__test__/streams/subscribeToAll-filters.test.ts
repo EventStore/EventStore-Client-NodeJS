@@ -1,4 +1,4 @@
-import { createTestNode, Defer, delay, jsonTestEvents } from "../utils";
+import { createTestNode, Defer, delay, jsonTestEvents } from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -10,7 +10,7 @@ import {
   excludeSystemEvents,
   AllStreamSubscription,
   Position,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();

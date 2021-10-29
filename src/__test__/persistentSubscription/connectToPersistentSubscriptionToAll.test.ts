@@ -11,7 +11,7 @@ import {
   matchServerVersion,
   optionalDescribe,
   postEventViaHttpApi,
-} from "../utils";
+} from "@test-utils";
 
 import {
   AllStreamResolvedEvent,
@@ -24,7 +24,7 @@ import {
   UnsupportedError,
   streamNameFilter,
   END,
-} from "../..";
+} from "@eventstore/db-client";
 
 const asyncPipeline = promisify(pipeline);
 

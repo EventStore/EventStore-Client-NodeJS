@@ -1,10 +1,10 @@
-import { createTestNode } from "../utils";
+import { createTestNode } from "@test-utils";
 
 import {
   PINNED,
   EventStoreDBClient,
   persistentSubscriptionSettingsFromDefaults,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("updatePersistentSubscription", () => {
   const node = createTestNode();

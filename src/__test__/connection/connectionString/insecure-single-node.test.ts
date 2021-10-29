@@ -1,4 +1,4 @@
-import { createInsecureTestNode } from "../../utils";
+import { createInsecureTestNode } from "@test-utils";
 
 import { connectionStringTests } from "./connectionStringTests";
 

@@ -1,6 +1,11 @@
-import { createTestNode } from "../utils";
+import { createTestNode } from "@test-utils";
 
-import { CONTINUOUS, EventStoreDBClient, TRANSIENT, UnknownError } from "../..";
+import {
+  CONTINUOUS,
+  EventStoreDBClient,
+  TRANSIENT,
+  UnknownError,
+} from "@eventstore/db-client";
 
 describe("getProjectionStatistics", () => {
   const node = createTestNode();

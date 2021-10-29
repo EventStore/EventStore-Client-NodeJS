@@ -1,5 +1,4 @@
-import { createTestCluster, delay, jsonTestEvents } from "../utils";
-
+import { createTestCluster, delay, jsonTestEvents } from "@test-utils";
 import {
   jsonEvent,
   EventStoreDBClient,
@@ -8,7 +7,7 @@ import {
   NotLeaderError,
   FOLLOWER,
   EndPoint,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("reconnect", () => {
   test("UnavailableError", async () => {

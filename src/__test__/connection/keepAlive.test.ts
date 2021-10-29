@@ -1,6 +1,5 @@
 import { Channel } from "@grpc/grpc-js";
-
-import { EventStoreDBClient } from "../..";
+import { EventStoreDBClient } from "@eventstore/db-client";
 
 jest.mock("@grpc/grpc-js/build/src/channel.js");
 const ChannelMock = Channel as jest.Mock<Channel>;

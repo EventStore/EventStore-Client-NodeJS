@@ -1,12 +1,12 @@
-import { collect, createTestNode, jsonTestEvents } from "../utils";
+import { collect, createTestNode, jsonTestEvents } from "@test-utils";
 
 import {
   EventStoreDBClient,
   WrongExpectedVersionError,
   NO_STREAM,
   StreamNotFoundError,
-} from "../..";
-import { BACKWARDS } from "../../constants";
+  BACKWARDS,
+} from "@eventstore/db-client";
 
 describe("deleteStream", () => {
   const node = createTestNode();

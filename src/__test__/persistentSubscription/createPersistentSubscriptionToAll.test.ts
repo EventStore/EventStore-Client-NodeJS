@@ -1,6 +1,10 @@
 /** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
 
-import { matchServerVersion, createTestNode, optionalDescribe } from "../utils";
+import {
+  matchServerVersion,
+  createTestNode,
+  optionalDescribe,
+} from "@test-utils";
 
 import {
   END,
@@ -10,7 +14,7 @@ import {
   persistentSubscriptionToAllSettingsFromDefaults,
   START,
   UnsupportedError,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("createPersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;

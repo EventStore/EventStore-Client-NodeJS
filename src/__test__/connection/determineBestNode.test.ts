@@ -1,12 +1,17 @@
 import { v4 as uuid } from "uuid";
 
 import {
+  FOLLOWER,
+  LEADER,
+  RANDOM,
+  READ_ONLY_REPLICA,
+  VNodeState,
+} from "@eventstore/db-client";
+import {
   determineBestNode,
   filterAndOrderMembers,
   MemberInfo,
 } from "../../Client/discovery";
-import { FOLLOWER, LEADER, RANDOM, READ_ONLY_REPLICA } from "../../constants";
-import { VNodeState } from "../../types";
 
 const member = ({
   isAlive = true,

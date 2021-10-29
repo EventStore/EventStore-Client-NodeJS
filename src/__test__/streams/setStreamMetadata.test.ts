@@ -1,8 +1,11 @@
-import { createTestNode, jsonTestEvents } from "../utils";
+import { createTestNode, jsonTestEvents } from "@test-utils";
 
-import { EventStoreDBClient } from "../..";
-import { StreamMetadata } from "../../utils/streamMetadata";
-import { START, SYSTEM_STREAM_ACL } from "../../constants";
+import {
+  EventStoreDBClient,
+  StreamMetadata,
+  START,
+  SYSTEM_STREAM_ACL,
+} from "@eventstore/db-client";
 
 describe("setStreamMetadata", () => {
   const node = createTestNode();
