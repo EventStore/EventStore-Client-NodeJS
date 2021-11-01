@@ -9,6 +9,9 @@ import {
   EndPoint,
 } from "@eventstore/db-client";
 
+// This test can take time.
+jest.setTimeout(120_000);
+
 describe("reconnect", () => {
   test("UnavailableError", async () => {
     const cluster = createTestCluster();
