@@ -118,6 +118,7 @@ export class Cluster {
   private locations: ClusterLocation[] = [];
   private ready: Promise<void>;
   private inspected = false;
+  private failed = false;
 
   constructor(count: number, insecure = false, id = uuid()) {
     this.id = id;
@@ -127,9 +128,13 @@ export class Cluster {
   }
 
   public get rootCertificate(): Buffer {
-    if (this.insecure || !this.cert) {
+    if (this.insecure) {
       throw new Error("No Cert for insecure cluster");
     }
+    if (this.failed || !this.cert) {
+      throw new Error("Cluster failed to initialize");
+    }
+
     return this.cert;
   }
   public get certPath(): string {
@@ -168,6 +173,7 @@ export class Cluster {
         return this.up();
       }
 
+      this.failed = true;
       console.log(`${this.ipStub}.0/24`);
       console.log(JSON.stringify(this.endpoints, null, 2));
       console.error(error.err);
