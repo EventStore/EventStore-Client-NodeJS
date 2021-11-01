@@ -24,47 +24,6 @@ jobs:
       - name: Build
         run: yarn build
 
-  tests:
-    name: Test
-    strategy:
-      matrix:
-        version: [ci]
-    env:
-      # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
-      SECRETS_AVAILABLE: ${{ secrets.EVENTSTORE_CLOUD_ID != null }}
-    needs: build
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - name: Connect to tailscale
-        if: ${{ env.SECRETS_AVAILABLE == 'true' }}
-        run: |
-          curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.gpg | sudo apt-key add -
-          curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.list | sudo tee /etc/apt/sources.list.d/tailscale.list
-          sudo apt-get update
-          sudo apt-get install tailscale
-          sudo tailscale up --authkey ${{ secrets.TAILSCALE_AUTH }} --hostname "node-client-ci-$(date +'%Y-%m-%dT%H:%M:%S')" --advertise-tags=tag:ci --accept-routes
-      # Install up to date version of node
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install
-        run: yarn
-      - name: Run Tests
-        run: yarn test:${{ matrix.version }} --ci --coverage
-        env:
-          EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
-      - name: Disconnect from tailscale
-        if: ${{ always() && env.SECRETS_AVAILABLE == 'true' }}
-        run: sudo tailscale down
-
   package:
     name: Package compiles as a dependency
     needs: build
@@ -111,7 +70,7 @@ jobs:
     needs: build
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Install
         run: yarn
       - name: Linting

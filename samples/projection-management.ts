@@ -137,6 +137,12 @@ describe("[sample] projection-management", () => {
   test("Delete", async () => {
     const name = await createTestProjection();
 
+    // before https://github.com/EventStore/EventStore/pull/2944
+    // writeCheckpoint had to be false to stop the projection
+    await client.disableProjection(name, {
+      writeCheckpoint: false,
+    });
+
     // region Delete
     // A projection must be disabled to allow it to be deleted.
     await client.disableProjection(name, { writeCheckpoint: true });

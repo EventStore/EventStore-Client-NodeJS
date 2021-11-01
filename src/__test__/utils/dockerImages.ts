@@ -4,10 +4,7 @@ const esdbImage = ((): string => {
     case version.startsWith("local:"):
       return version.replace("local:", "");
     case version.startsWith("github:"):
-      return version.replace(
-        "github:",
-        "ghcr.io/eventstore/eventstore/eventstore:"
-      );
+      return version.replace("github:", "ghcr.io/eventstore/eventstore:");
     case version.startsWith("dockerhub:"):
       return version.replace("dockerhub:", "eventstore/eventstore:");
     default:

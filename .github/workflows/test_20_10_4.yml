@@ -1,0 +1,19 @@
+name: Test against 20.10.4
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 3 * * 0" # Every sunday at 3am UTC.
+
+jobs:
+  test:
+    name: Test against 20.10.4
+    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@test-against-servers
+    with:
+      version: "20.10.4-buster-slim"
+    secrets:
+      eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
+      tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
