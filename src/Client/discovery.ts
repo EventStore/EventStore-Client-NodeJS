@@ -7,7 +7,7 @@ import VNodeState = GrpcMemberInfo.VNodeState;
 
 import { EndPoint, NodePreference } from "../types";
 import { FOLLOWER, LEADER, RANDOM, READ_ONLY_REPLICA } from "../constants";
-import { debug } from "../utils";
+import { debug, parseUUID } from "../utils";
 import { DNSClusterOptions, GossipClusterOptions } from ".";
 
 export interface MemberInfo {
@@ -182,7 +182,7 @@ function listClusterMembers(
         }
 
         const member: MemberInfo = {
-          instanceId: grpcMember.getInstanceId()?.getString(),
+          instanceId: parseUUID(grpcMember.getInstanceId()),
           timeStamp: parseInt(grpcMember.getTimeStamp(), 10),
           state: grpcMember.getState(),
           isAlive: grpcMember.getIsAlive(),

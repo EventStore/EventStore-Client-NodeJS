@@ -8,3 +8,4 @@ export * from "./persistentSubscriptionSettings";
 export * from "./ReadStream";
 export * from "./systemStreams";
 export * from "./TwoWaySubscription";
+export * from "./grpcUUID";

@@ -1,5 +1,5 @@
 import { AppendReq } from "../../generated/streams_pb";
-import { StreamIdentifier, Empty, UUID } from "../../generated/shared_pb";
+import { StreamIdentifier, Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
@@ -13,6 +13,7 @@ import {
 
 import {
   convertToCommandError,
+  createUUID,
   debug,
   WrongExpectedVersionError,
 } from "../utils";
@@ -167,8 +168,7 @@ Client.prototype.appendToStream = async function (
         for (const event of events) {
           const entry = new AppendReq();
           const message = new AppendReq.ProposedMessage();
-          const id = new UUID();
-          id.setString(event.id);
+          const id = createUUID(event.id);
           message.setId(id);
           message.getMetadataMap().set("type", event.type);
           message.getMetadataMap().set("content-type", event.contentType);
