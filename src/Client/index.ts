@@ -405,7 +405,7 @@ export class Client {
 
     debug.connection(
       `Connecting to http${
-        this.#channelCredentials._isSecure() ? "" : "s"
+        this.#channelCredentials._isSecure() ? "s" : ""
       }://%s`,
       uri
     );
