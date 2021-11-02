@@ -26,7 +26,9 @@ describe("reconnect", () => {
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
       "my_stream",
-      jsonEvent({ type: "first-append", data: { message: "test" } })
+      jsonEvent({ type: "first-append", data: { message: "test" } }),
+      // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(firstAppend).toBeDefined();
 
@@ -38,7 +40,9 @@ describe("reconnect", () => {
     try {
       const secondAppend = await client.appendToStream(
         "my_stream",
-        jsonEvent({ type: "failed-append", data: { message: "test" } })
+        jsonEvent({ type: "failed-append", data: { message: "test" } }),
+        // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+        { credentials: { username: "admin", password: "changeit" } }
       );
       expect(secondAppend).toBe("Unreachable");
     } catch (error) {
@@ -52,7 +56,9 @@ describe("reconnect", () => {
       try {
         const reconnectedAppend = await client.appendToStream(
           "my_stream",
-          jsonEvent({ type: "reconnect-append", data: { message: "test" } })
+          jsonEvent({ type: "reconnect-append", data: { message: "test" } }),
+          // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+          { credentials: { username: "admin", password: "changeit" } }
         );
         expect(reconnectedAppend).toBeDefined();
         break;
@@ -79,7 +85,9 @@ describe("reconnect", () => {
     // make successful append to follower node
     const firstAppend = await client.appendToStream(
       "my_stream",
-      jsonEvent({ type: "first-append", data: { message: "test" } })
+      jsonEvent({ type: "first-append", data: { message: "test" } }),
+      // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(firstAppend).toBeDefined();
 
@@ -89,7 +97,11 @@ describe("reconnect", () => {
       const secondAppend = await client.appendToStream(
         "my_stream",
         jsonEvent({ type: "failed-append", data: { message: "test" } }),
-        { requiresLeader: true }
+        {
+          requiresLeader: true,
+          // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+          credentials: { username: "admin", password: "changeit" },
+        }
       );
       expect(secondAppend).toBe("Unreachable");
     } catch (error) {
@@ -104,7 +116,11 @@ describe("reconnect", () => {
     const reconnectedAppend = await client.appendToStream(
       "my_stream",
       jsonEvent({ type: "reconnect-append", data: { message: "test" } }),
-      { requiresLeader: true }
+      {
+        requiresLeader: true,
+        // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+        credentials: { username: "admin", password: "changeit" },
+      }
     );
     expect(reconnectedAppend).toBeDefined();
 
@@ -129,7 +145,9 @@ describe("reconnect", () => {
     // make successful append of 2000 events to node
     const firstAppend = await client.appendToStream(
       "my_stream",
-      jsonTestEvents(2000)
+      jsonTestEvents(2000),
+      // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(firstAppend).toBeDefined();
 
@@ -159,7 +177,8 @@ describe("reconnect", () => {
       try {
         const reconnectedAppend = await client.appendToStream(
           "my_stream",
-          jsonEvent({ type: "reconnect-append", data: { message: "test" } })
+          jsonEvent({ type: "reconnect-append", data: { message: "test" } }), // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+          { credentials: { username: "admin", password: "changeit" } }
         );
         expect(reconnectedAppend).toBeDefined();
         break;
@@ -186,7 +205,9 @@ describe("reconnect", () => {
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
       "my_stream",
-      jsonEvent({ type: "first-append", data: { message: "test" } })
+      jsonEvent({ type: "first-append", data: { message: "test" } }),
+      // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(firstAppend).toBeDefined();
 
@@ -199,7 +220,9 @@ describe("reconnect", () => {
     try {
       const secondAppend = await client.appendToStream(
         "my_stream",
-        jsonEvent({ type: "failed-append", data: { message: "test" } })
+        jsonEvent({ type: "failed-append", data: { message: "test" } }),
+        // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+        { credentials: { username: "admin", password: "changeit" } }
       );
       expect(secondAppend).toBe("Unreachable");
     } catch (error) {
@@ -210,7 +233,9 @@ describe("reconnect", () => {
     try {
       const secondAppend = await client.appendToStream(
         "my_stream",
-        jsonEvent({ type: "failed-append", data: { message: "test" } })
+        jsonEvent({ type: "failed-append", data: { message: "test" } }),
+        // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+        { credentials: { username: "admin", password: "changeit" } }
       );
       expect(secondAppend).toBe("Unreachable");
     } catch (error) {
@@ -229,7 +254,9 @@ describe("reconnect", () => {
       try {
         const reconnectedAppend = await client.appendToStream(
           "my_stream",
-          jsonEvent({ type: "reconnect-append", data: { message: "test" } })
+          jsonEvent({ type: "reconnect-append", data: { message: "test" } }),
+          // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+          { credentials: { username: "admin", password: "changeit" } }
         );
         expect(reconnectedAppend).toBeDefined();
         break;
@@ -257,7 +284,9 @@ describe("reconnect", () => {
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
       "my_stream",
-      jsonEvent({ type: "first-append", data: { message: "test" } })
+      jsonEvent({ type: "first-append", data: { message: "test" } }),
+      // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(firstAppend).toBeDefined();
 
