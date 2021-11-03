@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     name: Test
-    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@split-up-ci-tests
+    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@master
     with:
       version: "20.10.4-buster-slim"
     secrets:
