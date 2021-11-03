@@ -1,4 +1,4 @@
-name: Test against 20.10
+name: "20.10"
 
 on:
   pull_request:
@@ -10,8 +10,8 @@ on:
 
 jobs:
   test:
-    name: Test against 20.10.4
-    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@test-against-servers
+    name: Test
+    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@split-up-ci-tests
     with:
       version: "20.10.4-buster-slim"
     secrets:

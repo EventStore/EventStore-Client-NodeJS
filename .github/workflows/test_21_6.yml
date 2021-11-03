@@ -1,4 +1,4 @@
-name: Test against 21.6
+name: "21.6"
 
 on:
   pull_request:
@@ -10,8 +10,8 @@ on:
 
 jobs:
   test:
-    name: Test against 21.6.0
-    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@test-against-servers
+    name: Test
+    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@split-up-ci-tests
     with:
       version: "21.6.0-buster-slim"
     secrets:
