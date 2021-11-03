@@ -1,4 +1,13 @@
-import { createTestNode, Defer, delay, jsonTestEvents } from "../utils";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
+import {
+  createTestNode,
+  Defer,
+  delay,
+  jsonTestEvents,
+  matchServerVersion,
+  optionalTest,
+} from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -10,7 +19,7 @@ import {
   excludeSystemEvents,
   AllStreamSubscription,
   Position,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();
@@ -179,8 +188,9 @@ describe("subscribeToAll", () => {
       );
     });
 
-    // TODO: skip only for version <21.10
-    test.skip("checkpoints", async () => {
+    // checkpoints behaviour was fixed in
+    // https://github.com/EventStore/EventStore/pull/2608
+    optionalTest(matchServerVersion`>=21.10`)("checkpoints", async () => {
       const defer = new Defer();
       const FINISH_TEST = "checkpoints-finish";
       const MARKER_EVENT = "marker_event";

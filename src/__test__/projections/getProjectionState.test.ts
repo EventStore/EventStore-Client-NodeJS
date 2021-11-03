@@ -1,6 +1,6 @@
-import { createTestNode, delay, jsonTestEvents } from "../utils";
+import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 
-import { EventStoreDBClient, UnknownError } from "../..";
+import { EventStoreDBClient, UnknownError } from "@eventstore/db-client";
 
 describe("getProjectionState", () => {
   const node = createTestNode();

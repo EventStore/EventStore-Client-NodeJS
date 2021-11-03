@@ -9,7 +9,7 @@ import {
   delay,
   jsonTestEvents,
   postEventViaHttpApi,
-} from "../utils";
+} from "@test-utils";
 
 import {
   ResolvedEvent,
@@ -19,7 +19,7 @@ import {
   jsonEvent,
   persistentSubscriptionSettingsFromDefaults,
   START,
-} from "../..";
+} from "@eventstore/db-client";
 
 const asyncPipeline = promisify(pipeline);
 

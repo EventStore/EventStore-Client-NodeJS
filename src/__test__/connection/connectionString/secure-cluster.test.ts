@@ -1,4 +1,4 @@
-import { createTestCluster } from "../../utils";
+import { createTestCluster } from "@test-utils";
 
 import { connectionStringTests } from "./connectionStringTests";
 

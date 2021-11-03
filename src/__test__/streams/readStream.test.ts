@@ -4,7 +4,7 @@ import {
   createTestNode,
   delay,
   jsonTestEvents,
-} from "../utils";
+} from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -15,7 +15,7 @@ import {
   StreamNotFoundError,
   ResolvedEvent,
   LinkEvent,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("readStream", () => {
   const node = createTestNode();

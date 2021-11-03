@@ -1,6 +1,5 @@
-import { collect, createTestNode } from "../utils";
-
-import { EventStoreDBClient, jsonEvent } from "../..";
+import { collect, createTestNode } from "@test-utils";
+import { EventStoreDBClient, jsonEvent } from "@eventstore/db-client";
 
 describe("singleNodeConnection", () => {
   const node = createTestNode();

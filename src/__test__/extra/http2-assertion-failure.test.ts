@@ -1,7 +1,11 @@
 import { v4 as uuid } from "uuid";
-import { createInsecureTestNode, delay, jsonTestEvents } from "../utils";
-
-import { EventStoreDBClient, NO_STREAM, ResolvedEvent, START } from "../..";
+import { createInsecureTestNode, delay, jsonTestEvents } from "@test-utils";
+import {
+  EventStoreDBClient,
+  NO_STREAM,
+  ResolvedEvent,
+  START,
+} from "@eventstore/db-client";
 
 describe("http2 assertion failure", () => {
   const node = createInsecureTestNode();

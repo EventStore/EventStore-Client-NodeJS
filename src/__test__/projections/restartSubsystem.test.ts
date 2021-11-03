@@ -1,6 +1,6 @@
-import { createTestNode } from "../utils";
+import { createTestNode } from "@test-utils";
 
-import { EventStoreDBClient } from "../..";
+import { EventStoreDBClient } from "@eventstore/db-client";
 
 describe("restartSubsystem", () => {
   const node = createTestNode();

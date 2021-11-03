@@ -3,7 +3,7 @@ import {
   collect,
   createTestNode,
   jsonTestEvents,
-} from "../utils";
+} from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -15,7 +15,7 @@ import {
   binaryEvent,
   BinaryEventType,
   JSONEventType,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("appendToStream", () => {
   const node = createTestNode();

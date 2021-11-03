@@ -1,6 +1,6 @@
-import { Cluster, collect, delay, jsonTestEvents } from "../../utils";
+import { Cluster, collect, delay, jsonTestEvents } from "@test-utils";
 
-import { EventStoreDBClient } from "../../..";
+import { EventStoreDBClient } from "@eventstore/db-client";
 
 interface ConnectionStringTestsOptions {
   title: string;

@@ -1,7 +1,5 @@
-import { createTestNode, delay, jsonTestEvents } from "../utils";
-
-import { EventStoreDBClient } from "../..";
-import { UnavailableError } from "../../utils";
+import { createTestNode, delay, jsonTestEvents } from "@test-utils";
+import { EventStoreDBClient, UnavailableError } from "@eventstore/db-client";
 
 describe("write after end", () => {
   const node = createTestNode();

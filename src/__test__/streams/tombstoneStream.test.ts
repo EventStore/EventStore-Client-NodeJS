@@ -1,4 +1,4 @@
-import { collect, createTestNode, jsonTestEvents } from "../utils";
+import { collect, createTestNode, jsonTestEvents } from "@test-utils";
 
 import {
   WrongExpectedVersionError,
@@ -7,7 +7,7 @@ import {
   EventStoreDBClient,
   BACKWARDS,
   END,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {

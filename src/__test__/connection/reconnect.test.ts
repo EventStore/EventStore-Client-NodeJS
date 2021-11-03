@@ -1,5 +1,4 @@
-import { createTestCluster, delay, jsonTestEvents } from "../utils";
-
+import { createTestCluster, delay, jsonTestEvents } from "@test-utils";
 import {
   jsonEvent,
   EventStoreDBClient,
@@ -8,7 +7,10 @@ import {
   NotLeaderError,
   FOLLOWER,
   EndPoint,
-} from "../..";
+} from "@eventstore/db-client";
+
+// This test can take time.
+jest.setTimeout(120_000);
 
 describe("reconnect", () => {
   test("UnavailableError", async () => {

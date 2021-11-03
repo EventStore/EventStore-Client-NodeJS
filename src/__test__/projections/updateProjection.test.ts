@@ -1,6 +1,6 @@
-import { createTestNode } from "../utils";
+import { createTestNode } from "@test-utils";
 
-import { EventStoreDBClient, UnknownError } from "../..";
+import { EventStoreDBClient, UnknownError } from "@eventstore/db-client";
 
 describe("resetProjection", () => {
   const node = createTestNode();

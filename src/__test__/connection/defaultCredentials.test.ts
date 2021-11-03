@@ -1,6 +1,5 @@
-import { collect, createTestNode } from "../utils";
-
-import { EventStoreDBClient, AccessDeniedError } from "../..";
+import { collect, createTestNode } from "@test-utils";
+import { EventStoreDBClient, AccessDeniedError } from "@eventstore/db-client";
 
 describe("defaultCredentials", () => {
   const node = createTestNode();

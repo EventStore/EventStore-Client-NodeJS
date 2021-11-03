@@ -1,6 +1,5 @@
-import { collect, createTestCluster } from "../utils";
-
-import { jsonEvent, EventStoreDBClient } from "../..";
+import { collect, createTestCluster } from "@test-utils";
+import { jsonEvent, EventStoreDBClient } from "@eventstore/db-client";
 
 describe("cluster", () => {
   const cluster = createTestCluster();

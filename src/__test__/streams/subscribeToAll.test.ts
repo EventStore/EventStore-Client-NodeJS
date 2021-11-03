@@ -6,9 +6,14 @@ import {
   delay,
   jsonTestEvents,
   TestEventData,
-} from "../utils";
+} from "@test-utils";
 
-import { EventStoreDBClient, jsonEvent, ResolvedEvent, END } from "../..";
+import {
+  EventStoreDBClient,
+  jsonEvent,
+  ResolvedEvent,
+  END,
+} from "@eventstore/db-client";
 
 const asyncPipeline = promisify(pipeline);
 

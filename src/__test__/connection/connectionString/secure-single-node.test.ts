@@ -1,4 +1,4 @@
-import { createTestNode } from "../../utils";
+import { createTestNode } from "@test-utils";
 
 import { connectionStringTests } from "./connectionStringTests";
 

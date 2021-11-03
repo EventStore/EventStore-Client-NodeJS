@@ -1,4 +1,4 @@
-import { createInsecureTestCluster } from "../../utils";
+import { createInsecureTestCluster } from "@test-utils";
 
 import { connectionStringTests } from "./connectionStringTests";
 

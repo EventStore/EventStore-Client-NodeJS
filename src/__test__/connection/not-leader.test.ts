@@ -1,13 +1,13 @@
-import { collect, createTestCluster } from "../utils";
-
+import { collect, createTestCluster } from "@test-utils";
 import {
   jsonEvent,
   FOLLOWER,
   ErrorType,
   NotLeaderError,
   EventStoreDBClient,
-} from "../..";
-import { BACKWARDS, END } from "../../constants";
+  BACKWARDS,
+  END,
+} from "@eventstore/db-client";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();

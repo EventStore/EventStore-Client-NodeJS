@@ -1,4 +1,4 @@
-import { createTestNode } from "../utils";
+import { createTestNode } from "@test-utils";
 
 import {
   ABORTED,
@@ -6,7 +6,7 @@ import {
   RUNNING,
   STOPPED,
   UnknownError,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("disableProjection", () => {
   const node = createTestNode();

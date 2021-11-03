@@ -1,5 +1,5 @@
-import { collect, createTestNode, jsonTestEvents } from "../utils";
-import { EventStoreDBClient } from "../..";
+import { collect, createTestNode, jsonTestEvents } from "@test-utils";
+import { EventStoreDBClient } from "@eventstore/db-client";
 import { relative, resolve } from "path";
 
 describe("tlsCAFile", () => {

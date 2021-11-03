@@ -1,4 +1,4 @@
-import { collect, createTestNode, delay, jsonTestEvents } from "../utils";
+import { collect, createTestNode, delay, jsonTestEvents } from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -8,7 +8,7 @@ import {
   jsonEvent,
   AllStreamBinaryRecordedEvent,
   LinkEvent,
-} from "../..";
+} from "@eventstore/db-client";
 
 describe("readAll", () => {
   const node = createTestNode();
