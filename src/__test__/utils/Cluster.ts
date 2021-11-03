@@ -152,7 +152,7 @@ export class Cluster {
 
     try {
       const { exitCode: e } = await upAll({ cwd: this.path() });
-      expect(e).toBe(0);
+      if (e !== 0) throw `Exited with code ${e}`;
     } catch (error) {
       if (this.retryCount > 0) {
         this.retryCount -= 1;
@@ -175,6 +175,10 @@ export class Cluster {
     }
 
     await this.healthy();
+
+    if (this.count > 1) {
+      await this.leaderElected();
+    }
 
     if (!this.insecure) {
       this.cert = await readFile(this.certPath);
@@ -202,7 +206,8 @@ export class Cluster {
       cwd: this.path(),
       commandOptions: ["--volumes"],
     });
-    expect(exitCode).toBe(0);
+
+    if (exitCode !== 0) throw `Exited with code ${exitCode}`;
 
     await this.cleanUp();
   };
@@ -253,7 +258,7 @@ export class Cluster {
   };
 
   private initialize = async (): Promise<void> => {
-    this.ipStub = `172.${rnd(0, 255)}.${process.env.JEST_WORKER_ID}`;
+    this.ipStub = `172.${rnd(0, 255)}.${process.env.JEST_WORKER_ID ?? 1}`;
     this.locations = await nodeList(this.count, this.ipStub);
 
     const config = {
@@ -318,6 +323,46 @@ export class Cluster {
 
           if (response.exitCode === 0) {
             healthy.add(node);
+          }
+        } catch (error) {
+          // retry
+          // console.log(`--> ${node}`, error);
+        }
+      }
+    }
+  };
+
+  private leaderElected = async (...nodes: string[]) => {
+    nodes = !nodes.length
+      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      : nodes;
+
+    const ready = new Set();
+
+    while (ready.size !== nodes.length) {
+      for (const node of nodes) {
+        if (ready.has(node)) continue;
+
+        try {
+          const response = await exec(
+            node,
+            `curl --fail --insecure http${
+              this.insecure ? "" : "s"
+            }://localhost:2113/gossip`,
+            { cwd: this.path() }
+          );
+
+          interface Member {
+            state: "Unknown" | "Leader" | "Follower";
+          }
+
+          const { members } = JSON.parse(response.out) as { members: Member[] };
+
+          if (
+            members.every(({ state }) => state !== "Unknown") &&
+            members.some(({ state }) => state === "Leader")
+          ) {
+            ready.add(node);
           }
         } catch (error) {
           // retry

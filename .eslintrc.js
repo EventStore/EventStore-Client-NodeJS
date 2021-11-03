@@ -25,6 +25,7 @@ module.exports = {
     "jsdoc/check-examples": ["warn"],
     "jsdoc/check-indentation": ["warn"],
     "jsdoc/check-syntax": ["warn"],
+    "jsdoc/check-tag-names": ["warn", { definedTags: ["jest-environment"] }],
     "jsdoc/newline-after-description": ["warn", "never"],
     "jsdoc/no-types": ["error", { contexts: ["any"] }],
     "jsdoc/require-description": ["warn"],

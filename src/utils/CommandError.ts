@@ -26,6 +26,8 @@ export enum ErrorType {
 
   USER_NOT_FOUND = "user-not-found",
   USER_CONFLICT = "user-conflict",
+
+  UNSUPPORTED = "unsupported",
 }
 
 abstract class CommandErrorBase extends Error {
@@ -280,6 +282,21 @@ export class LoginConflictError extends CommandErrorBase {
   }
 }
 
+export class UnsupportedError extends CommandErrorBase {
+  public type: ErrorType.UNSUPPORTED = ErrorType.UNSUPPORTED;
+  public method: string;
+  public minimumVersion: string;
+
+  constructor(method: string, minimumVersion: string) {
+    super(
+      undefined,
+      `${method} requires server version ${minimumVersion} or higher.`
+    );
+    this.method = method;
+    this.minimumVersion = minimumVersion;
+  }
+}
+
 export type CommandError =
   | NotLeaderError
   | StreamNotFoundError
@@ -300,7 +317,8 @@ export type CommandError =
   | LoginConflictError
   | TimeoutError
   | UnavailableError
-  | UnknownError;
+  | UnknownError
+  | UnsupportedError;
 
 export const convertToCommandError = (error: Error): CommandError | Error => {
   if (isCommandError(error) || !isServiceError(error)) return error;

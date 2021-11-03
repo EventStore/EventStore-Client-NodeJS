@@ -1,5 +1,5 @@
-// package: event_store.client.client_capabilities
-// file: clientcapabilities.proto
+// package: event_store.client.server_features
+// file: serverfeatures.proto
 
 /* tslint:disable */
 /* eslint-disable */
@@ -12,8 +12,8 @@ export class SupportedMethods extends jspb.Message {
     getMethodsList(): Array<SupportedMethod>;
     setMethodsList(value: Array<SupportedMethod>): SupportedMethods;
     addMethods(value?: SupportedMethod, index?: number): SupportedMethod;
-    getEventstoreserverversion(): string;
-    setEventstoreserverversion(value: string): SupportedMethods;
+    getEventStoreServerVersion(): string;
+    setEventStoreServerVersion(value: string): SupportedMethods;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SupportedMethods.AsObject;
@@ -28,15 +28,19 @@ export class SupportedMethods extends jspb.Message {
 export namespace SupportedMethods {
     export type AsObject = {
         methodsList: Array<SupportedMethod.AsObject>,
-        eventstoreserverversion: string,
+        eventStoreServerVersion: string,
     }
 }
 
 export class SupportedMethod extends jspb.Message { 
-    getMethodname(): string;
-    setMethodname(value: string): SupportedMethod;
-    getServicename(): string;
-    setServicename(value: string): SupportedMethod;
+    getMethodName(): string;
+    setMethodName(value: string): SupportedMethod;
+    getServiceName(): string;
+    setServiceName(value: string): SupportedMethod;
+    clearFeaturesList(): void;
+    getFeaturesList(): Array<string>;
+    setFeaturesList(value: Array<string>): SupportedMethod;
+    addFeatures(value: string, index?: number): string;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SupportedMethod.AsObject;
@@ -50,7 +54,8 @@ export class SupportedMethod extends jspb.Message {
 
 export namespace SupportedMethod {
     export type AsObject = {
-        methodname: string,
-        servicename: string,
+        methodName: string,
+        serviceName: string,
+        featuresList: Array<string>,
     }
 }

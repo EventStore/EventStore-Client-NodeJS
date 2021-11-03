@@ -15,4 +15,4 @@ export * from "./types";
 
 export * from "./utils/filter";
 export * from "./utils/CommandError";
-export * from "./utils/persistentSubscriptionSettings";
+export * from "./persistentSubscription/utils/persistentSubscriptionSettings";

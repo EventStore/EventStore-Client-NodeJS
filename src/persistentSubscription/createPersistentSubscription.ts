@@ -3,20 +3,12 @@ import { CreateReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
 import { BaseOptions } from "../types";
-import {
-  debug,
-  convertToCommandError,
-  PersistentSubscriptionSettings,
-} from "../utils";
+import { debug, convertToCommandError } from "../utils";
 import { Client } from "../Client";
-import {
-  DISPATCH_TO_SINGLE,
-  END,
-  PINNED,
-  ROUND_ROBIN,
-  START,
-  UNLIMITED,
-} from "../constants";
+import { END, START } from "../constants";
+
+import { settingsToGRPC } from "./utils/settingsToGRPC";
+import { PersistentSubscriptionSettings } from "./utils/persistentSubscriptionSettings";
 
 declare module "../Client" {
   interface Client {
@@ -49,10 +41,10 @@ Client.prototype.createPersistentSubscription = async function (
   const req = new CreateReq();
   const options = new CreateReq.Options();
   const identifier = new StreamIdentifier();
-  const reqSettings = new CreateReq.Settings();
+  const reqSettings = settingsToGRPC(settings, CreateReq.Settings);
 
-  reqSettings.setResolveLinks(settings.resolveLinkTos);
-  switch (settings.fromRevision) {
+  // Add deprecated revision option for pre-21.10 support
+  switch (settings.startFrom) {
     case START: {
       reqSettings.setRevision(BigInt(0).toString(10));
       break;
@@ -63,44 +55,9 @@ Client.prototype.createPersistentSubscription = async function (
       break;
     }
     default: {
-      reqSettings.setRevision(settings.fromRevision.toString(10));
+      reqSettings.setRevision(settings.startFrom.toString(10));
       break;
     }
-  }
-  reqSettings.setExtraStatistics(settings.extraStats);
-  reqSettings.setMessageTimeoutMs(settings.messageTimeout);
-  reqSettings.setCheckpointAfterMs(settings.checkpointAfter);
-  reqSettings.setMaxRetryCount(settings.maxRetryCount);
-  reqSettings.setMinCheckpointCount(settings.minCheckpointCount);
-  reqSettings.setMaxCheckpointCount(settings.maxCheckpointCount);
-  switch (settings.maxSubscriberCount) {
-    case UNLIMITED: {
-      reqSettings.setMaxSubscriberCount(0);
-      break;
-    }
-    default: {
-      reqSettings.setMaxSubscriberCount(settings.maxSubscriberCount);
-      break;
-    }
-  }
-  reqSettings.setLiveBufferSize(settings.liveBufferSize);
-  reqSettings.setReadBatchSize(settings.readBatchSize);
-  reqSettings.setHistoryBufferSize(settings.historyBufferSize);
-
-  switch (settings.strategy) {
-    case DISPATCH_TO_SINGLE:
-      reqSettings.setNamedConsumerStrategy(
-        CreateReq.ConsumerStrategy.DISPATCHTOSINGLE
-      );
-      break;
-    case PINNED:
-      reqSettings.setNamedConsumerStrategy(CreateReq.ConsumerStrategy.PINNED);
-      break;
-    case ROUND_ROBIN:
-      reqSettings.setNamedConsumerStrategy(
-        CreateReq.ConsumerStrategy.ROUNDROBIN
-      );
-      break;
   }
 
   identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));

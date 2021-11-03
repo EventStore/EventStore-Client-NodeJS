@@ -11,6 +11,7 @@ import {
   ClientOptions as GRPCClientOptions,
   credentials as grpcCredentials,
   Metadata,
+  MethodDefinition,
 } from "@grpc/grpc-js";
 
 import type {
@@ -29,6 +30,7 @@ import {
 } from "../utils";
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
+import { ServerFeatures } from "./ServerFeatures";
 
 interface ClientOptions {
   /**
@@ -112,6 +114,7 @@ export class Client {
 
   #nextChannelSettings?: NextChannelSettings;
   #channel?: Promise<Channel>;
+  #serverFeatures?: Promise<ServerFeatures>;
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
     new Map();
 
@@ -302,13 +305,12 @@ export class Client {
     <Client extends GRPCClient, T extends Stream>(
       Client: GRPCClientConstructor<Client>,
       debugName: string,
-      creator: (client: Client) => T
+      creator: (client: Client) => T | Promise<T>
     ) =>
     async (): Promise<T> => {
       const client = await this.getGRPCClient(Client, debugName);
-      return creator(client).on("error", (err) =>
-        this.handleError(client, err)
-      );
+      const stream = await creator(client);
+      return stream.on("error", (err) => this.handleError(client, err));
     };
 
   // Internal handled execution
@@ -391,6 +393,7 @@ export class Client {
 
     this.#grpcClients.clear();
     this.#channel = undefined;
+    this.#serverFeatures = undefined;
     this.#nextChannelSettings = {
       failedEndpoint: {
         address,
@@ -489,6 +492,22 @@ export class Client {
 
     return [metadata, options];
   };
+
+  protected get capabilities(): Promise<ServerFeatures> {
+    if (!this.#serverFeatures) {
+      debug.command("Fetching server capabilities");
+      this.#serverFeatures = this.execute(
+        ...ServerFeatures.createServerFeatures
+      );
+    }
+    return this.#serverFeatures;
+  }
+
+  protected supports = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    method: MethodDefinition<any, any>,
+    feature?: string
+  ): Promise<boolean> => (await this.capabilities).supports(method, feature);
 
   protected get throwOnAppendFailure(): boolean {
     return this.#throwOnAppendFailure;
