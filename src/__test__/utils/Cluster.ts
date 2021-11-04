@@ -57,7 +57,8 @@ interface ClusterLocation {
 const createNodes = (
   internalIPs: ClusterLocation[],
   domain: string,
-  insecure: boolean
+  insecure: boolean,
+  extraOptions: string[]
 ) =>
   internalIPs.reduce(
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
@@ -86,6 +87,7 @@ const createNodes = (
                 `EVENTSTORE_CERTIFICATE_PRIVATE_KEY_FILE=/etc/eventstore/certs/node${i}/node.key`,
                 "EVENTSTORE_TRUSTED_ROOT_CERTIFICATES_PATH=/etc/eventstore/certs/ca",
               ]),
+          ...extraOptions,
         ],
         ports: [`${port}:2113`],
         networks: {
@@ -119,6 +121,7 @@ export class Cluster {
   private ready: Promise<void>;
   private inspected = false;
   private failed = false;
+  private extraOptions: string[] = [];
 
   constructor(count: number, insecure = false, id = uuid()) {
     this.id = id;
@@ -126,6 +129,11 @@ export class Cluster {
     this.insecure = insecure;
     this.ready = this.initialize();
   }
+
+  public setOption = (key: string, value: unknown): this => {
+    this.extraOptions.push(`${key}=${value}`);
+    return this;
+  };
 
   public get rootCertificate(): Buffer {
     if (this.insecure) {
@@ -279,7 +287,12 @@ export class Cluster {
           network_mode: "none",
         },
         ...createCertGen(this.locations, this.domain, this.insecure),
-        ...createNodes(this.locations, this.domain, this.insecure),
+        ...createNodes(
+          this.locations,
+          this.domain,
+          this.insecure,
+          this.extraOptions
+        ),
       },
       networks: {
         clusternetwork: {
