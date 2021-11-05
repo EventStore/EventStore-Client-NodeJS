@@ -305,12 +305,22 @@ export class Client {
     <Client extends GRPCClient, T extends Stream>(
       Client: GRPCClientConstructor<Client>,
       debugName: string,
-      creator: (client: Client) => T | Promise<T>
+      creator: (client: Client) => T | Promise<T>,
+      cache?: WeakMap<Client, T>
     ) =>
     async (): Promise<T> => {
       const client = await this.getGRPCClient(Client, debugName);
+
+      if (cache && cache.has(client)) return cache.get(client)!;
+
       const stream = await creator(client);
-      return stream.on("error", (err) => this.handleError(client, err));
+
+      cache?.set(client, stream);
+
+      return stream.on("error", (err) => {
+        cache?.delete(client);
+        this.handleError(client, err);
+      });
     };
 
   // Internal handled execution
