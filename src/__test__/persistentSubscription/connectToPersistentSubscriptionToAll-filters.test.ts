@@ -18,7 +18,7 @@ import {
   eventTypeFilter,
 } from "@eventstore/db-client";
 
-describe("connectToPersistentSubscriptionToAll (filters)", () => {
+describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   const supported = matchServerVersion`>=21.10`;
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
@@ -74,7 +74,8 @@ describe("connectToPersistentSubscriptionToAll (filters)", () => {
           { filter }
         );
 
-        const ps$all = client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+        const ps$all =
+          client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
         for await (const event of ps$all) {
           doSomething(event);
@@ -128,7 +129,8 @@ describe("connectToPersistentSubscriptionToAll (filters)", () => {
           { filter }
         );
 
-        const ps$all = client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+        const ps$all =
+          client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
         for await (const event of ps$all) {
           doSomething(event);
@@ -169,7 +171,7 @@ describe("connectToPersistentSubscriptionToAll (filters)", () => {
         finishEvent(FINISH_TEST),
       ]);
 
-      const ps$all = client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+      const ps$all = client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
       for await (const event of ps$all) {
         doSomething(event);

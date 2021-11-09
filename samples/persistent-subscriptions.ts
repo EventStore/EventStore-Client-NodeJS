@@ -85,7 +85,7 @@ describe("[sample] persistent-subscriptions", () => {
     );
 
     // region subscribe-to-persistent-subscription-to-stream
-    const subscription = client.connectToPersistentSubscription<SomeEvent>(
+    const subscription = client.subscribeToPersistentSubscription<SomeEvent>(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -148,7 +148,7 @@ describe("[sample] persistent-subscriptions", () => {
 
       // region subscribe-to-persistent-subscription-to-all
       const subscription =
-        client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+        client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
       try {
         for await (const event of subscription) {
@@ -187,7 +187,7 @@ describe("[sample] persistent-subscriptions", () => {
     );
 
     // region subscribe-to-persistent-subscription-with-manual-acks
-    const subscription = client.connectToPersistentSubscription<SomeEvent>(
+    const subscription = client.subscribeToPersistentSubscription<SomeEvent>(
       STREAM_NAME,
       GROUP_NAME
     );

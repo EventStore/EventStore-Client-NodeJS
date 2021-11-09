@@ -28,7 +28,7 @@ import {
 
 const asyncPipeline = promisify(pipeline);
 
-describe("connectToPersistentSubscriptionToAll", () => {
+describe("subscribeToPersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
@@ -60,7 +60,8 @@ describe("connectToPersistentSubscriptionToAll", () => {
       const GROUP_NAME = "oh_no";
 
       try {
-        const ps$all = client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+        const ps$all =
+          client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
         for await (const event of ps$all) {
           expect(event).toBe("unreachable");
@@ -68,7 +69,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: connectToPersistentSubscriptionToAll requires server version 21.10 or higher.]`
+          `[Error: subscribeToPersistentSubscriptionToAll requires server version 21.10 or higher.]`
         );
       }
     });
@@ -109,7 +110,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
         });
 
         const subscription = client
-          .connectToPersistentSubscriptionToAll(GROUP_NAME)
+          .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
           .on("error", onError)
           .on("data", onEvent)
           .on("close", onClose)
@@ -167,7 +168,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
         });
 
         const subscription = client
-          .connectToPersistentSubscriptionToAll(GROUP_NAME)
+          .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
           .on("error", onError)
           .on("data", onEvent)
           .on("close", onClose)
@@ -216,7 +217,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
         });
 
         const subscription = client
-          .connectToPersistentSubscriptionToAll(GROUP_NAME)
+          .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
           .on("error", onError)
           .on("data", onEvent)
           .on("close", onClose)
@@ -307,7 +308,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
         });
 
         const subscription = client
-          .connectToPersistentSubscriptionToAll(GROUP_NAME)
+          .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
           .on("error", onError)
           .on("data", onEvent)
           .on("close", onClose)
@@ -356,7 +357,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
           );
 
           const subscription =
-            client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+            client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
           for await (const resolvedEvent of subscription) {
             doSomething(resolvedEvent);
@@ -406,7 +407,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
           );
 
           const subscription =
-            client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+            client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
           for await (const resolvedEvent of subscription) {
             if (!resolvedEvent.event) continue;
@@ -459,7 +460,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
           ]);
 
           const subscription =
-            client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+            client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
           for await (const resolvedEvent of subscription) {
             const { event } = resolvedEvent;
@@ -499,7 +500,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
         );
 
         const subscription =
-          client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+          client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
         const eventListenerOne = jest.fn();
         const eventListenerTwo = jest.fn();
@@ -553,7 +554,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
         ]);
 
         const subscription =
-          client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+          client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
         const acker = new (class extends Transform {
           _transform(
@@ -622,7 +623,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
       ]);
 
       const subscription =
-        client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+        client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
       for await (const resolvedEvent of subscription) {
         doSomething(resolvedEvent);
@@ -668,7 +669,7 @@ describe("connectToPersistentSubscriptionToAll", () => {
             })
           );
 
-          return client.connectToPersistentSubscriptionToAll(GROUP_NAME);
+          return client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
         } catch (error) {
           confirmThatErrorWasThrown(error);
 

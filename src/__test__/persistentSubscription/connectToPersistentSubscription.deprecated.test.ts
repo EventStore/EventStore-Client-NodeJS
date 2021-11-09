@@ -23,7 +23,7 @@ import {
 
 const asyncPipeline = promisify(pipeline);
 
-describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
+describe("subscribeToPersistentSubscription [deprecated ack / nack]", () => {
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
 
@@ -82,7 +82,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -135,7 +135,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -186,7 +186,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -264,7 +264,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -305,7 +305,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
           finishEvent(),
         ]);
 
-        const subscription = client.connectToPersistentSubscription(
+        const subscription = client.subscribeToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
@@ -349,7 +349,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
           finishEvent(),
         ]);
 
-        const subscription = client.connectToPersistentSubscription(
+        const subscription = client.subscribeToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
@@ -403,7 +403,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
           finishEvent(),
         ]);
 
-        const subscription = client.connectToPersistentSubscription(
+        const subscription = client.subscribeToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
@@ -441,7 +441,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         persistentSubscriptionSettingsFromDefaults({ startFrom: START })
       );
 
-      const subscription = client.connectToPersistentSubscription(
+      const subscription = client.subscribeToPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME
       );
@@ -499,7 +499,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
         }),
       ]);
 
-      const subscription = client.connectToPersistentSubscription(
+      const subscription = client.subscribeToPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME
       );
@@ -561,7 +561,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       finishEvent(),
     ]);
 
-    const subscription = client.connectToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscription(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -610,7 +610,10 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
           persistentSubscriptionSettingsFromDefaults({ startFrom: START })
         );
 
-        return client.connectToPersistentSubscription(STREAM_NAME, GROUP_NAME);
+        return client.subscribeToPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME
+        );
       } catch (error) {
         confirmThatErrorWasThrown(error);
 
@@ -694,7 +697,7 @@ describe("connectToPersistentSubscription [deprecated ack / nack]", () => {
       })
     );
 
-    const subscription = client.connectToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscription(
       SYSTEM_STREAM_NAME,
       GROUP_NAME
     );

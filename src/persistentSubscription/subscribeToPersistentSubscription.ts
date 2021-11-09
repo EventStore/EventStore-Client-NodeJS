@@ -10,7 +10,7 @@ import { debug, convertGrpcEvent } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
 
-export interface ConnectToPersistentSubscriptionOptions extends BaseOptions {
+export interface SubscribeToPersistentSubscriptionOptions extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
    * @default 10
@@ -26,16 +26,16 @@ declare module "../Client" {
      * @param group A group name.
      * @param options Connection options.
      */
-    connectToPersistentSubscription<E extends EventType = EventType>(
+    subscribeToPersistentSubscription<E extends EventType = EventType>(
       streamName: string,
       groupName: string,
-      options?: ConnectToPersistentSubscriptionOptions,
+      options?: SubscribeToPersistentSubscriptionOptions,
       duplexOptions?: DuplexOptions
     ): PersistentSubscription<E>;
   }
 }
 
-Client.prototype.connectToPersistentSubscription = function <
+Client.prototype.subscribeToPersistentSubscription = function <
   E extends EventType = EventType
 >(
   this: Client,
@@ -44,13 +44,13 @@ Client.prototype.connectToPersistentSubscription = function <
   {
     bufferSize = 10,
     ...baseOptions
-  }: ConnectToPersistentSubscriptionOptions = {},
+  }: SubscribeToPersistentSubscriptionOptions = {},
   duplexOptions: DuplexOptions = {}
 ): PersistentSubscription<E> {
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
       PersistentSubscriptionsClient,
-      "connectToPersistentSubscription",
+      "subscribeToPersistentSubscription",
       (client) => {
         const req = new ReadReq();
         const options = new ReadReq.Options();
@@ -67,7 +67,7 @@ Client.prototype.connectToPersistentSubscription = function <
         options.setUuidOption(uuidOption);
         req.setOptions(options);
 
-        debug.command("connectToPersistentSubscription: %O", {
+        debug.command("subscribeToPersistentSubscription: %O", {
           streamName,
           groupName,
           options: {
@@ -75,7 +75,7 @@ Client.prototype.connectToPersistentSubscription = function <
             ...baseOptions,
           },
         });
-        debug.command_grpc("connectToPersistentSubscription: %g", req);
+        debug.command_grpc("subscribeToPersistentSubscription: %g", req);
 
         const stream = client.read(
           ...this.callArguments(baseOptions, {
