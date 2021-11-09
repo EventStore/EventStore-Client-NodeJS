@@ -24,6 +24,11 @@ const streamCache = new WeakMap<
   ReturnType<StreamsClient["batchAppend"]>
 >();
 
+const promiseBank = new Map<
+  string,
+  [resolve: (r: AppendResult) => void, reject: (error: Error) => void]
+>();
+
 export const batchAppend = async function (
   this: Client,
   streamName: string,
@@ -40,72 +45,76 @@ export const batchAppend = async function (
     StreamsClient,
     "appendToStream",
     (client) =>
-      client.batchAppend(
-        ...this.callArguments(baseOptions, {
-          deadline: Infinity,
+      client
+        .batchAppend(
+          ...this.callArguments(baseOptions, {
+            deadline: Infinity,
+          })
+        )
+        .on("data", (resp: BatchAppendResp) => {
+          const resultingId = parseUUID(resp.getCorrelationId()!);
+          const [resolve, reject] = promiseBank.get(resultingId)!;
+
+          promiseBank.delete(resultingId);
+
+          if (resp.hasError()) {
+            const grpcError = resp.getError()!;
+
+            if (!this.throwOnAppendFailure) {
+              const wrongExpectedVersion =
+                unpackWrongExpectedVersion(grpcError);
+
+              if (wrongExpectedVersion) {
+                const nextExpectedRevision =
+                  wrongExpectedVersion.hasCurrentStreamRevision()
+                    ? BigInt(wrongExpectedVersion.hasCurrentStreamRevision())
+                    : BigInt(-1);
+
+                return resolve({
+                  success: false,
+                  nextExpectedRevision,
+                  position: undefined,
+                });
+              }
+            }
+
+            return reject(
+              unpackToCommandError(
+                grpcError,
+                Buffer.from(
+                  resp.getStreamIdentifier()!.getStreamName()
+                ).toString("utf8")
+              )
+            );
+          }
+
+          const success = resp.getSuccess()!;
+          const nextExpectedRevision = BigInt(success.getCurrentRevision());
+          const grpcPosition = success.getPosition();
+          const position = grpcPosition
+            ? {
+                commit: BigInt(grpcPosition.getCommitPosition()),
+                prepare: BigInt(grpcPosition.getPreparePosition()),
+              }
+            : undefined;
+
+          return resolve({
+            success: true,
+            nextExpectedRevision,
+            position,
+          });
         })
-      ),
+        .on("error", (error) => {
+          for (const [_, reject] of promiseBank.values()) {
+            reject(convertToCommandError(error));
+          }
+          promiseBank.clear();
+        }),
     streamCache
   )();
 
-  return new Promise((resolve, reject) => {
-    const detach = () => {
-      stream.off("data", handleData).off("error", handleError);
-    };
-
-    const handleData = (resp: BatchAppendResp) => {
-      const resultingId = parseUUID(resp.getCorrelationId());
-      if (correlationId !== resultingId) return;
-
-      detach();
-
-      if (resp.hasError()) {
-        const grpcError = resp.getError()!;
-
-        if (!this.throwOnAppendFailure) {
-          const wrongExpectedVersion = unpackWrongExpectedVersion(grpcError);
-
-          if (wrongExpectedVersion) {
-            const nextExpectedRevision =
-              wrongExpectedVersion.hasCurrentStreamRevision()
-                ? BigInt(wrongExpectedVersion.hasCurrentStreamRevision())
-                : BigInt(-1);
-
-            return resolve({
-              success: false,
-              nextExpectedRevision,
-              position: undefined,
-            });
-          }
-        }
-
-        return reject(unpackToCommandError(grpcError, streamName));
-      }
-
-      const success = resp.getSuccess()!;
-      const nextExpectedRevision = BigInt(success.getCurrentRevision());
-      const grpcPosition = success.getPosition();
-
-      const position = grpcPosition
-        ? {
-            commit: BigInt(grpcPosition.getCommitPosition()),
-            prepare: BigInt(grpcPosition.getPreparePosition()),
-          }
-        : undefined;
-
-      return resolve({
-        success: true,
-        nextExpectedRevision,
-        position,
-      });
-    };
-
-    const handleError = (error: Error) => {
-      detach();
-      return reject(convertToCommandError(error));
-    };
-
-    stream.on("data", handleData).on("error", handleError);
+  return new Promise((...batchPromise) => {
+    promiseBank.set(correlationId, batchPromise);
 
     const correlationUUID = createUUID(correlationId);
     const options = new BatchAppendReq.Options();
