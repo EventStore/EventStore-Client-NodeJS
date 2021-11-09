@@ -40,14 +40,14 @@ describe("deleteProjection", () => {
   test("delete the projection", async () => {
     const PROJECTION_NAME = "projection_to_delete_everything";
 
-    await client.createContinuousProjection(PROJECTION_NAME, projection);
+    await client.createProjection(PROJECTION_NAME, projection);
 
     const beforeDetails = await client.getProjectionStatistics(PROJECTION_NAME);
 
     expect(beforeDetails).toBeDefined();
     expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
-    await client.disableProjection(PROJECTION_NAME, { writeCheckpoint: true });
+    await client.disableProjection(PROJECTION_NAME);
 
     const disabledDetails = await client.getProjectionStatistics(
       PROJECTION_NAME
@@ -62,9 +62,7 @@ describe("deleteProjection", () => {
     if (disabledDetails.projectionStatus === ABORTED) {
       // before https://github.com/EventStore/EventStore/pull/2944
       // writeCheckpoint had to be false to stop the projection
-      await client.disableProjection(PROJECTION_NAME, {
-        writeCheckpoint: false,
-      });
+      await client.abortProjection(PROJECTION_NAME);
 
       const stoppedDetails = await client.getProjectionStatistics(
         PROJECTION_NAME
@@ -74,7 +72,10 @@ describe("deleteProjection", () => {
       expect(stoppedDetails.projectionStatus).toBe(STOPPED);
     }
 
-    await client.deleteProjection(PROJECTION_NAME);
+    await client.deleteProjection(PROJECTION_NAME, {
+      deleteCheckpointStream: true,
+      deleteStateStream: true,
+    });
 
     try {
       const afterDetails = await client.getProjectionStatistics(

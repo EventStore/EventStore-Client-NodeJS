@@ -16,46 +16,31 @@ interface ListProjectionsOptions extends BaseOptions {}
 declare module "../Client" {
   interface Client {
     /**
-     * Lists continuous projections.
+     * Lists projections.
      * @param options List projections options.
      */
-    listContinuousProjections(
-      options?: ListProjectionsOptions
-    ): Promise<ProjectionDetails[]>;
-
-    /**
-     * Lists one time projections.
-     * @param options List projections options.
-     */
-    listOneTimeProjections(
-      options?: ListProjectionsOptions
-    ): Promise<ProjectionDetails[]>;
-
-    /**
-     * Lists transient projections.
-     * @param options List projections options.
-     */
-    listTransientProjections(
+    listProjections(
       options?: ListProjectionsOptions
     ): Promise<ProjectionDetails[]>;
   }
 }
 
-const fetchAndTransformProjectionList = async function (
+Client.prototype.listProjections = async function (
   this: Client,
-  debugName: string,
-  baseOptions: ListProjectionsOptions,
-  options: StatisticsReq.Options
+  baseOptions: ListProjectionsOptions = {}
 ): Promise<ProjectionDetails[]> {
+  const options = new StatisticsReq.Options();
+  options.setContinuous(new Empty());
+
   const req = new StatisticsReq();
   req.setOptions(options);
 
-  debug.command("%s: %O", debugName, {
+  debug.command("%s: %O", "listProjections", {
     options: baseOptions,
   });
-  debug.command_grpc("%s: %g", debugName, req);
+  debug.command_grpc("%s: %g", "listProjections", req);
 
-  return this.execute(ProjectionsClient, debugName, (client) => {
+  return this.execute(ProjectionsClient, "listProjections", (client) => {
     const stream = client.statistics(req, ...this.callArguments(baseOptions));
 
     return new Promise((resolve, reject) => {
@@ -77,49 +62,4 @@ const fetchAndTransformProjectionList = async function (
       });
     });
   });
-};
-
-Client.prototype.listContinuousProjections = async function (
-  this: Client,
-  baseOptions: ListProjectionsOptions = {}
-): Promise<ProjectionDetails[]> {
-  const options = new StatisticsReq.Options();
-  options.setContinuous(new Empty());
-
-  return fetchAndTransformProjectionList.call(
-    this,
-    "listContinuousProjections",
-    baseOptions,
-    options
-  );
-};
-
-Client.prototype.listOneTimeProjections = async function (
-  this: Client,
-  baseOptions: ListProjectionsOptions = {}
-): Promise<ProjectionDetails[]> {
-  const options = new StatisticsReq.Options();
-  options.setOneTime(new Empty());
-
-  return fetchAndTransformProjectionList.call(
-    this,
-    "listOneTimeProjections",
-    baseOptions,
-    options
-  );
-};
-
-Client.prototype.listTransientProjections = async function (
-  this: Client,
-  baseOptions: ListProjectionsOptions = {}
-): Promise<ProjectionDetails[]> {
-  const options = new StatisticsReq.Options();
-  options.setTransient(new Empty());
-
-  return fetchAndTransformProjectionList.call(
-    this,
-    "listTransientProjections",
-    baseOptions,
-    options
-  );
 };

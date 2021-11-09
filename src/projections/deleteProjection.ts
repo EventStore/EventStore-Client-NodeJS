@@ -8,19 +8,19 @@ import { debug, convertToCommandError } from "../utils";
 export interface DeleteProjectionOptions extends BaseOptions {
   /**
    * Deletes emitted streams.
-   * @default true
+   * @default false
    */
   deleteEmittedStreams?: boolean;
 
   /**
    * Deletes state stream.
-   * @default true
+   * @default false
    */
   deleteStateStream?: boolean;
 
   /**
    * Deletes checkpoint stream.
-   * @default true
+   * @default false
    */
   deleteCheckpointStream?: boolean;
 }
@@ -43,9 +43,9 @@ Client.prototype.deleteProjection = async function (
   this: Client,
   projectionName: string,
   {
-    deleteEmittedStreams = true,
-    deleteStateStream = true,
-    deleteCheckpointStream = true,
+    deleteEmittedStreams = false,
+    deleteStateStream = false,
+    deleteCheckpointStream = false,
     ...baseOptions
   }: DeleteProjectionOptions = {}
 ): Promise<void> {

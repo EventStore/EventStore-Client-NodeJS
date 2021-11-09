@@ -2,7 +2,7 @@ import { createTestNode } from "@test-utils";
 
 import { EventStoreDBClient } from "@eventstore/db-client";
 
-describe("createContinuousProjection", () => {
+describe("createProjection", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -23,7 +23,7 @@ describe("createContinuousProjection", () => {
     const PROJECTION_NAME = "track and field";
 
     await expect(
-      client.createContinuousProjection(
+      client.createProjection(
         PROJECTION_NAME,
         `
         fromAll()
@@ -43,7 +43,7 @@ describe("createContinuousProjection", () => {
   test("do not track", async () => {
     const PROJECTION_NAME = "do not track";
     await expect(
-      client.createContinuousProjection(
+      client.createProjection(
         PROJECTION_NAME,
         `
         fromAll()

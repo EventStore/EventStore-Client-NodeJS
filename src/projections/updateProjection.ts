@@ -8,10 +8,11 @@ import { debug, convertToCommandError } from "../utils";
 
 export interface UpdateProjectionOptions extends BaseOptions {
   /**
-   * Enables tracking emitted streams.
+   * Enables emitting events from the projection.
+   * Passing `undefined` will leave emitEnabled at its current value.
    * @default undefined
    */
-  trackEmittedStreams?: boolean | undefined;
+  emitEnabled?: boolean;
 }
 
 declare module "../Client" {
@@ -34,7 +35,7 @@ Client.prototype.updateProjection = async function (
   this: Client,
   projectionName: string,
   query: string,
-  { trackEmittedStreams, ...baseOptions }: UpdateProjectionOptions = {}
+  { emitEnabled, ...baseOptions }: UpdateProjectionOptions = {}
 ): Promise<void> {
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
@@ -42,10 +43,10 @@ Client.prototype.updateProjection = async function (
   options.setName(projectionName);
   options.setQuery(query);
 
-  if (trackEmittedStreams == null) {
+  if (emitEnabled == null) {
     options.setNoEmitOptions(new Empty());
   } else {
-    options.setEmitEnabled(trackEmittedStreams);
+    options.setEmitEnabled(emitEnabled);
   }
 
   req.setOptions(options);
@@ -53,7 +54,7 @@ Client.prototype.updateProjection = async function (
   debug.command("updateProjection: %O", {
     projectionName,
     query,
-    options: { trackEmittedStreams, ...baseOptions },
+    options: { emitEnabled, ...baseOptions },
   });
   debug.command_grpc("updateProjection: %g", req);
 

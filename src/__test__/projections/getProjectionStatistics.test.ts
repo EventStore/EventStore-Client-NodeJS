@@ -1,11 +1,6 @@
 import { createTestNode } from "@test-utils";
 
-import {
-  CONTINUOUS,
-  EventStoreDBClient,
-  TRANSIENT,
-  UnknownError,
-} from "@eventstore/db-client";
+import { EventStoreDBClient, UnknownError } from "@eventstore/db-client";
 
 describe("getProjectionStatistics", () => {
   const node = createTestNode();
@@ -20,12 +15,7 @@ describe("getProjectionStatistics", () => {
     });
   `;
 
-  const continuousProjections = [
-    "continuous-1",
-    "continuous-2",
-    "continuous-3",
-  ];
-  const transientProjections = ["transient-1", "transient-2", "transient-3"];
+  const projections = ["projection-1", "projection-2", "projection-3"];
 
   beforeAll(async () => {
     await node.up();
@@ -35,12 +25,8 @@ describe("getProjectionStatistics", () => {
       { username: "admin", password: "changeit" }
     );
 
-    for (const name of continuousProjections) {
-      await client.createContinuousProjection(name, basicProjection);
-    }
-
-    for (const name of transientProjections) {
-      await client.createTransientProjection(name, basicProjection);
+    for (const name of projections) {
+      await client.createProjection(name, basicProjection);
     }
   });
 
@@ -49,22 +35,12 @@ describe("getProjectionStatistics", () => {
   });
 
   describe("gets Projection Statistics", () => {
-    test("continuous", async () => {
-      const REQUESTED_NAME = continuousProjections[2];
+    test("gets statistics", async () => {
+      const REQUESTED_NAME = projections[2];
 
       const details = await client.getProjectionStatistics(REQUESTED_NAME);
 
       expect(details).toBeDefined();
-      expect(details.mode).toBe(CONTINUOUS);
-      expect(details.name).toBe(REQUESTED_NAME);
-    });
-
-    test("transient", async () => {
-      const REQUESTED_NAME = transientProjections[1];
-      const details = await client.getProjectionStatistics(REQUESTED_NAME);
-
-      expect(details).toBeDefined();
-      expect(details.mode).toBe(TRANSIENT);
       expect(details.name).toBe(REQUESTED_NAME);
     });
 

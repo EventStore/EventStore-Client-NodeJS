@@ -1,4 +1,6 @@
-import { createTestNode } from "@test-utils";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
+import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
   ABORTED,
@@ -8,7 +10,7 @@ import {
   UnknownError,
 } from "@eventstore/db-client";
 
-describe("disableProjection", () => {
+describe("disable / abort", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -36,38 +38,11 @@ describe("disableProjection", () => {
     await node.down();
   });
 
-  describe("disables the projection", () => {
-    test("write a checkpoint", async () => {
-      const PROJECTION_NAME = "projection_to_disable_with_checkpoint";
+  describe("disableProjection", () => {
+    test("disables the projection", async () => {
+      const PROJECTION_NAME = "projection_to_disable";
 
-      await client.createContinuousProjection(PROJECTION_NAME, projection);
-
-      const beforeDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
-
-      expect(beforeDetails).toBeDefined();
-      expect(beforeDetails.projectionStatus).toBe(RUNNING);
-
-      await client.disableProjection(PROJECTION_NAME, {
-        writeCheckpoint: true,
-      });
-
-      const afterDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
-
-      expect(afterDetails).toBeDefined();
-
-      // Incorrect projection status was switched (ABORTED -> STOPPED) in
-      // https://github.com/EventStore/EventStore/pull/2944
-      expect([STOPPED, ABORTED]).toContain(afterDetails.projectionStatus);
-    });
-
-    test("do not write a checkpoint", async () => {
-      const PROJECTION_NAME = "projection_to_disable_without_checkpoint";
-
-      await client.createContinuousProjection(PROJECTION_NAME, projection);
+      await client.createProjection(PROJECTION_NAME, projection);
 
       const beforeDetails = await client.getProjectionStatistics(
         PROJECTION_NAME
@@ -76,9 +51,7 @@ describe("disableProjection", () => {
       expect(beforeDetails).toBeDefined();
       expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
-      await client.disableProjection(PROJECTION_NAME, {
-        writeCheckpoint: false,
-      });
+      await client.disableProjection(PROJECTION_NAME);
 
       const afterDetails = await client.getProjectionStatistics(
         PROJECTION_NAME
@@ -86,9 +59,13 @@ describe("disableProjection", () => {
 
       expect(afterDetails).toBeDefined();
 
-      // Incorrect projection status was fixed (STOPPED -> ABORTED) in
-      // https://github.com/EventStore/EventStore/pull/2944
-      expect([ABORTED, STOPPED]).toContain(afterDetails.projectionStatus);
+      if (matchServerVersion`>=21.10`) {
+        expect(afterDetails.projectionStatus).toBe(STOPPED);
+      } else {
+        // Incorrect projection status was switched (ABORTED -> STOPPED) in
+        // https://github.com/EventStore/EventStore/pull/2944
+        expect([STOPPED, ABORTED]).toContain(afterDetails.projectionStatus);
+      }
     });
   });
 
@@ -99,6 +76,47 @@ describe("disableProjection", () => {
       await expect(
         client.disableProjection(PROJECTION_NAME)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+    });
+  });
+
+  describe("abortProjection", () => {
+    test("aborts the projection", async () => {
+      const PROJECTION_NAME = "projection_to_abort";
+
+      await client.createProjection(PROJECTION_NAME, projection);
+
+      const beforeDetails = await client.getProjectionStatistics(
+        PROJECTION_NAME
+      );
+
+      expect(beforeDetails).toBeDefined();
+      expect(beforeDetails.projectionStatus).toBe(RUNNING);
+
+      await client.abortProjection(PROJECTION_NAME);
+
+      const afterDetails = await client.getProjectionStatistics(
+        PROJECTION_NAME
+      );
+
+      expect(afterDetails).toBeDefined();
+
+      if (matchServerVersion`>=21.10`) {
+        expect(afterDetails.projectionStatus).toBe(ABORTED);
+      } else {
+        // Incorrect projection status was switched (ABORTED -> STOPPED) in
+        // https://github.com/EventStore/EventStore/pull/2944
+        expect([STOPPED, ABORTED]).toContain(afterDetails.projectionStatus);
+      }
+    });
+
+    describe("errors", () => {
+      test("projection doesnt exist", async () => {
+        const PROJECTION_NAME = "doesnt exist";
+
+        await expect(
+          client.abortProjection(PROJECTION_NAME)
+        ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+      });
     });
   });
 });

@@ -1,55 +1,65 @@
 import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { CreateReq } from "../../generated/projections_pb";
-
 import { Client } from "../Client";
 import { BaseOptions } from "../types";
+
 import { debug, convertToCommandError } from "../utils";
 
-export interface CreateTransientProjectionOptions extends BaseOptions {}
+export interface CreateProjectionOptions extends BaseOptions {
+  /**
+   * Enables tracking emitted streams.
+   * @default false
+   */
+  trackEmittedStreams?: boolean;
+}
 
 declare module "../Client" {
   interface Client {
     /**
-     * Creates a transient projection.
+     * Creates a continuous projection.
      * @param projectionName The name of the projection.
      * @param query The query to run.
-     * @param options Transient projection options.
+     * @param options Projection options.
      */
-    createTransientProjection(
+    createProjection(
       projectionName: string,
       query: string,
-      options?: CreateTransientProjectionOptions
+      options?: CreateProjectionOptions
     ): Promise<void>;
   }
 }
 
-Client.prototype.createTransientProjection = async function (
+Client.prototype.createProjection = async function (
   this: Client,
   projectionName: string,
   query: string,
-  baseOptions: CreateTransientProjectionOptions = {}
+  { trackEmittedStreams = false, ...baseOptions }: CreateProjectionOptions = {}
 ): Promise<void> {
   const req = new CreateReq();
   const options = new CreateReq.Options();
-  const transient = new CreateReq.Options.Transient();
+  const continuous = new CreateReq.Options.Continuous();
 
-  transient.setName(projectionName);
+  continuous.setName(projectionName);
+  continuous.setTrackEmittedStreams(trackEmittedStreams);
 
-  options.setTransient(transient);
+  options.setContinuous(continuous);
   options.setQuery(query);
 
   req.setOptions(options);
 
-  debug.command("createTransientProjection: %O", {
+  debug.command("createProjection: %O", {
     projectionName,
     query,
-    options: baseOptions,
+    options: {
+      trackEmittedStreams,
+      ...baseOptions,
+    },
   });
-  debug.command_grpc("createTransientProjection: %g", req);
+  debug.command_grpc("createProjection: %g", req);
 
   return this.execute(
     ProjectionsClient,
-    "CreateTransientProjection",
+    "createProjection",
     (client) =>
       new Promise<void>((resolve, reject) => {
         client.create(req, ...this.callArguments(baseOptions), (error) => {

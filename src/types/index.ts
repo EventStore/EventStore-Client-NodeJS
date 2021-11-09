@@ -101,11 +101,6 @@ export interface AppendResult {
   position?: Position;
 }
 
-export type ProjectionMode =
-  | typeof constants.CONTINUOUS
-  | typeof constants.ONE_TIME
-  | typeof constants.TRANSIENT;
-
 export type ProjectionStatus =
   | typeof constants.CREATING
   | typeof constants.LOADING
@@ -193,11 +188,6 @@ export interface ProjectionDetails {
    * The projection Name.
    */
   name: string;
-
-  /**
-   * The projection Mode.
-   */
-  mode: ProjectionMode;
 
   /**
    * The projection Position.

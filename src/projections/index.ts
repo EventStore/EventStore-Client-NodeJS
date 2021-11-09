@@ -1,6 +1,4 @@
-export * from "./createContinuousProjection";
-export * from "./createOneTimeProjection";
-export * from "./createTransientProjection";
+export * from "./createProjection";
 export * from "./deleteProjection";
 export * from "./disableProjection";
 export * from "./enableProjection";

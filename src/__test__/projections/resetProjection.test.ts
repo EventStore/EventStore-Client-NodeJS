@@ -30,18 +30,10 @@ describe("resetProjection", () => {
     await node.down();
   });
 
-  describe("resets the projection", () => {
-    test("write a checkpoint", async () => {
-      const PROJECTION_NAME = "projection_to_disable_with_checkpoint";
-      await client.createContinuousProjection(PROJECTION_NAME, projection);
-      await client.resetProjection(PROJECTION_NAME, { writeCheckpoint: true });
-    });
-
-    test("do not write a checkpoint", async () => {
-      const PROJECTION_NAME = "projection_to_disable_without_checkpoint";
-      await client.createContinuousProjection(PROJECTION_NAME, projection);
-      await client.resetProjection(PROJECTION_NAME, { writeCheckpoint: false });
-    });
+  test("resets the projection", async () => {
+    const PROJECTION_NAME = "projection_to_disable";
+    await client.createProjection(PROJECTION_NAME, projection);
+    await client.resetProjection(PROJECTION_NAME);
   });
 
   describe("errors", () => {

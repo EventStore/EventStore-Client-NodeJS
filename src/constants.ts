@@ -28,11 +28,6 @@ export const RETRY = "retry";
 export const SKIP = "skip";
 export const STOP = "stop";
 
-// projection modes
-export const CONTINUOUS = "Continuous";
-export const ONE_TIME = "OneTime";
-export const TRANSIENT = "Transient";
-
 // projection status
 export const CREATING = "Creating";
 export const LOADING = "Loading";

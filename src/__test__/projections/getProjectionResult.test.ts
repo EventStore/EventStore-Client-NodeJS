@@ -45,7 +45,7 @@ describe("getProjectionResult", () => {
 
       const count = 12;
 
-      await client.createContinuousProjection(PROJECTION_NAME, projection);
+      await client.createProjection(PROJECTION_NAME, projection);
 
       await client.appendToStream(
         STREAM_NAME,
@@ -109,7 +109,7 @@ describe("getProjectionResult", () => {
         });
       };
 
-      await client.createContinuousProjection(
+      await client.createProjection(
         PARTITION_PROJECTION_NAME,
         paritionProjection,
         { trackEmittedStreams: true }
@@ -121,10 +121,7 @@ describe("getProjectionResult", () => {
 
       expect(partitionStats.projectionStatus).toBe(RUNNING);
 
-      await client.createContinuousProjection(
-        COUNTER_PROJECTION_NAME,
-        countProjection
-      );
+      await client.createProjection(COUNTER_PROJECTION_NAME, countProjection);
 
       const counterStats = await client.getProjectionStatistics(
         COUNTER_PROJECTION_NAME

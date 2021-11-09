@@ -2,7 +2,6 @@ import { StatisticsResp } from "../../generated/projections_pb";
 import {
   ProcessingStatus,
   ProjectionDetails,
-  ProjectionMode,
   ProjectionStatus,
 } from "../types";
 
@@ -25,7 +24,6 @@ export const convertGrpcProjectionDetails = (
     processingStatus: processingStatus as ProcessingStatus,
     stateReason: details.statereason,
     name: details.name,
-    mode: details.mode as ProjectionMode,
     position: details.position,
     progress: details.progress,
     lastCheckpoint: details.lastcheckpoint,
