@@ -11,6 +11,7 @@ module.exports = {
     "no-constant-condition": ["error", { checkLoops: false }],
     // prettier decides
     "no-unexpected-multiline": ["off"],
+    "no-async-promise-executor": ["off"],
     "@typescript-eslint/no-empty-interface": [
       "error",
       {

@@ -11,6 +11,7 @@ import {
   createUUID,
   parseUUID,
   convertToCommandError,
+  backpressuredWrite,
 } from "../../utils";
 
 import {
@@ -113,7 +114,7 @@ export const batchAppend = async function (
     streamCache
   )();
 
-  return new Promise((...batchPromise) => {
+  return new Promise(async (...batchPromise) => {
     promiseBank.set(correlationId, batchPromise);
 
     const correlationUUID = createUUID(correlationId);
@@ -147,7 +148,7 @@ export const batchAppend = async function (
       batchAppendSize
     )) {
       debug.command_grpc("batchAppend: %g", batch);
-      stream.write(batch);
+      await backpressuredWrite(stream, batch);
     }
   });
 };

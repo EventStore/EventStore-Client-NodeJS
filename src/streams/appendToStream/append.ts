@@ -6,6 +6,7 @@ import { Client } from "../../Client";
 import { AppendResult, AppendExpectedRevision, EventData } from "../../types";
 
 import {
+  backpressuredWrite,
   convertToCommandError,
   createUUID,
   debug,
@@ -58,13 +59,11 @@ export const append = async function (
     StreamsClient,
     "appendToStream",
     (client) =>
-      new Promise<AppendResult>((resolve, reject) => {
+      new Promise<AppendResult>(async (resolve, reject) => {
         const sink = client.append(
           ...this.callArguments(baseOptions),
           (error, resp) => {
             if (error != null) {
-              // Make sure we don't write to the stream after it has closed.
-              sink.destroy();
               return reject(convertToCommandError(error));
             }
 
@@ -132,7 +131,9 @@ export const append = async function (
           }
         );
 
-        sink.write(header);
+        sink.on("error", (err) => reject(err));
+
+        await backpressuredWrite(sink, header);
 
         for (const event of events) {
           const entry = new AppendReq();
@@ -166,7 +167,8 @@ export const append = async function (
           }
 
           entry.setProposedMessage(message);
-          sink.write(entry);
+
+          await backpressuredWrite(sink, entry);
         }
 
         sink.end();

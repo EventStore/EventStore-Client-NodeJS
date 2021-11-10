@@ -1,3 +1,4 @@
+export * from "./backpressuredWrite";
 export * from "./CommandError";
 export * from "./convertGrpcEvent";
 export * from "./convertGrpcProjectionDetails";
