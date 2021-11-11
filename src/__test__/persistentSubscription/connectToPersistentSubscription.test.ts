@@ -23,7 +23,7 @@ import {
 
 const asyncPipeline = promisify(pipeline);
 
-describe("connectToPersistentSubscription", () => {
+describe("subscribeToPersistentSubscription", () => {
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
 
@@ -82,7 +82,7 @@ describe("connectToPersistentSubscription", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -134,7 +134,7 @@ describe("connectToPersistentSubscription", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -184,7 +184,7 @@ describe("connectToPersistentSubscription", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -265,7 +265,7 @@ describe("connectToPersistentSubscription", () => {
       });
 
       const subscription = client
-        .connectToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+        .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
@@ -309,7 +309,7 @@ describe("connectToPersistentSubscription", () => {
           finishEvent(),
         ]);
 
-        const subscription = client.connectToPersistentSubscription(
+        const subscription = client.subscribeToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
@@ -353,7 +353,7 @@ describe("connectToPersistentSubscription", () => {
           finishEvent(),
         ]);
 
-        const subscription = client.connectToPersistentSubscription(
+        const subscription = client.subscribeToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
@@ -409,7 +409,7 @@ describe("connectToPersistentSubscription", () => {
           finishEvent(),
         ]);
 
-        const subscription = client.connectToPersistentSubscription(
+        const subscription = client.subscribeToPersistentSubscription(
           STREAM_NAME,
           GROUP_NAME
         );
@@ -450,7 +450,7 @@ describe("connectToPersistentSubscription", () => {
         })
       );
 
-      const subscription = client.connectToPersistentSubscription(
+      const subscription = client.subscribeToPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME
       );
@@ -509,7 +509,7 @@ describe("connectToPersistentSubscription", () => {
         }),
       ]);
 
-      const subscription = client.connectToPersistentSubscription(
+      const subscription = client.subscribeToPersistentSubscription(
         STREAM_NAME,
         GROUP_NAME
       );
@@ -571,7 +571,7 @@ describe("connectToPersistentSubscription", () => {
       finishEvent(),
     ]);
 
-    const subscription = client.connectToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscription(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -620,7 +620,10 @@ describe("connectToPersistentSubscription", () => {
           })
         );
 
-        return client.connectToPersistentSubscription(STREAM_NAME, GROUP_NAME);
+        return client.subscribeToPersistentSubscription(
+          STREAM_NAME,
+          GROUP_NAME
+        );
       } catch (error) {
         confirmThatErrorWasThrown(error);
 
@@ -701,7 +704,7 @@ describe("connectToPersistentSubscription", () => {
       })
     );
 
-    const subscription = client.connectToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscription(
       SYSTEM_STREAM_NAME,
       GROUP_NAME
     );

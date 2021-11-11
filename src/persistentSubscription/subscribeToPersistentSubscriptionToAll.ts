@@ -13,7 +13,7 @@ import { convertAllStreamGrpcEvent, debug, UnsupportedError } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
 
-export interface ConnectToPersistentSubscriptionToAllOptions
+export interface SubscribeToPersistentSubscriptionToAllOptions
   extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
@@ -30,33 +30,33 @@ declare module "../Client" {
      * @param group A group name.
      * @param options Connection options.
      */
-    connectToPersistentSubscriptionToAll(
+    subscribeToPersistentSubscriptionToAll(
       groupName: string,
-      options?: ConnectToPersistentSubscriptionToAllOptions,
+      options?: SubscribeToPersistentSubscriptionToAllOptions,
       duplexOptions?: DuplexOptions
     ): PersistentSubscriptionToAll;
   }
 }
 
-Client.prototype.connectToPersistentSubscriptionToAll = function (
+Client.prototype.subscribeToPersistentSubscriptionToAll = function (
   this: Client,
   groupName: string,
   {
     bufferSize = 10,
     ...baseOptions
-  }: ConnectToPersistentSubscriptionToAllOptions = {},
+  }: SubscribeToPersistentSubscriptionToAllOptions = {},
   duplexOptions: DuplexOptions = {}
 ): PersistentSubscriptionToAll {
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
       PersistentSubscriptionsClient,
-      "connectToPersistentSubscription",
+      "subscribeToPersistentSubscriptionToAll",
       async (client) => {
         if (
           !(await this.supports(PersistentSubscriptionsService.read, "all"))
         ) {
           throw new UnsupportedError(
-            "connectToPersistentSubscriptionToAll",
+            "subscribeToPersistentSubscriptionToAll",
             "21.10"
           );
         }
@@ -72,14 +72,14 @@ Client.prototype.connectToPersistentSubscriptionToAll = function (
         options.setUuidOption(uuidOption);
         req.setOptions(options);
 
-        debug.command("connectToPersistentSubscriptionToAll: %O", {
+        debug.command("subscribeToPersistentSubscriptionToAll: %O", {
           groupName,
           options: {
             bufferSize,
             ...baseOptions,
           },
         });
-        debug.command_grpc("connectToPersistentSubscriptionToAll: %g", req);
+        debug.command_grpc("subscribeToPersistentSubscriptionToAll: %g", req);
 
         const stream = client.read(
           ...this.callArguments(baseOptions, {
