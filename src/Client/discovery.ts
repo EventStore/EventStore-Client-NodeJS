@@ -6,7 +6,7 @@ import { Empty } from "../../generated/shared_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
 
 import { EndPoint, NodePreference } from "../types";
-import { FOLLOWER, LEADER, RANDOM, READ_ONLY_REPLICA } from "../constants";
+import { FOLLOWER, LEADER, READ_ONLY_REPLICA } from "../constants";
 import { debug, parseUUID } from "../utils";
 import { DNSClusterOptions, GossipClusterOptions } from ".";
 
@@ -23,6 +23,7 @@ export const discoverEndpoint = async (
     discoveryInterval = 100,
     maxDiscoverAttempts = 10,
     gossipTimeout = 5,
+    nodePreference = LEADER,
     ...settings
   }: DNSClusterOptions | GossipClusterOptions,
   credentials: ChannelCredentials,
@@ -59,8 +60,7 @@ export const discoverEndpoint = async (
             credentials,
             createDeadline(gossipTimeout)
           );
-          const preference = settings.nodePreference ?? RANDOM;
-          const endpoint = determineBestNode(preference, members);
+          const endpoint = determineBestNode(nodePreference, members);
           if (endpoint) return Promise.resolve(endpoint);
         } catch (error) {
           debug.connection(
