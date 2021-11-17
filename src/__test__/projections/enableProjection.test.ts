@@ -1,4 +1,6 @@
-import { createTestNode } from "@test-utils";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
+import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
   ABORTED,
@@ -39,7 +41,7 @@ describe("enableProjection", () => {
   test("enables the projection", async () => {
     const PROJECTION_NAME = "projection_to_enable";
 
-    await client.createContinuousProjection(PROJECTION_NAME, projection);
+    await client.createProjection(PROJECTION_NAME, projection);
 
     await client.disableProjection(PROJECTION_NAME);
 
@@ -47,9 +49,13 @@ describe("enableProjection", () => {
 
     expect(beforeDetails).toBeDefined();
 
-    // Incorrect projection status was switched (ABORTED -> STOPPED) in
-    // https://github.com/EventStore/EventStore/pull/2944
-    expect([STOPPED, ABORTED]).toContain(beforeDetails.projectionStatus);
+    if (matchServerVersion`>=21.10`) {
+      expect(beforeDetails.projectionStatus).toBe(STOPPED);
+    } else {
+      // Incorrect projection status was switched (ABORTED -> STOPPED) in
+      // https://github.com/EventStore/EventStore/pull/2944
+      expect([STOPPED, ABORTED]).toContain(beforeDetails.projectionStatus);
+    }
 
     await client.enableProjection(PROJECTION_NAME);
 

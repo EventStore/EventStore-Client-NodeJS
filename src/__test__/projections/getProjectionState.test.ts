@@ -37,7 +37,7 @@ describe("getProjectionState", () => {
     const PROJECTION_NAME = "count events";
     const count = 3;
 
-    await client.createContinuousProjection(PROJECTION_NAME, projection);
+    await client.createProjection(PROJECTION_NAME, projection);
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents(count, EVENT_TYPE));
 

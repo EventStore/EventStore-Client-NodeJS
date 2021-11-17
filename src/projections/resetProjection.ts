@@ -5,13 +5,7 @@ import { Client } from "../Client";
 import { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
-export interface ResetProjectionOptions extends BaseOptions {
-  /**
-   * If a checkpoint should be written.
-   * @default true
-   */
-  writeCheckpoint?: boolean;
-}
+export interface ResetProjectionOptions extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
@@ -31,19 +25,18 @@ declare module "../Client" {
 Client.prototype.resetProjection = async function (
   this: Client,
   projectionName: string,
-  { writeCheckpoint = true, ...baseOptions }: ResetProjectionOptions = {}
+  baseOptions: ResetProjectionOptions = {}
 ): Promise<void> {
   const req = new ResetReq();
   const options = new ResetReq.Options();
 
   options.setName(projectionName);
-  options.setWriteCheckpoint(writeCheckpoint);
 
   req.setOptions(options);
 
   debug.command("resetProjection: %O", {
     projectionName,
-    options: { writeCheckpoint, ...baseOptions },
+    options: baseOptions,
   });
   debug.command_grpc("resetProjection: %g", req);
 

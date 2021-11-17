@@ -151,8 +151,8 @@ describe("readStream", () => {
 
         await client.enableProjection("$by_category");
 
-        await client.createContinuousProjection(
-          "continuous",
+        await client.createProjection(
+          "projection",
           `fromStream("${FROM_STREAM_NAME}").when({
             $any: function(state, ev) {
               linkTo('a-' + ev.data.some, ev)

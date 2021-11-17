@@ -17,7 +17,7 @@ describe("[sample] projection-management", () => {
     retry = 5
   ): Promise<string> => {
     try {
-      await client.createContinuousProjection(name, "fromAll().when()");
+      await client.createProjection(name, "fromAll().when()");
     } catch (error) {
       if (retry > 0) return createTestProjection(name, retry - 1);
       throw error;
@@ -79,12 +79,12 @@ describe("[sample] projection-management", () => {
             })
             .outputState();
     `;
-    await client.createContinuousProjection(name, projection);
+    await client.createProjection(name, projection);
     // endregion CreateContinuous
 
     // region CreateContinuous_Conflict
     try {
-      await client.createContinuousProjection(name, projection);
+      await client.createProjection(name, projection);
     } catch (err) {
       if (!isCommandError(err) || !err.message.includes("Conflict")) throw err;
       console.log(`${name} already exists`);
@@ -138,14 +138,12 @@ describe("[sample] projection-management", () => {
     const name = await createTestProjection();
 
     // before https://github.com/EventStore/EventStore/pull/2944
-    // writeCheckpoint had to be false to stop the projection
-    await client.disableProjection(name, {
-      writeCheckpoint: false,
-    });
+    // writeCheckpoint had to be false (abort) to stop the projection
+    await client.abortProjection(name);
 
     // region Delete
     // A projection must be disabled to allow it to be deleted.
-    await client.disableProjection(name, { writeCheckpoint: true });
+    await client.disableProjection(name);
 
     // The projection can now be deleted
     await client.deleteProjection(name);
@@ -170,10 +168,7 @@ describe("[sample] projection-management", () => {
     const name = await createTestProjection();
 
     // region Abort
-    await client.disableProjection(name, {
-      // not writing the checkpoint will abort the projection
-      writeCheckpoint: false,
-    });
+    await client.abortProjection(name);
     // endregion Abort
   });
 
@@ -182,9 +177,7 @@ describe("[sample] projection-management", () => {
     const projectionName = "projection that does not exist";
 
     try {
-      await client.disableProjection(projectionName, {
-        writeCheckpoint: false,
-      });
+      await client.abortProjection(projectionName);
     } catch (err) {
       if (!isCommandError(err) || !err.message.includes("NotFound")) throw err;
       console.log(`${projectionName} does not exist`);
@@ -232,7 +225,7 @@ describe("[sample] projection-management", () => {
             })
             .outputState();
     `;
-    await client.createContinuousProjection(name, "fromAll().when()");
+    await client.createProjection(name, "fromAll().when()");
     await client.updateProjection(name, projection);
     // endregion Update
   });
@@ -259,16 +252,10 @@ describe("[sample] projection-management", () => {
 
   test("ListContinuous", async () => {
     // region ListContinuous
-    const projections = await client.listContinuousProjections();
+    const projections = await client.listProjections();
 
-    for (const {
-      name,
-      status,
-      checkpointStatus,
-      mode,
-      progress,
-    } of projections) {
-      console.log(name, status, checkpointStatus, mode, progress);
+    for (const { name, status, checkpointStatus, progress } of projections) {
+      console.log(name, status, checkpointStatus, progress);
     }
     // endregion ListContinuous
   });
@@ -283,7 +270,6 @@ describe("[sample] projection-management", () => {
       projection.name,
       projection.status,
       projection.checkpointStatus,
-      projection.mode,
       projection.progress
     );
     // endregion GetStatus
@@ -312,7 +298,7 @@ describe("[sample] projection-management", () => {
             .outputState();
     `;
 
-    await client.createContinuousProjection(name, projection);
+    await client.createProjection(name, projection);
 
     // Give it some time to count event
     await delay(500);
@@ -345,7 +331,7 @@ describe("[sample] projection-management", () => {
             .outputState();
     `;
 
-    await client.createContinuousProjection(name, projection);
+    await client.createProjection(name, projection);
 
     // Give it some time to have a result.
     await delay(500);
