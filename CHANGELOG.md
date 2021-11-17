@@ -1,3 +1,227 @@
+## [v3.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.1...v3.0.0) (WIP)
+
+### Breaking changes
+
+#### EventStoreDBClient
+
+- The default node preference is now `LEADER`. This applies when connecting with a connection string, and via the client constructor. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/96dfcfc3ae5536df1d7cf22b173c00044120f25f)
+
+#### Persistent Subscriptions
+
+The persistent subscriptions api has been updated to align with other eventstore clients, and the new persistent subscriptions to all api.
+
+- `connectToPersistentSubscription` has been renamed to `subscribeToPersistentSubscription` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5266130e5794dfa3505160a7a61165b15ed32e9c)
+- `persistentSubscriptionSettings` keys and default values have been changed. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/f7d5f7db012000ef82dac0e8b6fbcd4d598d812a)
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th> 
+      <th>Default</th> 
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <pre lang="diff">
+- fromRevision
++ startFrom</pre>
+      </td>
+      <td>
+        <pre lang="diff">
+- START
++ END</pre>
+      </td>
+      <td>The exclusive position in the stream or transaction file the subscription should start from.</td>
+    </tr>
+    <tr>
+      <td>
+        <pre lang="diff">
+- extraStats
++ extraStatistics</pre>
+      </td>
+      <td><code>false</code></td>
+      <td>Enables if depth latency statistics should be tracked on subscription.</td>
+    </tr>
+    <tr>
+      <td>
+        <pre lang="diff">
+- checkpointAfter
++ checkPointAfter</pre>
+      </td>
+      <td><code>2_000</code></td>
+      <td>The amount of time to try checkpoint after in milliseconds.</td>
+    </tr>
+    <tr>
+      <td>
+        <pre lang="diff">
+- minCheckpointCount
++ checkPointLowerBound</pre>
+      </td>
+      <td><code>10</code></td>
+      <td>The minimum number of messages to process before a checkpoint may be written.</td>
+    </tr>
+    <tr>
+      <td>
+        <pre lang="diff">
+- maxCheckpointCount
++ checkPointUpperBound</pre>
+      </td>
+      <td><code>1_000</code></td>
+      <td>The maximum number of messages to process before a checkpoint may be written.</td>
+    </tr>
+    <tr>
+      <td><code>maxSubscriberCount</code></td>
+      <td>
+        <pre lang="diff">
+- UNLIMITED
++ UNBOUNDED</pre>
+      </td>
+      <td>The maximum number of subscribers allowed..</td>
+    </tr>
+    <tr>
+      <td>
+        <pre lang="diff">
+- strategy
++ consumerStrategyName</pre>
+      </td>
+      <td><code>ROUND_ROBIN</code></td>
+      <td>The strategy to use for distributing events to client consumers.</td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center">-- The following options remain unchanged. --</td>
+    </tr>
+    <tr>
+      <td><code>resolveLinkTos</code></td>
+      <td><code>false</code></td>
+      <td>Also return events targeted by the links.</td>
+    </tr>
+    <tr>
+      <td><code>messageTimeout</code></td>
+      <td><code>30_000</code></td>
+      <td>The amount of time in milliseconds after which a message should be considered to be timeout and retried.</td>
+    </tr>
+    <tr>
+      <td><code>maxRetryCount</code></td>
+      <td><code>10</code></td>
+      <td>The maximum number of retries (due to timeout) before a message is considered to be parked.</td>
+    </tr>
+    <tr>
+      <td><code>liveBufferSize</code></td>
+      <td><code>500</code></td>
+      <td>The size of the buffer listening to live messages as they happen.</td>
+    </tr>
+    <tr>
+      <td><code>readBatchSize</code></td>
+      <td><code>20</code></td>
+      <td>The number of events read at a time when paging in history.</td>
+    </tr>
+    <tr>
+      <td><code>historyBufferSize</code></td>
+      <td><code>500</code></td>
+      <td>The number of events to cache when paging through history.</td>
+    </tr>
+  </tbody>
+</table>
+
+- Constant `UNLIMITED` has been renamed to `UNBOUNDED`. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/f7d5f7db012000ef82dac0e8b6fbcd4d598d812a)
+
+#### Projections
+
+The projections api has been completely overhauled, removing one time and transient projections. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d9fc4d1b40b7e65195f12dcc387c9028eceafcdc)
+
+- `createProjection`:
+  - `createContinuousProjection` has been renamed to `createProjection`.
+  - `createOneTimeProjection` has been removed.
+  - `createTransientProjection` has been removed.
+- `listProjections`:
+  - `listContinuousProjections` has been renamed to `listProjections`.
+  - `listOneTimeProjections` has been removed.
+  - `listTransientProjections` has been removed.
+  - `mode` has been removed from `ProjectionDetails`, only `CONTINUOUS` projections are returned.
+  - `CONTINUOUS` `ONE_TIME` & `TRANSIENT` constants have been removed.
+- `resetProjection`:
+  - `writeCheckpoint` option has been removed. (It previously had no effect ).
+- `disableProjection`:
+  - `writeCheckpoint` option has been removed. Use `abortProjection` if wishing to set this to `false`.
+- `abortProjection`:
+  - `abortProjection` method has been added.
+- `deleteProjection`:
+  - `deleteEmittedStreams` option now defaults to `false`.
+  - `deleteStateStream` option now defaults to `false`.
+  - `deleteCheckpointStream` option now defaults to `false`.
+
+### Features
+
+#### Persistent Subscriptions to all
+
+The client now supports persistent subscriptions to the all stream, for server version `21.10` and greater.
+
+- Added `createPersistentSubscriptionToAll` method. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/f7d5f7db012000ef82dac0e8b6fbcd4d598d812a)
+
+```ts
+const groupName = "my_persistent_subscription";
+const settings = persistentSubscriptionToAllSettingsFromDefaults({
+  // start from the beginning of the all stream
+  startFrom: START,
+});
+// Filter only events with type matching regex
+const filter = eventTypeFilter({
+  regex: "^[0-9]*_regex_filter_eventType_[A-z]*$",
+});
+
+// Create a persistent subscrition to the all stream
+await client.createPersistentSubscriptionToAll(groupName, settings, { filter });
+```
+
+- Added `subscribeToPersistentSubscriptionToAll` method. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/bf660ef1d82c02cf577de439db2c5b5529399c0a)
+
+```ts
+// Connect to the created persistent subscription to all stream
+const psToAll = client.subscribeToPersistentSubscriptionToAll(groupName);
+
+for await (const event of psToAll) {
+  doSomethingWithEvent(event);
+  // Acknowledge that the event has been handled
+  await psToAll.ack(event);
+}
+```
+
+- Added `updatePersistentSubscriptionToAll` method. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/75aa261f6307408383b20a98447782ca77ce75c7)
+
+```ts
+const updatedSettings =  persistentSubscriptionToAllSettingsFromDefaults({
+  // Ensure that our previous settings are persisted
+  ...settings,
+  // Enable extra statistics
+  extraStatistics: true,
+});
+
+// Update the persistent subscription to use new settings.
+await client.updatePersistentSubscriptionToAll(groupName, updatedSettings)l
+
+```
+
+- Added `deletePersistentSubscriptionToAll` method. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/cf4fa765282fe00cc3195acafcb75421fcd5f733)
+
+```ts
+// delete the unwanted persistent subscription to all
+await client.deletePersistentSubscriptionToAll(groupName);
+```
+
+#### Other features
+
+- When connected to server version `21.10` and greater, the client will now send appended events over a single duplex stream, resulting in much faster append times. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/4e764c1d3ca20627553ad16588a259d63283a31b)
+- Client now internally checks if the server supports an api before sending a request. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/4122f6f17756c7a4deff0288bfb8af9adfca4aee)
+
+### Bug Fixes
+
+- Fixed incorrect log message where http was logged as https and vice versa. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/b056749de06338675fab25af35edb47f1042446d)
+- `updateProjection` option `trackEmittedStreams` name has been corrected as `emitEnabled`. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d9fc4d1b40b7e65195f12dcc387c9028eceafcdc)
+
+- Prevent `WRITE_AFTER_END` from still being uncaught in rare cases. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/a1ba19a86fc440ceedc06b75a968ec1901f6eeec)
+
 ## [v2.1.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.0...v2.1.1) (2021-09-29)
 
 ### Bug Fixes
