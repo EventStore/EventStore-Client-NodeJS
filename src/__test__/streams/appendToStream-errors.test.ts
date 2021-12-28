@@ -137,13 +137,18 @@ describe("appendToStream - errors", () => {
       const STREAM_NAME = `${prefix}_timeout`;
 
       try {
-        for (let i = 0; i < 10; i++) {
-          await timeoutClient.appendToStream(
-            STREAM_NAME,
-            jsonTestEvents(30_000),
-            {
-              credentials,
-            }
+        // try increasingly hard to hit the timeout
+        for (let i = 5; i < 20; i += 5) {
+          await Promise.all(
+            Array.from({ length: i }, () =>
+              timeoutClient.appendToStream(
+                STREAM_NAME,
+                jsonTestEvents(30_000),
+                {
+                  credentials,
+                }
+              )
+            )
           );
         }
 
