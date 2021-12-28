@@ -17,6 +17,14 @@ const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const CPExec = promisify(cp.exec);
 
+type LogLevel = "Warning" | "Debug" | "Information" | "Error" | "Verbose";
+interface LogLevels {
+  Default: LogLevel;
+  System: LogLevel;
+  Microsoft: LogLevel;
+  Grpc: LogLevel;
+}
+
 const nodeList = (count: number, ipStub: string) =>
   Promise.all<ClusterLocation>(
     Array.from({ length: count }, async (_, i) => ({
@@ -79,6 +87,7 @@ const createNodes = (
           `EVENTSTORE_CLUSTER_SIZE=${internalIPs.length}`,
           "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true",
           "EVENTSTORE_RUN_PROJECTIONS=All",
+          "EVENTSTORE_LOG_CONFIG=/etc/eventstore/config/logconfig.json",
           "EVENTSTORE_DISCOVER_VIA_DNS=false",
           ...(insecure
             ? [`EVENTSTORE_INSECURE=true`]
@@ -97,9 +106,14 @@ const createNodes = (
         },
         restart: "unless-stopped",
         ...(insecure
-          ? {}
+          ? {
+              volumes: ["./config:/etc/eventstore/config"],
+            }
           : {
-              volumes: ["./certs:/etc/eventstore/certs"],
+              volumes: [
+                "./certs:/etc/eventstore/certs",
+                "./config:/etc/eventstore/config",
+              ],
               depends_on: ["cert-gen"],
             }),
       },
@@ -121,6 +135,12 @@ export class Cluster {
   private ready: Promise<void>;
   private inspected = false;
   private failed = false;
+  private logLevel: LogLevels = {
+    Default: "Debug",
+    System: "Warning",
+    Microsoft: "Warning",
+    Grpc: "Warning",
+  };
   private extraOptions: string[] = [];
 
   constructor(count: number, insecure = false, id = uuid()) {
@@ -129,6 +149,11 @@ export class Cluster {
     this.insecure = insecure;
     this.ready = this.initialize();
   }
+
+  public setLogLevel = (levels: Partial<LogLevels>): this => {
+    this.logLevel = { ...this.logLevel, ...levels };
+    return this;
+  };
 
   public setOption = (key: string, value: unknown): this => {
     this.extraOptions.push(`${key}=${value}`);
@@ -311,6 +336,15 @@ export class Cluster {
     };
 
     await mkdir(this.path(), { recursive: true });
+    await mkdir(this.path("./config"), { recursive: true });
+    await writeFile(
+      this.path("./config/logconfig.json"),
+      JSON.stringify({
+        Logging: {
+          LogLevel: this.logLevel,
+        },
+      })
+    );
     await writeFile(this.path("./docker-compose.yaml"), stringify(config));
   };
 
