@@ -148,7 +148,7 @@ describe("getProjectionState", () => {
 
       const state = await client.getProjectionState<CatCounter>(
         COUNTER_PROJECTION_NAME,
-        { fromPartition: `cat-${MR_WHISKERS}` }
+        { partition: `cat-${MR_WHISKERS}` }
       );
 
       expect(state).toMatchObject({

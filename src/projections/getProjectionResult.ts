@@ -7,9 +7,9 @@ import { debug, convertToCommandError } from "../utils";
 
 export interface GetProjectionResultOptions extends BaseOptions {
   /**
-   * Sets partition.
+   * Gets result from partition.
    */
-  fromPartition?: string;
+  partition?: string;
 }
 
 declare module "../Client" {
@@ -29,19 +29,19 @@ declare module "../Client" {
 Client.prototype.getProjectionResult = async function <T = unknown>(
   this: Client,
   projectionName: string,
-  { fromPartition = "", ...baseOptions }: GetProjectionResultOptions = {}
+  { partition = "", ...baseOptions }: GetProjectionResultOptions = {}
 ): Promise<T> {
   const req = new ResultReq();
   const options = new ResultReq.Options();
   options.setName(projectionName);
-  options.setPartition(fromPartition);
+  options.setPartition(partition);
 
   req.setOptions(options);
 
   debug.command("getProjectionResult: %O", {
     projectionName,
     options: {
-      fromPartition,
+      partition,
       ...baseOptions,
     },
   });
