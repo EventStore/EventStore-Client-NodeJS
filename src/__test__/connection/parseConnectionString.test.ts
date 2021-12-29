@@ -18,7 +18,7 @@ describe("connection string parser", () => {
     });
   });
 
-  describe("Should warn on unknown keys", () => {
+  describe("Should warn on unknown and unsupported keys", () => {
     test.each(warning)("%s", (connectionString, expected) => {
       const warnSpy = jest.spyOn(console, "warn").mockImplementation();
       const parsed = parseConnectionString(connectionString);
