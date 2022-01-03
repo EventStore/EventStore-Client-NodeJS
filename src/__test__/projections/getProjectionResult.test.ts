@@ -148,7 +148,7 @@ describe("getProjectionResult", () => {
 
       const result = await client.getProjectionResult<CatCounter>(
         COUNTER_PROJECTION_NAME,
-        { fromPartition: `cat-${MR_WHISKERS}` }
+        { partition: `cat-${MR_WHISKERS}` }
       );
 
       expect(result).toMatchObject({

@@ -5,7 +5,12 @@ import { Client } from "../Client";
 import { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
-export interface GetProjectionStateOptions extends BaseOptions {}
+export interface GetProjectionStateOptions extends BaseOptions {
+  /**
+   * Gets state from partition.
+   */
+  partition?: string;
+}
 
 declare module "../Client" {
   interface Client {
@@ -24,16 +29,21 @@ declare module "../Client" {
 Client.prototype.getProjectionState = async function <T = unknown>(
   this: Client,
   projectionName: string,
-  baseOptions: GetProjectionStateOptions = {}
+  { partition = "", ...baseOptions }: GetProjectionStateOptions = {}
 ): Promise<T> {
   const req = new StateReq();
   const options = new StateReq.Options();
   options.setName(projectionName);
+  options.setPartition(partition);
+
   req.setOptions(options);
 
   debug.command("getProjectionState: %O", {
     projectionName,
-    options: baseOptions,
+    options: {
+      partition,
+      ...baseOptions,
+    },
   });
   debug.command_grpc("getProjectionState: %g", req);
 
