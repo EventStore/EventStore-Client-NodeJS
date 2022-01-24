@@ -14,7 +14,7 @@ import {
   StreamDeletedError,
   MaxAppendSizeExceededError,
   AccessDeniedError,
-  TimeoutError,
+  DeadlineExceededError,
 } from "@eventstore/db-client";
 
 describe("appendToStream - errors", () => {
@@ -133,28 +133,21 @@ describe("appendToStream - errors", () => {
       }
     });
 
-    optionalTest(supported)("Timeout", async () => {
-      const STREAM_NAME = `${prefix}_timeout`;
+    optionalTest(supported)("DeadlineExceeded", async () => {
+      const STREAM_NAME = `${prefix}_deadline`;
 
       try {
-        // try increasingly hard to hit the timeout
-        for (let i = 5; i < 20; i += 5) {
-          await Promise.all(
-            Array.from({ length: i }, () =>
-              timeoutClient.appendToStream(
-                STREAM_NAME,
-                jsonTestEvents(30_000),
-                {
-                  credentials,
-                }
-              )
-            )
-          );
-        }
-
+        await timeoutClient.appendToStream(
+          STREAM_NAME,
+          jsonTestEvents(30_000),
+          {
+            credentials,
+            deadline: 1,
+          }
+        );
         expect("this point").toBe("unreachable");
       } catch (error) {
-        expect(error).toBeInstanceOf(TimeoutError);
+        expect(error).toBeInstanceOf(DeadlineExceededError);
       }
     });
 

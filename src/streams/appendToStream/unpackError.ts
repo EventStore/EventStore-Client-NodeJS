@@ -11,7 +11,7 @@ import {
   AccessDeniedError,
   MaxAppendSizeExceededError,
   StreamDeletedError,
-  TimeoutError,
+  DeadlineExceededError,
   UnknownError,
   WrongExpectedVersionError,
 } from "../..";
@@ -56,7 +56,7 @@ export const unpackToCommandError = (grpcError: Status, streamName: string) => {
     case "event_store.client.Timeout": {
       const unpacked = details.unpack(Timeout.deserializeBinary, typename);
       if (!unpacked) break;
-      return new TimeoutError();
+      return new DeadlineExceededError();
     }
     case "event_store.client.Unknown": {
       const unpacked = details.unpack(Unknown.deserializeBinary, typename);

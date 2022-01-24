@@ -4,6 +4,7 @@ import { debug } from "../utils";
 
 export interface QueryOptions {
   maxDiscoverAttempts?: number;
+  defaultDeadline?: number;
   discoveryInterval?: number;
   gossipTimeout?: number;
   nodePreference?: NodePreference;
@@ -53,6 +54,7 @@ const mapToNodePreference = caseMap<NodePreference>({
 
 const mapToQueryOption = caseMap<keyof QueryOptions>({
   maxDiscoverAttempts: "maxDiscoverAttempts",
+  defaultDeadline: "defaultDeadline",
   discoveryInterval: "discoveryInterval",
   gossipTimeout: "gossipTimeout",
   nodePreference: "nodePreference",
@@ -287,6 +289,7 @@ const verifyKeyValuePair = (
       return { key, value };
     }
     case "maxDiscoverAttempts":
+    case "defaultDeadline":
     case "discoveryInterval":
     case "gossipTimeout":
     case "keepAliveInterval":

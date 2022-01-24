@@ -7,6 +7,7 @@ import { CurrentRevision, EndPoint, AppendExpectedRevision } from "../types";
 
 export enum ErrorType {
   TIMEOUT = "timeout",
+  DEADLINE_EXCEEDED = "deadline-exceeded",
   UNAVAILABLE = "unavailable",
   UNKNOWN = "unknown",
   NOT_LEADER = "not-leader",
@@ -49,6 +50,10 @@ abstract class CommandErrorBase extends Error {
 
 export class TimeoutError extends CommandErrorBase {
   public type: ErrorType.TIMEOUT = ErrorType.TIMEOUT;
+}
+
+export class DeadlineExceededError extends CommandErrorBase {
+  public type: ErrorType.DEADLINE_EXCEEDED = ErrorType.DEADLINE_EXCEEDED;
 }
 
 export class UnavailableError extends CommandErrorBase {
@@ -370,6 +375,7 @@ export type CommandError =
   | LoginNotFoundError
   | LoginConflictError
   | TimeoutError
+  | DeadlineExceededError
   | UnavailableError
   | UnknownError
   | UnsupportedError;
@@ -419,6 +425,8 @@ export const convertToCommandError = (error: Error): CommandError | Error => {
   switch (error.code) {
     case StatusCode.ABORTED:
       return new TimeoutError(error);
+    case StatusCode.DEADLINE_EXCEEDED:
+      return new DeadlineExceededError(error);
     case StatusCode.UNAVAILABLE:
       return new UnavailableError(error);
     case StatusCode.UNAUTHENTICATED:
