@@ -343,15 +343,15 @@ export class LoginConflictError extends CommandErrorBase {
 
 export class UnsupportedError extends CommandErrorBase {
   public type: ErrorType.UNSUPPORTED = ErrorType.UNSUPPORTED;
-  public method: string;
+  public feature: string;
   public minimumVersion: string;
 
-  constructor(method: string, minimumVersion: string) {
+  constructor(feature: string, minimumVersion: string) {
     super(
       undefined,
-      `${method} requires server version ${minimumVersion} or higher.`
+      `${feature} requires server version ${minimumVersion} or higher.`
     );
-    this.method = method;
+    this.feature = feature;
     this.minimumVersion = minimumVersion;
   }
 }
