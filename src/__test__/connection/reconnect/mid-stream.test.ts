@@ -57,7 +57,8 @@ describe("reconnect", () => {
 
     const reconnectedAppend = await client.appendToStream(
       "my_stream",
-      jsonEvent({ type: "reconnect-append", data: { message: "test" } }), // batch append triggers reconnect as soon as stream drops, so we need to force regular append
+      jsonEvent({ type: "reconnect-append", data: { message: "test" } }),
+      // batch append triggers reconnect as soon as stream drops, so we need to force regular append
       { credentials: { username: "admin", password: "changeit" } }
     );
     expect(reconnectedAppend).toBeDefined();

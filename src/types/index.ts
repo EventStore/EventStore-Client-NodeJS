@@ -22,6 +22,10 @@ export interface BaseOptions {
    * Command requires a leader node.
    */
   requiresLeader?: boolean;
+  /**
+   * An optional length of time (in milliseconds) to override the default deadline.
+   */
+  deadline?: number;
 }
 
 /**

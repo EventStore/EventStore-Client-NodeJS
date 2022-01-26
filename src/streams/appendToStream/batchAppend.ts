@@ -19,6 +19,7 @@ import {
   unpackWrongExpectedVersion,
 } from "./unpackError";
 import { InternalAppendToStreamOptions } from ".";
+import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 
 const streamCache = new WeakMap<
   StreamsClient,
@@ -122,6 +123,11 @@ export const batchAppend = async function (
     const identifier = new StreamIdentifier();
     identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
     options.setStreamIdentifier(identifier);
+    const deadline = Timestamp.fromDate(
+      this.createDeadline(baseOptions.deadline)
+    );
+    options.setDeadline(deadline);
+
     switch (expectedRevision) {
       case "any": {
         options.setAny(new Empty());
