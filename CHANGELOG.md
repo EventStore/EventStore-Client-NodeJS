@@ -151,6 +151,16 @@ The projections api has been completely overhauled, removing one time and transi
   - `deleteEmittedStreams` option now defaults to `false`.
   - `deleteStateStream` option now defaults to `false`.
   - `deleteCheckpointStream` option now defaults to `false`.
+- `getProjectionState` & `getProjectionResult`:
+  - `fromPartition` option has been renamed to `partition` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/e7685d108ce77db63a2a9ce5480de41d4f8f5c1e)
+
+#### Client Deadlines
+
+The client now supports setting deadlines for non-streaming gRPC requests, with a default deadline of 10 seconds (formerly `Infinity`). [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/cdc673eee3eff97d0170a8250f251bb1712c7106)
+
+- `defaultDeadline` global setting has been added to the constructor options and connection string.
+- `deadline` option has been added to all methods, to allow setting the deadline per request.
+- `DeadlineExceeded` error will now be thrown if a deadline has been exceeded.
 
 ### Features
 
@@ -214,6 +224,8 @@ await client.deletePersistentSubscriptionToAll(groupName);
 
 - When connected to server version `21.10` and greater, the client will now send appended events over a single duplex stream, resulting in much faster append times. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/4e764c1d3ca20627553ad16588a259d63283a31b)
 - Client now internally checks if the server supports an api before sending a request. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/4122f6f17756c7a4deff0288bfb8af9adfca4aee)
+- `fromPartition` option added to `getProjectionState` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/a440c4558934e16cd43acb0cf49bc580a588659c)
+- Improved `tlsVerifyCert` not supported message [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/6c6a67b2569fa54802af553f7b2b35114b91edb4)
 
 ### Bug Fixes
 
