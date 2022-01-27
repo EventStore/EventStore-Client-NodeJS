@@ -453,22 +453,10 @@ export interface ReadableSubscription<E> extends Readable {
 
 export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
   /**
-   * @deprecated Please pass the entire resolved event.
-   */
-  ack(...ids: string[]): Promise<void>;
-  /**
    * Acknowledge events as handled.
    */
   ack(...events: E[]): Promise<void>;
 
-  /**
-   * @deprecated Please pass the entire resolved event.
-   */
-  nack(
-    action: PersistentAction,
-    reason: string,
-    ...ids: string[]
-  ): Promise<void>;
   /**
    * "Not Acknowledge" the event.
    */

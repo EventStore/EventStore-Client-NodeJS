@@ -64,14 +64,13 @@ export class PersistentSubscriptionImpl<E>
     next();
   }
 
-  public async ack(...events: Array<string | ResolvedEvent>): Promise<void> {
+  public async ack(...events: ResolvedEvent[]): Promise<void> {
     try {
       const req = new ReadReq();
       const ack = new ReadReq.Ack();
 
       for (const event of events) {
-        const id =
-          typeof event === "string" ? event : event.link?.id ?? event.event?.id;
+        const id = event.link?.id ?? event.event?.id;
 
         // A resolved event will always have either link or event (or both), so this should to be unreachable
         if (!id) throw new Error("Attempted to ack an event with no id");
@@ -92,7 +91,7 @@ export class PersistentSubscriptionImpl<E>
   public async nack(
     action: PersistentAction,
     reason: string,
-    ...events: Array<string | ResolvedEvent>
+    ...events: ResolvedEvent[]
   ): Promise<void> {
     try {
       const req = new ReadReq();
@@ -114,8 +113,7 @@ export class PersistentSubscriptionImpl<E>
       }
 
       for (const event of events) {
-        const id =
-          typeof event === "string" ? event : event.link?.id ?? event.event?.id;
+        const id = event.link?.id ?? event.event?.id;
 
         // A resolved event will always have either link or event (or both), so this should to be unreachable
         if (!id) throw new Error("Attempted to ack an event with no id");
