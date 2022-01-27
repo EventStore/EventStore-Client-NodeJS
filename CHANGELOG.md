@@ -1,4 +1,4 @@
-## [v3.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.1...v3.0.0) (WIP)
+## [v3.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.1...v3.0.0) (2022-01-27)
 
 ### Breaking changes
 
@@ -231,8 +231,11 @@ await client.deletePersistentSubscriptionToAll(groupName);
 
 - Fixed incorrect log message where http was logged as https and vice versa. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/b056749de06338675fab25af35edb47f1042446d)
 - `updateProjection` option `trackEmittedStreams` name has been corrected as `emitEnabled`. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d9fc4d1b40b7e65195f12dcc387c9028eceafcdc)
-
 - Prevent `WRITE_AFTER_END` from still being uncaught in rare cases. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/a1ba19a86fc440ceedc06b75a968ec1901f6eeec)
+
+### Removal of Deprecated Apis
+
+- Remove ack and nack via event id [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5193cd6f1877e3c1e1cc19529754b2a43fb6df27)
 
 ## [v2.1.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.0...v2.1.1) (2021-09-29)
 
