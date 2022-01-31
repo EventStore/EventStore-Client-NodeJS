@@ -4,6 +4,7 @@ export * from "./disableProjection";
 export * from "./enableProjection";
 export * from "./getProjectionResult";
 export * from "./getProjectionState";
+export * from "./getProjectionStatus";
 export * from "./getProjectionStatistics";
 export * from "./listProjections";
 export * from "./resetProjection";
