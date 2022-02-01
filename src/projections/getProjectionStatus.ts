@@ -10,14 +10,30 @@ import {
   convertGrpcProjectionDetails,
 } from "../utils";
 
-export interface GetProjectionStatisticsOptions extends BaseOptions {}
+export interface GetProjectionStatusOptions extends BaseOptions {}
+
+/**
+ * @deprecated Renamed to `GetProjectionStatusOptions`.
+ */
+export type GetProjectionStatisticsOptions = GetProjectionStatusOptions;
 
 declare module "../Client" {
   interface Client {
     /**
-     * Gets the result of a projection.
+     * Gets the current status of a projection.
      * @param projectionName The name of the projection.
-     * @param options Get state options.
+     * @param options Get status options.
+     */
+    getProjectionStatus(
+      projectionName: string,
+      options?: GetProjectionStatusOptions
+    ): Promise<ProjectionDetails>;
+
+    /**
+     * Gets the current status of a projection.
+     * @param projectionName The name of the projection.
+     * @param options Get statistics options.
+     * @deprecated Renamed to `getProjectionStatus`.
      */
     getProjectionStatistics(
       projectionName: string,
@@ -26,10 +42,10 @@ declare module "../Client" {
   }
 }
 
-Client.prototype.getProjectionStatistics = async function (
+Client.prototype.getProjectionStatus = async function (
   this: Client,
   projectionName: string,
-  baseOptions: GetProjectionStatisticsOptions = {}
+  baseOptions: GetProjectionStatusOptions = {}
 ): Promise<ProjectionDetails> {
   const req = new StatisticsReq();
   const options = new StatisticsReq.Options();
@@ -67,3 +83,5 @@ Client.prototype.getProjectionStatistics = async function (
     }
   );
 };
+
+Client.prototype.getProjectionStatistics = Client.prototype.getProjectionStatus;
