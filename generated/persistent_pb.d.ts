@@ -743,6 +743,8 @@ export namespace CreateReq {
         clearCheckpointAfterMs(): void;
         getCheckpointAfterMs(): number;
         setCheckpointAfterMs(value: number): Settings;
+        getConsumerStrategy(): string;
+        setConsumerStrategy(value: string): Settings;
 
         getMessageTimeoutCase(): Settings.MessageTimeoutCase;
         getCheckpointAfterCase(): Settings.CheckpointAfterCase;
@@ -774,6 +776,7 @@ export namespace CreateReq {
             messageTimeoutMs: number,
             checkpointAfterTicks: string,
             checkpointAfterMs: number,
+            consumerStrategy: string,
         }
 
         export enum MessageTimeoutCase {
@@ -1207,5 +1210,493 @@ export class DeleteResp extends jspb.Message {
 
 export namespace DeleteResp {
     export type AsObject = {
+    }
+}
+
+export class GetInfoReq extends jspb.Message { 
+
+    hasOptions(): boolean;
+    clearOptions(): void;
+    getOptions(): GetInfoReq.Options | undefined;
+    setOptions(value?: GetInfoReq.Options): GetInfoReq;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetInfoReq.AsObject;
+    static toObject(includeInstance: boolean, msg: GetInfoReq): GetInfoReq.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetInfoReq, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetInfoReq;
+    static deserializeBinaryFromReader(message: GetInfoReq, reader: jspb.BinaryReader): GetInfoReq;
+}
+
+export namespace GetInfoReq {
+    export type AsObject = {
+        options?: GetInfoReq.Options.AsObject,
+    }
+
+
+    export class Options extends jspb.Message { 
+
+        hasStreamIdentifier(): boolean;
+        clearStreamIdentifier(): void;
+        getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+        setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
+
+        hasAll(): boolean;
+        clearAll(): void;
+        getAll(): shared_pb.Empty | undefined;
+        setAll(value?: shared_pb.Empty): Options;
+        getGroupName(): string;
+        setGroupName(value: string): Options;
+
+        getStreamOptionCase(): Options.StreamOptionCase;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Options.AsObject;
+        static toObject(includeInstance: boolean, msg: Options): Options.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: Options, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Options;
+        static deserializeBinaryFromReader(message: Options, reader: jspb.BinaryReader): Options;
+    }
+
+    export namespace Options {
+        export type AsObject = {
+            streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
+            all?: shared_pb.Empty.AsObject,
+            groupName: string,
+        }
+
+        export enum StreamOptionCase {
+            STREAM_OPTION_NOT_SET = 0,
+            STREAM_IDENTIFIER = 1,
+            ALL = 2,
+        }
+
+    }
+
+}
+
+export class GetInfoResp extends jspb.Message { 
+
+    hasSubscriptionInfo(): boolean;
+    clearSubscriptionInfo(): void;
+    getSubscriptionInfo(): SubscriptionInfo | undefined;
+    setSubscriptionInfo(value?: SubscriptionInfo): GetInfoResp;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetInfoResp.AsObject;
+    static toObject(includeInstance: boolean, msg: GetInfoResp): GetInfoResp.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetInfoResp, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetInfoResp;
+    static deserializeBinaryFromReader(message: GetInfoResp, reader: jspb.BinaryReader): GetInfoResp;
+}
+
+export namespace GetInfoResp {
+    export type AsObject = {
+        subscriptionInfo?: SubscriptionInfo.AsObject,
+    }
+}
+
+export class SubscriptionInfo extends jspb.Message { 
+    getEventSource(): string;
+    setEventSource(value: string): SubscriptionInfo;
+    getGroupName(): string;
+    setGroupName(value: string): SubscriptionInfo;
+    getStatus(): string;
+    setStatus(value: string): SubscriptionInfo;
+    clearConnectionsList(): void;
+    getConnectionsList(): Array<SubscriptionInfo.ConnectionInfo>;
+    setConnectionsList(value: Array<SubscriptionInfo.ConnectionInfo>): SubscriptionInfo;
+    addConnections(value?: SubscriptionInfo.ConnectionInfo, index?: number): SubscriptionInfo.ConnectionInfo;
+    getAveragePerSecond(): number;
+    setAveragePerSecond(value: number): SubscriptionInfo;
+    getTotalItems(): string;
+    setTotalItems(value: string): SubscriptionInfo;
+    getCountSinceLastMeasurement(): string;
+    setCountSinceLastMeasurement(value: string): SubscriptionInfo;
+    getLastCheckpointedEventPosition(): string;
+    setLastCheckpointedEventPosition(value: string): SubscriptionInfo;
+    getLastKnownEventPosition(): string;
+    setLastKnownEventPosition(value: string): SubscriptionInfo;
+    getResolveLinkTos(): boolean;
+    setResolveLinkTos(value: boolean): SubscriptionInfo;
+    getStartFrom(): string;
+    setStartFrom(value: string): SubscriptionInfo;
+    getMessageTimeoutMilliseconds(): number;
+    setMessageTimeoutMilliseconds(value: number): SubscriptionInfo;
+    getExtraStatistics(): boolean;
+    setExtraStatistics(value: boolean): SubscriptionInfo;
+    getMaxRetryCount(): number;
+    setMaxRetryCount(value: number): SubscriptionInfo;
+    getLiveBufferSize(): number;
+    setLiveBufferSize(value: number): SubscriptionInfo;
+    getBufferSize(): number;
+    setBufferSize(value: number): SubscriptionInfo;
+    getReadBatchSize(): number;
+    setReadBatchSize(value: number): SubscriptionInfo;
+    getCheckPointAfterMilliseconds(): number;
+    setCheckPointAfterMilliseconds(value: number): SubscriptionInfo;
+    getMinCheckPointCount(): number;
+    setMinCheckPointCount(value: number): SubscriptionInfo;
+    getMaxCheckPointCount(): number;
+    setMaxCheckPointCount(value: number): SubscriptionInfo;
+    getReadBufferCount(): number;
+    setReadBufferCount(value: number): SubscriptionInfo;
+    getLiveBufferCount(): string;
+    setLiveBufferCount(value: string): SubscriptionInfo;
+    getRetryBufferCount(): number;
+    setRetryBufferCount(value: number): SubscriptionInfo;
+    getTotalInFlightMessages(): number;
+    setTotalInFlightMessages(value: number): SubscriptionInfo;
+    getOutstandingMessagesCount(): number;
+    setOutstandingMessagesCount(value: number): SubscriptionInfo;
+    getNamedConsumerStrategy(): string;
+    setNamedConsumerStrategy(value: string): SubscriptionInfo;
+    getMaxSubscriberCount(): number;
+    setMaxSubscriberCount(value: number): SubscriptionInfo;
+    getParkedMessageCount(): string;
+    setParkedMessageCount(value: string): SubscriptionInfo;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SubscriptionInfo.AsObject;
+    static toObject(includeInstance: boolean, msg: SubscriptionInfo): SubscriptionInfo.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SubscriptionInfo, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SubscriptionInfo;
+    static deserializeBinaryFromReader(message: SubscriptionInfo, reader: jspb.BinaryReader): SubscriptionInfo;
+}
+
+export namespace SubscriptionInfo {
+    export type AsObject = {
+        eventSource: string,
+        groupName: string,
+        status: string,
+        connectionsList: Array<SubscriptionInfo.ConnectionInfo.AsObject>,
+        averagePerSecond: number,
+        totalItems: string,
+        countSinceLastMeasurement: string,
+        lastCheckpointedEventPosition: string,
+        lastKnownEventPosition: string,
+        resolveLinkTos: boolean,
+        startFrom: string,
+        messageTimeoutMilliseconds: number,
+        extraStatistics: boolean,
+        maxRetryCount: number,
+        liveBufferSize: number,
+        bufferSize: number,
+        readBatchSize: number,
+        checkPointAfterMilliseconds: number,
+        minCheckPointCount: number,
+        maxCheckPointCount: number,
+        readBufferCount: number,
+        liveBufferCount: string,
+        retryBufferCount: number,
+        totalInFlightMessages: number,
+        outstandingMessagesCount: number,
+        namedConsumerStrategy: string,
+        maxSubscriberCount: number,
+        parkedMessageCount: string,
+    }
+
+
+    export class ConnectionInfo extends jspb.Message { 
+        getFrom(): string;
+        setFrom(value: string): ConnectionInfo;
+        getUsername(): string;
+        setUsername(value: string): ConnectionInfo;
+        getAverageItemsPerSecond(): number;
+        setAverageItemsPerSecond(value: number): ConnectionInfo;
+        getTotalItems(): string;
+        setTotalItems(value: string): ConnectionInfo;
+        getCountSinceLastMeasurement(): string;
+        setCountSinceLastMeasurement(value: string): ConnectionInfo;
+        clearObservedMeasurementsList(): void;
+        getObservedMeasurementsList(): Array<SubscriptionInfo.Measurement>;
+        setObservedMeasurementsList(value: Array<SubscriptionInfo.Measurement>): ConnectionInfo;
+        addObservedMeasurements(value?: SubscriptionInfo.Measurement, index?: number): SubscriptionInfo.Measurement;
+        getAvailableSlots(): number;
+        setAvailableSlots(value: number): ConnectionInfo;
+        getInFlightMessages(): number;
+        setInFlightMessages(value: number): ConnectionInfo;
+        getConnectionName(): string;
+        setConnectionName(value: string): ConnectionInfo;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): ConnectionInfo.AsObject;
+        static toObject(includeInstance: boolean, msg: ConnectionInfo): ConnectionInfo.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: ConnectionInfo, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): ConnectionInfo;
+        static deserializeBinaryFromReader(message: ConnectionInfo, reader: jspb.BinaryReader): ConnectionInfo;
+    }
+
+    export namespace ConnectionInfo {
+        export type AsObject = {
+            from: string,
+            username: string,
+            averageItemsPerSecond: number,
+            totalItems: string,
+            countSinceLastMeasurement: string,
+            observedMeasurementsList: Array<SubscriptionInfo.Measurement.AsObject>,
+            availableSlots: number,
+            inFlightMessages: number,
+            connectionName: string,
+        }
+    }
+
+    export class Measurement extends jspb.Message { 
+        getKey(): string;
+        setKey(value: string): Measurement;
+        getValue(): string;
+        setValue(value: string): Measurement;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Measurement.AsObject;
+        static toObject(includeInstance: boolean, msg: Measurement): Measurement.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: Measurement, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Measurement;
+        static deserializeBinaryFromReader(message: Measurement, reader: jspb.BinaryReader): Measurement;
+    }
+
+    export namespace Measurement {
+        export type AsObject = {
+            key: string,
+            value: string,
+        }
+    }
+
+}
+
+export class ReplayParkedReq extends jspb.Message { 
+
+    hasOptions(): boolean;
+    clearOptions(): void;
+    getOptions(): ReplayParkedReq.Options | undefined;
+    setOptions(value?: ReplayParkedReq.Options): ReplayParkedReq;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ReplayParkedReq.AsObject;
+    static toObject(includeInstance: boolean, msg: ReplayParkedReq): ReplayParkedReq.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ReplayParkedReq, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ReplayParkedReq;
+    static deserializeBinaryFromReader(message: ReplayParkedReq, reader: jspb.BinaryReader): ReplayParkedReq;
+}
+
+export namespace ReplayParkedReq {
+    export type AsObject = {
+        options?: ReplayParkedReq.Options.AsObject,
+    }
+
+
+    export class Options extends jspb.Message { 
+        getGroupName(): string;
+        setGroupName(value: string): Options;
+
+        hasStreamIdentifier(): boolean;
+        clearStreamIdentifier(): void;
+        getStreamIdentifier(): shared_pb.StreamIdentifier | undefined;
+        setStreamIdentifier(value?: shared_pb.StreamIdentifier): Options;
+
+        hasAll(): boolean;
+        clearAll(): void;
+        getAll(): shared_pb.Empty | undefined;
+        setAll(value?: shared_pb.Empty): Options;
+
+        hasStopAt(): boolean;
+        clearStopAt(): void;
+        getStopAt(): string;
+        setStopAt(value: string): Options;
+
+        hasNoLimit(): boolean;
+        clearNoLimit(): void;
+        getNoLimit(): shared_pb.Empty | undefined;
+        setNoLimit(value?: shared_pb.Empty): Options;
+
+        getStreamOptionCase(): Options.StreamOptionCase;
+        getStopAtOptionCase(): Options.StopAtOptionCase;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Options.AsObject;
+        static toObject(includeInstance: boolean, msg: Options): Options.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: Options, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Options;
+        static deserializeBinaryFromReader(message: Options, reader: jspb.BinaryReader): Options;
+    }
+
+    export namespace Options {
+        export type AsObject = {
+            groupName: string,
+            streamIdentifier?: shared_pb.StreamIdentifier.AsObject,
+            all?: shared_pb.Empty.AsObject,
+            stopAt: string,
+            noLimit?: shared_pb.Empty.AsObject,
+        }
+
+        export enum StreamOptionCase {
+            STREAM_OPTION_NOT_SET = 0,
+            STREAM_IDENTIFIER = 2,
+            ALL = 3,
+        }
+
+        export enum StopAtOptionCase {
+            STOP_AT_OPTION_NOT_SET = 0,
+            STOP_AT = 4,
+            NO_LIMIT = 5,
+        }
+
+    }
+
+}
+
+export class ReplayParkedResp extends jspb.Message { 
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ReplayParkedResp.AsObject;
+    static toObject(includeInstance: boolean, msg: ReplayParkedResp): ReplayParkedResp.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ReplayParkedResp, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ReplayParkedResp;
+    static deserializeBinaryFromReader(message: ReplayParkedResp, reader: jspb.BinaryReader): ReplayParkedResp;
+}
+
+export namespace ReplayParkedResp {
+    export type AsObject = {
+    }
+}
+
+export class ListReq extends jspb.Message { 
+
+    hasOptions(): boolean;
+    clearOptions(): void;
+    getOptions(): ListReq.Options | undefined;
+    setOptions(value?: ListReq.Options): ListReq;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListReq.AsObject;
+    static toObject(includeInstance: boolean, msg: ListReq): ListReq.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListReq, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListReq;
+    static deserializeBinaryFromReader(message: ListReq, reader: jspb.BinaryReader): ListReq;
+}
+
+export namespace ListReq {
+    export type AsObject = {
+        options?: ListReq.Options.AsObject,
+    }
+
+
+    export class Options extends jspb.Message { 
+
+        hasListAllSubscriptions(): boolean;
+        clearListAllSubscriptions(): void;
+        getListAllSubscriptions(): shared_pb.Empty | undefined;
+        setListAllSubscriptions(value?: shared_pb.Empty): Options;
+
+        hasListForStream(): boolean;
+        clearListForStream(): void;
+        getListForStream(): ListReq.StreamOption | undefined;
+        setListForStream(value?: ListReq.StreamOption): Options;
+
+        getListOptionCase(): Options.ListOptionCase;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): Options.AsObject;
+        static toObject(includeInstance: boolean, msg: Options): Options.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: Options, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): Options;
+        static deserializeBinaryFromReader(message: Options, reader: jspb.BinaryReader): Options;
+    }
+
+    export namespace Options {
+        export type AsObject = {
+            listAllSubscriptions?: shared_pb.Empty.AsObject,
+            listForStream?: ListReq.StreamOption.AsObject,
+        }
+
+        export enum ListOptionCase {
+            LIST_OPTION_NOT_SET = 0,
+            LIST_ALL_SUBSCRIPTIONS = 1,
+            LIST_FOR_STREAM = 2,
+        }
+
+    }
+
+    export class StreamOption extends jspb.Message { 
+
+        hasStream(): boolean;
+        clearStream(): void;
+        getStream(): shared_pb.StreamIdentifier | undefined;
+        setStream(value?: shared_pb.StreamIdentifier): StreamOption;
+
+        hasAll(): boolean;
+        clearAll(): void;
+        getAll(): shared_pb.Empty | undefined;
+        setAll(value?: shared_pb.Empty): StreamOption;
+
+        getStreamOptionCase(): StreamOption.StreamOptionCase;
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): StreamOption.AsObject;
+        static toObject(includeInstance: boolean, msg: StreamOption): StreamOption.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: StreamOption, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): StreamOption;
+        static deserializeBinaryFromReader(message: StreamOption, reader: jspb.BinaryReader): StreamOption;
+    }
+
+    export namespace StreamOption {
+        export type AsObject = {
+            stream?: shared_pb.StreamIdentifier.AsObject,
+            all?: shared_pb.Empty.AsObject,
+        }
+
+        export enum StreamOptionCase {
+            STREAM_OPTION_NOT_SET = 0,
+            STREAM = 1,
+            ALL = 2,
+        }
+
+    }
+
+}
+
+export class ListResp extends jspb.Message { 
+    clearSubscriptionsList(): void;
+    getSubscriptionsList(): Array<SubscriptionInfo>;
+    setSubscriptionsList(value: Array<SubscriptionInfo>): ListResp;
+    addSubscriptions(value?: SubscriptionInfo, index?: number): SubscriptionInfo;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): ListResp.AsObject;
+    static toObject(includeInstance: boolean, msg: ListResp): ListResp.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: ListResp, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): ListResp;
+    static deserializeBinaryFromReader(message: ListResp, reader: jspb.BinaryReader): ListResp;
+}
+
+export namespace ListResp {
+    export type AsObject = {
+        subscriptionsList: Array<SubscriptionInfo.AsObject>,
     }
 }

@@ -11,13 +11,15 @@ import {
   PersistentSubscriptionToAllSettings,
 } from "./persistentSubscriptionSettings";
 
-export const settingsToGRPC = (
+type GRPCSettings = typeof CreateReq.Settings | typeof UpdateReq.Settings;
+
+export const settingsToGRPC = <T extends GRPCSettings>(
   settings:
     | PersistentSubscriptionSettings
     | PersistentSubscriptionToAllSettings,
-  ReqSettings: typeof CreateReq.Settings | typeof UpdateReq.Settings
-): CreateReq.Settings => {
-  const reqSettings = new ReqSettings();
+  ReqSettings: T
+): InstanceType<T> => {
+  const reqSettings = new ReqSettings() as InstanceType<T>;
 
   reqSettings.setResolveLinks(settings.resolveLinkTos);
   reqSettings.setExtraStatistics(settings.extraStatistics);
