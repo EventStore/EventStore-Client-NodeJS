@@ -264,7 +264,7 @@ describe("[sample] projection-management", () => {
     const name = await createTestProjection();
 
     // region GetStatus
-    const projection = await client.getProjectionStatistics(name);
+    const projection = await client.getProjectionStatus(name);
 
     console.log(
       projection.name,
