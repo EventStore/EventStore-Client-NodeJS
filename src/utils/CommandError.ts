@@ -263,17 +263,40 @@ export class PersistentSubscriptionFailedError extends CommandErrorBase {
   }
 }
 
+interface PersistentSubscriptionDoesNotExistMeta {
+  streamName: string;
+  groupName: string;
+}
 export class PersistentSubscriptionDoesNotExistError extends CommandErrorBase {
   public type: ErrorType.PERSISTENT_SUBSCRIPTION_DOES_NOT_EXIST =
     ErrorType.PERSISTENT_SUBSCRIPTION_DOES_NOT_EXIST;
   public streamName: string;
   public groupName: string;
 
-  constructor(error: ServiceError) {
-    super(error);
-    const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.groupName = metadata["group-name"].toString();
+  constructor(error: ServiceError);
+  constructor(
+    error: undefined,
+    metadata: PersistentSubscriptionDoesNotExistMeta
+  );
+  constructor(
+    error?: ServiceError,
+    passedMetadata?: PersistentSubscriptionDoesNotExistMeta
+  ) {
+    super(
+      error,
+      passedMetadata
+        ? `5 NOT_FOUND: Subscription group ${passedMetadata.groupName} on stream ${passedMetadata.streamName} does not exist.`
+        : undefined
+    );
+
+    if (passedMetadata) {
+      this.streamName = passedMetadata.streamName;
+      this.groupName = passedMetadata.groupName;
+    } else {
+      const metadata = error!.metadata!.getMap();
+      this.streamName = metadata["stream-name"].toString();
+      this.groupName = metadata["group-name"].toString();
+    }
   }
 }
 
