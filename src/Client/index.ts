@@ -448,6 +448,10 @@ export class Client {
           : this.#keepAliveInterval,
       "grpc.keepalive_timeout_ms":
         this.#keepAliveTimeout < 0 ? Number.MAX_VALUE : this.#keepAliveTimeout,
+      // EventStore allows events of up to 16mb to be written internally.
+      // While you can't write events this large through gRPC, you could do so through the TCP client, or through projections.
+      // To allow the client to read any event that EventStoreDB was able to write, we want to hardcode the max receive message length to 17mb.
+      "grpc.max_receive_message_length": 17 * 1024 * 1024,
     });
   };
 
