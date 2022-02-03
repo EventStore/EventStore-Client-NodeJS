@@ -12,7 +12,7 @@
     "lint:eslint": "eslint \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/**/!(*.d).{ts,json}\"",
     "test": "jest",
-    "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" DEBUG_DEPTH=6 jest --verbose --run-in-band",
+    "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" DEBUG_DEPTH=6 DEBUG_COLORS=\"true\" jest --verbose --run-in-band",
     "test:flake": "jest --testSequencer=./src/__test__/utils/FlakeFinder.js",
     "generate": "run-s generate:*",
     "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
