@@ -5,9 +5,11 @@ import * as cp from "child_process";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
-import { upAll, down, exec, stopOne } from "docker-compose";
+import { upAll, down, exec, stopOne, logs } from "docker-compose";
 import { stringify } from "yaml";
 
+import { testDebug } from "./debug";
+import { Defer } from "./Defer";
 import { dockerImages } from "./dockerImages";
 import { EndPoint } from "../../types";
 
@@ -195,22 +197,21 @@ export class Cluster {
       if (this.retryCount > 0) {
         this.retryCount -= 1;
 
-        // console.log(
-        //   `Failed to initialize cluster. Retry ${3 - this.retryCount}\n${
-        //     error.err
-        //   } `
-        // );
+        testDebug(
+          `Failed to initialize cluster. Retry ${3 - this.retryCount}\n${
+            error.err
+          } `
+        );
 
+        await this.down();
         await this.cleanUp();
         await this.initialize();
         return this.up();
       }
 
       this.failed = true;
-      console.log(`${this.ipStub}.0/24`);
-      console.log(JSON.stringify(this.endpoints, null, 2));
-      console.error(error.err);
-      return;
+
+      console.error(`Cluster failed to initialize with error: ${error.err}`);
     }
 
     await this.healthy();
@@ -251,6 +252,17 @@ export class Cluster {
     await this.cleanUp();
   };
 
+  public enableNodeLogs = async (
+    node: EndPoint = this.endpoints[0]
+  ): Promise<void> => {
+    const nodeId = this.endpointToNodeId(node);
+    logs(nodeId, {
+      cwd: this.path(),
+      follow: true,
+      log: true,
+    });
+  };
+
   public killNode = async (node: EndPoint): Promise<void> => {
     const nodeId = this.endpointToNodeId(node);
     const response = await stopOne(nodeId, {
@@ -276,6 +288,7 @@ export class Cluster {
     throw new Error("Failed to resurrect node");
   };
 
+  public inspect = () => this.openInBrowser(false);
   public openInBrowser = async (launch = true): Promise<void> => {
     this.inspected = true;
     const url = `http${this.insecure ? "" : "s"}://${this.uri}`;
@@ -367,19 +380,14 @@ export class Cluster {
             }://localhost:2113/health/live`,
             { cwd: this.path() }
           );
-          // console.log(
-          //   `--> ${node}`,
-          //   response.exitCode,
-          //   response.out,
-          //   response.err
-          // );
 
           if (response.exitCode === 0) {
             healthy.add(node);
+
+            testDebug(`--> ${node} is healthy`);
           }
         } catch (error) {
           // retry
-          // console.log(`--> ${node}`, error);
         }
       }
     }
@@ -416,10 +424,11 @@ export class Cluster {
             members.some(({ state }) => state === "Leader")
           ) {
             ready.add(node);
+
+            testDebug(`--> ${node} is ready`);
           }
         } catch (error) {
           // retry
-          // console.log(`--> ${node}`, error);
         }
       }
     }
@@ -434,6 +443,8 @@ export class Cluster {
       await rmdir(this.path(), { recursive: true });
     } catch (error) {
       if (process.env.CI) return;
+      if (error.code === "ENOENT") return;
+
       console.log(
         `Failed to clean up test files at "${this.path()}": ${error}`
       );
