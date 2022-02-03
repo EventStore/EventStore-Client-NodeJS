@@ -5,6 +5,13 @@ import createDebug from "debug";
 createDebug.formatters.g = function (v) {
   return createDebug.formatters.O.call(this, v.toObject());
 };
+createDebug.formatters.h = function ({ Authorization, ...rest }) {
+  const headers = { ...rest };
+  if (Authorization) {
+    headers.Authorization = Authorization.replace(/ \S*/, " *****");
+  }
+  return createDebug.formatters.O.call(this, headers);
+};
 
 const base = createDebug("esdb");
 const command = base.extend("command");
