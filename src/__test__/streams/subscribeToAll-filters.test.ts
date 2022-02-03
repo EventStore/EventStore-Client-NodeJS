@@ -276,8 +276,9 @@ describe("subscribeToAll", () => {
       expect(events.length).toBe(384);
 
       // 384 / (32 * 2 (checkpointInterval) ) = 6;
-      expect(checkpointReached).toBeCalledTimes(6);
-      expect(checkpoints).toHaveLength(6);
+      expect(checkpointReached.mock.calls.length).toBeGreaterThanOrEqual(6);
+      // sometimes we can have a catch up checkpoint
+      expect(checkpointReached.mock.calls.length).toBeLessThanOrEqual(7);
 
       for (const { commit, prepare } of checkpoints) {
         expect(typeof commit).toBe("bigint");
