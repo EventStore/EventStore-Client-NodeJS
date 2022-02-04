@@ -1,3 +1,19 @@
+## [v3.1.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.0.0...v3.1.0) (2022-02-04)
+
+## Features
+
+- `getProjectionStatistics` has been renamed to `getProjectionStatus` to align with other clients. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d03d5e9cd3e8d7974da31c24c4ad287b389e5eb9)
+
+### Bug Fixes
+
+- Increase maximum readable event size to match maximum event size that can be written internally. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/37474bd83c8e8f5f71050d96994ba663e9cbf6f6)
+
+### Deprecations
+
+- `getProjectionStatistics` is now deprecated [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d03d5e9cd3e8d7974da31c24c4ad287b389e5eb9)
+  - Will be removed in `v4.0.0`
+  - Use `getProjectionStatus`
+
 ## [v3.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v2.1.1...v3.0.0) (2022-01-27)
 
 ### Breaking changes
