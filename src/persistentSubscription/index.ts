@@ -3,6 +3,7 @@ export * from "./createPersistentSubscriptionToAll";
 export * from "./deletePersistentSubscription";
 export * from "./deletePersistentSubscriptionToAll";
 export * from "./replayParkedMessages";
+export * from "./replayParkedMessagesToAll";
 export * from "./subscribeToPersistentSubscription";
 export * from "./subscribeToPersistentSubscriptionToAll";
 export * from "./updatePersistentSubscription";
