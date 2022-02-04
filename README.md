@@ -24,6 +24,10 @@ This client is compatible with version `20.6.1` upwards.
 
 Server setup instructions can be found in the [Event Store Docs], follow the docker setup for the simplest configuration.
 
+## Documentation
+
+Full documentation can be found in [Event Store GRPC Client Docs].
+
 ## Example
 
 The following snippet showcases a simple example where we form a connection, then append and read events from the server.
@@ -217,12 +221,6 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 
 Information on support can be found on our website: [Event Store Support]
 
-## Documentation
-
-Documentation for EventStoreDB can be found in [Event Store Docs]
-
-Bear in mind that this client is not yet properly documented. We are working hard on a new version of the documentation.
-
 ## Community
 
 We have a community discussion space at [Event Store Discuss].
@@ -233,12 +231,12 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 
 [event store support]: https://eventstore.com/support/
 [event store docs]: https://developers.eventstore.com/server/v20.10/docs/installation/
+[event store grpc client docs]: https://developers.eventstore.com/clients/grpc
 [event store discuss]: https://discuss.eventstore.com/
 [yarn]: https://yarnpkg.com/
 [jest]: https://jestjs.io/
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/
-[authenticate docker with a gitub personal access token]: https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages#authenticating-with-a-personal-access-token
 [debug]: https://github.com/visionmedia/debug
 [`util.inspect()`]: https://nodejs.org/api/util.html#util_util_inspect_object_options
 [npm-badge]: https://img.shields.io/npm/v/@eventstore/db-client.svg
