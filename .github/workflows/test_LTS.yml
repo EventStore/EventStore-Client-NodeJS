@@ -1,4 +1,4 @@
-name: "20.10"
+name: "LTS"
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
     name: Test
     uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@master
     with:
-      version: "20.10.5-buster-slim"
+      version: "21.10.1-focal"
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}

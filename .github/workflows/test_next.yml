@@ -1,4 +1,4 @@
-name: "21.6"
+name: "Next feature version"
 
 on:
   pull_request:
@@ -6,14 +6,14 @@ on:
     branches:
       - master
   schedule:
-    - cron: "0 3 * * 0" # Every sunday at 3am UTC.
+    - cron: "0 * * * 0" # Every day at 3am UTC.
 
 jobs:
   test:
     name: Test
     uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@master
     with:
-      version: "21.6.0-buster-slim"
+      version: "ci"
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
