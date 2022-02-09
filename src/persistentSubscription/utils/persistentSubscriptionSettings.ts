@@ -80,7 +80,7 @@ interface PersistentSubscriptionSettingsGeneric {
 export interface PersistentSubscriptionSettings
   extends PersistentSubscriptionSettingsGeneric {
   /**
-   * The exclusive position in the stream or transaction file the subscription should start from.
+   * The inclusive position in the stream or transaction file the subscription should start from.
    * @default END
    */
   startFrom: typeof START | typeof END | bigint;
@@ -89,7 +89,7 @@ export interface PersistentSubscriptionSettings
 export interface PersistentSubscriptionToAllSettings
   extends PersistentSubscriptionSettingsGeneric {
   /**
-   * The exclusive position in the stream or transaction file the subscription should start from.
+   * The inclusive position in the stream or transaction file the subscription should start from.
    * @default END
    */
   startFrom: typeof START | typeof END | Position;
