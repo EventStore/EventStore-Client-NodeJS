@@ -111,6 +111,28 @@ export interface PersistentSubscriptionToAllInfo {
   connections: PersistentSubscriptionConnectionInfo[];
 }
 
+export type PersistentSubscriptionToEitherInfo =
+  | PersistentSubscriptionInfo
+  | PersistentSubscriptionToAllInfo;
+
+export const isPersistentSubscriptionToAllInfo = (
+  info: PersistentSubscriptionToEitherInfo
+): info is PersistentSubscriptionToAllInfo => info.eventSource === "$all";
+
+export const isPersistentSubscriptionToStreamInfo = (
+  info: PersistentSubscriptionToEitherInfo
+): info is PersistentSubscriptionInfo => info.eventSource !== "$all";
+
+export const mapPersistentSubscriptionToEitherInfo = (
+  response: SubscriptionInfo
+): PersistentSubscriptionToEitherInfo => {
+  if (response.getEventSource() === "$all") {
+    return mapPersistentSubscriptionToAllInfo(response);
+  }
+
+  return mapPersistentSubscriptionInfo(response);
+};
+
 export const mapPersistentSubscriptionInfo = (
   response: SubscriptionInfo
 ): PersistentSubscriptionInfo => ({

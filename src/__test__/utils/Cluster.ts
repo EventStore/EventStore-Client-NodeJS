@@ -9,7 +9,6 @@ import { upAll, down, exec, stopOne, logs } from "docker-compose";
 import { stringify } from "yaml";
 
 import { testDebug } from "./debug";
-import { Defer } from "./Defer";
 import { dockerImages } from "./dockerImages";
 import { EndPoint } from "../../types";
 
