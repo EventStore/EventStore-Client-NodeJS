@@ -19,28 +19,18 @@ import {
 
 describe("appendToStream - errors", () => {
   const node = createTestNode();
-  const timeoutNode = createTestNode()
-    .setOption("EVENTSTORE_COMMIT_TIMEOUT_MS", 1)
-    .setOption("EVENTSTORE_PREPARE_TIMEOUT_MS", 1);
   let client!: EventStoreDBClient;
-  let timeoutClient!: EventStoreDBClient;
 
   beforeAll(async () => {
     await node.up();
-    await timeoutNode.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri, throwOnAppendFailure: true },
       { rootCertificate: node.rootCertificate }
-    );
-    timeoutClient = new EventStoreDBClient(
-      { endpoint: timeoutNode.uri, throwOnAppendFailure: true },
-      { rootCertificate: timeoutNode.rootCertificate }
     );
   });
 
   afterAll(async () => {
     await node.down();
-    await timeoutNode.down();
   });
 
   describe.each([
@@ -137,14 +127,10 @@ describe("appendToStream - errors", () => {
       const STREAM_NAME = `${prefix}_deadline`;
 
       try {
-        await timeoutClient.appendToStream(
-          STREAM_NAME,
-          jsonTestEvents(30_000),
-          {
-            credentials,
-            deadline: 1,
-          }
-        );
+        await client.appendToStream(STREAM_NAME, jsonTestEvents(30_000), {
+          credentials,
+          deadline: 1,
+        });
         expect("this point").toBe("unreachable");
       } catch (error) {
         expect(error).toBeInstanceOf(DeadlineExceededError);
