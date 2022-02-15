@@ -4,6 +4,7 @@ import { debug } from "../utils";
 
 export interface QueryOptions {
   maxDiscoverAttempts?: number;
+  connectionName?: string;
   defaultDeadline?: number;
   discoveryInterval?: number;
   gossipTimeout?: number;
@@ -54,6 +55,7 @@ const mapToNodePreference = caseMap<NodePreference>({
 
 const mapToQueryOption = caseMap<keyof QueryOptions>({
   maxDiscoverAttempts: "maxDiscoverAttempts",
+  connectionName: "connectionName",
   defaultDeadline: "defaultDeadline",
   discoveryInterval: "discoveryInterval",
   gossipTimeout: "gossipTimeout",
@@ -285,8 +287,9 @@ const verifyKeyValuePair = (
 
       return { key, value: parsedValue };
     }
+    case "connectionName":
     case "tlsCAFile": {
-      return { key, value };
+      return { key, value: decodeURIComponent(value) };
     }
     case "maxDiscoverAttempts":
     case "defaultDeadline":

@@ -1,5 +1,5 @@
 import { createInsecureTestCluster, createTestCluster } from "@test-utils";
-import { ErrorType, EventStoreDBClient } from "@eventstore/db-client";
+import { EventStoreDBClient } from "@eventstore/db-client";
 
 describe("http api", () => {
   interface PingResult {

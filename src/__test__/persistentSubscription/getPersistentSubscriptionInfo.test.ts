@@ -20,6 +20,7 @@ describe("getPersistentSubscriptionInfo", () => {
     client = new EventStoreDBClient(
       {
         endpoint: node.uri,
+        connectionName: "getPersistentSubscriptionInfo test client",
       },
       { rootCertificate: node.rootCertificate },
       { username: "admin", password: "changeit" }
@@ -154,6 +155,8 @@ describe("getPersistentSubscriptionInfo", () => {
 
     // We set our default user above
     expect(connection.username).toBe("admin");
+    // should be us connected
+    expect(connection.connectionName).toBe(client.connectionName);
 
     // we enabled extraStatistics.
     expect(connection.extraStatistics).toBeDefined();

@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
 import { Stream } from "stream";
 
+import { v4 as uuid } from "uuid";
+
 import {
   CallCredentials as grpcCallCredentials,
   CallOptions,
@@ -56,6 +58,11 @@ interface ClientOptions {
    * @default 10_000
    */
   defaultDeadline?: number;
+  /**
+   * The name of the connection to use in logs.
+   * @default uuid
+   */
+  connectionName?: string;
 }
 
 interface DiscoveryOptions {
@@ -125,6 +132,7 @@ export class Client {
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
     new Map();
   #http: HTTP;
+  #connectionName: string;
 
   // eslint-disable-next-line jsdoc/require-param
   /**
@@ -192,6 +200,7 @@ export class Client {
           keepAliveInterval: options.keepAliveInterval,
           keepAliveTimeout: options.keepAliveTimeout,
           defaultDeadline: options.defaultDeadline,
+          connectionName: options.connectionName,
         },
         channelCredentials,
         options.defaultCredentials
@@ -210,6 +219,7 @@ export class Client {
           keepAliveInterval: options.keepAliveInterval,
           keepAliveTimeout: options.keepAliveTimeout,
           defaultDeadline: options.defaultDeadline,
+          connectionName: options.connectionName,
         },
         channelCredentials,
         options.defaultCredentials
@@ -223,6 +233,7 @@ export class Client {
         keepAliveInterval: options.keepAliveInterval,
         keepAliveTimeout: options.keepAliveTimeout,
         defaultDeadline: options.defaultDeadline,
+        connectionName: options.connectionName,
       },
       channelCredentials,
       options.defaultCredentials
@@ -250,6 +261,7 @@ export class Client {
       keepAliveInterval = 10_000,
       keepAliveTimeout = 10_000,
       defaultDeadline = 10_000,
+      connectionName = uuid(),
       ...connectionSettings
     }: ConnectionSettings,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
@@ -286,6 +298,7 @@ export class Client {
     this.#connectionSettings = connectionSettings;
     this.#insecure = !!channelCredentials.insecure;
     this.#defaultCredentials = defaultUserCredentials;
+    this.#connectionName = connectionName;
     this.#http = new HTTP(this, channelCredentials, defaultUserCredentials);
 
     if (this.#insecure) {
@@ -303,6 +316,14 @@ export class Client {
         channelCredentials.verifyOptions
       );
     }
+  }
+
+  /**
+   * The name of the connection to use in logs.
+   * Can be set via {@link ClientOptions.connectionName} or `connectionName` in the connection string.
+   */
+  public get connectionName() {
+    return this.#connectionName;
   }
 
   // Internal access to grpc client.
@@ -521,6 +542,8 @@ export class Client {
   ): [Metadata, CallOptions] => {
     const metadata = new Metadata();
     const options = callOptions ? { ...callOptions } : {};
+
+    metadata.add("connection-name", this.#connectionName);
 
     if (requiresLeader) {
       metadata.add("requires-leader", "true");
