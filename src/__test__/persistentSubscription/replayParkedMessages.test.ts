@@ -231,6 +231,7 @@ describe("replayParkedMessages", () => {
 
       try {
         await client.replayParkedMessages(STREAM_NAME, GROUP_NAME);
+        throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
         expect(error).toMatchInlineSnapshot(
@@ -252,6 +253,7 @@ describe("replayParkedMessages", () => {
         await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
           credentials: { username: "AzureDiamond", password: "hunter2" },
         });
+        throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(AccessDeniedError);
       }

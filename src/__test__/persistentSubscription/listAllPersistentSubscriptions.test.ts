@@ -12,8 +12,10 @@ import {
 } from "@test-utils";
 
 import {
+  AccessDeniedError,
   END,
   EventStoreDBClient,
+  PersistentSubscriptionDoesNotExistError,
   PersistentSubscriptionToAll,
   PINNED,
   Position,
@@ -22,7 +24,7 @@ import {
 } from "@eventstore/db-client";
 
 describe("listAllPersistentSubscriptions", () => {
-  const psToAllSupported = matchServerVersion`>=21.10`;
+  const psToAllSupported = matchServerVersion`>=21.10.1`;
 
   const node = createTestNode();
   let client!: EventStoreDBClient;
@@ -170,5 +172,42 @@ describe("listAllPersistentSubscriptions", () => {
 
     await subscriptionToAll?.unsubscribe();
     await subscriptionToStream.unsubscribe();
+  });
+
+  describe("errors", () => {
+    const emptyNode = createTestNode();
+    let client!: EventStoreDBClient;
+
+    beforeAll(async () => {
+      await emptyNode.up();
+
+      client = new EventStoreDBClient(
+        {
+          endpoint: emptyNode.uri,
+        },
+        { rootCertificate: emptyNode.rootCertificate },
+        { username: "admin", password: "changeit" }
+      );
+    });
+
+    afterAll(async () => {
+      await emptyNode.down();
+    });
+
+    test("no persistent subscriptions", async () => {
+      const list = await client.listAllPersistentSubscriptions();
+      expect(list).toHaveLength(0);
+    });
+
+    test("AccessDenied", async () => {
+      try {
+        await client.listAllPersistentSubscriptions({
+          credentials: { username: "AzureDiamond", password: "hunter2" },
+        });
+        throw "unreachable";
+      } catch (error) {
+        expect(error).toBeInstanceOf(AccessDeniedError);
+      }
+    });
   });
 });

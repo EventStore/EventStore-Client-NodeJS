@@ -1,8 +1,10 @@
 import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 
 import {
+  AccessDeniedError,
   END,
   EventStoreDBClient,
+  PersistentSubscriptionDoesNotExistError,
   persistentSubscriptionSettingsFromDefaults,
   ROUND_ROBIN,
   START,
@@ -156,5 +158,41 @@ describe("getPersistentSubscriptionInfo", () => {
     // we enabled extraStatistics.
     expect(connection.extraStatistics).toBeDefined();
     expect(connection.extraStatistics!.get("quintile 3")).toBeDefined();
+  });
+
+  describe("errors", () => {
+    test("PersistentSubscriptionDoesNotExist", async () => {
+      const STREAM_NAME = "does_not_exist_get_info_stream_name";
+      const GROUP_NAME = "does_not_exist_get_info_group_name";
+
+      try {
+        await client.getPersistentSubscriptionInfo(STREAM_NAME, GROUP_NAME);
+        throw "unreachable";
+      } catch (error) {
+        expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
+        expect(error).toMatchInlineSnapshot(
+          `[Error: 5 NOT_FOUND: Subscription group does_not_exist_get_info_group_name on stream does_not_exist_get_info_stream_name does not exist.]`
+        );
+
+        if (error instanceof PersistentSubscriptionDoesNotExistError) {
+          expect(error.streamName).toBe(STREAM_NAME);
+          expect(error.groupName).toBe(GROUP_NAME);
+        }
+      }
+    });
+
+    test("AccessDenied", async () => {
+      const STREAM_NAME = "access_denied_get_info_stream_name";
+      const GROUP_NAME = "access_denied_get_info_group_name";
+
+      try {
+        await client.getPersistentSubscriptionInfo(STREAM_NAME, GROUP_NAME, {
+          credentials: { username: "AzureDiamond", password: "hunter2" },
+        });
+        throw "unreachable";
+      } catch (error) {
+        expect(error).toBeInstanceOf(AccessDeniedError);
+      }
+    });
   });
 });

@@ -31,7 +31,7 @@ Client.prototype.listPersistentSubscriptionsToAll = async function (
   baseOptions: ListPersistentSubscriptionsToAllOptions = {}
 ): Promise<PersistentSubscriptionToAllInfo[]> {
   if (!(await this.supports(PersistentSubscriptionsService.list, "all"))) {
-    throw new UnsupportedError("listPersistentSubscriptionsToAll", "21.10");
+    throw new UnsupportedError("listPersistentSubscriptionsToAll", "21.10.1");
   }
 
   const req = new ListReq();

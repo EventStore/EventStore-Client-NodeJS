@@ -457,6 +457,7 @@ describe("subscribeToPersistentSubscription", () => {
 
       const eventListenerOne = jest.fn();
       const eventListenerTwo = jest.fn();
+      const onError = jest.fn();
       const endListener = jest.fn(() => {
         defer.resolve();
       });
@@ -471,7 +472,7 @@ describe("subscribeToPersistentSubscription", () => {
             subscription.unsubscribe();
           }
         })
-        .on("error", (err) => console.log("aag", err))
+        .on("error", onError)
         .on("end", endListener);
 
       await client.appendToStream(STREAM_NAME, [

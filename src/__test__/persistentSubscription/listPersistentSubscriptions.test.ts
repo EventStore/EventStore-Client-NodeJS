@@ -6,8 +6,10 @@ import {
 } from "@test-utils";
 
 import {
+  AccessDeniedError,
   END,
   EventStoreDBClient,
+  PersistentSubscriptionDoesNotExistError,
   ROUND_ROBIN,
   START,
 } from "@eventstore/db-client";
@@ -133,5 +135,38 @@ describe("listPersistentSubscriptions", () => {
     }
 
     await subscription.unsubscribe();
+  });
+
+  describe("errors", () => {
+    test("PersistentSubscriptionDoesNotExist", async () => {
+      const STREAM_NAME = "does_not_exist_list_stream_name";
+
+      try {
+        await client.listPersistentSubscriptions(STREAM_NAME);
+        throw "unreachable";
+      } catch (error) {
+        expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
+        expect(error).toMatchInlineSnapshot(
+          `[Error: 5 NOT_FOUND: Subscription group  on stream does_not_exist_list_stream_name does not exist.]`
+        );
+
+        if (error instanceof PersistentSubscriptionDoesNotExistError) {
+          expect(error.streamName).toBe(STREAM_NAME);
+        }
+      }
+    });
+
+    test("AccessDenied", async () => {
+      const STREAM_NAME = "access_denied_list_stream_name";
+
+      try {
+        await client.listPersistentSubscriptions(STREAM_NAME, {
+          credentials: { username: "AzureDiamond", password: "hunter2" },
+        });
+        throw "unreachable";
+      } catch (error) {
+        expect(error).toBeInstanceOf(AccessDeniedError);
+      }
+    });
   });
 });

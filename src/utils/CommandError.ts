@@ -257,15 +257,15 @@ export class PersistentSubscriptionFailedError extends CommandErrorBase {
   constructor(error: ServiceError) {
     super(error);
     const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.groupName = metadata["group-name"].toString();
-    this.reason = metadata["reason"].toString();
+    this.streamName = metadata["stream-name"]?.toString() ?? "";
+    this.groupName = metadata["group-name"]?.toString() ?? "";
+    this.reason = metadata["reason"]?.toString() ?? "";
   }
 }
 
 interface PersistentSubscriptionDoesNotExistMeta {
   streamName: string;
-  groupName: string;
+  groupName?: string;
 }
 export class PersistentSubscriptionDoesNotExistError extends CommandErrorBase {
   public type: ErrorType.PERSISTENT_SUBSCRIPTION_DOES_NOT_EXIST =
@@ -285,17 +285,19 @@ export class PersistentSubscriptionDoesNotExistError extends CommandErrorBase {
     super(
       error,
       passedMetadata
-        ? `5 NOT_FOUND: Subscription group ${passedMetadata.groupName} on stream ${passedMetadata.streamName} does not exist.`
+        ? `5 NOT_FOUND: Subscription group ${
+            passedMetadata.groupName ?? ""
+          } on stream ${passedMetadata.streamName} does not exist.`
         : undefined
     );
 
     if (passedMetadata) {
       this.streamName = passedMetadata.streamName;
-      this.groupName = passedMetadata.groupName;
+      this.groupName = passedMetadata.groupName ?? "";
     } else {
       const metadata = error!.metadata!.getMap();
-      this.streamName = metadata["stream-name"].toString();
-      this.groupName = metadata["group-name"].toString();
+      this.streamName = metadata["stream-name"]?.toString() ?? "";
+      this.groupName = metadata["group-name"]?.toString() ?? "";
     }
   }
 }
@@ -309,8 +311,8 @@ export class PersistentSubscriptionExistsError extends CommandErrorBase {
   constructor(error: ServiceError) {
     super(error);
     const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.groupName = metadata["group-name"].toString();
+    this.streamName = metadata["stream-name"]?.toString() ?? "";
+    this.groupName = metadata["group-name"]?.toString() ?? "";
   }
 }
 
@@ -323,8 +325,8 @@ export class PersistentSubscriptionMaximumSubscribersReachedError extends Comman
   constructor(error: ServiceError) {
     super(error);
     const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.groupName = metadata["group-name"].toString();
+    this.streamName = metadata["stream-name"]?.toString() ?? "";
+    this.groupName = metadata["group-name"]?.toString() ?? "";
   }
 }
 
@@ -337,8 +339,8 @@ export class PersistentSubscriptionDroppedError extends CommandErrorBase {
   constructor(error: ServiceError) {
     super(error);
     const metadata = error.metadata!.getMap();
-    this.streamName = metadata["stream-name"].toString();
-    this.groupName = metadata["group-name"].toString();
+    this.streamName = metadata["stream-name"]?.toString() ?? "";
+    this.groupName = metadata["group-name"]?.toString() ?? "";
   }
 }
 

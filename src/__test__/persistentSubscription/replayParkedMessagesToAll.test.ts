@@ -21,7 +21,7 @@ import {
 } from "@eventstore/db-client";
 
 describe("replayParkedMessagesToAll", () => {
-  const supported = matchServerVersion`>=21.10`;
+  const supported = matchServerVersion`>=21.10.1`;
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
 
@@ -39,7 +39,7 @@ describe("replayParkedMessagesToAll", () => {
     await cluster.down();
   });
 
-  optionalDescribe(!supported)("Not Supported (<21.10)", () => {
+  optionalDescribe(!supported)("Not Supported (<21.10.1)", () => {
     test("Throws an unavailable error", async () => {
       const GROUP_NAME = "oh_no";
 
@@ -48,13 +48,13 @@ describe("replayParkedMessagesToAll", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: replayParkedMessagesToAll requires server version 21.10 or higher.]`
+          `[Error: replayParkedMessagesToAll requires server version 21.10.1 or higher.]`
         );
       }
     });
   });
 
-  optionalDescribe(supported)("Supported (>=21.10)", () => {
+  optionalDescribe(supported)("Supported (>=21.10.1)", () => {
     test("should replay all parked messages by default", async () => {
       const GROUP_NAME = "replay_to_end_parked_group_name";
       const PREFIX = "replay_parked_to_all_";
@@ -257,6 +257,7 @@ describe("replayParkedMessagesToAll", () => {
 
         try {
           await client.replayParkedMessagesToAll(GROUP_NAME);
+          throw "unreachable";
         } catch (error) {
           expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
           expect(error).toMatchInlineSnapshot(
@@ -276,6 +277,7 @@ describe("replayParkedMessagesToAll", () => {
           await client.replayParkedMessagesToAll(GROUP_NAME, {
             credentials: { username: "AzureDiamond", password: "hunter2" },
           });
+          throw "unreachable";
         } catch (error) {
           expect(error).toBeInstanceOf(AccessDeniedError);
         }

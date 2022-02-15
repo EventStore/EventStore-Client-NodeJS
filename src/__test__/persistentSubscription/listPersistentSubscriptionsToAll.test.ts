@@ -11,8 +11,10 @@ import {
 } from "@test-utils";
 
 import {
+  AccessDeniedError,
   END,
   EventStoreDBClient,
+  PersistentSubscriptionDoesNotExistError,
   Position,
   ROUND_ROBIN,
   START,
@@ -20,7 +22,7 @@ import {
 } from "@eventstore/db-client";
 
 describe("listPersistentSubscriptionsToAll", () => {
-  const supported = matchServerVersion`>=21.10`;
+  const supported = matchServerVersion`>=21.10.1`;
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -40,20 +42,20 @@ describe("listPersistentSubscriptionsToAll", () => {
     await node.down();
   });
 
-  optionalDescribe(!supported)("Not Supported (<21.10)", () => {
+  optionalDescribe(!supported)("Not Supported (<21.10.1)", () => {
     test("Throws an unavailable error", async () => {
       try {
         await client.listPersistentSubscriptionsToAll();
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: listPersistentSubscriptionsToAll requires server version 21.10 or higher.]`
+          `[Error: listPersistentSubscriptionsToAll requires server version 21.10.1 or higher.]`
         );
       }
     });
   });
 
-  optionalDescribe(supported)("Supported (>=21.10)", () => {
+  optionalDescribe(supported)("Supported (>=21.10.1)", () => {
     let created!: CreatedPSToAll[];
 
     beforeAll(async () => {
@@ -138,6 +140,54 @@ describe("listPersistentSubscriptionsToAll", () => {
       }
 
       await subscription.unsubscribe();
+    });
+
+    describe("errors", () => {
+      const emptyNode = createTestNode();
+      let client!: EventStoreDBClient;
+
+      beforeAll(async () => {
+        await emptyNode.up();
+
+        client = new EventStoreDBClient(
+          {
+            endpoint: emptyNode.uri,
+          },
+          { rootCertificate: emptyNode.rootCertificate },
+          { username: "admin", password: "changeit" }
+        );
+      });
+
+      afterAll(async () => {
+        await emptyNode.down();
+      });
+
+      test("PersistentSubscriptionDoesNotExist", async () => {
+        try {
+          await client.listPersistentSubscriptionsToAll();
+          throw "unreachable";
+        } catch (error) {
+          expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
+          expect(error).toMatchInlineSnapshot(
+            `[Error: 5 NOT_FOUND: Subscription group  on stream $all does not exist.]`
+          );
+
+          if (error instanceof PersistentSubscriptionDoesNotExistError) {
+            expect(error.streamName).toBe("$all");
+          }
+        }
+      });
+
+      test("AccessDenied", async () => {
+        try {
+          await client.listPersistentSubscriptionsToAll({
+            credentials: { username: "AzureDiamond", password: "hunter2" },
+          });
+          throw "unreachable";
+        } catch (error) {
+          expect(error).toBeInstanceOf(AccessDeniedError);
+        }
+      });
     });
   });
 });

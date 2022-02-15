@@ -36,7 +36,7 @@ Client.prototype.getPersistentSubscriptionToAllInfo = async function (
   baseOptions: GetPersistentSubscriptionToAllInfoOptions = {}
 ): Promise<PersistentSubscriptionToAllInfo> {
   if (!(await this.supports(PersistentSubscriptionsService.getInfo, "all"))) {
-    throw new UnsupportedError("getPersistentSubscriptionToAllInfo", "21.10");
+    throw new UnsupportedError("getPersistentSubscriptionToAllInfo", "21.10.1");
   }
 
   const req = new GetInfoReq();

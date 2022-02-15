@@ -9,8 +9,10 @@ import {
 } from "@test-utils";
 
 import {
+  AccessDeniedError,
   END,
   EventStoreDBClient,
+  PersistentSubscriptionDoesNotExistError,
   persistentSubscriptionToAllSettingsFromDefaults,
   Position,
   ROUND_ROBIN,
@@ -19,7 +21,7 @@ import {
 } from "@eventstore/db-client";
 
 describe("getPersistentSubscriptionToAllInfo", () => {
-  const supported = matchServerVersion`>=21.10`;
+  const supported = matchServerVersion`>=21.10.1`;
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -39,7 +41,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
     await node.down();
   });
 
-  optionalDescribe(!supported)("Not Supported (<21.10)", () => {
+  optionalDescribe(!supported)("Not Supported (<21.10.1)", () => {
     test("Throws an unavailable error", async () => {
       const GROUP_NAME = "oh_no";
 
@@ -48,13 +50,13 @@ describe("getPersistentSubscriptionToAllInfo", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: getPersistentSubscriptionToAllInfo requires server version 21.10 or higher.]`
+          `[Error: getPersistentSubscriptionToAllInfo requires server version 21.10.1 or higher.]`
         );
       }
     });
   });
 
-  optionalDescribe(supported)("Supported (>=21.10)", () => {
+  optionalDescribe(supported)("Supported (>=21.10.1)", () => {
     test("should get info on a persistent subscription to all", async () => {
       const STREAM_NAME = "test_stream_name";
       const GROUP_NAME = "test_group_name";
@@ -102,6 +104,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
 
       const subscription = client
         .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
+        .on("error", jest.fn())
         .on("data", async (e) => {
           await subscription.ack(e);
         });
@@ -148,6 +151,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
 
       const subscription = client
         .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
+        .on("error", jest.fn())
         .on("data", async (e) => {
           await subscription.ack(e);
         });
@@ -174,6 +178,39 @@ describe("getPersistentSubscriptionToAllInfo", () => {
       // we enabled extraStatistics.
       expect(connection.extraStatistics).toBeDefined();
       expect(connection.extraStatistics!.get("quintile 3")).toBeDefined();
+    });
+
+    describe("errors", () => {
+      test("PersistentSubscriptionDoesNotExist", async () => {
+        const GROUP_NAME = "does_not_exist_get_info_group_name";
+
+        try {
+          await client.getPersistentSubscriptionToAllInfo(GROUP_NAME);
+          throw "unreachable";
+        } catch (error) {
+          expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
+          expect(error).toMatchInlineSnapshot(
+            `[Error: 5 NOT_FOUND: Subscription group does_not_exist_get_info_group_name on stream $all does not exist.]`
+          );
+
+          if (error instanceof PersistentSubscriptionDoesNotExistError) {
+            expect(error.groupName).toBe(GROUP_NAME);
+          }
+        }
+      });
+
+      test("AccessDenied", async () => {
+        const GROUP_NAME = "access_denied_get_info_group_name";
+
+        try {
+          await client.getPersistentSubscriptionToAllInfo(GROUP_NAME, {
+            credentials: { username: "AzureDiamond", password: "hunter2" },
+          });
+          throw "unreachable";
+        } catch (error) {
+          expect(error).toBeInstanceOf(AccessDeniedError);
+        }
+      });
     });
   });
 });

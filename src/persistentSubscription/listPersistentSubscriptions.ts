@@ -1,5 +1,9 @@
 import { BaseOptions } from "../types";
-import { debug, convertToCommandError } from "../utils";
+import {
+  debug,
+  convertToCommandError,
+  PersistentSubscriptionDoesNotExistError,
+} from "../utils";
 import { Client } from "../Client";
 import {
   PersistentSubscriptionsClient,
@@ -91,7 +95,16 @@ const listPersistentSubscriptionsHTTP = async function (
 ): Promise<PersistentSubscriptionInfo[]> {
   const basicList = await this.HTTPRequest<
     Array<{ eventStreamId: string; groupName: string }>
-  >("GET", `/subscriptions/${encodeURIComponent(streamName)}`, baseOptions);
+  >("GET", `/subscriptions/${encodeURIComponent(streamName)}`, {
+    ...baseOptions,
+    transformError(statusCode) {
+      if (statusCode === 404) {
+        return new PersistentSubscriptionDoesNotExistError(undefined, {
+          streamName,
+        });
+      }
+    },
+  });
 
   const list = await Promise.all(
     basicList.map(({ eventStreamId, groupName }) =>

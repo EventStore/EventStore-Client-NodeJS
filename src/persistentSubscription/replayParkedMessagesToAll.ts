@@ -39,7 +39,7 @@ Client.prototype.replayParkedMessagesToAll = async function (
   if (
     !(await this.supports(PersistentSubscriptionsService.replayParked, "all"))
   ) {
-    throw new UnsupportedError("replayParkedMessagesToAll", "21.10");
+    throw new UnsupportedError("replayParkedMessagesToAll", "21.10.1");
   }
 
   const req = new ReplayParkedReq();
