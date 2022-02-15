@@ -25,7 +25,7 @@ describe("deletePersistentSubscription", () => {
     await node.down();
   });
 
-  test("should delete a persistant subscription", async () => {
+  test("should delete a persistent subscription", async () => {
     const STREAM_NAME = "test_stream_name";
     const GROUP_NAME = "test_group_name";
 

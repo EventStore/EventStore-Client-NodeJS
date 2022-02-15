@@ -98,7 +98,7 @@ describe("listAllPersistentSubscriptions", () => {
     await node.down();
   });
 
-  test("should list all persistant subscriptions", async () => {
+  test("should list all persistent subscriptions", async () => {
     const list = await client.listAllPersistentSubscriptions();
 
     expect(list).toHaveLength(created.length);
@@ -112,7 +112,7 @@ describe("listAllPersistentSubscriptions", () => {
     }
   });
 
-  test("should list info on a persistant subscription connection", async () => {
+  test("should list info on a persistent subscription connection", async () => {
     const [streamNameOfInterest, groupNameOfInterest] = psOfInterestToStream;
     const groupNameOfInterestToAll = psOfInterestToAll?.[1];
 

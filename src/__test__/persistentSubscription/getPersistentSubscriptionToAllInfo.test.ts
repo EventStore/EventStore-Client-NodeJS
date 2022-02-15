@@ -55,7 +55,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
   });
 
   optionalDescribe(supported)("Supported (>=21.10)", () => {
-    test("should get info on a persistant subscription to all", async () => {
+    test("should get info on a persistent subscription to all", async () => {
       const STREAM_NAME = "test_stream_name";
       const GROUP_NAME = "test_group_name";
 
@@ -134,7 +134,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
       );
     });
 
-    test("should get info on a persistant subscription to all connection", async () => {
+    test("should get info on a persistent subscription to all connection", async () => {
       const STREAM_NAME = "test_stream_name_connection";
       const GROUP_NAME = "test_group_name_connection";
 

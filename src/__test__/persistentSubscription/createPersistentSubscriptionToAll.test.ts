@@ -56,7 +56,7 @@ describe("createPersistentSubscriptionToAll", () => {
   });
 
   optionalDescribe(supported)("Supported (>=21.10)", () => {
-    describe("should create a persistant subscription to all", () => {
+    describe("should create a persistent subscription to all", () => {
       test("start from start", async () => {
         const GROUP_NAME = "group_name_from_start";
         await expect(

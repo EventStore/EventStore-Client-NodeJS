@@ -83,7 +83,7 @@ describe("listPersistentSubscriptionsToAll", () => {
       );
     });
 
-    test("should list persistant subscriptions on a stream", async () => {
+    test("should list persistent subscriptions on a stream", async () => {
       const list = await client.listPersistentSubscriptionsToAll();
 
       expect(list).toHaveLength(created.length);
@@ -97,7 +97,7 @@ describe("listPersistentSubscriptionsToAll", () => {
       }
     });
 
-    test("should list info on a persistant subscription connection", async () => {
+    test("should list info on a persistent subscription connection", async () => {
       const groupNameOfInterest = created[0][1];
 
       await client.appendToStream("some_stream", jsonTestEvents());

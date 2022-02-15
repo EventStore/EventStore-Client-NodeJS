@@ -28,7 +28,7 @@ describe("getPersistentSubscriptionInfo", () => {
     await node.down();
   });
 
-  test("should get info on a persistant subscription", async () => {
+  test("should get info on a persistent subscription", async () => {
     const STREAM_NAME = "test_stream_name";
     const GROUP_NAME = "test_group_name";
 
@@ -109,7 +109,7 @@ describe("getPersistentSubscriptionInfo", () => {
     expect(typeof info3.stats.lastCheckpointedEventRevision).toBe("bigint");
   });
 
-  test("should get info on a persistant subscription connection", async () => {
+  test("should get info on a persistent subscription connection", async () => {
     const STREAM_NAME = "test_stream_name_connection";
     const GROUP_NAME = "test_group_name_connection";
 

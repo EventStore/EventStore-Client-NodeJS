@@ -88,9 +88,9 @@ export interface PersistentSubscriptionInfo {
   groupName: string;
   /** The current status of the subscription. */
   status: string;
-  /** The settings used to create the persistant subscription. */
+  /** The settings used to create the persistent subscription. */
   settings: PersistentSubscriptionSettings;
-  /** The settings used to create the persistant subscription. */
+  /** The settings used to create the persistent subscription. */
   stats: PersistentSubscriptionStats;
   /** Active connections to the subscription. */
   connections: PersistentSubscriptionConnectionInfo[];
@@ -103,9 +103,9 @@ export interface PersistentSubscriptionToAllInfo {
   groupName: string;
   /** The current status of the subscription. */
   status: string;
-  /** The settings used to create the persistant subscription. */
+  /** The settings used to create the persistent subscription. */
   settings: PersistentSubscriptionToAllSettings;
-  /** The settings used to create the persistant subscription. */
+  /** The settings used to create the persistent subscription. */
   stats: PersistentSubscriptionToAllStats;
   /** Active connections to the subscription. */
   connections: PersistentSubscriptionConnectionInfo[];

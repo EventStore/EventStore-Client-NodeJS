@@ -26,7 +26,7 @@ describe("updatePersistentSubscription", () => {
     await node.down();
   });
 
-  test("should update a persistant subscription", async () => {
+  test("should update a persistent subscription", async () => {
     const STREAM_NAME = "from_start_test_stream_name";
     const GROUP_NAME = "from_start_test_group_name";
     const settings = persistentSubscriptionSettingsFromDefaults({

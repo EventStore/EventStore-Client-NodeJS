@@ -76,7 +76,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
   });
 
   optionalDescribe(supported)("Supported (>=21.10)", () => {
-    describe("should connect to a persistant subscription to all", () => {
+    describe("should connect to a persistent subscription to all", () => {
       test("from start", async () => {
         const STREAM_PREFIX = "connect_from_start_";
         const GROUP_NAME = "from_start_test_group_name";

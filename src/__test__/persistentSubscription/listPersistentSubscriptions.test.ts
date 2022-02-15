@@ -32,7 +32,7 @@ describe("listPersistentSubscriptions", () => {
     await node.down();
   });
 
-  test("should list persistant subscriptions on a stream", async () => {
+  test("should list persistent subscriptions on a stream", async () => {
     const STREAM_NAME = "test_stream_name";
     const created = await createManyPs(client)(
       () => STREAM_NAME,
@@ -71,7 +71,7 @@ describe("listPersistentSubscriptions", () => {
     }
   });
 
-  test("should list info on a persistant subscription connection", async () => {
+  test("should list info on a persistent subscription connection", async () => {
     const STREAM_NAME = "test_stream_name_connection";
 
     const created = await createManyPs(client)(

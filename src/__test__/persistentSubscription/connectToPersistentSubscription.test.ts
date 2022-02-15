@@ -49,7 +49,7 @@ describe("subscribeToPersistentSubscription", () => {
     await cluster.down();
   });
 
-  describe("should connect to a persistant subscription", () => {
+  describe("should connect to a persistent subscription", () => {
     test("from start", async () => {
       const STREAM_NAME = "from_start_test_stream_name";
       const GROUP_NAME = "from_start_test_group_name";
