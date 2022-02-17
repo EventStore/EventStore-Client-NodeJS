@@ -5,8 +5,6 @@ declare global {
   var capabilities: ServerFeatures;
 }
 
-const UNKNOWN = "unknown";
-
 interface ServerVersion {
   string: string;
   year: number;
@@ -14,44 +12,39 @@ interface ServerVersion {
   patch: number;
 }
 
-const parseServerVersion = (
-  version: string
-): ServerVersion | typeof UNKNOWN => {
+const parseServerVersion = (version: string): ServerVersion => {
   const match = version.match(
     /^(?<year>[0-9]+)[.](?<month>[0-9]+)[.](?<patch>[0-9]+)/
   );
 
-  if (!match) return UNKNOWN;
+  if (!match || !match.groups) {
+    // version before capabilities were added
+    return {
+      string: "20.10.0",
+      year: 20,
+      month: 10,
+      patch: 0,
+    };
+  }
 
   return {
     string: version,
-    year: parseInt(match.groups!.year, 10),
-    month: parseInt(match.groups!.month, 10),
-    patch: parseInt(match.groups!.patch, 10),
+    year: parseInt(match.groups.year, 10),
+    month: parseInt(match.groups.month, 10),
+    patch: parseInt(match.groups.patch, 10),
   };
 };
 
-const stringToOperator = (op?: string): ((a: number, b: number) => boolean) => {
-  switch (op) {
-    case ">":
-      return (a, b) => a > b;
-    case "<":
-      return (a, b) => a < b;
-    case ">=":
-      return (a, b) => a >= b;
-    case "<=":
-      return (a, b) => a <= b;
-    default:
-      return (a, b) => a === b;
-  }
-};
+interface MatchVersion {
+  operator: "===" | ">=" | "<=";
+  year: number;
+  month?: number;
+  patch?: number;
+}
 
-const versionMatches = (
-  matchString: string,
-  serverVersion: string
-): boolean => {
+const parseMatchVersion = (matchString: string): MatchVersion => {
   const match = matchString.match(
-    /^(?<operator>>|<|>=|<=)?(?<year>[0-9]+)([.](?<month>[0-9]+))?([.](?<patch>[0-9]+))?/
+    /^(?<operator>>=|<=)?(?<year>[0-9]+)([.](?<month>[0-9]+))?([.](?<patch>[0-9]+))?/
   );
 
   if (!match) throw `Malformed version match string ${matchString}`;
@@ -62,32 +55,49 @@ const versionMatches = (
     month?: string;
     patch?: string;
   };
+
+  if (!match || !match.groups) {
+    throw `Malformed version match string ${matchString}`;
+  }
+
+  return {
+    operator: (match.groups.operator as MatchVersion["operator"]) ?? "===",
+    year: parseInt(match.groups.year, 10),
+    month: match.groups.month ? parseInt(match.groups.month, 10) : undefined,
+    patch: match.groups.patch ? parseInt(match.groups.patch, 10) : undefined,
+  };
+};
+
+const versionMatches = (
+  matchString: string,
+  serverVersion: string
+): boolean => {
+  const match = parseMatchVersion(matchString);
   const version = parseServerVersion(serverVersion);
 
-  if (version === UNKNOWN) {
-    return !!groups.operator?.startsWith("<");
+  if (match.operator === ">=") {
+    if (version.year > match.year) return true;
+    if (version.year < match.year) return false;
+    if (match.month && version.month > match.month) return true;
+    if (match.month && version.month < match.month) return false;
+    if (match.patch && version.patch > match.patch) return true;
+    if (match.patch && version.patch < match.patch) return false;
+    return true;
   }
 
-  const operator = stringToOperator(groups.operator);
-
-  if (!operator(parseInt(groups.year, 10), version.year)) {
-    return false;
+  if (match.operator === "<=") {
+    if (version.year < match.year) return true;
+    if (version.year > match.year) return false;
+    if (match.month && version.month < match.month) return true;
+    if (match.month && version.month > match.month) return false;
+    if (match.patch && version.patch < match.patch) return true;
+    if (match.patch && version.patch > match.patch) return false;
+    return true;
   }
 
-  if (
-    groups.month != null &&
-    !operator(parseInt(groups.month, 10), version.month)
-  ) {
-    return false;
-  }
-
-  if (
-    groups.patch != null &&
-    !operator(parseInt(groups.patch, 10), version.patch)
-  ) {
-    return false;
-  }
-
+  if (version.year !== match.year) return false;
+  if (match.month && version.month !== match.month) return false;
+  if (match.patch && version.patch !== match.patch) return false;
   return true;
 };
 

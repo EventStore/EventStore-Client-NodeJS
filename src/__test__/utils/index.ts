@@ -8,6 +8,7 @@ export const createInsecureTestCluster = (count = 3): Cluster =>
 
 export { Cluster };
 export * from "./collect";
+export * from "./createManyPs";
 export * from "./Defer";
 export * from "./delay";
 export * from "./testEvents";

@@ -1,7 +1,7 @@
 import { END, ROUND_ROBIN, START, UNBOUNDED } from "../../constants";
 import { ConsumerStrategy, Position } from "../../types";
 
-interface PersistentSubscriptionSettingsGeneric {
+export interface PersistentSubscriptionSettingsGeneric {
   /**
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
@@ -11,7 +11,7 @@ interface PersistentSubscriptionSettingsGeneric {
   resolveLinkTos: boolean;
 
   /**
-   * Enables in depth latency statistics should be tracked on this subscription.
+   * Enable tracking of in depth latency statistics on this subscription.
    * @default false
    */
   extraStatistics: boolean;
@@ -23,7 +23,7 @@ interface PersistentSubscriptionSettingsGeneric {
   messageTimeout: number;
 
   /**
-   * The maximum number of retries (due to timeout) before a message get considered to be parked.
+   * The maximum number of retries (due to timeout) before a message gets considered to be parked.
    * @default 10
    */
   maxRetryCount: number;
@@ -74,7 +74,7 @@ interface PersistentSubscriptionSettingsGeneric {
    * The strategy to use for distributing events to client consumers.
    * @default ROUND_ROBIN
    */
-  consumerStrategyName: ConsumerStrategy;
+  consumerStrategyName: ConsumerStrategy | string;
 }
 
 export interface PersistentSubscriptionSettings

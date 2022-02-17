@@ -18,9 +18,9 @@ export const LEADER = "leader";
 export const READ_ONLY_REPLICA = "read_only_replica";
 
 // consumer strategy
-export const DISPATCH_TO_SINGLE = "dispatch_to_single";
-export const ROUND_ROBIN = "round_robin";
-export const PINNED = "pinned";
+export const DISPATCH_TO_SINGLE = "DispatchToSingle";
+export const ROUND_ROBIN = "RoundRobin";
+export const PINNED = "Pinned";
 
 // persistent action
 export const PARK = "park";

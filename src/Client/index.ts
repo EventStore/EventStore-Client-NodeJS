@@ -31,6 +31,7 @@ import {
 import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 import { ServerFeatures } from "./ServerFeatures";
+import { HTTP } from "./http";
 
 interface ClientOptions {
   /**
@@ -123,6 +124,7 @@ export class Client {
   #serverFeatures?: Promise<ServerFeatures>;
   #grpcClients: Map<GRPCClientConstructor<GRPCClient>, Promise<GRPCClient>> =
     new Map();
+  #http: HTTP;
 
   // eslint-disable-next-line jsdoc/require-param
   /**
@@ -284,6 +286,7 @@ export class Client {
     this.#connectionSettings = connectionSettings;
     this.#insecure = !!channelCredentials.insecure;
     this.#defaultCredentials = defaultUserCredentials;
+    this.#http = new HTTP(this, channelCredentials, defaultUserCredentials);
 
     if (this.#insecure) {
       debug.connection("Using insecure channel");
@@ -355,6 +358,21 @@ export class Client {
     }
   };
 
+  protected get HTTPRequest() {
+    return this.#http.request;
+  }
+
+  protected getChannel = async (): Promise<Channel> => {
+    if (this.#channel) {
+      debug.connection("Using existing connection");
+      return this.#channel;
+    }
+
+    this.#channel = this.createChannel();
+
+    return this.#channel;
+  };
+
   private createGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>
   ): Promise<T> => {
@@ -370,17 +388,6 @@ export class Client {
     );
 
     return client;
-  };
-
-  private getChannel = async (): Promise<Channel> => {
-    if (this.#channel) {
-      debug.connection("Using existing connection");
-      return this.#channel;
-    }
-
-    this.#channel = this.createChannel();
-
-    return this.#channel;
   };
 
   private shouldReconnect = (

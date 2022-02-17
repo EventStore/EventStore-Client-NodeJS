@@ -27,7 +27,7 @@ describe("createPersistentSubscription", () => {
     await node.down();
   });
 
-  describe("should create a persistant subscription", () => {
+  describe("should create a persistent subscription", () => {
     test("from start", async () => {
       const STREAM_NAME = "stream_name_from_start";
       const GROUP_NAME = "group_name_from_start";

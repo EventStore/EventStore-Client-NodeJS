@@ -243,4 +243,144 @@ describe("[sample] persistent-subscriptions", () => {
     await client.deletePersistentSubscription(STREAM_NAME, GROUP_NAME);
     // endregion delete-persistent-subscription
   });
+
+  test("get-persistent-subscription-to-stream-info", async () => {
+    const STREAM_NAME = "get-persistent-subscription-to-stream-info";
+    const GROUP_NAME = "get-persistent-subscription-to-stream-info-group";
+
+    await client.createPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionSettingsFromDefaults()
+    );
+
+    // region get-persistent-subscription-to-stream-info
+    const info = await client.getPersistentSubscriptionInfo(
+      STREAM_NAME,
+      GROUP_NAME
+    );
+
+    console.log(
+      `Persistent subscription ${info.groupName} to stream ${info.eventSource} has status ${info.status}.`
+    );
+    // endregion get-persistent-subscription-to-stream-info
+
+    expect(console.log).toBeCalledWith(
+      `Persistent subscription ${GROUP_NAME} to stream ${STREAM_NAME} has status ${info.status}.`
+    );
+  });
+
+  optionalTest(supports$all)(
+    "get-persistent-subscription-to-all-info",
+    async () => {
+      const GROUP_NAME = "get-persistent-subscription-to-all-info-group";
+      await client.createPersistentSubscriptionToAll(
+        GROUP_NAME,
+        persistentSubscriptionToAllSettingsFromDefaults()
+      );
+
+      // region get-persistent-subscription-to-all-info
+      const info = await client.getPersistentSubscriptionToAllInfo(GROUP_NAME);
+
+      console.log(
+        `Persistent subscription ${info.groupName} to $all has status ${info.status}.`
+      );
+      // endregion get-persistent-subscription-to-all-info
+
+      expect(console.log).toBeCalledWith(
+        `Persistent subscription ${GROUP_NAME} to $all has status ${info.status}.`
+      );
+    }
+  );
+
+  test("replay-parked-of-persistent-subscription-to-stream", async () => {
+    const STREAM_NAME = "replay-parked-of-persistent-subscription-to-stream";
+    const GROUP_NAME =
+      "replay-parked-of-persistent-subscription-to-stream-group";
+    await client.createPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionSettingsFromDefaults()
+    );
+
+    // region replay-parked-of-persistent-subscription-to-stream
+    await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, { stopAt: 10 });
+    // endregion replay-parked-of-persistent-subscription-to-stream
+  });
+
+  optionalTest(supports$all)(
+    "replay-parked-of-persistent-subscription-to-all",
+    async () => {
+      const GROUP_NAME =
+        "replay-parked-of-persistent-subscription-to-all-group";
+      await client.createPersistentSubscriptionToAll(
+        GROUP_NAME,
+        persistentSubscriptionToAllSettingsFromDefaults()
+      );
+      // region replay-parked-of-persistent-subscription-to-all
+      await client.replayParkedMessagesToAll(GROUP_NAME, { stopAt: 10 });
+      // endregion replay-parked-of-persistent-subscription-to-all
+    }
+  );
+
+  test("list-persistent-subscriptions-to-stream", async () => {
+    const STREAM_NAME = "list-persistent-subscriptions-to-stream";
+    const GROUP_NAME = "list-persistent-subscriptions-to-stream-group";
+    await client.createPersistentSubscription(
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionSettingsFromDefaults()
+    );
+    // region list-persistent-subscriptions-to-stream
+    const subscriptions = await client.listPersistentSubscriptions(STREAM_NAME);
+
+    for (const { groupName, eventSource, status } of subscriptions) {
+      console.log(
+        `Persistent subscription ${groupName} to stream ${eventSource} has status ${status}.`
+      );
+    }
+    // endregion list-persistent-subscriptions-to-stream
+
+    expect(console.log).toBeCalledTimes(1);
+  });
+
+  optionalTest(supports$all)(
+    "list-persistent-subscriptions-to-all",
+    async () => {
+      const GROUP_NAME = "list-persistent-subscriptions-to-all-group";
+      await client.createPersistentSubscriptionToAll(
+        GROUP_NAME,
+        persistentSubscriptionToAllSettingsFromDefaults()
+      );
+      // region list-persistent-subscriptions-to-all
+      const subscriptions = await client.listPersistentSubscriptionsToAll();
+
+      for (const { groupName, status } of subscriptions) {
+        console.log(
+          `Persistent subscription ${groupName} to $all has status ${status}.`
+        );
+      }
+      // endregion list-persistent-subscriptions-to-all
+
+      expect(console.log).toBeCalled();
+    }
+  );
+
+  test("list-persistent-subscriptions", async () => {
+    // region list-persistent-subscriptions
+    const subscriptions = await client.listAllPersistentSubscriptions();
+
+    for (const { groupName, eventSource, status } of subscriptions) {
+      console.log(
+        `Persistent subscription ${groupName} to ${eventSource} has status ${status}.`
+      );
+    }
+    // endregion list-persistent-subscriptions
+  });
+
+  test("restart-persistent-subscription-subsystem", async () => {
+    // region restart-persistent-subscription-subsystem
+    await client.restartPersistentSubscriptionSubsystem();
+    // endregion restart-persistent-subscription-subsystem
+  });
 });

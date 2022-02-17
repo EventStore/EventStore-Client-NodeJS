@@ -53,7 +53,7 @@ describe("updatePersistentSubscriptionToAll", () => {
   });
 
   optionalDescribe(supported)("Supported (>=21.10)", () => {
-    test("should update a persistant subscription to all", async () => {
+    test("should update a persistent subscription to all", async () => {
       const GROUP_NAME = "supported_test_group_name";
       const settings = persistentSubscriptionToAllSettingsFromDefaults({
         extraStatistics: true,

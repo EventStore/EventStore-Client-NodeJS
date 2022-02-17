@@ -49,7 +49,7 @@ describe("deletePersistentSubscriptionToAll", () => {
   });
 
   optionalDescribe(supported)("Supported (>=21.10)", () => {
-    test("should delete a persistant subscription", async () => {
+    test("should delete a persistent subscription", async () => {
       const GROUP_NAME = "test_group_name";
 
       await client.createPersistentSubscriptionToAll(

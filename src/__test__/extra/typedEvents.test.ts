@@ -259,7 +259,7 @@ describe("typed events should compile", () => {
   });
 
   test("connectToPersistantSubscription", async () => {
-    const STREAM_NAME = "known_types_in_persistant_subscription";
+    const STREAM_NAME = "known_types_in_persistent_subscription";
     const GROUP_NAME = "some_group";
 
     // set up event types
