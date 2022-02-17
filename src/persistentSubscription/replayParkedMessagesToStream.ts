@@ -13,7 +13,7 @@ import {
 import { BaseOptions } from "../types";
 import { Client } from "../Client";
 
-export interface ReplayParkedMessagesOptions extends BaseOptions {
+export interface ReplayParkedMessagesToStreamOptions extends BaseOptions {
   /**
    * When to stop replaying parked messages. Leave undefined to have no limit.
    * @default undefined
@@ -29,21 +29,21 @@ declare module "../Client" {
      * @param groupName A group name.
      * @param options Replay options.
      */
-    replayParkedMessages(
+    replayParkedMessagesToStream(
       streamName: string,
       groupName: string,
-      options?: ReplayParkedMessagesOptions
+      options?: ReplayParkedMessagesToStreamOptions
     ): Promise<void>;
   }
 }
 
-Client.prototype.replayParkedMessages = async function (
+Client.prototype.replayParkedMessagesToStream = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  options: ReplayParkedMessagesOptions = {}
+  options: ReplayParkedMessagesToStreamOptions = {}
 ): Promise<void> {
-  debug.command("replayParkedMessages: %O", {
+  debug.command("replayParkedMessagesToStream: %O", {
     streamName,
     groupName,
     options,
@@ -52,17 +52,27 @@ Client.prototype.replayParkedMessages = async function (
   if (
     await this.supports(PersistentSubscriptionsService.replayParked, "stream")
   ) {
-    return replayParkedMessagesGRPC.call(this, streamName, groupName, options);
+    return replayParkedMessagesToStreamGRPC.call(
+      this,
+      streamName,
+      groupName,
+      options
+    );
   }
 
-  return replayParkedMessagesHTTP.call(this, streamName, groupName, options);
+  return replayParkedMessagesToStreamHTTP.call(
+    this,
+    streamName,
+    groupName,
+    options
+  );
 };
 
-const replayParkedMessagesGRPC = async function (
+const replayParkedMessagesToStreamGRPC = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  { stopAt, ...baseOptions }: ReplayParkedMessagesOptions = {}
+  { stopAt, ...baseOptions }: ReplayParkedMessagesToStreamOptions = {}
 ) {
   const req = new ReplayParkedReq();
   const options = new ReplayParkedReq.Options();
@@ -79,11 +89,11 @@ const replayParkedMessagesGRPC = async function (
 
   req.setOptions(options);
 
-  debug.command_grpc("replayParkedMessages: %g", req);
+  debug.command_grpc("replayParkedMessagesToStream: %g", req);
 
   return this.execute(
     PersistentSubscriptionsClient,
-    "replayParkedMessages",
+    "replayParkedMessagesToStream",
     (client) =>
       new Promise<void>((resolve, reject) => {
         client.replayParked(
@@ -98,11 +108,11 @@ const replayParkedMessagesGRPC = async function (
   );
 };
 
-const replayParkedMessagesHTTP = async function (
+const replayParkedMessagesToStreamHTTP = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  { stopAt, ...baseOptions }: ReplayParkedMessagesOptions = {}
+  { stopAt, ...baseOptions }: ReplayParkedMessagesToStreamOptions = {}
 ) {
   await this.HTTPRequest(
     "POST",

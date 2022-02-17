@@ -60,7 +60,7 @@ describe("listPersistentSubscriptions", () => {
 
     await delay(1000);
 
-    const list = await client.listPersistentSubscriptions(STREAM_NAME);
+    const list = await client.listPersistentSubscriptionsToStream(STREAM_NAME);
 
     expect(list).toHaveLength(created.length);
 
@@ -104,6 +104,7 @@ describe("listPersistentSubscriptions", () => {
         STREAM_NAME,
         groupNameOfInterest
       )
+      .on("error", jest.fn())
       .on("data", async (e) => {
         await subscription.ack(e);
       });
@@ -111,7 +112,7 @@ describe("listPersistentSubscriptions", () => {
     // let some events run through the subscription
     await delay(1000);
 
-    const list = await client.listPersistentSubscriptions(STREAM_NAME);
+    const list = await client.listPersistentSubscriptionsToStream(STREAM_NAME);
 
     expect(list).toHaveLength(created.length);
 
@@ -145,7 +146,7 @@ describe("listPersistentSubscriptions", () => {
       const STREAM_NAME = "does_not_exist_list_stream_name";
 
       try {
-        await client.listPersistentSubscriptions(STREAM_NAME);
+        await client.listPersistentSubscriptionsToStream(STREAM_NAME);
         throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
@@ -163,7 +164,7 @@ describe("listPersistentSubscriptions", () => {
       const STREAM_NAME = "access_denied_list_stream_name";
 
       try {
-        await client.listPersistentSubscriptions(STREAM_NAME, {
+        await client.listPersistentSubscriptionsToStream(STREAM_NAME, {
           credentials: { username: "AzureDiamond", password: "hunter2" },
         });
         throw "unreachable";

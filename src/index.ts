@@ -28,8 +28,8 @@ export {
 export type {
   ExtraStatisticsKey,
   PersistentSubscriptionConnectionInfo,
-  PersistentSubscriptionStats,
   PersistentSubscriptionToAllStats,
-  PersistentSubscriptionInfo,
+  PersistentSubscriptionToStreamStats,
   PersistentSubscriptionToAllInfo,
+  PersistentSubscriptionToStreamInfo,
 } from "./persistentSubscription/utils/mapPersistentSubscriptionInfo";

@@ -65,7 +65,7 @@ interface PersistentSubscriptionStatsBase {
   outstandingMessagesCount: number;
 }
 
-export interface PersistentSubscriptionStats
+export interface PersistentSubscriptionToStreamStats
   extends PersistentSubscriptionStatsBase {
   /** The revision of the last checkpoint. */
   lastCheckpointedEventRevision?: bigint;
@@ -81,7 +81,7 @@ export interface PersistentSubscriptionToAllStats
   lastKnownEventPosition?: Position;
 }
 
-export interface PersistentSubscriptionInfo {
+export interface PersistentSubscriptionToStreamInfo {
   /** The source of events for the subscription. */
   eventSource: string;
   /** The group name given on creation. */
@@ -91,7 +91,7 @@ export interface PersistentSubscriptionInfo {
   /** The settings used to create the persistent subscription. */
   settings: PersistentSubscriptionToStreamSettings;
   /** The settings used to create the persistent subscription. */
-  stats: PersistentSubscriptionStats;
+  stats: PersistentSubscriptionToStreamStats;
   /** Active connections to the subscription. */
   connections: PersistentSubscriptionConnectionInfo[];
 }
@@ -112,7 +112,7 @@ export interface PersistentSubscriptionToAllInfo {
 }
 
 export type PersistentSubscriptionToEitherInfo =
-  | PersistentSubscriptionInfo
+  | PersistentSubscriptionToStreamInfo
   | PersistentSubscriptionToAllInfo;
 
 export const isPersistentSubscriptionToAllInfo = (
@@ -121,7 +121,7 @@ export const isPersistentSubscriptionToAllInfo = (
 
 export const isPersistentSubscriptionToStreamInfo = (
   info: PersistentSubscriptionToEitherInfo
-): info is PersistentSubscriptionInfo => info.eventSource !== "$all";
+): info is PersistentSubscriptionToStreamInfo => info.eventSource !== "$all";
 
 export const mapPersistentSubscriptionToEitherInfo = (
   response: SubscriptionInfo
@@ -130,12 +130,12 @@ export const mapPersistentSubscriptionToEitherInfo = (
     return mapPersistentSubscriptionToAllInfo(response);
   }
 
-  return mapPersistentSubscriptionInfo(response);
+  return mapPersistentSubscriptionToStreamInfo(response);
 };
 
-export const mapPersistentSubscriptionInfo = (
+export const mapPersistentSubscriptionToStreamInfo = (
   response: SubscriptionInfo
-): PersistentSubscriptionInfo => ({
+): PersistentSubscriptionToStreamInfo => ({
   eventSource: response.getEventSource(),
   groupName: response.getGroupName(),
   status: response.getStatus(),
@@ -273,7 +273,9 @@ const mapStatsBase = (
   parkedMessageCount: BigInt(response.getParkedMessageCount()),
 });
 
-const mapStats = (response: SubscriptionInfo): PersistentSubscriptionStats => ({
+const mapStats = (
+  response: SubscriptionInfo
+): PersistentSubscriptionToStreamStats => ({
   ...mapStatsBase(response),
   lastCheckpointedEventRevision: stringToRevision(
     response.getLastCheckpointedEventPosition()
@@ -354,7 +356,7 @@ interface HTTPConnectionInfo {
 
 export const mapHTTPPersistentSubscriptionInfo = (
   response: HTTPSubscriptionInfo
-): PersistentSubscriptionInfo => ({
+): PersistentSubscriptionToStreamInfo => ({
   eventSource: response.eventStreamId,
   groupName: response.groupName,
   status: response.status,

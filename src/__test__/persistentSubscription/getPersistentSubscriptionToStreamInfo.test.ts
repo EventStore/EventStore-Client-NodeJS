@@ -10,7 +10,7 @@ import {
   START,
 } from "@eventstore/db-client";
 
-describe("getPersistentSubscriptionInfo", () => {
+describe("getPersistentSubscriptionToStreamInfo", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -46,7 +46,7 @@ describe("getPersistentSubscriptionInfo", () => {
       settings
     );
 
-    const info = await client.getPersistentSubscriptionInfo(
+    const info = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -71,7 +71,7 @@ describe("getPersistentSubscriptionInfo", () => {
       settings2
     );
 
-    const info2 = await client.getPersistentSubscriptionInfo(
+    const info2 = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -87,6 +87,7 @@ describe("getPersistentSubscriptionInfo", () => {
 
     const subscription = client
       .subscribeToPersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
+      .on("error", jest.fn())
       .on("data", async (e) => {
         await subscription.ack(e);
       });
@@ -96,7 +97,7 @@ describe("getPersistentSubscriptionInfo", () => {
     await subscription.unsubscribe();
     await delay(1000);
 
-    const info3 = await client.getPersistentSubscriptionInfo(
+    const info3 = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -130,6 +131,7 @@ describe("getPersistentSubscriptionInfo", () => {
 
     const subscription = client
       .subscribeToPersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
+      .on("error", jest.fn())
       .on("data", async (e) => {
         await subscription.ack(e);
       });
@@ -137,7 +139,7 @@ describe("getPersistentSubscriptionInfo", () => {
     // let some events run through the subscription
     await delay(1000);
 
-    const info = await client.getPersistentSubscriptionInfo(
+    const info = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -169,7 +171,10 @@ describe("getPersistentSubscriptionInfo", () => {
       const GROUP_NAME = "does_not_exist_get_info_group_name";
 
       try {
-        await client.getPersistentSubscriptionInfo(STREAM_NAME, GROUP_NAME);
+        await client.getPersistentSubscriptionToStreamInfo(
+          STREAM_NAME,
+          GROUP_NAME
+        );
         throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
@@ -189,9 +194,13 @@ describe("getPersistentSubscriptionInfo", () => {
       const GROUP_NAME = "access_denied_get_info_group_name";
 
       try {
-        await client.getPersistentSubscriptionInfo(STREAM_NAME, GROUP_NAME, {
-          credentials: { username: "AzureDiamond", password: "hunter2" },
-        });
+        await client.getPersistentSubscriptionToStreamInfo(
+          STREAM_NAME,
+          GROUP_NAME,
+          {
+            credentials: { username: "AzureDiamond", password: "hunter2" },
+          }
+        );
         throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(AccessDeniedError);

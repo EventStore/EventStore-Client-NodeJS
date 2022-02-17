@@ -10,7 +10,7 @@ import {
   START,
 } from "@eventstore/db-client";
 
-describe("replayParkedMessages", () => {
+describe("replayParkedMessagesToStream", () => {
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
 
@@ -68,7 +68,7 @@ describe("replayParkedMessages", () => {
 
         if (resolvedEvent.event?.type === FINISH) {
           await delay(5000); // wait for all nacks to be processed
-          await client.replayParkedMessages(STREAM_NAME, GROUP_NAME);
+          await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME);
           hasReplayed = true;
         }
 
@@ -125,7 +125,7 @@ describe("replayParkedMessages", () => {
 
         if (resolvedEvent.event?.type === FINISH) {
           await delay(5000); // wait for all nacks to be processed
-          await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
+          await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
             stopAt: STOP_AT,
           });
           hasReplayed = true;
@@ -196,7 +196,7 @@ describe("replayParkedMessages", () => {
 
         if (resolvedEvent.event?.type === FINISH) {
           await delay(5000); // wait for all nacks to be processed
-          await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
+          await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
             stopAt: STOP_AT,
           });
           hasReplayed = true;
@@ -230,7 +230,7 @@ describe("replayParkedMessages", () => {
       const GROUP_NAME = "does_not_exist_replay_parked_group_name";
 
       try {
-        await client.replayParkedMessages(STREAM_NAME, GROUP_NAME);
+        await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME);
         throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
@@ -250,7 +250,7 @@ describe("replayParkedMessages", () => {
       const GROUP_NAME = "access_denied_replay_parked_group_name";
 
       try {
-        await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
+        await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
           credentials: { username: "AzureDiamond", password: "hunter2" },
         });
         throw "unreachable";
