@@ -6,7 +6,7 @@ import {
   jsonEvent,
   JSONEventType,
   PARK,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   persistentSubscriptionToAllSettingsFromDefaults,
   ResolvedEvent,
   START,
@@ -55,10 +55,10 @@ describe("[sample] persistent-subscriptions", () => {
     const GROUP_NAME = "create-persistent-subscription-to-stream-group";
 
     // region create-persistent-subscription-to-stream
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults(),
+      persistentSubscriptionToStreamSettingsFromDefaults(),
       { credentials: { username: "admin", password: "changeit" } }
     );
     // endregion create-persistent-subscription-to-stream
@@ -77,18 +77,19 @@ describe("[sample] persistent-subscriptions", () => {
       jsonEvent({ type: "test", data: {} })
     );
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({ startFrom: START }),
+      persistentSubscriptionToStreamSettingsFromDefaults({ startFrom: START }),
       { credentials: { username: "admin", password: "changeit" } }
     );
 
     // region subscribe-to-persistent-subscription-to-stream
-    const subscription = client.subscribeToPersistentSubscription<SomeEvent>(
-      STREAM_NAME,
-      GROUP_NAME
-    );
+    const subscription =
+      client.subscribeToPersistentSubscriptionToStream<SomeEvent>(
+        STREAM_NAME,
+        GROUP_NAME
+      );
 
     try {
       for await (const event of subscription) {
@@ -172,10 +173,10 @@ describe("[sample] persistent-subscriptions", () => {
       await subscription.unsubscribe();
     };
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       }),
       { credentials: { username: "admin", password: "changeit" } }
@@ -187,10 +188,11 @@ describe("[sample] persistent-subscriptions", () => {
     );
 
     // region subscribe-to-persistent-subscription-with-manual-acks
-    const subscription = client.subscribeToPersistentSubscription<SomeEvent>(
-      STREAM_NAME,
-      GROUP_NAME
-    );
+    const subscription =
+      client.subscribeToPersistentSubscriptionToStream<SomeEvent>(
+        STREAM_NAME,
+        GROUP_NAME
+      );
 
     try {
       for await (const event of subscription) {
@@ -211,17 +213,17 @@ describe("[sample] persistent-subscriptions", () => {
     const STREAM_NAME = "update-persistent-subscription";
     const GROUP_NAME = "update-persistent-subscription-group";
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     // region update-persistent-subscription
-    await client.updatePersistentSubscription(
+    await client.updatePersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         resolveLinkTos: true,
         checkPointLowerBound: 20,
       })
@@ -233,14 +235,14 @@ describe("[sample] persistent-subscriptions", () => {
     const STREAM_NAME = "delete-persistent-subscription";
     const GROUP_NAME = "delete-persistent-subscription-group";
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     // region delete-persistent-subscription
-    await client.deletePersistentSubscription(STREAM_NAME, GROUP_NAME);
+    await client.deletePersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME);
     // endregion delete-persistent-subscription
   });
 
@@ -248,14 +250,14 @@ describe("[sample] persistent-subscriptions", () => {
     const STREAM_NAME = "get-persistent-subscription-to-stream-info";
     const GROUP_NAME = "get-persistent-subscription-to-stream-info-group";
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     // region get-persistent-subscription-to-stream-info
-    const info = await client.getPersistentSubscriptionInfo(
+    const info = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -297,14 +299,16 @@ describe("[sample] persistent-subscriptions", () => {
     const STREAM_NAME = "replay-parked-of-persistent-subscription-to-stream";
     const GROUP_NAME =
       "replay-parked-of-persistent-subscription-to-stream-group";
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     // region replay-parked-of-persistent-subscription-to-stream
-    await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, { stopAt: 10 });
+    await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
+      stopAt: 10,
+    });
     // endregion replay-parked-of-persistent-subscription-to-stream
   });
 
@@ -326,13 +330,15 @@ describe("[sample] persistent-subscriptions", () => {
   test("list-persistent-subscriptions-to-stream", async () => {
     const STREAM_NAME = "list-persistent-subscriptions-to-stream";
     const GROUP_NAME = "list-persistent-subscriptions-to-stream-group";
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
     // region list-persistent-subscriptions-to-stream
-    const subscriptions = await client.listPersistentSubscriptions(STREAM_NAME);
+    const subscriptions = await client.listPersistentSubscriptionsToStream(
+      STREAM_NAME
+    );
 
     for (const { groupName, eventSource, status } of subscriptions) {
       console.log(
