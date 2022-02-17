@@ -174,6 +174,8 @@ describe("getPersistentSubscriptionToAllInfo", () => {
 
       // We set our default user above
       expect(connection.username).toBe("admin");
+      // should be us connected
+      expect(connection.connectionName).toBe(client.connectionName);
 
       // we enabled extraStatistics.
       expect(connection.extraStatistics).toBeDefined();

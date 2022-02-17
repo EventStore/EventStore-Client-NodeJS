@@ -331,11 +331,12 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://my%3Agreat%40username:UyeXx8%24%5EPsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false",
+    "esdb://my%3Agreat%40username:UyeXx8%24%5EPsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false&connectionName=wh%40t%3F%3A%26",
     {
       dnsDiscover: false,
       nodePreference: "follower",
       throwOnAppendFailure: false,
+      connectionName: "wh@t?:&",
       defaultCredentials: {
         username: "my:great@username",
         password: "UyeXx8$^PsOo4jG88FlCauR1Coz25q",
@@ -349,11 +350,12 @@ export const valid: Array<
     },
   ],
   [
-    "esdb+discover://user:pass@морда-кошки.ru,ощущение-картофеля.ru?nodePreference=follower&throwOnAppendFailure=false",
+    "esdb+discover://user:pass@морда-кошки.ru,ощущение-картофеля.ru?nodePreference=follower&throwOnAppendFailure=false&connectionName=соединение",
     {
       dnsDiscover: true,
       nodePreference: "follower",
       throwOnAppendFailure: false,
+      connectionName: "соединение",
       defaultCredentials: {
         username: "user",
         password: "pass",
@@ -392,7 +394,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=true&THROWOnAppendFailure=false&KEEPALIVEinterval=200",
+    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=true&THROWOnAppendFailure=false&KEEPALIVEinterval=200&CoNnEcTionNAME=wow, what a great connection",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -401,6 +403,7 @@ export const valid: Array<
       nodePreference: "leader",
       tls: false,
       tlsVerifyCert: true,
+      connectionName: "wow, what a great connection",
       throwOnAppendFailure: false,
       keepAliveInterval: 200,
       hosts: [
@@ -440,6 +443,8 @@ export const valid: Array<
       &nOdEpReFeReNcE=leader
       &TLS=false
       &TlsVerifyCert=true
+      & CONNECTIONname = my great 
+      connection
       &
       THROWOnAppendFailure
       =
@@ -452,6 +457,7 @@ export const valid: Array<
       nodePreference: "leader",
       tls: false,
       tlsVerifyCert: true,
+      connectionName: "my great \n      connection",
       throwOnAppendFailure: false,
       keepAliveInterval: 200,
       hosts: [
