@@ -21,7 +21,7 @@ declare module "../Client" {
     /**
      * Gets information and statistics on the specified persistent subscription to $all and its connections.
      * @param groupName A group name.
-     * @param options Replay options.
+     * @param options Get persistent subscription to all options.
      */
     getPersistentSubscriptionToAllInfo(
       groupName: string,

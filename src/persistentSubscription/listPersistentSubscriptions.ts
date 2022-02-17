@@ -25,7 +25,7 @@ declare module "../Client" {
     /**
      * Lists persistent subscriptions to a stream.
      * @param streamName A stream name.
-     * @param options List projections options.
+     * @param options List persistent subscriptions options.
      */
     listPersistentSubscriptions(
       streamName: string,

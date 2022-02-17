@@ -27,7 +27,7 @@ declare module "../Client" {
      * Gets information and statistics on the specified persistent subscription and its connections.
      * @param streamName A stream name.
      * @param groupName A group name.
-     * @param options Replay options.
+     * @param options Get persistent subscription info options.
      */
     getPersistentSubscriptionInfo(
       streamName: string,

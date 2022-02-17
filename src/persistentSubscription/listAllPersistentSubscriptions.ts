@@ -20,7 +20,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Lists all persistent subscriptions.
-     * @param options List projections options.
+     * @param options List persistent subscriptions options.
      */
     listAllPersistentSubscriptions(
       options?: ListPersistentSubscriptionsOptions
