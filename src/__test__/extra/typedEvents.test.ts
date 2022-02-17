@@ -5,7 +5,7 @@ import {
   EventStoreDBClient,
   jsonEvent,
   JSONEventType,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
 } from "@eventstore/db-client";
 
 describe("typed events should compile", () => {
@@ -295,10 +295,10 @@ describe("typed events should compile", () => {
       metadata: { feels: "terrible" },
     });
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);

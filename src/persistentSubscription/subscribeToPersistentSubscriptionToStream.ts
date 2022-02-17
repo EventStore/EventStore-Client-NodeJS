@@ -5,12 +5,17 @@ import { ReadReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 import UUIDOption = ReadReq.Options.UUIDOption;
 
-import { PersistentSubscription, BaseOptions, EventType } from "../types";
+import {
+  PersistentSubscriptionToStream,
+  BaseOptions,
+  EventType,
+} from "../types";
 import { debug, convertGrpcEvent } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
 
-export interface SubscribeToPersistentSubscriptionOptions extends BaseOptions {
+export interface SubscribeToPersistentSubscriptionToStreamOptions
+  extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
    * @default 10
@@ -26,16 +31,30 @@ declare module "../Client" {
      * @param group A group name.
      * @param options Connection options.
      */
+    subscribeToPersistentSubscriptionToStream<E extends EventType = EventType>(
+      streamName: string,
+      groupName: string,
+      options?: SubscribeToPersistentSubscriptionToStreamOptions,
+      duplexOptions?: DuplexOptions
+    ): PersistentSubscriptionToStream<E>;
+
+    /**
+     * Connects to a persistent subscription.
+     * @param stream A stream name.
+     * @param group A group name.
+     * @param options Connection options.
+     * @deprecated Renamed to {@link subscribeToPersistentSubscriptionToStream}.
+     */
     subscribeToPersistentSubscription<E extends EventType = EventType>(
       streamName: string,
       groupName: string,
-      options?: SubscribeToPersistentSubscriptionOptions,
+      options?: SubscribeToPersistentSubscriptionToStreamOptions,
       duplexOptions?: DuplexOptions
-    ): PersistentSubscription<E>;
+    ): PersistentSubscriptionToStream<E>;
   }
 }
 
-Client.prototype.subscribeToPersistentSubscription = function <
+Client.prototype.subscribeToPersistentSubscriptionToStream = function <
   E extends EventType = EventType
 >(
   this: Client,
@@ -44,13 +63,13 @@ Client.prototype.subscribeToPersistentSubscription = function <
   {
     bufferSize = 10,
     ...baseOptions
-  }: SubscribeToPersistentSubscriptionOptions = {},
+  }: SubscribeToPersistentSubscriptionToStreamOptions = {},
   duplexOptions: DuplexOptions = {}
-): PersistentSubscription<E> {
+): PersistentSubscriptionToStream<E> {
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
       PersistentSubscriptionsClient,
-      "subscribeToPersistentSubscription",
+      "subscribeToPersistentSubscriptionToStream",
       (client) => {
         const req = new ReadReq();
         const options = new ReadReq.Options();
@@ -67,7 +86,7 @@ Client.prototype.subscribeToPersistentSubscription = function <
         options.setUuidOption(uuidOption);
         req.setOptions(options);
 
-        debug.command("subscribeToPersistentSubscription: %O", {
+        debug.command("subscribeToPersistentSubscriptionToStream: %O", {
           streamName,
           groupName,
           options: {
@@ -75,7 +94,10 @@ Client.prototype.subscribeToPersistentSubscription = function <
             ...baseOptions,
           },
         });
-        debug.command_grpc("subscribeToPersistentSubscription: %g", req);
+        debug.command_grpc(
+          "subscribeToPersistentSubscriptionToStream: %g",
+          req
+        );
 
         const stream = client.read(
           ...this.callArguments(baseOptions, {
@@ -90,3 +112,6 @@ Client.prototype.subscribeToPersistentSubscription = function <
     duplexOptions
   );
 };
+
+Client.prototype.subscribeToPersistentSubscription =
+  Client.prototype.subscribeToPersistentSubscriptionToStream;

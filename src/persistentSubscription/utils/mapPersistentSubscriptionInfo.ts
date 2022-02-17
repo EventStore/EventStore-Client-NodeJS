@@ -2,7 +2,7 @@ import { SubscriptionInfo } from "../../../generated/persistent_pb";
 import { END, START, UNBOUNDED } from "../../constants";
 import type { Position } from "../../types";
 import {
-  PersistentSubscriptionSettings,
+  PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionSettingsGeneric,
   PersistentSubscriptionToAllSettings,
 } from "./persistentSubscriptionSettings";
@@ -89,7 +89,7 @@ export interface PersistentSubscriptionInfo {
   /** The current status of the subscription. */
   status: string;
   /** The settings used to create the persistent subscription. */
-  settings: PersistentSubscriptionSettings;
+  settings: PersistentSubscriptionToStreamSettings;
   /** The settings used to create the persistent subscription. */
   stats: PersistentSubscriptionStats;
   /** Active connections to the subscription. */
@@ -162,7 +162,7 @@ const stringToRevision = (str: string): bigint | undefined => {
 
 const stringToStartFromRevision = (
   startFrom: string
-): PersistentSubscriptionSettings["startFrom"] => {
+): PersistentSubscriptionToStreamSettings["startFrom"] => {
   switch (startFrom) {
     case "0":
       return START;
@@ -221,7 +221,7 @@ const mapSettingBase = (
 
 const mapSettings = (
   response: SubscriptionInfo
-): PersistentSubscriptionSettings => ({
+): PersistentSubscriptionToStreamSettings => ({
   ...mapSettingBase(response),
   startFrom: stringToStartFromRevision(response.getStartFrom()),
 });
@@ -365,7 +365,7 @@ export const mapHTTPPersistentSubscriptionInfo = (
 
 const mapHTTPSettings = (
   response: HTTPSubscriptionInfo
-): PersistentSubscriptionSettings => ({
+): PersistentSubscriptionToStreamSettings => ({
   startFrom: mapHTTPStartFrom(response.config.startFrom),
   resolveLinkTos: response.config.resolveLinktos,
   extraStatistics: response.config.extraStatistics,
@@ -383,7 +383,7 @@ const mapHTTPSettings = (
 
 const mapHTTPStartFrom = (
   startFrom: number
-): PersistentSubscriptionSettings["startFrom"] => {
+): PersistentSubscriptionToStreamSettings["startFrom"] => {
   switch (startFrom) {
     case 0:
       return START;

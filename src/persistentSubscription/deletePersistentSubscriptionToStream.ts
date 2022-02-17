@@ -6,7 +6,8 @@ import { convertToCommandError, debug } from "../utils";
 import { BaseOptions } from "../types";
 import { Client } from "../Client";
 
-export interface DeletePersistentSubscriptionOptions extends BaseOptions {}
+export interface DeletePersistentSubscriptionToStreamOptions
+  extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
@@ -16,19 +17,32 @@ declare module "../Client" {
      * @param groupName A group name.
      * @param options Deletion options.
      */
+    deletePersistentSubscriptionToStream(
+      streamName: string,
+      groupName: string,
+      options?: DeletePersistentSubscriptionToStreamOptions
+    ): Promise<void>;
+
+    /**
+     * Deletes a persistent subscription.
+     * @param streamName A stream name.
+     * @param groupName A group name.
+     * @param options Deletion options.
+     * @deprecated Renamed to {@link deletePersistentSubscriptionToStream}.
+     */
     deletePersistentSubscription(
       streamName: string,
       groupName: string,
-      options?: DeletePersistentSubscriptionOptions
+      options?: DeletePersistentSubscriptionToStreamOptions
     ): Promise<void>;
   }
 }
 
-Client.prototype.deletePersistentSubscription = async function (
+Client.prototype.deletePersistentSubscriptionToStream = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: DeletePersistentSubscriptionOptions = {}
+  baseOptions: DeletePersistentSubscriptionToStreamOptions = {}
 ): Promise<void> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
@@ -39,16 +53,16 @@ Client.prototype.deletePersistentSubscription = async function (
   options.setGroupName(groupName);
   req.setOptions(options);
 
-  debug.command("deletePersistentSubscription: %O", {
+  debug.command("deletePersistentSubscriptionToStream: %O", {
     streamName,
     groupName,
     options: baseOptions,
   });
-  debug.command_grpc("deletePersistentSubscription: %g", req);
+  debug.command_grpc("deletePersistentSubscriptionToStream: %g", req);
 
   return this.execute(
     PersistentSubscriptionsClient,
-    "deletePersistentSubscription",
+    "deletePersistentSubscriptionToStream",
     (client) =>
       new Promise<void>((resolve, reject) => {
         client.delete(req, ...this.callArguments(baseOptions), (error) => {
@@ -58,3 +72,6 @@ Client.prototype.deletePersistentSubscription = async function (
       })
   );
 };
+
+Client.prototype.deletePersistentSubscription =
+  Client.prototype.deletePersistentSubscriptionToStream;

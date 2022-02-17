@@ -130,7 +130,7 @@ describe("listAllPersistentSubscriptions", () => {
     await client.appendToStream(streamNameOfInterest, jsonTestEvents());
 
     const subscriptionToStream = client
-      .subscribeToPersistentSubscription(
+      .subscribeToPersistentSubscriptionToStream(
         streamNameOfInterest,
         groupNameOfInterest
       )

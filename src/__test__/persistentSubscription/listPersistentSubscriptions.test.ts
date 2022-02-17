@@ -100,7 +100,10 @@ describe("listPersistentSubscriptions", () => {
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
     const subscription = client
-      .subscribeToPersistentSubscription(STREAM_NAME, groupNameOfInterest)
+      .subscribeToPersistentSubscriptionToStream(
+        STREAM_NAME,
+        groupNameOfInterest
+      )
       .on("data", async (e) => {
         await subscription.ack(e);
       });

@@ -5,7 +5,7 @@ import {
   END,
   EventStoreDBClient,
   PersistentSubscriptionDoesNotExistError,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   ROUND_ROBIN,
   START,
 } from "@eventstore/db-client";
@@ -35,12 +35,12 @@ describe("getPersistentSubscriptionInfo", () => {
     const STREAM_NAME = "test_stream_name";
     const GROUP_NAME = "test_group_name";
 
-    const settings = persistentSubscriptionSettingsFromDefaults({
+    const settings = persistentSubscriptionToStreamSettingsFromDefaults({
       startFrom: END,
       checkPointUpperBound: 1,
     });
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
       settings
@@ -57,7 +57,7 @@ describe("getPersistentSubscriptionInfo", () => {
     // We did not connect
     expect(info.connections).toHaveLength(0);
 
-    const settings2 = persistentSubscriptionSettingsFromDefaults({
+    const settings2 = persistentSubscriptionToStreamSettingsFromDefaults({
       ...settings,
       startFrom: BigInt(123),
       checkPointLowerBound: 12,
@@ -65,7 +65,7 @@ describe("getPersistentSubscriptionInfo", () => {
       consumerStrategyName: ROUND_ROBIN,
     });
 
-    await client.updatePersistentSubscription(
+    await client.updatePersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
       settings2
@@ -86,7 +86,7 @@ describe("getPersistentSubscriptionInfo", () => {
     await client.appendToStream(STREAM_NAME, jsonTestEvents(500));
 
     const subscription = client
-      .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+      .subscribeToPersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
       .on("data", async (e) => {
         await subscription.ack(e);
       });
@@ -116,12 +116,12 @@ describe("getPersistentSubscriptionInfo", () => {
     const STREAM_NAME = "test_stream_name_connection";
     const GROUP_NAME = "test_group_name_connection";
 
-    const settings = persistentSubscriptionSettingsFromDefaults({
+    const settings = persistentSubscriptionToStreamSettingsFromDefaults({
       startFrom: START,
       extraStatistics: true,
     });
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
       settings
@@ -129,7 +129,7 @@ describe("getPersistentSubscriptionInfo", () => {
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
     const subscription = client
-      .subscribeToPersistentSubscription(STREAM_NAME, GROUP_NAME)
+      .subscribeToPersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
       .on("data", async (e) => {
         await subscription.ack(e);
       });

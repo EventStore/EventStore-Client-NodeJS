@@ -19,8 +19,10 @@ export type { StreamMetadata } from "./utils/streamMetadata";
 export * from "./utils/systemStreams";
 export {
   PersistentSubscriptionSettings,
+  PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionToAllSettings,
   persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   persistentSubscriptionToAllSettingsFromDefaults,
 } from "./persistentSubscription/utils/persistentSubscriptionSettings";
 export type {

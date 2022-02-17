@@ -29,7 +29,7 @@ declare module "../Client" {
      * Available from server version 21.10 onwards.
      * @param groupName A group name.
      * @param settings PersistentSubscription settings.
-     * @see {@link persistentSubscriptionSettingsFromDefaults}
+     * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
      * @param options Command options.
      */
     createPersistentSubscriptionToAll(

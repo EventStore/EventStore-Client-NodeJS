@@ -2,10 +2,10 @@ import { createTestNode } from "@test-utils";
 
 import {
   EventStoreDBClient,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
 } from "@eventstore/db-client";
 
-describe("deletePersistentSubscription", () => {
+describe("deletePersistentSubscriptionToStream", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -29,14 +29,14 @@ describe("deletePersistentSubscription", () => {
     const STREAM_NAME = "test_stream_name";
     const GROUP_NAME = "test_group_name";
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     await expect(
-      client.deletePersistentSubscription(STREAM_NAME, GROUP_NAME)
+      client.deletePersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
     ).resolves.toBeUndefined();
   });
 });

@@ -1,7 +1,7 @@
 import {
   EventStoreDBClient,
   PersistentSubscriptionSettings,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   PersistentSubscriptionToAllSettings,
   persistentSubscriptionToAllSettingsFromDefaults,
 } from "@eventstore/db-client";
@@ -25,10 +25,10 @@ export const createManyPs =
       const toCreate: CreatedPS = [
         streamName(i),
         groupName(i),
-        persistentSubscriptionSettingsFromDefaults(settingsChange),
+        persistentSubscriptionToStreamSettingsFromDefaults(settingsChange),
       ];
 
-      await client.createPersistentSubscription(...toCreate);
+      await client.createPersistentSubscriptionToStream(...toCreate);
 
       created.push(toCreate);
     }

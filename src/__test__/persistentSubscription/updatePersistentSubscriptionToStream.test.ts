@@ -3,10 +3,10 @@ import { createTestNode } from "@test-utils";
 import {
   PINNED,
   EventStoreDBClient,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
 } from "@eventstore/db-client";
 
-describe("updatePersistentSubscription", () => {
+describe("updatePersistentSubscriptionToStream", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -29,18 +29,18 @@ describe("updatePersistentSubscription", () => {
   test("should update a persistent subscription", async () => {
     const STREAM_NAME = "from_start_test_stream_name";
     const GROUP_NAME = "from_start_test_group_name";
-    const settings = persistentSubscriptionSettingsFromDefaults({
+    const settings = persistentSubscriptionToStreamSettingsFromDefaults({
       startFrom: BigInt(1),
     });
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
       settings
     );
 
     await expect(
-      client.updatePersistentSubscription(STREAM_NAME, GROUP_NAME, {
+      client.updatePersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME, {
         ...settings,
         consumerStrategyName: PINNED,
       })

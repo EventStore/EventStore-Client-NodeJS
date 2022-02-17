@@ -463,8 +463,12 @@ export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
   nack(action: PersistentAction, reason: string, ...events: E[]): Promise<void>;
 }
 
-export type PersistentSubscription<E extends EventType = EventType> =
+export type PersistentSubscriptionToStream<E extends EventType = EventType> =
   PersistentSubscriptionBase<ResolvedEvent<E>>;
+/**
+ * @deprecated Renamed to {@link PersistentSubscriptionToStream}.
+ */
+export type PersistentSubscription = PersistentSubscriptionToStream;
 export type PersistentSubscriptionToAll =
   PersistentSubscriptionBase<AllStreamResolvedEvent>;
 

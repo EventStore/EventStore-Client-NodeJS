@@ -6,7 +6,7 @@ import {
   jsonEvent,
   PARK,
   PersistentSubscriptionDoesNotExistError,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   START,
 } from "@eventstore/db-client";
 
@@ -33,10 +33,10 @@ describe("replayParkedMessages", () => {
     const GROUP_NAME = "replay_to_end_parked_group_name";
     const FINISH = "finish-test";
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -49,7 +49,7 @@ describe("replayParkedMessages", () => {
       }),
     ]);
 
-    const subscription = client.subscribeToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -89,10 +89,10 @@ describe("replayParkedMessages", () => {
     const FINISH = "finish-test";
     const STOP_AT = 4;
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -105,7 +105,7 @@ describe("replayParkedMessages", () => {
       }),
     ]);
 
-    const subscription = client.subscribeToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -160,10 +160,10 @@ describe("replayParkedMessages", () => {
     const FINISH = "finish-test";
     const STOP_AT = 4;
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -176,7 +176,7 @@ describe("replayParkedMessages", () => {
       }),
     ]);
 
-    const subscription = client.subscribeToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME
     );

@@ -7,7 +7,7 @@ import {
   UNBOUNDED,
 } from "../../constants";
 import {
-  PersistentSubscriptionSettings,
+  PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionToAllSettings,
 } from "./persistentSubscriptionSettings";
 
@@ -15,7 +15,7 @@ type GRPCSettings = typeof CreateReq.Settings | typeof UpdateReq.Settings;
 
 export const settingsToGRPC = <T extends GRPCSettings>(
   settings:
-    | PersistentSubscriptionSettings
+    | PersistentSubscriptionToStreamSettings
     | PersistentSubscriptionToAllSettings,
   ReqSettings: T
 ): InstanceType<T> => {

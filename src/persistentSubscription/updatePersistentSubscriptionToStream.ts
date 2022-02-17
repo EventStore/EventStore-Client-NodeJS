@@ -1,47 +1,61 @@
 import { StreamIdentifier } from "../../generated/shared_pb";
-import { CreateReq } from "../../generated/persistent_pb";
+import { UpdateReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
-import { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
-import { Client } from "../Client";
 import { END, START } from "../constants";
-
+import { Client } from "../Client";
+import { BaseOptions } from "../types";
+import { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
-import { PersistentSubscriptionSettings } from "./utils/persistentSubscriptionSettings";
 
 declare module "../Client" {
   interface Client {
     /**
-     * Creates a persistent subscription on a stream. Persistent subscriptions are special kind of subscription where the
-     * server remembers where the read offset is at. This allows for many different modes of operations compared to a
-     * regular subscription where the client holds the read offset. The pair stream name and group must be unique.
+     * Updates a persistent subscription configuration.
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param settings PersistentSubscription settings.
-     * @see {@link persistentSubscriptionSettingsFromDefaults}
+     * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
      * @param options Command options.
      */
-    createPersistentSubscription(
+    updatePersistentSubscriptionToStream(
       streamName: string,
       groupName: string,
-      settings: PersistentSubscriptionSettings,
+      settings: PersistentSubscriptionToStreamSettings,
+      options?: BaseOptions
+    ): Promise<void>;
+
+    /**
+     * Updates a persistent subscription configuration.
+     * @param streamName A stream name.
+     * @param groupName A group name.
+     * @param settings PersistentSubscription settings.
+     * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
+     * @param options Command options.
+     * @deprecated Renamed to {@link updatePersistentSubscriptionToStream}.
+     */
+    updatePersistentSubscription(
+      streamName: string,
+      groupName: string,
+      settings: PersistentSubscriptionToStreamSettings,
       options?: BaseOptions
     ): Promise<void>;
   }
 }
 
-Client.prototype.createPersistentSubscription = async function (
+Client.prototype.updatePersistentSubscriptionToStream = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  settings: PersistentSubscriptionSettings,
+  settings: PersistentSubscriptionToStreamSettings,
   baseOptions: BaseOptions = {}
 ): Promise<void> {
-  const req = new CreateReq();
-  const options = new CreateReq.Options();
+  const req = new UpdateReq();
+  const options = new UpdateReq.Options();
   const identifier = new StreamIdentifier();
-  const reqSettings = settingsToGRPC(settings, CreateReq.Settings);
+
+  const reqSettings = settingsToGRPC(settings, UpdateReq.Settings);
 
   // Add deprecated revision option for pre-21.10 support
   switch (settings.startFrom) {
@@ -68,23 +82,26 @@ Client.prototype.createPersistentSubscription = async function (
 
   req.setOptions(options);
 
-  debug.command("createPersistentSubscription: %O", {
+  debug.command("updatePersistentSubscriptionToStream: %O", {
     streamName,
     groupName,
     settings,
     options: baseOptions,
   });
-  debug.command_grpc("createPersistentSubscription: %g", req);
+  debug.command_grpc("updatePersistentSubscriptionToStream: %g", req);
 
   return this.execute(
     PersistentSubscriptionsClient,
-    "createPersistentSubscription",
+    "updatePersistentSubscriptionToStream",
     (client) =>
       new Promise<void>((resolve, reject) => {
-        client.create(req, ...this.callArguments(baseOptions), (error) => {
+        client.update(req, ...this.callArguments(baseOptions), (error) => {
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
       })
   );
 };
+
+Client.prototype.updatePersistentSubscription =
+  Client.prototype.updatePersistentSubscriptionToStream;
