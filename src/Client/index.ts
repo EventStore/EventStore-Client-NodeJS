@@ -27,7 +27,6 @@ import {
   convertToCommandError,
   debug,
   NotLeaderError,
-  TimeoutError,
   UnavailableError,
 } from "../utils";
 import { discoverEndpoint } from "./discovery";
@@ -420,7 +419,7 @@ export class Client {
       return [true, error.leader];
     }
 
-    return [error instanceof UnavailableError || error instanceof TimeoutError];
+    return [error instanceof UnavailableError];
   };
 
   protected handleError = async (
