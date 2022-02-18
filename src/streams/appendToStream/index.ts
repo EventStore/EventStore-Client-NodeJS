@@ -7,6 +7,7 @@ import {
   AppendResult,
   AppendExpectedRevision,
   EventData,
+  EventType,
 } from "../../types";
 
 import { append } from "./append";
@@ -38,18 +39,20 @@ declare module "../../Client" {
      * @param events Events or event to write.
      * @param options Writing options.
      */
-    appendToStream(
+    appendToStream<KnownEventType extends EventType = EventType>(
       streamName: string,
-      events: EventData | EventData[],
+      events: EventData<KnownEventType> | EventData<KnownEventType>[],
       options?: AppendToStreamOptions
     ): Promise<AppendResult>;
   }
 }
 
-Client.prototype.appendToStream = async function (
+Client.prototype.appendToStream = async function <
+  KnownEventType extends EventType = EventType
+>(
   this: Client,
   streamName: string,
-  event: EventData | EventData[],
+  event: EventData<KnownEventType> | EventData<KnownEventType>[],
   {
     expectedRevision = ANY,
     batchAppendSize = 3 * 1024 * 1024,
