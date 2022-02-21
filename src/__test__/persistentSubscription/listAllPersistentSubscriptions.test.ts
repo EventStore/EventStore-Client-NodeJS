@@ -15,7 +15,6 @@ import {
   AccessDeniedError,
   END,
   EventStoreDBClient,
-  PersistentSubscriptionDoesNotExistError,
   PersistentSubscriptionToAll,
   PINNED,
   Position,

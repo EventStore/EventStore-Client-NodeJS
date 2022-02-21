@@ -1,11 +1,12 @@
 import { v4 as uuid } from "uuid";
+import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { BatchAppendReq, BatchAppendResp } from "../../../generated/streams_pb";
 import { Empty, StreamIdentifier, UUID } from "../../../generated/shared_pb";
 
-import { Client } from "../../Client";
-import { AppendResult, EventData } from "../../types";
+import type { Client } from "../../Client";
+import type { AppendResult, EventData } from "../../types";
 import {
   debug,
   createUUID,
@@ -18,8 +19,7 @@ import {
   unpackToCommandError,
   unpackWrongExpectedVersion,
 } from "./unpackError";
-import { InternalAppendToStreamOptions } from ".";
-import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
+import type { InternalAppendToStreamOptions } from ".";
 
 const streamCache = new WeakMap<
   StreamsClient,

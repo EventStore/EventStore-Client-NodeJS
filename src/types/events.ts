@@ -1,4 +1,4 @@
-import { Position } from "../types";
+import type { Position } from "../types";
 
 export type JSONType = Record<string | number, unknown> | unknown[] | string;
 export type MetadataType = JSONType | Uint8Array;

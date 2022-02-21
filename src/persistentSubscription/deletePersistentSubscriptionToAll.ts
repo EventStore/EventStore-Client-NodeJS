@@ -6,7 +6,7 @@ import {
 } from "../../generated/persistent_grpc_pb";
 
 import { convertToCommandError, debug, UnsupportedError } from "../utils";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
 export interface DeletePersistentSubscriptionToAllOptions extends BaseOptions {}

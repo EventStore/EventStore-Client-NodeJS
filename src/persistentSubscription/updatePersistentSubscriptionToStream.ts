@@ -5,8 +5,9 @@ import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_p
 import { debug, convertToCommandError } from "../utils";
 import { END, START } from "../constants";
 import { Client } from "../Client";
-import { BaseOptions } from "../types";
-import { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
+import type { BaseOptions } from "../types";
+
+import type { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 
 declare module "../Client" {

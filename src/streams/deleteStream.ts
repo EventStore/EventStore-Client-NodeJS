@@ -3,7 +3,7 @@ import { StreamIdentifier, Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
-import { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
+import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
 import { debug, convertToCommandError } from "../utils";
 import { ANY, NO_STREAM } from "../constants";
 

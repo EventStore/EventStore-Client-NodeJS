@@ -1,12 +1,10 @@
-import { ReadableOptions } from "stream";
+import type { ReadableOptions } from "stream";
 
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
 import { Empty, StreamIdentifier } from "../../generated/shared_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
-import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
 
-import {
+import type {
   ReadRevision,
   StreamSubscription,
   BaseOptions,
@@ -64,7 +62,7 @@ Client.prototype.subscribeToStream = function <
   const identifier = new StreamIdentifier();
   identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
 
-  const uuidOption = new UUIDOption();
+  const uuidOption = new ReadReq.Options.UUIDOption();
   uuidOption.setString(new Empty());
 
   const streamOptions = new ReadReq.Options.StreamOptions();
@@ -89,7 +87,7 @@ Client.prototype.subscribeToStream = function <
 
   options.setStream(streamOptions);
   options.setResolveLinks(resolveLinkTos);
-  options.setSubscription(new SubscriptionOptions());
+  options.setSubscription(new ReadReq.Options.SubscriptionOptions());
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
 

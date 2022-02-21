@@ -1,16 +1,17 @@
 import { Transform, TransformCallback, TransformOptions } from "stream";
 
-import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
+import type { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 
-import { ReadResp } from "../../generated/streams_pb";
+import type { ReadResp } from "../../generated/streams_pb";
+
+import type { StreamingRead } from "../types";
 
 import {
   ConvertGrpcEvent,
   convertToCommandError,
   StreamNotFoundError,
 } from ".";
-import { StreamingRead } from "../types";
 
 type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 

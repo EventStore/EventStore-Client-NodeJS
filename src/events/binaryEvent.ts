@@ -1,5 +1,7 @@
 import { v4 as uuid } from "uuid";
-import { BinaryEventType, EventData } from "../types";
+
+import type { BinaryEventType, EventData } from "../types";
+
 import { convertMetadata } from "./convertMetadata";
 
 export type BinaryEventOptions<E extends BinaryEventType> = E & {

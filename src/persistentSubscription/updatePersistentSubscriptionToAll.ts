@@ -8,8 +8,9 @@ import {
 import { debug, convertToCommandError, UnsupportedError } from "../utils";
 import { END, START } from "../constants";
 import { Client } from "../Client";
-import { BaseOptions } from "../types";
-import { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
+import type { BaseOptions } from "../types";
+
+import type { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 
 export interface UpdatePersistentSubscriptionToAllOptions extends BaseOptions {}

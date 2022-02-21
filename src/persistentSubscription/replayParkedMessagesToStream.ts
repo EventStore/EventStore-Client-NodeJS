@@ -10,7 +10,7 @@ import {
   debug,
   PersistentSubscriptionDoesNotExistError,
 } from "../utils";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
 export interface ReplayParkedMessagesToStreamOptions extends BaseOptions {

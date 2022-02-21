@@ -5,13 +5,13 @@ import {
   PersistentSubscriptionsService,
 } from "../../generated/persistent_grpc_pb";
 
-import { BaseOptions, Filter } from "../types";
+import type { BaseOptions, Filter } from "../types";
 import { debug, convertToCommandError, UnsupportedError } from "../utils";
 import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 
 import { settingsToGRPC } from "./utils/settingsToGRPC";
-import { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
+import type { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
 
 export interface CreatePersistentSubscriptionToAllOptions extends BaseOptions {
   /**

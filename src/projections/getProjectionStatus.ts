@@ -1,9 +1,10 @@
-import { ServiceError } from "@grpc/grpc-js";
+import type { ServiceError } from "@grpc/grpc-js";
+
 import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { StatisticsReq, StatisticsResp } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
-import { BaseOptions, ProjectionDetails } from "../types";
+import type { BaseOptions, ProjectionDetails } from "../types";
 import {
   debug,
   convertToCommandError,

@@ -1,5 +1,6 @@
-import { StatisticsResp } from "../../generated/projections_pb";
-import {
+import type { StatisticsResp } from "../../generated/projections_pb";
+
+import type {
   ProcessingStatus,
   ProjectionDetails,
   ProjectionStatus,

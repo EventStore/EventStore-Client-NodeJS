@@ -1,12 +1,13 @@
-import { Channel } from "@grpc/grpc-js";
+import type { Channel } from "@grpc/grpc-js";
 
 import { IncomingMessage, request as httpRequest } from "http";
 import { request as httpsRequest } from "https";
 import { URL } from "url";
 
-import { ChannelCredentialOptions, Client } from "./";
-import { Credentials, BaseOptions } from "../types";
+import type { Credentials, BaseOptions } from "../types";
 import { AccessDeniedError, debug, UnknownError } from "../utils";
+
+import type { ChannelCredentialOptions, Client } from "./";
 
 type TransformError = (
   statusCode: number,

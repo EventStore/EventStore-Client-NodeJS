@@ -10,7 +10,7 @@ import {
   createUUID,
   backpressuredWrite,
 } from "../../utils";
-import {
+import type {
   PersistentAction,
   PersistentSubscriptionBase,
   ResolvedEvent,

@@ -1,11 +1,10 @@
-import { ReadableOptions } from "stream";
+import type { ReadableOptions } from "stream";
 
 import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
 
-import {
+import type {
   BaseOptions,
   ReadPosition,
   Direction,
@@ -69,7 +68,7 @@ Client.prototype.readAll = function (
   const req = new ReadReq();
   const options = new ReadReq.Options();
 
-  const uuidOption = new UUIDOption();
+  const uuidOption = new ReadReq.Options.UUIDOption();
   uuidOption.setString(new Empty());
 
   const allOptions = new ReadReq.Options.AllOptions();

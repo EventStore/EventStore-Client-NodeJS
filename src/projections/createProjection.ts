@@ -1,8 +1,8 @@
 import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { CreateReq } from "../../generated/projections_pb";
-import { Client } from "../Client";
-import { BaseOptions } from "../types";
 
+import { Client } from "../Client";
+import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
 export interface CreateProjectionOptions extends BaseOptions {

@@ -1,6 +1,7 @@
 import { exec as ex } from "child_process";
 import { promisify } from "util";
 import { config as loadDotEnv } from "dotenv";
+
 import { dockerImages } from "./dockerImages";
 
 const exec = promisify(ex);

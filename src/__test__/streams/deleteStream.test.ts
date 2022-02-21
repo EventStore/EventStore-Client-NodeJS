@@ -1,5 +1,4 @@
 import { collect, createTestNode, jsonTestEvents } from "@test-utils";
-
 import {
   EventStoreDBClient,
   WrongExpectedVersionError,

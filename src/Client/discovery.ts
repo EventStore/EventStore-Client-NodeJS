@@ -1,14 +1,12 @@
 import { ChannelCredentials, Metadata } from "@grpc/grpc-js";
 
-import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import { GossipClient } from "../../generated/gossip_grpc_pb";
 import { Empty } from "../../generated/shared_pb";
-import VNodeState = GrpcMemberInfo.VNodeState;
 
-import { EndPoint, NodePreference } from "../types";
+import { EndPoint, NodePreference, VNodeState } from "../types";
 import { FOLLOWER, LEADER, READ_ONLY_REPLICA } from "../constants";
 import { debug, parseUUID } from "../utils";
-import { DNSClusterOptions, GossipClusterOptions } from ".";
+import type { DNSClusterOptions, GossipClusterOptions } from ".";
 
 export interface MemberInfo {
   instanceId?: string;

@@ -3,7 +3,7 @@ import { DeleteReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
 import { convertToCommandError, debug } from "../utils";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
 export interface DeletePersistentSubscriptionToStreamOptions

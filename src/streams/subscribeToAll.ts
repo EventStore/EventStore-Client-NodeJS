@@ -1,14 +1,10 @@
-import { ReadableOptions } from "stream";
+import type { ReadableOptions } from "stream";
 
 import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
-import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
-import GRPCFilterOptions = ReadReq.Options.FilterOptions;
-import GRPCExpression = ReadReq.Options.FilterOptions.Expression;
 
-import {
+import type {
   ReadPosition,
   AllStreamSubscription,
   BaseOptions,
@@ -63,7 +59,7 @@ Client.prototype.subscribeToAll = function (
 ): AllStreamSubscription {
   const req = new ReadReq();
   const options = new ReadReq.Options();
-  const uuidOption = new UUIDOption();
+  const uuidOption = new ReadReq.Options.UUIDOption();
   uuidOption.setString(new Empty());
 
   const allOptions = new ReadReq.Options.AllOptions();
@@ -90,11 +86,11 @@ Client.prototype.subscribeToAll = function (
 
   options.setAll(allOptions);
   options.setResolveLinks(resolveLinkTos);
-  options.setSubscription(new SubscriptionOptions());
+  options.setSubscription(new ReadReq.Options.SubscriptionOptions());
   options.setUuidOption(uuidOption);
 
   if (filter) {
-    const expr = new GRPCExpression();
+    const expr = new ReadReq.Options.FilterOptions.Expression();
 
     if ("prefixes" in filter) {
       expr.setPrefixList(filter.prefixes);
@@ -104,7 +100,7 @@ Client.prototype.subscribeToAll = function (
       expr.setRegex(filter.regex);
     }
 
-    const filterOptions = new GRPCFilterOptions();
+    const filterOptions = new ReadReq.Options.FilterOptions();
 
     switch (filter.filterOn) {
       case STREAM_NAME: {

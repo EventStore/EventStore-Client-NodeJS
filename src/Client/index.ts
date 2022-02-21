@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
-import { Stream } from "stream";
+import type { Stream } from "stream";
 
 import { v4 as uuid } from "uuid";
 

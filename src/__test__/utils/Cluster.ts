@@ -8,9 +8,10 @@ import * as getPort from "get-port";
 import { upAll, down, exec, stopOne, logs } from "docker-compose";
 import { stringify } from "yaml";
 
+import type { EndPoint } from "../../types";
+
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
-import { EndPoint } from "../../types";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);

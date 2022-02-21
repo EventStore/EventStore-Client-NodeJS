@@ -4,7 +4,7 @@ import { TombstoneReq } from "../../generated/streams_pb";
 
 import { Client } from "../Client";
 import { ANY, NO_STREAM, STREAM_EXISTS } from "../constants";
-import { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
+import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
 import { convertToCommandError, debug } from "../utils";
 
 export interface TombstoneStreamOptions extends BaseOptions {

@@ -2,7 +2,7 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { EnableReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
 export interface EnableProjectionOptions extends BaseOptions {}

@@ -1,5 +1,4 @@
 import { createTestNode, jsonTestEvents } from "@test-utils";
-
 import { EventStoreDBClient, StreamMetadata } from "@eventstore/db-client";
 
 describe("getStreamMetadata", () => {

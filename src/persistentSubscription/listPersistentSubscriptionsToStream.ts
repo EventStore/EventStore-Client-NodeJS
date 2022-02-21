@@ -1,22 +1,24 @@
-import { BaseOptions } from "../types";
+import {
+  PersistentSubscriptionsClient,
+  PersistentSubscriptionsService,
+} from "../../generated/persistent_grpc_pb";
+import { ListReq } from "../../generated/persistent_pb";
+import { StreamIdentifier } from "../../generated/shared_pb";
+
+import type { BaseOptions } from "../types";
 import {
   debug,
   convertToCommandError,
   PersistentSubscriptionDoesNotExistError,
 } from "../utils";
 import { Client } from "../Client";
-import {
-  PersistentSubscriptionsClient,
-  PersistentSubscriptionsService,
-} from "../../generated/persistent_grpc_pb";
-import { ListReq } from "../../generated/persistent_pb";
+
 import {
   HTTPSubscriptionInfo,
   mapHTTPPersistentSubscriptionInfo,
   mapPersistentSubscriptionToStreamInfo,
   PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
-import { StreamIdentifier } from "../../generated/shared_pb";
 
 interface ListPersistentSubscriptionsToStreamOptions extends BaseOptions {}
 

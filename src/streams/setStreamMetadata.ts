@@ -1,6 +1,9 @@
 import { Client } from "../Client";
-import { BaseOptions, AppendResult, AppendExpectedRevision } from "../types";
-
+import type {
+  BaseOptions,
+  AppendResult,
+  AppendExpectedRevision,
+} from "../types";
 import { debug, metastreamOf } from "../utils";
 import { jsonEvent } from "../events";
 import { prepareStreamMetadata, StreamMetadata } from "../utils/streamMetadata";

@@ -5,7 +5,6 @@ import {
   delay,
   jsonTestEvents,
 } from "@test-utils";
-
 import {
   EventStoreDBClient,
   BACKWARDS,

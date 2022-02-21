@@ -2,9 +2,12 @@ import { AppendReq } from "../../../generated/streams_pb";
 import { StreamIdentifier, Empty } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
-import { Client } from "../../Client";
-import { AppendResult, AppendExpectedRevision, EventData } from "../../types";
-
+import type { Client } from "../../Client";
+import type {
+  AppendResult,
+  AppendExpectedRevision,
+  EventData,
+} from "../../types";
 import {
   backpressuredWrite,
   convertToCommandError,
@@ -12,7 +15,8 @@ import {
   debug,
   WrongExpectedVersionError,
 } from "../../utils";
-import { InternalAppendToStreamOptions } from ".";
+
+import type { InternalAppendToStreamOptions } from ".";
 
 export const append = async function (
   this: Client,

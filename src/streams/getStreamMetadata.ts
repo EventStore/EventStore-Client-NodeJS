@@ -1,6 +1,6 @@
 import { Client } from "../Client";
 import { BACKWARDS, END } from "../constants";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { debug, metastreamOf, StreamNotFoundError } from "../utils";
 import {
   CustomStreamMetadata,

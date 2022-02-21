@@ -1,4 +1,4 @@
-import { Status } from "../../../generated/status_pb";
+import type { Status } from "../../../generated/status_pb";
 import {
   AccessDenied,
   MaximumAppendSizeExceeded,
@@ -7,6 +7,7 @@ import {
   Unknown,
   WrongExpectedVersion,
 } from "../../../generated/shared_pb";
+
 import {
   AccessDeniedError,
   MaxAppendSizeExceededError,
@@ -14,7 +15,7 @@ import {
   DeadlineExceededError,
   UnknownError,
   WrongExpectedVersionError,
-} from "../..";
+} from "../../utils/CommandError";
 
 export const unpackWrongExpectedVersion = (grpcError: Status) =>
   grpcError

@@ -1,5 +1,5 @@
 import { RANDOM, FOLLOWER, LEADER, READ_ONLY_REPLICA } from "../constants";
-import { Credentials, EndPoint, NodePreference } from "../types";
+import type { Credentials, EndPoint, NodePreference } from "../types";
 import { debug } from "../utils";
 
 export interface QueryOptions {

@@ -8,7 +8,6 @@ import {
   matchServerVersion,
   optionalTest,
 } from "@test-utils";
-
 import {
   EventStoreDBClient,
   jsonEvent,

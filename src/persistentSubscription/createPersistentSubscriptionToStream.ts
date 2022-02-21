@@ -2,13 +2,13 @@ import { StreamIdentifier } from "../../generated/shared_pb";
 import { CreateReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 import { Client } from "../Client";
 import { END, START } from "../constants";
 
 import { settingsToGRPC } from "./utils/settingsToGRPC";
-import { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
+import type { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
 
 declare module "../Client" {
   interface Client {

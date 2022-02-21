@@ -1,13 +1,12 @@
-import { ReadableOptions } from "stream";
+import type { ReadableOptions } from "stream";
 
 import { StreamIdentifier, Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
 
 import { Client } from "../Client";
 import { BACKWARDS, END, FORWARDS, START } from "../constants";
-import {
+import type {
   BaseOptions,
   Direction,
   EventType,
@@ -76,7 +75,7 @@ Client.prototype.readStream = function <
   const identifier = new StreamIdentifier();
   identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
 
-  const uuidOption = new UUIDOption();
+  const uuidOption = new ReadReq.Options.UUIDOption();
   uuidOption.setString(new Empty());
 
   const streamOptions = new ReadReq.Options.StreamOptions();

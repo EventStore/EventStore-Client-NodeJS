@@ -1,5 +1,7 @@
 import { v4 as uuid } from "uuid";
-import { EventData, JSONEventType } from "../types";
+
+import type { EventData, JSONEventType } from "../types";
+
 import { convertMetadata } from "./convertMetadata";
 
 export type JSONEventOptions<E extends JSONEventType> = {
