@@ -1,12 +1,14 @@
 import { Client } from "../Client";
 import { BACKWARDS, END } from "../constants";
 import type { BaseOptions } from "../types";
-import { debug, metastreamOf, StreamNotFoundError } from "../utils";
+import { debug, StreamNotFoundError } from "../utils";
+
 import {
   CustomStreamMetadata,
   readStreamMetadata,
   StreamMetadata,
-} from "../utils/streamMetadata";
+} from "./utils/streamMetadata";
+import { metastreamOf } from "./utils/systemStreams";
 
 export interface GetStreamMetadataResult<
   CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata

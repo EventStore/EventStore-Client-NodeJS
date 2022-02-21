@@ -11,9 +11,11 @@ import type {
   AllStreamResolvedEvent,
   StreamingRead,
 } from "../types";
-import { debug, convertAllStreamGrpcEvent, ReadStream } from "../utils";
+import { debug, convertAllStreamGrpcEvent } from "../utils";
 import { BACKWARDS, FORWARDS, START } from "../constants";
 import { Client } from "../Client";
+
+import { ReadStream } from "./utils/ReadStream";
 
 export interface ReadAllOptions extends BaseOptions {
   /**

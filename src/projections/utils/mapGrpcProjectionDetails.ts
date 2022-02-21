@@ -1,12 +1,12 @@
-import type { StatisticsResp } from "../../generated/projections_pb";
+import type { StatisticsResp } from "../../../generated/projections_pb";
 
 import type {
   ProcessingStatus,
   ProjectionDetails,
   ProjectionStatus,
-} from "../types";
+} from "../../types";
 
-export const convertGrpcProjectionDetails = (
+export const mapGrpcProjectionDetails = (
   grpcProjectionDetails: StatisticsResp.Details
 ): ProjectionDetails => {
   const details = grpcProjectionDetails.toObject();

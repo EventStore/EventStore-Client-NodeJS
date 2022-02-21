@@ -5,12 +5,10 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { StatisticsReq, StatisticsResp } from "../../generated/projections_pb";
 
 import type { BaseOptions, ProjectionDetails } from "../types";
-import {
-  debug,
-  convertToCommandError,
-  convertGrpcProjectionDetails,
-} from "../utils";
+import { debug, convertToCommandError } from "../utils";
 import { Client } from "../Client";
+
+import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
 
 interface ListProjectionsOptions extends BaseOptions {}
 
@@ -53,9 +51,7 @@ Client.prototype.listProjections = async function (
 
       stream.on("data", (resp: StatisticsResp) => {
         if (!resp.hasDetails()) return;
-        projectionDetails.push(
-          convertGrpcProjectionDetails(resp.getDetails()!)
-        );
+        projectionDetails.push(mapGrpcProjectionDetails(resp.getDetails()!));
       });
 
       stream.on("end", () => {

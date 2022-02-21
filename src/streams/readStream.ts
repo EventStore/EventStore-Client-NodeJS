@@ -14,12 +14,9 @@ import type {
   ResolvedEvent,
   StreamingRead,
 } from "../types";
-import {
-  debug,
-  convertGrpcEvent,
-  ReadStream,
-  createStreamIdentifier,
-} from "../utils";
+import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
+
+import { ReadStream } from "./utils/ReadStream";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**

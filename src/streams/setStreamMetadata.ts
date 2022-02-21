@@ -4,9 +4,11 @@ import type {
   AppendResult,
   AppendExpectedRevision,
 } from "../types";
-import { debug, metastreamOf } from "../utils";
+import { debug } from "../utils";
 import { jsonEvent } from "../events";
-import { prepareStreamMetadata, StreamMetadata } from "../utils/streamMetadata";
+
+import { prepareStreamMetadata, StreamMetadata } from "./utils/streamMetadata";
+import { metastreamOf } from "./utils/systemStreams";
 
 export interface SetStreamMetadataOptions extends BaseOptions {
   /**

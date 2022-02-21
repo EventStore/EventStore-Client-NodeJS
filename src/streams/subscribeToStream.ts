@@ -12,12 +12,9 @@ import type {
 } from "../types";
 import { Client } from "../Client";
 import { END, START } from "../constants";
-import {
-  debug,
-  convertGrpcEvent,
-  OneWaySubscription,
-  createStreamIdentifier,
-} from "../utils";
+import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
+
+import { Subscription } from "./utils/Subscription";
 
 export interface SubscribeToStreamOptions extends BaseOptions {
   /**
@@ -118,9 +115,5 @@ Client.prototype.subscribeToStream = function <
       )
   );
 
-  return new OneWaySubscription(
-    createGRPCStream,
-    convertGrpcEvent,
-    readableOptions
-  );
+  return new Subscription(createGRPCStream, convertGrpcEvent, readableOptions);
 };

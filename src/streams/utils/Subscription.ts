@@ -3,15 +3,14 @@ import { Transform, TransformCallback, TransformOptions } from "stream";
 import type { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 
-import type { ReadResp } from "../../generated/streams_pb";
+import type { ReadResp } from "../../../generated/streams_pb";
 
-import type { Filter, Position, ReadableSubscription } from "../types";
-
-import { ConvertGrpcEvent, convertToCommandError } from ".";
+import type { Filter, Position, ReadableSubscription } from "../../types";
+import { ConvertGrpcEvent, convertToCommandError } from "../../utils";
 
 type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
-export class OneWaySubscription<E>
+export class Subscription<E>
   extends Transform
   implements ReadableSubscription<E>
 {

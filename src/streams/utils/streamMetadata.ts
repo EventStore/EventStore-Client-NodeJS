@@ -3,7 +3,7 @@ import type {
   START,
   SYSTEM_STREAM_ACL,
   USER_STREAM_ACL,
-} from "../constants";
+} from "../../constants";
 
 const MAX_AGE = "$maxAge";
 const MAX_COUNT = "$maxCount";

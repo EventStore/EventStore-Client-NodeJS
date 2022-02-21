@@ -10,9 +10,11 @@ import type {
   BaseOptions,
   Filter,
 } from "../types";
-import { convertAllStreamGrpcEvent, debug, OneWaySubscription } from "../utils";
+import { convertAllStreamGrpcEvent, debug } from "../utils";
 import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
+
+import { Subscription } from "./utils/Subscription";
 
 export interface SubscribeToAllOptions extends BaseOptions {
   /**
@@ -157,7 +159,7 @@ Client.prototype.subscribeToAll = function (
       )
   );
 
-  return new OneWaySubscription(
+  return new Subscription(
     createGRPCStream,
     convertAllStreamGrpcEvent,
     readableOptions,
