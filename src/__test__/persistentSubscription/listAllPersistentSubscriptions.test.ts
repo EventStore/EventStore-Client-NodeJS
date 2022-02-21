@@ -130,10 +130,11 @@ describe("listAllPersistentSubscriptions", () => {
     await client.appendToStream(streamNameOfInterest, jsonTestEvents());
 
     const subscriptionToStream = client
-      .subscribeToPersistentSubscription(
+      .subscribeToPersistentSubscriptionToStream(
         streamNameOfInterest,
         groupNameOfInterest
       )
+      .on("error", jest.fn())
       .on("data", async (e) => {
         await subscriptionToStream.ack(e);
       });

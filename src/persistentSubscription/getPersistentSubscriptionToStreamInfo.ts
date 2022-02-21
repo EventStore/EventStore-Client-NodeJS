@@ -15,11 +15,12 @@ import { Client } from "../Client";
 import {
   HTTPSubscriptionInfo,
   mapHTTPPersistentSubscriptionInfo,
-  mapPersistentSubscriptionInfo,
-  PersistentSubscriptionInfo,
+  mapPersistentSubscriptionToStreamInfo,
+  PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
 
-export interface GetPersistentSubscriptionInfoOptions extends BaseOptions {}
+export interface GetPersistentSubscriptionToStreamInfoOptions
+  extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
@@ -29,28 +30,28 @@ declare module "../Client" {
      * @param groupName A group name.
      * @param options Get persistent subscription info options.
      */
-    getPersistentSubscriptionInfo(
+    getPersistentSubscriptionToStreamInfo(
       streamName: string,
       groupName: string,
-      options?: GetPersistentSubscriptionInfoOptions
-    ): Promise<PersistentSubscriptionInfo>;
+      options?: GetPersistentSubscriptionToStreamInfoOptions
+    ): Promise<PersistentSubscriptionToStreamInfo>;
   }
 }
 
-Client.prototype.getPersistentSubscriptionInfo = async function (
+Client.prototype.getPersistentSubscriptionToStreamInfo = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  options: GetPersistentSubscriptionInfoOptions
-): Promise<PersistentSubscriptionInfo> {
-  debug.command("getPersistentSubscriptionInfo: %O", {
+  options: GetPersistentSubscriptionToStreamInfoOptions
+): Promise<PersistentSubscriptionToStreamInfo> {
+  debug.command("getPersistentSubscriptionToStreamInfo: %O", {
     streamName,
     groupName,
     options,
   });
 
   if (await this.supports(PersistentSubscriptionsService.getInfo, "stream")) {
-    return getPersistentSubscriptionInfoGRPC.call(
+    return getPersistentSubscriptionToStreamInfoGRPC.call(
       this,
       streamName,
       groupName,
@@ -58,7 +59,7 @@ Client.prototype.getPersistentSubscriptionInfo = async function (
     );
   }
 
-  return getPersistentSubscriptionInfoHTTP.call(
+  return getPersistentSubscriptionToStreamInfoHTTP.call(
     this,
     streamName,
     groupName,
@@ -66,12 +67,12 @@ Client.prototype.getPersistentSubscriptionInfo = async function (
   );
 };
 
-const getPersistentSubscriptionInfoGRPC = async function (
+const getPersistentSubscriptionToStreamInfoGRPC = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: GetPersistentSubscriptionInfoOptions = {}
-): Promise<PersistentSubscriptionInfo> {
+  baseOptions: GetPersistentSubscriptionToStreamInfoOptions = {}
+): Promise<PersistentSubscriptionToStreamInfo> {
   const req = new GetInfoReq();
   const options = new GetInfoReq.Options();
   const identifier = new StreamIdentifier();
@@ -81,20 +82,22 @@ const getPersistentSubscriptionInfoGRPC = async function (
 
   req.setOptions(options);
 
-  debug.command_grpc("getPersistentSubscriptionInfo: %g", req);
+  debug.command_grpc("getPersistentSubscriptionToStreamInfo: %g", req);
 
   return this.execute(
     PersistentSubscriptionsClient,
-    "getPersistentSubscriptionInfo",
+    "getPersistentSubscriptionToStreamInfo",
     (client) =>
-      new Promise<PersistentSubscriptionInfo>((resolve, reject) => {
+      new Promise<PersistentSubscriptionToStreamInfo>((resolve, reject) => {
         client.getInfo(
           req,
           ...this.callArguments(baseOptions),
           (error, response) => {
             if (error) return reject(convertToCommandError(error));
             return resolve(
-              mapPersistentSubscriptionInfo(response.getSubscriptionInfo()!)
+              mapPersistentSubscriptionToStreamInfo(
+                response.getSubscriptionInfo()!
+              )
             );
           }
         );
@@ -102,12 +105,12 @@ const getPersistentSubscriptionInfoGRPC = async function (
   );
 };
 
-const getPersistentSubscriptionInfoHTTP = async function (
+const getPersistentSubscriptionToStreamInfoHTTP = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: GetPersistentSubscriptionInfoOptions = {}
-): Promise<PersistentSubscriptionInfo> {
+  baseOptions: GetPersistentSubscriptionToStreamInfoOptions = {}
+): Promise<PersistentSubscriptionToStreamInfo> {
   const info = await this.HTTPRequest<HTTPSubscriptionInfo>(
     "GET",
     `/subscriptions/${encodeURIComponent(streamName)}/${encodeURIComponent(

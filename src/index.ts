@@ -19,15 +19,17 @@ export type { StreamMetadata } from "./utils/streamMetadata";
 export * from "./utils/systemStreams";
 export {
   PersistentSubscriptionSettings,
+  PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionToAllSettings,
   persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   persistentSubscriptionToAllSettingsFromDefaults,
 } from "./persistentSubscription/utils/persistentSubscriptionSettings";
 export type {
   ExtraStatisticsKey,
   PersistentSubscriptionConnectionInfo,
-  PersistentSubscriptionStats,
   PersistentSubscriptionToAllStats,
-  PersistentSubscriptionInfo,
+  PersistentSubscriptionToStreamStats,
   PersistentSubscriptionToAllInfo,
+  PersistentSubscriptionToStreamInfo,
 } from "./persistentSubscription/utils/mapPersistentSubscriptionInfo";

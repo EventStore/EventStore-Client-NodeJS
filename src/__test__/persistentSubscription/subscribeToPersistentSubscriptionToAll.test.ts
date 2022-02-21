@@ -16,7 +16,7 @@ import {
 import {
   AllStreamResolvedEvent,
   NotLeaderError,
-  PersistentSubscription,
+  PersistentSubscriptionToStream,
   EventStoreDBClient,
   jsonEvent,
   persistentSubscriptionToAllSettingsFromDefaults,
@@ -661,7 +661,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
       const createAndConnectWithAutoReconnect = async (
         client: EventStoreDBClient
-      ): Promise<PersistentSubscription> => {
+      ): Promise<PersistentSubscriptionToStream> => {
         try {
           await client.createPersistentSubscriptionToAll(
             GROUP_NAME,

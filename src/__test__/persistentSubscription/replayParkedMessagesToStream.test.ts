@@ -6,11 +6,11 @@ import {
   jsonEvent,
   PARK,
   PersistentSubscriptionDoesNotExistError,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   START,
 } from "@eventstore/db-client";
 
-describe("replayParkedMessages", () => {
+describe("replayParkedMessagesToStream", () => {
   const cluster = createTestCluster();
   let client!: EventStoreDBClient;
 
@@ -33,10 +33,10 @@ describe("replayParkedMessages", () => {
     const GROUP_NAME = "replay_to_end_parked_group_name";
     const FINISH = "finish-test";
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -49,7 +49,7 @@ describe("replayParkedMessages", () => {
       }),
     ]);
 
-    const subscription = client.subscribeToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -68,7 +68,7 @@ describe("replayParkedMessages", () => {
 
         if (resolvedEvent.event?.type === FINISH) {
           await delay(5000); // wait for all nacks to be processed
-          await client.replayParkedMessages(STREAM_NAME, GROUP_NAME);
+          await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME);
           hasReplayed = true;
         }
 
@@ -89,10 +89,10 @@ describe("replayParkedMessages", () => {
     const FINISH = "finish-test";
     const STOP_AT = 4;
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -105,7 +105,7 @@ describe("replayParkedMessages", () => {
       }),
     ]);
 
-    const subscription = client.subscribeToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -125,7 +125,7 @@ describe("replayParkedMessages", () => {
 
         if (resolvedEvent.event?.type === FINISH) {
           await delay(5000); // wait for all nacks to be processed
-          await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
+          await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
             stopAt: STOP_AT,
           });
           hasReplayed = true;
@@ -160,10 +160,10 @@ describe("replayParkedMessages", () => {
     const FINISH = "finish-test";
     const STOP_AT = 4;
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -176,7 +176,7 @@ describe("replayParkedMessages", () => {
       }),
     ]);
 
-    const subscription = client.subscribeToPersistentSubscription(
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME
     );
@@ -196,7 +196,7 @@ describe("replayParkedMessages", () => {
 
         if (resolvedEvent.event?.type === FINISH) {
           await delay(5000); // wait for all nacks to be processed
-          await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
+          await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
             stopAt: STOP_AT,
           });
           hasReplayed = true;
@@ -230,7 +230,7 @@ describe("replayParkedMessages", () => {
       const GROUP_NAME = "does_not_exist_replay_parked_group_name";
 
       try {
-        await client.replayParkedMessages(STREAM_NAME, GROUP_NAME);
+        await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME);
         throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
@@ -250,7 +250,7 @@ describe("replayParkedMessages", () => {
       const GROUP_NAME = "access_denied_replay_parked_group_name";
 
       try {
-        await client.replayParkedMessages(STREAM_NAME, GROUP_NAME, {
+        await client.replayParkedMessagesToStream(STREAM_NAME, GROUP_NAME, {
           credentials: { username: "AzureDiamond", password: "hunter2" },
         });
         throw "unreachable";

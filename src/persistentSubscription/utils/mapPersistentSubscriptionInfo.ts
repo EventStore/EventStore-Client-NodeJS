@@ -2,7 +2,7 @@ import { SubscriptionInfo } from "../../../generated/persistent_pb";
 import { END, START, UNBOUNDED } from "../../constants";
 import type { Position } from "../../types";
 import {
-  PersistentSubscriptionSettings,
+  PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionSettingsGeneric,
   PersistentSubscriptionToAllSettings,
 } from "./persistentSubscriptionSettings";
@@ -65,7 +65,7 @@ interface PersistentSubscriptionStatsBase {
   outstandingMessagesCount: number;
 }
 
-export interface PersistentSubscriptionStats
+export interface PersistentSubscriptionToStreamStats
   extends PersistentSubscriptionStatsBase {
   /** The revision of the last checkpoint. */
   lastCheckpointedEventRevision?: bigint;
@@ -81,7 +81,7 @@ export interface PersistentSubscriptionToAllStats
   lastKnownEventPosition?: Position;
 }
 
-export interface PersistentSubscriptionInfo {
+export interface PersistentSubscriptionToStreamInfo {
   /** The source of events for the subscription. */
   eventSource: string;
   /** The group name given on creation. */
@@ -89,9 +89,9 @@ export interface PersistentSubscriptionInfo {
   /** The current status of the subscription. */
   status: string;
   /** The settings used to create the persistent subscription. */
-  settings: PersistentSubscriptionSettings;
+  settings: PersistentSubscriptionToStreamSettings;
   /** The settings used to create the persistent subscription. */
-  stats: PersistentSubscriptionStats;
+  stats: PersistentSubscriptionToStreamStats;
   /** Active connections to the subscription. */
   connections: PersistentSubscriptionConnectionInfo[];
 }
@@ -112,7 +112,7 @@ export interface PersistentSubscriptionToAllInfo {
 }
 
 export type PersistentSubscriptionToEitherInfo =
-  | PersistentSubscriptionInfo
+  | PersistentSubscriptionToStreamInfo
   | PersistentSubscriptionToAllInfo;
 
 export const isPersistentSubscriptionToAllInfo = (
@@ -121,7 +121,7 @@ export const isPersistentSubscriptionToAllInfo = (
 
 export const isPersistentSubscriptionToStreamInfo = (
   info: PersistentSubscriptionToEitherInfo
-): info is PersistentSubscriptionInfo => info.eventSource !== "$all";
+): info is PersistentSubscriptionToStreamInfo => info.eventSource !== "$all";
 
 export const mapPersistentSubscriptionToEitherInfo = (
   response: SubscriptionInfo
@@ -130,12 +130,12 @@ export const mapPersistentSubscriptionToEitherInfo = (
     return mapPersistentSubscriptionToAllInfo(response);
   }
 
-  return mapPersistentSubscriptionInfo(response);
+  return mapPersistentSubscriptionToStreamInfo(response);
 };
 
-export const mapPersistentSubscriptionInfo = (
+export const mapPersistentSubscriptionToStreamInfo = (
   response: SubscriptionInfo
-): PersistentSubscriptionInfo => ({
+): PersistentSubscriptionToStreamInfo => ({
   eventSource: response.getEventSource(),
   groupName: response.getGroupName(),
   status: response.getStatus(),
@@ -162,7 +162,7 @@ const stringToRevision = (str: string): bigint | undefined => {
 
 const stringToStartFromRevision = (
   startFrom: string
-): PersistentSubscriptionSettings["startFrom"] => {
+): PersistentSubscriptionToStreamSettings["startFrom"] => {
   switch (startFrom) {
     case "0":
       return START;
@@ -221,7 +221,7 @@ const mapSettingBase = (
 
 const mapSettings = (
   response: SubscriptionInfo
-): PersistentSubscriptionSettings => ({
+): PersistentSubscriptionToStreamSettings => ({
   ...mapSettingBase(response),
   startFrom: stringToStartFromRevision(response.getStartFrom()),
 });
@@ -273,7 +273,9 @@ const mapStatsBase = (
   parkedMessageCount: BigInt(response.getParkedMessageCount()),
 });
 
-const mapStats = (response: SubscriptionInfo): PersistentSubscriptionStats => ({
+const mapStats = (
+  response: SubscriptionInfo
+): PersistentSubscriptionToStreamStats => ({
   ...mapStatsBase(response),
   lastCheckpointedEventRevision: stringToRevision(
     response.getLastCheckpointedEventPosition()
@@ -354,7 +356,7 @@ interface HTTPConnectionInfo {
 
 export const mapHTTPPersistentSubscriptionInfo = (
   response: HTTPSubscriptionInfo
-): PersistentSubscriptionInfo => ({
+): PersistentSubscriptionToStreamInfo => ({
   eventSource: response.eventStreamId,
   groupName: response.groupName,
   status: response.status,
@@ -365,7 +367,7 @@ export const mapHTTPPersistentSubscriptionInfo = (
 
 const mapHTTPSettings = (
   response: HTTPSubscriptionInfo
-): PersistentSubscriptionSettings => ({
+): PersistentSubscriptionToStreamSettings => ({
   startFrom: mapHTTPStartFrom(response.config.startFrom),
   resolveLinkTos: response.config.resolveLinktos,
   extraStatistics: response.config.extraStatistics,
@@ -383,7 +385,7 @@ const mapHTTPSettings = (
 
 const mapHTTPStartFrom = (
   startFrom: number
-): PersistentSubscriptionSettings["startFrom"] => {
+): PersistentSubscriptionToStreamSettings["startFrom"] => {
   switch (startFrom) {
     case 0:
       return START;

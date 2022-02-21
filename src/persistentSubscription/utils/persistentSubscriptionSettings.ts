@@ -77,7 +77,7 @@ export interface PersistentSubscriptionSettingsGeneric {
   consumerStrategyName: ConsumerStrategy | string;
 }
 
-export interface PersistentSubscriptionSettings
+export interface PersistentSubscriptionToStreamSettings
   extends PersistentSubscriptionSettingsGeneric {
   /**
    * Where to start the subscription from. This can be from the start of the stream, from the end of the stream at the time of creation, or from an inclusive position in the stream.
@@ -85,6 +85,12 @@ export interface PersistentSubscriptionSettings
    */
   startFrom: typeof START | typeof END | bigint;
 }
+
+/**
+ * @deprecated Renamed to {@link PersistentSubscriptionToStreamSettings}.
+ */
+export type PersistentSubscriptionSettings =
+  PersistentSubscriptionToStreamSettings;
 
 export interface PersistentSubscriptionToAllSettings
   extends PersistentSubscriptionSettingsGeneric {
@@ -110,14 +116,30 @@ const defaults: PersistentSubscriptionSettingsGeneric = {
   consumerStrategyName: ROUND_ROBIN,
 };
 
-export const persistentSubscriptionSettingsFromDefaults = (
-  changes: Partial<PersistentSubscriptionSettings> = {}
-): PersistentSubscriptionSettings => ({
+/**
+ * Creates {@link PersistentSubscriptionToStreamSettings} from default settings.
+ * @param changes Changes to apply to the default settings.
+ */
+export const persistentSubscriptionToStreamSettingsFromDefaults = (
+  changes: Partial<PersistentSubscriptionToStreamSettings> = {}
+): PersistentSubscriptionToStreamSettings => ({
   startFrom: END,
   ...defaults,
   ...changes,
 });
 
+/**
+ * Creates {@link PersistentSubscriptionToStreamSettings} from default settings.
+ * @param changes Changes to apply to the default settings.
+ * @deprecated Renamed to {@link persistentSubscriptionToStreamSettingsFromDefaults}.
+ */
+export const persistentSubscriptionSettingsFromDefaults =
+  persistentSubscriptionToStreamSettingsFromDefaults;
+
+/**
+ * Creates {@link PersistentSubscriptionToAllSettings} from default settings.
+ * @param changes Changes to apply to the default settings.
+ */
 export const persistentSubscriptionToAllSettingsFromDefaults = (
   changes: Partial<PersistentSubscriptionToAllSettings> = {}
 ): PersistentSubscriptionToAllSettings => ({

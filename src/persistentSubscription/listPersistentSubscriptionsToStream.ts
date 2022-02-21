@@ -13,12 +13,12 @@ import { ListReq } from "../../generated/persistent_pb";
 import {
   HTTPSubscriptionInfo,
   mapHTTPPersistentSubscriptionInfo,
-  mapPersistentSubscriptionInfo,
-  PersistentSubscriptionInfo,
+  mapPersistentSubscriptionToStreamInfo,
+  PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
 import { StreamIdentifier } from "../../generated/shared_pb";
 
-interface ListPersistentSubscriptionsOptions extends BaseOptions {}
+interface ListPersistentSubscriptionsToStreamOptions extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
@@ -27,35 +27,43 @@ declare module "../Client" {
      * @param streamName A stream name.
      * @param options List persistent subscriptions options.
      */
-    listPersistentSubscriptions(
+    listPersistentSubscriptionsToStream(
       streamName: string,
-      options?: ListPersistentSubscriptionsOptions
-    ): Promise<PersistentSubscriptionInfo[]>;
+      options?: ListPersistentSubscriptionsToStreamOptions
+    ): Promise<PersistentSubscriptionToStreamInfo[]>;
   }
 }
 
-Client.prototype.listPersistentSubscriptions = async function (
+Client.prototype.listPersistentSubscriptionsToStream = async function (
   this: Client,
   streamName: string,
-  options: ListPersistentSubscriptionsOptions = {}
-): Promise<PersistentSubscriptionInfo[]> {
-  debug.command("listPersistentSubscriptions: %O", {
+  options: ListPersistentSubscriptionsToStreamOptions = {}
+): Promise<PersistentSubscriptionToStreamInfo[]> {
+  debug.command("listPersistentSubscriptionsToStream: %O", {
     streamName,
     options,
   });
 
   if (await this.supports(PersistentSubscriptionsService.list, "stream")) {
-    return listPersistentSubscriptionsGRPC.call(this, streamName, options);
+    return listPersistentSubscriptionsToStreamGRPC.call(
+      this,
+      streamName,
+      options
+    );
   }
 
-  return listPersistentSubscriptionsHTTP.call(this, streamName, options);
+  return listPersistentSubscriptionsToStreamHTTP.call(
+    this,
+    streamName,
+    options
+  );
 };
 
-const listPersistentSubscriptionsGRPC = async function (
+const listPersistentSubscriptionsToStreamGRPC = async function (
   this: Client,
   streamName: string,
-  baseOptions: ListPersistentSubscriptionsOptions = {}
-): Promise<PersistentSubscriptionInfo[]> {
+  baseOptions: ListPersistentSubscriptionsToStreamOptions = {}
+): Promise<PersistentSubscriptionToStreamInfo[]> {
   const req = new ListReq();
   const options = new ListReq.Options();
   const streamOption = new ListReq.StreamOption();
@@ -65,13 +73,13 @@ const listPersistentSubscriptionsGRPC = async function (
   options.setListForStream(streamOption);
   req.setOptions(options);
 
-  debug.command_grpc("listPersistentSubscriptions: %g", req);
+  debug.command_grpc("listPersistentSubscriptionsToStream: %g", req);
 
   return this.execute(
     PersistentSubscriptionsClient,
-    "listPersistentSubscriptions",
+    "listPersistentSubscriptionsToStream",
     (client) =>
-      new Promise<PersistentSubscriptionInfo[]>((resolve, reject) => {
+      new Promise<PersistentSubscriptionToStreamInfo[]>((resolve, reject) => {
         client.list(
           req,
           ...this.callArguments(baseOptions),
@@ -80,7 +88,7 @@ const listPersistentSubscriptionsGRPC = async function (
             return resolve(
               response
                 .getSubscriptionsList()
-                .map((r) => mapPersistentSubscriptionInfo(r))
+                .map((r) => mapPersistentSubscriptionToStreamInfo(r))
             );
           }
         );
@@ -88,11 +96,11 @@ const listPersistentSubscriptionsGRPC = async function (
   );
 };
 
-const listPersistentSubscriptionsHTTP = async function (
+const listPersistentSubscriptionsToStreamHTTP = async function (
   this: Client,
   streamName: string,
-  baseOptions: ListPersistentSubscriptionsOptions = {}
-): Promise<PersistentSubscriptionInfo[]> {
+  baseOptions: ListPersistentSubscriptionsToStreamOptions = {}
+): Promise<PersistentSubscriptionToStreamInfo[]> {
   const basicList = await this.HTTPRequest<
     Array<{ eventStreamId: string; groupName: string }>
   >("GET", `/subscriptions/${encodeURIComponent(streamName)}`, {

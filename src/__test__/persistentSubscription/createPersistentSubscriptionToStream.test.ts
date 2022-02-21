@@ -3,11 +3,11 @@ import { createTestNode } from "@test-utils";
 import {
   EventStoreDBClient,
   PersistentSubscriptionExistsError,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   START,
 } from "@eventstore/db-client";
 
-describe("createPersistentSubscription", () => {
+describe("createPersistentSubscriptionToStream", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
 
@@ -32,10 +32,10 @@ describe("createPersistentSubscription", () => {
       const STREAM_NAME = "stream_name_from_start";
       const GROUP_NAME = "group_name_from_start";
       await expect(
-        client.createPersistentSubscription(
+        client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults({
+          persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
           })
         )
@@ -46,10 +46,10 @@ describe("createPersistentSubscription", () => {
       const STREAM_NAME = "stream_name_from_end";
       const GROUP_NAME = "group_name_from_end";
       await expect(
-        client.createPersistentSubscription(
+        client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults() // end is default
+          persistentSubscriptionToStreamSettingsFromDefaults() // end is default
         )
       ).resolves.toBeUndefined();
     });
@@ -58,10 +58,10 @@ describe("createPersistentSubscription", () => {
       const STREAM_NAME = "stream_name_from_revision";
       const GROUP_NAME = "group_name_from_revision";
       await expect(
-        client.createPersistentSubscription(
+        client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults({
+          persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: BigInt(1),
           })
         )
@@ -74,18 +74,18 @@ describe("createPersistentSubscription", () => {
     const GROUP_NAME = "group_name_already_exists";
 
     await expect(
-      client.createPersistentSubscription(
+      client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionToStreamSettingsFromDefaults()
       )
     ).resolves.toBeUndefined();
 
     await expect(
-      client.createPersistentSubscription(
+      client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults()
+        persistentSubscriptionToStreamSettingsFromDefaults()
       )
     ).rejects.toThrowError(PersistentSubscriptionExistsError);
   });

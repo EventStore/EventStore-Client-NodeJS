@@ -14,10 +14,10 @@ import {
 import {
   ResolvedEvent,
   NotLeaderError,
-  PersistentSubscription,
+  PersistentSubscriptionToStream,
   EventStoreDBClient,
   jsonEvent,
-  persistentSubscriptionSettingsFromDefaults,
+  persistentSubscriptionToStreamSettingsFromDefaults,
   START,
 } from "@eventstore/db-client";
 
@@ -55,10 +55,10 @@ describe("subscribeToPersistentSubscription", () => {
       const GROUP_NAME = "from_start_test_group_name";
 
       await client.appendToStream(STREAM_NAME, jsonTestEvents(20));
-      await client.createPersistentSubscription(
+      await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
+        persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
         })
       );
@@ -109,10 +109,10 @@ describe("subscribeToPersistentSubscription", () => {
       const GROUP_NAME = "from_revision_test_group_name";
 
       await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
-      await client.createPersistentSubscription(
+      await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
+        persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: BigInt(1),
         })
       );
@@ -161,10 +161,10 @@ describe("subscribeToPersistentSubscription", () => {
       const GROUP_NAME = "from_end_test_group_name";
 
       await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
-      await client.createPersistentSubscription(
+      await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults() // end is default
+        persistentSubscriptionToStreamSettingsFromDefaults() // end is default
       );
 
       const defer = new Defer();
@@ -223,10 +223,10 @@ describe("subscribeToPersistentSubscription", () => {
         finishEvent(),
       ]);
 
-      await client.createPersistentSubscription(
+      await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
+        persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
         })
       );
@@ -296,10 +296,10 @@ describe("subscribeToPersistentSubscription", () => {
         const GROUP_NAME = "async_iter_ack_group_name";
         const doSomething = jest.fn();
 
-        await client.createPersistentSubscription(
+        await client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults({
+          persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
           })
         );
@@ -339,10 +339,10 @@ describe("subscribeToPersistentSubscription", () => {
         const skipCount = 20;
         const retryCount = 20;
 
-        await client.createPersistentSubscription(
+        await client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults({
+          persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
           })
         );
@@ -396,10 +396,10 @@ describe("subscribeToPersistentSubscription", () => {
         const GROUP_NAME = "async_iter_ack_fun_group_name";
         const doSomething = jest.fn();
 
-        await client.createPersistentSubscription(
+        await client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults({
+          persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
           })
         );
@@ -442,10 +442,10 @@ describe("subscribeToPersistentSubscription", () => {
 
       const defer = new Defer();
 
-      await client.createPersistentSubscription(
+      await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
+        persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
         })
       );
@@ -492,10 +492,10 @@ describe("subscribeToPersistentSubscription", () => {
       const GROUP_NAME = "pipeline_test_group_name";
       const FINISH_TEST = "finish_pipeline";
 
-      await client.createPersistentSubscription(
+      await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionSettingsFromDefaults({
+        persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
         })
       );
@@ -548,10 +548,10 @@ describe("subscribeToPersistentSubscription", () => {
     const GROUP_NAME = "malformed_json_group_name";
     const doSomething = jest.fn();
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
       })
     );
@@ -611,12 +611,12 @@ describe("subscribeToPersistentSubscription", () => {
 
     const createAndConnectWithAutoReconnect = async (
       client: EventStoreDBClient
-    ): Promise<PersistentSubscription> => {
+    ): Promise<PersistentSubscriptionToStream> => {
       try {
-        await client.createPersistentSubscription(
+        await client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionSettingsFromDefaults({
+          persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
           })
         );
@@ -697,10 +697,10 @@ describe("subscribeToPersistentSubscription", () => {
       }),
     ]);
 
-    await client.createPersistentSubscription(
+    await client.createPersistentSubscriptionToStream(
       SYSTEM_STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionSettingsFromDefaults({
+      persistentSubscriptionToStreamSettingsFromDefaults({
         resolveLinkTos: true,
       })
     );
