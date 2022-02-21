@@ -1,5 +1,5 @@
 import { AppendReq } from "../../../generated/streams_pb";
-import { StreamIdentifier, Empty } from "../../../generated/shared_pb";
+import { Empty } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
 import type { Client } from "../../Client";
@@ -11,6 +11,7 @@ import type {
 import {
   backpressuredWrite,
   convertToCommandError,
+  createStreamIdentifier,
   createUUID,
   debug,
   WrongExpectedVersionError,
@@ -26,9 +27,8 @@ export const append = async function (
 ): Promise<AppendResult> {
   const header = new AppendReq();
   const options = new AppendReq.Options();
-  const identifier = new StreamIdentifier();
+  const identifier = createStreamIdentifier(streamName);
 
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
   options.setStreamIdentifier(identifier);
 
   switch (expectedRevision) {

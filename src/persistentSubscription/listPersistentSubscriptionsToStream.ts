@@ -3,13 +3,13 @@ import {
   PersistentSubscriptionsService,
 } from "../../generated/persistent_grpc_pb";
 import { ListReq } from "../../generated/persistent_pb";
-import { StreamIdentifier } from "../../generated/shared_pb";
 
 import type { BaseOptions } from "../types";
 import {
   debug,
   convertToCommandError,
   PersistentSubscriptionDoesNotExistError,
+  createStreamIdentifier,
 } from "../utils";
 import { Client } from "../Client";
 
@@ -69,8 +69,8 @@ const listPersistentSubscriptionsToStreamGRPC = async function (
   const req = new ListReq();
   const options = new ListReq.Options();
   const streamOption = new ListReq.StreamOption();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  const identifier = createStreamIdentifier(streamName);
+
   streamOption.setStream(identifier);
   options.setListForStream(streamOption);
   req.setOptions(options);

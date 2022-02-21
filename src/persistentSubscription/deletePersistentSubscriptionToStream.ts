@@ -1,8 +1,7 @@
-import { StreamIdentifier } from "../../generated/shared_pb";
 import { DeleteReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
-import { convertToCommandError, debug } from "../utils";
+import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
@@ -46,9 +45,8 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
 ): Promise<void> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
-  const identifier = new StreamIdentifier();
+  const identifier = createStreamIdentifier(streamName);
 
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
   options.setStreamIdentifier(identifier);
   options.setGroupName(groupName);
   req.setOptions(options);

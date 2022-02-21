@@ -1,6 +1,6 @@
 import type { DuplexOptions } from "stream";
 
-import { StreamIdentifier, Empty } from "../../generated/shared_pb";
+import { Empty } from "../../generated/shared_pb";
 import { ReadReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
@@ -9,7 +9,7 @@ import type {
   BaseOptions,
   EventType,
 } from "../types";
-import { debug, convertGrpcEvent } from "../utils";
+import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
 
@@ -72,12 +72,9 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
       (client) => {
         const req = new ReadReq();
         const options = new ReadReq.Options();
-        const identifier = new StreamIdentifier();
-        identifier.setStreamName(
-          Uint8Array.from(Buffer.from(streamName, "utf8"))
-        );
-
+        const identifier = createStreamIdentifier(streamName);
         const uuidOption = new ReadReq.Options.UUIDOption();
+
         uuidOption.setString(new Empty());
         options.setStreamIdentifier(identifier);
         options.setGroupName(groupName);

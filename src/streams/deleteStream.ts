@@ -1,10 +1,10 @@
 import { DeleteReq } from "../../generated/streams_pb";
-import { StreamIdentifier, Empty } from "../../generated/shared_pb";
+import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
 import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
-import { debug, convertToCommandError } from "../utils";
+import { debug, convertToCommandError, createStreamIdentifier } from "../utils";
 import { ANY, NO_STREAM } from "../constants";
 
 export interface DeleteStreamOptions extends BaseOptions {
@@ -36,8 +36,7 @@ Client.prototype.deleteStream = async function (
 ): Promise<DeleteResult> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  const identifier = createStreamIdentifier(streamName);
 
   options.setStreamIdentifier(identifier);
 

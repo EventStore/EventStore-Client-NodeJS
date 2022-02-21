@@ -7,4 +7,5 @@ export * from "./filter";
 export * from "./OneWaySubscription";
 export * from "./ReadStream";
 export * from "./systemStreams";
+export * from "./grpcStreamIdentifier";
 export * from "./grpcUUID";

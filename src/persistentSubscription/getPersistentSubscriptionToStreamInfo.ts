@@ -1,4 +1,3 @@
-import { StreamIdentifier } from "../../generated/shared_pb";
 import { GetInfoReq } from "../../generated/persistent_pb";
 import {
   PersistentSubscriptionsClient,
@@ -7,6 +6,7 @@ import {
 
 import {
   convertToCommandError,
+  createStreamIdentifier,
   debug,
   PersistentSubscriptionDoesNotExistError,
 } from "../utils";
@@ -75,8 +75,8 @@ const getPersistentSubscriptionToStreamInfoGRPC = async function (
 ): Promise<PersistentSubscriptionToStreamInfo> {
   const req = new GetInfoReq();
   const options = new GetInfoReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  const identifier = createStreamIdentifier(streamName);
+
   options.setStreamIdentifier(identifier);
   options.setGroupName(groupName);
 

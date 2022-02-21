@@ -1,9 +1,8 @@
-import { StreamIdentifier } from "../../generated/shared_pb";
 import { CreateReq } from "../../generated/persistent_pb";
 import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_pb";
 
 import type { BaseOptions } from "../types";
-import { debug, convertToCommandError } from "../utils";
+import { debug, convertToCommandError, createStreamIdentifier } from "../utils";
 import { Client } from "../Client";
 import { END, START } from "../constants";
 
@@ -58,7 +57,7 @@ Client.prototype.createPersistentSubscriptionToStream = async function (
 ): Promise<void> {
   const req = new CreateReq();
   const options = new CreateReq.Options();
-  const identifier = new StreamIdentifier();
+  const identifier = createStreamIdentifier(streamName);
   const reqSettings = settingsToGRPC(settings, CreateReq.Settings);
 
   // Add deprecated revision option for pre-21.10 support
@@ -77,8 +76,6 @@ Client.prototype.createPersistentSubscriptionToStream = async function (
       break;
     }
   }
-
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
 
   options.setGroupName(groupName);
   options.setStreamIdentifier(identifier);

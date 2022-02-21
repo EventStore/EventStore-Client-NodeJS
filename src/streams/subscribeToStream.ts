@@ -2,7 +2,7 @@ import type { ReadableOptions } from "stream";
 
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
-import { Empty, StreamIdentifier } from "../../generated/shared_pb";
+import { Empty } from "../../generated/shared_pb";
 
 import type {
   ReadRevision,
@@ -12,7 +12,12 @@ import type {
 } from "../types";
 import { Client } from "../Client";
 import { END, START } from "../constants";
-import { debug, convertGrpcEvent, OneWaySubscription } from "../utils";
+import {
+  debug,
+  convertGrpcEvent,
+  OneWaySubscription,
+  createStreamIdentifier,
+} from "../utils";
 
 export interface SubscribeToStreamOptions extends BaseOptions {
   /**
@@ -59,13 +64,11 @@ Client.prototype.subscribeToStream = function <
 ): StreamSubscription<KnownEventType> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
-
-  const uuidOption = new ReadReq.Options.UUIDOption();
-  uuidOption.setString(new Empty());
-
   const streamOptions = new ReadReq.Options.StreamOptions();
+  const uuidOption = new ReadReq.Options.UUIDOption();
+  const identifier = createStreamIdentifier(streamName);
+
+  uuidOption.setString(new Empty());
   streamOptions.setStreamIdentifier(identifier);
 
   switch (fromRevision) {

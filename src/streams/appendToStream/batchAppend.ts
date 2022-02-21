@@ -3,7 +3,7 @@ import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 import { BatchAppendReq, BatchAppendResp } from "../../../generated/streams_pb";
-import { Empty, StreamIdentifier, UUID } from "../../../generated/shared_pb";
+import { Empty, UUID } from "../../../generated/shared_pb";
 
 import type { Client } from "../../Client";
 import type { AppendResult, EventData } from "../../types";
@@ -13,6 +13,7 @@ import {
   parseUUID,
   convertToCommandError,
   backpressuredWrite,
+  createStreamIdentifier,
 } from "../../utils";
 
 import {
@@ -120,12 +121,12 @@ export const batchAppend = async function (
 
     const correlationUUID = createUUID(correlationId);
     const options = new BatchAppendReq.Options();
-    const identifier = new StreamIdentifier();
-    identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
-    options.setStreamIdentifier(identifier);
+    const identifier = createStreamIdentifier(streamName);
     const deadline = Timestamp.fromDate(
       this.createDeadline(baseOptions.deadline)
     );
+
+    options.setStreamIdentifier(identifier);
     options.setDeadline(deadline);
 
     switch (expectedRevision) {
