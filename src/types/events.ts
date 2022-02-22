@@ -3,48 +3,71 @@ import { Position } from "../types";
 export type JSONType = Record<string | number, unknown> | unknown[] | string;
 export type MetadataType = JSONType | Uint8Array;
 
-export interface JSONEventType<
+export type JSONEventType<
   Type extends string = string,
   Data extends JSONType = JSONType,
   Metadata extends MetadataType | unknown = unknown
-> {
-  type: Type;
-  data: Data;
-  metadata: Metadata;
-}
+> = Metadata extends MetadataType
+  ? {
+      type: Type;
+      data: Data;
+      metadata: Metadata;
+    }
+  : {
+      type: Type;
+      data: Data;
+      metadata?: Metadata;
+    };
 
-export interface BinaryEventType<
+export type BinaryEventType<
   Type extends string = string,
   Metadata extends MetadataType | unknown = unknown
-> {
-  type: Type;
-  data: Uint8Array;
-  metadata: Metadata;
-}
+> = Metadata extends MetadataType
+  ? {
+      type: Type;
+      data: Uint8Array;
+      metadata: Metadata;
+    }
+  : {
+      type: Type;
+      data: Uint8Array;
+      metadata?: Metadata;
+    };
 
 export type EventType = JSONEventType | BinaryEventType;
 
-export interface JSONEventData<E extends JSONEventType = JSONEventType> {
-  id: string;
-  contentType: "application/json";
-  type: E["type"];
-  data: E["data"];
-  metadata: E["metadata"] extends MetadataType
-    ? E["metadata"]
-    : MetadataType | undefined;
-}
+export type JSONEventData<E extends JSONEventType = JSONEventType> =
+  E extends JSONEventType
+    ? {
+        id: string;
+        contentType: "application/json";
+        type: E["type"];
+        data: E["data"];
+        metadata: E["metadata"] extends MetadataType
+          ? E["metadata"]
+          : MetadataType | undefined;
+      }
+    : never;
 
-export interface BinaryEventData<E extends BinaryEventType = BinaryEventType> {
-  id: string;
-  contentType: "application/octet-stream";
-  type: E["type"];
-  data: E["data"];
-  metadata: E["metadata"] extends MetadataType
-    ? E["metadata"]
-    : MetadataType | undefined;
-}
+export type BinaryEventData<E extends BinaryEventType = BinaryEventType> =
+  E extends BinaryEventType
+    ? {
+        id: string;
+        contentType: "application/octet-stream";
+        type: E["type"];
+        data: E["data"];
+        metadata: E["metadata"] extends MetadataType
+          ? E["metadata"]
+          : MetadataType | undefined;
+      }
+    : never;
 
-export type EventData = JSONEventData | BinaryEventData;
+export type EventData<E extends EventType = EventType> =
+  E extends BinaryEventType
+    ? BinaryEventData<E>
+    : E extends JSONEventType
+    ? JSONEventData<E>
+    : never;
 
 export type LinkEvent = BinaryEventType<
   "$>",
@@ -58,86 +81,76 @@ export type LinkEvent = BinaryEventType<
 /**
  * Represents a previously written event.
  */
-interface RecordedEventBase<E extends EventType = EventType> {
-  /**
-   * The event stream that events belongs to.
-   */
-  streamId: string;
+export type RecordedEvent<E extends EventType = EventType> = E extends EventType
+  ? {
+      /**
+       * The event stream that events belongs to.
+       */
+      streamId: string;
 
-  /**
-   * Unique identifier representing this event. UUID format.
-   */
-  id: string;
+      /**
+       * Unique identifier representing this event. UUID format.
+       */
+      id: string;
 
-  /**
-   * Number of this event in the stream.
-   */
-  revision: bigint;
+      /**
+       * Indicates whether the content is internally marked as JSON.
+       */
+      isJson: E extends JSONEventType ? true : false;
 
-  /**
-   * Type of this event.
-   */
-  type: E["type"];
+      /**
+       * Number of this event in the stream.
+       */
+      revision: bigint;
 
-  /**
-   * Representing when this event was created in the database system.
-   */
-  created: number;
+      /**
+       * Type of this event.
+       */
+      type: E["type"];
 
-  /**
-   * Representing the metadata associated with this event.
-   */
-  metadata: E["metadata"] extends MetadataType
-    ? E["metadata"]
-    : MetadataType | undefined;
-}
+      /**
+       * Representing when this event was created in the database system.
+       */
+      created: number;
 
-export interface JSONRecordedEvent<E extends JSONEventType = JSONEventType>
-  extends RecordedEventBase<E> {
-  /**
-   * Indicates whether the content is internally marked as JSON.
-   */
-  isJson: true;
+      /**
+       * Data of this event.
+       */
+      data: E extends JSONEventType ? E["data"] : Uint8Array;
 
-  /**
-   * Data of this event.
-   */
-  data: E["data"];
-}
+      /**
+       * Representing the metadata associated with this event.
+       */
+      metadata: E["metadata"] extends MetadataType
+        ? E["metadata"]
+        : MetadataType | undefined;
+    }
+  : never;
 
-export interface BinaryRecordedEvent<
-  E extends BinaryEventType = BinaryEventType
-> extends RecordedEventBase<E> {
-  /**
-   * Indicates whether the content is internally marked as JSON.
-   */
-  isJson: false;
+export type JSONRecordedEvent<E extends JSONEventType = JSONEventType> =
+  RecordedEvent<E>;
 
-  /**
-   * Data of this event.
-   */
-  data: Uint8Array;
-}
+export type BinaryRecordedEvent<E extends BinaryEventType = BinaryEventType> =
+  RecordedEvent<E>;
 
-export interface AllStreamJSONRecordedEvent<
+export type AllStreamJSONRecordedEvent<
   E extends JSONEventType = JSONEventType
-> extends JSONRecordedEvent<E> {
+> = RecordedEvent<E> & {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
-}
+};
 
-export interface AllStreamBinaryRecordedEvent<
+export type AllStreamBinaryRecordedEvent<
   E extends BinaryEventType = BinaryEventType
-> extends BinaryRecordedEvent<E> {
+> = RecordedEvent<E> & {
   /**
    * Position of this event in the transaction log.
    */
   position: Position;
-}
+};
 
-export type RecordedEvent = JSONRecordedEvent | BinaryRecordedEvent;
 export type AllStreamRecordedEvent =
   | AllStreamJSONRecordedEvent
   | AllStreamBinaryRecordedEvent;
