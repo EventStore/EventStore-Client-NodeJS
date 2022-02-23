@@ -14,13 +14,15 @@ import {
   convertToCommandError,
   backpressuredWrite,
   createStreamIdentifier,
+  InternalOptions,
 } from "../../utils";
 
 import {
   unpackToCommandError,
   unpackWrongExpectedVersion,
 } from "./unpackError";
-import type { InternalAppendToStreamOptions } from ".";
+
+import type { AppendToStreamOptions } from ".";
 
 const streamCache = new WeakMap<
   StreamsClient,
@@ -40,7 +42,7 @@ export const batchAppend = async function (
     expectedRevision,
     batchAppendSize,
     ...baseOptions
-  }: InternalAppendToStreamOptions
+  }: InternalOptions<AppendToStreamOptions>
 ): Promise<AppendResult> {
   const correlationId = uuid();
 
