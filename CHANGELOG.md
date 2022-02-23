@@ -1,3 +1,176 @@
+## [v3.2.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.1.0...v3.2.0) (2022-02-23)
+
+## Features
+
+### Persistent Subscription Control
+
+New methods for persistent subscription control have been added.
+
+| Method Name                              | Description                                                                                           |                                                                                                                |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `getPersistendSubscriptionToAllInfo`     | Gets information and statistics on the specified persistent subscription to $all and its connections. | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d6099ef7039b3595da4effc7d521cf68b59ef30c) |
+| `getPersistentSubscriptionToStreamInfo`  | Gets information and statistics on the specified persistent subscription and its connections.         | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d6099ef7039b3595da4effc7d521cf68b59ef30c) |
+| `listAllPersistentSubscriptions`         | Lists all persistent subscriptions.                                                                   | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5efda84a6222adb29a2be0d504ce598c587ee8c1) |
+| `listPersistentSubscriptionsToAll`       | Lists persistent subscriptions to the $all stream.                                                    | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5efda84a6222adb29a2be0d504ce598c587ee8c1) |
+| `listPersistentSubscriptionsToStream`    | Lists persistent subscriptions to a specified stream.                                                 | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5efda84a6222adb29a2be0d504ce598c587ee8c1) |
+| `replayParkedMessagesToAll`              | Replays the parked messages of a persistent subscription to $all.                                     | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/21d6230af6d2a6759e07add4706c227ba30f2839) |
+| `replayParkedMessagesToStream`           | Replays the parked messages of a persistent subscription.                                             | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/7e5743b14e12f44e77d1f89905121354d5662617) |
+| `restartPersistentSubscriptionSubsystem` | Restarts the persistent subscription subsystem.                                                       | [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/11ba5cde48cd18550ac5c8882456382560453d05) |
+
+### Connection Name
+
+The `connectionName` option has been added allowing you to name the connection in logs and persistent subscription info. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/ba2a8c68c0d5856bc1e8ad94b9185da9269507cf)
+
+- Defaults to a UUID.
+- Adds `connectionName` option to constructor.
+- Adds `connectionName=<name>` param to connection string
+- Adds `connectionName` getter to client for reading the name of the client.
+
+### Allow skipping metadata key in `EventType`
+
+Previously, to use `JSONEventType` or `BinaryEventType` you would have to provide a metadata key, even if you typed it as `unknown` or `never`. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5f121cbadafa56d8dec6455bef0a861ab70e47a1)
+
+#### Before:
+
+```typescript
+type MyEvent = JSONEventType<"my-event", { some: string }>;
+
+// Property 'metadata' is missing in type '{ type: "my-event"; data: { some: string; }; }' but required in type 'JSONEventType<"my-event", { some: string; }, unknown>'.ts(2741)
+const myEventData: MyEvent = {
+    type: "my-event",
+    { some: "data" }
+}
+```
+
+#### After:
+
+```typescript
+type MyEvent = JSONEventType<"my-event", { some: string }>;
+
+const myEventData: MyEvent = {
+    type: "my-event",
+    { some: "data" }
+}
+```
+
+### Retain ability to descriminate event type unions after converting types
+
+Previously, if you had a union of event types, you would lose the ability it descriminate them after converting them to `EventData` or a `RecordedEvent` due to typescript combining them into an intersection of the types. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5f121cbadafa56d8dec6455bef0a861ab70e47a1)
+
+#### Before:
+
+```typescript
+type MyFirstEvent = JSONEventType<
+  "my-first-type",
+  { some: string; other: string }
+>;
+type MySecondEvent = JSONEventType<
+  "my-second-event",
+  { other: string; another: boolean }
+>;
+
+type MyEvents = MyFirstEvent | MySecondEvent;
+```
+
+We can descriminate based on the `type` key.
+
+```typescript
+const descriminateType = (eventData: MyEvents) => {
+  if (eventData.type === "my-first-type") {
+    // { some: string; other: string; }
+    eventData.data;
+  } else {
+    //  { other: string; another: boolean }
+    eventData.data;
+  }
+};
+```
+
+However, this breaks down when `MyEvents` is passed directly to `JSONEventData` or a `JSONRecordedEvent`.
+
+```typescript
+const descriminateType = (eventData: JSONRecordedEvent<MyEvents>) => {
+  if (eventData.type === "my-first-type") {
+    // { some: string; other: string; } | { other: string; another: boolean }
+    eventData.data;
+  } else {
+    // { some: string; other: string; } | { other: string; another: boolean }
+    eventData.data;
+  }
+};
+```
+
+You would have to use the helper type `EventTypeToRecordedEvent` to retain correct descrimination.
+
+```typescript
+const descriminateType = (eventData: EventTypeToRecordedEvent<MyEvents>) => {
+  if (eventData.type === "my-first-type") {
+    // { some: string; other: string; }
+    eventData.data;
+  } else {
+    // { other: string; another: boolean }
+    eventData.data;
+  }
+};
+```
+
+#### After:
+
+You can now pass your union directly to `JSONRecordedEvent`, `BinaryRecordedEvent` or the now generic `RecordedEvent` without losing the ability to descriminate the union:
+
+```typescript
+const descriminateType = (eventData: RecordedEvent<MyEvents>) => {
+  if (eventData.type === "my-first-type") {
+    // { some: string; other: string; }
+    eventData.data;
+  } else {
+    // { other: string; another: boolean }
+    eventData.data;
+  }
+};
+```
+
+All converter types (`EventTypeToRecordedEvent`, `RecordedEventToEventType`, `EventTypeToEventData`, `EventDataToEventType`, `RecordedEventToEventData`, `EventDataToRecordedEvent`) are still available.
+
+#### Allow enforcing types on `appendToStream`
+
+You can now enforce the types you append to a stream. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5f121cbadafa56d8dec6455bef0a861ab70e47a1)
+
+```typescript
+await client.appendToStream<MyEvents>(`my_stream`, jsonEvents);
+```
+
+#### Export Options types
+
+All method option types are not exported. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/2994ca9123ca91b6d093ef321671b9e8823cabb7)
+
+## Bug Fixes
+
+- Fix doc comment for persistent subscription `startFrom` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/58e76ec07a69f97eb626dc8b3fc3679d4c6606b6)
+- Ensure rediscovery is not run when the server returns a timeout [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/a8058d0c97af4a64be1f4906b6f20cb6459af227)
+
+## Deprecations
+
+- Consumer strategy names have been matched with server counterparts. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d6099ef7039b3595da4effc7d521cf68b59ef30c)
+  - `DISPATCH_TO_SINGLE`: `dispatch_to_single` -> `DispatchToSingle`;
+  - `ROUND_ROBIN`: `round_robin` -> `RoundRobin`;
+  - `PINNED`: `pinned` -> `Pinned`;
+  - Only affects users who pass the strings directly. Constants have changed to match.
+  - Previous strings will log a warning.
+  - Will be removed in `v4.0.0`
+- Persistent subscription methods, helpers and types relating to streams have been renamed to align with other method names. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5a82a98c4fede4cd40cf825f828574163fc38c3b)
+  - Methods:
+    - `createPersistentSubscription` -> `createPersistentSubscriptionToStream`
+    - `deletePersistentSubscription` -> `deletePersistentSubscriptionToStream`
+    - `subscribeToPersistentSubscription` -> `subscribeToPersistentSubscriptionToStream`
+    - `updatePersistentSubscription` -> `updatePersistentSubscriptionToStream`
+  - Helper Functions:
+    - `persistentSubscriptionSettingsFromDefaults` -> `persistentSubscriptionToStreamSettingsFromDefaults`
+  - Types:
+    - `PersistentSubscriptionSettings` -> `PersistentSubscriptionToStreamSettings`
+    - `PersistentSubscription` -> `PersistentSubscriptionToStream`
+  - Will be removed in `v4.0.0`
+
 ## [v3.1.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.0.0...v3.1.0) (2022-02-04)
 
 ## Features
