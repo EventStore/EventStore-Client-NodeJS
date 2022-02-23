@@ -14,16 +14,17 @@ import {
   createStreamIdentifier,
   createUUID,
   debug,
+  InternalOptions,
   WrongExpectedVersionError,
 } from "../../utils";
 
-import type { InternalAppendToStreamOptions } from ".";
+import type { AppendToStreamOptions } from ".";
 
 export const append = async function (
   this: Client,
   streamName: string,
   events: EventData[],
-  { expectedRevision, ...baseOptions }: InternalAppendToStreamOptions
+  { expectedRevision, ...baseOptions }: InternalOptions<AppendToStreamOptions>
 ): Promise<AppendResult> {
   const header = new AppendReq();
   const options = new AppendReq.Options();

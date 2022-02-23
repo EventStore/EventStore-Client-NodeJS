@@ -26,11 +26,6 @@ export interface AppendToStreamOptions extends BaseOptions {
   batchAppendSize?: number;
 }
 
-export type InternalAppendToStreamOptions = Required<
-  Omit<AppendToStreamOptions, keyof BaseOptions>
-> &
-  BaseOptions;
-
 declare module "../../Client" {
   interface Client {
     /**
