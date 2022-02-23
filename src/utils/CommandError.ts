@@ -2,8 +2,12 @@
 
 import { status as StatusCode, ServiceError, Metadata } from "@grpc/grpc-js";
 
-import { WrongExpectedVersion } from "../../generated/shared_pb";
-import { CurrentRevision, EndPoint, AppendExpectedRevision } from "../types";
+import type { WrongExpectedVersion } from "../../generated/shared_pb";
+import type {
+  CurrentRevision,
+  EndPoint,
+  AppendExpectedRevision,
+} from "../types";
 
 export enum ErrorType {
   TIMEOUT = "timeout",

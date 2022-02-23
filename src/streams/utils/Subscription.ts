@@ -1,31 +1,33 @@
 import { Transform, TransformCallback, TransformOptions } from "stream";
 
-import { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
+import type { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 
-import { ReadResp } from "../../generated/streams_pb";
+import type { ReadResp } from "../../../generated/streams_pb";
 
-import {
-  ConvertGrpcEvent,
-  convertToCommandError,
-  StreamNotFoundError,
-} from ".";
-import { StreamingRead } from "../types";
+import type { Filter, Position, ReadableSubscription } from "../../types";
+import { ConvertGrpcEvent, convertToCommandError } from "../../utils";
 
 type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
-export class ReadStream<E> extends Transform implements StreamingRead<E> {
+export class Subscription<E>
+  extends Transform
+  implements ReadableSubscription<E>
+{
   #convertGrpcEvent: ConvertGrpcEvent<E>;
   #grpcStream: Promise<ClientReadableStream<ReadResp>>;
+  #checkpointReached?: Filter["checkpointReached"];
 
   constructor(
     createGRPCStream: CreateGRPCStream,
     convertGrpcEvent: ConvertGrpcEvent<E>,
-    options: TransformOptions
+    options: TransformOptions,
+    checkpointReached?: Filter["checkpointReached"]
   ) {
     super({ ...options, objectMode: true });
     this.#convertGrpcEvent = convertGrpcEvent;
     this.#grpcStream = createGRPCStream();
+    this.#checkpointReached = checkpointReached;
     this.initialize();
   }
 
@@ -43,21 +45,22 @@ export class ReadStream<E> extends Transform implements StreamingRead<E> {
     }
   };
 
-  _transform(resp: ReadResp, _encoding: string, next: TransformCallback): void {
+  async _transform(
+    resp: ReadResp,
+    _encoding: string,
+    next: TransformCallback
+  ): Promise<void> {
     if (resp.hasConfirmation?.()) {
       this.emit("confirmation");
     }
 
-    if (resp.hasStreamNotFound?.()) {
-      const streamNotFound = resp.getStreamNotFound()!;
-
-      this.emit(
-        "error",
-        new StreamNotFoundError(
-          null as never,
-          streamNotFound.getStreamIdentifier()?.getStreamName()
-        )
-      );
+    if (resp.hasCheckpoint?.() && this.#checkpointReached) {
+      const checkpoint = resp.getCheckpoint()!;
+      const position: Position = {
+        commit: BigInt(checkpoint.getCommitPosition()),
+        prepare: BigInt(checkpoint.getPreparePosition()),
+      };
+      await this.#checkpointReached(this, position);
     }
 
     if (resp.hasEvent?.()) {
@@ -68,7 +71,7 @@ export class ReadStream<E> extends Transform implements StreamingRead<E> {
     next();
   }
 
-  public async cancel(): Promise<void> {
+  public async unsubscribe(): Promise<void> {
     const stream = await this.#grpcStream;
 
     return new Promise((resolve) => {

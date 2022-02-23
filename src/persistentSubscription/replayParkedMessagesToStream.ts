@@ -1,4 +1,4 @@
-import { Empty, StreamIdentifier } from "../../generated/shared_pb";
+import { Empty } from "../../generated/shared_pb";
 import { ReplayParkedReq } from "../../generated/persistent_pb";
 import {
   PersistentSubscriptionsClient,
@@ -7,10 +7,11 @@ import {
 
 import {
   convertToCommandError,
+  createStreamIdentifier,
   debug,
   PersistentSubscriptionDoesNotExistError,
 } from "../utils";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
 export interface ReplayParkedMessagesToStreamOptions extends BaseOptions {
@@ -76,8 +77,8 @@ const replayParkedMessagesToStreamGRPC = async function (
 ) {
   const req = new ReplayParkedReq();
   const options = new ReplayParkedReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  const identifier = createStreamIdentifier(streamName);
+
   options.setStreamIdentifier(identifier);
   options.setGroupName(groupName);
 

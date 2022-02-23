@@ -1,13 +1,12 @@
-import { ReadableOptions } from "stream";
+import type { ReadableOptions } from "stream";
 
-import { StreamIdentifier, Empty } from "../../generated/shared_pb";
+import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
 
 import { Client } from "../Client";
 import { BACKWARDS, END, FORWARDS, START } from "../constants";
-import {
+import type {
   BaseOptions,
   Direction,
   EventType,
@@ -15,7 +14,9 @@ import {
   ResolvedEvent,
   StreamingRead,
 } from "../types";
-import { debug, convertGrpcEvent, ReadStream } from "../utils";
+import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
+
+import { ReadStream } from "./utils/ReadStream";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**
@@ -73,13 +74,11 @@ Client.prototype.readStream = function <
 ): StreamingRead<ResolvedEvent<KnownEventType>> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
-
-  const uuidOption = new UUIDOption();
-  uuidOption.setString(new Empty());
-
   const streamOptions = new ReadReq.Options.StreamOptions();
+  const uuidOption = new ReadReq.Options.UUIDOption();
+  const identifier = createStreamIdentifier(streamName);
+
+  uuidOption.setString(new Empty());
   streamOptions.setStreamIdentifier(identifier);
 
   switch (fromRevision) {

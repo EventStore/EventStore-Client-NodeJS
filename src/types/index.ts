@@ -1,17 +1,20 @@
-import { Readable } from "stream";
-import {
+import type { Readable } from "stream";
+import type {
   Client as GRPCClient,
   ClientOptions as GRPCClientOptions,
   ChannelCredentials,
 } from "@grpc/grpc-js";
-import { ResolvedEvent, AllStreamResolvedEvent, EventType } from "./events";
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
-import * as constants from "../constants";
 
-export { VNodeState };
-export * from "./events";
+import type {
+  ResolvedEvent,
+  AllStreamResolvedEvent,
+  EventType,
+} from "./events";
+
+import type * as constants from "../constants";
 
 export interface BaseOptions {
   /**
@@ -476,3 +479,6 @@ export type StreamSubscription<E extends EventType = EventType> =
   ReadableSubscription<ResolvedEvent<E>>;
 export type AllStreamSubscription =
   ReadableSubscription<AllStreamResolvedEvent>;
+
+export { VNodeState };
+export * from "./events";

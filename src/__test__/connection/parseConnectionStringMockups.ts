@@ -1,4 +1,4 @@
-import { ConnectionOptions } from "../../Client/parseConnectionString";
+import type { ConnectionOptions } from "../../Client/parseConnectionString";
 
 export const valid: Array<
   [connectionString: string, expected: ConnectionOptions]

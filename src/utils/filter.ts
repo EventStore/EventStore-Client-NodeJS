@@ -1,5 +1,5 @@
 import { EVENT_TYPE, STREAM_NAME } from "../constants";
-import {
+import type {
   FilterOn,
   Filter,
   RegexFilter,

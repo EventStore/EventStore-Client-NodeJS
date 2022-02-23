@@ -6,7 +6,8 @@ import {
   ROUND_ROBIN,
   UNBOUNDED,
 } from "../../constants";
-import {
+
+import type {
   PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionToAllSettings,
 } from "./persistentSubscriptionSettings";

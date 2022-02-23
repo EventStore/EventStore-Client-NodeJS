@@ -1,6 +1,6 @@
 import {
   EventStoreDBClient,
-  PersistentSubscriptionSettings,
+  PersistentSubscriptionToStreamSettings,
   persistentSubscriptionToStreamSettingsFromDefaults,
   PersistentSubscriptionToAllSettings,
   persistentSubscriptionToAllSettingsFromDefaults,
@@ -9,7 +9,7 @@ import {
 export type CreatedPS = [
   streamName: string,
   groupName: string,
-  settings: PersistentSubscriptionSettings
+  settings: PersistentSubscriptionToStreamSettings
 ];
 
 export const createManyPs =
@@ -17,7 +17,7 @@ export const createManyPs =
   async (
     streamName: (i: number) => string,
     groupName: (i: number) => string,
-    settingsChanges: Partial<PersistentSubscriptionSettings>[]
+    settingsChanges: Partial<PersistentSubscriptionToStreamSettings>[]
   ): Promise<CreatedPS[]> => {
     const created: CreatedPS[] = [];
 

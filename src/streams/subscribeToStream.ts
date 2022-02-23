@@ -1,12 +1,10 @@
-import { ReadableOptions } from "stream";
+import type { ReadableOptions } from "stream";
 
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { ReadReq } from "../../generated/streams_pb";
-import { Empty, StreamIdentifier } from "../../generated/shared_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
-import SubscriptionOptions = ReadReq.Options.SubscriptionOptions;
+import { Empty } from "../../generated/shared_pb";
 
-import {
+import type {
   ReadRevision,
   StreamSubscription,
   BaseOptions,
@@ -14,7 +12,9 @@ import {
 } from "../types";
 import { Client } from "../Client";
 import { END, START } from "../constants";
-import { debug, convertGrpcEvent, OneWaySubscription } from "../utils";
+import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
+
+import { Subscription } from "./utils/Subscription";
 
 export interface SubscribeToStreamOptions extends BaseOptions {
   /**
@@ -61,13 +61,11 @@ Client.prototype.subscribeToStream = function <
 ): StreamSubscription<KnownEventType> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
-
-  const uuidOption = new UUIDOption();
-  uuidOption.setString(new Empty());
-
   const streamOptions = new ReadReq.Options.StreamOptions();
+  const uuidOption = new ReadReq.Options.UUIDOption();
+  const identifier = createStreamIdentifier(streamName);
+
+  uuidOption.setString(new Empty());
   streamOptions.setStreamIdentifier(identifier);
 
   switch (fromRevision) {
@@ -89,7 +87,7 @@ Client.prototype.subscribeToStream = function <
 
   options.setStream(streamOptions);
   options.setResolveLinks(resolveLinkTos);
-  options.setSubscription(new SubscriptionOptions());
+  options.setSubscription(new ReadReq.Options.SubscriptionOptions());
   options.setUuidOption(uuidOption);
   options.setNoFilter(new Empty());
 
@@ -117,9 +115,5 @@ Client.prototype.subscribeToStream = function <
       )
   );
 
-  return new OneWaySubscription(
-    createGRPCStream,
-    convertGrpcEvent,
-    readableOptions
-  );
+  return new Subscription(createGRPCStream, convertGrpcEvent, readableOptions);
 };

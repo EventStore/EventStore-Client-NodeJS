@@ -1,4 +1,4 @@
-import { StreamingRead } from "../../types";
+import type { StreamingRead } from "../../types";
 
 export const collect = async <
   T extends StreamingRead<unknown>,

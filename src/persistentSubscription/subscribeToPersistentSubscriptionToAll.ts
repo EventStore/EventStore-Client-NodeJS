@@ -1,4 +1,4 @@
-import { DuplexOptions } from "stream";
+import type { DuplexOptions } from "stream";
 
 import { Empty } from "../../generated/shared_pb";
 import { ReadReq } from "../../generated/persistent_pb";
@@ -6,9 +6,8 @@ import {
   PersistentSubscriptionsClient,
   PersistentSubscriptionsService,
 } from "../../generated/persistent_grpc_pb";
-import UUIDOption = ReadReq.Options.UUIDOption;
 
-import { BaseOptions, PersistentSubscriptionToAll } from "../types";
+import type { BaseOptions, PersistentSubscriptionToAll } from "../types";
 import { convertAllStreamGrpcEvent, debug, UnsupportedError } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
@@ -63,7 +62,7 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
 
         const req = new ReadReq();
         const options = new ReadReq.Options();
-        const uuidOption = new UUIDOption();
+        const uuidOption = new ReadReq.Options.UUIDOption();
         uuidOption.setString(new Empty());
 
         options.setAll(new Empty());

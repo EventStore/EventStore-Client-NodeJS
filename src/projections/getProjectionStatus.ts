@@ -1,14 +1,12 @@
-import { ServiceError } from "@grpc/grpc-js";
+import type { ServiceError } from "@grpc/grpc-js";
+
 import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { StatisticsReq, StatisticsResp } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
-import { BaseOptions, ProjectionDetails } from "../types";
-import {
-  debug,
-  convertToCommandError,
-  convertGrpcProjectionDetails,
-} from "../utils";
+import type { BaseOptions, ProjectionDetails } from "../types";
+import { debug, convertToCommandError } from "../utils";
+import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
 
 export interface GetProjectionStatusOptions extends BaseOptions {}
 
@@ -73,7 +71,7 @@ Client.prototype.getProjectionStatus = async function (
 
         stream.on("data", (resp: StatisticsResp) => {
           if (!resp.hasDetails()) return;
-          projectionDetail = convertGrpcProjectionDetails(resp.getDetails()!);
+          projectionDetail = mapGrpcProjectionDetails(resp.getDetails()!);
         });
 
         stream.on("end", () => {

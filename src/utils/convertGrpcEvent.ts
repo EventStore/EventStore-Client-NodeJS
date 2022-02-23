@@ -1,12 +1,8 @@
-import { ReadResp as StreamsReadResp } from "../../generated/streams_pb";
-import { ReadResp as PersistentReadResp } from "../../generated/persistent_pb";
-import StreamsEvent = StreamsReadResp.ReadEvent;
-import PersistentEvent = PersistentReadResp.ReadEvent;
-import StreamsRecordedEvent = StreamsEvent.RecordedEvent;
-import PersistentRecordedEvent = PersistentEvent.RecordedEvent;
+import type { ReadResp as StreamsReadResp } from "../../generated/streams_pb";
+import type { ReadResp as PersistentReadResp } from "../../generated/persistent_pb";
 
 import { debug } from "./debug";
-import {
+import type {
   AllStreamResolvedEvent,
   EventType,
   EventTypeToRecordedEvent,
@@ -14,11 +10,16 @@ import {
   Position,
   ResolvedEvent,
 } from "../types";
+
 import { parseUUID } from ".";
 
 export type GRPCReadResp = StreamsReadResp | PersistentReadResp;
-export type GRPCReadEvent = StreamsEvent | PersistentEvent;
-export type GRPCRecordedEvent = StreamsRecordedEvent | PersistentRecordedEvent;
+export type GRPCReadEvent =
+  | StreamsReadResp.ReadEvent
+  | PersistentReadResp.ReadEvent;
+export type GRPCRecordedEvent =
+  | StreamsReadResp.ReadEvent.RecordedEvent
+  | PersistentReadResp.ReadEvent.RecordedEvent;
 
 export type ConvertGrpcEvent<E> = (grpcEvent: GRPCReadEvent) => E;
 

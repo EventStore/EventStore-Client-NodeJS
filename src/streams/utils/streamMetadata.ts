@@ -1,4 +1,9 @@
-import { END, START, SYSTEM_STREAM_ACL, USER_STREAM_ACL } from "../constants";
+import type {
+  END,
+  START,
+  SYSTEM_STREAM_ACL,
+  USER_STREAM_ACL,
+} from "../../constants";
 
 const MAX_AGE = "$maxAge";
 const MAX_COUNT = "$maxCount";

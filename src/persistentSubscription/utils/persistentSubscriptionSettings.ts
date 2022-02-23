@@ -1,5 +1,5 @@
 import { END, ROUND_ROBIN, START, UNBOUNDED } from "../../constants";
-import { ConsumerStrategy, Position } from "../../types";
+import type { ConsumerStrategy, Position } from "../../types";
 
 export interface PersistentSubscriptionSettingsGeneric {
   /**

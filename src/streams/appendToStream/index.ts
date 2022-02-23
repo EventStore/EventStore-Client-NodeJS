@@ -2,7 +2,7 @@ import { StreamsService } from "../../../generated/streams_grpc_pb";
 
 import { Client } from "../../Client";
 import { ANY } from "../../constants";
-import {
+import type {
   BaseOptions,
   AppendResult,
   AppendExpectedRevision,

@@ -1,7 +1,9 @@
-import { SubscriptionInfo } from "../../../generated/persistent_pb";
+import type { SubscriptionInfo } from "../../../generated/persistent_pb";
+
 import { END, START, UNBOUNDED } from "../../constants";
 import type { Position } from "../../types";
-import {
+
+import type {
   PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionSettingsGeneric,
   PersistentSubscriptionToAllSettings,

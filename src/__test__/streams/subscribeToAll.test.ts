@@ -1,5 +1,6 @@
 import { pipeline, Writable, Readable } from "stream";
 import { promisify } from "util";
+
 import {
   createTestNode,
   Defer,
@@ -7,7 +8,6 @@ import {
   jsonTestEvents,
   TestEventData,
 } from "@test-utils";
-
 import {
   EventStoreDBClient,
   jsonEvent,

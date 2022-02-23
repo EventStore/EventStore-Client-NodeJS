@@ -1,10 +1,11 @@
 import type { MethodDefinition, ServiceError } from "@grpc/grpc-js";
+
 import { Empty } from "../../generated/shared_pb";
 import { ServerFeaturesClient } from "../../generated/serverfeatures_grpc_pb";
-import { SupportedMethods } from "../../generated/serverfeatures_pb";
+import type { SupportedMethods } from "../../generated/serverfeatures_pb";
 
 import { debug } from "../utils";
-import { GRPCClientConstructor } from "../types";
+import type { GRPCClientConstructor } from "../types";
 
 type ExecuteClientCapabilities = [
   GRPCClientConstructor<ServerFeaturesClient>,

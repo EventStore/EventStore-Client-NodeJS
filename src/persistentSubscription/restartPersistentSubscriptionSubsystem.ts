@@ -5,7 +5,7 @@ import {
 import { Empty } from "../../generated/shared_pb";
 
 import { Client } from "../Client";
-import { BaseOptions } from "../types";
+import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
 export interface RestartPersistentSubscriptionSubsystemOptions

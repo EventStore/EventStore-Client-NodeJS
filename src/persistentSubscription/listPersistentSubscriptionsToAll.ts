@@ -1,16 +1,18 @@
-import { BaseOptions } from "../types";
-import { debug, convertToCommandError, UnsupportedError } from "../utils";
-import { Client } from "../Client";
 import {
   PersistentSubscriptionsClient,
   PersistentSubscriptionsService,
 } from "../../generated/persistent_grpc_pb";
 import { ListReq } from "../../generated/persistent_pb";
+import { Empty } from "../../generated/shared_pb";
+
+import type { BaseOptions } from "../types";
+import { debug, convertToCommandError, UnsupportedError } from "../utils";
+import { Client } from "../Client";
+
 import {
   mapPersistentSubscriptionToAllInfo,
   PersistentSubscriptionToAllInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
-import { Empty } from "../../generated/shared_pb";
 
 interface ListPersistentSubscriptionsToAllOptions extends BaseOptions {}
 

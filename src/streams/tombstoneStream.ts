@@ -1,11 +1,11 @@
-import { Empty, StreamIdentifier } from "../../generated/shared_pb";
+import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { TombstoneReq } from "../../generated/streams_pb";
 
 import { Client } from "../Client";
 import { ANY, NO_STREAM, STREAM_EXISTS } from "../constants";
-import { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
-import { convertToCommandError, debug } from "../utils";
+import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
+import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 
 export interface TombstoneStreamOptions extends BaseOptions {
   /**
@@ -36,8 +36,7 @@ Client.prototype.tombstoneStream = async function (
 ): Promise<DeleteResult> {
   const req = new TombstoneReq();
   const options = new TombstoneReq.Options();
-  const identifier = new StreamIdentifier();
-  identifier.setStreamName(Uint8Array.from(Buffer.from(streamName, "utf8")));
+  const identifier = createStreamIdentifier(streamName);
 
   options.setStreamIdentifier(identifier);
 

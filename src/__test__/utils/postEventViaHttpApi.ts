@@ -1,8 +1,10 @@
 import { request } from "https";
 import { readFileSync } from "fs";
 import { URL } from "url";
-import { Cluster } from "./Cluster";
-import { EndPoint } from "../../types";
+
+import type { EndPoint } from "../../types";
+
+import type { Cluster } from "./Cluster";
 
 interface Options {
   type: string;
