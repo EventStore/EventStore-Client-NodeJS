@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
-import type { Stream } from "stream";
+import { Readable, Writable, Duplex, finished } from "stream";
 
 import { v4 as uuid } from "uuid";
 
@@ -15,6 +15,12 @@ import {
   Metadata,
   MethodDefinition,
 } from "@grpc/grpc-js";
+import {
+  ClientWritableStreamImpl,
+  ClientDuplexStreamImpl,
+  ClientUnaryCallImpl,
+  ClientReadableStreamImpl,
+} from "@grpc/grpc-js/build/src/call";
 
 import type {
   NodePreference,
@@ -340,9 +346,11 @@ export class Client {
     return this.#grpcClients.get(Client) as Promise<T>;
   };
 
+  private disposableStreams: Set<Writable | Readable | Duplex> = new Set();
+
   // Internal handled execution
   protected GRPCStreamCreator =
-    <Client extends GRPCClient, T extends Stream>(
+    <Client extends GRPCClient, T extends Writable | Readable | Duplex>(
       Client: GRPCClientConstructor<Client>,
       debugName: string,
       creator: (client: Client) => T | Promise<T>,
@@ -356,12 +364,45 @@ export class Client {
       const stream = await creator(client);
 
       cache?.set(client, stream);
+      this.disposableStreams.add(stream);
 
-      return stream.on("error", (err) => {
+      finished(stream, (err) => {
         cache?.delete(client);
-        this.handleError(client, err);
+        this.disposableStreams.delete(stream);
+        if (err) this.handleError(client, err);
       });
+
+      return stream;
     };
+
+  public dispose = async () => {
+    debug.command(`Disposing ${this.disposableStreams.size} streams.`);
+
+    const promises = [];
+
+    for (const stream of this.disposableStreams) {
+      promises.push(
+        new Promise((resolve) => {
+          finished(stream, resolve);
+        })
+      );
+
+      if (
+        stream instanceof ClientWritableStreamImpl ||
+        stream instanceof ClientDuplexStreamImpl ||
+        stream instanceof ClientUnaryCallImpl ||
+        stream instanceof ClientReadableStreamImpl
+      ) {
+        stream.cancel();
+      } else {
+        stream.destroy();
+      }
+    }
+
+    await Promise.allSettled(promises);
+
+    debug.command(`Disposed ${promises.length} streams.`);
+  };
 
   // Internal handled execution
   protected execute = async <Client extends GRPCClient, T>(
