@@ -1,3 +1,9 @@
+## [v3.3.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.2.0...v3.3.0) (2022-03-30)
+
+### Features
+
+- Added `dispose` method to dispose all currently running streaming calls. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/fa0ba6c0d58a0f9b5d8843caa2aa21989122b3b4)
+
 ## [v3.2.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.1.0...v3.2.0) (2022-02-23)
 
 ## Features
