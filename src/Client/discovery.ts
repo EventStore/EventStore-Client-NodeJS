@@ -164,6 +164,9 @@ function listClusterMembers(
 
   return new Promise((resolve, reject) => {
     client.read(new Empty(), new Metadata(), { deadline }, (error, info) => {
+      // regardless of the outcome, we are done with this client.
+      client.close();
+
       if (error) return reject(error);
 
       const members: MemberInfo[] = [];

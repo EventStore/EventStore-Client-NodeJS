@@ -486,6 +486,7 @@ export class Client {
 
     const [_protocol, address, port] = failedChannel.getTarget().split(":");
 
+    failedChannel.close();
     this.#grpcClients.clear();
     this.#channel = undefined;
     this.#serverFeatures = undefined;
