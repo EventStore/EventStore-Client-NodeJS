@@ -1,3 +1,7 @@
+## [v3.3.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.3.0...v3.3.1) (2022-04-06)
+
+- Close channels when they fail to prevent memory leak. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/76f41ede6b23ec422daf12b2977323397c59b657)
+
 ## [v3.3.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.2.0...v3.3.0) (2022-03-30)
 
 ### Features
