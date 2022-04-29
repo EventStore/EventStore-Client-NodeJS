@@ -46,7 +46,7 @@ export interface ReadStreamOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Sends events to a given stream.
+     * Reads events from a given stream.
      * @param streamName A stream name.
      * @param options Reading options.
      */
