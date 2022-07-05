@@ -178,6 +178,18 @@ export interface ResolvedEvent<Event extends EventType = EventType> {
 /**
  * A structure representing a single event or an resolved link event.
  */
+export interface PersistentSubscriptionToStreamResolvedEvent<
+  Event extends EventType = EventType
+> extends ResolvedEvent<Event> {
+  /**
+   * The number of times this event has been retried.
+   */
+  retryCount: number;
+}
+
+/**
+ * A structure representing a single event or an resolved link event.
+ */
 export interface AllStreamResolvedEvent {
   /**
    * The event, or the resolved link event if this {@link ResolvedEvent} is a link event.
@@ -193,6 +205,17 @@ export interface AllStreamResolvedEvent {
    * Commit position of the record.
    */
   commitPosition?: bigint;
+}
+
+/**
+ * A structure representing a single event or an resolved link event.
+ */
+export interface PersistentSubscriptionToAllResolvedEvent
+  extends AllStreamResolvedEvent {
+  /**
+   * The number of times this event has been retried.
+   */
+  retryCount: number;
 }
 
 export type EventTypeToRecordedEvent<T extends EventType> =

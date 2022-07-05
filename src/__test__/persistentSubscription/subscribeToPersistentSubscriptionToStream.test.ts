@@ -730,4 +730,48 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
     expect(doSomething).toBeCalledTimes(100);
   });
+
+  test("retryCount", async () => {
+    const STREAM_NAME = "retry_count";
+    const GROUP_NAME = "retry_count_group_name";
+
+    await client.createPersistentSubscriptionToStream(
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionToStreamSettingsFromDefaults({
+        startFrom: START,
+        maxRetryCount: 5,
+      })
+    );
+
+    await client.appendToStream(STREAM_NAME, [
+      ...jsonTestEvents(99),
+      finishEvent(),
+    ]);
+
+    const subscription = client.subscribeToPersistentSubscriptionToStream(
+      STREAM_NAME,
+      GROUP_NAME
+    );
+
+    const nacked: Record<string, number> = {};
+
+    for await (const resolvedEvent of subscription) {
+      const id = resolvedEvent.event!.id;
+
+      if (nacked[id] != null) {
+        expect(resolvedEvent.retryCount).toBe(nacked[id]);
+      } else {
+        expect(resolvedEvent.retryCount).toBe(0);
+      }
+
+      await subscription.nack("retry", "to test it", resolvedEvent);
+
+      nacked[id] = (nacked[id] ?? 0) + 1;
+
+      if (resolvedEvent.event?.type === "finish-test") {
+        break;
+      }
+    }
+  });
 });

@@ -12,6 +12,8 @@ import type {
   ResolvedEvent,
   AllStreamResolvedEvent,
   EventType,
+  PersistentSubscriptionToAllResolvedEvent,
+  PersistentSubscriptionToStreamResolvedEvent,
 } from "./events";
 
 import type * as constants from "../constants";
@@ -458,22 +460,26 @@ export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
   /**
    * Acknowledge events as handled.
    */
-  ack(...events: E[]): Promise<void>;
+  ack(...events: ResolvedEvent[]): Promise<void>;
 
   /**
    * "Not Acknowledge" the event.
    */
-  nack(action: PersistentAction, reason: string, ...events: E[]): Promise<void>;
+  nack(
+    action: PersistentAction,
+    reason: string,
+    ...events: ResolvedEvent[]
+  ): Promise<void>;
 }
 
 export type PersistentSubscriptionToStream<E extends EventType = EventType> =
-  PersistentSubscriptionBase<ResolvedEvent<E>>;
+  PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>>;
 /**
  * @deprecated Renamed to {@link PersistentSubscriptionToStream}.
  */
 export type PersistentSubscription = PersistentSubscriptionToStream;
 export type PersistentSubscriptionToAll =
-  PersistentSubscriptionBase<AllStreamResolvedEvent>;
+  PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent>;
 
 export type StreamSubscription<E extends EventType = EventType> =
   ReadableSubscription<ResolvedEvent<E>>;

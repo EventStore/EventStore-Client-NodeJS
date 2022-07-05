@@ -94,6 +94,9 @@ describe("[sample] persistent-subscriptions", () => {
     try {
       for await (const event of subscription) {
         try {
+          console.log(
+            `handling event ${event.event?.type} with retryCount ${event.retryCount}`
+          );
           await handleEvent(event);
           await subscription.ack(event);
         } catch (error) {
@@ -153,6 +156,9 @@ describe("[sample] persistent-subscriptions", () => {
 
       try {
         for await (const event of subscription) {
+          console.log(
+            `handling event ${event.event?.type} with retryCount ${event.retryCount}`
+          );
           await handleEvent(event);
           await subscription.ack(event);
         }
@@ -197,6 +203,9 @@ describe("[sample] persistent-subscriptions", () => {
     try {
       for await (const event of subscription) {
         try {
+          console.log(
+            `handling event ${event.event?.type} with retryCount ${event.retryCount}`
+          );
           await handleEvent(event);
           await subscription.ack(event);
         } catch (error) {

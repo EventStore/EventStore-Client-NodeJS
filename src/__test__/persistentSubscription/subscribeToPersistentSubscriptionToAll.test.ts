@@ -719,5 +719,47 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
         NotLeaderError
       );
     });
+
+    test("retryCount", async () => {
+      const STREAM_NAME = "to_all_retry_count_stream_name";
+      const GROUP_NAME = "to_all_retry_count_group_name";
+      const FINISH_TEST = "to_all_retry_count_finish_test";
+
+      await client.createPersistentSubscriptionToAll(
+        GROUP_NAME,
+        persistentSubscriptionToAllSettingsFromDefaults({
+          startFrom: END,
+          maxRetryCount: 5,
+        })
+      );
+
+      await client.appendToStream(STREAM_NAME, [
+        ...jsonTestEvents(99),
+        finishEvent(FINISH_TEST),
+      ]);
+
+      const subscription =
+        client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
+
+      const nacked: Record<string, number> = {};
+
+      for await (const resolvedEvent of subscription) {
+        const id = resolvedEvent.event!.id;
+
+        if (nacked[id] != null) {
+          expect(resolvedEvent.retryCount).toBe(nacked[id]);
+        } else {
+          expect(resolvedEvent.retryCount).toBe(0);
+        }
+
+        await subscription.nack("retry", "to test it", resolvedEvent);
+
+        nacked[id] = (nacked[id] ?? 0) + 1;
+
+        if (resolvedEvent.event?.type === FINISH_TEST) {
+          break;
+        }
+      }
+    });
   });
 });
