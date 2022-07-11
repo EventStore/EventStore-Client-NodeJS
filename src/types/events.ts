@@ -176,7 +176,7 @@ export interface ResolvedEvent<Event extends EventType = EventType> {
 }
 
 /**
- * A structure representing a single event or an resolved link event.
+ * A structure representing a single event or a resolved link event from a persistent subscription to a stream.
  */
 export interface PersistentSubscriptionToStreamResolvedEvent<
   Event extends EventType = EventType
@@ -208,7 +208,7 @@ export interface AllStreamResolvedEvent {
 }
 
 /**
- * A structure representing a single event or an resolved link event.
+ * A structure representing a single event or a resolved link event from a persistent subscription to $all.
  */
 export interface PersistentSubscriptionToAllResolvedEvent
   extends AllStreamResolvedEvent {
