@@ -23,11 +23,11 @@ export class PersistentSubscriptionImpl<E>
   implements PersistentSubscriptionBase<E>
 {
   #grpcStream: Promise<ClientDuplexStream<ReadReq, ReadResp>>;
-  #convertGrpcEvent: ConvertGrpcEvent<E>;
+  #convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
 
   constructor(
     createGRPCStream: CreateGRPCStream,
-    convertGrpcEvent: ConvertGrpcEvent<E>,
+    convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>,
     options: TransformOptions
   ) {
     super({ ...options, objectMode: true });

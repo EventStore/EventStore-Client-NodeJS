@@ -9,7 +9,11 @@ import type {
   BaseOptions,
   EventType,
 } from "../types";
-import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
+import {
+  debug,
+  convertPersistentSubscriptionToStreamGrpcEvent,
+  createStreamIdentifier,
+} from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
 
@@ -104,7 +108,7 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
         return stream;
       }
     ),
-    convertGrpcEvent,
+    convertPersistentSubscriptionToStreamGrpcEvent,
     duplexOptions
   );
 };

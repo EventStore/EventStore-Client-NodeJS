@@ -15,12 +15,12 @@ import {
 type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
 export class ReadStream<E> extends Transform implements StreamingRead<E> {
-  #convertGrpcEvent: ConvertGrpcEvent<E>;
+  #convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
   #grpcStream: Promise<ClientReadableStream<ReadResp>>;
 
   constructor(
     createGRPCStream: CreateGRPCStream,
-    convertGrpcEvent: ConvertGrpcEvent<E>,
+    convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>,
     options: TransformOptions
   ) {
     super({ ...options, objectMode: true });

@@ -8,7 +8,11 @@ import {
 } from "../../generated/persistent_grpc_pb";
 
 import type { BaseOptions, PersistentSubscriptionToAll } from "../types";
-import { convertAllStreamGrpcEvent, debug, UnsupportedError } from "../utils";
+import {
+  convertPersistentSubscriptionToAllGrpcEvent,
+  debug,
+  UnsupportedError,
+} from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
 
@@ -89,7 +93,7 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         return stream;
       }
     ),
-    convertAllStreamGrpcEvent,
+    convertPersistentSubscriptionToAllGrpcEvent,
     duplexOptions
   );
 };

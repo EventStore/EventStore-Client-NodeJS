@@ -14,13 +14,13 @@ export class Subscription<E>
   extends Transform
   implements ReadableSubscription<E>
 {
-  #convertGrpcEvent: ConvertGrpcEvent<E>;
+  #convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
   #grpcStream: Promise<ClientReadableStream<ReadResp>>;
   #checkpointReached?: Filter["checkpointReached"];
 
   constructor(
     createGRPCStream: CreateGRPCStream,
-    convertGrpcEvent: ConvertGrpcEvent<E>,
+    convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>,
     options: TransformOptions,
     checkpointReached?: Filter["checkpointReached"]
   ) {
