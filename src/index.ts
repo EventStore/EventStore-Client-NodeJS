@@ -16,7 +16,7 @@ export * from "./types";
 export * from "./utils/filter";
 export * from "./utils/CommandError";
 
-export type { StreamMetadata } from "./streams/utils/streamMetadata";
+export type { StreamMetadata, StreamACL } from "./streams/utils/streamMetadata";
 export * from "./streams/utils/systemStreams";
 export {
   PersistentSubscriptionSettings,

@@ -1,9 +1,4 @@
-import type {
-  END,
-  START,
-  SYSTEM_STREAM_ACL,
-  USER_STREAM_ACL,
-} from "../../constants";
+import type { END, START } from "../../constants";
 
 const MAX_AGE = "$maxAge";
 const MAX_COUNT = "$maxCount";
@@ -67,7 +62,7 @@ export interface SystemStreamMetadata {
   /**
    * The optional ACL for the stream.
    */
-  acl?: typeof USER_STREAM_ACL | typeof SYSTEM_STREAM_ACL | StreamACL;
+  acl?: StreamACL;
 
   /**
    * The optional maximum number of events allowed in the stream.
