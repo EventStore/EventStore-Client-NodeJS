@@ -1,3 +1,35 @@
+## [v3.4.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.3.1...v3.4.0) (2022-07-14)
+
+## Features
+
+### Add retry count to persistent subscription events
+
+Adds `retryCount` property to events from `subscribeToPersistentSubscriptionToStream` and `subscribeToPersistentSubscriptionToAll` [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/e82d72763c34b1922928a2a73d396da2195e5083)
+
+```typescript
+const subscription = client.subscribeToPersistentSubscriptionToStream(
+  STREAM_NAME,
+  GROUP_NAME
+);
+
+for await (const event of subscription) {
+  try {
+    console.log(
+      `handling event ${event.event?.type} with retryCount ${event.retryCount}`
+    );
+    await handleEvent(event);
+    await subscription.ack(event);
+  } catch (error) {
+    await subscription.nack(PARK, error.toString(), event);
+  }
+}
+```
+
+## Bug Fixes
+
+- Fix doc comment on readStream [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/1fcf0c8d69dc6dee0ef1b85867b07aacc86916e0)
+- Fix type definition for acl in stream metadata [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/4f587f2e0dae9803f8ed45fa04caa0e57f2f6435)
+
 ## [v3.3.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.3.0...v3.3.1) (2022-04-06)
 
 - Close channels when they fail to prevent memory leak. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/76f41ede6b23ec422daf12b2977323397c59b657)

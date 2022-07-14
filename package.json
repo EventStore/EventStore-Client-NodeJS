@@ -1,6 +1,6 @@
 {
   "name": "@eventstore/db-client",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "NodeJS EventStoreDB version 20+ and uses gRPC as the communication protocol.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
