@@ -3,7 +3,6 @@ import {
   EventStoreDBClient,
   StreamMetadata,
   START,
-  SYSTEM_STREAM_ACL,
 } from "@eventstore/db-client";
 
 describe("setStreamMetadata", () => {
@@ -118,22 +117,6 @@ describe("setStreamMetadata", () => {
 
       expect(warnSpy.mock.calls).toHaveLength(1);
       warnSpy.mockRestore();
-    });
-
-    test("string acls", async () => {
-      const STREAM_NAME = "string_acls";
-
-      const metadata: StreamMetadata = {
-        acl: SYSTEM_STREAM_ACL,
-      };
-
-      await client.setStreamMetadata(STREAM_NAME, metadata);
-
-      const { metadata: readMetadata } = await client.getStreamMetadata(
-        STREAM_NAME
-      );
-
-      expect(readMetadata!.acl).toEqual(SYSTEM_STREAM_ACL);
     });
 
     test("metadata goes to the right place", async () => {
