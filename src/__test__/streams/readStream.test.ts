@@ -14,11 +14,13 @@ import {
   StreamNotFoundError,
   ResolvedEvent,
   LinkEvent,
+  Position,
 } from "@eventstore/db-client";
 
 describe("readStream", () => {
   const node = createTestNode();
   let client!: EventStoreDBClient;
+  let lastEventPosition: Position;
   const STREAM_NAME = "test_stream_name";
   const OUT_OF_STREAM_NAME = "out_of_stream_name";
 
@@ -30,10 +32,13 @@ describe("readStream", () => {
       { username: "admin", password: "changeit" }
     );
 
-    await client.appendToStream(STREAM_NAME, [
+    var appendResult = await client.appendToStream(STREAM_NAME, [
       ...jsonTestEvents(4, "json-test"),
       ...binaryTestEvents(4, "binary-test"),
     ]);
+
+    expect(appendResult).toBeDefined();
+    lastEventPosition = appendResult.position!;
 
     await client.appendToStream(
       OUT_OF_STREAM_NAME,
@@ -240,6 +245,23 @@ describe("readStream", () => {
             expect(error.streamName).toBe(DELETE_STREAM_NAME);
           }
         }
+      });
+    });
+
+    describe("read result", () => {
+      test("populates log position", async () => {
+        let resolvedEvent!: ResolvedEvent;
+
+        for await (const event of client.readStream(STREAM_NAME, {
+          maxCount: 1,
+          fromRevision: BigInt(7),
+        })) {
+          resolvedEvent = event;
+        }
+
+        expect(lastEventPosition.prepare).toBe(lastEventPosition.commit);
+        expect(resolvedEvent.commitPosition).toBeDefined();
+        expect(resolvedEvent.commitPosition).toBe(lastEventPosition.commit);
       });
     });
   });
