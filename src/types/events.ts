@@ -124,6 +124,12 @@ export type RecordedEvent<E extends EventType = EventType> = E extends EventType
       metadata: E["metadata"] extends MetadataType
         ? E["metadata"]
         : MetadataType | undefined;
+
+      /**
+       * Position of this event in the transaction log.
+       * Only returned on server versions later than 22.6.0.
+       */
+      position?: Position;
     }
   : never;
 

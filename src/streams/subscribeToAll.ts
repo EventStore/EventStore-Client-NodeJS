@@ -10,7 +10,7 @@ import type {
   BaseOptions,
   Filter,
 } from "../types";
-import { convertAllStreamGrpcEvent, debug } from "../utils";
+import { convertGrpcEvent, debug } from "../utils";
 import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 
@@ -161,7 +161,7 @@ Client.prototype.subscribeToAll = function (
 
   return new Subscription(
     createGRPCStream,
-    convertAllStreamGrpcEvent,
+    convertGrpcEvent,
     readableOptions,
     filter?.checkpointReached
   );
