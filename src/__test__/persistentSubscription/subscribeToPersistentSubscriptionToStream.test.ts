@@ -1,3 +1,5 @@
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
 import { pipeline, Writable, Readable, Transform } from "stream";
 import { promisify } from "util";
 
@@ -8,6 +10,8 @@ import {
   Defer,
   delay,
   jsonTestEvents,
+  matchServerVersion,
+  optionalDescribe,
   postEventViaHttpApi,
 } from "@test-utils";
 
@@ -773,5 +777,49 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         break;
       }
     }
+  });
+
+  const supported = matchServerVersion`>=22.6.0`;
+  optionalDescribe(supported)("Supported (>=22.6.0)", () => {
+    test("populates log position", async () => {
+      const STREAM_NAME = "log_position";
+      const GROUP_NAME = "log_position_group_name";
+
+      await client.createPersistentSubscriptionToStream(
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionToStreamSettingsFromDefaults({
+          startFrom: START,
+        })
+      );
+
+      const appendResult = await client.appendToStream(
+        STREAM_NAME,
+        finishEvent()
+      );
+
+      const subscription = client.subscribeToPersistentSubscriptionToStream(
+        STREAM_NAME,
+        GROUP_NAME
+      );
+
+      for await (const resolvedEvent of subscription) {
+        await subscription.ack(resolvedEvent);
+
+        expect(resolvedEvent.event?.position).toBeDefined();
+        expect(resolvedEvent.event?.position?.commit).toBeDefined();
+        expect(resolvedEvent.event?.position?.prepare).toBeDefined();
+        expect(resolvedEvent.event?.position?.commit).toBe(
+          appendResult.position?.commit
+        );
+        expect(resolvedEvent.event?.position?.prepare).toBe(
+          appendResult.position?.prepare
+        );
+
+        if (resolvedEvent.event?.type === "finish-test") {
+          break;
+        }
+      }
+    });
   });
 });
