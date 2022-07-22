@@ -9,7 +9,7 @@ import {
 
 import type { BaseOptions, PersistentSubscriptionToAll } from "../types";
 import {
-  convertPersistentSubscriptionToAllGrpcEvent,
+  convertPersistentSubscriptionGrpcEvent,
   debug,
   UnsupportedError,
 } from "../utils";
@@ -93,7 +93,7 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         return stream;
       }
     ),
-    convertPersistentSubscriptionToAllGrpcEvent,
+    convertPersistentSubscriptionGrpcEvent,
     duplexOptions
   );
 };

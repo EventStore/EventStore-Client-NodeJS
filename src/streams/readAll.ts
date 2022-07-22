@@ -11,7 +11,7 @@ import type {
   AllStreamResolvedEvent,
   StreamingRead,
 } from "../types";
-import { debug, convertAllStreamGrpcEvent } from "../utils";
+import { debug, convertGrpcEvent } from "../utils";
 import { BACKWARDS, FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
@@ -136,9 +136,5 @@ Client.prototype.readAll = function (
       )
   );
 
-  return new ReadStream(
-    createGRPCStream,
-    convertAllStreamGrpcEvent,
-    readableOptions
-  );
+  return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);
 };

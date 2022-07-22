@@ -11,7 +11,7 @@ import type {
 } from "../types";
 import {
   debug,
-  convertPersistentSubscriptionToStreamGrpcEvent,
+  convertPersistentSubscriptionGrpcEvent,
   createStreamIdentifier,
 } from "../utils";
 import { Client } from "../Client";
@@ -108,7 +108,7 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
         return stream;
       }
     ),
-    convertPersistentSubscriptionToStreamGrpcEvent,
+    convertPersistentSubscriptionGrpcEvent,
     duplexOptions
   );
 };

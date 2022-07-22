@@ -3,12 +3,10 @@ import type { ReadResp as PersistentReadResp } from "../../generated/persistent_
 
 import { debug } from "./debug";
 import type {
-  AllStreamResolvedEvent,
   EventType,
   EventTypeToRecordedEvent,
   LinkEvent,
   PersistentSubscriptionToStreamResolvedEvent,
-  PersistentSubscriptionToAllResolvedEvent,
   Position,
   ResolvedEvent,
 } from "../types";
@@ -25,10 +23,9 @@ export type GRPCRecordedEvent =
 
 export type ConvertGrpcEvent<GRPCEvent, E> = (grpcEvent: GRPCEvent) => E;
 
-export const convertGrpcEvent: ConvertGrpcEvent<
-  StreamsReadResp.ReadEvent,
-  ResolvedEvent
-> = (grpcEvent) => {
+export const convertGrpcEvent = <T extends ResolvedEvent>(
+  grpcEvent: StreamsReadResp.ReadEvent
+): T => {
   const resolved: ResolvedEvent = {};
 
   if (grpcEvent.hasEvent()) {
@@ -43,13 +40,14 @@ export const convertGrpcEvent: ConvertGrpcEvent<
     resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
   }
 
-  return resolved;
+  return resolved as T;
 };
 
-export const convertPersistentSubscriptionToStreamGrpcEvent: ConvertGrpcEvent<
-  PersistentReadResp.ReadEvent,
-  PersistentSubscriptionToStreamResolvedEvent
-> = (grpcEvent) => {
+export const convertPersistentSubscriptionGrpcEvent = <
+  T extends PersistentSubscriptionToStreamResolvedEvent
+>(
+  grpcEvent: PersistentReadResp.ReadEvent
+): T => {
   const resolved: PersistentSubscriptionToStreamResolvedEvent = {
     retryCount: grpcEvent.hasRetryCount() ? grpcEvent.getRetryCount() : 0,
   };
@@ -66,73 +64,24 @@ export const convertPersistentSubscriptionToStreamGrpcEvent: ConvertGrpcEvent<
     resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
   }
 
-  return resolved;
+  return resolved as T;
 };
 
-export const convertAllStreamGrpcEvent: ConvertGrpcEvent<
-  StreamsReadResp.ReadEvent,
-  AllStreamResolvedEvent
-> = (grpcEvent) => {
-  const resolved: AllStreamResolvedEvent = {};
+const extractPosition = (
+  grpcRecord: GRPCRecordedEvent
+): Position | undefined => {
+  const commit = grpcRecord.getCommitPosition();
+  const prepare = grpcRecord.getPreparePosition();
 
-  if (grpcEvent.hasEvent()) {
-    const event = grpcEvent.getEvent()!;
-    resolved.event = {
-      ...convertGrpcRecord(event),
-      position: extractPosition(event),
+  if (commit != null && prepare != null) {
+    return {
+      commit: BigInt(commit),
+      prepare: BigInt(prepare),
     };
   }
 
-  if (grpcEvent.hasLink()) {
-    const link = grpcEvent.getLink()!;
-    resolved.link = {
-      ...convertGrpcRecord<LinkEvent>(link),
-      position: extractPosition(link),
-    };
-  }
-
-  if (grpcEvent.hasCommitPosition()) {
-    resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
-  }
-
-  return resolved;
+  return undefined;
 };
-
-export const convertPersistentSubscriptionToAllGrpcEvent: ConvertGrpcEvent<
-  PersistentReadResp.ReadEvent,
-  PersistentSubscriptionToAllResolvedEvent
-> = (grpcEvent) => {
-  const resolved: PersistentSubscriptionToAllResolvedEvent = {
-    retryCount: grpcEvent.hasRetryCount() ? grpcEvent.getRetryCount() : 0,
-  };
-
-  if (grpcEvent.hasEvent()) {
-    const event = grpcEvent.getEvent()!;
-    resolved.event = {
-      ...convertGrpcRecord(event),
-      position: extractPosition(event),
-    };
-  }
-
-  if (grpcEvent.hasLink()) {
-    const link = grpcEvent.getLink()!;
-    resolved.link = {
-      ...convertGrpcRecord<LinkEvent>(link),
-      position: extractPosition(link),
-    };
-  }
-
-  if (grpcEvent.hasCommitPosition()) {
-    resolved.commitPosition = BigInt(grpcEvent.getCommitPosition()!);
-  }
-
-  return resolved;
-};
-
-const extractPosition = (grpcRecord: GRPCRecordedEvent): Position => ({
-  commit: BigInt(grpcRecord.getCommitPosition()),
-  prepare: BigInt(grpcRecord.getPreparePosition()),
-});
 
 const safeParseJSON = <T = unknown>(
   str: string,
@@ -183,6 +132,8 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
   const metadata: E["metadata"] = parseMetadata(grpcRecord, id);
   const isJson = contentType === "application/json";
 
+  const position = extractPosition(grpcRecord);
+
   if (isJson) {
     const dataStr = Buffer.from(grpcRecord.getData()).toString("utf8");
 
@@ -201,6 +152,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
       metadata,
       isJson,
       created,
+      position,
     } as EventTypeToRecordedEvent<E>;
   }
 
@@ -215,5 +167,6 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
     metadata,
     isJson,
     created,
+    position,
   } as EventTypeToRecordedEvent<E>;
 };
