@@ -354,16 +354,19 @@ export class Client {
       Client: GRPCClientConstructor<Client>,
       debugName: string,
       creator: (client: Client) => T | Promise<T>,
-      cache?: WeakMap<Client, T>
+      cache?: WeakMap<Client, T | Promise<T>>
     ) =>
     async (): Promise<T> => {
       const client = await this.getGRPCClient(Client, debugName);
 
       if (cache && cache.has(client)) return cache.get(client)!;
 
-      const stream = await creator(client);
+      const streamPromise = creator(client);
 
-      cache?.set(client, stream);
+      cache?.set(client, streamPromise);
+
+      const stream = await streamPromise;
+
       this.disposableStreams.add(stream);
 
       finished(stream, (err) => {
