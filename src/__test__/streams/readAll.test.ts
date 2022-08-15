@@ -110,7 +110,7 @@ describe("readAll", () => {
             linkTo('a-' + ev.data.some, ev)
           }
         });`,
-        { trackEmittedStreams: true }
+        { emitEnabled: true }
       );
 
       // Append an event that will be linked
