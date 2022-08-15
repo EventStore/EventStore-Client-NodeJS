@@ -26,7 +26,7 @@ import type { AppendToStreamOptions } from ".";
 
 const streamCache = new WeakMap<
   StreamsClient,
-  ReturnType<StreamsClient["batchAppend"]>
+  Promise<ReturnType<StreamsClient["batchAppend"]>>
 >();
 
 const promiseBank = new Map<
