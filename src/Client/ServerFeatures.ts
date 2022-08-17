@@ -34,7 +34,11 @@ export class ServerFeatures {
 
   constructor(error: ServiceError | null, supportedMethods: SupportedMethods) {
     if (error) {
-      debug.connection("Connected to unknown server version");
+      debug.connection(
+        "Failed to fetch server features with error: %s",
+        error.message
+      );
+      debug.connection("Assuming unknown server version.");
       return;
     }
 
