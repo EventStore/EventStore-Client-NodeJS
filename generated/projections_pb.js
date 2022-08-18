@@ -1140,7 +1140,8 @@ proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.toOb
 proto.event_store.client.projections.CreateReq.Options.Continuous.toObject = function(includeInstance, msg) {
   var f, obj = {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    trackEmittedStreams: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
+    emitEnabled: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+    trackEmittedStreams: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
   };
 
   if (includeInstance) {
@@ -1183,6 +1184,10 @@ proto.event_store.client.projections.CreateReq.Options.Continuous.deserializeBin
       break;
     case 2:
       var value = /** @type {boolean} */ (reader.readBool());
+      msg.setEmitEnabled(value);
+      break;
+    case 3:
+      var value = /** @type {boolean} */ (reader.readBool());
       msg.setTrackEmittedStreams(value);
       break;
     default:
@@ -1221,10 +1226,17 @@ proto.event_store.client.projections.CreateReq.Options.Continuous.serializeBinar
       f
     );
   }
-  f = message.getTrackEmittedStreams();
+  f = message.getEmitEnabled();
   if (f) {
     writer.writeBool(
       2,
+      f
+    );
+  }
+  f = message.getTrackEmittedStreams();
+  if (f) {
+    writer.writeBool(
+      3,
       f
     );
   }
@@ -1250,10 +1262,10 @@ proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.setN
 
 
 /**
- * optional bool track_emitted_streams = 2;
+ * optional bool emit_enabled = 2;
  * @return {boolean}
  */
-proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.getTrackEmittedStreams = function() {
+proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.getEmitEnabled = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
 };
 
@@ -1262,8 +1274,26 @@ proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.getT
  * @param {boolean} value
  * @return {!proto.event_store.client.projections.CreateReq.Options.Continuous} returns this
  */
-proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.setTrackEmittedStreams = function(value) {
+proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.setEmitEnabled = function(value) {
   return jspb.Message.setProto3BooleanField(this, 2, value);
+};
+
+
+/**
+ * optional bool track_emitted_streams = 3;
+ * @return {boolean}
+ */
+proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.getTrackEmittedStreams = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.event_store.client.projections.CreateReq.Options.Continuous} returns this
+ */
+proto.event_store.client.projections.CreateReq.Options.Continuous.prototype.setTrackEmittedStreams = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 

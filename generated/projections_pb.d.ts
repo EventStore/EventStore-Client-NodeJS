@@ -94,6 +94,8 @@ export namespace CreateReq {
         export class Continuous extends jspb.Message { 
             getName(): string;
             setName(value: string): Continuous;
+            getEmitEnabled(): boolean;
+            setEmitEnabled(value: boolean): Continuous;
             getTrackEmittedStreams(): boolean;
             setTrackEmittedStreams(value: boolean): Continuous;
 
@@ -110,6 +112,7 @@ export namespace CreateReq {
         export namespace Continuous {
             export type AsObject = {
                 name: string,
+                emitEnabled: boolean,
                 trackEmittedStreams: boolean,
             }
         }

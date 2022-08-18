@@ -54,7 +54,7 @@ describe("oversize events", () => {
 `;
 
     await client.createProjection(PROJECTION_NAME, projection, {
-      trackEmittedStreams: true,
+      emitEnabled: true,
     });
 
     // give it a chance to get up and running

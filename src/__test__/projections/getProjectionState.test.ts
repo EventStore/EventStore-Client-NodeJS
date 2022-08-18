@@ -110,7 +110,7 @@ describe("getProjectionState", () => {
       await client.createProjection(
         PARTITION_PROJECTION_NAME,
         paritionProjection,
-        { trackEmittedStreams: true }
+        { emitEnabled: true }
       );
 
       const partitionStats = await client.getProjectionStatistics(
