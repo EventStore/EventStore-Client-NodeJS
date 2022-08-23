@@ -50,14 +50,16 @@ export class ReadStream<E> extends Transform implements StreamingRead<E> {
 
     if (resp.hasStreamNotFound?.()) {
       const streamNotFound = resp.getStreamNotFound()!;
-
-      this.emit(
-        "error",
-        new StreamNotFoundError(
-          null as never,
-          streamNotFound.getStreamIdentifier()?.getStreamName()
-        )
-      );
+      this.#grpcStream.then((stream) => {
+        stream.destroy(
+          new StreamNotFoundError(
+            null as never,
+            streamNotFound.getStreamIdentifier()?.getStreamName()
+          )
+        );
+        next();
+      });
+      return;
     }
 
     if (resp.hasEvent?.()) {
