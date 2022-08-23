@@ -6,6 +6,7 @@ import type { SupportedMethods } from "../../generated/serverfeatures_pb";
 
 import { debug } from "../utils";
 import type { GRPCClientConstructor } from "../types";
+import { Status } from "@grpc/grpc-js/build/src/constants";
 
 type ExecuteClientCapabilities = [
   GRPCClientConstructor<ServerFeaturesClient>,
@@ -24,10 +25,13 @@ export class ServerFeatures {
     ServerFeaturesClient,
     "getSupportedMethods",
     (client: ServerFeaturesClient) =>
-      new Promise<ServerFeatures>((resolve) => {
+      new Promise<ServerFeatures>((resolve, reject) => {
         debug.connection("Fetching server features");
         client.getSupportedMethods(new Empty(), (error, supportedMethods) => {
-          resolve(new ServerFeatures(error, supportedMethods));
+          if (error && error.code !== Status.UNIMPLEMENTED) {
+            return reject(error);
+          }
+          return resolve(new ServerFeatures(error, supportedMethods));
         });
       }),
   ];
