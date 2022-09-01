@@ -45,39 +45,23 @@ export const settingsToGRPC = <T extends GRPCSettings>(
   reqSettings.setReadBatchSize(settings.readBatchSize);
   reqSettings.setHistoryBufferSize(settings.historyBufferSize);
 
-  /* eslint-disable no-fallthrough */ // We want to fall through for deprecated strings.
   switch (settings.consumerStrategyName) {
-    case "dispatch_to_single":
-      console.warn(
-        `consumerStrategyName as string "dispatch_to_single" is deprecated, please use the constant DISPATCH_TO_SINGLE.`
-      );
     case DISPATCH_TO_SINGLE: {
       reqSettings.setNamedConsumerStrategy(
         CreateReq.ConsumerStrategy.DISPATCHTOSINGLE
       );
       break;
     }
-
-    case "pinned":
-      console.warn(
-        `consumerStrategyName as string "pinned" is deprecated, please use the constant PINNED.`
-      );
     case PINNED: {
       reqSettings.setNamedConsumerStrategy(CreateReq.ConsumerStrategy.PINNED);
       break;
     }
-
-    case "round_robin":
-      console.warn(
-        `consumerStrategyName as string "round_robin" is deprecated, please use the constant ROUND_ROBIN.`
-      );
     case ROUND_ROBIN: {
       reqSettings.setNamedConsumerStrategy(
         CreateReq.ConsumerStrategy.ROUNDROBIN
       );
       break;
     }
-
     default: {
       console.warn(
         `Unknown consumerStrategyName ${settings.consumerStrategyName}.`
@@ -85,7 +69,6 @@ export const settingsToGRPC = <T extends GRPCSettings>(
       break;
     }
   }
-  /* eslint-enable no-fallthrough */
 
   return reqSettings;
 };
