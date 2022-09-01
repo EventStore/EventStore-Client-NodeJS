@@ -40,20 +40,6 @@ declare module "../Client" {
       options?: SubscribeToPersistentSubscriptionToStreamOptions,
       duplexOptions?: DuplexOptions
     ): PersistentSubscriptionToStream<E>;
-
-    /**
-     * Connects to a persistent subscription.
-     * @param stream A stream name.
-     * @param group A group name.
-     * @param options Connection options.
-     * @deprecated Renamed to {@link subscribeToPersistentSubscriptionToStream}.
-     */
-    subscribeToPersistentSubscription<E extends EventType = EventType>(
-      streamName: string,
-      groupName: string,
-      options?: SubscribeToPersistentSubscriptionToStreamOptions,
-      duplexOptions?: DuplexOptions
-    ): PersistentSubscriptionToStream<E>;
   }
 }
 
@@ -112,6 +98,3 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
     duplexOptions
   );
 };
-
-Client.prototype.subscribeToPersistentSubscription =
-  Client.prototype.subscribeToPersistentSubscriptionToStream;

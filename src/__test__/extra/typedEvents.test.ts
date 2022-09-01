@@ -305,7 +305,7 @@ describe("typed events should compile", () => {
 
     for await (const {
       event,
-    } of client.subscribeToPersistentSubscription<KnownEvents>(
+    } of client.subscribeToPersistentSubscriptionToStream<KnownEvents>(
       STREAM_NAME,
       GROUP_NAME
     )) {

@@ -21,19 +21,6 @@ declare module "../Client" {
       groupName: string,
       options?: DeletePersistentSubscriptionToStreamOptions
     ): Promise<void>;
-
-    /**
-     * Deletes a persistent subscription.
-     * @param streamName A stream name.
-     * @param groupName A group name.
-     * @param options Deletion options.
-     * @deprecated Renamed to {@link deletePersistentSubscriptionToStream}.
-     */
-    deletePersistentSubscription(
-      streamName: string,
-      groupName: string,
-      options?: DeletePersistentSubscriptionToStreamOptions
-    ): Promise<void>;
   }
 }
 
@@ -70,6 +57,3 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
       })
   );
 };
-
-Client.prototype.deletePersistentSubscription =
-  Client.prototype.deletePersistentSubscriptionToStream;

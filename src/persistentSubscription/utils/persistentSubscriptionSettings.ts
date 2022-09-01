@@ -86,12 +86,6 @@ export interface PersistentSubscriptionToStreamSettings
   startFrom: typeof START | typeof END | bigint;
 }
 
-/**
- * @deprecated Renamed to {@link PersistentSubscriptionToStreamSettings}.
- */
-export type PersistentSubscriptionSettings =
-  PersistentSubscriptionToStreamSettings;
-
 export interface PersistentSubscriptionToAllSettings
   extends PersistentSubscriptionSettingsGeneric {
   /**
@@ -127,14 +121,6 @@ export const persistentSubscriptionToStreamSettingsFromDefaults = (
   ...defaults,
   ...changes,
 });
-
-/**
- * Creates {@link PersistentSubscriptionToStreamSettings} from default settings.
- * @param changes Changes to apply to the default settings.
- * @deprecated Renamed to {@link persistentSubscriptionToStreamSettingsFromDefaults}.
- */
-export const persistentSubscriptionSettingsFromDefaults =
-  persistentSubscriptionToStreamSettingsFromDefaults;
 
 /**
  * Creates {@link PersistentSubscriptionToAllSettings} from default settings.
