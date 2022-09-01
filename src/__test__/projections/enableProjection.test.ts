@@ -45,7 +45,7 @@ describe("enableProjection", () => {
 
     await client.disableProjection(PROJECTION_NAME);
 
-    const beforeDetails = await client.getProjectionStatistics(PROJECTION_NAME);
+    const beforeDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
     expect(beforeDetails).toBeDefined();
 
@@ -59,7 +59,7 @@ describe("enableProjection", () => {
 
     await client.enableProjection(PROJECTION_NAME);
 
-    const afterDetails = await client.getProjectionStatistics(PROJECTION_NAME);
+    const afterDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
     expect(afterDetails).toBeDefined();
     expect(afterDetails.projectionStatus).toBe(RUNNING);

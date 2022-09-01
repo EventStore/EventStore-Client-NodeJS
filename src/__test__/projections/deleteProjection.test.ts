@@ -42,16 +42,14 @@ describe("deleteProjection", () => {
 
     await client.createProjection(PROJECTION_NAME, projection);
 
-    const beforeDetails = await client.getProjectionStatistics(PROJECTION_NAME);
+    const beforeDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
     expect(beforeDetails).toBeDefined();
     expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
     await client.disableProjection(PROJECTION_NAME);
 
-    const disabledDetails = await client.getProjectionStatistics(
-      PROJECTION_NAME
-    );
+    const disabledDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
     expect(disabledDetails).toBeDefined();
 
@@ -64,9 +62,7 @@ describe("deleteProjection", () => {
       // writeCheckpoint had to be false to stop the projection
       await client.abortProjection(PROJECTION_NAME);
 
-      const stoppedDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
+      const stoppedDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
       expect(stoppedDetails).toBeDefined();
       expect(stoppedDetails.projectionStatus).toBe(STOPPED);
@@ -78,9 +74,7 @@ describe("deleteProjection", () => {
     });
 
     try {
-      const afterDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
+      const afterDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
       expect(afterDetails).toBeDefined();
       expect(afterDetails.projectionStatus).toBe(DELETING);
