@@ -25,22 +25,6 @@ declare module "../Client" {
       settings: PersistentSubscriptionToStreamSettings,
       options?: BaseOptions
     ): Promise<void>;
-
-    /**
-     * Updates a persistent subscription configuration.
-     * @param streamName A stream name.
-     * @param groupName A group name.
-     * @param settings PersistentSubscription settings.
-     * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
-     * @param options Command options.
-     * @deprecated Renamed to {@link updatePersistentSubscriptionToStream}.
-     */
-    updatePersistentSubscription(
-      streamName: string,
-      groupName: string,
-      settings: PersistentSubscriptionToStreamSettings,
-      options?: BaseOptions
-    ): Promise<void>;
   }
 }
 
@@ -99,6 +83,3 @@ Client.prototype.updatePersistentSubscriptionToStream = async function (
       })
   );
 };
-
-Client.prototype.updatePersistentSubscription =
-  Client.prototype.updatePersistentSubscriptionToStream;

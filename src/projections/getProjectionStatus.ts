@@ -10,11 +10,6 @@ import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
 
 export interface GetProjectionStatusOptions extends BaseOptions {}
 
-/**
- * @deprecated Renamed to `GetProjectionStatusOptions`.
- */
-export type GetProjectionStatisticsOptions = GetProjectionStatusOptions;
-
 declare module "../Client" {
   interface Client {
     /**
@@ -25,17 +20,6 @@ declare module "../Client" {
     getProjectionStatus(
       projectionName: string,
       options?: GetProjectionStatusOptions
-    ): Promise<ProjectionDetails>;
-
-    /**
-     * Gets the current status of a projection.
-     * @param projectionName The name of the projection.
-     * @param options Get statistics options.
-     * @deprecated Renamed to `getProjectionStatus`.
-     */
-    getProjectionStatistics(
-      projectionName: string,
-      options?: GetProjectionStatisticsOptions
     ): Promise<ProjectionDetails>;
   }
 }
@@ -81,5 +65,3 @@ Client.prototype.getProjectionStatus = async function (
     }
   );
 };
-
-Client.prototype.getProjectionStatistics = Client.prototype.getProjectionStatus;

@@ -113,7 +113,7 @@ describe("getProjectionState", () => {
         { emitEnabled: true }
       );
 
-      const partitionStats = await client.getProjectionStatistics(
+      const partitionStats = await client.getProjectionStatus(
         PARTITION_PROJECTION_NAME
       );
 
@@ -121,15 +121,13 @@ describe("getProjectionState", () => {
 
       await client.createProjection(COUNTER_PROJECTION_NAME, countProjection);
 
-      const counterStats = await client.getProjectionStatistics(
+      const counterStats = await client.getProjectionStatus(
         COUNTER_PROJECTION_NAME
       );
 
       expect(counterStats.projectionStatus).toBe(RUNNING);
 
-      const byCategoryStats = await client.getProjectionStatistics(
-        "$by_category"
-      );
+      const byCategoryStats = await client.getProjectionStatus("$by_category");
 
       expect(byCategoryStats.projectionStatus).toBe(RUNNING);
 

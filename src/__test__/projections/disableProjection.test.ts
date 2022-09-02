@@ -44,18 +44,14 @@ describe("disable / abort", () => {
 
       await client.createProjection(PROJECTION_NAME, projection);
 
-      const beforeDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
+      const beforeDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
       expect(beforeDetails).toBeDefined();
       expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
       await client.disableProjection(PROJECTION_NAME);
 
-      const afterDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
+      const afterDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
       expect(afterDetails).toBeDefined();
 
@@ -85,18 +81,14 @@ describe("disable / abort", () => {
 
       await client.createProjection(PROJECTION_NAME, projection);
 
-      const beforeDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
+      const beforeDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
       expect(beforeDetails).toBeDefined();
       expect(beforeDetails.projectionStatus).toBe(RUNNING);
 
       await client.abortProjection(PROJECTION_NAME);
 
-      const afterDetails = await client.getProjectionStatistics(
-        PROJECTION_NAME
-      );
+      const afterDetails = await client.getProjectionStatus(PROJECTION_NAME);
 
       expect(afterDetails).toBeDefined();
 

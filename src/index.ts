@@ -19,10 +19,8 @@ export * from "./utils/CommandError";
 export type { StreamMetadata, StreamACL } from "./streams/utils/streamMetadata";
 export * from "./streams/utils/systemStreams";
 export {
-  PersistentSubscriptionSettings,
   PersistentSubscriptionToStreamSettings,
   PersistentSubscriptionToAllSettings,
-  persistentSubscriptionSettingsFromDefaults,
   persistentSubscriptionToStreamSettingsFromDefaults,
   persistentSubscriptionToAllSettingsFromDefaults,
 } from "./persistentSubscription/utils/persistentSubscriptionSettings";

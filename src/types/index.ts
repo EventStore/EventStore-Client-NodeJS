@@ -474,10 +474,7 @@ export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
 
 export type PersistentSubscriptionToStream<E extends EventType = EventType> =
   PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>>;
-/**
- * @deprecated Renamed to {@link PersistentSubscriptionToStream}.
- */
-export type PersistentSubscription = PersistentSubscriptionToStream;
+
 export type PersistentSubscriptionToAll =
   PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent>;
 
