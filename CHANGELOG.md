@@ -1,3 +1,67 @@
+## [v4.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.4.0...v4.0.0) (2022-09-02)
+
+## Breaking changes
+
+### Add `emitEnabled` option to `createProjection`.
+
+Due to a bug on the server, previously, the `trackEmittedStreams` option was setting `emitEnabled`, and not `trackEmittedStreams`. This release adds the `emitEnabled` option and corrects the behaviour of `trackEmittedStreams`, with a polyfill for earlier server versions. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/8b1b106bad69ccd9aa96a03b55a2c0bfee4fc110)
+
+#### Before:
+
+Setting `trackEmittedStreams` would enable emitting, but not track streams.
+
+```typescript
+await client.createProjection(PROJECTION_NAME, projectionQuery, {
+  trackEmittedStreams: true,
+});
+```
+
+#### After:
+
+Setting `emitEnabled` works as expected:
+
+```typescript
+await client.createProjection(PROJECTION_NAME, projectionQuery, {
+  emitEnabled: true,
+});
+```
+
+Setting both `emitEnabled` and `trackEmittedStreams` works as expected:
+
+```typescript
+await client.createProjection(PROJECTION_NAME, projectionQuery, {
+  emitEnabled: true,
+  trackEmittedStreams: true,
+});
+```
+
+Setting only `trackEmittedStreams` will be rejected by the server:
+
+```typescript
+// incorrect
+await client.createProjection(PROJECTION_NAME, projectionQuery, {
+  trackEmittedStreams: true,
+});
+```
+
+## Features
+
+### Add position to events from stream
+
+When connected to a server that supports it (>22.6), events read from a stream will include their commit and prepare position. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/322b110e0815962733ac4e6d756208b16ae53df1)
+
+## Bug Fixes
+
+- Prevent multiple appends within the same event loop creating many batches, and improve backpressure. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/088bc4559146fe21340afcc38bdcce34353b36b3)
+- Destroy read stream if stream is not found. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/5488d77ab32cfb4502cea3c4f718cba8616f9ea3)
+- Only swallow unimplemented errors when creating server-features. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/fec332eb017def8ed57c1366aed0b42f2d6380c5)
+
+## Removal of Deprecated Apis
+
+- Remove deprecated consumer strategy names. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/3b1262488ae799714f2c9d9cb6988671c6850cc1)
+- Remove deprecated persistent subscription methods. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/3e3e63383067aae10628ae4c665a27ef8c0db6ef)
+- Remove deprecated `getProjectionStatistics` method. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/0956cbc32f4b65f70a281986ab5ca9ef4d00581c)
+
 ## [v3.4.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.3.1...v3.4.0) (2022-07-14)
 
 ## Features
