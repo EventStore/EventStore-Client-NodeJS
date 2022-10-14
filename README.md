@@ -245,3 +245,5 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 [ci-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/actions
 [license-badge]: https://img.shields.io/npm/l/@eventstore/db-client.svg
 [license-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/LICENSE
+
+CI test for QA 22.10
