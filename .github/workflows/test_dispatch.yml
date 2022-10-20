@@ -1,0 +1,19 @@
+name: "Dispatch"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag"
+        required: true
+        type: string
+
+jobs:
+  test:
+    name: Test
+    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@master
+    with:
+      version: ${{ inputs.version }}
+    secrets:
+      eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
+      tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
