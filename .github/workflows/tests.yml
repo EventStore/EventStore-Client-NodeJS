@@ -41,7 +41,7 @@ jobs:
     env:
       # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
       SECRETS_AVAILABLE: ${{ secrets.eventstore_cloud_id != null }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Connect to tailscale
