@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     name: Test
-    uses: EventStore/EventStore-Client-NodeJS/.github/workflows/tests.yml@master
+    uses: ./.github/workflows/tests.yml
     with:
       version: "21.10.1-focal"
     secrets:
