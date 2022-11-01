@@ -107,6 +107,31 @@ const parseMetadata = (grpcRecord: GRPCRecordedEvent, id: string) => {
   }
 };
 
+const TICKS_PER_MILLISECOND = BigInt(10_000);
+const convertCreatedToDate = (
+  created: string | undefined,
+  id: string
+): Date => {
+  // Created should always be present, but we'll default to `0` just in case.
+  if (created == null) {
+    debug.events(`Missing "created" in event ${id}`);
+    return new Date(0);
+  }
+
+  try {
+    // Created is in dotnet "ticks", which are 100 nanoseconds.
+    const millisecondsSinceEpoch = BigInt(created) / TICKS_PER_MILLISECOND;
+    // We need to convert to a number to create a Date.
+    // An ECMAScript Date can only go up to 8.64e15, so this should be safe to do until the year 275760.
+    // https://262.ecma-international.org/10.0/#sec-time-values-and-time-range
+    const epoch = Number(millisecondsSinceEpoch);
+    return new Date(epoch);
+  } catch (error) {
+    debug.events(`Invalid "created" in event ${id}. ${error.message}`);
+    return new Date(0);
+  }
+};
+
 export const convertGrpcRecord = <E extends EventType = EventType>(
   grpcRecord: GRPCRecordedEvent
 ): EventTypeToRecordedEvent<E> => {
@@ -115,7 +140,6 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
   const type = metadataMap.get("type") ?? "<no-event-type-provided>";
   const contentType =
     metadataMap.get("content-type") ?? "application/octet-stream";
-  const created = parseInt(metadataMap.get("created") ?? "0", 10);
 
   if (!grpcRecord.hasStreamIdentifier()) {
     throw "Impossible situation where streamIdentifier is undefined in a recorded event";
@@ -128,6 +152,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
     throw "Impossible situation where id is undefined in a recorded event";
   }
   const id = parseUUID(grpcRecord.getId()!);
+  const created = convertCreatedToDate(metadataMap.get("created"), id);
   const revision = BigInt(grpcRecord.getStreamRevision());
   const metadata: E["metadata"] = parseMetadata(grpcRecord, id);
   const isJson = contentType === "application/json";

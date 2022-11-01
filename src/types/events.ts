@@ -111,7 +111,7 @@ export type RecordedEvent<E extends EventType = EventType> = E extends EventType
       /**
        * Representing when this event was created in the database system.
        */
-      created: number;
+      created: Date;
 
       /**
        * Data of this event.
