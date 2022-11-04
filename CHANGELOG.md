@@ -1,3 +1,33 @@
+## [v5.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v4.0.0...v5.0.0) (2022-11-04)
+
+## Breaking changes
+
+### `RecordedEvent["created"]` is now a `Date`
+
+Previously, a recorded event's created property was being returned in ticks, a 64bit integer in 100ns precision. As well as being an unusual format, this was being parsed into a `Number`, so was unsafe. This release changes the property to be represented by a `Date`.
+
+#### Before:
+
+`created` was an unsafe "ticks" since epoch:
+
+```typescript
+for await (const { event } of client.readStream(STREAM_NAME)) {
+  // 16675621600650000 (greater than Number.MAX_SAFE_INTEGER)
+  console.log(event?.created);
+}
+```
+
+#### After:
+
+`created` is a `Date`:
+
+```typescript
+for await (const { event } of client.readStream(STREAM_NAME)) {
+  // 2022-11-04T11:42:40.065Z
+  console.log(event?.created);
+}
+```
+
 ## [v4.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v3.4.0...v4.0.0) (2022-09-02)
 
 ## Breaking changes
