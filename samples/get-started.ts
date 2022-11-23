@@ -11,11 +11,15 @@ import { v4 as uuid } from "uuid";
 const CLOUD_ID = process.env.EVENTSTORE_CLOUD_ID!;
 const STREAM_NAME = uuid();
 
+/*
+// region createClient
+const client = EventStoreDBClient.connectionString`{connectionString}`;
+// endregion createClient
+*/
+
 optionalDescribe(!!CLOUD_ID)("[sample] get-started", () => {
   test("get-started", async () => {
-    // region createClient
     const client = EventStoreDBClient.connectionString`esdb+discover://${CLOUD_ID}.mesdb.eventstore.cloud`;
-    // endregion createClient
 
     // region createEvent
     type TestEvent = JSONEventType<
