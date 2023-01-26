@@ -339,7 +339,7 @@ export class Client {
     if (this.#grpcClients.has(Client)) {
       debug.connection("Using existing grpc client for %s", debugName);
     } else {
-      debug.connection("Createing client for %s", debugName);
+      debug.connection("Creating client for %s", debugName);
       this.#grpcClients.set(Client, this.createGRPCClient(Client));
     }
 
