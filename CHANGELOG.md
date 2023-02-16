@@ -1,3 +1,14 @@
+## [v5.0.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v5.0.0...v5.0.1) (2023-02-16)
+
+## Bug Fixes
+
+- Fix minor typo [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/8c13698e2e6b2847b2373ffa7c0a217ab8c501c7)
+- Generate sourcemaps with build [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/9937ed91b3e6506c697f287f408497d013ce8738)
+
+## Thanks
+
+:tada: Thanks for @coffemakingtoaster for their contributions! :tada:
+
 ## [v5.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v4.0.0...v5.0.0) (2022-11-04)
 
 ## Breaking changes
