@@ -8,7 +8,8 @@
     "noUnusedLocals": true,
     "useUnknownInCatchVariables": false,
     "importsNotUsedAsValues": "error",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "sourceMap": true
   },
   "include": ["./src", "./generated"],
   "exclude": ["**/*.test.ts", "**/__test__/**/*"]
