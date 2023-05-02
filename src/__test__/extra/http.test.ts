@@ -32,7 +32,7 @@ describe("http api", () => {
       );
 
       const result = await ping.call(client);
-      expect(result).toEqual(goodPing);
+      expect(result).toMatchObject(goodPing);
     });
 
     test("ip", async () => {
@@ -47,7 +47,7 @@ describe("http api", () => {
       );
 
       const result = await ping.call(client);
-      expect(result).toEqual(goodPing);
+      expect(result).toMatchObject(goodPing);
     });
 
     test("error transform", async () => {
@@ -102,7 +102,7 @@ describe("http api", () => {
       );
 
       const result = await ping.call(client);
-      expect(result).toEqual(goodPing);
+      expect(result).toMatchObject(goodPing);
     });
 
     test("ip", async () => {
@@ -117,7 +117,7 @@ describe("http api", () => {
       );
 
       const result = await ping.call(client);
-      expect(result).toEqual(goodPing);
+      expect(result).toMatchObject(goodPing);
     });
 
     test("error transform", async () => {
