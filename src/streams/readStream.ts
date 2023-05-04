@@ -14,7 +14,7 @@ import type {
   ResolvedEvent,
   StreamingRead,
 } from "../types";
-import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
+import { debug, convertGrpcEvent, createStreamIdentifier, InvalidArgumentError } from "../utils";
 
 import { ReadStream } from "./utils/ReadStream";
 
@@ -91,6 +91,17 @@ Client.prototype.readStream = function <
       break;
     }
     default: {
+      const lowerBound = BigInt("0");
+      const upperBound = BigInt("0xffffffffffffffff");
+
+      if (fromRevision < lowerBound) {
+        throw new InvalidArgumentError(`fromRevision value must be a non-negative integer. Value Received: ${fromRevision}`);
+      }
+
+      if (fromRevision > upperBound) {
+        throw new InvalidArgumentError(`fromRevision value must be a non-negative integer, range from 0 to 18446744073709551615. Value Received: ${fromRevision}`);
+      }
+
       streamOptions.setRevision(fromRevision.toString(10));
       break;
     }
