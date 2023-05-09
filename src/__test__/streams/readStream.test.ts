@@ -20,6 +20,7 @@ import {
   LinkEvent,
   Position,
   AppendResult,
+  InvalidArgumentError,
 } from "@eventstore/db-client";
 
 describe("readStream", () => {
@@ -223,6 +224,34 @@ describe("readStream", () => {
           if (error instanceof StreamNotFoundError) {
             expect(error.streamName).toBe(NO_STREAM_NAME);
           }
+        }
+      });
+
+      test("stream revision invalid argument lower bound", async () => {
+        let count = 0;
+        try {
+          for await (const e of client.readStream(STREAM_NAME,  {
+            direction: BACKWARDS,
+            fromRevision: BigInt(-1),
+          })) {
+            count++;
+          }
+        } catch (error) {
+          expect(error).toBeInstanceOf(InvalidArgumentError);
+        }
+      });
+
+      test("stream revision invalid argument upper bound", async () => {
+        let count = 0;
+        try {
+          for await (const e of client.readStream(STREAM_NAME,  {
+            direction: BACKWARDS,
+            fromRevision: BigInt("18446744073709551616"),
+          })) {
+            count++;
+          }
+        } catch (error) {
+          expect(error).toBeInstanceOf(InvalidArgumentError);
         }
       });
 

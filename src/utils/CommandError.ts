@@ -18,6 +18,7 @@ export enum ErrorType {
   STREAM_NOT_FOUND = "stream-not-found",
   NO_STREAM = "no-stream",
   ACCESS_DENIED = "access-denied",
+  INVALID_ARGUMENT = "invalid-argument",
   INVALID_TRANSACTION = "invalid-transaction",
   STREAM_DELETED = "stream-deleted",
   SCAVENGE_NOT_FOUND = "scavenge-not-found",
@@ -385,11 +386,22 @@ export class UnsupportedError extends CommandErrorBase {
   }
 }
 
+export class InvalidArgumentError extends CommandErrorBase {
+  public type: ErrorType.INVALID_ARGUMENT = ErrorType.INVALID_ARGUMENT;
+  public errorMessage: string;
+
+  constructor(error: string) {
+    super(undefined, error);
+    this.errorMessage = error;
+  }
+}
+
 export type CommandError =
   | NotLeaderError
   | StreamNotFoundError
   | NoStreamError
   | AccessDeniedError
+  | InvalidArgumentError
   | InvalidTransactionError
   | StreamDeletedError
   | ScavengeNotFoundError
