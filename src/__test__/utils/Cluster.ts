@@ -6,7 +6,6 @@ import * as cp from "child_process";
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
 import { upAll, down, exec, stopOne, logs } from "docker-compose";
-import { stringify } from "yaml";
 
 import type { EndPoint } from "../../types";
 
@@ -358,7 +357,7 @@ export class Cluster {
         },
       })
     );
-    await writeFile(this.path("./docker-compose.yaml"), stringify(config));
+    await writeFile(this.path("./docker-compose.yaml"), JSON.stringify(config));
   };
 
   private healthy = async (...nodes: string[]) => {
