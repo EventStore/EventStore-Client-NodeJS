@@ -230,7 +230,7 @@ describe("readStream", () => {
       test("stream revision invalid argument lower bound", async () => {
         let count = 0;
         try {
-          for await (const e of client.readStream(STREAM_NAME,  {
+          for await (const e of client.readStream(STREAM_NAME, {
             direction: BACKWARDS,
             fromRevision: BigInt(-1),
           })) {
@@ -244,7 +244,7 @@ describe("readStream", () => {
       test("stream revision invalid argument upper bound", async () => {
         let count = 0;
         try {
-          for await (const e of client.readStream(STREAM_NAME,  {
+          for await (const e of client.readStream(STREAM_NAME, {
             direction: BACKWARDS,
             fromRevision: BigInt("18446744073709551616"),
           })) {
