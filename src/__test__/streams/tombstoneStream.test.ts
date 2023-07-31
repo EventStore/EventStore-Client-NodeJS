@@ -18,7 +18,8 @@ describe("tombstoneStream", () => {
       await node.up();
       client = new EventStoreDBClient(
         { endpoint: node.uri },
-        { rootCertificate: node.rootCertificate }
+        { rootCertificate: node.rootCertificate },
+        { username: "admin", password: "changeit" }
       );
     });
 

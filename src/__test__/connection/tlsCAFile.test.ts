@@ -24,7 +24,7 @@ describe("tlsCAFile", () => {
   ])("Path can be %s", async (name, tlsCAFile) => {
     const STREAM_NAME = `${name}_stream`;
 
-    const client = EventStoreDBClient.connectionString`esdb://${
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${
       node.uri
     }?tlsCAFile=${tlsCAFile()}`;
 
@@ -43,7 +43,7 @@ describe("tlsCAFile", () => {
   test("If a file was not found, error should be thrown", () => {
     expect(
       () =>
-        EventStoreDBClient.connectionString`esdb://${node.uri}?tlsCAFile=/some/path.ca`
+        EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCAFile=/some/path.ca`
     ).toThrowErrorMatchingSnapshot();
   });
 });

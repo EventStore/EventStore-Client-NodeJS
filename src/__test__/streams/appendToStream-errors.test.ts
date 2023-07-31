@@ -25,7 +25,8 @@ describe("appendToStream - errors", () => {
     await node.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri, throwOnAppendFailure: true },
-      { rootCertificate: node.rootCertificate }
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -34,15 +35,13 @@ describe("appendToStream - errors", () => {
   });
 
   describe.each([
-    ["Batch append (>21.10)", matchServerVersion`>=21.10`, undefined],
-    ["Normal Append", true, { username: "admin", password: "changeit" }],
-  ])("%s", (prefix, supported, credentials) => {
+    ["Batch append (>21.10)", matchServerVersion`>=21.10`],
+    ["Normal Append", true],
+  ])("%s", (prefix, supported) => {
     optionalTest(supported)("WrongExpectedVersion", async () => {
       const STREAM_NAME = `${prefix}_no_stream_here_but_there_is`;
 
-      await client.appendToStream(STREAM_NAME, jsonTestEvents(), {
-        credentials,
-      });
+      await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
       try {
         const result = await client.appendToStream(
@@ -50,7 +49,6 @@ describe("appendToStream - errors", () => {
           jsonTestEvents(),
           {
             expectedRevision: "no_stream",
-            credentials,
           }
         );
 
@@ -69,18 +67,13 @@ describe("appendToStream - errors", () => {
     optionalTest(supported)("StreamDeleted", async () => {
       const STREAM_NAME = `${prefix}_i_will_be_deleted`;
 
-      await client.appendToStream(STREAM_NAME, jsonTestEvents(), {
-        credentials,
-      });
-      await client.tombstoneStream(STREAM_NAME, { credentials });
+      await client.appendToStream(STREAM_NAME, jsonTestEvents());
+      await client.tombstoneStream(STREAM_NAME);
 
       try {
         const result = await client.appendToStream(
           STREAM_NAME,
-          jsonTestEvents(),
-          {
-            credentials,
-          }
+          jsonTestEvents()
         );
 
         expect(result).toBe("unreachable");
@@ -96,9 +89,7 @@ describe("appendToStream - errors", () => {
     optionalTest(supported)("AccessDenied", async () => {
       const STREAM_NAME = `${prefix}_no_entry`;
 
-      await client.appendToStream(STREAM_NAME, jsonTestEvents(), {
-        credentials,
-      });
+      await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
       await client.setStreamMetadata(STREAM_NAME, {
         acl: {
@@ -111,9 +102,7 @@ describe("appendToStream - errors", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            credentials: credentials
-              ? { username: "AzureDiamond", password: "hunter2" }
-              : undefined,
+            credentials: { username: "AzureDiamond", password: "hunter2" },
           }
         );
 
@@ -128,7 +117,6 @@ describe("appendToStream - errors", () => {
 
       try {
         await client.appendToStream(STREAM_NAME, jsonTestEvents(30_000), {
-          credentials,
           deadline: 1,
         });
         expect("this point").toBe("unreachable");
@@ -143,10 +131,7 @@ describe("appendToStream - errors", () => {
       try {
         const result = await client.appendToStream(
           STREAM_NAME,
-          jsonTestEvents(40_000),
-          {
-            credentials,
-          }
+          jsonTestEvents(40_000)
         );
 
         expect(result).toBe("unreachable");
