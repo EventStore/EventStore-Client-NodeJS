@@ -259,8 +259,13 @@ describe("subscribeToAll", () => {
         },
       });
 
+      for (let i = 0; i < 18; i++) {
+        await client.appendToStream(STREAM_NAME_A, jsonTestEvents(20));
+        await delay(10);
+      }
+
       await client.appendToStream(STREAM_NAME_A, [
-        ...jsonTestEvents(375),
+        ...jsonTestEvents(15),
         finishEvent,
       ]);
 
