@@ -28,7 +28,8 @@ describe("not-leader", () => {
         endpoints: cluster.endpoints,
         nodePreference: FOLLOWER,
       },
-      { rootCertificate: cluster.rootCertificate }
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     const appendResult = await followerClient.appendToStream(
@@ -65,7 +66,8 @@ describe("not-leader", () => {
           {
             endpoint: error.leader,
           },
-          { rootCertificate: cluster.rootCertificate }
+          { rootCertificate: cluster.rootCertificate },
+          { username: "admin", password: "changeit" }
         );
 
         const readResult = await readFromTestStream(leaderClient);

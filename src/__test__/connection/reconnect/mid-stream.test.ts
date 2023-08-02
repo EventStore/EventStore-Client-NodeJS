@@ -21,7 +21,8 @@ describe("reconnect", () => {
 
     const client = new EventStoreDBClient(
       { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.rootCertificate }
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     // make successful append of 2000 events to node

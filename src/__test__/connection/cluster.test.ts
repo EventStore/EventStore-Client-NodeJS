@@ -17,7 +17,8 @@ describe("cluster", () => {
   test("should successfully connect", async () => {
     const client = new EventStoreDBClient(
       { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.rootCertificate }
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);

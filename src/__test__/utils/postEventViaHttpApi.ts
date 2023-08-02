@@ -48,6 +48,7 @@ const post = (
           "ES-EventType": type,
         },
         ca: [cert],
+        auth: "admin:changeit",
       },
       (res) => {
         if (res.statusCode === 307) {

@@ -22,7 +22,8 @@ describe("reconnect", () => {
         // so it's better not to have deadlines here to force the errors we are testing.
         defaultDeadline: Infinity,
       },
-      { rootCertificate: cluster.rootCertificate }
+      { rootCertificate: cluster.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     // make successful append to connect to node
@@ -71,7 +72,8 @@ describe("reconnect", () => {
         // so it's better not to have deadlines here to force the errors we are testing.
         defaultDeadline: Infinity,
       },
-      { rootCertificate: timeoutNode.rootCertificate }
+      { rootCertificate: timeoutNode.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     // make successful append to connect to node

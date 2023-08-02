@@ -19,7 +19,8 @@ describe("write after end", () => {
 
     const client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate }
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
 
     const STREAM_NAME = "json_stream_name";
@@ -64,7 +65,8 @@ describe("write after end", () => {
 
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
-        { rootCertificate: node.rootCertificate }
+        { rootCertificate: node.rootCertificate },
+        { username: "admin", password: "changeit" }
       );
 
       const STREAM_NAME = "json_stream_name";

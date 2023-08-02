@@ -32,7 +32,7 @@ export const connectionStringTests = ({
       const STREAM_NAME = `${streamPrefix}_template_string_stream`;
       const uri = createUri(server);
       const query = createQueryString(server);
-      const client = EventStoreDBClient.connectionString`esdb://${uri}?${query}`;
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${uri}?${query}`;
 
       const appendResult = await client.appendToStream(
         STREAM_NAME,
@@ -54,7 +54,7 @@ export const connectionStringTests = ({
       const uri = createUri(server);
       const query = createQueryString(server);
       const client = EventStoreDBClient.connectionString(
-        `esdb://${uri}?${query}`
+        `esdb://admin:changeit@${uri}?${query}`
       );
 
       const appendResult = await client.appendToStream(

@@ -22,7 +22,8 @@ describe("appendToStream - batch append", () => {
     await node.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate }
+      { rootCertificate: node.rootCertificate },
+      { username: "admin", password: "changeit" }
     );
     batchSpy = spyOn.call(client, "GRPCStreamCreator");
     executeSpy = spyOn.call(client, "execute");
