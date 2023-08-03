@@ -605,7 +605,8 @@ export class Client {
   };
 
   protected createDeadline(deadline: number = this.#defaultDeadline): Date {
-    return new Date(Date.now() + deadline);
+    // grpcJS chokes on an invalid date, so we cap the deadline to max 1 year.
+    return new Date(Date.now() + Math.min(deadline, 0x757b12c00));
   }
 
   protected get capabilities(): Promise<ServerFeatures> {
