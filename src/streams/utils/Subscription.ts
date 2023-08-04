@@ -1,12 +1,15 @@
 import { Transform, TransformCallback, TransformOptions } from "stream";
 
 import type { ClientReadableStream, ServiceError } from "@grpc/grpc-js";
-import { Status } from "@grpc/grpc-js/build/src/constants";
 
 import type { ReadResp } from "../../../generated/streams_pb";
 
 import type { Filter, Position, ReadableSubscription } from "../../types";
-import { ConvertGrpcEvent, convertToCommandError } from "../../utils";
+import {
+  ConvertGrpcEvent,
+  convertToCommandError,
+  isClientCancellationError,
+} from "../../utils";
 
 type CreateGRPCStream = () => Promise<ClientReadableStream<ReadResp>>;
 
@@ -35,7 +38,7 @@ export class Subscription<E>
     try {
       (await this.#grpcStream)
         .on("error", (err: ServiceError) => {
-          if (err.code === Status.CANCELLED) return;
+          if (isClientCancellationError(err)) return;
           const error = convertToCommandError(err);
           this.emit("error", error);
         })
@@ -73,7 +76,6 @@ export class Subscription<E>
 
   public async unsubscribe(): Promise<void> {
     const stream = await this.#grpcStream;
-
     return new Promise((resolve) => {
       // https://github.com/grpc/grpc-node/issues/1464
       // https://github.com/grpc/grpc-node/issues/1652

@@ -6,3 +6,4 @@ export * from "./filter";
 export * from "./grpcStreamIdentifier";
 export * from "./grpcUUID";
 export * from "./utilityTypes";
+export * from "./isClientCancellationError";

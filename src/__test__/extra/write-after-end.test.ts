@@ -7,7 +7,11 @@ import {
   matchServerVersion,
   optionalTest,
 } from "@test-utils";
-import { EventStoreDBClient, UnavailableError } from "@eventstore/db-client";
+import {
+  CancelledError,
+  EventStoreDBClient,
+  UnavailableError,
+} from "@eventstore/db-client";
 
 // These tests can take time.
 jest.setTimeout(120_000);
@@ -89,7 +93,7 @@ describe("write after end", () => {
       await node.killNode(node.endpoints[0]);
 
       const error = await errorPromise;
-      expect(error).toBeInstanceOf(UnavailableError);
+      expect(error).toBeInstanceOf(CancelledError);
 
       // wait for any unhandled rejections
       await delay(5_000);

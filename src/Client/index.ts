@@ -30,6 +30,7 @@ import type {
   BaseOptions,
 } from "../types";
 import {
+  CancelledError,
   convertToCommandError,
   debug,
   NotLeaderError,
@@ -463,7 +464,12 @@ export class Client {
       return [true, error.leader];
     }
 
-    return [error instanceof UnavailableError];
+    return [
+      // Server is unavailable to take request
+      error instanceof UnavailableError ||
+        // Server has cancelled a long running request
+        error instanceof CancelledError,
+    ];
   };
 
   protected handleError = async (
