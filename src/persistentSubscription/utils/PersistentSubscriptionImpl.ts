@@ -1,6 +1,6 @@
 import { Transform, TransformCallback, TransformOptions } from "stream";
 
-import { ClientDuplexStream, ServiceError, status } from "@grpc/grpc-js";
+import type { ClientDuplexStream, ServiceError } from "@grpc/grpc-js";
 
 import { ReadReq, ReadResp } from "../../../generated/persistent_pb";
 
@@ -9,6 +9,7 @@ import {
   ConvertGrpcEvent,
   createUUID,
   backpressuredWrite,
+  isClientCancellationError,
 } from "../../utils";
 import type {
   PersistentAction,
@@ -40,7 +41,7 @@ export class PersistentSubscriptionImpl<E>
     try {
       (await this.#grpcStream)
         .on("error", (err: ServiceError) => {
-          if (err.code === status.CANCELLED) return;
+          if (isClientCancellationError(err)) return;
           const error = convertToCommandError(err);
           this.emit("error", error);
         })

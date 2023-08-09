@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import { status as StatusCode, ServiceError, Metadata } from "@grpc/grpc-js";
+import { isClientCancellationError } from ".";
 
 import type { WrongExpectedVersion } from "../../generated/shared_pb";
 import type {
@@ -13,6 +14,7 @@ export enum ErrorType {
   TIMEOUT = "timeout",
   DEADLINE_EXCEEDED = "deadline-exceeded",
   UNAVAILABLE = "unavailable",
+  CANCELLED = "cancelled",
   UNKNOWN = "unknown",
   NOT_LEADER = "not-leader",
   STREAM_NOT_FOUND = "stream-not-found",
@@ -63,6 +65,10 @@ export class DeadlineExceededError extends CommandErrorBase {
 
 export class UnavailableError extends CommandErrorBase {
   public type: ErrorType.UNAVAILABLE = ErrorType.UNAVAILABLE;
+}
+
+export class CancelledError extends CommandErrorBase {
+  public type: ErrorType.CANCELLED = ErrorType.CANCELLED;
 }
 
 export class UnknownError extends CommandErrorBase {
@@ -418,6 +424,7 @@ export type CommandError =
   | TimeoutError
   | DeadlineExceededError
   | UnavailableError
+  | CancelledError
   | UnknownError
   | UnsupportedError;
 
@@ -472,6 +479,10 @@ export const convertToCommandError = (error: Error): CommandError | Error => {
       return new UnavailableError(error);
     case StatusCode.UNAUTHENTICATED:
       return new AccessDeniedError(error);
+    case StatusCode.CANCELLED: {
+      if (isClientCancellationError(error)) break;
+      return new CancelledError(error);
+    }
   }
 
   return new UnknownError(error);

@@ -30,6 +30,7 @@ import type {
   BaseOptions,
 } from "../types";
 import {
+  CancelledError,
   convertToCommandError,
   debug,
   NotLeaderError,
@@ -463,7 +464,12 @@ export class Client {
       return [true, error.leader];
     }
 
-    return [error instanceof UnavailableError];
+    return [
+      // Server is unavailable to take request
+      error instanceof UnavailableError ||
+        // Server has cancelled a long running request
+        error instanceof CancelledError,
+    ];
   };
 
   protected handleError = async (
@@ -605,7 +611,8 @@ export class Client {
   };
 
   protected createDeadline(deadline: number = this.#defaultDeadline): Date {
-    return new Date(Date.now() + deadline);
+    // grpcJS chokes on an invalid date, so we cap the deadline to max 1 year.
+    return new Date(Date.now() + Math.min(deadline, 0x757b12c00));
   }
 
   protected get capabilities(): Promise<ServerFeatures> {
