@@ -1,3 +1,55 @@
+## [v6.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v5.0.1...v6.0.0) (2023-08-25)
+
+## Breaking changes
+
+### `CancelledError` is now thrown when a stream is cancelled by the server
+
+Previously, we would throw an `UnavailableError` when the server was unavailable to take a request, _or_ a stream was cancelled by the server. This release now throws a `CancelledError` when the stream is cancelled, allowing users to distinguish between them.
+
+If users are catching `UnavailableError` on a stream for this situation, they should now be looking for a `CancelledError`. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/022b150842800a2aa0ba297154061f941fbb8ca9)
+
+Before:
+
+```ts
+try {
+  for await (const event of client.readStream("my_stream")) {
+    // do something
+  }
+} catch (error) {
+  if (isCommandError(error)) {
+    if (error.type === ErrorType.UNAVAILABLE) {
+      // Server is unavailable to take request
+      // _OR_
+      // Stream was cancelled by server
+    }
+  }
+}
+```
+
+After:
+
+```ts
+try {
+  for await (const event of client.readStream("my_stream")) {
+    // do something
+  }
+} catch (error) {
+  if (isCommandError(error)) {
+    if (error.type === ErrorType.CANCELLED) {
+      // Stream was cancelled by server
+    }
+
+    if (error.type === ErrorType.UNAVAILABLE) {
+      // Server is unavailable to take request
+    }
+  }
+}
+```
+
+## Bug Fixes
+
+- fix out of bounds value for stream revision [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/39094c2aa351fcb8f399a75168a322b7278ec467)
+
 ## [v5.0.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v5.0.0...v5.0.1) (2023-02-16)
 
 ## Bug Fixes
