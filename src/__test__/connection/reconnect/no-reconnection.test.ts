@@ -4,6 +4,7 @@ import {
   EventStoreDBClient,
   StreamNotFoundError,
   TimeoutError,
+  WrongExpectedVersionError,
 } from "@eventstore/db-client";
 
 // This test can take time.
@@ -38,14 +39,17 @@ describe("reconnect", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const priorChannel = await (client as any).getChannel();
 
-    try {
-      // attempt to read a stream that doesnt exist
+    // attempt to read a stream that doesn't exist should fail
+    await expect(async () => {
       for await (const event of client.readStream("doesn't-exist")) {
         expect(event).toBe("unreachable");
       }
-    } catch (error) {
-      expect(error).toBeInstanceOf(StreamNotFoundError);
-    }
+    }).rejects.toThrowError(StreamNotFoundError);
+
+    // attempt to delete a stream that doesnt exist should fail
+    await expect(client.deleteStream("doesn't-exist")).rejects.toThrowError(
+      WrongExpectedVersionError
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const afterChannel = await (client as any).getChannel();
