@@ -9,6 +9,7 @@ import type {
   EventData,
   EventType,
 } from "../../types";
+import { validateEventIds } from "../../utils";
 
 import { append } from "./append";
 import { batchAppend } from "./batchAppend";
@@ -55,6 +56,8 @@ Client.prototype.appendToStream = async function <
   }: AppendToStreamOptions = {}
 ): Promise<AppendResult> {
   const events = Array.isArray(event) ? event : [event];
+
+  validateEventIds(events);
 
   if (
     !baseOptions.credentials &&

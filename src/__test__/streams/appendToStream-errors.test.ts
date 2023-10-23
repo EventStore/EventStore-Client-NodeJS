@@ -1,6 +1,7 @@
 /** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
 
 import {
+  binaryTestEvents,
   createTestNode,
   jsonTestEvents,
   matchServerVersion,
@@ -16,6 +17,7 @@ import {
   AccessDeniedError,
   DeadlineExceededError,
 } from "@eventstore/db-client";
+import { IsNotUUIDError } from "../../utils";
 
 describe("appendToStream - errors", () => {
   const node = createTestNode();
@@ -142,6 +144,26 @@ describe("appendToStream - errors", () => {
           expect(typeof error.maxAppendSize).toBe("number");
         }
       }
+    });
+
+    optionalTest(supported)("InvalidId", async () => {
+      const STREAM_NAME = `${prefix}_invalid_id`;
+
+      // json event
+      await expect(
+        client.appendToStream(STREAM_NAME, {
+          ...jsonTestEvents(1)[0],
+          id: "an_invalid_id_example_1",
+        })
+      ).rejects.toThrowError(IsNotUUIDError);
+
+      // binary event
+      await expect(
+        client.appendToStream(STREAM_NAME, {
+          ...binaryTestEvents(1)[0],
+          id: "an_invalid_id_example_2",
+        })
+      ).rejects.toThrowError(IsNotUUIDError);
     });
   });
 });

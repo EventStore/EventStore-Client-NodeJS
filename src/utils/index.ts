@@ -7,3 +7,5 @@ export * from "./grpcStreamIdentifier";
 export * from "./grpcUUID";
 export * from "./utilityTypes";
 export * from "./isClientCancellationError";
+export * from "./IsNotUUIDError";
+export * from "./validateEventIds";
