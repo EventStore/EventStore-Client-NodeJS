@@ -1,4 +1,4 @@
-import type { ReadableOptions } from "stream";
+import type { Readable, ReadableOptions } from "stream";
 
 import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
@@ -16,6 +16,7 @@ import { BACKWARDS, FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
 import { ReadStream } from "./utils/ReadStream";
+import { readAllOptionsSchema } from "./readAll.types";
 
 export interface ReadAllOptions extends BaseOptions {
   /**
@@ -58,15 +59,17 @@ declare module "../Client" {
 
 Client.prototype.readAll = function (
   this: Client,
-  {
+  rawOptions: ReadAllOptions = {},
+  readableOptions: ReadableOptions = {}
+): StreamingRead<AllStreamResolvedEvent> {
+  const {
     maxCount = Number.MAX_SAFE_INTEGER,
     fromPosition = START,
     resolveLinkTos = false,
     direction = FORWARDS,
     ...baseOptions
-  }: ReadAllOptions = {},
-  readableOptions: ReadableOptions = {}
-): StreamingRead<AllStreamResolvedEvent> {
+  }: ReadAllOptions = readAllOptionsSchema.parse(rawOptions);
+
   const req = new ReadReq();
   const options = new ReadReq.Options();
 
