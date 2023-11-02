@@ -19,7 +19,7 @@ declare module "../Client" {
      */
     getProjectionStatus(
       projectionName: string,
-      options?: GetProjectionStatusOptions
+      options?: GetProjectionStatusOptions,
     ): Promise<ProjectionDetails>;
   }
 }
@@ -27,7 +27,7 @@ declare module "../Client" {
 Client.prototype.getProjectionStatus = async function (
   this: Client,
   projectionName: string,
-  baseOptions: GetProjectionStatusOptions = {}
+  baseOptions: GetProjectionStatusOptions = {},
 ): Promise<ProjectionDetails> {
   const req = new StatisticsReq();
   const options = new StatisticsReq.Options();
@@ -62,6 +62,6 @@ Client.prototype.getProjectionStatus = async function (
           resolve(projectionDetail);
         });
       });
-    }
+    },
   );
 };

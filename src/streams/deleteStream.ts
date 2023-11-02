@@ -24,7 +24,7 @@ declare module "../Client" {
      */
     deleteStream(
       streamName: string,
-      options?: DeleteStreamOptions
+      options?: DeleteStreamOptions,
     ): Promise<DeleteResult>;
   }
 }
@@ -32,7 +32,7 @@ declare module "../Client" {
 Client.prototype.deleteStream = async function (
   this: Client,
   streamName: string,
-  { expectedRevision = ANY, ...baseOptions }: DeleteStreamOptions = {}
+  { expectedRevision = ANY, ...baseOptions }: DeleteStreamOptions = {},
 ): Promise<DeleteResult> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
@@ -88,8 +88,8 @@ Client.prototype.deleteStream = async function (
             }
 
             return resolve(result);
-          }
+          },
         );
-      })
+      }),
   );
 };

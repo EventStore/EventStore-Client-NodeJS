@@ -17,7 +17,7 @@ describe("deletePersistentSubscriptionToStream", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -32,11 +32,11 @@ describe("deletePersistentSubscriptionToStream", () => {
     await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionToStreamSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults(),
     );
 
     await expect(
-      client.deletePersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
+      client.deletePersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME),
     ).resolves.toBeUndefined();
   });
 });

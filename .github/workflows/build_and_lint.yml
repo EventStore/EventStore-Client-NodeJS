@@ -6,7 +6,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: "0 3 * * 0" # Every sunday at 3am UTC.
+    - cron: '0 3 * * 0' # Every sunday at 3am UTC.
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '16.x'
       - name: Install
         run: yarn
       - name: Build

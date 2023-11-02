@@ -10,7 +10,7 @@ describe("getStreamMetadata", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 

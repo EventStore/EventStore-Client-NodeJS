@@ -19,7 +19,7 @@ declare module "../Client" {
 
 Client.prototype.restartSubsystem = async function (
   this: Client,
-  baseOptions: RestartSubsystemOptions = {}
+  baseOptions: RestartSubsystemOptions = {},
 ): Promise<void> {
   const req = new Empty();
 
@@ -39,8 +39,8 @@ Client.prototype.restartSubsystem = async function (
           (error) => {
             if (error) return reject(convertToCommandError(error));
             return resolve();
-          }
+          },
         );
-      })
+      }),
   );
 };

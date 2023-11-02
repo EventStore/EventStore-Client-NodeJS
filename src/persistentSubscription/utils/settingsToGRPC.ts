@@ -18,7 +18,7 @@ export const settingsToGRPC = <T extends GRPCSettings>(
   settings:
     | PersistentSubscriptionToStreamSettings
     | PersistentSubscriptionToAllSettings,
-  ReqSettings: T
+  ReqSettings: T,
 ): InstanceType<T> => {
   const reqSettings = new ReqSettings() as InstanceType<T>;
 
@@ -48,7 +48,7 @@ export const settingsToGRPC = <T extends GRPCSettings>(
   switch (settings.consumerStrategyName) {
     case DISPATCH_TO_SINGLE: {
       reqSettings.setNamedConsumerStrategy(
-        CreateReq.ConsumerStrategy.DISPATCHTOSINGLE
+        CreateReq.ConsumerStrategy.DISPATCHTOSINGLE,
       );
       break;
     }
@@ -58,13 +58,13 @@ export const settingsToGRPC = <T extends GRPCSettings>(
     }
     case ROUND_ROBIN: {
       reqSettings.setNamedConsumerStrategy(
-        CreateReq.ConsumerStrategy.ROUNDROBIN
+        CreateReq.ConsumerStrategy.ROUNDROBIN,
       );
       break;
     }
     default: {
       console.warn(
-        `Unknown consumerStrategyName ${settings.consumerStrategyName}.`
+        `Unknown consumerStrategyName ${settings.consumerStrategyName}.`,
       );
       break;
     }

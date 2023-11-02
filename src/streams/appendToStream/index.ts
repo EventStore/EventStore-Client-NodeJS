@@ -37,13 +37,13 @@ declare module "../../Client" {
     appendToStream<KnownEventType extends EventType = EventType>(
       streamName: string,
       events: EventData<KnownEventType> | EventData<KnownEventType>[],
-      options?: AppendToStreamOptions
+      options?: AppendToStreamOptions,
     ): Promise<AppendResult>;
   }
 }
 
 Client.prototype.appendToStream = async function <
-  KnownEventType extends EventType = EventType
+  KnownEventType extends EventType = EventType,
 >(
   this: Client,
   streamName: string,
@@ -52,7 +52,7 @@ Client.prototype.appendToStream = async function <
     expectedRevision = ANY,
     batchAppendSize = 3 * 1024 * 1024,
     ...baseOptions
-  }: AppendToStreamOptions = {}
+  }: AppendToStreamOptions = {},
 ): Promise<AppendResult> {
   const events = Array.isArray(event) ? event : [event];
 

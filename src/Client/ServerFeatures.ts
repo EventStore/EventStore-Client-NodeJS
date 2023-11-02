@@ -11,7 +11,7 @@ import { Status } from "@grpc/grpc-js/build/src/constants";
 type ExecuteClientCapabilities = [
   GRPCClientConstructor<ServerFeaturesClient>,
   string,
-  (c: ServerFeaturesClient) => Promise<ServerFeatures>
+  (c: ServerFeaturesClient) => Promise<ServerFeatures>,
 ];
 
 const UNKNOWN = "unknown";
@@ -40,7 +40,7 @@ export class ServerFeatures {
     if (error) {
       debug.connection(
         "Failed to fetch server features with error: %s",
-        error.message
+        error.message,
       );
       debug.connection("Assuming unknown server version.");
       return;
@@ -61,7 +61,7 @@ export class ServerFeatures {
   public supports = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     method: MethodDefinition<any, any>,
-    feature?: string
+    feature?: string,
   ): boolean => {
     const path = method.path.toLowerCase();
     const isSupported = feature

@@ -115,7 +115,7 @@ const defaults: PersistentSubscriptionSettingsGeneric = {
  * @param changes Changes to apply to the default settings.
  */
 export const persistentSubscriptionToStreamSettingsFromDefaults = (
-  changes: Partial<PersistentSubscriptionToStreamSettings> = {}
+  changes: Partial<PersistentSubscriptionToStreamSettings> = {},
 ): PersistentSubscriptionToStreamSettings => ({
   startFrom: END,
   ...defaults,
@@ -127,7 +127,7 @@ export const persistentSubscriptionToStreamSettingsFromDefaults = (
  * @param changes Changes to apply to the default settings.
  */
 export const persistentSubscriptionToAllSettingsFromDefaults = (
-  changes: Partial<PersistentSubscriptionToAllSettings> = {}
+  changes: Partial<PersistentSubscriptionToAllSettings> = {},
 ): PersistentSubscriptionToAllSettings => ({
   startFrom: END,
   ...defaults,

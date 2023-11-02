@@ -24,7 +24,7 @@ describe("deadline", () => {
       connection_string: string,
       constructor_options: Partial<DNSClusterOptions>,
       call_options: BaseOptions,
-      expected: number
+      expected: number,
     ]
   >([
     ["should default to 10_000", "esdb://host", {}, {}, 10_000],
@@ -102,7 +102,7 @@ describe("deadline", () => {
     [
       test_name: string,
       connection_string: string,
-      constructor_options: Partial<DNSClusterOptions>
+      constructor_options: Partial<DNSClusterOptions>,
     ]
   >([
     [

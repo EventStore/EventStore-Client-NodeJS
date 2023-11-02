@@ -73,7 +73,7 @@ export interface SystemStreamMetadata {
 export type CustomStreamMetadata = Record<string | number, unknown>;
 
 export type StreamMetadata<
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
 > = SystemStreamMetadata & CustomMetadata;
 
 const convertAcl =
@@ -86,7 +86,7 @@ const convertAcl =
         console.warn(`Unknown key "${key}" in acl will be ignored`);
         return acc;
       },
-      {}
+      {},
     );
   };
 const prepareAcl = convertAcl({
@@ -111,9 +111,9 @@ const ensureInteger = (key: string, value: unknown) => {
 };
 
 export const prepareStreamMetadata = <
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
 >(
-  metadata: StreamMetadata<CustomMetadata>
+  metadata: StreamMetadata<CustomMetadata>,
 ): Record<string, unknown> =>
   Object.entries(metadata).reduce((acc, [key, value]) => {
     switch (key) {
@@ -133,9 +133,9 @@ export const prepareStreamMetadata = <
   }, {});
 
 export const readStreamMetadata = <
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
 >(
-  metadata: Record<string, unknown>
+  metadata: Record<string, unknown>,
 ): StreamMetadata<CustomMetadata> =>
   Object.entries(metadata).reduce((acc, [key, value]) => {
     switch (key) {

@@ -34,7 +34,7 @@ declare module "../Client" {
      */
     deleteProjection(
       projectionName: string,
-      options?: DeleteProjectionOptions
+      options?: DeleteProjectionOptions,
     ): Promise<void>;
   }
 }
@@ -47,7 +47,7 @@ Client.prototype.deleteProjection = async function (
     deleteStateStream = false,
     deleteCheckpointStream = false,
     ...baseOptions
-  }: DeleteProjectionOptions = {}
+  }: DeleteProjectionOptions = {},
 ): Promise<void> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
@@ -79,6 +79,6 @@ Client.prototype.deleteProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

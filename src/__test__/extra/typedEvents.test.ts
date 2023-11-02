@@ -17,7 +17,7 @@ describe("typed events should compile", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -43,7 +43,7 @@ describe("typed events should compile", () => {
       {
         type: "my-first-event",
         data: { hello: "hi" },
-      }
+      },
     );
 
     jsonEvent<MyFirstEvent>({
@@ -101,7 +101,7 @@ describe("typed events should compile", () => {
       {
         type: "my-second-event",
         data: new Uint8Array(),
-      }
+      },
     );
 
     binaryEvent<MySecondEvent>({
@@ -233,7 +233,7 @@ describe("typed events should compile", () => {
     await client.appendToStream(STREAM_NAME, [event1, event2]);
 
     for await (const { event } of client.subscribeToStream<KnownEvents>(
-      STREAM_NAME
+      STREAM_NAME,
     )) {
       switch (event?.type) {
         case "my-great-event":
@@ -298,7 +298,7 @@ describe("typed events should compile", () => {
     await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      persistentSubscriptionToStreamSettingsFromDefaults()
+      persistentSubscriptionToStreamSettingsFromDefaults(),
     );
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);
@@ -307,7 +307,7 @@ describe("typed events should compile", () => {
       event,
     } of client.subscribeToPersistentSubscriptionToStream<KnownEvents>(
       STREAM_NAME,
-      GROUP_NAME
+      GROUP_NAME,
     )) {
       switch (event?.type) {
         case "my-great-event":

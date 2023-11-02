@@ -13,7 +13,7 @@ export const jsonTestEvents = (count = 4, type = "test"): EventData[] =>
         message: "test",
         index: i,
       },
-    })
+    }),
   );
 
 export const binaryTestEvents = (count = 4, type = "test"): EventData[] =>
@@ -21,5 +21,5 @@ export const binaryTestEvents = (count = 4, type = "test"): EventData[] =>
     binaryEvent({
       type,
       data: Buffer.from(`hello: ${i}`),
-    })
+    }),
   );

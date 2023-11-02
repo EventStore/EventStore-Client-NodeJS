@@ -189,10 +189,10 @@ $ yarn test:debug // debug all tests
 $ yarn test:debug ReadAll // only the ReadAll tests
 ```
 
-Specific docker images can be specified via the enviroment variable `EVENTSTORE_IMAGE`.
+By default the tests use `ghcr.io/eventstore/eventstore:ci`. To override this, set the `EVENTSTORE_IMAGE` environment variable to the tag you wish to use:
 
 ```shell script
-$ yarn cross-env EVENTSTORE_IMAGE=77d63f3f0ab3 jest
+$ yarn cross-env EVENTSTORE_IMAGE="21.10.0-focal" jest
 ```
 
 See [Jest] documentation for more options.

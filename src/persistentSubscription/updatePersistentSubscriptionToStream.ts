@@ -6,7 +6,10 @@ import { END, START } from "../constants";
 import { Client } from "../Client";
 import type { BaseOptions } from "../types";
 
-import type { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
+import type {
+  PersistentSubscriptionToStreamSettings,
+  persistentSubscriptionToStreamSettingsFromDefaults,
+} from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 
 declare module "../Client" {
@@ -23,7 +26,7 @@ declare module "../Client" {
       streamName: string,
       groupName: string,
       settings: PersistentSubscriptionToStreamSettings,
-      options?: BaseOptions
+      options?: BaseOptions,
     ): Promise<void>;
   }
 }
@@ -33,7 +36,7 @@ Client.prototype.updatePersistentSubscriptionToStream = async function (
   streamName: string,
   groupName: string,
   settings: PersistentSubscriptionToStreamSettings,
-  baseOptions: BaseOptions = {}
+  baseOptions: BaseOptions = {},
 ): Promise<void> {
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
@@ -80,6 +83,6 @@ Client.prototype.updatePersistentSubscriptionToStream = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

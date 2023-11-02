@@ -39,7 +39,7 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
 
       const appendResult = await client.appendToStream(STREAM_NAME, event);
       const readResult = await collect(
-        client.readStream(STREAM_NAME, { maxCount: 10 })
+        client.readStream(STREAM_NAME, { maxCount: 10 }),
       );
 
       expect(appendResult).toBeDefined();
@@ -52,7 +52,7 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
         const appendResult = await client.appendToStream(
           `${clientType}-leader-test`,
           jsonTestEvents(),
-          { requiresLeader: true }
+          { requiresLeader: true },
         );
 
         expect(appendResult).toBeDefined();
@@ -65,7 +65,7 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
           const appendResult = await client.appendToStream(
             `${clientType}-leader-test`,
             jsonTestEvents(),
-            { requiresLeader: true }
+            { requiresLeader: true },
           );
           expect(appendResult).toBe("unreachable");
         } catch (error) {

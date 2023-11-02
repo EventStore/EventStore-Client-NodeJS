@@ -11,7 +11,7 @@ describe("restartPersistentSubscriptionSubsystem", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -21,7 +21,7 @@ describe("restartPersistentSubscriptionSubsystem", () => {
 
   test("Doesnt error", async () => {
     await expect(
-      client.restartPersistentSubscriptionSubsystem()
+      client.restartPersistentSubscriptionSubsystem(),
     ).resolves.toBeUndefined();
   });
 });

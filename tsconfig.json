@@ -1,16 +1,24 @@
 {
   "compilerOptions": {
-    "lib": ["ES2019"],
+    "lib": [
+      "ES2019"
+    ],
     "module": "commonjs",
     "target": "ES2019",
     "declaration": true,
     "strict": true,
     "noUnusedLocals": true,
     "useUnknownInCatchVariables": false,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": false,
     "outDir": "./dist",
     "sourceMap": true
   },
-  "include": ["./src", "./generated"],
-  "exclude": ["**/*.test.ts", "**/__test__/**/*"]
+  "include": [
+    "./src",
+    "./generated"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/__test__/**/*"
+  ]
 }

@@ -21,7 +21,7 @@ declare module "../Client" {
      */
     getProjectionState<T = unknown>(
       projectionName: string,
-      options?: GetProjectionStateOptions
+      options?: GetProjectionStateOptions,
     ): Promise<T>;
   }
 }
@@ -29,7 +29,7 @@ declare module "../Client" {
 Client.prototype.getProjectionState = async function <T = unknown>(
   this: Client,
   projectionName: string,
-  { partition = "", ...baseOptions }: GetProjectionStateOptions = {}
+  { partition = "", ...baseOptions }: GetProjectionStateOptions = {},
 ): Promise<T> {
   const req = new StateReq();
   const options = new StateReq.Options();
@@ -58,8 +58,8 @@ Client.prototype.getProjectionState = async function <T = unknown>(
           (error, response) => {
             if (error) return reject(convertToCommandError(error));
             return resolve(response.getState()?.toJavaScript() as T);
-          }
+          },
         );
-      })
+      }),
   );
 };

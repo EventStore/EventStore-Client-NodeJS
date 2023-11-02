@@ -31,7 +31,7 @@ declare module "../Client" {
      */
     listPersistentSubscriptionsToStream(
       streamName: string,
-      options?: ListPersistentSubscriptionsToStreamOptions
+      options?: ListPersistentSubscriptionsToStreamOptions,
     ): Promise<PersistentSubscriptionToStreamInfo[]>;
   }
 }
@@ -39,7 +39,7 @@ declare module "../Client" {
 Client.prototype.listPersistentSubscriptionsToStream = async function (
   this: Client,
   streamName: string,
-  options: ListPersistentSubscriptionsToStreamOptions = {}
+  options: ListPersistentSubscriptionsToStreamOptions = {},
 ): Promise<PersistentSubscriptionToStreamInfo[]> {
   debug.command("listPersistentSubscriptionsToStream: %O", {
     streamName,
@@ -50,21 +50,21 @@ Client.prototype.listPersistentSubscriptionsToStream = async function (
     return listPersistentSubscriptionsToStreamGRPC.call(
       this,
       streamName,
-      options
+      options,
     );
   }
 
   return listPersistentSubscriptionsToStreamHTTP.call(
     this,
     streamName,
-    options
+    options,
   );
 };
 
 const listPersistentSubscriptionsToStreamGRPC = async function (
   this: Client,
   streamName: string,
-  baseOptions: ListPersistentSubscriptionsToStreamOptions = {}
+  baseOptions: ListPersistentSubscriptionsToStreamOptions = {},
 ): Promise<PersistentSubscriptionToStreamInfo[]> {
   const req = new ListReq();
   const options = new ListReq.Options();
@@ -90,18 +90,18 @@ const listPersistentSubscriptionsToStreamGRPC = async function (
             return resolve(
               response
                 .getSubscriptionsList()
-                .map((r) => mapPersistentSubscriptionToStreamInfo(r))
+                .map((r) => mapPersistentSubscriptionToStreamInfo(r)),
             );
-          }
+          },
         );
-      })
+      }),
   );
 };
 
 const listPersistentSubscriptionsToStreamHTTP = async function (
   this: Client,
   streamName: string,
-  baseOptions: ListPersistentSubscriptionsToStreamOptions = {}
+  baseOptions: ListPersistentSubscriptionsToStreamOptions = {},
 ): Promise<PersistentSubscriptionToStreamInfo[]> {
   const basicList = await this.HTTPRequest<
     Array<{ eventStreamId: string; groupName: string }>
@@ -121,11 +121,11 @@ const listPersistentSubscriptionsToStreamHTTP = async function (
       this.HTTPRequest<HTTPSubscriptionInfo>(
         "GET",
         `/subscriptions/${encodeURIComponent(
-          eventStreamId
+          eventStreamId,
         )}/${encodeURIComponent(groupName)}/info`,
-        baseOptions
-      )
-    )
+        baseOptions,
+      ),
+    ),
   );
 
   return list.map((info) => mapHTTPPersistentSubscriptionInfo(info));

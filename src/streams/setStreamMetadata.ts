@@ -29,18 +29,18 @@ declare module "../Client" {
     setStreamMetadata<MetadataType extends StreamMetadata = StreamMetadata>(
       streamName: string,
       metadata: StreamMetadata<MetadataType>,
-      options?: SetStreamMetadataOptions
+      options?: SetStreamMetadataOptions,
     ): Promise<AppendResult>;
   }
 }
 
 Client.prototype.setStreamMetadata = async function <
-  MetadataType extends StreamMetadata = StreamMetadata
+  MetadataType extends StreamMetadata = StreamMetadata,
 >(
   this: Client,
   streamName: string,
   metadata: MetadataType,
-  options: SetStreamMetadataOptions = {}
+  options: SetStreamMetadataOptions = {},
 ): Promise<AppendResult> {
   debug.command("setStreamMetadata: %O", {
     streamName,

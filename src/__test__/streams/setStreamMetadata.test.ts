@@ -14,7 +14,7 @@ describe("setStreamMetadata", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -32,9 +32,8 @@ describe("setStreamMetadata", () => {
 
       await client.setStreamMetadata(STREAM_NAME, metadata);
 
-      const { metadata: readMetadata } = await client.getStreamMetadata(
-        STREAM_NAME
-      );
+      const { metadata: readMetadata } =
+        await client.getStreamMetadata(STREAM_NAME);
 
       expect(readMetadata).toEqual(metadata);
     });
@@ -58,9 +57,8 @@ describe("setStreamMetadata", () => {
 
       await client.setStreamMetadata(STREAM_NAME, metadata);
 
-      const { metadata: readMetadata } = await client.getStreamMetadata(
-        STREAM_NAME
-      );
+      const { metadata: readMetadata } =
+        await client.getStreamMetadata(STREAM_NAME);
 
       expect(readMetadata).toEqual(metadata);
     });
@@ -79,7 +77,7 @@ describe("setStreamMetadata", () => {
 
       await client.setStreamMetadata<CustomStreamMetadata>(
         STREAM_NAME,
-        metadata
+        metadata,
       );
 
       const { metadata: readMetadata } =
@@ -107,9 +105,8 @@ describe("setStreamMetadata", () => {
 
       await client.setStreamMetadata(STREAM_NAME, metadata);
 
-      const { metadata: readMetadata } = await client.getStreamMetadata(
-        STREAM_NAME
-      );
+      const { metadata: readMetadata } =
+        await client.getStreamMetadata(STREAM_NAME);
 
       expect(readMetadata!.acl).toEqual({
         deleteRoles: ["admin"],
@@ -148,11 +145,11 @@ describe("setStreamMetadata", () => {
           const STREAM_NAME = "err";
 
           await expect(
-            client.setStreamMetadata(STREAM_NAME, { [key]: 2.5 })
+            client.setStreamMetadata(STREAM_NAME, { [key]: 2.5 }),
           ).rejects.toThrowError(
-            `Invalid stream metadata: "${key}" must be an integer.`
+            `Invalid stream metadata: "${key}" must be an integer.`,
           );
-        }
+        },
       );
     });
   });

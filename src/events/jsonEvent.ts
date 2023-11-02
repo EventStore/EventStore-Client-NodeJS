@@ -23,4 +23,4 @@ export const jsonEvent = <E extends JSONEventType>({
     type,
     data: data,
     metadata: convertMetadata<E["metadata"]>(metadata),
-  } as EventData<E>);
+  }) as EventData<E>;

@@ -19,14 +19,14 @@ declare module "../Client" {
      * @param options List projections options.
      */
     listProjections(
-      options?: ListProjectionsOptions
+      options?: ListProjectionsOptions,
     ): Promise<ProjectionDetails[]>;
   }
 }
 
 Client.prototype.listProjections = async function (
   this: Client,
-  baseOptions: ListProjectionsOptions = {}
+  baseOptions: ListProjectionsOptions = {},
 ): Promise<ProjectionDetails[]> {
   const options = new StatisticsReq.Options();
   options.setContinuous(new Empty());

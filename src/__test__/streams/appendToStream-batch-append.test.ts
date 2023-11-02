@@ -23,7 +23,7 @@ describe("appendToStream - batch append", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
     batchSpy = spyOn.call(client, "GRPCStreamCreator");
     executeSpy = spyOn.call(client, "execute");
@@ -50,7 +50,7 @@ describe("appendToStream - batch append", () => {
       expect(executeSpy).toHaveBeenCalledWith(
         StreamsClient,
         "appendToStream",
-        expect.any(Function)
+        expect.any(Function),
       );
     });
   });
@@ -67,7 +67,7 @@ describe("appendToStream - batch append", () => {
         StreamsClient,
         "appendToStream",
         expect.any(Function),
-        expect.any(WeakMap)
+        expect.any(WeakMap),
       );
     });
 
@@ -77,7 +77,7 @@ describe("appendToStream - batch append", () => {
       const result = await client.appendToStream(
         STREAM_NAME,
         jsonTestEvents(),
-        { credentials: { username: "admin", password: "changeit" } }
+        { credentials: { username: "admin", password: "changeit" } },
       );
       expect(result).toBeDefined();
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
@@ -86,7 +86,7 @@ describe("appendToStream - batch append", () => {
       expect(executeSpy).toHaveBeenCalledWith(
         StreamsClient,
         "appendToStream",
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -95,7 +95,7 @@ describe("appendToStream - batch append", () => {
 
       const stream = await extractBatchStream.call(
         client,
-        ...batchSpy.mock.calls[0]
+        ...batchSpy.mock.calls[0],
       );
 
       const writeSpy = jest.spyOn(stream, "write");
@@ -103,7 +103,7 @@ describe("appendToStream - batch append", () => {
       const result = await client.appendToStream(
         "small_batch_size",
         jsonTestEvents(5_000),
-        { batchAppendSize: 1024 }
+        { batchAppendSize: 1024 },
       );
 
       expect(result).toBeDefined();
@@ -112,7 +112,7 @@ describe("appendToStream - batch append", () => {
       expect(writeSpy).toHaveBeenCalledTimes(
         // (test event is 128 bytes)
         // (size * event count) / requested batch size
-        (128 * 5_000) / 1024
+        (128 * 5_000) / 1024,
       );
     });
   });
@@ -129,7 +129,7 @@ function extractBatchStream(
   clientConstructor: any,
   name: any,
   _: any,
-  cache: any
+  cache: any,
 ): Promise<Duplex> {
   return this.GRPCStreamCreator(
     clientConstructor,
@@ -137,6 +137,6 @@ function extractBatchStream(
     () => {
       throw "Creator shouldn't be called as it will take the client from the cache";
     },
-    cache
+    cache,
   )();
 }

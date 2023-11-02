@@ -11,7 +11,7 @@ import {
 import { metastreamOf } from "./utils/systemStreams";
 
 export interface GetStreamMetadataResult<
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
 > {
   /**
    * The name of the stream.
@@ -26,7 +26,7 @@ export interface GetStreamMetadataResult<
   /**
    * A the version of the metadata.
    */
-  metastreamRevision?: BigInt;
+  metastreamRevision?: bigint;
 }
 
 export interface GetStreamMetadataOptions extends BaseOptions {}
@@ -39,20 +39,20 @@ declare module "../Client" {
      * @param options Read options.
      */
     getStreamMetadata<
-      CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
+      CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
     >(
       streamName: string,
-      options?: GetStreamMetadataOptions
+      options?: GetStreamMetadataOptions,
     ): Promise<GetStreamMetadataResult<CustomMetadata>>;
   }
 }
 
 Client.prototype.getStreamMetadata = async function <
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
 >(
   this: Client,
   streamName: string,
-  baseOptions: GetStreamMetadataOptions = {}
+  baseOptions: GetStreamMetadataOptions = {},
 ): Promise<GetStreamMetadataResult<CustomMetadata>> {
   const metadataStreamName = metastreamOf(streamName);
 
@@ -80,7 +80,7 @@ Client.prototype.getStreamMetadata = async function <
     return {
       streamName,
       metadata: readStreamMetadata<CustomMetadata>(
-        metadataEvent.event.data as Record<string, unknown>
+        metadataEvent.event.data as Record<string, unknown>,
       ),
       metastreamRevision: metadataEvent.commitPosition,
     };

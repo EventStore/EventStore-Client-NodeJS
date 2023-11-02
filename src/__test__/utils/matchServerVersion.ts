@@ -12,9 +12,9 @@ interface ServerVersion {
   patch: number;
 }
 
-const parseServerVersion = (version: string): ServerVersion => {
+export const parseServerVersion = (version: string): ServerVersion => {
   const match = version.match(
-    /^(?<year>[0-9]+)[.](?<month>[0-9]+)[.](?<patch>[0-9]+)/
+    /^(?<year>[0-9]+)[.](?<month>[0-9]+)[.](?<patch>[0-9]+)/,
   );
 
   if (!match || !match.groups) {
@@ -44,7 +44,7 @@ interface MatchVersion {
 
 const parseMatchVersion = (matchString: string): MatchVersion => {
   const match = matchString.match(
-    /^(?<operator>>=|<=)?(?<year>[0-9]+)([.](?<month>[0-9]+))?([.](?<patch>[0-9]+))?/
+    /^(?<operator>>=|<=)?(?<year>[0-9]+)([.](?<month>[0-9]+))?([.](?<patch>[0-9]+))?/,
   );
 
   if (!match) throw `Malformed version match string ${matchString}`;
@@ -70,7 +70,7 @@ const parseMatchVersion = (matchString: string): MatchVersion => {
 
 const versionMatches = (
   matchString: string,
-  serverVersion: string
+  serverVersion: string,
 ): boolean => {
   const match = parseMatchVersion(matchString);
   const version = parseServerVersion(serverVersion);
@@ -112,7 +112,7 @@ export const matchServerVersion = (
   const serverVersion = global.capabilities.serverVersion;
   const matchString = version.reduce<string>(
     (acc, chunk, i) => `${acc}${chunk}${parts[i] ?? ""}`,
-    ""
+    "",
   );
 
   return versionMatches(matchString, serverVersion);

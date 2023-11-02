@@ -21,7 +21,7 @@ declare module "../Client" {
      */
     deletePersistentSubscriptionToAll(
       groupName: string,
-      options?: DeletePersistentSubscriptionToAllOptions
+      options?: DeletePersistentSubscriptionToAllOptions,
     ): Promise<void>;
   }
 }
@@ -29,7 +29,7 @@ declare module "../Client" {
 Client.prototype.deletePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
-  { ...baseOptions }: DeletePersistentSubscriptionToAllOptions = {}
+  { ...baseOptions }: DeletePersistentSubscriptionToAllOptions = {},
 ): Promise<void> {
   if (!(await this.supports(PersistentSubscriptionsService.delete, "all"))) {
     throw new UnsupportedError("deletePersistentSubscriptionToAll", "21.10");
@@ -57,6 +57,6 @@ Client.prototype.deletePersistentSubscriptionToAll = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

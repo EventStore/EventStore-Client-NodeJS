@@ -25,14 +25,14 @@ declare module "../Client" {
      * @param options List persistent subscriptions options.
      */
     listAllPersistentSubscriptions(
-      options?: ListPersistentSubscriptionsOptions
+      options?: ListPersistentSubscriptionsOptions,
     ): Promise<PersistentSubscriptionToEitherInfo[]>;
   }
 }
 
 Client.prototype.listAllPersistentSubscriptions = async function (
   this: Client,
-  options: ListPersistentSubscriptionsOptions = {}
+  options: ListPersistentSubscriptionsOptions = {},
 ): Promise<PersistentSubscriptionToEitherInfo[]> {
   debug.command("listAllPersistentSubscriptions: %O", {
     options,
@@ -47,7 +47,7 @@ Client.prototype.listAllPersistentSubscriptions = async function (
 
 const listPersistentSubscriptionsGRPC = async function (
   this: Client,
-  baseOptions: ListPersistentSubscriptionsOptions = {}
+  baseOptions: ListPersistentSubscriptionsOptions = {},
 ): Promise<PersistentSubscriptionToEitherInfo[]> {
   const options = new ListReq.Options();
   const req = new ListReq();
@@ -72,17 +72,17 @@ const listPersistentSubscriptionsGRPC = async function (
             return resolve(
               response
                 .getSubscriptionsList()
-                .map((r) => mapPersistentSubscriptionToEitherInfo(r))
+                .map((r) => mapPersistentSubscriptionToEitherInfo(r)),
             );
-          }
+          },
         );
-      })
+      }),
   );
 };
 
 const listAllPersistentSubscriptionsHTTP = async function (
   this: Client,
-  baseOptions: ListPersistentSubscriptionsOptions = {}
+  baseOptions: ListPersistentSubscriptionsOptions = {},
 ): Promise<PersistentSubscriptionToEitherInfo[]> {
   const basicList = await this.HTTPRequest<
     Array<{ eventStreamId: string; groupName: string }>
@@ -93,11 +93,11 @@ const listAllPersistentSubscriptionsHTTP = async function (
       this.HTTPRequest<HTTPSubscriptionInfo>(
         "GET",
         `/subscriptions/${encodeURIComponent(
-          eventStreamId
+          eventStreamId,
         )}/${encodeURIComponent(groupName)}/info`,
-        baseOptions
-      )
-    )
+        baseOptions,
+      ),
+    ),
   );
 
   return list.map((info) => mapHTTPPersistentSubscriptionInfo(info));

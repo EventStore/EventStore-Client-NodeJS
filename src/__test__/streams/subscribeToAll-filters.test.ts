@@ -34,7 +34,7 @@ describe("subscribeToAll", () => {
       {
         rootCertificate: node.rootCertificate,
       },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents(4));
@@ -89,7 +89,7 @@ describe("subscribeToAll", () => {
           8 + // a
             8 + // b
             8 + // a
-            1 // finish
+            1, // finish
         );
       });
     });
@@ -115,11 +115,11 @@ describe("subscribeToAll", () => {
 
         await client.appendToStream(
           STREAM_NAME_A,
-          jsonTestEvents(8, eventType("a"))
+          jsonTestEvents(8, eventType("a")),
         );
         await client.appendToStream(
           STREAM_NAME_B,
-          jsonTestEvents(8, eventType("b"))
+          jsonTestEvents(8, eventType("b")),
         );
         await client.appendToStream(STREAM_NAME_A, [
           ...jsonTestEvents(8, eventType("c")),
@@ -143,7 +143,7 @@ describe("subscribeToAll", () => {
           8 + // a
             8 + // b
             8 + // a
-            1 // finish
+            1, // finish
         );
       });
     });
@@ -183,7 +183,7 @@ describe("subscribeToAll", () => {
       // We run from the start, so could be more
       expect(doSomething.mock.calls.length).toBeGreaterThanOrEqual(9);
       expect(doSomethingWithNonSystemEvent).toBeCalledTimes(
-        doSomething.mock.calls.length
+        doSomething.mock.calls.length,
       );
     });
 
@@ -199,7 +199,7 @@ describe("subscribeToAll", () => {
         jsonEvent({
           type: MARKER_EVENT,
           data: { message: "mark my words" },
-        })
+        }),
       );
 
       await client.appendToStream(STREAM_NAME_A, jsonTestEvents(8));
@@ -230,7 +230,7 @@ describe("subscribeToAll", () => {
           active = true;
           await delay(100);
           active = false;
-        }
+        },
       );
 
       const confirmWaitingForCheckpointReached = jest.fn(() => {

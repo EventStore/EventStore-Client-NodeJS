@@ -21,7 +21,7 @@ export class ReadStream<E> extends Transform implements StreamingRead<E> {
   constructor(
     createGRPCStream: CreateGRPCStream,
     convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>,
-    options: TransformOptions
+    options: TransformOptions,
   ) {
     super({ ...options, objectMode: true });
     this.#convertGrpcEvent = convertGrpcEvent;
@@ -54,8 +54,8 @@ export class ReadStream<E> extends Transform implements StreamingRead<E> {
         stream.destroy(
           new StreamNotFoundError(
             null as never,
-            streamNotFound.getStreamIdentifier()?.getStreamName()
-          )
+            streamNotFound.getStreamIdentifier()?.getStreamName(),
+          ),
         );
         next();
       });

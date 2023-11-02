@@ -7,6 +7,7 @@ import type {
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
+import { ANY } from "../constants";
 
 import type {
   ResolvedEvent,
@@ -65,6 +66,10 @@ export type ExpectedRevision =
    * The stream being written to should not yet exist. If it does exist, treats that as a concurrency problem.
    */
   | typeof constants.NO_STREAM
+  /**
+   * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
+   */
+  | typeof constants.STREAM_EXISTS
   /**
    * States that the last event written to the stream should have an event number matching your expected value.
    */
@@ -140,17 +145,17 @@ export interface ProjectionDetails {
   /**
    * The CoreProcessingTime.
    */
-  coreProcessingTime: BigInt;
+  coreProcessingTime: bigint;
 
   /**
    * The projection version.
    */
-  version: BigInt;
+  version: bigint;
 
   /**
    * The Epoch.
    */
-  epoch: BigInt;
+  epoch: bigint;
 
   /**
    * The projection EffectiveName.
@@ -174,7 +179,7 @@ export interface ProjectionDetails {
 
   /**
    * The raw status of the projection.
-   * Split into {@link projectionStatus} and {@link processingStatus} for convenience.
+   * Split into {@link ProjectionDetails.projectionStatus} and {@link ProjectionDetails.processingStatus} for convenience.
    */
   status: string;
 
@@ -216,7 +221,7 @@ export interface ProjectionDetails {
   /**
    * The projection EventsProcessedAfterRestart.
    */
-  eventsProcessedAfterRestart: BigInt;
+  eventsProcessedAfterRestart: bigint;
 
   /**
    * The projection CheckpointStatus.
@@ -226,7 +231,7 @@ export interface ProjectionDetails {
   /**
    * The projection BufferedEvents.
    */
-  bufferedEvents: BigInt;
+  bufferedEvents: bigint;
 
   /**
    * The projection WritePendingEventsBeforeCheckpoint.
@@ -278,7 +283,7 @@ export type VerifyOptions = Parameters<typeof ChannelCredentials.createSsl>[3];
 export type GRPCClientConstructor<T extends GRPCClient> = new (
   address: string,
   credentials: ChannelCredentials,
-  options?: Partial<GRPCClientOptions>
+  options?: Partial<GRPCClientOptions>,
 ) => T;
 
 export type FilterOn =
@@ -301,7 +306,7 @@ export interface FilterBase {
    */
   checkpointReached?: (
     subscription: AllStreamSubscription,
-    position: Position
+    position: Position,
   ) => Promise<void> | void;
   /**
    * The maximum number of events that are filtered out before the page is returned
@@ -341,7 +346,7 @@ export interface StreamingRead<E> extends Readable {
   addListener(event: "error", listener: (err: Error) => void): this;
   addListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   on(event: "close", listener: () => void): this;
@@ -365,7 +370,7 @@ export interface StreamingRead<E> extends Readable {
   prependListener(event: "error", listener: (err: Error) => void): this;
   prependListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   prependOnceListener(event: "close", listener: () => void): this;
@@ -375,7 +380,7 @@ export interface StreamingRead<E> extends Readable {
   prependOnceListener(event: "error", listener: (err: Error) => void): this;
   prependOnceListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   removeListener(event: "close", listener: () => void): this;
@@ -384,7 +389,7 @@ export interface StreamingRead<E> extends Readable {
   removeListener(event: "error", listener: (err: Error) => void): this;
   removeListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   [Symbol.asyncIterator](): AsyncIterableIterator<E>;
@@ -401,7 +406,7 @@ export interface ReadableSubscription<E> extends Readable {
   addListener(event: "confirmation", listener: () => void): this;
   addListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   on(event: "close", listener: () => void): this;
@@ -428,7 +433,7 @@ export interface ReadableSubscription<E> extends Readable {
   prependListener(event: "confirmation", listener: () => void): this;
   prependListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   prependOnceListener(event: "close", listener: () => void): this;
@@ -439,7 +444,7 @@ export interface ReadableSubscription<E> extends Readable {
   prependOnceListener(event: "confirmation", listener: () => void): this;
   prependOnceListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   removeListener(event: "close", listener: () => void): this;
@@ -450,7 +455,7 @@ export interface ReadableSubscription<E> extends Readable {
   removeListener(event: "confirmation", listener: () => void): this;
   removeListener(
     event: string | symbol,
-    listener: (...args: unknown[]) => void
+    listener: (...args: unknown[]) => void,
   ): this;
 
   [Symbol.asyncIterator](): AsyncIterableIterator<E>;

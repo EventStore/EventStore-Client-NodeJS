@@ -1,10 +1,14 @@
-name: "Dispatch"
+name: 'Dispatch'
 
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version tag"
+      cloud_version:
+        description: 'EventStoreDB server tag'
+        required: true
+        type: string
+      esdb_version:
+        description: 'EventStoreDB cloud version tag'
         required: true
         type: string
 
@@ -13,7 +17,8 @@ jobs:
     name: Test
     uses: ./.github/workflows/tests.yml
     with:
-      version: ${{ inputs.version }}
+      esdb_version: ${{ inputs.esdb_version }}
+      cloud_version: ${{ inputs.cloud_version }}
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}

@@ -11,7 +11,10 @@ import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 
 import { settingsToGRPC } from "./utils/settingsToGRPC";
-import type { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
+import type {
+  PersistentSubscriptionToAllSettings,
+  persistentSubscriptionToStreamSettingsFromDefaults,
+} from "./utils/persistentSubscriptionSettings";
 
 export interface CreatePersistentSubscriptionToAllOptions extends BaseOptions {
   /**
@@ -35,7 +38,7 @@ declare module "../Client" {
     createPersistentSubscriptionToAll(
       groupName: string,
       settings: PersistentSubscriptionToAllSettings,
-      options?: CreatePersistentSubscriptionToAllOptions
+      options?: CreatePersistentSubscriptionToAllOptions,
     ): Promise<void>;
   }
 }
@@ -48,7 +51,7 @@ Client.prototype.createPersistentSubscriptionToAll = async function (
     filter,
 
     ...baseOptions
-  }: CreatePersistentSubscriptionToAllOptions = {}
+  }: CreatePersistentSubscriptionToAllOptions = {},
 ): Promise<void> {
   if (!(await this.supports(PersistentSubscriptionsService.create, "all"))) {
     throw new UnsupportedError("createPersistentSubscriptionToAll", "21.10");
@@ -142,6 +145,6 @@ Client.prototype.createPersistentSubscriptionToAll = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

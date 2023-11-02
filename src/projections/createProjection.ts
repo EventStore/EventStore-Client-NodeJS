@@ -32,7 +32,7 @@ declare module "../Client" {
     createProjection(
       projectionName: string,
       query: string,
-      options?: CreateProjectionOptions
+      options?: CreateProjectionOptions,
     ): Promise<void>;
   }
 }
@@ -41,7 +41,7 @@ Client.prototype.createProjection = async function (
   this: Client,
   projectionName: string,
   query: string,
-  options: CreateProjectionOptions = {}
+  options: CreateProjectionOptions = {},
 ): Promise<void> {
   debug.command("createProjection: %O", {
     projectionName,
@@ -67,7 +67,7 @@ const createProjectionGRPC = async function (
     emitEnabled = false,
     trackEmittedStreams = false,
     ...baseOptions
-  }: CreateProjectionOptions = {}
+  }: CreateProjectionOptions = {},
 ): Promise<void> {
   const req = new CreateReq();
   const options = new CreateReq.Options();
@@ -93,7 +93,7 @@ const createProjectionGRPC = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };
 
@@ -105,7 +105,7 @@ const createProjectionHTTP = async function (
     emitEnabled = false,
     trackEmittedStreams = false,
     ...baseOptions
-  }: CreateProjectionOptions = {}
+  }: CreateProjectionOptions = {},
 ) {
   await this.HTTPRequest(
     "POST",
@@ -118,6 +118,6 @@ const createProjectionHTTP = async function (
         trackemittedstreams: trackEmittedStreams.toString(),
       },
     },
-    query
+    query,
   );
 };

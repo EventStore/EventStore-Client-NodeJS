@@ -15,7 +15,7 @@ describe("createProjection", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -36,8 +36,8 @@ describe("createProjection", () => {
               return {};
             }
           });
-        `
-      )
+        `,
+      ),
     ).resolves.toBeUndefined();
   });
 
@@ -62,7 +62,7 @@ describe("createProjection", () => {
 
     await client.appendToStream(
       STREAM_NAME,
-      jsonEvent({ type: EVENT_TYPE, data: "anything" })
+      jsonEvent({ type: EVENT_TYPE, data: "anything" }),
     );
 
     await delay(500);
@@ -74,7 +74,7 @@ describe("createProjection", () => {
 
     try {
       for await (const e of client.readStream(
-        `$projections-${PROJECTION_NAME}-emittedstreams`
+        `$projections-${PROJECTION_NAME}-emittedstreams`,
       )) {
         expect(e).toBe("UNREACHABLE");
       }
@@ -105,7 +105,7 @@ describe("createProjection", () => {
 
     await client.appendToStream(
       STREAM_NAME,
-      jsonEvent({ type: EVENT_TYPE, data: "anything" })
+      jsonEvent({ type: EVENT_TYPE, data: "anything" }),
     );
 
     await delay(500);
@@ -116,7 +116,7 @@ describe("createProjection", () => {
     expect(emitted.event?.type).toBe(EMIT_EVENT_TYPE);
 
     const [emittedStream] = await collect(
-      client.readStream(`$projections-${PROJECTION_NAME}-emittedstreams`)
+      client.readStream(`$projections-${PROJECTION_NAME}-emittedstreams`),
     );
 
     expect(emittedStream).toBeDefined();

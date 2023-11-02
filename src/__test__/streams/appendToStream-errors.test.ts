@@ -26,7 +26,7 @@ describe("appendToStream - errors", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri, throwOnAppendFailure: true },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -49,7 +49,7 @@ describe("appendToStream - errors", () => {
           jsonTestEvents(),
           {
             expectedRevision: "no_stream",
-          }
+          },
         );
 
         expect(result).toBe("unreachable");
@@ -73,7 +73,7 @@ describe("appendToStream - errors", () => {
       try {
         const result = await client.appendToStream(
           STREAM_NAME,
-          jsonTestEvents()
+          jsonTestEvents(),
         );
 
         expect(result).toBe("unreachable");
@@ -103,7 +103,7 @@ describe("appendToStream - errors", () => {
           jsonTestEvents(),
           {
             credentials: { username: "AzureDiamond", password: "hunter2" },
-          }
+          },
         );
 
         expect(result).toBe("unreachable");
@@ -131,7 +131,7 @@ describe("appendToStream - errors", () => {
       try {
         const result = await client.appendToStream(
           STREAM_NAME,
-          jsonTestEvents(40_000)
+          jsonTestEvents(40_000),
         );
 
         expect(result).toBe("unreachable");

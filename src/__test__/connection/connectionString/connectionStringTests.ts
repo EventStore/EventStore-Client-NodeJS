@@ -36,13 +36,13 @@ export const connectionStringTests = ({
 
       const appendResult = await client.appendToStream(
         STREAM_NAME,
-        jsonTestEvents()
+        jsonTestEvents(),
       );
       await delay(100);
       const readResult = await collect(
         client.readStream(STREAM_NAME, {
           maxCount: 10,
-        })
+        }),
       );
 
       expect(appendResult).toBeDefined();
@@ -54,18 +54,18 @@ export const connectionStringTests = ({
       const uri = createUri(server);
       const query = createQueryString(server);
       const client = EventStoreDBClient.connectionString(
-        `esdb://admin:changeit@${uri}?${query}`
+        `esdb://admin:changeit@${uri}?${query}`,
       );
 
       const appendResult = await client.appendToStream(
         STREAM_NAME,
-        jsonTestEvents()
+        jsonTestEvents(),
       );
       await delay(100);
       const readResult = await collect(
         client.readStream(STREAM_NAME, {
           maxCount: 10,
-        })
+        }),
       );
 
       expect(appendResult).toBeDefined();
@@ -77,7 +77,7 @@ export const connectionStringTests = ({
       const query = createQueryString(server);
       const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${uri}?${query}`;
       await expect(
-        collect(client.readAll({ maxCount: 10 }))
+        collect(client.readAll({ maxCount: 10 })),
       ).resolves.toBeDefined();
     });
   });

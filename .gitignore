@@ -107,5 +107,6 @@ dist
 .DS_Store
 .npmrc
 package-lock.json
+.vscode
 
 src/__test__/utils/instances

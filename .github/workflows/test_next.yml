@@ -13,7 +13,8 @@ jobs:
     name: Test
     uses: ./.github/workflows/tests.yml
     with:
-      version: "ci"
+      cloud_version: "ci"
+      esdb_version: "ci"
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}

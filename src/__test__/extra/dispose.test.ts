@@ -30,7 +30,7 @@ describe("dispose", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -198,7 +198,7 @@ describe("dispose", () => {
       GROUP_NAME,
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
-      })
+      }),
     );
 
     await client.createPersistentSubscriptionToStream(
@@ -206,7 +206,7 @@ describe("dispose", () => {
       GROUP_NAME_2,
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
-      })
+      }),
     );
 
     const handleError = jest.fn((error) => {
@@ -326,7 +326,7 @@ describe("dispose", () => {
       await client.dispose();
       const result2 = await client.appendToStream(
         STREAM_NAME,
-        jsonTestEvents()
+        jsonTestEvents(),
       );
       expect(result2).toBeDefined();
       expect(result2.nextExpectedRevision).toBeGreaterThanOrEqual(0);
@@ -345,14 +345,14 @@ describe("dispose", () => {
         persistentSubscriptionToAllSettingsFromDefaults({
           startFrom: START,
         }),
-        { filter: streamNameFilter({ prefixes: [STREAM_NAME] }) }
+        { filter: streamNameFilter({ prefixes: [STREAM_NAME] }) },
       );
 
       await client.createPersistentSubscriptionToAll(
         GROUP_NAME_2,
         persistentSubscriptionToAllSettingsFromDefaults({
           startFrom: START,
-        })
+        }),
       );
 
       const handleError = jest.fn((error) => {

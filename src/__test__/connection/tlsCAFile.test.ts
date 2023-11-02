@@ -30,10 +30,10 @@ describe("tlsCAFile", () => {
 
     const appendResult = await client.appendToStream(
       STREAM_NAME,
-      jsonTestEvents()
+      jsonTestEvents(),
     );
     const readResult = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 })
+      client.readStream(STREAM_NAME, { maxCount: 10 }),
     );
 
     expect(appendResult).toBeDefined();
@@ -43,7 +43,7 @@ describe("tlsCAFile", () => {
   test("If a file was not found, error should be thrown", () => {
     expect(
       () =>
-        EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCAFile=/some/path.ca`
+        EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCAFile=/some/path.ca`,
     ).toThrowErrorMatchingSnapshot();
   });
 });

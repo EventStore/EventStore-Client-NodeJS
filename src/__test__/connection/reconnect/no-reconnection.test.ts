@@ -1,4 +1,9 @@
-import { createTestCluster, createTestNode, jsonTestEvents } from "@test-utils";
+import {
+  createTestCluster,
+  createTestNode,
+  jsonTestEvents,
+  parseServerVersion,
+} from "@test-utils";
 import {
   jsonEvent,
   EventStoreDBClient,
@@ -24,7 +29,7 @@ describe("reconnect", () => {
         defaultDeadline: Infinity,
       },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
 
     // make successful append to connect to node
@@ -32,24 +37,39 @@ describe("reconnect", () => {
       "my_stream",
       jsonEvent({ type: "first-append", data: { message: "test" } }),
       // batch append triggers reconnect as soon as stream drops, so we need to force regular append
-      { credentials: { username: "admin", password: "changeit" } }
+      { credentials: { username: "admin", password: "changeit" } },
     );
     expect(firstAppend).toBeDefined();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const priorChannel = await (client as any).getChannel();
 
+    const EVENTSTORE_IMAGE = process.env.EVENTSTORE_IMAGE;
+
+    const version = parseServerVersion(EVENTSTORE_IMAGE as string);
+
     // attempt to read a stream that doesn't exist should fail
     await expect(async () => {
       for await (const event of client.readStream("doesn't-exist")) {
         expect(event).toBe("unreachable");
       }
-    }).rejects.toThrowError(StreamNotFoundError);
+    }).rejects.toThrow(StreamNotFoundError);
 
-    // attempt to delete a stream that doesnt exist should fail
-    await expect(client.deleteStream("doesn't-exist")).rejects.toThrowError(
-      WrongExpectedVersionError
-    );
+    if (version.year < 21) {
+      // In versions before 21 the deletion of a non-existent stream returns a
+      // specific position object.
+      expect(await client.deleteStream("doesn't-exist")).toEqual({
+        position: {
+          commit: expect.any(BigInt),
+          prepare: expect.any(BigInt),
+        },
+      });
+    } else {
+      // attempt to delete a stream that doesnt exist should fail
+      await expect(client.deleteStream("doesn't-exist")).rejects.toThrow(
+        WrongExpectedVersionError,
+      );
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const afterChannel = await (client as any).getChannel();
@@ -77,7 +97,7 @@ describe("reconnect", () => {
         defaultDeadline: Infinity,
       },
       { rootCertificate: timeoutNode.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
 
     // make successful append to connect to node
@@ -85,7 +105,7 @@ describe("reconnect", () => {
       "my_stream",
       jsonEvent({ type: "first-append", data: { message: "test" } }),
       // batch append triggers reconnect as soon as stream drops, so we need to force regular append
-      { credentials }
+      { credentials },
     );
     expect(firstAppend).toBeDefined();
 
@@ -99,8 +119,8 @@ describe("reconnect", () => {
           Array.from({ length: i }, () =>
             client.appendToStream(STREAM_NAME, jsonTestEvents(30_000), {
               credentials,
-            })
-          )
+            }),
+          ),
         );
       }
 

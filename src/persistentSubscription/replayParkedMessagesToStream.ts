@@ -19,7 +19,7 @@ export interface ReplayParkedMessagesToStreamOptions extends BaseOptions {
    * When to stop replaying parked messages. Leave undefined to have no limit.
    * @default undefined
    */
-  stopAt?: number | BigInt;
+  stopAt?: number | bigint;
 }
 
 declare module "../Client" {
@@ -33,7 +33,7 @@ declare module "../Client" {
     replayParkedMessagesToStream(
       streamName: string,
       groupName: string,
-      options?: ReplayParkedMessagesToStreamOptions
+      options?: ReplayParkedMessagesToStreamOptions,
     ): Promise<void>;
   }
 }
@@ -42,7 +42,7 @@ Client.prototype.replayParkedMessagesToStream = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  options: ReplayParkedMessagesToStreamOptions = {}
+  options: ReplayParkedMessagesToStreamOptions = {},
 ): Promise<void> {
   debug.command("replayParkedMessagesToStream: %O", {
     streamName,
@@ -57,7 +57,7 @@ Client.prototype.replayParkedMessagesToStream = async function (
       this,
       streamName,
       groupName,
-      options
+      options,
     );
   }
 
@@ -65,7 +65,7 @@ Client.prototype.replayParkedMessagesToStream = async function (
     this,
     streamName,
     groupName,
-    options
+    options,
   );
 };
 
@@ -73,7 +73,7 @@ const replayParkedMessagesToStreamGRPC = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  { stopAt, ...baseOptions }: ReplayParkedMessagesToStreamOptions = {}
+  { stopAt, ...baseOptions }: ReplayParkedMessagesToStreamOptions = {},
 ) {
   const req = new ReplayParkedReq();
   const options = new ReplayParkedReq.Options();
@@ -103,9 +103,9 @@ const replayParkedMessagesToStreamGRPC = async function (
           (error) => {
             if (error) return reject(convertToCommandError(error));
             return resolve();
-          }
+          },
         );
-      })
+      }),
   );
 };
 
@@ -113,12 +113,12 @@ const replayParkedMessagesToStreamHTTP = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  { stopAt, ...baseOptions }: ReplayParkedMessagesToStreamOptions = {}
+  { stopAt, ...baseOptions }: ReplayParkedMessagesToStreamOptions = {},
 ) {
   await this.HTTPRequest(
     "POST",
     `/subscriptions/${encodeURIComponent(streamName)}/${encodeURIComponent(
-      groupName
+      groupName,
     )}/replayParked`,
     {
       ...baseOptions,
@@ -133,6 +133,6 @@ const replayParkedMessagesToStreamHTTP = async function (
           });
         }
       },
-    }
+    },
   );
 };

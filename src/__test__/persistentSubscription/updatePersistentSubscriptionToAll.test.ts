@@ -26,7 +26,7 @@ describe("updatePersistentSubscriptionToAll", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -41,12 +41,12 @@ describe("updatePersistentSubscriptionToAll", () => {
       try {
         await client.updatePersistentSubscriptionToAll(
           GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults()
+          persistentSubscriptionToAllSettingsFromDefaults(),
         );
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: updatePersistentSubscriptionToAll requires server version 21.10 or higher.]`
+          `[Error: updatePersistentSubscriptionToAll requires server version 21.10 or higher.]`,
         );
       }
     });
@@ -65,7 +65,7 @@ describe("updatePersistentSubscriptionToAll", () => {
         client.updatePersistentSubscriptionToAll(GROUP_NAME, {
           ...settings,
           consumerStrategyName: PINNED,
-        })
+        }),
       ).resolves.toBeUndefined();
     });
   });

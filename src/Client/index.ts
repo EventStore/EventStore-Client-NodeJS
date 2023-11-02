@@ -152,7 +152,7 @@ export class Client {
     const string: string = Array.isArray(connectionString)
       ? connectionString.reduce<string>(
           (acc, chunk, i) => `${acc}${chunk}${parts[i] ?? ""}`,
-          ""
+          "",
         )
       : (connectionString as string);
 
@@ -167,7 +167,7 @@ export class Client {
     if (options.tlsCAFile) {
       if (channelCredentials.insecure) {
         debug.connection(
-          "tslCAFile passed to insecure connection. Will be ignored."
+          "tslCAFile passed to insecure connection. Will be ignored.",
         );
       } else {
         const resolvedPath = isAbsolute(options.tlsCAFile)
@@ -178,7 +178,7 @@ export class Client {
 
         if (!existsSync(resolvedPath)) {
           throw new Error(
-            "Failed to load certificate file. File was not found."
+            "Failed to load certificate file. File was not found.",
           );
         }
 
@@ -191,7 +191,7 @@ export class Client {
 
       if (options.hosts.length > 1) {
         debug.connection(
-          `More than one address provided for discovery. Using first: ${discover.address}:${discover.port}.`
+          `More than one address provided for discovery. Using first: ${discover.address}:${discover.port}.`,
         );
       }
 
@@ -209,7 +209,7 @@ export class Client {
           connectionName: options.connectionName,
         },
         channelCredentials,
-        options.defaultCredentials
+        options.defaultCredentials,
       );
     }
 
@@ -228,7 +228,7 @@ export class Client {
           connectionName: options.connectionName,
         },
         channelCredentials,
-        options.defaultCredentials
+        options.defaultCredentials,
       );
     }
 
@@ -242,24 +242,24 @@ export class Client {
         connectionName: options.connectionName,
       },
       channelCredentials,
-      options.defaultCredentials
+      options.defaultCredentials,
     );
   }
 
   constructor(
     connectionSettings: DNSClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
   );
   constructor(
     connectionSettings: GossipClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
   );
   constructor(
     connectionSettings: SingleNodeOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
   );
   constructor(
     {
@@ -271,29 +271,29 @@ export class Client {
       ...connectionSettings
     }: ConnectionSettings,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
   ) {
     if (keepAliveInterval < -1) {
       throw new Error(
-        `Invalid keepAliveInterval "${keepAliveInterval}". Please provide a positive integer, or -1 to disable.`
+        `Invalid keepAliveInterval "${keepAliveInterval}". Please provide a positive integer, or -1 to disable.`,
       );
     }
 
     if (keepAliveTimeout < -1) {
       throw new Error(
-        `Invalid keepAliveTimeout "${keepAliveTimeout}". Please provide a positive integer, or -1 to disable.`
+        `Invalid keepAliveTimeout "${keepAliveTimeout}". Please provide a positive integer, or -1 to disable.`,
       );
     }
 
     if (keepAliveInterval > -1 && keepAliveInterval < 10_000) {
       console.warn(
-        `Specified KeepAliveInterval of ${keepAliveInterval} is less than recommended 10_000 ms.`
+        `Specified KeepAliveInterval of ${keepAliveInterval} is less than recommended 10_000 ms.`,
       );
     }
 
     if (defaultDeadline <= 0) {
       throw new Error(
-        `Invalid defaultDeadline "${defaultDeadline}". Please provide a positive integer.`
+        `Invalid defaultDeadline "${defaultDeadline}". Please provide a positive integer.`,
       );
     }
 
@@ -313,13 +313,13 @@ export class Client {
     } else {
       debug.connection(
         "Using secure channel with credentials %O",
-        channelCredentials
+        channelCredentials,
       );
       this.#channelCredentials = grpcCredentials.createSsl(
         channelCredentials.rootCertificate,
         channelCredentials.privateKey,
         channelCredentials.certChain,
-        channelCredentials.verifyOptions
+        channelCredentials.verifyOptions,
       );
     }
   }
@@ -335,7 +335,7 @@ export class Client {
   // Internal access to grpc client.
   private getGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>,
-    debugName: string
+    debugName: string,
   ): Promise<T> => {
     if (this.#grpcClients.has(Client)) {
       debug.connection("Using existing grpc client for %s", debugName);
@@ -355,7 +355,7 @@ export class Client {
       Client: GRPCClientConstructor<Client>,
       debugName: string,
       creator: (client: Client) => T | Promise<T>,
-      cache?: WeakMap<Client, T | Promise<T>>
+      cache?: WeakMap<Client, T | Promise<T>>,
     ) =>
     async (): Promise<T> => {
       const client = await this.getGRPCClient(Client, debugName);
@@ -388,7 +388,7 @@ export class Client {
       promises.push(
         new Promise((resolve) => {
           finished(stream, resolve);
-        })
+        }),
       );
 
       if (
@@ -412,7 +412,7 @@ export class Client {
   protected execute = async <Client extends GRPCClient, T>(
     Client: GRPCClientConstructor<Client>,
     debugName: string,
-    action: (client: Client) => Promise<T>
+    action: (client: Client) => Promise<T>,
   ): Promise<T> => {
     const client = await this.getGRPCClient(Client, debugName);
     try {
@@ -439,7 +439,7 @@ export class Client {
   };
 
   private createGRPCClient = async <T extends GRPCClient>(
-    Client: GRPCClientConstructor<T>
+    Client: GRPCClientConstructor<T>,
   ): Promise<T> => {
     const channelOverride: GRPCClientOptions["channelOverride"] =
       await this.getChannel();
@@ -449,14 +449,14 @@ export class Client {
       null as never,
       {
         channelOverride,
-      } as GRPCClientOptions
+      } as GRPCClientOptions,
     );
 
     return client;
   };
 
   private shouldReconnect = (
-    err: Error
+    err: Error,
   ): [shouldReconnect: boolean, to?: EndPoint] => {
     const error = convertToCommandError(err);
 
@@ -474,7 +474,7 @@ export class Client {
 
   protected handleError = async (
     client: GRPCClient,
-    error: Error
+    error: Error,
   ): Promise<void> => {
     const [shouldReconnect, nextEndpoint] = this.shouldReconnect(error);
 
@@ -490,7 +490,7 @@ export class Client {
     }
 
     debug.connection(
-      `Reconnection required${nextEndpoint ? ` to: ${nextEndpoint}` : ""}`
+      `Reconnection required${nextEndpoint ? ` to: ${nextEndpoint}` : ""}`,
     );
 
     const [_protocol, address, port] = failedChannel.getTarget().split(":");
@@ -515,7 +515,7 @@ export class Client {
       `Connecting to http${
         this.#channelCredentials._isSecure() ? "s" : ""
       }://%s`,
-      uri
+      uri,
     );
 
     this.#nextChannelSettings = undefined;
@@ -550,7 +550,7 @@ export class Client {
       const { address, port } = await discoverEndpoint(
         this.#connectionSettings,
         this.#channelCredentials,
-        this.#nextChannelSettings?.failedEndpoint
+        this.#nextChannelSettings?.failedEndpoint,
       );
       return `${address}:${port}`;
     } catch (error) {
@@ -572,7 +572,7 @@ export class Client {
 
       if (this.#insecure) {
         debug.connection(
-          "Credentials are unsupported in insecure mode, and will be ignored."
+          "Credentials are unsupported in insecure mode, and will be ignored.",
         );
       } else {
         const auth = Buffer.from(`${username}:${password}`).toString("base64");
@@ -588,7 +588,7 @@ export class Client {
       requiresLeader,
       deadline,
     }: BaseOptions,
-    callOptions?: CallOptions
+    callOptions?: CallOptions,
   ): [Metadata, CallOptions] => {
     const metadata = new Metadata();
     const options = callOptions ? { ...callOptions } : {};
@@ -601,7 +601,7 @@ export class Client {
 
     if (credentials) {
       options.credentials = grpcCallCredentials.createFromMetadataGenerator(
-        this.createCredentialsMetadataGenerator(credentials)
+        this.createCredentialsMetadataGenerator(credentials),
       );
     }
 
@@ -619,7 +619,7 @@ export class Client {
     if (!this.#serverFeatures) {
       debug.command("Fetching server capabilities");
       this.#serverFeatures = this.execute(
-        ...ServerFeatures.createServerFeatures
+        ...ServerFeatures.createServerFeatures,
       );
     }
     return this.#serverFeatures;
@@ -628,7 +628,7 @@ export class Client {
   protected supports = async (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     method: MethodDefinition<any, any>,
-    feature?: string
+    feature?: string,
   ): Promise<boolean> => (await this.capabilities).supports(method, feature);
 
   protected get throwOnAppendFailure(): boolean {

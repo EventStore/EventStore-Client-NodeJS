@@ -21,7 +21,7 @@ describe("typed events should compile", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -32,15 +32,15 @@ describe("typed events should compile", () => {
   test("stream agregator", async () => {
     type EventAggregator<Aggregate, E extends EventType> = (
       currentState: Aggregate | undefined,
-      event: RecordedEvent<E>
+      event: RecordedEvent<E>,
     ) => Aggregate;
 
     const createStreamAggregator =
       <Entity, StreamEvents extends EventType>(
-        when: EventAggregator<Entity, StreamEvents>
+        when: EventAggregator<Entity, StreamEvents>,
       ) =>
       async (
-        eventStream: StreamingRead<ResolvedEvent<StreamEvents>>
+        eventStream: StreamingRead<ResolvedEvent<StreamEvents>>,
       ): Promise<Entity> => {
         let currentState: Entity | undefined = undefined;
         for await (const { event } of eventStream) {
@@ -124,7 +124,7 @@ describe("typed events should compile", () => {
 
     const addProductItem = (
       inventory: ProductItems,
-      { productId, quantity }: ProductItem
+      { productId, quantity }: ProductItem,
     ): ProductItems => {
       const current = inventory.get(productId);
 
@@ -140,7 +140,7 @@ describe("typed events should compile", () => {
 
     const removeProductItem = (
       inventory: ProductItems,
-      { productId, quantity }: ProductItem
+      { productId, quantity }: ProductItem,
     ): ProductItems => {
       const current = inventory.get(productId);
 
@@ -162,7 +162,7 @@ describe("typed events should compile", () => {
     const create =
       <Command, StreamEvent extends JSONEventType>(
         client: EventStoreDBClient,
-        handle: (command: Command) => StreamEvent
+        handle: (command: Command) => StreamEvent,
       ) =>
       (streamName: string, command: Command): Promise<AppendResult> => {
         const event = handle(command);
@@ -202,7 +202,7 @@ describe("typed events should compile", () => {
             ...currentState,
             productItems: addProductItem(
               currentState.productItems,
-              event.data.productItem
+              event.data.productItem,
             ),
           };
         case "product-item-removed-from-shopping-cart":
@@ -210,7 +210,7 @@ describe("typed events should compile", () => {
             ...currentState,
             productItems: removeProductItem(
               currentState.productItems,
-              event.data.productItem
+              event.data.productItem,
             ),
           };
         case "shopping-cart-confirmed":
@@ -295,11 +295,11 @@ describe("typed events should compile", () => {
 
     await client.appendToStream<ShoppingCartEvent>(
       `shoppingcart-${shoppingCartId}`,
-      jsonEvents
+      jsonEvents,
     );
 
     const shoppingCartStream = client.readStream<ShoppingCartEvent>(
-      `shoppingcart-${shoppingCartId}`
+      `shoppingcart-${shoppingCartId}`,
     );
 
     const cart = await shoppingCartAggregator(shoppingCartStream);

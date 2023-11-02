@@ -26,7 +26,7 @@ describe("listPersistentSubscriptions", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -53,7 +53,7 @@ describe("listPersistentSubscriptions", () => {
           consumerStrategyName: ROUND_ROBIN,
         },
         {},
-      ]
+      ],
     );
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
@@ -92,7 +92,7 @@ describe("listPersistentSubscriptions", () => {
           maxRetryCount: 12,
         },
         {},
-      ]
+      ],
     );
 
     const groupNameOfInterest = created[0][1];
@@ -102,7 +102,7 @@ describe("listPersistentSubscriptions", () => {
     const subscription = client
       .subscribeToPersistentSubscriptionToStream(
         STREAM_NAME,
-        groupNameOfInterest
+        groupNameOfInterest,
       )
       .on("error", jest.fn())
       .on("data", async (e) => {
@@ -151,7 +151,7 @@ describe("listPersistentSubscriptions", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: 5 NOT_FOUND: Subscription group  on stream does_not_exist_list_stream_name does not exist.]`
+          `[Error: 5 NOT_FOUND: Subscription group  on stream does_not_exist_list_stream_name does not exist.]`,
         );
 
         if (error instanceof PersistentSubscriptionDoesNotExistError) {

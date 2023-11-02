@@ -18,14 +18,14 @@ declare module "../Client" {
      * @param options Restart subsystem options.
      */
     restartPersistentSubscriptionSubsystem(
-      options?: RestartPersistentSubscriptionSubsystemOptions
+      options?: RestartPersistentSubscriptionSubsystemOptions,
     ): Promise<void>;
   }
 }
 
 Client.prototype.restartPersistentSubscriptionSubsystem = async function (
   this: Client,
-  options: RestartPersistentSubscriptionSubsystemOptions = {}
+  options: RestartPersistentSubscriptionSubsystemOptions = {},
 ): Promise<void> {
   debug.command("restartPersistentSubscriptionSubsystem: %O", {
     options,
@@ -40,7 +40,7 @@ Client.prototype.restartPersistentSubscriptionSubsystem = async function (
 
 const restartPersistentSubscriptionSubsystemGRPC = async function (
   this: Client,
-  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {}
+  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {},
 ): Promise<void> {
   const req = new Empty();
 
@@ -57,15 +57,15 @@ const restartPersistentSubscriptionSubsystemGRPC = async function (
           (error) => {
             if (error) return reject(convertToCommandError(error));
             return resolve();
-          }
+          },
         );
-      })
+      }),
   );
 };
 
 const restartPersistentSubscriptionSubsystemHTTP = async function (
   this: Client,
-  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {}
+  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {},
 ): Promise<void> {
   await this.HTTPRequest<string>("POST", "/subscriptions/restart", baseOptions);
 };

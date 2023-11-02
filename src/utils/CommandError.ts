@@ -95,7 +95,7 @@ export class StreamNotFoundError extends CommandErrorBase {
 
   static nameToString = (
     error?: ServiceError,
-    streamName?: string | Uint8Array
+    streamName?: string | Uint8Array,
   ): string => {
     const name = streamName ?? error?.metadata?.getMap()["stream-name"] ?? "";
     if (typeof name === "string") return name;
@@ -105,7 +105,7 @@ export class StreamNotFoundError extends CommandErrorBase {
   constructor(error?: ServiceError, streamName?: string | Uint8Array) {
     super(
       error,
-      `${StreamNotFoundError.nameToString(error, streamName)} not found`
+      `${StreamNotFoundError.nameToString(error, streamName)} not found`,
     );
 
     this.streamName = StreamNotFoundError.nameToString(error, streamName);
@@ -172,7 +172,7 @@ export class WrongExpectedVersionError extends CommandErrorBase {
 
   static fromWrongExpectedVersion = (
     details: WrongExpectedVersion,
-    streamName: string
+    streamName: string,
   ) => {
     let expected: AppendExpectedRevision = "any";
     switch (true) {
@@ -236,7 +236,7 @@ export class MaxAppendSizeExceededError extends CommandErrorBase {
       const metadata = error.metadata!.getMap();
       this.maxAppendSize = parseInt(
         metadata["maximum-append-size"].toString(),
-        10
+        10,
       );
     } else {
       this.maxAppendSize = maxAppendSize!;
@@ -287,11 +287,11 @@ export class PersistentSubscriptionDoesNotExistError extends CommandErrorBase {
   constructor(error: ServiceError);
   constructor(
     error: undefined,
-    metadata: PersistentSubscriptionDoesNotExistMeta
+    metadata: PersistentSubscriptionDoesNotExistMeta,
   );
   constructor(
     error?: ServiceError,
-    passedMetadata?: PersistentSubscriptionDoesNotExistMeta
+    passedMetadata?: PersistentSubscriptionDoesNotExistMeta,
   ) {
     super(
       error,
@@ -299,7 +299,7 @@ export class PersistentSubscriptionDoesNotExistError extends CommandErrorBase {
         ? `5 NOT_FOUND: Subscription group ${
             passedMetadata.groupName ?? ""
           } on stream ${passedMetadata.streamName} does not exist.`
-        : undefined
+        : undefined,
     );
 
     if (passedMetadata) {
@@ -385,7 +385,7 @@ export class UnsupportedError extends CommandErrorBase {
   constructor(feature: string, minimumVersion: string) {
     super(
       undefined,
-      `${feature} requires server version ${minimumVersion} or higher.`
+      `${feature} requires server version ${minimumVersion} or higher.`,
     );
     this.feature = feature;
     this.minimumVersion = minimumVersion;

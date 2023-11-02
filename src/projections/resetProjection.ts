@@ -17,7 +17,7 @@ declare module "../Client" {
      */
     resetProjection(
       projectionName: string,
-      options?: ResetProjectionOptions
+      options?: ResetProjectionOptions,
     ): Promise<void>;
   }
 }
@@ -25,7 +25,7 @@ declare module "../Client" {
 Client.prototype.resetProjection = async function (
   this: Client,
   projectionName: string,
-  baseOptions: ResetProjectionOptions = {}
+  baseOptions: ResetProjectionOptions = {},
 ): Promise<void> {
   const req = new ResetReq();
   const options = new ResetReq.Options();
@@ -49,6 +49,6 @@ Client.prototype.resetProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

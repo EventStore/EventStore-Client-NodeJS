@@ -44,7 +44,7 @@ declare module "../Client" {
      */
     subscribeToAll(
       options?: SubscribeToAllOptions,
-      readableOptions?: ReadableOptions
+      readableOptions?: ReadableOptions,
     ): AllStreamSubscription;
   }
 }
@@ -57,7 +57,7 @@ Client.prototype.subscribeToAll = function (
     filter,
     ...baseOptions
   }: SubscribeToAllOptions = {},
-  readableOptions: ReadableOptions = {}
+  readableOptions: ReadableOptions = {},
 ): AllStreamSubscription {
   const req = new ReadReq();
   const options = new ReadReq.Options();
@@ -155,14 +155,14 @@ Client.prototype.subscribeToAll = function (
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
-        })
-      )
+        }),
+      ),
   );
 
   return new Subscription(
     createGRPCStream,
     convertGrpcEvent,
     readableOptions,
-    filter?.checkpointReached
+    filter?.checkpointReached,
   );
 };

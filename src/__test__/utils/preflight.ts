@@ -28,6 +28,7 @@ const pullImage = async (image: string) => {
     await exec(`docker pull ${image}`);
   } catch (error) {
     console.error(`\x1b[1m\x1b[91mFailed to pull ${image}\x1b[39m\x1b[22m`);
+    console.log(error);
     process.exit(1);
   }
 };

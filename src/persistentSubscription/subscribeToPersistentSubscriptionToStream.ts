@@ -38,13 +38,13 @@ declare module "../Client" {
       streamName: string,
       groupName: string,
       options?: SubscribeToPersistentSubscriptionToStreamOptions,
-      duplexOptions?: DuplexOptions
+      duplexOptions?: DuplexOptions,
     ): PersistentSubscriptionToStream<E>;
   }
 }
 
 Client.prototype.subscribeToPersistentSubscriptionToStream = function <
-  E extends EventType = EventType
+  E extends EventType = EventType,
 >(
   this: Client,
   streamName: string,
@@ -53,7 +53,7 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
     bufferSize = 10,
     ...baseOptions
   }: SubscribeToPersistentSubscriptionToStreamOptions = {},
-  duplexOptions: DuplexOptions = {}
+  duplexOptions: DuplexOptions = {},
 ): PersistentSubscriptionToStream<E> {
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
@@ -82,19 +82,19 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
         });
         debug.command_grpc(
           "subscribeToPersistentSubscriptionToStream: %g",
-          req
+          req,
         );
 
         const stream = client.read(
           ...this.callArguments(baseOptions, {
             deadline: Infinity,
-          })
+          }),
         );
         stream.write(req);
         return stream;
-      }
+      },
     ),
     convertPersistentSubscriptionGrpcEvent,
-    duplexOptions
+    duplexOptions,
   );
 };

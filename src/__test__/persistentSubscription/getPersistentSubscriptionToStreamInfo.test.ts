@@ -23,7 +23,7 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
         connectionName: "getPersistentSubscriptionInfo test client",
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -43,12 +43,12 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
     await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      settings
+      settings,
     );
 
     const info = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
-      GROUP_NAME
+      GROUP_NAME,
     );
 
     expect(info.eventSource).toBe(STREAM_NAME);
@@ -68,12 +68,12 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
     await client.updatePersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      settings2
+      settings2,
     );
 
     const info2 = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
-      GROUP_NAME
+      GROUP_NAME,
     );
 
     expect(info2.eventSource).toBe(STREAM_NAME);
@@ -99,7 +99,7 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
 
     const info3 = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
-      GROUP_NAME
+      GROUP_NAME,
     );
 
     expect(info3.eventSource).toBe(STREAM_NAME);
@@ -125,7 +125,7 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
     await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      settings
+      settings,
     );
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
@@ -141,7 +141,7 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
 
     const info = await client.getPersistentSubscriptionToStreamInfo(
       STREAM_NAME,
-      GROUP_NAME
+      GROUP_NAME,
     );
 
     await subscription.unsubscribe();
@@ -173,13 +173,13 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
       try {
         await client.getPersistentSubscriptionToStreamInfo(
           STREAM_NAME,
-          GROUP_NAME
+          GROUP_NAME,
         );
         throw "unreachable";
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: 5 NOT_FOUND: Subscription group does_not_exist_get_info_group_name on stream does_not_exist_get_info_stream_name does not exist.]`
+          `[Error: 5 NOT_FOUND: Subscription group does_not_exist_get_info_group_name on stream does_not_exist_get_info_stream_name does not exist.]`,
         );
 
         if (error instanceof PersistentSubscriptionDoesNotExistError) {
@@ -199,7 +199,7 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
           GROUP_NAME,
           {
             credentials: { username: "AzureDiamond", password: "hunter2" },
-          }
+          },
         );
         throw "unreachable";
       } catch (error) {

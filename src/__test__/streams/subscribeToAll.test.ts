@@ -31,7 +31,7 @@ describe("subscribeToAll", () => {
       {
         rootCertificate: node.rootCertificate,
       },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents(4));
@@ -169,7 +169,7 @@ describe("subscribeToAll", () => {
         jsonEvent({
           type: MARKER_EVENT,
           data: { message: "mark my words" },
-        })
+        }),
       );
 
       await client.appendToStream(STREAM_NAME_A, jsonTestEvents(3));
@@ -254,7 +254,7 @@ describe("subscribeToAll", () => {
 
       const appendResult = await client.appendToStream(
         STREAM_NAME_B,
-        markerEvent
+        markerEvent,
       );
 
       client.appendToStream(STREAM_NAME, [...jsonTestEvents(8), finishEvent]);
@@ -302,7 +302,7 @@ describe("subscribeToAll", () => {
 
       const appendResult = await client.appendToStream(
         STREAM_NAME_B,
-        markerEvent
+        markerEvent,
       );
 
       const subscription = client.subscribeToAll({
@@ -326,7 +326,7 @@ describe("subscribeToAll", () => {
 
           if (event.event.isJson) {
             readEvents.add(
-              (event.event.data as unknown as TestEventData).index
+              (event.event.data as unknown as TestEventData).index,
             );
           }
         }
@@ -367,7 +367,7 @@ describe("subscribeToAll", () => {
 
       const appendResult = await client.appendToStream(
         STREAM_NAME,
-        markerEvent
+        markerEvent,
       );
 
       const eventListenerOne = jest.fn();

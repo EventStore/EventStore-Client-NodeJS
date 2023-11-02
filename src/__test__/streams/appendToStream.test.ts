@@ -26,7 +26,7 @@ describe("appendToStream", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -51,7 +51,7 @@ describe("appendToStream", () => {
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.rootCertificate },
-        { username: "admin", password: "changeit" }
+        { username: "admin", password: "changeit" },
       );
 
       await client.appendToStream(
@@ -59,7 +59,7 @@ describe("appendToStream", () => {
         jsonEvent({
           type: EVENT_TYPE,
           data: KILLER,
-        })
+        }),
       );
 
       let count = 0;
@@ -77,7 +77,7 @@ describe("appendToStream", () => {
 
       const result = await client.appendToStream(
         STREAM_NAME,
-        binaryTestEvents()
+        binaryTestEvents(),
       );
 
       expect(result).toBeDefined();
@@ -97,18 +97,18 @@ describe("appendToStream", () => {
         binaryEvent({
           type: "$>",
           data: Buffer.from(`${LINK_REVISION}@${LINK_TO_STREAM_NAME}`),
-        })
+        }),
       );
 
       const [trueEvent] = await collect(
         client.readStream(LINK_TO_STREAM_NAME, {
           fromRevision: LINK_REVISION,
           maxCount: 1,
-        })
+        }),
       );
 
       const [linkEvent] = await collect(
-        client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
+        client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true }),
       );
 
       expect(trueEvent.event).toBeDefined();
@@ -384,7 +384,7 @@ describe("appendToStream", () => {
             jsonTestEvents(),
             {
               expectedRevision: ANY,
-            }
+            },
           );
 
           expect(result).toBeDefined();
@@ -401,7 +401,7 @@ describe("appendToStream", () => {
             jsonTestEvents(),
             {
               expectedRevision: NO_STREAM,
-            }
+            },
           );
 
           expect(result).toBeDefined();
@@ -419,7 +419,7 @@ describe("appendToStream", () => {
               jsonTestEvents(),
               {
                 expectedRevision: "no_stream",
-              }
+              },
             );
 
             expect(result).toBe("unreachable");
@@ -446,7 +446,7 @@ describe("appendToStream", () => {
             jsonTestEvents(),
             {
               expectedRevision: STREAM_EXISTS,
-            }
+            },
           );
           expect(result).toBeDefined();
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
@@ -461,7 +461,7 @@ describe("appendToStream", () => {
               jsonTestEvents(),
               {
                 expectedRevision: STREAM_EXISTS,
-              }
+              },
             );
 
             expect(result).toBe("unreachable");
@@ -483,7 +483,7 @@ describe("appendToStream", () => {
 
           const { nextExpectedRevision } = await client.appendToStream(
             STREAM_NAME,
-            jsonTestEvents()
+            jsonTestEvents(),
           );
 
           const result = await client.appendToStream(
@@ -491,7 +491,7 @@ describe("appendToStream", () => {
             jsonTestEvents(),
             {
               expectedRevision: nextExpectedRevision,
-            }
+            },
           );
 
           expect(result).toBeDefined();
@@ -506,7 +506,7 @@ describe("appendToStream", () => {
               const result = await client.appendToStream(
                 STREAM_NAME,
                 jsonTestEvents(),
-                { expectedRevision: BigInt(1) }
+                { expectedRevision: BigInt(1) },
               );
 
               expect(result).toBe("unreachable");
@@ -526,7 +526,7 @@ describe("appendToStream", () => {
 
             const { nextExpectedRevision } = await client.appendToStream(
               STREAM_NAME,
-              jsonTestEvents()
+              jsonTestEvents(),
             );
 
             try {
@@ -535,7 +535,7 @@ describe("appendToStream", () => {
                 jsonTestEvents(),
                 {
                   expectedRevision: nextExpectedRevision + BigInt(1),
-                }
+                },
               );
 
               expect(result).toBe("unreachable");
@@ -545,7 +545,7 @@ describe("appendToStream", () => {
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
                 expect(error.expectedVersion).toBe(
-                  nextExpectedRevision + BigInt(1)
+                  nextExpectedRevision + BigInt(1),
                 );
                 expect(error.actualVersion).toBe(nextExpectedRevision);
               }
@@ -561,7 +561,7 @@ describe("appendToStream", () => {
       const throwingClient = new EventStoreDBClient(
         { endpoint: node.uri, throwOnAppendFailure: true },
         { rootCertificate: node.rootCertificate },
-        { username: "admin", password: "changeit" }
+        { username: "admin", password: "changeit" },
       );
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
@@ -574,7 +574,7 @@ describe("appendToStream", () => {
           jsonTestEvents(),
           {
             expectedRevision: "no_stream",
-          }
+          },
         );
 
         expect(result).toBe("unreachable");
@@ -593,7 +593,7 @@ describe("appendToStream", () => {
       const nonThrowingClient = new EventStoreDBClient(
         { endpoint: node.uri, throwOnAppendFailure: false },
         { rootCertificate: node.rootCertificate },
-        { username: "admin", password: "changeit" }
+        { username: "admin", password: "changeit" },
       );
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";
@@ -605,7 +605,7 @@ describe("appendToStream", () => {
         jsonTestEvents(),
         {
           expectedRevision: "no_stream",
-        }
+        },
       );
 
       expect(result.success).toBe(false);

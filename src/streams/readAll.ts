@@ -22,7 +22,7 @@ export interface ReadAllOptions extends BaseOptions {
    * The number of events to read.
    * @default Number.MAX_SAFE_INTEGER
    */
-  maxCount?: number | BigInt;
+  maxCount?: number | bigint;
   /**
    * Starts the read at the given position.
    * @default START
@@ -51,7 +51,7 @@ declare module "../Client" {
      */
     readAll(
       options?: ReadAllOptions,
-      readableOptions?: ReadableOptions
+      readableOptions?: ReadableOptions,
     ): StreamingRead<AllStreamResolvedEvent>;
   }
 }
@@ -65,7 +65,7 @@ Client.prototype.readAll = function (
     direction = FORWARDS,
     ...baseOptions
   }: ReadAllOptions = {},
-  readableOptions: ReadableOptions = {}
+  readableOptions: ReadableOptions = {},
 ): StreamingRead<AllStreamResolvedEvent> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
@@ -132,8 +132,8 @@ Client.prototype.readAll = function (
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
-        })
-      )
+        }),
+      ),
   );
 
   return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);

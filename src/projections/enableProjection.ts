@@ -16,7 +16,7 @@ declare module "../Client" {
      */
     enableProjection(
       projectionName: string,
-      options?: EnableProjectionOptions
+      options?: EnableProjectionOptions,
     ): Promise<void>;
   }
 }
@@ -24,7 +24,7 @@ declare module "../Client" {
 Client.prototype.enableProjection = async function (
   this: Client,
   projectionName: string,
-  baseOptions: EnableProjectionOptions = {}
+  baseOptions: EnableProjectionOptions = {},
 ): Promise<void> {
   const req = new EnableReq();
   const options = new EnableReq.Options();
@@ -48,6 +48,6 @@ Client.prototype.enableProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

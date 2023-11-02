@@ -42,13 +42,13 @@ declare module "../Client" {
     subscribeToStream<KnownEventType extends EventType = EventType>(
       streamName: string,
       options?: SubscribeToStreamOptions,
-      readableOptions?: ReadableOptions
+      readableOptions?: ReadableOptions,
     ): StreamSubscription<KnownEventType>;
   }
 }
 
 Client.prototype.subscribeToStream = function <
-  KnownEventType extends EventType = EventType
+  KnownEventType extends EventType = EventType,
 >(
   this: Client,
   streamName: string,
@@ -57,7 +57,7 @@ Client.prototype.subscribeToStream = function <
     resolveLinkTos = false,
     ...baseOptions
   }: SubscribeToStreamOptions = {},
-  readableOptions: ReadableOptions = {}
+  readableOptions: ReadableOptions = {},
 ): StreamSubscription<KnownEventType> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
@@ -111,8 +111,8 @@ Client.prototype.subscribeToStream = function <
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
-        })
-      )
+        }),
+      ),
   );
 
   return new Subscription(createGRPCStream, convertGrpcEvent, readableOptions);

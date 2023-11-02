@@ -28,7 +28,7 @@ export interface ReadStreamOptions extends BaseOptions {
    * The number of events to read.
    * @default Number.MAX_SAFE_INTEGER
    */
-  maxCount?: number | BigInt;
+  maxCount?: number | bigint;
   /**
    * Starts the read at the given event revision.
    * @default START
@@ -58,13 +58,13 @@ declare module "../Client" {
     readStream<KnownEventType extends EventType = EventType>(
       streamName: string,
       options?: ReadStreamOptions,
-      readableOptions?: ReadableOptions
+      readableOptions?: ReadableOptions,
     ): StreamingRead<ResolvedEvent<KnownEventType>>;
   }
 }
 
 Client.prototype.readStream = function <
-  KnownEventType extends EventType = EventType
+  KnownEventType extends EventType = EventType,
 >(
   this: Client,
   streamName: string,
@@ -75,7 +75,7 @@ Client.prototype.readStream = function <
     direction = FORWARDS,
     ...baseOptions
   }: ReadStreamOptions = {},
-  readableOptions: ReadableOptions = {}
+  readableOptions: ReadableOptions = {},
 ): StreamingRead<ResolvedEvent<KnownEventType>> {
   const req = new ReadReq();
   const options = new ReadReq.Options();
@@ -101,13 +101,13 @@ Client.prototype.readStream = function <
 
       if (fromRevision < lowerBound) {
         throw new InvalidArgumentError(
-          `fromRevision value must be a non-negative integer. Value Received: ${fromRevision}`
+          `fromRevision value must be a non-negative integer. Value Received: ${fromRevision}`,
         );
       }
 
       if (fromRevision > upperBound) {
         throw new InvalidArgumentError(
-          `fromRevision value must be a non-negative integer, range from 0 to 18446744073709551615. Value Received: ${fromRevision}`
+          `fromRevision value must be a non-negative integer, range from 0 to 18446744073709551615. Value Received: ${fromRevision}`,
         );
       }
 
@@ -155,8 +155,8 @@ Client.prototype.readStream = function <
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
-        })
-      )
+        }),
+      ),
   );
 
   return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);

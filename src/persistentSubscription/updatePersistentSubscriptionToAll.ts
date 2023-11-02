@@ -10,7 +10,10 @@ import { END, START } from "../constants";
 import { Client } from "../Client";
 import type { BaseOptions } from "../types";
 
-import type { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
+import type {
+  PersistentSubscriptionToAllSettings,
+  persistentSubscriptionToAllSettingsFromDefaults,
+} from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 
 export interface UpdatePersistentSubscriptionToAllOptions extends BaseOptions {}
@@ -27,7 +30,7 @@ declare module "../Client" {
     updatePersistentSubscriptionToAll(
       groupName: string,
       settings: PersistentSubscriptionToAllSettings,
-      options?: UpdatePersistentSubscriptionToAllOptions
+      options?: UpdatePersistentSubscriptionToAllOptions,
     ): Promise<void>;
   }
 }
@@ -36,7 +39,7 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
   settings: PersistentSubscriptionToAllSettings,
-  { ...baseOptions }: UpdatePersistentSubscriptionToAllOptions = {}
+  { ...baseOptions }: UpdatePersistentSubscriptionToAllOptions = {},
 ): Promise<void> {
   if (!(await this.supports(PersistentSubscriptionsService.update, "all"))) {
     throw new UnsupportedError("updatePersistentSubscriptionToAll", "21.10");
@@ -87,6 +90,6 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

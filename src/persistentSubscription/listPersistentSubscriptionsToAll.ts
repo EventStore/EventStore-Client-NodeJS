@@ -23,14 +23,14 @@ declare module "../Client" {
      * @param options List persistent subscriptions options.
      */
     listPersistentSubscriptionsToAll(
-      options?: ListPersistentSubscriptionsToAllOptions
+      options?: ListPersistentSubscriptionsToAllOptions,
     ): Promise<PersistentSubscriptionToAllInfo[]>;
   }
 }
 
 Client.prototype.listPersistentSubscriptionsToAll = async function (
   this: Client,
-  baseOptions: ListPersistentSubscriptionsToAllOptions = {}
+  baseOptions: ListPersistentSubscriptionsToAllOptions = {},
 ): Promise<PersistentSubscriptionToAllInfo[]> {
   if (!(await this.supports(PersistentSubscriptionsService.list, "all"))) {
     throw new UnsupportedError("listPersistentSubscriptionsToAll", "21.10.1");
@@ -62,10 +62,10 @@ Client.prototype.listPersistentSubscriptionsToAll = async function (
             return resolve(
               response
                 .getSubscriptionsList()
-                .map((r) => mapPersistentSubscriptionToAllInfo(r))
+                .map((r) => mapPersistentSubscriptionToAllInfo(r)),
             );
-          }
+          },
         );
-      })
+      }),
   );
 };

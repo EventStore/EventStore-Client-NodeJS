@@ -16,7 +16,7 @@ describe("deleteStream", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -37,7 +37,7 @@ describe("deleteStream", () => {
         expect(result).toBeDefined();
 
         await expect(
-          collect(client.readStream(ANY_REVISION_STREAM, { maxCount: 10 }))
+          collect(client.readStream(ANY_REVISION_STREAM, { maxCount: 10 })),
         ).rejects.toThrowError(StreamNotFoundError);
       });
     });
@@ -72,7 +72,7 @@ describe("deleteStream", () => {
               maxCount: 1,
               direction: BACKWARDS,
               fromRevision: "end",
-            })
+            }),
           );
 
           const expectedRevision = events[0].event!.revision;
@@ -84,7 +84,7 @@ describe("deleteStream", () => {
           expect(result).toBeDefined();
 
           await expect(
-            collect(client.readStream(STREAM, { maxCount: 1 }))
+            collect(client.readStream(STREAM, { maxCount: 1 })),
           ).rejects.toThrowError(StreamNotFoundError);
         });
       });

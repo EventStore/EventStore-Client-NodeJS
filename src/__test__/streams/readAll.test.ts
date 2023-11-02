@@ -20,7 +20,7 @@ describe("readAll", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents());
@@ -110,14 +110,14 @@ describe("readAll", () => {
             linkTo('a-' + ev.data.some, ev)
           }
         });`,
-        { emitEnabled: true }
+        { emitEnabled: true },
       );
 
       // Append an event that will be linked
 
       await client.appendToStream(
         FROM_STREAM_NAME,
-        jsonEvent({ type: "linky", data: { some: "thing" } })
+        jsonEvent({ type: "linky", data: { some: "thing" } }),
       );
 
       await delay(1000);
@@ -157,10 +157,10 @@ describe("readAll", () => {
 
       expect(doResolveEvent.event?.id).toBe(
         (noResolveEvent.event as AllStreamBinaryRecordedEvent<LinkEvent>)!
-          .metadata!.$causedBy
+          .metadata!.$causedBy,
       );
       expect(doResolveEvent.event?.id).toBe(
-        doResolveEvent.link!.metadata.$causedBy
+        doResolveEvent.link!.metadata.$causedBy,
       );
     });
   });

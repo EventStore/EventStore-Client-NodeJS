@@ -14,7 +14,7 @@ export interface ReplayParkedMessagesToAllOptions extends BaseOptions {
    * When to stop replaying parked messages. Leave undefined to have no limit.
    * @default undefined
    */
-  stopAt?: number | BigInt;
+  stopAt?: number | bigint;
 }
 
 declare module "../Client" {
@@ -26,7 +26,7 @@ declare module "../Client" {
      */
     replayParkedMessagesToAll(
       groupName: string,
-      options?: ReplayParkedMessagesToAllOptions
+      options?: ReplayParkedMessagesToAllOptions,
     ): Promise<void>;
   }
 }
@@ -34,7 +34,7 @@ declare module "../Client" {
 Client.prototype.replayParkedMessagesToAll = async function (
   this: Client,
   groupName: string,
-  { stopAt, ...baseOptions }: ReplayParkedMessagesToAllOptions = {}
+  { stopAt, ...baseOptions }: ReplayParkedMessagesToAllOptions = {},
 ): Promise<void> {
   if (
     !(await this.supports(PersistentSubscriptionsService.replayParked, "all"))
@@ -72,8 +72,8 @@ Client.prototype.replayParkedMessagesToAll = async function (
           (error) => {
             if (error) return reject(convertToCommandError(error));
             return resolve();
-          }
+          },
         );
-      })
+      }),
   );
 };

@@ -3,7 +3,10 @@ name: tests workflow
 on:
   workflow_call:
     inputs:
-      version:
+      cloud_version:
+        required: true
+        type: string
+      esdb_version:
         required: true
         type: string
     secrets:
@@ -14,7 +17,7 @@ on:
 
 jobs:
   tests:
-    name: "${{ matrix.group.name }}"
+    name: '${{ matrix.group.name }}'
     strategy:
       fail-fast: false
       matrix:
@@ -51,17 +54,17 @@ jobs:
           curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.list | sudo tee /etc/apt/sources.list.d/tailscale.list
           sudo apt-get update
           sudo apt-get install tailscale
-          sudo tailscale up --authkey ${{ secrets.tailscale_auth }} --hostname "node-client-ci-${{ inputs.version }}-$(date +'%Y-%m-%d-%H-%M-%S')" --advertise-tags=tag:ci --accept-routes
+          sudo tailscale up --authkey ${{ secrets.tailscale_auth }} --hostname "node-client-ci-${{ inputs.cloud_version }}-$(date +'%Y-%m-%d-%H-%M-%S')" --advertise-tags=tag:ci --accept-routes
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '16.x'
       - name: Install
         run: yarn
       - name: Run Tests
         run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
-          EVENTSTORE_IMAGE: github:${{ inputs.version }}
+          EVENTSTORE_IMAGE: github:${{ inputs.esdb_version }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.eventstore_cloud_id }}
       - name: Disconnect from tailscale
         if: ${{ always() && matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}

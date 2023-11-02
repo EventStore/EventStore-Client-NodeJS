@@ -36,7 +36,7 @@ declare module "../Client" {
     subscribeToPersistentSubscriptionToAll(
       groupName: string,
       options?: SubscribeToPersistentSubscriptionToAllOptions,
-      duplexOptions?: DuplexOptions
+      duplexOptions?: DuplexOptions,
     ): PersistentSubscriptionToAll;
   }
 }
@@ -48,7 +48,7 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
     bufferSize = 10,
     ...baseOptions
   }: SubscribeToPersistentSubscriptionToAllOptions = {},
-  duplexOptions: DuplexOptions = {}
+  duplexOptions: DuplexOptions = {},
 ): PersistentSubscriptionToAll {
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
@@ -60,7 +60,7 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         ) {
           throw new UnsupportedError(
             "subscribeToPersistentSubscriptionToAll",
-            "21.10"
+            "21.10",
           );
         }
 
@@ -87,13 +87,13 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         const stream = client.read(
           ...this.callArguments(baseOptions, {
             deadline: Infinity,
-          })
+          }),
         );
         stream.write(req);
         return stream;
-      }
+      },
     ),
     convertPersistentSubscriptionGrpcEvent,
-    duplexOptions
+    duplexOptions,
   );
 };

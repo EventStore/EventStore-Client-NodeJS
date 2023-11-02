@@ -26,7 +26,7 @@ declare module "../Client" {
     updateProjection(
       projectionName: string,
       query: string,
-      options?: UpdateProjectionOptions
+      options?: UpdateProjectionOptions,
     ): Promise<void>;
   }
 }
@@ -35,7 +35,7 @@ Client.prototype.updateProjection = async function (
   this: Client,
   projectionName: string,
   query: string,
-  { emitEnabled, ...baseOptions }: UpdateProjectionOptions = {}
+  { emitEnabled, ...baseOptions }: UpdateProjectionOptions = {},
 ): Promise<void> {
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
@@ -67,6 +67,6 @@ Client.prototype.updateProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

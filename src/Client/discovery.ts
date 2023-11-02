@@ -25,7 +25,7 @@ export const discoverEndpoint = async (
     ...settings
   }: DNSClusterOptions | GossipClusterOptions,
   credentials: ChannelCredentials,
-  failedEndpoint?: EndPoint
+  failedEndpoint?: EndPoint,
 ): Promise<EndPoint> => {
   let discoverAttempts = 0;
 
@@ -56,14 +56,14 @@ export const discoverEndpoint = async (
           const members = await listClusterMembers(
             candidate,
             credentials,
-            createDeadline(gossipTimeout)
+            createDeadline(gossipTimeout),
           );
           const endpoint = determineBestNode(nodePreference, members);
           if (endpoint) return Promise.resolve(endpoint);
         } catch (error) {
           debug.connection(
             `Failed to get cluster list from ${candidate.address}:${candidate.port}`,
-            error.toString()
+            error.toString(),
           );
           continue;
         }
@@ -109,7 +109,7 @@ const getPreferedStates = (preference: NodePreference) => {
 
 type CompareFn<T> = (a: T, b: T) => number;
 const compareByPreference = (
-  preference: NodePreference
+  preference: NodePreference,
 ): CompareFn<MemberInfo> => {
   const preferedStates = getPreferedStates(preference);
   return (a, b) =>
@@ -119,7 +119,7 @@ const shuffle: CompareFn<unknown> = () => Math.random() - 0.5;
 
 export const filterAndOrderMembers = (
   preference: NodePreference,
-  members: MemberInfo[]
+  members: MemberInfo[],
 ): MemberInfo[] =>
   members
     .filter(isInAllowedState)
@@ -128,12 +128,12 @@ export const filterAndOrderMembers = (
 
 export const determineBestNode = (
   preference: NodePreference,
-  members: MemberInfo[]
+  members: MemberInfo[],
 ): EndPoint | undefined => {
   debug.connection(
     `Determining best node with preference "%s" from members: %O`,
     preference,
-    members
+    members,
   );
 
   const [chosenMember] = filterAndOrderMembers(preference, members);
@@ -157,7 +157,7 @@ function createDeadline(seconds: number) {
 function listClusterMembers(
   seed: EndPoint,
   credentials: ChannelCredentials,
-  deadline: Date
+  deadline: Date,
 ): Promise<MemberInfo[]> {
   const uri = `${seed.address}:${seed.port}`;
   const client = new GossipClient(uri, credentials, {});

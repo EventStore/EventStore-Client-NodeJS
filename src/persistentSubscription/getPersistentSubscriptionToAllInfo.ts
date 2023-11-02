@@ -25,7 +25,7 @@ declare module "../Client" {
      */
     getPersistentSubscriptionToAllInfo(
       groupName: string,
-      options?: GetPersistentSubscriptionToAllInfoOptions
+      options?: GetPersistentSubscriptionToAllInfoOptions,
     ): Promise<PersistentSubscriptionToAllInfo>;
   }
 }
@@ -33,7 +33,7 @@ declare module "../Client" {
 Client.prototype.getPersistentSubscriptionToAllInfo = async function (
   this: Client,
   groupName: string,
-  baseOptions: GetPersistentSubscriptionToAllInfoOptions = {}
+  baseOptions: GetPersistentSubscriptionToAllInfoOptions = {},
 ): Promise<PersistentSubscriptionToAllInfo> {
   if (!(await this.supports(PersistentSubscriptionsService.getInfo, "all"))) {
     throw new UnsupportedError("getPersistentSubscriptionToAllInfo", "21.10.1");
@@ -64,11 +64,11 @@ Client.prototype.getPersistentSubscriptionToAllInfo = async function (
             if (error) return reject(convertToCommandError(error));
             return resolve(
               mapPersistentSubscriptionToAllInfo(
-                response.getSubscriptionInfo()!
-              )
+                response.getSubscriptionInfo()!,
+              ),
             );
-          }
+          },
         );
-      })
+      }),
   );
 };

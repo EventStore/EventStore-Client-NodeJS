@@ -17,7 +17,7 @@ declare module "../Client" {
      */
     disableProjection(
       projectionName: string,
-      options?: DisableProjectionOptions
+      options?: DisableProjectionOptions,
     ): Promise<void>;
     /**
      * Aborts a projection.
@@ -26,7 +26,7 @@ declare module "../Client" {
      */
     abortProjection(
       projectionName: string,
-      options?: DisableProjectionOptions
+      options?: DisableProjectionOptions,
     ): Promise<void>;
   }
 }
@@ -34,24 +34,24 @@ declare module "../Client" {
 Client.prototype.disableProjection = async function (
   this: Client,
   projectionName: string,
-  baseOptions: DisableProjectionOptions = {}
+  baseOptions: DisableProjectionOptions = {},
 ): Promise<void> {
   return disableProjection("disableProjection", true).call(
     this,
     projectionName,
-    baseOptions
+    baseOptions,
   );
 };
 
 Client.prototype.abortProjection = async function (
   this: Client,
   projectionName: string,
-  baseOptions: DisableProjectionOptions = {}
+  baseOptions: DisableProjectionOptions = {},
 ): Promise<void> {
   return disableProjection("abortProjection", false).call(
     this,
     projectionName,
-    baseOptions
+    baseOptions,
   );
 };
 
@@ -59,7 +59,7 @@ function disableProjection(debugName: string, writeCheckpoint: boolean) {
   return async function (
     this: Client,
     projectionName: string,
-    baseOptions: DisableProjectionOptions = {}
+    baseOptions: DisableProjectionOptions = {},
   ): Promise<void> {
     const req = new DisableReq();
     const options = new DisableReq.Options();
@@ -84,7 +84,7 @@ function disableProjection(debugName: string, writeCheckpoint: boolean) {
             if (error) return reject(convertToCommandError(error));
             return resolve();
           });
-        })
+        }),
     );
   };
 }

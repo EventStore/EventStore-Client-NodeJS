@@ -19,7 +19,7 @@ declare module "../Client" {
     deletePersistentSubscriptionToStream(
       streamName: string,
       groupName: string,
-      options?: DeletePersistentSubscriptionToStreamOptions
+      options?: DeletePersistentSubscriptionToStreamOptions,
     ): Promise<void>;
   }
 }
@@ -28,7 +28,7 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: DeletePersistentSubscriptionToStreamOptions = {}
+  baseOptions: DeletePersistentSubscriptionToStreamOptions = {},
 ): Promise<void> {
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
@@ -54,6 +54,6 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
   );
 };

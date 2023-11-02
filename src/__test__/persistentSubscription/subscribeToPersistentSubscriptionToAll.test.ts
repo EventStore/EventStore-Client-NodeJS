@@ -47,7 +47,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -69,7 +69,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: subscribeToPersistentSubscriptionToAll requires server version 21.10 or higher.]`
+          `[Error: subscribeToPersistentSubscriptionToAll requires server version 21.10 or higher.]`,
         );
       }
     });
@@ -88,7 +88,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           persistentSubscriptionToAllSettingsFromDefaults({
             startFrom: START,
           }),
-          { filter: streamNameFilter({ prefixes: [STREAM_PREFIX] }) }
+          { filter: streamNameFilter({ prefixes: [STREAM_PREFIX] }) },
         );
 
         const defer = new Defer();
@@ -136,7 +136,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
         const { position } = await client.appendToStream(
           "some_stream",
-          jsonTestEvents(1)
+          jsonTestEvents(1),
         );
 
         await client.appendToStream("some_stream", jsonTestEvents(20));
@@ -148,7 +148,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           persistentSubscriptionToAllSettingsFromDefaults({
             startFrom: position,
           }),
-          {}
+          {},
         );
 
         const defer = new Defer();
@@ -197,7 +197,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
         await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
         await client.createPersistentSubscriptionToAll(
           GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults() // end is default
+          persistentSubscriptionToAllSettingsFromDefaults(), // end is default
         );
 
         const defer = new Defer();
@@ -252,7 +252,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
         const { position } = await client.appendToStream(
           STREAM_NAME,
-          jsonTestEvents(1, "mark")
+          jsonTestEvents(1, "mark"),
         );
 
         expect(position).toBeDefined();
@@ -267,7 +267,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           GROUP_NAME,
           persistentSubscriptionToAllSettingsFromDefaults({
             startFrom: position,
-          })
+          }),
         );
 
         const defer = new Defer();
@@ -298,7 +298,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
             await subscription.nack(
               event.event.type === "skip-event" ? "skip" : "retry",
               "To test it",
-              event
+              event,
             );
             return;
           }
@@ -324,7 +324,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
         expect(nacked.length).toBe(1 + skipCount + retryCount);
         // mark + skipped + retried (twice) + finish test + system events
         expect(onEvent.mock.calls.length).toBeGreaterThanOrEqual(
-          1 + skipCount + retryCount * 2 + 1
+          1 + skipCount + retryCount * 2 + 1,
         );
       });
     });
@@ -339,7 +339,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
           const { position } = await client.appendToStream(
             STREAM_NAME,
-            jsonTestEvents(1, "mark")
+            jsonTestEvents(1, "mark"),
           );
 
           expect(position).toBeDefined();
@@ -353,7 +353,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
             GROUP_NAME,
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: position,
-            })
+            }),
           );
 
           const subscription =
@@ -381,7 +381,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
           const { position } = await client.appendToStream(
             STREAM_NAME,
-            jsonTestEvents(1, "mark")
+            jsonTestEvents(1, "mark"),
           );
 
           expect(position).toBeDefined();
@@ -403,7 +403,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
             GROUP_NAME,
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: position,
-            })
+            }),
           );
 
           const subscription =
@@ -427,7 +427,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
               await subscription.nack(
                 resolvedEvent.event.type === "skip-event" ? "skip" : "retry",
                 "To test it",
-                resolvedEvent
+                resolvedEvent,
               );
               continue;
             }
@@ -439,7 +439,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           expect(nacked.length).toBe(1 + skipCount + retryCount);
           // mark + skipped + retried (twice) + finish test + system events
           expect(doSomething.mock.calls.length).toBeGreaterThanOrEqual(
-            1 + skipCount + retryCount * 2 + 1
+            1 + skipCount + retryCount * 2 + 1,
           );
         });
 
@@ -451,7 +451,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
           await client.createPersistentSubscriptionToAll(
             GROUP_NAME,
-            persistentSubscriptionToAllSettingsFromDefaults()
+            persistentSubscriptionToAllSettingsFromDefaults(),
           );
 
           await client.appendToStream(STREAM_NAME, [
@@ -496,7 +496,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           GROUP_NAME,
           persistentSubscriptionToAllSettingsFromDefaults({
             startFrom: END,
-          })
+          }),
         );
 
         const subscription =
@@ -541,7 +541,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
         await client.createPersistentSubscriptionToAll(
           GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults()
+          persistentSubscriptionToAllSettingsFromDefaults(),
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -561,7 +561,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           _transform(
             resolvedEvent: AllStreamResolvedEvent,
             _encoding: string,
-            done: (error: null, e: AllStreamResolvedEvent) => void
+            done: (error: null, e: AllStreamResolvedEvent) => void,
           ) {
             subscription
               .ack(resolvedEvent)
@@ -574,7 +574,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           _write(
             { event }: AllStreamResolvedEvent,
             _encoding: string,
-            done: () => void
+            done: () => void,
           ) {
             if (!event?.streamId.startsWith("$")) {
               this.ids.push(event!.id);
@@ -604,7 +604,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
         GROUP_NAME,
         persistentSubscriptionToAllSettingsFromDefaults({
           startFrom: END,
-        })
+        }),
       );
 
       await client.appendToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
@@ -650,7 +650,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           nodePreference: "follower",
         },
         { rootCertificate: cluster.rootCertificate },
-        { username: "admin", password: "changeit" }
+        { username: "admin", password: "changeit" },
       );
 
       const STREAM_NAME = "follower_node_test";
@@ -660,14 +660,14 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
       const confirmThatErrorWasThrown = jest.fn();
 
       const createAndConnectWithAutoReconnect = async (
-        client: EventStoreDBClient
+        client: EventStoreDBClient,
       ): Promise<PersistentSubscriptionToStream> => {
         try {
           await client.createPersistentSubscriptionToAll(
             GROUP_NAME,
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: START,
-            })
+            }),
           );
 
           return client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
@@ -682,7 +682,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
                 endpoint: error.leader,
               },
               { rootCertificate: cluster.rootCertificate },
-              { username: "admin", password: "changeit" }
+              { username: "admin", password: "changeit" },
             );
 
             // try again with new connection
@@ -699,9 +699,8 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
         finishEvent(FINISH_TEST),
       ]);
 
-      const subscription = await createAndConnectWithAutoReconnect(
-        followerClient
-      );
+      const subscription =
+        await createAndConnectWithAutoReconnect(followerClient);
 
       for await (const resolvedEvent of subscription) {
         doSomething(resolvedEvent);
@@ -716,7 +715,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
       expect(confirmThatErrorWasThrown).toBeCalledTimes(1);
       expect(confirmThatErrorWasThrown.mock.calls[0][0]).toBeInstanceOf(
-        NotLeaderError
+        NotLeaderError,
       );
     });
 
@@ -730,7 +729,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
         persistentSubscriptionToAllSettingsFromDefaults({
           startFrom: END,
           maxRetryCount: 5,
-        })
+        }),
       );
 
       await client.appendToStream(STREAM_NAME, [

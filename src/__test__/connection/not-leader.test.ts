@@ -29,12 +29,12 @@ describe("not-leader", () => {
         nodePreference: FOLLOWER,
       },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
 
     const appendResult = await followerClient.appendToStream(
       STREAM_NAME,
-      event
+      event,
     );
 
     expect(appendResult).toBeDefined();
@@ -46,7 +46,7 @@ describe("not-leader", () => {
           direction: BACKWARDS,
           fromRevision: END,
           requiresLeader: true,
-        })
+        }),
       );
     };
 
@@ -67,7 +67,7 @@ describe("not-leader", () => {
             endpoint: error.leader,
           },
           { rootCertificate: cluster.rootCertificate },
-          { username: "admin", password: "changeit" }
+          { username: "admin", password: "changeit" },
         );
 
         const readResult = await readFromTestStream(leaderClient);

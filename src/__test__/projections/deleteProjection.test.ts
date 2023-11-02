@@ -29,7 +29,7 @@ describe("deleteProjection", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" }
+      { username: "admin", password: "changeit" },
     );
   });
 
@@ -89,7 +89,7 @@ describe("deleteProjection", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        client.deleteProjection(PROJECTION_NAME)
+        client.deleteProjection(PROJECTION_NAME),
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

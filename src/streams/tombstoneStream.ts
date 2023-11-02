@@ -24,7 +24,7 @@ declare module "../Client" {
      */
     tombstoneStream(
       streamName: string,
-      options?: TombstoneStreamOptions
+      options?: TombstoneStreamOptions,
     ): Promise<DeleteResult>;
   }
 }
@@ -32,7 +32,7 @@ declare module "../Client" {
 Client.prototype.tombstoneStream = async function (
   this: Client,
   streamName: string,
-  { expectedRevision = ANY, ...baseOptions }: TombstoneStreamOptions = {}
+  { expectedRevision = ANY, ...baseOptions }: TombstoneStreamOptions = {},
 ): Promise<DeleteResult> {
   const req = new TombstoneReq();
   const options = new TombstoneReq.Options();
@@ -91,8 +91,8 @@ Client.prototype.tombstoneStream = async function (
             }
 
             return resolve(result);
-          }
+          },
         );
-      })
+      }),
   );
 };
