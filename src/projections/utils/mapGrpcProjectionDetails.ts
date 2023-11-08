@@ -7,7 +7,7 @@ import type {
 } from "../../types";
 
 export const mapGrpcProjectionDetails = (
-  grpcProjectionDetails: StatisticsResp.Details,
+  grpcProjectionDetails: StatisticsResp.Details
 ): ProjectionDetails => {
   const details = grpcProjectionDetails.toObject();
   const [projectionStatus, processingStatus = ""] = details.status.split("/");

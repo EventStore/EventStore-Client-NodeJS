@@ -15,25 +15,30 @@ import {
   mapPersistentSubscriptionToEitherInfo,
   PersistentSubscriptionToEitherInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
-interface ListPersistentSubscriptionsOptions extends BaseOptions {}
+export interface ListPersistentSubscriptionsOptions extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
     /**
      * Lists all persistent subscriptions.
+     *
      * @param options List persistent subscriptions options.
      */
     listAllPersistentSubscriptions(
-      options?: ListPersistentSubscriptionsOptions,
+      options?: ListPersistentSubscriptionsOptions
     ): Promise<PersistentSubscriptionToEitherInfo[]>;
   }
 }
 
 Client.prototype.listAllPersistentSubscriptions = async function (
   this: Client,
-  options: ListPersistentSubscriptionsOptions = {},
+  options: ListPersistentSubscriptionsOptions = {}
 ): Promise<PersistentSubscriptionToEitherInfo[]> {
+  validateField(schemas.listPersistentSubscriptionsOptions.optional(), options);
+
   debug.command("listAllPersistentSubscriptions: %O", {
     options,
   });
@@ -47,7 +52,7 @@ Client.prototype.listAllPersistentSubscriptions = async function (
 
 const listPersistentSubscriptionsGRPC = async function (
   this: Client,
-  baseOptions: ListPersistentSubscriptionsOptions = {},
+  baseOptions: ListPersistentSubscriptionsOptions = {}
 ): Promise<PersistentSubscriptionToEitherInfo[]> {
   const options = new ListReq.Options();
   const req = new ListReq();
@@ -72,17 +77,17 @@ const listPersistentSubscriptionsGRPC = async function (
             return resolve(
               response
                 .getSubscriptionsList()
-                .map((r) => mapPersistentSubscriptionToEitherInfo(r)),
+                .map((r) => mapPersistentSubscriptionToEitherInfo(r))
             );
-          },
+          }
         );
-      }),
+      })
   );
 };
 
 const listAllPersistentSubscriptionsHTTP = async function (
   this: Client,
-  baseOptions: ListPersistentSubscriptionsOptions = {},
+  baseOptions: ListPersistentSubscriptionsOptions = {}
 ): Promise<PersistentSubscriptionToEitherInfo[]> {
   const basicList = await this.HTTPRequest<
     Array<{ eventStreamId: string; groupName: string }>
@@ -93,11 +98,11 @@ const listAllPersistentSubscriptionsHTTP = async function (
       this.HTTPRequest<HTTPSubscriptionInfo>(
         "GET",
         `/subscriptions/${encodeURIComponent(
-          eventStreamId,
+          eventStreamId
         )}/${encodeURIComponent(groupName)}/info`,
-        baseOptions,
-      ),
-    ),
+        baseOptions
+      )
+    )
   );
 
   return list.map((info) => mapHTTPPersistentSubscriptionInfo(info));

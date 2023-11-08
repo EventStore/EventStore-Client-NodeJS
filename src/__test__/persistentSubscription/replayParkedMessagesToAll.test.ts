@@ -31,7 +31,7 @@ describe("replayParkedMessagesToAll", () => {
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -48,7 +48,7 @@ describe("replayParkedMessagesToAll", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: replayParkedMessagesToAll requires server version 21.10.1 or higher.]`,
+          `[Error: replayParkedMessagesToAll requires server version 21.10.1 or higher.]`
         );
       }
     });
@@ -67,7 +67,7 @@ describe("replayParkedMessagesToAll", () => {
         }),
         {
           filter: streamNameFilter({ prefixes: [PREFIX] }),
-        },
+        }
       );
 
       await client.appendToStream(`${PREFIX}something`, [
@@ -82,10 +82,10 @@ describe("replayParkedMessagesToAll", () => {
         client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
       const parkEvent = jest.fn((resolvedEvent) =>
-        subscription.nack(PARK, "Park it", resolvedEvent),
+        subscription.nack(PARK, "Park it", resolvedEvent)
       );
       const ackEvent = jest.fn((resolvedEvent) =>
-        subscription.ack(resolvedEvent),
+        subscription.ack(resolvedEvent)
       );
 
       let hasReplayed = false;
@@ -123,7 +123,7 @@ describe("replayParkedMessagesToAll", () => {
         }),
         {
           filter: streamNameFilter({ prefixes: [PREFIX] }),
-        },
+        }
       );
 
       await client.appendToStream(`${PREFIX}something`, [
@@ -138,10 +138,10 @@ describe("replayParkedMessagesToAll", () => {
         client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
       const parkEvent = jest.fn((resolvedEvent) =>
-        subscription.nack(PARK, "Park it", resolvedEvent),
+        subscription.nack(PARK, "Park it", resolvedEvent)
       );
       const ackEvent = jest.fn((resolvedEvent) =>
-        subscription.ack(resolvedEvent),
+        subscription.ack(resolvedEvent)
       );
 
       let hasReplayed = false;
@@ -194,7 +194,7 @@ describe("replayParkedMessagesToAll", () => {
         }),
         {
           filter: streamNameFilter({ prefixes: [PREFIX] }),
-        },
+        }
       );
 
       await client.appendToStream(`${PREFIX}something`, [
@@ -209,10 +209,10 @@ describe("replayParkedMessagesToAll", () => {
         client.subscribeToPersistentSubscriptionToAll(GROUP_NAME);
 
       const parkEvent = jest.fn((resolvedEvent) =>
-        subscription.nack(PARK, "Park it", resolvedEvent),
+        subscription.nack(PARK, "Park it", resolvedEvent)
       );
       const ackEvent = jest.fn((resolvedEvent) =>
-        subscription.ack(resolvedEvent),
+        subscription.ack(resolvedEvent)
       );
 
       let hasReplayed = false;
@@ -261,7 +261,7 @@ describe("replayParkedMessagesToAll", () => {
         } catch (error) {
           expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
           expect(error).toMatchInlineSnapshot(
-            `[Error: 5 NOT_FOUND: Subscription group does_not_exist_replay_parked_group_name on stream $all does not exist.]`,
+            `[Error: 5 NOT_FOUND: Subscription group does_not_exist_replay_parked_group_name on stream $all does not exist.]`
           );
 
           if (error instanceof PersistentSubscriptionDoesNotExistError) {

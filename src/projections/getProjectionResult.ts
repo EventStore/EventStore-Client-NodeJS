@@ -2,8 +2,10 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { ResultReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface GetProjectionResultOptions extends BaseOptions {
   /**
@@ -16,12 +18,13 @@ declare module "../Client" {
   interface Client {
     /**
      * Gets the result of a projection.
+     *
      * @param projectionName The name of the projection.
      * @param options Get result options.
      */
     getProjectionResult<T = unknown>(
       projectionName: string,
-      options?: GetProjectionResultOptions,
+      options?: GetProjectionResultOptions
     ): Promise<T>;
   }
 }
@@ -29,8 +32,16 @@ declare module "../Client" {
 Client.prototype.getProjectionResult = async function <T = unknown>(
   this: Client,
   projectionName: string,
-  { partition = "", ...baseOptions }: GetProjectionResultOptions = {},
+  getProjectionResultOptions: GetProjectionResultOptions = {}
 ): Promise<T> {
+  const { partition = "", ...baseOptions } = getProjectionResultOptions;
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(
+    schemas.getProjectionResultOptions.optional(),
+    getProjectionResultOptions
+  );
+
   const req = new ResultReq();
   const options = new ResultReq.Options();
   options.setName(projectionName);
@@ -58,8 +69,8 @@ Client.prototype.getProjectionResult = async function <T = unknown>(
           (error, response) => {
             if (error) return reject(convertToCommandError(error));
             return resolve(response.getResult()?.toJavaScript() as T);
-          },
+          }
         );
-      }),
+      })
   );
 };

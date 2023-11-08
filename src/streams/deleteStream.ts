@@ -6,10 +6,13 @@ import { Client } from "../Client";
 import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
 import { debug, convertToCommandError, createStreamIdentifier } from "../utils";
 import { ANY, NO_STREAM } from "../constants";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface DeleteStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before deleting.
+   *
    * @default ANY
    */
   expectedRevision?: ExpectedRevision;
@@ -19,12 +22,13 @@ declare module "../Client" {
   interface Client {
     /**
      * Soft-deletes a stream.
+     *
      * @param streamName A stream name.
      * @param options Deletion options.
      */
     deleteStream(
       streamName: string,
-      options?: DeleteStreamOptions,
+      options?: DeleteStreamOptions
     ): Promise<DeleteResult>;
   }
 }
@@ -32,8 +36,13 @@ declare module "../Client" {
 Client.prototype.deleteStream = async function (
   this: Client,
   streamName: string,
-  { expectedRevision = ANY, ...baseOptions }: DeleteStreamOptions = {},
+  deleteStreamOptions: DeleteStreamOptions = {}
 ): Promise<DeleteResult> {
+  const { expectedRevision = ANY, ...baseOptions } = deleteStreamOptions;
+
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.deleteStreamOptions.optional(), deleteStreamOptions);
+
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
   const identifier = createStreamIdentifier(streamName);
@@ -88,8 +97,8 @@ Client.prototype.deleteStream = async function (
             }
 
             return resolve(result);
-          },
+          }
         );
-      }),
+      })
   );
 };

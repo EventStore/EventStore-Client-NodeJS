@@ -39,7 +39,7 @@ describe("listAllPersistentSubscriptions", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     if (psToAllSupported) {
@@ -65,7 +65,7 @@ describe("listAllPersistentSubscriptions", () => {
             consumerStrategyName: PINNED,
           },
           {},
-        ],
+        ]
       );
 
       created.push(...createdAll);
@@ -89,7 +89,7 @@ describe("listAllPersistentSubscriptions", () => {
           consumerStrategyName: ROUND_ROBIN,
         },
         {},
-      ],
+      ]
     );
     created.push(...createdSteam);
     psOfInterestToStream = createdSteam[0];
@@ -131,7 +131,7 @@ describe("listAllPersistentSubscriptions", () => {
     const subscriptionToStream = client
       .subscribeToPersistentSubscriptionToStream(
         streamNameOfInterest,
-        groupNameOfInterest,
+        groupNameOfInterest
       )
       .on("error", jest.fn())
       .on("data", async (e) => {
@@ -186,7 +186,7 @@ describe("listAllPersistentSubscriptions", () => {
           endpoint: emptyNode.uri,
         },
         { rootCertificate: emptyNode.rootCertificate },
-        { username: "admin", password: "changeit" },
+        { username: "admin", password: "changeit" }
       );
     });
 

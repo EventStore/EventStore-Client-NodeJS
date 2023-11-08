@@ -24,7 +24,7 @@ export const append = async function (
   this: Client,
   streamName: string,
   events: EventData[],
-  { expectedRevision, ...baseOptions }: InternalOptions<AppendToStreamOptions>,
+  { expectedRevision, ...baseOptions }: InternalOptions<AppendToStreamOptions>
 ): Promise<AppendResult> {
   const header = new AppendReq();
   const options = new AppendReq.Options();
@@ -100,7 +100,7 @@ export const append = async function (
                       ? BigInt(grpcError.getCurrentRevision())
                       : "no_stream",
                     expected,
-                  }),
+                  })
                 );
               }
 
@@ -133,7 +133,7 @@ export const append = async function (
                 position,
               });
             }
-          },
+          }
         );
 
         sink.on("error", (err) => reject(err));
@@ -166,7 +166,7 @@ export const append = async function (
             } else {
               const metadata = JSON.stringify(event.metadata);
               message.setCustomMetadata(
-                Buffer.from(metadata, "utf8").toString("base64"),
+                Buffer.from(metadata, "utf8").toString("base64")
               );
             }
           }
@@ -177,6 +177,6 @@ export const append = async function (
         }
 
         sink.end();
-      }),
+      })
   );
 };

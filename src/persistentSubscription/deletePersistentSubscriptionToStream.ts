@@ -4,6 +4,8 @@ import { PersistentSubscriptionsClient } from "../../generated/persistent_grpc_p
 import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface DeletePersistentSubscriptionToStreamOptions
   extends BaseOptions {}
@@ -12,6 +14,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Deletes a persistent subscription.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param options Deletion options.
@@ -19,7 +22,7 @@ declare module "../Client" {
     deletePersistentSubscriptionToStream(
       streamName: string,
       groupName: string,
-      options?: DeletePersistentSubscriptionToStreamOptions,
+      options?: DeletePersistentSubscriptionToStreamOptions
     ): Promise<void>;
   }
 }
@@ -28,8 +31,12 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: DeletePersistentSubscriptionToStreamOptions = {},
+  baseOptions: DeletePersistentSubscriptionToStreamOptions = {}
 ): Promise<void> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(schemas.baseOptions.optional(), baseOptions);
+
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
   const identifier = createStreamIdentifier(streamName);
@@ -54,6 +61,6 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };

@@ -16,11 +16,14 @@ import {
 } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface SubscribeToPersistentSubscriptionToStreamOptions
   extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
+   *
    * @default 10
    */
   bufferSize?: number;
@@ -30,6 +33,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Connects to a persistent subscription.
+     *
      * @param stream A stream name.
      * @param group A group name.
      * @param options Connection options.
@@ -38,23 +42,30 @@ declare module "../Client" {
       streamName: string,
       groupName: string,
       options?: SubscribeToPersistentSubscriptionToStreamOptions,
-      duplexOptions?: DuplexOptions,
+      duplexOptions?: DuplexOptions
     ): PersistentSubscriptionToStream<E>;
   }
 }
 
 Client.prototype.subscribeToPersistentSubscriptionToStream = function <
-  E extends EventType = EventType,
+  E extends EventType = EventType
 >(
   this: Client,
   streamName: string,
   groupName: string,
-  {
-    bufferSize = 10,
-    ...baseOptions
-  }: SubscribeToPersistentSubscriptionToStreamOptions = {},
-  duplexOptions: DuplexOptions = {},
+  subscribeToPersistentSubscriptionToStreamOptions: SubscribeToPersistentSubscriptionToStreamOptions = {},
+  duplexOptions: DuplexOptions = {}
 ): PersistentSubscriptionToStream<E> {
+  const { bufferSize = 10, ...baseOptions } =
+    subscribeToPersistentSubscriptionToStreamOptions;
+
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.subscribeToPersistentSubscriptionToStreamOptions.optional(),
+    subscribeToPersistentSubscriptionToStreamOptions
+  );
+
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
       PersistentSubscriptionsClient,
@@ -82,19 +93,19 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
         });
         debug.command_grpc(
           "subscribeToPersistentSubscriptionToStream: %g",
-          req,
+          req
         );
 
         const stream = client.read(
           ...this.callArguments(baseOptions, {
             deadline: Infinity,
-          }),
+          })
         );
         stream.write(req);
         return stream;
-      },
+      }
     ),
     convertPersistentSubscriptionGrpcEvent,
-    duplexOptions,
+    duplexOptions
   );
 };

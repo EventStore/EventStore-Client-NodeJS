@@ -15,17 +15,23 @@ import { END, START } from "../constants";
 import { debug, convertGrpcEvent, createStreamIdentifier } from "../utils";
 
 import { Subscription } from "./utils/Subscription";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface SubscribeToStreamOptions extends BaseOptions {
   /**
    * Starts the read at the given event revision.
+   *
    * @default START
    */
   fromRevision?: ReadRevision;
   /**
-   * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
-   * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
-   * resolution feature, the server will also return the event targeted by the link.
+   * The best way to explain link resolution is when using system projections.
+   * When reading the stream `$streams` (which contains all streams), each event
+   * is actually a link pointing to the first event of a stream. By enabling
+   * link resolution feature, the server will also return the event targeted by
+   * the link.
+   *
    * @default false
    */
   resolveLinkTos?: boolean;
@@ -35,6 +41,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Subscribe to events on the given stream.
+     *
      * @param streamName A stream name.
      * @param options Subscription options.
      * @param readableOptions Readable stream options.
@@ -42,23 +49,31 @@ declare module "../Client" {
     subscribeToStream<KnownEventType extends EventType = EventType>(
       streamName: string,
       options?: SubscribeToStreamOptions,
-      readableOptions?: ReadableOptions,
+      readableOptions?: ReadableOptions
     ): StreamSubscription<KnownEventType>;
   }
 }
 
 Client.prototype.subscribeToStream = function <
-  KnownEventType extends EventType = EventType,
+  KnownEventType extends EventType = EventType
 >(
   this: Client,
   streamName: string,
-  {
+  subscribeToStreamOptions: SubscribeToStreamOptions = {},
+  readableOptions: ReadableOptions = {}
+): StreamSubscription<KnownEventType> {
+  const {
     fromRevision = START,
     resolveLinkTos = false,
     ...baseOptions
-  }: SubscribeToStreamOptions = {},
-  readableOptions: ReadableOptions = {},
-): StreamSubscription<KnownEventType> {
+  } = subscribeToStreamOptions;
+
+  validateField(schemas.streamName, streamName);
+  validateField(
+    schemas.subscribeToStreamOptions.optional(),
+    subscribeToStreamOptions
+  );
+
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const streamOptions = new ReadReq.Options.StreamOptions();
@@ -111,8 +126,8 @@ Client.prototype.subscribeToStream = function <
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
-        }),
-      ),
+        })
+      )
   );
 
   return new Subscription(createGRPCStream, convertGrpcEvent, readableOptions);

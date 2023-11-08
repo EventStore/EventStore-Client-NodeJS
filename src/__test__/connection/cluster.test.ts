@@ -18,12 +18,12 @@ describe("cluster", () => {
     const client = new EventStoreDBClient(
       { endpoints: cluster.endpoints },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 }),
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
 
     expect(appendResult).toBeDefined();
@@ -42,13 +42,13 @@ describe("cluster", () => {
         ],
         maxDiscoverAttempts,
       },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.rootCertificate }
     );
 
     await expect(
-      client.appendToStream(STREAM_NAME, event),
+      client.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Failed to discover after ${maxDiscoverAttempts} attempts."`,
+      `"Failed to discover after ${maxDiscoverAttempts} attempts."`
     );
   });
 
@@ -70,9 +70,9 @@ describe("cluster", () => {
       discoveryInterval: client1DiscoveryInterval,
     });
     await expect(
-      client1.appendToStream(STREAM_NAME, event),
+      client1.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Failed to discover after ${maxDiscoverAttempts} attempts."`,
+      `"Failed to discover after ${maxDiscoverAttempts} attempts."`
     );
     const client1Duration = Date.now() - client1Start;
 
@@ -83,15 +83,15 @@ describe("cluster", () => {
       discoveryInterval: client2DiscoveryInterval,
     });
     await expect(
-      client2.appendToStream(STREAM_NAME, event),
+      client2.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Failed to discover after ${maxDiscoverAttempts} attempts."`,
+      `"Failed to discover after ${maxDiscoverAttempts} attempts."`
     );
     const client2Duration = Date.now() - client2Start;
 
     expect(client2Duration).toBeGreaterThan(client1Duration);
     expect(client2Duration).toBeGreaterThanOrEqual(
-      client2DiscoveryInterval * maxDiscoverAttempts,
+      client2DiscoveryInterval * maxDiscoverAttempts
     );
 
     const expectedDifference =

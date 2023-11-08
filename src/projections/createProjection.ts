@@ -5,17 +5,21 @@ import {
 import { CreateReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface CreateProjectionOptions extends BaseOptions {
   /**
    * Enables emitting from the projection.
+   *
    * @default false
    */
   emitEnabled?: boolean;
   /**
    * Enables tracking emitted streams.
+   *
    * @default false
    */
   trackEmittedStreams?: boolean;
@@ -25,6 +29,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Creates a continuous projection.
+     *
      * @param projectionName The name of the projection.
      * @param query The query to run.
      * @param options Projection options.
@@ -32,7 +37,7 @@ declare module "../Client" {
     createProjection(
       projectionName: string,
       query: string,
-      options?: CreateProjectionOptions,
+      options?: CreateProjectionOptions
     ): Promise<void>;
   }
 }
@@ -41,13 +46,17 @@ Client.prototype.createProjection = async function (
   this: Client,
   projectionName: string,
   query: string,
-  options: CreateProjectionOptions = {},
+  options: CreateProjectionOptions = {}
 ): Promise<void> {
   debug.command("createProjection: %O", {
     projectionName,
     query,
     options,
   });
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.query, query);
+  validateField(schemas.createProjectionOptions.optional(), options);
 
   if (
     options.trackEmittedStreams &&
@@ -63,12 +72,21 @@ const createProjectionGRPC = async function (
   this: Client,
   projectionName: string,
   query: string,
-  {
+  createProjectionOptions: CreateProjectionOptions = {}
+): Promise<void> {
+  const {
     emitEnabled = false,
     trackEmittedStreams = false,
     ...baseOptions
-  }: CreateProjectionOptions = {},
-): Promise<void> {
+  } = createProjectionOptions;
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.query, query);
+  validateField(
+    schemas.createProjectionGrpcOptions.optional(),
+    createProjectionOptions
+  );
+
   const req = new CreateReq();
   const options = new CreateReq.Options();
   const continuous = new CreateReq.Options.Continuous();
@@ -93,7 +111,7 @@ const createProjectionGRPC = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };
 
@@ -101,12 +119,21 @@ const createProjectionHTTP = async function (
   this: Client,
   projectionName: string,
   query: string,
-  {
+  createProjectionOptions: CreateProjectionOptions = {}
+) {
+  const {
     emitEnabled = false,
     trackEmittedStreams = false,
     ...baseOptions
-  }: CreateProjectionOptions = {},
-) {
+  } = createProjectionOptions;
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.query, query);
+  validateField(
+    schemas.createProjectionHttpOptions.optional(),
+    createProjectionOptions
+  );
+
   await this.HTTPRequest(
     "POST",
     `/projections/continuous`,
@@ -118,6 +145,6 @@ const createProjectionHTTP = async function (
         trackemittedstreams: trackEmittedStreams.toString(),
       },
     },
-    query,
+    query
   );
 };

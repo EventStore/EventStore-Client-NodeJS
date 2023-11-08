@@ -56,7 +56,7 @@ describe("http2 assertion failure", () => {
 
       while (received.length < 10) await delay(10);
       expect(received.map((e) => e.event?.id)).toStrictEqual(
-        [...priorEvents, ...postEvents].map((e) => e.id),
+        [...priorEvents, ...postEvents].map((e) => e.id)
       );
       await sub.unsubscribe();
     }

@@ -16,15 +16,19 @@ import { BACKWARDS, FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
 import { ReadStream } from "./utils/ReadStream";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface ReadAllOptions extends BaseOptions {
   /**
    * The number of events to read.
+   *
    * @default Number.MAX_SAFE_INTEGER
    */
   maxCount?: number | bigint;
   /**
    * Starts the read at the given position.
+   *
    * @default START
    */
   fromPosition?: ReadPosition;
@@ -32,11 +36,13 @@ export interface ReadAllOptions extends BaseOptions {
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
+   *
    * @default false
    */
   resolveLinkTos?: boolean;
   /**
    * Sets the read direction of the streamconnection.
+   *
    * @default FORWARDS
    */
   direction?: Direction;
@@ -47,26 +53,31 @@ declare module "../Client" {
     /**
      * Reads events from the $all. You can read forwards or backwards.
      * You might need to be authenticated to execute the command successfully.
+     *
      * @param options Reading options.
      */
     readAll(
       options?: ReadAllOptions,
-      readableOptions?: ReadableOptions,
+      readableOptions?: ReadableOptions
     ): StreamingRead<AllStreamResolvedEvent>;
   }
 }
 
 Client.prototype.readAll = function (
   this: Client,
-  {
+  readAllOptions: ReadAllOptions = {},
+  readableOptions: ReadableOptions = {}
+): StreamingRead<AllStreamResolvedEvent> {
+  const {
     maxCount = Number.MAX_SAFE_INTEGER,
     fromPosition = START,
     resolveLinkTos = false,
     direction = FORWARDS,
     ...baseOptions
-  }: ReadAllOptions = {},
-  readableOptions: ReadableOptions = {},
-): StreamingRead<AllStreamResolvedEvent> {
+  } = readAllOptions;
+
+  validateField(schemas.readAllOptions.optional(), readAllOptions);
+
   const req = new ReadReq();
   const options = new ReadReq.Options();
 
@@ -132,8 +143,8 @@ Client.prototype.readAll = function (
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
-        }),
-      ),
+        })
+      )
   );
 
   return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);

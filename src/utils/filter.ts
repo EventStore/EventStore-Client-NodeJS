@@ -20,7 +20,7 @@ interface FilterOptionsBase {
    */
   checkpointReached?: (
     subscription: AllStreamSubscription,
-    position: Position,
+    position: Position
   ) => Promise<void> | void;
   /**
    * The maximum number of events that are filtered out before the page is returned
@@ -85,5 +85,5 @@ const createFilterOn = (filterOn: FilterOn) => {
 export const streamNameFilter = createFilterOn(STREAM_NAME);
 export const eventTypeFilter = createFilterOn(EVENT_TYPE);
 export const excludeSystemEvents = (
-  options: Omit<RegexOptions, "regex"> = {},
+  options: Omit<RegexOptions, "regex"> = {}
 ): RegexFilter => eventTypeFilter({ regex: "^[^$].*", ...options });

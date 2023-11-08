@@ -33,7 +33,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -50,7 +50,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: getPersistentSubscriptionToAllInfo requires server version 21.10.1 or higher.]`,
+          `[Error: getPersistentSubscriptionToAllInfo requires server version 21.10.1 or higher.]`
         );
       }
     });
@@ -130,10 +130,10 @@ describe("getPersistentSubscriptionToAllInfo", () => {
       expect(typeof info3.stats.lastKnownEventPosition?.prepare).toBe("bigint");
 
       expect(typeof info3.stats.lastCheckpointedEventPosition?.commit).toBe(
-        "bigint",
+        "bigint"
       );
       expect(typeof info3.stats.lastCheckpointedEventPosition?.prepare).toBe(
-        "bigint",
+        "bigint"
       );
     });
 
@@ -192,7 +192,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
         } catch (error) {
           expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
           expect(error).toMatchInlineSnapshot(
-            `[Error: 5 NOT_FOUND: Subscription group does_not_exist_get_info_group_name on stream $all does not exist.]`,
+            `[Error: 5 NOT_FOUND: Subscription group does_not_exist_get_info_group_name on stream $all does not exist.]`
           );
 
           if (error instanceof PersistentSubscriptionDoesNotExistError) {

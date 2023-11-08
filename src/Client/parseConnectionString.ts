@@ -33,7 +33,7 @@ const caseMap = <T extends string>(options: { [K in T]: K }) => {
   const expected = Object.values<T>(options);
 
   const mapping = new Map<string, T>(
-    expected.map((option) => [toflatCase(option), option]),
+    expected.map((option) => [toflatCase(option), option])
   );
 
   function MapTo(value: string): T | undefined {
@@ -69,7 +69,7 @@ const mapToQueryOption = caseMap<keyof QueryOptions>({
 });
 
 export const parseConnectionString = (
-  connectionString: string,
+  connectionString: string
 ): ConnectionOptions =>
   parseProtocol(connectionString.trim().replace(/\/+$/, ""), 0, {
     dnsDiscover: false,
@@ -79,7 +79,7 @@ export const parseConnectionString = (
 const parseProtocol = (
   connectionString: string,
   position: number,
-  options: ConnectionOptions,
+  options: ConnectionOptions
 ): ConnectionOptions => {
   let nextPosition = position;
   const expected = "esdb:// or esdb+discover://";
@@ -112,7 +112,7 @@ const parseProtocol = (
 const parseCredentials = (
   connectionString: string,
   position: number,
-  options: ConnectionOptions,
+  options: ConnectionOptions
 ): ConnectionOptions => {
   let nextPosition = position;
   const expected = "username:password";
@@ -138,7 +138,7 @@ const parseCredentials = (
           password: decodeURIComponent(password),
         },
       },
-      true,
+      true
     );
   }
 
@@ -149,7 +149,7 @@ const parseHosts = (
   connectionString: string,
   position: number,
   options: ConnectionOptions,
-  mustMatch: boolean,
+  mustMatch: boolean
 ): ConnectionOptions => {
   let nextPosition = position;
   const expected = "host";
@@ -172,7 +172,7 @@ const parseHosts = (
       throw new ParseError(
         connectionString,
         [position + `${address}:${rawPort}`.length, nextPosition],
-        ", or ?key=value",
+        ", or ?key=value"
       );
     }
 
@@ -182,7 +182,7 @@ const parseHosts = (
       throw new ParseError(
         connectionString,
         [position + `${address}:`.length, nextPosition],
-        "port number",
+        "port number"
       );
     }
 
@@ -193,7 +193,7 @@ const parseHosts = (
         ...options,
         hosts: [...options.hosts, { address, port }],
       },
-      false,
+      false
     );
   }
 
@@ -204,7 +204,7 @@ const parseSearchParams = (
   connectionString: string,
   position: number,
   options: ConnectionOptions,
-  first: boolean,
+  first: boolean
 ): ConnectionOptions => {
   if (position === connectionString.length) return options;
 
@@ -213,7 +213,7 @@ const parseSearchParams = (
   const match = connectionString
     .substring(position)
     .match(
-      new RegExp(`^(?:[${first ? "?" : "&"}](?<key>[^=]+)=(?<value>[^&?]+))`),
+      new RegExp(`^(?:[${first ? "?" : "&"}](?<key>[^=]+)=(?<value>[^&?]+))`)
     );
 
   if (!match || !match.groups || !match.groups.key || !match.groups.value) {
@@ -225,7 +225,7 @@ const parseSearchParams = (
   const keypair = verifyKeyValuePair(
     match.groups as RawKeyPair,
     connectionString,
-    [position, nextPosition],
+    [position, nextPosition]
   );
 
   return parseSearchParams(
@@ -237,7 +237,7 @@ const parseSearchParams = (
           [keypair.key]: keypair.value,
         }
       : options,
-    false,
+    false
   );
 };
 
@@ -255,7 +255,7 @@ interface KeyValuePair {
 const verifyKeyValuePair = (
   { key: rawKey, value: rawValue }: RawKeyPair,
   connectionString: string,
-  [from, to]: ParsingLocation,
+  [from, to]: ParsingLocation
 ): KeyValuePair | null => {
   const keyFrom = from + `&${rawKey}=`.length;
   const key = mapToQueryOption(rawKey) ?? rawKey;
@@ -269,7 +269,7 @@ const verifyKeyValuePair = (
         `    Passing "tlsCAFile" in the connection string.`,
         `    Setting NODE_EXTRA_CA_CERTS https://nodejs.org/api/cli.html#cli_node_extra_ca_certs_file`,
         errorLocationString(connectionString, [from + `&`.length, to]),
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
@@ -281,7 +281,7 @@ const verifyKeyValuePair = (
         throw new ParseError(
           connectionString,
           [keyFrom, to],
-          mapToNodePreference.expected.join(" or "),
+          mapToNodePreference.expected.join(" or ")
         );
       }
 
@@ -324,7 +324,7 @@ const verifyKeyValuePair = (
         from + `&`.length,
         from + `&${key}`.length,
       ]),
-    ].join("\n"),
+    ].join("\n")
   );
 
   return null;
@@ -334,15 +334,15 @@ const errorString = (
   connectionString: string,
   [from, to]: ParsingLocation,
   expected: string,
-  full: boolean,
+  full: boolean
 ): string => {
   const lines = [];
 
   lines.push(
     `Unexpected "${connectionString.substring(
       from,
-      from === to ? from + 1 : to,
-    )}" at position ${from}, expected ${expected}.`,
+      from === to ? from + 1 : to
+    )}" at position ${from}, expected ${expected}.`
   );
 
   if (full) {
@@ -354,7 +354,7 @@ const errorString = (
 
 const errorLocationString = (
   connectionString: string,
-  [from, to]: ParsingLocation,
+  [from, to]: ParsingLocation
 ): string => {
   const lines = [];
 
@@ -372,7 +372,7 @@ class ParseError extends Error {
   constructor(
     connectionString: string,
     location: ParsingLocation,
-    expected: string,
+    expected: string
   ) {
     super(errorString(connectionString, location, expected, false));
     this.connectionString = connectionString;

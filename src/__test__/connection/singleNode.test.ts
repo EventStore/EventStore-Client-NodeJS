@@ -18,12 +18,12 @@ describe("singleNodeConnection", () => {
     const client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 }),
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
 
     expect(appendResult).toBeDefined();

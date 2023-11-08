@@ -37,7 +37,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -71,7 +71,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
           persistentSubscriptionToAllSettingsFromDefaults({
             startFrom: START,
           }),
-          { filter },
+          { filter }
         );
 
         const ps$all =
@@ -90,7 +90,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
           8 + // a
             8 + // b
             8 + // a
-            1, // finish
+            1 // finish
         );
       });
     });
@@ -110,11 +110,11 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
 
         await client.appendToStream(
           STREAM_NAME_A,
-          jsonTestEvents(8, eventType("a")),
+          jsonTestEvents(8, eventType("a"))
         );
         await client.appendToStream(
           STREAM_NAME_B,
-          jsonTestEvents(8, eventType("b")),
+          jsonTestEvents(8, eventType("b"))
         );
         await client.appendToStream(STREAM_NAME_A, [
           ...jsonTestEvents(8, eventType("c")),
@@ -126,7 +126,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
           persistentSubscriptionToAllSettingsFromDefaults({
             startFrom: START,
           }),
-          { filter },
+          { filter }
         );
 
         const ps$all =
@@ -146,7 +146,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
           8 + // a
             8 + // b
             8 + // a
-            1, // finish
+            1 // finish
         );
       });
     });
@@ -163,7 +163,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
         persistentSubscriptionToAllSettingsFromDefaults({
           startFrom: END,
         }),
-        { filter: excludeSystemEvents() },
+        { filter: excludeSystemEvents() }
       );
 
       await client.appendToStream(STREAM_NAME, [
@@ -190,7 +190,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
       // We run from the start, so could be more
       expect(doSomething.mock.calls.length).toBeGreaterThanOrEqual(9);
       expect(doSomethingWithNonSystemEvent).toBeCalledTimes(
-        doSomething.mock.calls.length,
+        doSomething.mock.calls.length
       );
     });
   });

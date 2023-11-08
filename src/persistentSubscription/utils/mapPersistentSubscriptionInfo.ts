@@ -118,15 +118,15 @@ export type PersistentSubscriptionToEitherInfo =
   | PersistentSubscriptionToAllInfo;
 
 export const isPersistentSubscriptionToAllInfo = (
-  info: PersistentSubscriptionToEitherInfo,
+  info: PersistentSubscriptionToEitherInfo
 ): info is PersistentSubscriptionToAllInfo => info.eventSource === "$all";
 
 export const isPersistentSubscriptionToStreamInfo = (
-  info: PersistentSubscriptionToEitherInfo,
+  info: PersistentSubscriptionToEitherInfo
 ): info is PersistentSubscriptionToStreamInfo => info.eventSource !== "$all";
 
 export const mapPersistentSubscriptionToEitherInfo = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToEitherInfo => {
   if (response.getEventSource() === "$all") {
     return mapPersistentSubscriptionToAllInfo(response);
@@ -136,7 +136,7 @@ export const mapPersistentSubscriptionToEitherInfo = (
 };
 
 export const mapPersistentSubscriptionToStreamInfo = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToStreamInfo => ({
   eventSource: response.getEventSource(),
   groupName: response.getGroupName(),
@@ -147,7 +147,7 @@ export const mapPersistentSubscriptionToStreamInfo = (
 });
 
 export const mapPersistentSubscriptionToAllInfo = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToAllInfo => ({
   eventSource: response.getEventSource() as "$all",
   groupName: response.getGroupName(),
@@ -163,7 +163,7 @@ const stringToRevision = (str: string): bigint | undefined => {
 };
 
 const stringToStartFromRevision = (
-  startFrom: string,
+  startFrom: string
 ): PersistentSubscriptionToStreamSettings["startFrom"] => {
   switch (startFrom) {
     case "0":
@@ -187,7 +187,7 @@ const stringToPosition = (str: string): Position | undefined => {
 };
 
 const stringToStartFromPostition = (
-  startFrom: string,
+  startFrom: string
 ): PersistentSubscriptionToAllSettings["startFrom"] => {
   switch (startFrom) {
     case "C:0/P:0":
@@ -205,7 +205,7 @@ const mapMaxSubscriberCount = (count: number) => {
 };
 
 const mapSettingBase = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionSettingsGeneric => ({
   resolveLinkTos: response.getResolveLinkTos(),
   extraStatistics: response.getExtraStatistics(),
@@ -222,21 +222,21 @@ const mapSettingBase = (
 });
 
 const mapSettings = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToStreamSettings => ({
   ...mapSettingBase(response),
   startFrom: stringToStartFromRevision(response.getStartFrom()),
 });
 
 const mapToAllSettings = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToAllSettings => ({
   ...mapSettingBase(response),
   startFrom: stringToStartFromPostition(response.getStartFrom()),
 });
 
 const mapConnection = (
-  connection: SubscriptionInfo.ConnectionInfo,
+  connection: SubscriptionInfo.ConnectionInfo
 ): PersistentSubscriptionConnectionInfo => ({
   from: connection.getFrom(),
   username: connection.getUsername(),
@@ -250,11 +250,11 @@ const mapConnection = (
         if (acc == null) acc = new Map();
         acc.set(
           observedMeasurement.getKey().toLowerCase() as ExtraStatisticsKey,
-          BigInt(observedMeasurement.getValue()),
+          BigInt(observedMeasurement.getValue())
         );
         return acc;
       },
-      undefined,
+      undefined
     ),
   availableSlots: connection.getAvailableSlots(),
   inFlightMessages: connection.getInFlightMessages(),
@@ -262,7 +262,7 @@ const mapConnection = (
 });
 
 const mapStatsBase = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionStatsBase => ({
   averagePerSecond: response.getAveragePerSecond(),
   totalItems: BigInt(response.getTotalItems()),
@@ -276,26 +276,26 @@ const mapStatsBase = (
 });
 
 const mapStats = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToStreamStats => ({
   ...mapStatsBase(response),
   lastCheckpointedEventRevision: stringToRevision(
-    response.getLastCheckpointedEventPosition(),
+    response.getLastCheckpointedEventPosition()
   ),
   lastKnownEventRevision: stringToRevision(
-    response.getLastKnownEventPosition(),
+    response.getLastKnownEventPosition()
   ),
 });
 
 const mapToAllStats = (
-  response: SubscriptionInfo,
+  response: SubscriptionInfo
 ): PersistentSubscriptionToAllStats => ({
   ...mapStatsBase(response),
   lastCheckpointedEventPosition: stringToPosition(
-    response.getLastCheckpointedEventPosition(),
+    response.getLastCheckpointedEventPosition()
   ),
   lastKnownEventPosition: stringToPosition(
-    response.getLastKnownEventPosition(),
+    response.getLastKnownEventPosition()
   ),
 });
 
@@ -357,7 +357,7 @@ interface HTTPConnectionInfo {
 }
 
 export const mapHTTPPersistentSubscriptionInfo = (
-  response: HTTPSubscriptionInfo,
+  response: HTTPSubscriptionInfo
 ): PersistentSubscriptionToStreamInfo => ({
   eventSource: response.eventStreamId,
   groupName: response.groupName,
@@ -368,7 +368,7 @@ export const mapHTTPPersistentSubscriptionInfo = (
 });
 
 const mapHTTPSettings = (
-  response: HTTPSubscriptionInfo,
+  response: HTTPSubscriptionInfo
 ): PersistentSubscriptionToStreamSettings => ({
   startFrom: mapHTTPStartFrom(response.config.startFrom),
   resolveLinkTos: response.config.resolveLinktos,
@@ -386,7 +386,7 @@ const mapHTTPSettings = (
 });
 
 const mapHTTPStartFrom = (
-  startFrom: number,
+  startFrom: number
 ): PersistentSubscriptionToStreamSettings["startFrom"] => {
   switch (startFrom) {
     case 0:
@@ -419,7 +419,7 @@ const mapHTTPStats = (response: HTTPSubscriptionInfo) => ({
 });
 
 const mapHTTPConnection = (
-  connection: HTTPConnectionInfo,
+  connection: HTTPConnectionInfo
 ): PersistentSubscriptionConnectionInfo => ({
   from: connection.from,
   username: connection.username,

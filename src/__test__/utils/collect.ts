@@ -2,9 +2,9 @@ import type { StreamingRead } from "../../types";
 
 export const collect = async <
   T extends StreamingRead<unknown>,
-  E = T extends StreamingRead<infer E> ? E : unknown,
+  E = T extends StreamingRead<infer E> ? E : unknown
 >(
-  stream: T,
+  stream: T
 ): Promise<E[]> => {
   const collected = [];
 

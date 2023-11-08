@@ -28,7 +28,7 @@ describe("subscribeToStream", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
     await client.appendToStream("out_of_stream_name", jsonTestEvents(4));
   });

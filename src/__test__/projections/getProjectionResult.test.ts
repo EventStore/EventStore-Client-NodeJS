@@ -16,7 +16,7 @@ describe("getProjectionResult", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     await client.enableProjection("$by_category");
@@ -49,7 +49,7 @@ describe("getProjectionResult", () => {
 
       await client.appendToStream(
         STREAM_NAME,
-        jsonTestEvents(count, EVENT_TYPE),
+        jsonTestEvents(count, EVENT_TYPE)
       );
 
       await delay(5000);
@@ -112,11 +112,11 @@ describe("getProjectionResult", () => {
       await client.createProjection(
         PARTITION_PROJECTION_NAME,
         paritionProjection,
-        { emitEnabled: true },
+        { emitEnabled: true }
       );
 
       const partitionStats = await client.getProjectionStatus(
-        PARTITION_PROJECTION_NAME,
+        PARTITION_PROJECTION_NAME
       );
 
       expect(partitionStats.projectionStatus).toBe(RUNNING);
@@ -124,7 +124,7 @@ describe("getProjectionResult", () => {
       await client.createProjection(COUNTER_PROJECTION_NAME, countProjection);
 
       const counterStats = await client.getProjectionStatus(
-        COUNTER_PROJECTION_NAME,
+        COUNTER_PROJECTION_NAME
       );
 
       expect(counterStats.projectionStatus).toBe(RUNNING);
@@ -146,7 +146,7 @@ describe("getProjectionResult", () => {
 
       const result = await client.getProjectionResult<CatCounter>(
         COUNTER_PROJECTION_NAME,
-        { partition: `cat-${MR_WHISKERS}` },
+        { partition: `cat-${MR_WHISKERS}` }
       );
 
       expect(result).toMatchObject({
@@ -161,7 +161,7 @@ describe("getProjectionResult", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        client.getProjectionResult(PROJECTION_NAME),
+        client.getProjectionResult(PROJECTION_NAME)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

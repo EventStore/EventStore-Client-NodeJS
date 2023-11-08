@@ -22,7 +22,7 @@ describe("getProjectionStatus", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     for (const name of projections) {
@@ -47,7 +47,7 @@ describe("getProjectionStatus", () => {
     test("non-existant", async () => {
       const REQUESTED_NAME = "some-non-existant-projection";
       await expect(
-        client.getProjectionStatus(REQUESTED_NAME),
+        client.getProjectionStatus(REQUESTED_NAME)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

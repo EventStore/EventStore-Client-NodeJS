@@ -2,8 +2,10 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { StateReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface GetProjectionStateOptions extends BaseOptions {
   /**
@@ -16,12 +18,13 @@ declare module "../Client" {
   interface Client {
     /**
      * Gets the result of a projection.
+     *
      * @param projectionName The name of the projection.
      * @param options Get state options.
      */
     getProjectionState<T = unknown>(
       projectionName: string,
-      options?: GetProjectionStateOptions,
+      options?: GetProjectionStateOptions
     ): Promise<T>;
   }
 }
@@ -29,8 +32,16 @@ declare module "../Client" {
 Client.prototype.getProjectionState = async function <T = unknown>(
   this: Client,
   projectionName: string,
-  { partition = "", ...baseOptions }: GetProjectionStateOptions = {},
+  getProjectionStateOptions: GetProjectionStateOptions = {}
 ): Promise<T> {
+  const { partition = "", ...baseOptions } = getProjectionStateOptions;
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(
+    schemas.getProjectionStateOptions.optional(),
+    getProjectionStateOptions
+  );
+
   const req = new StateReq();
   const options = new StateReq.Options();
   options.setName(projectionName);
@@ -58,8 +69,8 @@ Client.prototype.getProjectionState = async function <T = unknown>(
           (error, response) => {
             if (error) return reject(convertToCommandError(error));
             return resolve(response.getState()?.toJavaScript() as T);
-          },
+          }
         );
-      }),
+      })
   );
 };

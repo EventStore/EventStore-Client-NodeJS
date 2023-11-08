@@ -45,7 +45,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -64,7 +64,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         GROUP_NAME,
         persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
-        }),
+        })
       );
 
       const defer = new Defer();
@@ -118,7 +118,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         GROUP_NAME,
         persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: BigInt(1),
-        }),
+        })
       );
 
       const defer = new Defer();
@@ -168,7 +168,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
       await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionToStreamSettingsFromDefaults(), // end is default
+        persistentSubscriptionToStreamSettingsFromDefaults() // end is default
       );
 
       const defer = new Defer();
@@ -232,7 +232,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         GROUP_NAME,
         persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
-        }),
+        })
       );
 
       const defer = new Defer();
@@ -259,7 +259,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
           await subscription.nack(
             event.event.type === "skip-event" ? "skip" : "retry",
             "To test it",
-            event,
+            event
           );
           return;
         }
@@ -288,7 +288,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
           // retried
           retryCount * 2 +
           // finish test event
-          1,
+          1
       );
     });
   });
@@ -305,7 +305,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
           GROUP_NAME,
           persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
-          }),
+          })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -315,7 +315,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
         const subscription = client.subscribeToPersistentSubscriptionToStream(
           STREAM_NAME,
-          GROUP_NAME,
+          GROUP_NAME
         );
 
         for await (const resolvedEvent of subscription) {
@@ -348,7 +348,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
           GROUP_NAME,
           persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
-          }),
+          })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -359,7 +359,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
         const subscription = client.subscribeToPersistentSubscriptionToStream(
           STREAM_NAME,
-          GROUP_NAME,
+          GROUP_NAME
         );
 
         for await (const resolvedEvent of subscription) {
@@ -377,7 +377,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
             await subscription.nack(
               resolvedEvent.event.type === "skip-event" ? "skip" : "retry",
               "To test it",
-              resolvedEvent,
+              resolvedEvent
             );
             continue;
           }
@@ -391,7 +391,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
             // retried
             retryCount * 2 +
             // finish test event
-            1,
+            1
         );
       });
 
@@ -405,7 +405,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
           GROUP_NAME,
           persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
-          }),
+          })
         );
 
         await client.appendToStream(STREAM_NAME, [
@@ -415,7 +415,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
         const subscription = client.subscribeToPersistentSubscriptionToStream(
           STREAM_NAME,
-          GROUP_NAME,
+          GROUP_NAME
         );
 
         for await (const resolvedEvent of subscription) {
@@ -451,12 +451,12 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         GROUP_NAME,
         persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
-        }),
+        })
       );
 
       const subscription = client.subscribeToPersistentSubscriptionToStream(
         STREAM_NAME,
-        GROUP_NAME,
+        GROUP_NAME
       );
 
       const eventListenerOne = jest.fn();
@@ -501,7 +501,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         GROUP_NAME,
         persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
-        }),
+        })
       );
 
       await client.appendToStream(STREAM_NAME, [
@@ -516,14 +516,14 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
       const subscription = client.subscribeToPersistentSubscriptionToStream(
         STREAM_NAME,
-        GROUP_NAME,
+        GROUP_NAME
       );
 
       const acker = new (class extends Transform {
         _transform(
           resolvedEvent: ResolvedEvent,
           _encoding: string,
-          done: (error: null, e: ResolvedEvent) => void,
+          done: (error: null, e: ResolvedEvent) => void
         ) {
           subscription.ack(resolvedEvent).then(() => done(null, resolvedEvent));
         }
@@ -557,7 +557,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
       GROUP_NAME,
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
-      }),
+      })
     );
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents(3, "test 1"));
@@ -578,7 +578,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
     const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
-      GROUP_NAME,
+      GROUP_NAME
     );
 
     for await (const resolvedEvent of subscription) {
@@ -605,7 +605,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         nodePreference: "follower",
       },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     const STREAM_NAME = "follower_node_test";
@@ -614,7 +614,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
     const confirmThatErrorWasThrown = jest.fn();
 
     const createAndConnectWithAutoReconnect = async (
-      client: EventStoreDBClient,
+      client: EventStoreDBClient
     ): Promise<PersistentSubscriptionToStream> => {
       try {
         await client.createPersistentSubscriptionToStream(
@@ -622,12 +622,12 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
           GROUP_NAME,
           persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
-          }),
+          })
         );
 
         return client.subscribeToPersistentSubscriptionToStream(
           STREAM_NAME,
-          GROUP_NAME,
+          GROUP_NAME
         );
       } catch (error) {
         confirmThatErrorWasThrown(error);
@@ -640,7 +640,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
               endpoint: error.leader,
             },
             { rootCertificate: cluster.rootCertificate },
-            { username: "admin", password: "changeit" },
+            { username: "admin", password: "changeit" }
           );
 
           // try again with new connection
@@ -657,8 +657,9 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
       finishEvent(),
     ]);
 
-    const subscription =
-      await createAndConnectWithAutoReconnect(followerClient);
+    const subscription = await createAndConnectWithAutoReconnect(
+      followerClient
+    );
 
     for await (const resolvedEvent of subscription) {
       doSomething(resolvedEvent);
@@ -673,7 +674,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
     expect(confirmThatErrorWasThrown).toBeCalledTimes(1);
     expect(confirmThatErrorWasThrown.mock.calls[0][0]).toBeInstanceOf(
-      NotLeaderError,
+      NotLeaderError
     );
   });
 
@@ -705,12 +706,12 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
       GROUP_NAME,
       persistentSubscriptionToStreamSettingsFromDefaults({
         resolveLinkTos: true,
-      }),
+      })
     );
 
     const subscription = client.subscribeToPersistentSubscriptionToStream(
       SYSTEM_STREAM_NAME,
-      GROUP_NAME,
+      GROUP_NAME
     );
 
     const acked = new Set<string>();
@@ -744,7 +745,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
         maxRetryCount: 5,
-      }),
+      })
     );
 
     await client.appendToStream(STREAM_NAME, [
@@ -754,7 +755,7 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
 
     const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
-      GROUP_NAME,
+      GROUP_NAME
     );
 
     const nacked: Record<string, number> = {};
@@ -789,17 +790,17 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         GROUP_NAME,
         persistentSubscriptionToStreamSettingsFromDefaults({
           startFrom: START,
-        }),
+        })
       );
 
       const appendResult = await client.appendToStream(
         STREAM_NAME,
-        finishEvent(),
+        finishEvent()
       );
 
       const subscription = client.subscribeToPersistentSubscriptionToStream(
         STREAM_NAME,
-        GROUP_NAME,
+        GROUP_NAME
       );
 
       for await (const resolvedEvent of subscription) {
@@ -809,10 +810,10 @@ describe("subscribeToPersistentSubscriptionToStream", () => {
         expect(resolvedEvent.event?.position?.commit).toBeDefined();
         expect(resolvedEvent.event?.position?.prepare).toBeDefined();
         expect(resolvedEvent.event?.position?.commit).toBe(
-          appendResult.position?.commit,
+          appendResult.position?.commit
         );
         expect(resolvedEvent.event?.position?.prepare).toBe(
-          appendResult.position?.prepare,
+          appendResult.position?.prepare
         );
 
         if (resolvedEvent.event?.type === "finish-test") {

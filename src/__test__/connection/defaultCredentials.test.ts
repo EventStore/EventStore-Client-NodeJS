@@ -17,18 +17,18 @@ describe("defaultCredentials", () => {
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.rootCertificate },
-        { username: "admin", password: "changeit" },
+        { username: "admin", password: "changeit" }
       );
       await expect(
-        collect(client.readAll({ maxCount: 10 })),
+        collect(client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
       await expect(
         collect(
           client.readAll({
             maxCount: 10,
             credentials: { username: "AzureDiamond", password: "hunter2" },
-          }),
-        ),
+          })
+        )
       ).rejects.toThrowError(AccessDeniedError);
     });
 
@@ -36,18 +36,18 @@ describe("defaultCredentials", () => {
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.rootCertificate },
-        { username: "AzureDiamond", password: "hunter2" },
+        { username: "AzureDiamond", password: "hunter2" }
       );
       await expect(
-        collect(client.readAll({ maxCount: 10 })),
+        collect(client.readAll({ maxCount: 10 }))
       ).rejects.toThrowError(AccessDeniedError);
       await expect(
         collect(
           client.readAll({
             maxCount: 10,
             credentials: { username: "admin", password: "changeit" },
-          }),
-        ),
+          })
+        )
       ).resolves.toBeDefined();
     });
   });

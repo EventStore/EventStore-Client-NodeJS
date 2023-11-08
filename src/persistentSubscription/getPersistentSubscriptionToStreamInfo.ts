@@ -18,6 +18,8 @@ import {
   mapPersistentSubscriptionToStreamInfo,
   PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface GetPersistentSubscriptionToStreamInfoOptions
   extends BaseOptions {}
@@ -25,7 +27,9 @@ export interface GetPersistentSubscriptionToStreamInfoOptions
 declare module "../Client" {
   interface Client {
     /**
-     * Gets information and statistics on the specified persistent subscription and its connections.
+     * Gets information and statistics on the specified persistent subscription
+     * and its connections.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param options Get persistent subscription info options.
@@ -33,7 +37,7 @@ declare module "../Client" {
     getPersistentSubscriptionToStreamInfo(
       streamName: string,
       groupName: string,
-      options?: GetPersistentSubscriptionToStreamInfoOptions,
+      options?: GetPersistentSubscriptionToStreamInfoOptions
     ): Promise<PersistentSubscriptionToStreamInfo>;
   }
 }
@@ -42,8 +46,15 @@ Client.prototype.getPersistentSubscriptionToStreamInfo = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  options: GetPersistentSubscriptionToStreamInfoOptions,
+  options: GetPersistentSubscriptionToStreamInfoOptions
 ): Promise<PersistentSubscriptionToStreamInfo> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.getPersistentSubscriptionToStreamInfoOptions.optional(),
+    options
+  );
+
   debug.command("getPersistentSubscriptionToStreamInfo: %O", {
     streamName,
     groupName,
@@ -55,7 +66,7 @@ Client.prototype.getPersistentSubscriptionToStreamInfo = async function (
       this,
       streamName,
       groupName,
-      options,
+      options
     );
   }
 
@@ -63,7 +74,7 @@ Client.prototype.getPersistentSubscriptionToStreamInfo = async function (
     this,
     streamName,
     groupName,
-    options,
+    options
   );
 };
 
@@ -71,7 +82,7 @@ const getPersistentSubscriptionToStreamInfoGRPC = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: GetPersistentSubscriptionToStreamInfoOptions = {},
+  baseOptions: GetPersistentSubscriptionToStreamInfoOptions = {}
 ): Promise<PersistentSubscriptionToStreamInfo> {
   const req = new GetInfoReq();
   const options = new GetInfoReq.Options();
@@ -96,12 +107,12 @@ const getPersistentSubscriptionToStreamInfoGRPC = async function (
             if (error) return reject(convertToCommandError(error));
             return resolve(
               mapPersistentSubscriptionToStreamInfo(
-                response.getSubscriptionInfo()!,
-              ),
+                response.getSubscriptionInfo()!
+              )
             );
-          },
+          }
         );
-      }),
+      })
   );
 };
 
@@ -109,12 +120,12 @@ const getPersistentSubscriptionToStreamInfoHTTP = async function (
   this: Client,
   streamName: string,
   groupName: string,
-  baseOptions: GetPersistentSubscriptionToStreamInfoOptions = {},
+  baseOptions: GetPersistentSubscriptionToStreamInfoOptions = {}
 ): Promise<PersistentSubscriptionToStreamInfo> {
   const info = await this.HTTPRequest<HTTPSubscriptionInfo>(
     "GET",
     `/subscriptions/${encodeURIComponent(streamName)}/${encodeURIComponent(
-      groupName,
+      groupName
     )}/info`,
     {
       ...baseOptions,
@@ -126,7 +137,7 @@ const getPersistentSubscriptionToStreamInfoHTTP = async function (
           });
         }
       },
-    },
+    }
   );
 
   return mapHTTPPersistentSubscriptionInfo(info);

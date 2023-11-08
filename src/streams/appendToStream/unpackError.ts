@@ -22,7 +22,7 @@ export const unpackWrongExpectedVersion = (grpcError: Status) =>
     .getDetails()
     ?.unpack(
       WrongExpectedVersion.deserializeBinary,
-      "event_store.client.WrongExpectedVersion",
+      "event_store.client.WrongExpectedVersion"
     ) ?? null;
 
 export const unpackToCommandError = (grpcError: Status, streamName: string) => {
@@ -33,18 +33,18 @@ export const unpackToCommandError = (grpcError: Status, streamName: string) => {
     case "event_store.client.WrongExpectedVersion": {
       const unpacked = details.unpack(
         WrongExpectedVersion.deserializeBinary,
-        typename,
+        typename
       );
       if (!unpacked) break;
       return WrongExpectedVersionError.fromWrongExpectedVersion(
         unpacked,
-        streamName,
+        streamName
       );
     }
     case "event_store.client.StreamDeleted": {
       const unpacked = details.unpack(
         StreamDeleted.deserializeBinary,
-        typename,
+        typename
       );
       if (!unpacked) break;
       return StreamDeletedError.fromStreamName(streamName);
@@ -67,16 +67,16 @@ export const unpackToCommandError = (grpcError: Status, streamName: string) => {
     case "event_store.client.MaximumAppendSizeExceeded": {
       const unpacked = details.unpack(
         MaximumAppendSizeExceeded.deserializeBinary,
-        typename,
+        typename
       );
       if (!unpacked) break;
       return MaxAppendSizeExceededError.fromMaxAppendSize(
-        unpacked.getMaxappendsize(),
+        unpacked.getMaxappendsize()
       );
     }
   }
   return new UnknownError(
     undefined,
-    `Could not recognize ${grpcError.getMessage()}`,
+    `Could not recognize ${grpcError.getMessage()}`
   );
 };

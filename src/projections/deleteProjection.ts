@@ -2,24 +2,29 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { DeleteReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface DeleteProjectionOptions extends BaseOptions {
   /**
    * Deletes emitted streams.
+   *
    * @default false
    */
   deleteEmittedStreams?: boolean;
 
   /**
    * Deletes state stream.
+   *
    * @default false
    */
   deleteStateStream?: boolean;
 
   /**
    * Deletes checkpoint stream.
+   *
    * @default false
    */
   deleteCheckpointStream?: boolean;
@@ -29,12 +34,13 @@ declare module "../Client" {
   interface Client {
     /**
      * Deletes a projection.
+     *
      * @param projectionName The name of the projection to delete.
      * @param options Delete projection options.
      */
     deleteProjection(
       projectionName: string,
-      options?: DeleteProjectionOptions,
+      options?: DeleteProjectionOptions
     ): Promise<void>;
   }
 }
@@ -42,13 +48,21 @@ declare module "../Client" {
 Client.prototype.deleteProjection = async function (
   this: Client,
   projectionName: string,
-  {
+  deleteProjectionOptions: DeleteProjectionOptions = {}
+): Promise<void> {
+  const {
     deleteEmittedStreams = false,
     deleteStateStream = false,
     deleteCheckpointStream = false,
     ...baseOptions
-  }: DeleteProjectionOptions = {},
-): Promise<void> {
+  } = deleteProjectionOptions;
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(
+    schemas.deleteProjectionOptions.optional(),
+    deleteProjectionOptions
+  );
+
   const req = new DeleteReq();
   const options = new DeleteReq.Options();
 
@@ -79,6 +93,6 @@ Client.prototype.deleteProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };

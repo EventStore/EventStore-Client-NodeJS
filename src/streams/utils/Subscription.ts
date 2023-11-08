@@ -25,7 +25,7 @@ export class Subscription<E>
     createGRPCStream: CreateGRPCStream,
     convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>,
     options: TransformOptions,
-    checkpointReached?: Filter["checkpointReached"],
+    checkpointReached?: Filter["checkpointReached"]
   ) {
     super({ ...options, objectMode: true });
     this.#convertGrpcEvent = convertGrpcEvent;
@@ -51,7 +51,7 @@ export class Subscription<E>
   async _transform(
     resp: ReadResp,
     _encoding: string,
-    next: TransformCallback,
+    next: TransformCallback
   ): Promise<void> {
     if (resp.hasConfirmation?.()) {
       this.emit("confirmation");

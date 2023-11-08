@@ -17,12 +17,12 @@ describe("insecure", () => {
   test("should successfully connect", async () => {
     const client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { insecure: true },
+      { insecure: true }
     );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 }),
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
 
     expect(appendResult).toBeDefined();

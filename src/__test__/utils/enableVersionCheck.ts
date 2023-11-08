@@ -1,4 +1,4 @@
-import NodeEnvironment from "jest-environment-node";
+import NodeEnvironment = require("jest-environment-node");
 
 import { Cluster } from "./Cluster";
 import { EventStoreDBClient } from "../../";
@@ -17,7 +17,7 @@ const checkCapabilities = async () => {
       endpoint: node.uri,
     },
     { rootCertificate: node.rootCertificate },
-    { username: "admin", password: "changeit" },
+    { username: "admin", password: "changeit" }
   );
 
   const capabilities = await extractVersion.call(client);

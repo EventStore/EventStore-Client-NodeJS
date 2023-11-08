@@ -62,7 +62,7 @@ class BackpressureQueue<T> {
 
 export const backpressuredWrite = async <T>(
   stream: ClientWritableStream<T>,
-  data: T,
+  data: T
 ) => {
   if (!cache.has(stream)) {
     cache.set(stream, new BackpressureQueue<T>(stream));

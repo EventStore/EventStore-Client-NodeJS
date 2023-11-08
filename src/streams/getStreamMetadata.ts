@@ -1,7 +1,9 @@
 import { Client } from "../Client";
 import { BACKWARDS, END } from "../constants";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, StreamNotFoundError } from "../utils";
+import { validateField } from "../utils/validation";
 
 import {
   CustomStreamMetadata,
@@ -11,7 +13,7 @@ import {
 import { metastreamOf } from "./utils/systemStreams";
 
 export interface GetStreamMetadataResult<
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
 > {
   /**
    * The name of the stream.
@@ -35,25 +37,29 @@ declare module "../Client" {
   interface Client {
     /**
      * Reads the metadata for a stream.
+     *
      * @param streamName A stream name.
      * @param options Read options.
      */
     getStreamMetadata<
-      CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
+      CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
     >(
       streamName: string,
-      options?: GetStreamMetadataOptions,
+      options?: GetStreamMetadataOptions
     ): Promise<GetStreamMetadataResult<CustomMetadata>>;
   }
 }
 
 Client.prototype.getStreamMetadata = async function <
-  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata,
+  CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata
 >(
   this: Client,
   streamName: string,
-  baseOptions: GetStreamMetadataOptions = {},
+  baseOptions: GetStreamMetadataOptions = {}
 ): Promise<GetStreamMetadataResult<CustomMetadata>> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.getStreamMetadataOptions.optional(), baseOptions);
+
   const metadataStreamName = metastreamOf(streamName);
 
   debug.command("getStreamMetadata: %O", {
@@ -80,7 +86,7 @@ Client.prototype.getStreamMetadata = async function <
     return {
       streamName,
       metadata: readStreamMetadata<CustomMetadata>(
-        metadataEvent.event.data as Record<string, unknown>,
+        metadataEvent.event.data as Record<string, unknown>
       ),
       metastreamRevision: metadataEvent.commitPosition,
     };

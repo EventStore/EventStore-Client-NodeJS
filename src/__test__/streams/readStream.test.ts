@@ -35,7 +35,7 @@ describe("readStream", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     appendResult = await client.appendToStream(STREAM_NAME, [
@@ -45,7 +45,7 @@ describe("readStream", () => {
 
     await client.appendToStream(
       OUT_OF_STREAM_NAME,
-      jsonTestEvents(5, "out-of-stream-test"),
+      jsonTestEvents(5, "out-of-stream-test")
     );
   });
 
@@ -165,14 +165,14 @@ describe("readStream", () => {
               linkTo('a-' + ev.data.some, ev)
             }
           });`,
-          { emitEnabled: true },
+          { emitEnabled: true }
         );
 
         // Append an event that will be linked
 
         await client.appendToStream(
           FROM_STREAM_NAME,
-          jsonEvent({ type: "linky", data: { some: "thing" } }),
+          jsonEvent({ type: "linky", data: { some: "thing" } })
         );
 
         await delay(1000);
@@ -202,10 +202,10 @@ describe("readStream", () => {
         expect(doResolveEvent.link?.type).toBe("$>");
 
         expect(doResolveEvent.event?.id).toBe(
-          noResolveEvent.event!.metadata.$causedBy,
+          noResolveEvent.event!.metadata.$causedBy
         );
         expect(doResolveEvent.event?.id).toBe(
-          doResolveEvent.link!.metadata.$causedBy,
+          doResolveEvent.link!.metadata.$causedBy
         );
       });
     });
@@ -286,17 +286,17 @@ describe("readStream", () => {
             maxCount: 1,
             fromRevision: END,
             direction: BACKWARDS,
-          }),
+          })
         );
 
         expect(resolvedEvent.event?.position).toBeDefined();
         expect(resolvedEvent.event?.position?.commit).toBeDefined();
         expect(resolvedEvent.event?.position?.prepare).toBeDefined();
         expect(resolvedEvent.event?.position?.commit).toBe(
-          appendResult.position?.commit,
+          appendResult.position?.commit
         );
         expect(resolvedEvent.event?.position?.prepare).toBe(
-          appendResult.position?.prepare,
+          appendResult.position?.prepare
         );
       });
     });

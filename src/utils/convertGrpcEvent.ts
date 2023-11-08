@@ -24,7 +24,7 @@ export type GRPCRecordedEvent =
 export type ConvertGrpcEvent<GRPCEvent, E> = (grpcEvent: GRPCEvent) => E;
 
 export const convertGrpcEvent = <T extends ResolvedEvent>(
-  grpcEvent: StreamsReadResp.ReadEvent,
+  grpcEvent: StreamsReadResp.ReadEvent
 ): T => {
   const resolved: ResolvedEvent = {};
 
@@ -44,9 +44,9 @@ export const convertGrpcEvent = <T extends ResolvedEvent>(
 };
 
 export const convertPersistentSubscriptionGrpcEvent = <
-  T extends PersistentSubscriptionToStreamResolvedEvent,
+  T extends PersistentSubscriptionToStreamResolvedEvent
 >(
-  grpcEvent: PersistentReadResp.ReadEvent,
+  grpcEvent: PersistentReadResp.ReadEvent
 ): T => {
   const resolved: PersistentSubscriptionToStreamResolvedEvent = {
     retryCount: grpcEvent.hasRetryCount() ? grpcEvent.getRetryCount() : 0,
@@ -68,7 +68,7 @@ export const convertPersistentSubscriptionGrpcEvent = <
 };
 
 const extractPosition = (
-  grpcRecord: GRPCRecordedEvent,
+  grpcRecord: GRPCRecordedEvent
 ): Position | undefined => {
   const commit = grpcRecord.getCommitPosition();
   const prepare = grpcRecord.getPreparePosition();
@@ -86,7 +86,7 @@ const extractPosition = (
 const safeParseJSON = <T = unknown>(
   str: string,
   fallback: (str: string) => T,
-  errorMessage: string,
+  errorMessage: string
 ): T => {
   try {
     const parsed = JSON.parse(str);
@@ -110,7 +110,7 @@ const parseMetadata = (grpcRecord: GRPCRecordedEvent, id: string) => {
 const TICKS_PER_MILLISECOND = BigInt(10_000);
 const convertCreatedToDate = (
   created: string | undefined,
-  id: string,
+  id: string
 ): Date => {
   // Created should always be present, but we'll default to `0` just in case.
   if (created == null) {
@@ -133,7 +133,7 @@ const convertCreatedToDate = (
 };
 
 export const convertGrpcRecord = <E extends EventType = EventType>(
-  grpcRecord: GRPCRecordedEvent,
+  grpcRecord: GRPCRecordedEvent
 ): EventTypeToRecordedEvent<E> => {
   const metadataMap = grpcRecord.getMetadataMap();
 
@@ -145,7 +145,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
     throw "Impossible situation where streamIdentifier is undefined in a recorded event";
   }
   const streamId = Buffer.from(
-    grpcRecord.getStreamIdentifier()!.getStreamName(),
+    grpcRecord.getStreamIdentifier()!.getStreamName()
   ).toString("utf8");
 
   if (!grpcRecord.hasId()) {
@@ -165,7 +165,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
     const data = safeParseJSON<E["data"]>(
       dataStr,
       (d) => d,
-      `Malformed JSON data in event ${id}`,
+      `Malformed JSON data in event ${id}`
     );
 
     return {

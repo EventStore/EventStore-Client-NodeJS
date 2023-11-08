@@ -22,7 +22,7 @@ describe("reconnect", () => {
     const client = new EventStoreDBClient(
       { endpoints: cluster.endpoints },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     // make successful append of 2000 events to node
@@ -30,7 +30,7 @@ describe("reconnect", () => {
       "my_stream",
       jsonTestEvents(2000),
       // batch append triggers reconnect as soon as stream drops, so we need to force regular append
-      { credentials: { username: "admin", password: "changeit" } },
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(firstAppend).toBeDefined();
 
@@ -60,7 +60,7 @@ describe("reconnect", () => {
       "my_stream",
       jsonEvent({ type: "reconnect-append", data: { message: "test" } }),
       // batch append triggers reconnect as soon as stream drops, so we need to force regular append
-      { credentials: { username: "admin", password: "changeit" } },
+      { credentials: { username: "admin", password: "changeit" } }
     );
     expect(reconnectedAppend).toBeDefined();
 

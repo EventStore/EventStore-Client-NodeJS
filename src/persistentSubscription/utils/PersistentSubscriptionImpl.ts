@@ -29,7 +29,7 @@ export class PersistentSubscriptionImpl<E>
   constructor(
     createGRPCStream: CreateGRPCStream,
     convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>,
-    options: TransformOptions,
+    options: TransformOptions
   ) {
     super({ ...options, objectMode: true });
     this.#grpcStream = createGRPCStream();

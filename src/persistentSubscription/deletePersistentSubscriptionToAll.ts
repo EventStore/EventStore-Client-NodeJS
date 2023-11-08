@@ -8,6 +8,8 @@ import {
 import { convertToCommandError, debug, UnsupportedError } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface DeletePersistentSubscriptionToAllOptions extends BaseOptions {}
 
@@ -15,13 +17,14 @@ declare module "../Client" {
   interface Client {
     /**
      * Deletes a persistent subscription.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param options Deletion options.
      */
     deletePersistentSubscriptionToAll(
       groupName: string,
-      options?: DeletePersistentSubscriptionToAllOptions,
+      options?: DeletePersistentSubscriptionToAllOptions
     ): Promise<void>;
   }
 }
@@ -29,8 +32,16 @@ declare module "../Client" {
 Client.prototype.deletePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
-  { ...baseOptions }: DeletePersistentSubscriptionToAllOptions = {},
+  deletePersistentSubscriptionToAllOptions: DeletePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
+  const { ...baseOptions } = deletePersistentSubscriptionToAllOptions;
+
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.deletePersistentSubscriptionToAllOptions.optional(),
+    deletePersistentSubscriptionToAllOptions
+  );
+
   if (!(await this.supports(PersistentSubscriptionsService.delete, "all"))) {
     throw new UnsupportedError("deletePersistentSubscriptionToAll", "21.10");
   }
@@ -57,6 +68,6 @@ Client.prototype.deletePersistentSubscriptionToAll = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };

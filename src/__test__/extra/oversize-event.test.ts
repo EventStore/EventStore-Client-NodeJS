@@ -16,7 +16,7 @@ describe("oversize events", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -74,7 +74,7 @@ describe("oversize events", () => {
     expect(state2.projectionStatus).toBe(RUNNING);
 
     const subscription = client.subscribeToStream<BigEvent>(
-      `${STREAM_NAME}_emit`,
+      `${STREAM_NAME}_emit`
     );
 
     for await (const { event } of subscription) {

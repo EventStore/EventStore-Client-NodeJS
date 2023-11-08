@@ -121,12 +121,12 @@ describe("member sorting", () => {
 
   const countUnique = (sortedArrays: MemberInfo[][]): number =>
     new Set(
-      sortedArrays.map((arr) => arr.map(({ instanceId }) => instanceId).join()),
+      sortedArrays.map((arr) => arr.map(({ instanceId }) => instanceId).join())
     ).size;
 
   test(`RANDOM should shuffle the array`, () => {
     const sortedArrays = Array.from({ length: 200 }, () =>
-      filterAndOrderMembers(RANDOM, [...members]),
+      filterAndOrderMembers(RANDOM, [...members])
     );
 
     expect(countUnique(sortedArrays)).toBeGreaterThan(1);
@@ -134,7 +134,7 @@ describe("member sorting", () => {
 
   test(`LEADER should place the leader first, shuffle the rest`, () => {
     const sortedArrays = Array.from({ length: 200 }, () =>
-      filterAndOrderMembers(LEADER, [...members]),
+      filterAndOrderMembers(LEADER, [...members])
     );
 
     for (const sorted of sortedArrays) {
@@ -148,7 +148,7 @@ describe("member sorting", () => {
 
   test(`FOLLOWER should place the followers first in a random order, shuffle the rest`, () => {
     const sortedArrays = Array.from({ length: 200 }, () =>
-      filterAndOrderMembers(FOLLOWER, [...members]),
+      filterAndOrderMembers(FOLLOWER, [...members])
     );
 
     for (const sorted of sortedArrays) {
@@ -162,7 +162,7 @@ describe("member sorting", () => {
 
   test(`READ_ONLY_REPLICA should prefer ReadOnlyReplica PreReadOnlyReplica ReadOnlyLeaderless in order`, () => {
     const sortedArrays = Array.from({ length: 200 }, () =>
-      filterAndOrderMembers(READ_ONLY_REPLICA, [...members]),
+      filterAndOrderMembers(READ_ONLY_REPLICA, [...members])
     );
 
     for (const sorted of sortedArrays) {

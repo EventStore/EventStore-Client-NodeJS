@@ -12,7 +12,7 @@ import type { EndPoint } from "../../types";
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
 
-const rmdir = promisify(fs.rm);
+const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -31,13 +31,13 @@ const nodeList = (count: number, ipStub: string) =>
     Array.from({ length: count }, async (_, i) => ({
       port: await getPort(),
       ipv4_address: `${ipStub}.${10 + i}`,
-    })),
+    }))
   );
 
 const createCertGen = (
   internalIPs: ClusterLocation[],
   domain: string,
-  insecure: boolean,
+  insecure: boolean
 ) =>
   insecure
     ? {}
@@ -49,7 +49,7 @@ const createCertGen = (
     ${internalIPs
       .map(
         ({ ipv4_address }, i) =>
-          `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address} -dns-names ${domain}`,
+          `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address} -dns-names ${domain}`
       )
       .join(" && ")}"`,
           user: "1000:1000",
@@ -67,7 +67,7 @@ const createNodes = (
   internalIPs: ClusterLocation[],
   domain: string,
   insecure: boolean,
-  extraOptions: string[],
+  extraOptions: string[]
 ) =>
   internalIPs.reduce(
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
@@ -79,7 +79,7 @@ const createNodes = (
             .reduce<string[]>(
               (acc, { ipv4_address: ip }) =>
                 ip === ipv4_address ? acc : [...acc, `${ip}:2113`],
-              [],
+              []
             )
             .join(",")}`,
           `EVENTSTORE_INT_IP=${ipv4_address}`,
@@ -119,7 +119,7 @@ const createNodes = (
             }),
       },
     }),
-    {},
+    {}
   );
 
 const rnd = (min: number, max: number) =>
@@ -199,7 +199,7 @@ export class Cluster {
         testDebug(
           `Failed to initialize cluster. Retry ${3 - this.retryCount}\n${
             error.err
-          } `,
+          } `
         );
 
         await this.down();
@@ -228,14 +228,14 @@ export class Cluster {
     if (this.inspected) {
       const composeFile = relative(
         process.cwd(),
-        this.path("./docker-compose.yaml"),
+        this.path("./docker-compose.yaml")
       );
 
       const folder = relative(process.cwd(), this.path());
 
       console.log(
         "Leaving cluster open for inspection. Dont forget to take it down: \n",
-        `docker-compose -f ${composeFile} down --volumes && rm -rf ${folder}`,
+        `docker-compose -f ${composeFile} down --volumes && rm -rf ${folder}`
       );
 
       return;
@@ -252,7 +252,7 @@ export class Cluster {
   };
 
   public enableNodeLogs = async (
-    node: EndPoint = this.endpoints[0],
+    node: EndPoint = this.endpoints[0]
   ): Promise<void> => {
     const nodeId = this.endpointToNodeId(node);
     logs(nodeId, {
@@ -328,7 +328,7 @@ export class Cluster {
           this.locations,
           this.domain,
           this.insecure,
-          this.extraOptions,
+          this.extraOptions
         ),
       },
       networks: {
@@ -347,15 +347,15 @@ export class Cluster {
       },
     };
 
-    await mkdir(this.path(), { recursive: true, mode: 0o700 });
-    await mkdir(this.path("./config"), { recursive: true, mode: 0o777 });
+    await mkdir(this.path(), { recursive: true });
+    await mkdir(this.path("./config"), { recursive: true });
     await writeFile(
       this.path("./config/logconfig.json"),
       JSON.stringify({
         Logging: {
           LogLevel: this.logLevel,
         },
-      }),
+      })
     );
     await writeFile(this.path("./docker-compose.yaml"), JSON.stringify(config));
   };
@@ -377,7 +377,7 @@ export class Cluster {
             `curl --fail --insecure http${
               this.insecure ? "" : "s"
             }://localhost:2113/health/live`,
-            { cwd: this.path() },
+            { cwd: this.path() }
           );
 
           if (response.exitCode === 0) {
@@ -409,7 +409,7 @@ export class Cluster {
             `curl --fail --insecure http${
               this.insecure ? "" : "s"
             }://localhost:2113/gossip`,
-            { cwd: this.path() },
+            { cwd: this.path() }
           );
 
           interface Member {
@@ -439,21 +439,20 @@ export class Cluster {
 
   private cleanUp = async () => {
     try {
-      await rmdir(this.path(), { recursive: true, force: true });
+      await rmdir(this.path(), { recursive: true });
     } catch (error) {
       if (process.env.CI) return;
       if (error.code === "ENOENT") return;
-      return;
 
       console.log(
-        `Failed to clean up test files at "${this.path()}": ${error}`,
+        `Failed to clean up test files at "${this.path()}": ${error}`
       );
     }
   };
 
   private endpointToNodeId = (endpoint: EndPoint) => {
     const index = this.locations.findIndex(
-      (location) => location.port === endpoint.port,
+      (location) => location.port === endpoint.port
     );
 
     if (index === -1) {

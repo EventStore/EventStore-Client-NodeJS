@@ -30,7 +30,7 @@ describe("disable / abort", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -70,7 +70,7 @@ describe("disable / abort", () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
-        client.disableProjection(PROJECTION_NAME),
+        client.disableProjection(PROJECTION_NAME)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });
@@ -106,7 +106,7 @@ describe("disable / abort", () => {
         const PROJECTION_NAME = "doesnt exist";
 
         await expect(
-          client.abortProjection(PROJECTION_NAME),
+          client.abortProjection(PROJECTION_NAME)
         ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
       });
     });

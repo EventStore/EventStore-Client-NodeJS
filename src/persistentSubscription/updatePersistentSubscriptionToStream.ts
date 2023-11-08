@@ -11,11 +11,14 @@ import type {
   persistentSubscriptionToStreamSettingsFromDefaults,
 } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 declare module "../Client" {
   interface Client {
     /**
      * Updates a persistent subscription configuration.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param settings PersistentSubscription settings.
@@ -26,7 +29,7 @@ declare module "../Client" {
       streamName: string,
       groupName: string,
       settings: PersistentSubscriptionToStreamSettings,
-      options?: BaseOptions,
+      options?: BaseOptions
     ): Promise<void>;
   }
 }
@@ -36,8 +39,13 @@ Client.prototype.updatePersistentSubscriptionToStream = async function (
   streamName: string,
   groupName: string,
   settings: PersistentSubscriptionToStreamSettings,
-  baseOptions: BaseOptions = {},
+  baseOptions: BaseOptions = {}
 ): Promise<void> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(schemas.persistentSubscriptionToStreamSettings, settings);
+  validateField(schemas.baseOptions.optional(), baseOptions);
+
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
   const identifier = createStreamIdentifier(streamName);
@@ -83,6 +91,6 @@ Client.prototype.updatePersistentSubscriptionToStream = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };

@@ -7,6 +7,8 @@ import { Client } from "../Client";
 import type { BaseOptions, ProjectionDetails } from "../types";
 import { debug, convertToCommandError } from "../utils";
 import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface GetProjectionStatusOptions extends BaseOptions {}
 
@@ -14,12 +16,13 @@ declare module "../Client" {
   interface Client {
     /**
      * Gets the current status of a projection.
+     *
      * @param projectionName The name of the projection.
      * @param options Get status options.
      */
     getProjectionStatus(
       projectionName: string,
-      options?: GetProjectionStatusOptions,
+      options?: GetProjectionStatusOptions
     ): Promise<ProjectionDetails>;
   }
 }
@@ -27,8 +30,11 @@ declare module "../Client" {
 Client.prototype.getProjectionStatus = async function (
   this: Client,
   projectionName: string,
-  baseOptions: GetProjectionStatusOptions = {},
+  baseOptions: GetProjectionStatusOptions = {}
 ): Promise<ProjectionDetails> {
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.getProjectionStatusOptions.optional(), baseOptions);
+
   const req = new StatisticsReq();
   const options = new StatisticsReq.Options();
   options.setName(projectionName);
@@ -62,6 +68,6 @@ Client.prototype.getProjectionStatus = async function (
           resolve(projectionDetail);
         });
       });
-    },
+    }
   );
 };

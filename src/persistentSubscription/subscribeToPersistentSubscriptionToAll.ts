@@ -15,11 +15,14 @@ import {
 } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface SubscribeToPersistentSubscriptionToAllOptions
   extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
+   *
    * @default 10
    */
   bufferSize?: number;
@@ -29,6 +32,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Connects to a persistent subscription.
+     *
      * @param stream A stream name.
      * @param group A group name.
      * @param options Connection options.
@@ -36,7 +40,7 @@ declare module "../Client" {
     subscribeToPersistentSubscriptionToAll(
       groupName: string,
       options?: SubscribeToPersistentSubscriptionToAllOptions,
-      duplexOptions?: DuplexOptions,
+      duplexOptions?: DuplexOptions
     ): PersistentSubscriptionToAll;
   }
 }
@@ -44,12 +48,18 @@ declare module "../Client" {
 Client.prototype.subscribeToPersistentSubscriptionToAll = function (
   this: Client,
   groupName: string,
-  {
-    bufferSize = 10,
-    ...baseOptions
-  }: SubscribeToPersistentSubscriptionToAllOptions = {},
-  duplexOptions: DuplexOptions = {},
+  subscribeToPersistentSubscriptionToAllOptions: SubscribeToPersistentSubscriptionToAllOptions = {},
+  duplexOptions: DuplexOptions = {}
 ): PersistentSubscriptionToAll {
+  const { bufferSize = 10, ...baseOptions } =
+    subscribeToPersistentSubscriptionToAllOptions;
+
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.subscribeToPersistentSubscriptionToAllOptions.optional(),
+    subscribeToPersistentSubscriptionToAllOptions
+  );
+
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
       PersistentSubscriptionsClient,
@@ -60,7 +70,7 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         ) {
           throw new UnsupportedError(
             "subscribeToPersistentSubscriptionToAll",
-            "21.10",
+            "21.10"
           );
         }
 
@@ -87,13 +97,13 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         const stream = client.read(
           ...this.callArguments(baseOptions, {
             deadline: Infinity,
-          }),
+          })
         );
         stream.write(req);
         return stream;
-      },
+      }
     ),
     convertPersistentSubscriptionGrpcEvent,
-    duplexOptions,
+    duplexOptions
   );
 };

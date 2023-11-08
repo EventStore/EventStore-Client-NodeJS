@@ -34,7 +34,7 @@ describe("listPersistentSubscriptionsToAll", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -49,7 +49,7 @@ describe("listPersistentSubscriptionsToAll", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: listPersistentSubscriptionsToAll requires server version 21.10.1 or higher.]`,
+          `[Error: listPersistentSubscriptionsToAll requires server version 21.10.1 or higher.]`
         );
       }
     });
@@ -81,7 +81,7 @@ describe("listPersistentSubscriptionsToAll", () => {
             consumerStrategyName: ROUND_ROBIN,
           },
           {},
-        ],
+        ]
       );
     });
 
@@ -154,7 +154,7 @@ describe("listPersistentSubscriptionsToAll", () => {
             endpoint: emptyNode.uri,
           },
           { rootCertificate: emptyNode.rootCertificate },
-          { username: "admin", password: "changeit" },
+          { username: "admin", password: "changeit" }
         );
       });
 
@@ -169,7 +169,7 @@ describe("listPersistentSubscriptionsToAll", () => {
         } catch (error) {
           expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
           expect(error).toMatchInlineSnapshot(
-            `[Error: 5 NOT_FOUND: Subscription group  on stream $all does not exist.]`,
+            `[Error: 5 NOT_FOUND: Subscription group  on stream $all does not exist.]`
           );
 
           if (error instanceof PersistentSubscriptionDoesNotExistError) {

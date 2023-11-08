@@ -5,8 +5,10 @@ import {
 import { Empty } from "../../generated/shared_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface RestartPersistentSubscriptionSubsystemOptions
   extends BaseOptions {}
@@ -15,21 +17,27 @@ declare module "../Client" {
   interface Client {
     /**
      * Restarts the persistent subscription subsystem.
+     *
      * @param options Restart subsystem options.
      */
     restartPersistentSubscriptionSubsystem(
-      options?: RestartPersistentSubscriptionSubsystemOptions,
+      options?: RestartPersistentSubscriptionSubsystemOptions
     ): Promise<void>;
   }
 }
 
 Client.prototype.restartPersistentSubscriptionSubsystem = async function (
   this: Client,
-  options: RestartPersistentSubscriptionSubsystemOptions = {},
+  options: RestartPersistentSubscriptionSubsystemOptions = {}
 ): Promise<void> {
   debug.command("restartPersistentSubscriptionSubsystem: %O", {
     options,
   });
+
+  validateField(
+    schemas.restartPersistentSubscriptionSubsystemOptions.optional(),
+    options
+  );
 
   if (await this.supports(PersistentSubscriptionsService.restartSubsystem)) {
     return restartPersistentSubscriptionSubsystemGRPC.call(this, options);
@@ -40,7 +48,7 @@ Client.prototype.restartPersistentSubscriptionSubsystem = async function (
 
 const restartPersistentSubscriptionSubsystemGRPC = async function (
   this: Client,
-  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {},
+  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {}
 ): Promise<void> {
   const req = new Empty();
 
@@ -57,15 +65,15 @@ const restartPersistentSubscriptionSubsystemGRPC = async function (
           (error) => {
             if (error) return reject(convertToCommandError(error));
             return resolve();
-          },
+          }
         );
-      }),
+      })
   );
 };
 
 const restartPersistentSubscriptionSubsystemHTTP = async function (
   this: Client,
-  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {},
+  baseOptions: RestartPersistentSubscriptionSubsystemOptions = {}
 ): Promise<void> {
   await this.HTTPRequest<string>("POST", "/subscriptions/restart", baseOptions);
 };

@@ -19,7 +19,7 @@ describe("Channel", () => {
         nodePreference: "random",
       },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
 
     /*
@@ -35,7 +35,7 @@ describe("Channel", () => {
           maxCount: 1,
           fromPosition: "start",
           direction: "forwards",
-        }),
+        })
       ),
       client.appendToStream("stream_2", jsonTestEvents()),
     ];

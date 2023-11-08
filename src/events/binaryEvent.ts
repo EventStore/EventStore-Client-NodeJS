@@ -27,4 +27,4 @@ export const binaryEvent = <E extends BinaryEventType = BinaryEventType>({
     type,
     data: Uint8Array.from(data),
     metadata: convertMetadata<E["metadata"]>(metadata),
-  }) as EventData<E>;
+  } as EventData<E>);

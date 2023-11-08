@@ -29,7 +29,7 @@ describe("createPersistentSubscriptionToAll", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -44,12 +44,12 @@ describe("createPersistentSubscriptionToAll", () => {
       try {
         await client.createPersistentSubscriptionToAll(
           GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults(),
+          persistentSubscriptionToAllSettingsFromDefaults()
         );
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: createPersistentSubscriptionToAll requires server version 21.10 or higher.]`,
+          `[Error: createPersistentSubscriptionToAll requires server version 21.10 or higher.]`
         );
       }
     });
@@ -64,8 +64,8 @@ describe("createPersistentSubscriptionToAll", () => {
             GROUP_NAME,
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: START,
-            }),
-          ),
+            })
+          )
         ).resolves.toBeUndefined();
       });
 
@@ -76,8 +76,8 @@ describe("createPersistentSubscriptionToAll", () => {
             GROUP_NAME,
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: END,
-            }),
-          ),
+            })
+          )
         ).resolves.toBeUndefined();
       });
 
@@ -88,8 +88,8 @@ describe("createPersistentSubscriptionToAll", () => {
             GROUP_NAME,
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: { commit: BigInt(1), prepare: BigInt(1) },
-            }),
-          ),
+            })
+          )
         ).resolves.toBeUndefined();
       });
 
@@ -101,8 +101,8 @@ describe("createPersistentSubscriptionToAll", () => {
             persistentSubscriptionToAllSettingsFromDefaults({
               startFrom: END,
             }),
-            { filter: excludeSystemEvents() },
-          ),
+            { filter: excludeSystemEvents() }
+          )
         ).resolves.toBeUndefined();
       });
     });
@@ -113,15 +113,15 @@ describe("createPersistentSubscriptionToAll", () => {
       await expect(
         client.createPersistentSubscriptionToAll(
           GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults(),
-        ),
+          persistentSubscriptionToAllSettingsFromDefaults()
+        )
       ).resolves.toBeUndefined();
 
       await expect(
         client.createPersistentSubscriptionToAll(
           GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults(),
-        ),
+          persistentSubscriptionToAllSettingsFromDefaults()
+        )
       ).rejects.toThrowError(PersistentSubscriptionExistsError);
     });
   });

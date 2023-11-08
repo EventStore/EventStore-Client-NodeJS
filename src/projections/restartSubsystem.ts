@@ -2,8 +2,10 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { Empty } from "../../generated/shared_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface RestartSubsystemOptions extends BaseOptions {}
 
@@ -11,6 +13,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Restarts the entire projection subsystem.
+     *
      * @param options Restart subsystem options.
      */
     restartSubsystem(options?: RestartSubsystemOptions): Promise<void>;
@@ -19,8 +22,10 @@ declare module "../Client" {
 
 Client.prototype.restartSubsystem = async function (
   this: Client,
-  baseOptions: RestartSubsystemOptions = {},
+  baseOptions: RestartSubsystemOptions = {}
 ): Promise<void> {
+  validateField(schemas.restartSubsystemOptions.optional(), baseOptions);
+
   const req = new Empty();
 
   debug.command("restartSubsystem: %O", {
@@ -39,8 +44,8 @@ Client.prototype.restartSubsystem = async function (
           (error) => {
             if (error) return reject(convertToCommandError(error));
             return resolve();
-          },
+          }
         );
-      }),
+      })
   );
 };

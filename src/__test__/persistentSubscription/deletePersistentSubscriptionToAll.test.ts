@@ -25,7 +25,7 @@ describe("deletePersistentSubscriptionToAll", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -42,7 +42,7 @@ describe("deletePersistentSubscriptionToAll", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(UnsupportedError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: deletePersistentSubscriptionToAll requires server version 21.10 or higher.]`,
+          `[Error: deletePersistentSubscriptionToAll requires server version 21.10 or higher.]`
         );
       }
     });
@@ -54,11 +54,11 @@ describe("deletePersistentSubscriptionToAll", () => {
 
       await client.createPersistentSubscriptionToAll(
         GROUP_NAME,
-        persistentSubscriptionToAllSettingsFromDefaults(),
+        persistentSubscriptionToAllSettingsFromDefaults()
       );
 
       await expect(
-        client.deletePersistentSubscriptionToAll(GROUP_NAME),
+        client.deletePersistentSubscriptionToAll(GROUP_NAME)
       ).resolves.toBeUndefined();
     });
   });

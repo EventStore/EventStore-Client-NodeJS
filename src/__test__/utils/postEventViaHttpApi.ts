@@ -34,7 +34,7 @@ const convertEndpoint = (endpoint: string | EndPoint, stream: string) => {
 const post = (
   endpoint: string | EndPoint,
   cert: Buffer,
-  options: Options,
+  options: Options
 ): Promise<string> => {
   const { type, contentType, stream, data } = options;
 
@@ -64,7 +64,7 @@ const post = (
         res.on("end", () => {
           return resolve(response);
         });
-      },
+      }
     );
 
     req.on("error", (error) => {
@@ -78,7 +78,7 @@ const post = (
 
 export const postEventViaHttpApi = (
   cluster: Cluster,
-  options: Options,
+  options: Options
 ): Promise<string> => {
   const [endpoint] = cluster.endpoints;
   const cert = readFileSync(cluster.certPath);

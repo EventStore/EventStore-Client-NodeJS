@@ -15,6 +15,8 @@ import type {
   persistentSubscriptionToAllSettingsFromDefaults,
 } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface UpdatePersistentSubscriptionToAllOptions extends BaseOptions {}
 
@@ -22,6 +24,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Updates a persistent subscription to all configuration.
+     *
      * @param groupName A group name.
      * @param settings PersistentSubscriptionToAll settings.
      * @see {@link persistentSubscriptionToAllSettingsFromDefaults}
@@ -30,7 +33,7 @@ declare module "../Client" {
     updatePersistentSubscriptionToAll(
       groupName: string,
       settings: PersistentSubscriptionToAllSettings,
-      options?: UpdatePersistentSubscriptionToAllOptions,
+      options?: UpdatePersistentSubscriptionToAllOptions
     ): Promise<void>;
   }
 }
@@ -39,11 +42,20 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
   settings: PersistentSubscriptionToAllSettings,
-  { ...baseOptions }: UpdatePersistentSubscriptionToAllOptions = {},
+  updatePersistentSubscriptionToAllOptions: UpdatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
   if (!(await this.supports(PersistentSubscriptionsService.update, "all"))) {
     throw new UnsupportedError("updatePersistentSubscriptionToAll", "21.10");
   }
+
+  const { ...baseOptions } = updatePersistentSubscriptionToAllOptions;
+
+  validateField(schemas.groupName, groupName);
+  validateField(schemas.persistentSubscriptionToAllSettings, settings);
+  validateField(
+    schemas.updatePersistentSubscriptionToAllOptions.optional(),
+    settings
+  );
 
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
@@ -90,6 +102,6 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };

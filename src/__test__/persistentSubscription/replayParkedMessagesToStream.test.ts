@@ -20,7 +20,7 @@ describe("replayParkedMessagesToStream", () => {
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -38,7 +38,7 @@ describe("replayParkedMessagesToStream", () => {
       GROUP_NAME,
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
-      }),
+      })
     );
 
     await client.appendToStream(STREAM_NAME, [
@@ -51,14 +51,14 @@ describe("replayParkedMessagesToStream", () => {
 
     const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
-      GROUP_NAME,
+      GROUP_NAME
     );
 
     const parkEvent = jest.fn((resolvedEvent) =>
-      subscription.nack(PARK, "Park it", resolvedEvent),
+      subscription.nack(PARK, "Park it", resolvedEvent)
     );
     const ackEvent = jest.fn((resolvedEvent) =>
-      subscription.ack(resolvedEvent),
+      subscription.ack(resolvedEvent)
     );
 
     let hasReplayed = false;
@@ -94,7 +94,7 @@ describe("replayParkedMessagesToStream", () => {
       GROUP_NAME,
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
-      }),
+      })
     );
 
     await client.appendToStream(STREAM_NAME, [
@@ -107,14 +107,14 @@ describe("replayParkedMessagesToStream", () => {
 
     const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
-      GROUP_NAME,
+      GROUP_NAME
     );
 
     const parkEvent = jest.fn((resolvedEvent) =>
-      subscription.nack(PARK, "Park it", resolvedEvent),
+      subscription.nack(PARK, "Park it", resolvedEvent)
     );
     const ackEvent = jest.fn((resolvedEvent) =>
-      subscription.ack(resolvedEvent),
+      subscription.ack(resolvedEvent)
     );
 
     let hasReplayed = false;
@@ -165,7 +165,7 @@ describe("replayParkedMessagesToStream", () => {
       GROUP_NAME,
       persistentSubscriptionToStreamSettingsFromDefaults({
         startFrom: START,
-      }),
+      })
     );
 
     await client.appendToStream(STREAM_NAME, [
@@ -178,14 +178,14 @@ describe("replayParkedMessagesToStream", () => {
 
     const subscription = client.subscribeToPersistentSubscriptionToStream(
       STREAM_NAME,
-      GROUP_NAME,
+      GROUP_NAME
     );
 
     const parkEvent = jest.fn((resolvedEvent) =>
-      subscription.nack(PARK, "Park it", resolvedEvent),
+      subscription.nack(PARK, "Park it", resolvedEvent)
     );
     const ackEvent = jest.fn((resolvedEvent) =>
-      subscription.ack(resolvedEvent),
+      subscription.ack(resolvedEvent)
     );
 
     let hasReplayed = false;
@@ -235,7 +235,7 @@ describe("replayParkedMessagesToStream", () => {
       } catch (error) {
         expect(error).toBeInstanceOf(PersistentSubscriptionDoesNotExistError);
         expect(error).toMatchInlineSnapshot(
-          `[Error: 5 NOT_FOUND: Subscription group does_not_exist_replay_parked_group_name on stream does_not_exist_replay_parked_stream_name does not exist.]`,
+          `[Error: 5 NOT_FOUND: Subscription group does_not_exist_replay_parked_group_name on stream does_not_exist_replay_parked_stream_name does not exist.]`
         );
 
         if (error instanceof PersistentSubscriptionDoesNotExistError) {

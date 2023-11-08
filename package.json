@@ -14,6 +14,8 @@
     "test": "jest",
     "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" DEBUG_DEPTH=6 DEBUG_COLORS=\"true\" jest --verbose --run-in-band",
     "test:flake": "jest --testSequencer=./src/__test__/utils/FlakeFinder.js",
+    "21.10": "yarn cross-env EVENTSTORE_IMAGE=github:21.10.1-focal jest",
+    "20.10": "yarn cross-env EVENTSTORE_IMAGE=github:20.10.5-focal jest",
     "generate": "run-s generate:*",
     "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
     "generate:sed-insert": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
@@ -59,14 +61,10 @@
       "@eventstore/db-client": "<rootDir>/src/index.ts",
       "@test-utils": "<rootDir>/src/__test__/utils"
     },
-    "transform": {
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "babel": true,
-          "tsconfig": "./src/__test__/tsconfig.json"
-        }
-      ]
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "./src/__test__/tsconfig.json"
+      }
     },
     "collectCoverageFrom": [
       "./src/**/*",
@@ -74,33 +72,33 @@
     ]
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.9.9",
+    "@grpc/grpc-js": "1.9.0",
     "@types/debug": "^4.1.7",
     "@types/google-protobuf": "^3.15.5",
-    "@types/node": "^20.8.10",
+    "@types/node": "^16.11.4",
     "debug": "^4.3.2",
     "google-protobuf": "^3.19.0",
-    "uuid": "^9.0.1"
+    "uuid": "^8.3.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.7",
-    "@types/uuid": "^9.0.6",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
+    "@types/jest": "^27.0.2",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
     "cross-env": "^7.0.3",
-    "docker-compose": "^0.24.3",
-    "dotenv": "^16.3.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-jsdoc": "^46.8.2",
+    "docker-compose": "^0.23.13",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.26.0",
+    "eslint-plugin-jsdoc": "^40.0.0",
     "get-port": "^5.1.1",
-    "grpc-tools": "^1.12.4",
-    "grpc_tools_node_protoc_ts": "^5.3.3",
-    "jest": "^29.7.0",
+    "grpc-tools": "^1.11.2",
+    "grpc_tools_node_protoc_ts": "^5.3.2",
+    "jest": "^27.3.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.0.3",
+    "prettier": "^2.4.1",
     "shx": "^0.3.3",
-    "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.4.2"
   }
 }

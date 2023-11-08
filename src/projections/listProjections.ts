@@ -9,25 +9,30 @@ import { debug, convertToCommandError } from "../utils";
 import { Client } from "../Client";
 
 import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
-interface ListProjectionsOptions extends BaseOptions {}
+export interface ListProjectionsOptions extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
     /**
      * Lists projections.
+     *
      * @param options List projections options.
      */
     listProjections(
-      options?: ListProjectionsOptions,
+      options?: ListProjectionsOptions
     ): Promise<ProjectionDetails[]>;
   }
 }
 
 Client.prototype.listProjections = async function (
   this: Client,
-  baseOptions: ListProjectionsOptions = {},
+  baseOptions: ListProjectionsOptions = {}
 ): Promise<ProjectionDetails[]> {
+  validateField(schemas.listProjectionsOptions.optional(), baseOptions);
+
   const options = new StatisticsReq.Options();
   options.setContinuous(new Empty());
 

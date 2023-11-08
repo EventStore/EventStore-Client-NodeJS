@@ -6,7 +6,7 @@ export type MetadataType = JSONType | Uint8Array;
 export type JSONEventType<
   Type extends string = string,
   Data extends JSONType = JSONType,
-  Metadata extends MetadataType | unknown = unknown,
+  Metadata extends MetadataType | unknown = unknown
 > = Metadata extends MetadataType
   ? {
       type: Type;
@@ -21,7 +21,7 @@ export type JSONEventType<
 
 export type BinaryEventType<
   Type extends string = string,
-  Metadata extends MetadataType | unknown = unknown,
+  Metadata extends MetadataType | unknown = unknown
 > = Metadata extends MetadataType
   ? {
       type: Type;
@@ -140,7 +140,7 @@ export type BinaryRecordedEvent<E extends BinaryEventType = BinaryEventType> =
   RecordedEvent<E>;
 
 export type AllStreamJSONRecordedEvent<
-  E extends JSONEventType = JSONEventType,
+  E extends JSONEventType = JSONEventType
 > = RecordedEvent<E> & {
   /**
    * Position of this event in the transaction log.
@@ -149,7 +149,7 @@ export type AllStreamJSONRecordedEvent<
 };
 
 export type AllStreamBinaryRecordedEvent<
-  E extends BinaryEventType = BinaryEventType,
+  E extends BinaryEventType = BinaryEventType
 > = RecordedEvent<E> & {
   /**
    * Position of this event in the transaction log.
@@ -185,7 +185,7 @@ export interface ResolvedEvent<Event extends EventType = EventType> {
  * A structure representing a single event or a resolved link event from a persistent subscription to a stream.
  */
 export interface PersistentSubscriptionToStreamResolvedEvent<
-  Event extends EventType = EventType,
+  Event extends EventType = EventType
 > extends ResolvedEvent<Event> {
   /**
    * The number of times this event has been retried.

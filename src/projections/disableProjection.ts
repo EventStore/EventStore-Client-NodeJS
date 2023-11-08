@@ -2,8 +2,10 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { DisableReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface DisableProjectionOptions extends BaseOptions {}
 export interface AbortProjectionOptions extends BaseOptions {}
@@ -12,21 +14,23 @@ declare module "../Client" {
   interface Client {
     /**
      * Disables a projection.
+     *
      * @param projectionName The name of the projection to disable.
      * @param options Disable projection options.
      */
     disableProjection(
       projectionName: string,
-      options?: DisableProjectionOptions,
+      options?: DisableProjectionOptions
     ): Promise<void>;
     /**
      * Aborts a projection.
+     *
      * @param projectionName The name of the projection to disable.
      * @param options Disable projection options.
      */
     abortProjection(
       projectionName: string,
-      options?: DisableProjectionOptions,
+      options?: DisableProjectionOptions
     ): Promise<void>;
   }
 }
@@ -34,24 +38,30 @@ declare module "../Client" {
 Client.prototype.disableProjection = async function (
   this: Client,
   projectionName: string,
-  baseOptions: DisableProjectionOptions = {},
+  baseOptions: DisableProjectionOptions = {}
 ): Promise<void> {
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.disableProjectionOptions.optional(), baseOptions);
+
   return disableProjection("disableProjection", true).call(
     this,
     projectionName,
-    baseOptions,
+    baseOptions
   );
 };
 
 Client.prototype.abortProjection = async function (
   this: Client,
   projectionName: string,
-  baseOptions: DisableProjectionOptions = {},
+  baseOptions: DisableProjectionOptions = {}
 ): Promise<void> {
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.abortProjectionOptions.optional(), baseOptions);
+
   return disableProjection("abortProjection", false).call(
     this,
     projectionName,
-    baseOptions,
+    baseOptions
   );
 };
 
@@ -59,7 +69,7 @@ function disableProjection(debugName: string, writeCheckpoint: boolean) {
   return async function (
     this: Client,
     projectionName: string,
-    baseOptions: DisableProjectionOptions = {},
+    baseOptions: DisableProjectionOptions = {}
   ): Promise<void> {
     const req = new DisableReq();
     const options = new DisableReq.Options();
@@ -84,7 +94,7 @@ function disableProjection(debugName: string, writeCheckpoint: boolean) {
             if (error) return reject(convertToCommandError(error));
             return resolve();
           });
-        }),
+        })
     );
   };
 }

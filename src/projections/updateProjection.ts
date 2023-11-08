@@ -3,13 +3,16 @@ import { UpdateReq } from "../../generated/projections_pb";
 import { Empty } from "../../generated/shared_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface UpdateProjectionOptions extends BaseOptions {
   /**
    * Enables emitting events from the projection.
    * Passing `undefined` will leave emitEnabled at its current value.
+   *
    * @default undefined
    */
   emitEnabled?: boolean;
@@ -19,6 +22,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Updates a projection.
+     *
      * @param projectionName The name of the projection.
      * @param query The query to run.
      * @param options Projection options.
@@ -26,7 +30,7 @@ declare module "../Client" {
     updateProjection(
       projectionName: string,
       query: string,
-      options?: UpdateProjectionOptions,
+      options?: UpdateProjectionOptions
     ): Promise<void>;
   }
 }
@@ -35,8 +39,17 @@ Client.prototype.updateProjection = async function (
   this: Client,
   projectionName: string,
   query: string,
-  { emitEnabled, ...baseOptions }: UpdateProjectionOptions = {},
+  updateProjectionOptions: UpdateProjectionOptions = {}
 ): Promise<void> {
+  const { emitEnabled, ...baseOptions } = updateProjectionOptions;
+
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.query, query);
+  validateField(
+    schemas.updateProjectionOptions.optional(),
+    updateProjectionOptions
+  );
+
   const req = new UpdateReq();
   const options = new UpdateReq.Options();
 
@@ -67,6 +80,6 @@ Client.prototype.updateProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      }),
+      })
   );
 };

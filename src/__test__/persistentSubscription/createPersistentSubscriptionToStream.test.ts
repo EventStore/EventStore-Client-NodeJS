@@ -19,7 +19,7 @@ describe("createPersistentSubscriptionToStream", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -37,8 +37,8 @@ describe("createPersistentSubscriptionToStream", () => {
           GROUP_NAME,
           persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: START,
-          }),
-        ),
+          })
+        )
       ).resolves.toBeUndefined();
     });
 
@@ -49,8 +49,8 @@ describe("createPersistentSubscriptionToStream", () => {
         client.createPersistentSubscriptionToStream(
           STREAM_NAME,
           GROUP_NAME,
-          persistentSubscriptionToStreamSettingsFromDefaults(), // end is default
-        ),
+          persistentSubscriptionToStreamSettingsFromDefaults() // end is default
+        )
       ).resolves.toBeUndefined();
     });
 
@@ -63,8 +63,8 @@ describe("createPersistentSubscriptionToStream", () => {
           GROUP_NAME,
           persistentSubscriptionToStreamSettingsFromDefaults({
             startFrom: BigInt(1),
-          }),
-        ),
+          })
+        )
       ).resolves.toBeUndefined();
     });
   });
@@ -77,16 +77,16 @@ describe("createPersistentSubscriptionToStream", () => {
       client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionToStreamSettingsFromDefaults(),
-      ),
+        persistentSubscriptionToStreamSettingsFromDefaults()
+      )
     ).resolves.toBeUndefined();
 
     await expect(
       client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         GROUP_NAME,
-        persistentSubscriptionToStreamSettingsFromDefaults(),
-      ),
+        persistentSubscriptionToStreamSettingsFromDefaults()
+      )
     ).rejects.toThrowError(PersistentSubscriptionExistsError);
   });
 });

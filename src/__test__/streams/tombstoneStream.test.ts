@@ -19,7 +19,7 @@ describe("tombstoneStream", () => {
       client = new EventStoreDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.rootCertificate },
-        { username: "admin", password: "changeit" },
+        { username: "admin", password: "changeit" }
       );
     });
 
@@ -144,7 +144,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           await expect(() =>
-            collect(client.readStream(NOT_A_STREAM, { maxCount: 10 })),
+            collect(client.readStream(NOT_A_STREAM, { maxCount: 10 }))
           ).rejects.toThrowError(StreamDeletedError);
         });
       });

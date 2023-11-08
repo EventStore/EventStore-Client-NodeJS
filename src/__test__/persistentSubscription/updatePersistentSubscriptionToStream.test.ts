@@ -18,7 +18,7 @@ describe("updatePersistentSubscriptionToStream", () => {
         endpoint: node.uri,
       },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -36,14 +36,14 @@ describe("updatePersistentSubscriptionToStream", () => {
     await client.createPersistentSubscriptionToStream(
       STREAM_NAME,
       GROUP_NAME,
-      settings,
+      settings
     );
 
     await expect(
       client.updatePersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME, {
         ...settings,
         consumerStrategyName: PINNED,
-      }),
+      })
     ).resolves.toBeUndefined();
   });
 });

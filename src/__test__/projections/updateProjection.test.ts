@@ -22,7 +22,7 @@ describe("resetProjection", () => {
     client = new EventStoreDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.rootCertificate },
-      { username: "admin", password: "changeit" },
+      { username: "admin", password: "changeit" }
     );
   });
 
@@ -61,7 +61,7 @@ describe("resetProjection", () => {
     test("projection doesnt exist", async () => {
       const PROJECTION_NAME = "doesnt exist";
       await expect(
-        client.updateProjection(PROJECTION_NAME, projection),
+        client.updateProjection(PROJECTION_NAME, projection)
       ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
     });
   });

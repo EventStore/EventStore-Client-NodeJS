@@ -42,7 +42,7 @@ export const batchAppend = async function (
     expectedRevision,
     batchAppendSize,
     ...baseOptions
-  }: InternalOptions<AppendToStreamOptions>,
+  }: InternalOptions<AppendToStreamOptions>
 ): Promise<AppendResult> {
   const correlationId = uuid();
 
@@ -54,7 +54,7 @@ export const batchAppend = async function (
         .batchAppend(
           ...this.callArguments(baseOptions, {
             deadline: Infinity,
-          }),
+          })
         )
         .on("data", (resp: BatchAppendResp) => {
           const resultingId = parseUUID(resp.getCorrelationId()!);
@@ -87,9 +87,9 @@ export const batchAppend = async function (
               unpackToCommandError(
                 grpcError,
                 Buffer.from(
-                  resp.getStreamIdentifier()!.getStreamName(),
-                ).toString("utf8"),
-              ),
+                  resp.getStreamIdentifier()!.getStreamName()
+                ).toString("utf8")
+              )
             );
           }
 
@@ -115,7 +115,7 @@ export const batchAppend = async function (
           }
           promiseBank.clear();
         }),
-    streamCache,
+    streamCache
   )();
 
   return new Promise(async (...batchPromise) => {
@@ -125,7 +125,7 @@ export const batchAppend = async function (
     const options = new BatchAppendReq.Options();
     const identifier = createStreamIdentifier(streamName);
     const deadline = Timestamp.fromDate(
-      this.createDeadline(baseOptions.deadline),
+      this.createDeadline(baseOptions.deadline)
     );
 
     options.setStreamIdentifier(identifier);
@@ -154,7 +154,7 @@ export const batchAppend = async function (
       events,
       correlationUUID,
       options,
-      batchAppendSize,
+      batchAppendSize
     )) {
       debug.command_grpc("batchAppend: %g", batch);
       await backpressuredWrite(stream, batch);
@@ -166,7 +166,7 @@ function* eventBatcher(
   events: EventData[],
   correlationId: UUID,
   options: BatchAppendReq.Options,
-  maxBatchSize: number,
+  maxBatchSize: number
 ) {
   const createAppendRequest = (addOptions = false) => {
     const appendRequest = new BatchAppendReq();
@@ -208,7 +208,7 @@ function* eventBatcher(
       } else {
         const metadata = JSON.stringify(event.metadata);
         message.setCustomMetadata(
-          Buffer.from(metadata, "utf8").toString("base64"),
+          Buffer.from(metadata, "utf8").toString("base64")
         );
       }
     }

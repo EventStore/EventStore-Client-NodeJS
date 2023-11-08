@@ -12,7 +12,7 @@ import type { ChannelCredentialOptions, Client } from "./";
 type TransformError = (
   statusCode: number,
   statusMessage: string,
-  res: IncomingMessage,
+  res: IncomingMessage
 ) => Error | undefined;
 
 export interface HTTPRequestOptions extends BaseOptions {
@@ -41,7 +41,7 @@ export class HTTP {
   constructor(
     client: Client,
     channelCredentials: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials,
+    defaultUserCredentials?: Credentials
   ) {
     this.#client = client;
     this.#channelCredentials = channelCredentials;
@@ -53,7 +53,7 @@ export class HTTP {
     method: HTTPMethod,
     path: string,
     { searchParams, ...options }: HTTPRequestOptions,
-    body?: string,
+    body?: string
   ): Promise<T> => {
     const url = await this.createURL(path, searchParams);
     return this.makeRequest<T>(method, url, options, body);
@@ -63,7 +63,7 @@ export class HTTP {
     method: HTTPMethod,
     url: URL,
     options: HTTPRequestOptions,
-    body?: string,
+    body?: string
   ) =>
     new Promise<T>((resolve, reject) => {
       const headers: Record<string, string> = {
@@ -74,7 +74,7 @@ export class HTTP {
 
       if (!this.#insecure && credentials) {
         headers["Authorization"] = `Basic ${Buffer.from(
-          `${credentials.username}:${credentials.password}`,
+          `${credentials.username}:${credentials.password}`
         ).toString("base64")}`;
       }
 
@@ -89,8 +89,8 @@ export class HTTP {
               method,
               new URL(res.headers.location!, url),
               options,
-              body,
-            ),
+              body
+            )
           );
         }
 
@@ -99,7 +99,7 @@ export class HTTP {
             options.transformError?.(
               res.statusCode!,
               res.statusMessage!,
-              res,
+              res
             ) ??
             defaultTransformError(res.statusCode!, res.statusMessage!, res);
 
@@ -120,7 +120,7 @@ export class HTTP {
         `Making %s call to %s with headers %h`,
         method,
         url.toString(),
-        headers,
+        headers
       );
 
       const req = this.#insecure
@@ -130,7 +130,7 @@ export class HTTP {
               method,
               headers,
             },
-            callback,
+            callback
           )
         : httpsRequest(
             url,
@@ -139,7 +139,7 @@ export class HTTP {
               headers,
               ca,
             },
-            callback,
+            callback
           );
 
       req.on("error", (error) => {
@@ -155,7 +155,7 @@ export class HTTP {
 
   private createURL = async (
     pathname: string,
-    searchParams: Record<string, string | undefined> = {},
+    searchParams: Record<string, string | undefined> = {}
   ): Promise<URL> => {
     const channel = await this.getChannel.call(this.#client);
     const protocol = this.#insecure ? "http://" : "https://";
