@@ -1,13 +1,17 @@
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
 import {
   createTestCluster,
   delay,
   getCurrentConnection,
   jsonTestEvents,
+  matchServerVersion,
 } from "@test-utils";
 import {
   jsonEvent,
   EventStoreDBClient,
   CancelledError,
+  UnavailableError,
 } from "@eventstore/db-client";
 
 // This test can take time.
@@ -50,7 +54,11 @@ describe("reconnect", () => {
 
       expect(i).toBe("unreachable");
     } catch (error) {
-      expect(error).toBeInstanceOf(CancelledError);
+      if (matchServerVersion`<=23.10`) {
+        expect(error).toBeInstanceOf(CancelledError);
+      } else {
+        expect(error).toBeInstanceOf(UnavailableError);
+      }
     }
 
     // wait for leader to be ready

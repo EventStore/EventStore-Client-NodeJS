@@ -28,7 +28,7 @@ export interface ReadStreamOptions extends BaseOptions {
    * The number of events to read.
    * @default Number.MAX_SAFE_INTEGER
    */
-  maxCount?: number | BigInt;
+  maxCount?: number | bigint;
   /**
    * Starts the read at the given event revision.
    * @default START

@@ -40,6 +40,10 @@ describe("write after end", () => {
             .appendToStream(STREAM_NAME, jsonTestEvents(30_000), {
               // credentials enforces classic append
               credentials: { username: "admin", password: "changeit" },
+
+              // Keep retrying write until node shutdown is complete and error
+              // occurs
+              deadline: Infinity,
             })
             .then(writeOnLoop);
 
@@ -93,7 +97,12 @@ describe("write after end", () => {
       await node.killNode(node.endpoints[0]);
 
       const error = await errorPromise;
-      expect(error).toBeInstanceOf(CancelledError);
+
+      if (matchServerVersion`<=23.10`) {
+        expect(error).toBeInstanceOf(CancelledError);
+      } else {
+        expect(error).toBeInstanceOf(UnavailableError);
+      }
 
       // wait for any unhandled rejections
       await delay(5_000);

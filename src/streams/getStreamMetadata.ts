@@ -26,7 +26,7 @@ export interface GetStreamMetadataResult<
   /**
    * A the version of the metadata.
    */
-  metastreamRevision?: BigInt;
+  metastreamRevision?: bigint;
 }
 
 export interface GetStreamMetadataOptions extends BaseOptions {}

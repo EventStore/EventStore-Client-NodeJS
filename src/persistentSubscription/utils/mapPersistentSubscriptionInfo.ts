@@ -43,7 +43,7 @@ export interface PersistentSubscriptionConnectionInfo {
   /** Number of in flight messages on this connection. */
   inFlightMessages: number;
   /** Timing measurements for the connection. Can be enabled with the `extraStatistics` setting. */
-  extraStatistics?: Map<ExtraStatisticsKey, BigInt>;
+  extraStatistics?: Map<ExtraStatisticsKey, bigint>;
 }
 
 interface PersistentSubscriptionStatsBase {
