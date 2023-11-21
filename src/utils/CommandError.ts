@@ -57,10 +57,6 @@ abstract class CommandErrorBase extends Error {
   }
 }
 
-export class ValidationError extends CommandErrorBase {
-  public type: ErrorType.VALIDATION_FAILED = ErrorType.VALIDATION_FAILED;
-}
-
 export class TimeoutError extends CommandErrorBase {
   public type: ErrorType.TIMEOUT = ErrorType.TIMEOUT;
 }

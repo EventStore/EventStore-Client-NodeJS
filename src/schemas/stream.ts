@@ -23,7 +23,10 @@ import {
   SystemStreamMetadata,
 } from "../streams/utils/streamMetadata";
 
-export const streamName = z.string();
+export const streamName = z.string({
+  invalid_type_error: "Stream name must be a string",
+  required_error: "Stream name is required",
+});
 
 export const appendToStreamOptions = baseOptions.extend({
   expectedRevision: appendExpectedRevision.optional(),
@@ -41,7 +44,10 @@ export const getStreamMetadataOptions = baseOptions.extend({});
 
 export const readAllOptions = baseOptions.extend({
   maxCount: z
-    .union([z.number().min(0), z.bigint().min(BigInt(0))])
+    .union([
+      z.number().min(0),
+      z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
+    ])
     .optional()
     .default(Number.MAX_SAFE_INTEGER),
   fromPosition: readPosition.optional().default(constants.START),
@@ -51,7 +57,10 @@ export const readAllOptions = baseOptions.extend({
 
 export const readStreamOptions = baseOptions.extend({
   maxCount: z
-    .union([z.number().min(0), z.bigint().min(BigInt(0))])
+    .union([
+      z.number().min(0),
+      z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
+    ])
     .optional()
     .default(Number.MAX_SAFE_INTEGER),
   fromRevision: readRevision.optional().default(constants.START),

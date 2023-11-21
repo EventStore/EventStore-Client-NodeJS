@@ -76,8 +76,8 @@ export const binaryEventData = z.object({
 export const eventData = z.array(z.union([binaryEventData, jsonEventData]));
 
 export const position = z.object({
-  commit: z.bigint().min(BigInt(0)),
-  prepare: z.bigint().min(BigInt(0)),
+  commit: z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
+  prepare: z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
 }) satisfies z.ZodType<Position>;
 
 export const direction = z.union([
@@ -94,14 +94,14 @@ export const readPosition = z.union([
 export const readRevision = z.union([
   z.literal(constants.START),
   z.literal(constants.END),
-  z.bigint().min(BigInt(0)),
+  z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
 ]) satisfies z.ZodType<ReadRevision>;
 
 export const expectedRevision = z.union([
   z.literal(constants.ANY),
   z.literal(constants.NO_STREAM),
   z.literal(constants.STREAM_EXISTS),
-  z.bigint().min(BigInt(0)),
+  z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
 ]) satisfies z.ZodType<ExpectedRevision>;
 
 export const appendExpectedRevision = z.union([

@@ -12,10 +12,10 @@ z.setErrorMap((issue, ctx) => {
   if (issue.path.length !== 0) {
     switch (issue.code) {
       case "too_small":
-        message = `The field '${fieldName}' must be greater than or equal to ${issue.minimum}`;
+        message = `the field '${fieldName}' must be greater than or equal to ${issue.minimum}. Received ${ctx.data}`;
         break;
       case "too_big":
-        message = `The field '${fieldName}' must be less than or equal to ${issue.maximum}`;
+        message = `the field '${fieldName}' must be less than or equal to ${issue.maximum}. Received ${ctx.data}`;
         break;
     }
   }

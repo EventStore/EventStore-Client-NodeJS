@@ -104,7 +104,10 @@ export const listPersistentSubscriptionsToStreamOptions = baseOptions.extend(
   {}
 ) satisfies z.ZodType<ListPersistentSubscriptionsToStreamOptions>;
 
-export const stopAt = z.union([z.number().min(0), z.bigint().min(BigInt(0))]);
+export const stopAt = z.union([
+  z.number().min(0),
+  z.bigint().min(BigInt("0")).max(BigInt("0xffffffffffffffff")),
+]);
 
 export const replayParkedMessagesToAllOptions = baseOptions.extend({
   stopAt: stopAt.optional(),
