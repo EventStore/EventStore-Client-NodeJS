@@ -1,4 +1,4 @@
-name: "LTS"
+name: 'LTS'
 
 on:
   pull_request:
@@ -6,14 +6,14 @@ on:
     branches:
       - master
   schedule:
-    - cron: "0 3 * * 0" # Every sunday at 3am UTC.
+    - cron: '0 3 * * 0' # Every sunday at 3am UTC.
 
 jobs:
   test:
     name: Test
     uses: ./.github/workflows/tests.yml
     with:
-      version: "21.10.1-focal"
+      version: '23.10.0-focal'
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
