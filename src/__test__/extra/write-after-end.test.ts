@@ -40,6 +40,7 @@ describe("write after end", () => {
             .appendToStream(STREAM_NAME, jsonTestEvents(30_000), {
               // credentials enforces classic append
               credentials: { username: "admin", password: "changeit" },
+              deadline: Infinity,
             })
             .then(writeOnLoop);
 
