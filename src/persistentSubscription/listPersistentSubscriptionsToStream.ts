@@ -19,13 +19,17 @@ import {
   mapPersistentSubscriptionToStreamInfo,
   PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
-interface ListPersistentSubscriptionsToStreamOptions extends BaseOptions {}
+export interface ListPersistentSubscriptionsToStreamOptions
+  extends BaseOptions {}
 
 declare module "../Client" {
   interface Client {
     /**
      * Lists persistent subscriptions to a stream.
+     *
      * @param streamName A stream name.
      * @param options List persistent subscriptions options.
      */
@@ -45,6 +49,12 @@ Client.prototype.listPersistentSubscriptionsToStream = async function (
     streamName,
     options,
   });
+
+  validateField(schemas.streamName, streamName);
+  validateField(
+    schemas.listPersistentSubscriptionsToStreamOptions.optional(),
+    options
+  );
 
   if (await this.supports(PersistentSubscriptionsService.list, "stream")) {
     return listPersistentSubscriptionsToStreamGRPC.call(

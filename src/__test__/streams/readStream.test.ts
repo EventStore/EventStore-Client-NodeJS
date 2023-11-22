@@ -18,7 +18,6 @@ import {
   StreamNotFoundError,
   ResolvedEvent,
   LinkEvent,
-  Position,
   AppendResult,
   InvalidArgumentError,
 } from "@eventstore/db-client";

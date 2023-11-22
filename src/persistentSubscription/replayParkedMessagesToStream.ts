@@ -13,19 +13,23 @@ import {
 } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface ReplayParkedMessagesToStreamOptions extends BaseOptions {
   /**
    * When to stop replaying parked messages. Leave undefined to have no limit.
+   *
    * @default undefined
    */
-  stopAt?: number | BigInt;
+  stopAt?: number | bigint;
 }
 
 declare module "../Client" {
   interface Client {
     /**
      * Replays the parked messages of a persistent subscription.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param options Replay options.
@@ -49,6 +53,13 @@ Client.prototype.replayParkedMessagesToStream = async function (
     groupName,
     options,
   });
+
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.replayParkedMessagesToStreamOptions.optional(),
+    options
+  );
 
   if (
     await this.supports(PersistentSubscriptionsService.replayParked, "stream")

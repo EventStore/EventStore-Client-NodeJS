@@ -18,6 +18,8 @@ import {
   mapPersistentSubscriptionToStreamInfo,
   PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface GetPersistentSubscriptionToStreamInfoOptions
   extends BaseOptions {}
@@ -25,7 +27,9 @@ export interface GetPersistentSubscriptionToStreamInfoOptions
 declare module "../Client" {
   interface Client {
     /**
-     * Gets information and statistics on the specified persistent subscription and its connections.
+     * Gets information and statistics on the specified persistent subscription
+     * and its connections.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param options Get persistent subscription info options.
@@ -44,6 +48,13 @@ Client.prototype.getPersistentSubscriptionToStreamInfo = async function (
   groupName: string,
   options: GetPersistentSubscriptionToStreamInfoOptions
 ): Promise<PersistentSubscriptionToStreamInfo> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.getPersistentSubscriptionToStreamInfoOptions.optional(),
+    options
+  );
+
   debug.command("getPersistentSubscriptionToStreamInfo: %O", {
     streamName,
     groupName,

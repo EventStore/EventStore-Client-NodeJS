@@ -16,11 +16,14 @@ import {
 } from "../utils";
 import { Client } from "../Client";
 import { PersistentSubscriptionImpl } from "./utils/PersistentSubscriptionImpl";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface SubscribeToPersistentSubscriptionToStreamOptions
   extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
+   *
    * @default 10
    */
   bufferSize?: number;
@@ -30,6 +33,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Connects to a persistent subscription.
+     *
      * @param stream A stream name.
      * @param group A group name.
      * @param options Connection options.
@@ -49,12 +53,19 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
   this: Client,
   streamName: string,
   groupName: string,
-  {
-    bufferSize = 10,
-    ...baseOptions
-  }: SubscribeToPersistentSubscriptionToStreamOptions = {},
+  subscribeToPersistentSubscriptionToStreamOptions: SubscribeToPersistentSubscriptionToStreamOptions = {},
   duplexOptions: DuplexOptions = {}
 ): PersistentSubscriptionToStream<E> {
+  const { bufferSize = 10, ...baseOptions } =
+    subscribeToPersistentSubscriptionToStreamOptions;
+
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.subscribeToPersistentSubscriptionToStreamOptions.optional(),
+    subscribeToPersistentSubscriptionToStreamOptions
+  );
+
   return new PersistentSubscriptionImpl(
     this.GRPCStreamCreator(
       PersistentSubscriptionsClient,

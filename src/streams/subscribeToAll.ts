@@ -15,10 +15,13 @@ import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 
 import { Subscription } from "./utils/Subscription";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface SubscribeToAllOptions extends BaseOptions {
   /**
    * Starts the read at the given position.
+   *
    * @default START
    */
   fromPosition?: ReadPosition;
@@ -26,6 +29,7 @@ export interface SubscribeToAllOptions extends BaseOptions {
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
+   *
    * @default false
    */
   resolveLinkTos?: boolean;
@@ -39,6 +43,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Subscribe to events on the $all stream.
+     *
      * @param options Subscription options.
      * @param readableOptions Readable stream options.
      */
@@ -51,14 +56,21 @@ declare module "../Client" {
 
 Client.prototype.subscribeToAll = function (
   this: Client,
-  {
+  subscribeToAllOptions: SubscribeToAllOptions = {},
+  readableOptions: ReadableOptions = {}
+): AllStreamSubscription {
+  const {
     fromPosition = START,
     resolveLinkTos = false,
     filter,
     ...baseOptions
-  }: SubscribeToAllOptions = {},
-  readableOptions: ReadableOptions = {}
-): AllStreamSubscription {
+  } = subscribeToAllOptions;
+
+  validateField(
+    schemas.subscribeToAllOptions.optional(),
+    subscribeToAllOptions
+  );
+
   const req = new ReadReq();
   const options = new ReadReq.Options();
   const uuidOption = new ReadReq.Options.UUIDOption();

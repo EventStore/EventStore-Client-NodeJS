@@ -8,19 +8,23 @@ import {
 import { convertToCommandError, debug, UnsupportedError } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface ReplayParkedMessagesToAllOptions extends BaseOptions {
   /**
    * When to stop replaying parked messages. Leave undefined to have no limit.
+   *
    * @default undefined
    */
-  stopAt?: number | BigInt;
+  stopAt?: number | bigint;
 }
 
 declare module "../Client" {
   interface Client {
     /**
      * Replays the parked messages of a persistent subscription to $all.
+     *
      * @param groupName A group name.
      * @param options Replay options.
      */
@@ -34,13 +38,21 @@ declare module "../Client" {
 Client.prototype.replayParkedMessagesToAll = async function (
   this: Client,
   groupName: string,
-  { stopAt, ...baseOptions }: ReplayParkedMessagesToAllOptions = {}
+  replayParkedMessagesToAllOptions: ReplayParkedMessagesToAllOptions = {}
 ): Promise<void> {
+  const { stopAt, ...baseOptions } = replayParkedMessagesToAllOptions;
+
   if (
     !(await this.supports(PersistentSubscriptionsService.replayParked, "all"))
   ) {
     throw new UnsupportedError("replayParkedMessagesToAll", "21.10.1");
   }
+
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.replayParkedMessagesToAllOptions.optional(),
+    replayParkedMessagesToAllOptions
+  );
 
   const req = new ReplayParkedReq();
   const options = new ReplayParkedReq.Options();

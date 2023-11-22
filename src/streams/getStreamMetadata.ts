@@ -1,7 +1,9 @@
 import { Client } from "../Client";
 import { BACKWARDS, END } from "../constants";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, StreamNotFoundError } from "../utils";
+import { validateField } from "../utils/validation";
 
 import {
   CustomStreamMetadata,
@@ -26,7 +28,7 @@ export interface GetStreamMetadataResult<
   /**
    * A the version of the metadata.
    */
-  metastreamRevision?: BigInt;
+  metastreamRevision?: bigint;
 }
 
 export interface GetStreamMetadataOptions extends BaseOptions {}
@@ -35,6 +37,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Reads the metadata for a stream.
+     *
      * @param streamName A stream name.
      * @param options Read options.
      */
@@ -54,6 +57,9 @@ Client.prototype.getStreamMetadata = async function <
   streamName: string,
   baseOptions: GetStreamMetadataOptions = {}
 ): Promise<GetStreamMetadataResult<CustomMetadata>> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.getStreamMetadataOptions.optional(), baseOptions);
+
   const metadataStreamName = metastreamOf(streamName);
 
   debug.command("getStreamMetadata: %O", {

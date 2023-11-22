@@ -7,6 +7,7 @@ import type {
 
 import { MemberInfo as GrpcMemberInfo } from "../../generated/gossip_pb";
 import VNodeState = GrpcMemberInfo.VNodeState;
+import { ANY } from "../constants";
 
 import type {
   ResolvedEvent,
@@ -65,6 +66,10 @@ export type ExpectedRevision =
    * The stream being written to should not yet exist. If it does exist, treats that as a concurrency problem.
    */
   | typeof constants.NO_STREAM
+  /**
+   * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
+   */
+  | typeof constants.STREAM_EXISTS
   /**
    * States that the last event written to the stream should have an event number matching your expected value.
    */
@@ -140,17 +145,17 @@ export interface ProjectionDetails {
   /**
    * The CoreProcessingTime.
    */
-  coreProcessingTime: BigInt;
+  coreProcessingTime: bigint;
 
   /**
    * The projection version.
    */
-  version: BigInt;
+  version: bigint;
 
   /**
    * The Epoch.
    */
-  epoch: BigInt;
+  epoch: bigint;
 
   /**
    * The projection EffectiveName.
@@ -174,7 +179,7 @@ export interface ProjectionDetails {
 
   /**
    * The raw status of the projection.
-   * Split into {@link projectionStatus} and {@link processingStatus} for convenience.
+   * Split into {@link ProjectionDetails.projectionStatus} and {@link ProjectionDetails.processingStatus} for convenience.
    */
   status: string;
 
@@ -216,7 +221,7 @@ export interface ProjectionDetails {
   /**
    * The projection EventsProcessedAfterRestart.
    */
-  eventsProcessedAfterRestart: BigInt;
+  eventsProcessedAfterRestart: bigint;
 
   /**
    * The projection CheckpointStatus.
@@ -226,7 +231,7 @@ export interface ProjectionDetails {
   /**
    * The projection BufferedEvents.
    */
-  bufferedEvents: BigInt;
+  bufferedEvents: bigint;
 
   /**
    * The projection WritePendingEventsBeforeCheckpoint.

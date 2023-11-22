@@ -2,8 +2,10 @@ import { ProjectionsClient } from "../../generated/projections_grpc_pb";
 import { DisableReq } from "../../generated/projections_pb";
 
 import { Client } from "../Client";
+import schemas from "../schemas";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
+import { validateField } from "../utils/validation";
 
 export interface DisableProjectionOptions extends BaseOptions {}
 export interface AbortProjectionOptions extends BaseOptions {}
@@ -12,6 +14,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Disables a projection.
+     *
      * @param projectionName The name of the projection to disable.
      * @param options Disable projection options.
      */
@@ -21,6 +24,7 @@ declare module "../Client" {
     ): Promise<void>;
     /**
      * Aborts a projection.
+     *
      * @param projectionName The name of the projection to disable.
      * @param options Disable projection options.
      */
@@ -36,6 +40,9 @@ Client.prototype.disableProjection = async function (
   projectionName: string,
   baseOptions: DisableProjectionOptions = {}
 ): Promise<void> {
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.disableProjectionOptions.optional(), baseOptions);
+
   return disableProjection("disableProjection", true).call(
     this,
     projectionName,
@@ -48,6 +55,9 @@ Client.prototype.abortProjection = async function (
   projectionName: string,
   baseOptions: DisableProjectionOptions = {}
 ): Promise<void> {
+  validateField(schemas.projectionName, projectionName);
+  validateField(schemas.abortProjectionOptions.optional(), baseOptions);
+
   return disableProjection("abortProjection", false).call(
     this,
     projectionName,

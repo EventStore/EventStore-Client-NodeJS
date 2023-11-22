@@ -11,7 +11,12 @@ import { Client } from "../Client";
 import { END, EVENT_TYPE, START, STREAM_NAME } from "../constants";
 
 import { settingsToGRPC } from "./utils/settingsToGRPC";
-import type { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
+import type {
+  PersistentSubscriptionToAllSettings,
+  persistentSubscriptionToStreamSettingsFromDefaults,
+} from "./utils/persistentSubscriptionSettings";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface CreatePersistentSubscriptionToAllOptions extends BaseOptions {
   /**
@@ -23,10 +28,12 @@ export interface CreatePersistentSubscriptionToAllOptions extends BaseOptions {
 declare module "../Client" {
   interface Client {
     /**
-     * Creates a persistent subscription to all. Persistent subscriptions are special kind of subscription where the
-     * server remembers where the read offset is. This allows for many different modes of operations compared to a
-     * regular subscription where the client holds the read offset. The group name must be unique.
-     * Available from server version 21.10 onwards.
+     * Creates a persistent subscription to all. Persistent subscriptions are
+     * special kind of subscription where the server remembers where the read
+     * offset is. This allows for many different modes of operations compared to
+     * a regular subscription where the client holds the read offset. The group
+     * name must be unique.  Available from server version 21.10 onwards.
+     *
      * @param groupName A group name.
      * @param settings PersistentSubscription settings.
      * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
@@ -44,12 +51,17 @@ Client.prototype.createPersistentSubscriptionToAll = async function (
   this: Client,
   groupName: string,
   settings: PersistentSubscriptionToAllSettings,
-  {
-    filter,
-
-    ...baseOptions
-  }: CreatePersistentSubscriptionToAllOptions = {}
+  createPersistentSubscriptionToAllOptions: CreatePersistentSubscriptionToAllOptions = {}
 ): Promise<void> {
+  const { filter, ...baseOptions } = createPersistentSubscriptionToAllOptions;
+
+  validateField(schemas.groupName, groupName);
+  validateField(schemas.persistentSubscriptionToAllSettings, settings);
+  validateField(
+    schemas.createPersistentSubscriptionToAllOptions.optional(),
+    baseOptions
+  );
+
   if (!(await this.supports(PersistentSubscriptionsService.create, "all"))) {
     throw new UnsupportedError("createPersistentSubscriptionToAll", "21.10");
   }

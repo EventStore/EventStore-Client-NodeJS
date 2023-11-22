@@ -45,27 +45,32 @@ interface ClientOptions {
   /**
    * The amount of time (in milliseconds) to wait after which a keepalive ping is sent on the transport.
    * Use -1 to disable.
+   *
    * @default 10_000
    */
   keepAliveInterval?: number;
   /**
    * The amount of time (in milliseconds) the sender of the keepalive ping waits for an acknowledgement.
    * If it does not receive an acknowledgment within this time, it will close the connection.
+   *
    * @default 10_000
    */
   keepAliveTimeout?: number;
   /**
    * Whether or not to immediately throw an exception when an append fails.
+   *
    * @default true
    */
   throwOnAppendFailure?: boolean;
   /**
    * An optional length of time (in milliseconds) to use for gRPC deadlines.
+   *
    * @default 10_000
    */
   defaultDeadline?: number;
   /**
    * The name of the connection to use in logs.
+   *
    * @default uuid
    */
   connectionName?: string;
@@ -143,6 +148,7 @@ export class Client {
   // eslint-disable-next-line jsdoc/require-param
   /**
    * Returns a connection from a connection string.
+   *
    * @param connectionString The connection string for your database.
    */
   static connectionString(

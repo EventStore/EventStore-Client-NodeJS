@@ -7,7 +7,12 @@ import { Client } from "../Client";
 import { END, START } from "../constants";
 
 import { settingsToGRPC } from "./utils/settingsToGRPC";
-import type { PersistentSubscriptionToStreamSettings } from "./utils/persistentSubscriptionSettings";
+import type {
+  PersistentSubscriptionToStreamSettings,
+  persistentSubscriptionToStreamSettingsFromDefaults,
+} from "./utils/persistentSubscriptionSettings";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 declare module "../Client" {
   interface Client {
@@ -15,6 +20,7 @@ declare module "../Client" {
      * Creates a persistent subscription on a stream. Persistent subscriptions are special kind of subscription where the
      * server remembers where the read offset is at. This allows for many different modes of operations compared to a
      * regular subscription where the client holds the read offset. The pair stream name and group must be unique.
+     *
      * @param streamName A stream name.
      * @param groupName A group name.
      * @param settings PersistentSubscription settings.
@@ -37,6 +43,11 @@ Client.prototype.createPersistentSubscriptionToStream = async function (
   settings: PersistentSubscriptionToStreamSettings,
   baseOptions: BaseOptions = {}
 ): Promise<void> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.groupName, groupName);
+  validateField(schemas.persistentSubscriptionToStreamSettings, settings);
+  validateField(schemas.baseOptions.optional(), baseOptions);
+
   const req = new CreateReq();
   const options = new CreateReq.Options();
   const identifier = createStreamIdentifier(streamName);

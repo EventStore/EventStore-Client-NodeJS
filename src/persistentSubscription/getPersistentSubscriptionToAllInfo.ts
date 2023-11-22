@@ -12,6 +12,8 @@ import {
   mapPersistentSubscriptionToAllInfo,
   PersistentSubscriptionToAllInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface GetPersistentSubscriptionToAllInfoOptions
   extends BaseOptions {}
@@ -19,7 +21,9 @@ export interface GetPersistentSubscriptionToAllInfoOptions
 declare module "../Client" {
   interface Client {
     /**
-     * Gets information and statistics on the specified persistent subscription to $all and its connections.
+     * Gets information and statistics on the specified persistent subscription
+     * to $all and its connections.
+     *
      * @param groupName A group name.
      * @param options Get persistent subscription to all options.
      */
@@ -35,6 +39,12 @@ Client.prototype.getPersistentSubscriptionToAllInfo = async function (
   groupName: string,
   baseOptions: GetPersistentSubscriptionToAllInfoOptions = {}
 ): Promise<PersistentSubscriptionToAllInfo> {
+  validateField(schemas.groupName, groupName);
+  validateField(
+    schemas.getPersistentSubscriptionToAllInfoOptions.optional(),
+    baseOptions
+  );
+
   if (!(await this.supports(PersistentSubscriptionsService.getInfo, "all"))) {
     throw new UnsupportedError("getPersistentSubscriptionToAllInfo", "21.10.1");
   }

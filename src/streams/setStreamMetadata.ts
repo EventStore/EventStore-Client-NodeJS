@@ -9,10 +9,13 @@ import { jsonEvent } from "../events";
 
 import { prepareStreamMetadata, StreamMetadata } from "./utils/streamMetadata";
 import { metastreamOf } from "./utils/systemStreams";
+import schemas from "../schemas";
+import { validateField } from "../utils/validation";
 
 export interface SetStreamMetadataOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
+   *
    * @default ANY
    */
   expectedRevision?: AppendExpectedRevision;
@@ -22,6 +25,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Sets metadata for steam.
+     *
      * @param streamName A stream name.
      * @param metadata Metadata to write.
      * @param options Writing options.
@@ -42,6 +46,10 @@ Client.prototype.setStreamMetadata = async function <
   metadata: MetadataType,
   options: SetStreamMetadataOptions = {}
 ): Promise<AppendResult> {
+  validateField(schemas.streamName, streamName);
+  validateField(schemas.streamMetadata, metadata);
+  validateField(schemas.setStreamMetadataOptions.optional(), options);
+
   debug.command("setStreamMetadata: %O", {
     streamName,
     metadata,

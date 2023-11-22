@@ -38,6 +38,8 @@ export enum ErrorType {
   USER_CONFLICT = "user-conflict",
 
   UNSUPPORTED = "unsupported",
+
+  VALIDATION_FAILED = "validation-failed",
 }
 
 abstract class CommandErrorBase extends Error {
