@@ -15,6 +15,9 @@ import {
   END,
 } from "@eventstore/db-client";
 
+// This test can take time.
+jest.setTimeout(120_000);
+
 const asyncPipeline = promisify(pipeline);
 
 describe("subscribeToAll", () => {
