@@ -140,17 +140,17 @@ export interface ProjectionDetails {
   /**
    * The CoreProcessingTime.
    */
-  coreProcessingTime: BigInt;
+  coreProcessingTime: bigint;
 
   /**
    * The projection version.
    */
-  version: BigInt;
+  version: bigint;
 
   /**
    * The Epoch.
    */
-  epoch: BigInt;
+  epoch: bigint;
 
   /**
    * The projection EffectiveName.
@@ -216,7 +216,7 @@ export interface ProjectionDetails {
   /**
    * The projection EventsProcessedAfterRestart.
    */
-  eventsProcessedAfterRestart: BigInt;
+  eventsProcessedAfterRestart: bigint;
 
   /**
    * The projection CheckpointStatus.
@@ -226,7 +226,7 @@ export interface ProjectionDetails {
   /**
    * The projection BufferedEvents.
    */
-  bufferedEvents: BigInt;
+  bufferedEvents: bigint;
 
   /**
    * The projection WritePendingEventsBeforeCheckpoint.

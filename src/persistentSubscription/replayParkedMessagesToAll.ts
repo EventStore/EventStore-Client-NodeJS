@@ -14,7 +14,7 @@ export interface ReplayParkedMessagesToAllOptions extends BaseOptions {
    * When to stop replaying parked messages. Leave undefined to have no limit.
    * @default undefined
    */
-  stopAt?: number | BigInt;
+  stopAt?: number | bigint;
 }
 
 declare module "../Client" {
