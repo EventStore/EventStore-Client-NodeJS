@@ -13,7 +13,7 @@ jobs:
     name: Test
     uses: ./.github/workflows/tests.yml
     with:
-      version: "21.10.1-focal"
+      version: "latest"
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
