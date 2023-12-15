@@ -455,6 +455,16 @@ export class ReadResp extends jspb.Message {
     getLastAllStreamPosition(): shared_pb.AllStreamPosition | undefined;
     setLastAllStreamPosition(value?: shared_pb.AllStreamPosition): ReadResp;
 
+    hasCaughtUp(): boolean;
+    clearCaughtUp(): void;
+    getCaughtUp(): ReadResp.CaughtUp | undefined;
+    setCaughtUp(value?: ReadResp.CaughtUp): ReadResp;
+
+    hasFellBehind(): boolean;
+    clearFellBehind(): void;
+    getFellBehind(): ReadResp.FellBehind | undefined;
+    setFellBehind(value?: ReadResp.FellBehind): ReadResp;
+
     getContentCase(): ReadResp.ContentCase;
 
     serializeBinary(): Uint8Array;
@@ -476,8 +486,44 @@ export namespace ReadResp {
         firstStreamPosition: string,
         lastStreamPosition: string,
         lastAllStreamPosition?: shared_pb.AllStreamPosition.AsObject,
+        caughtUp?: ReadResp.CaughtUp.AsObject,
+        fellBehind?: ReadResp.FellBehind.AsObject,
     }
 
+
+    export class CaughtUp extends jspb.Message { 
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): CaughtUp.AsObject;
+        static toObject(includeInstance: boolean, msg: CaughtUp): CaughtUp.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: CaughtUp, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): CaughtUp;
+        static deserializeBinaryFromReader(message: CaughtUp, reader: jspb.BinaryReader): CaughtUp;
+    }
+
+    export namespace CaughtUp {
+        export type AsObject = {
+        }
+    }
+
+    export class FellBehind extends jspb.Message { 
+
+        serializeBinary(): Uint8Array;
+        toObject(includeInstance?: boolean): FellBehind.AsObject;
+        static toObject(includeInstance: boolean, msg: FellBehind): FellBehind.AsObject;
+        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+        static serializeBinaryToWriter(message: FellBehind, writer: jspb.BinaryWriter): void;
+        static deserializeBinary(bytes: Uint8Array): FellBehind;
+        static deserializeBinaryFromReader(message: FellBehind, reader: jspb.BinaryReader): FellBehind;
+    }
+
+    export namespace FellBehind {
+        export type AsObject = {
+        }
+    }
 
     export class ReadEvent extends jspb.Message { 
 
@@ -660,6 +706,8 @@ export namespace ReadResp {
         FIRST_STREAM_POSITION = 5,
         LAST_STREAM_POSITION = 6,
         LAST_ALL_STREAM_POSITION = 7,
+        CAUGHT_UP = 8,
+        FELL_BEHIND = 9,
     }
 
 }

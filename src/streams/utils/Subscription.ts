@@ -57,6 +57,14 @@ export class Subscription<E>
       this.emit("confirmation");
     }
 
+    if (resp.hasCaughtUp?.()) {
+      this.emit("caughtUp", this);
+    }
+
+    if (resp.hasFellBehind?.()) {
+      this.emit("fellBehind", this);
+    }
+
     if (resp.hasCheckpoint?.() && this.#checkpointReached) {
       const checkpoint = resp.getCheckpoint()!;
       const position: Position = {

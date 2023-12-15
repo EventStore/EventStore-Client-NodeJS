@@ -1,4 +1,6 @@
-import { pipeline, Writable, Readable } from "stream";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
+import { pipeline, Writable, Readable, finished } from "stream";
 import { promisify } from "util";
 
 import {
@@ -6,6 +8,7 @@ import {
   Defer,
   delay,
   jsonTestEvents,
+  matchServerVersion,
   TestEventData,
 } from "@test-utils";
 import {
@@ -56,6 +59,7 @@ describe("subscribeToAll", () => {
       const onClose = jest.fn();
       const onConfirmation = jest.fn();
       const onEnd = jest.fn(defer.resolve);
+
       const onEvent = jest.fn(async (event: ResolvedEvent) => {
         events.push(event);
 
@@ -64,9 +68,12 @@ describe("subscribeToAll", () => {
         }
 
         if (event.event?.type === FINISH_TEST) {
+          await delay(500);
           subscription.unsubscribe();
         }
       });
+
+      const caughtUp = jest.fn();
 
       const subscription = client
         .subscribeToAll()
@@ -74,6 +81,7 @@ describe("subscribeToAll", () => {
         .on("data", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
+        .on("caughtUp", caughtUp)
         .on("end", onEnd);
 
       const finishEvent = jsonEvent({
@@ -93,6 +101,10 @@ describe("subscribeToAll", () => {
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
       expect(onEvent).toHaveBeenCalled();
+
+      if (matchServerVersion`>=23.10`) {
+        expect(caughtUp).toBeCalledTimes(1);
+      }
 
       // 8 set up events, 4 after subscribed
       expect(filteredEvents.length).toBe(12);
@@ -125,12 +137,15 @@ describe("subscribeToAll", () => {
         }
       });
 
+      const onCaughtUp = jest.fn();
+
       const subscription = client
         .subscribeToAll({ fromPosition: END })
         .on("error", onError)
         .on("data", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
+        .on("caughtUp", onCaughtUp)
         .on("end", onEnd);
 
       const finishEvent = jsonEvent({
@@ -152,6 +167,10 @@ describe("subscribeToAll", () => {
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
       expect(onEvent).toHaveBeenCalled();
+
+      if (matchServerVersion`>=23.10`) {
+        expect(onCaughtUp).toBeCalledTimes(1);
+      }
 
       // only 4 after subscribed
       expect(filteredEvents.length).toBe(4);
@@ -183,7 +202,7 @@ describe("subscribeToAll", () => {
       const onClose = jest.fn();
       const onConfirmation = jest.fn();
       const onEnd = jest.fn(defer.resolve);
-      const onEvent = jest.fn((event: ResolvedEvent) => {
+      const onEvent = jest.fn(async (event: ResolvedEvent) => {
         events.push(event);
 
         if (!event.event?.type.startsWith("$")) {
@@ -191,9 +210,11 @@ describe("subscribeToAll", () => {
         }
 
         if (event.event?.type === FINISH_TEST) {
+          await delay(500);
           subscription.unsubscribe();
         }
       });
+      const onCaughtUp = jest.fn();
 
       const subscription = client
         .subscribeToAll({
@@ -203,6 +224,7 @@ describe("subscribeToAll", () => {
         .on("data", onEvent)
         .on("close", onClose)
         .on("confirmation", onConfirmation)
+        .on("caughtUp", onCaughtUp)
         .on("end", onEnd);
 
       const finishEvent = jsonEvent({
@@ -222,6 +244,9 @@ describe("subscribeToAll", () => {
       expect(onError).not.toBeCalled();
       expect(onConfirmation).toBeCalledTimes(1);
       expect(onEvent).toHaveBeenCalled();
+      if (matchServerVersion`>=23.10`) {
+        expect(onCaughtUp).toBeCalledTimes(1);
+      }
 
       // 3 before subscribed, 4 after subscribed
       expect(filteredEvents.length).toBe(7);
@@ -375,22 +400,25 @@ describe("subscribeToAll", () => {
       const endListener = jest.fn(defer.resolve);
       const onceListener = jest.fn();
       const offListener = jest.fn();
+      const caughtUpListener = jest.fn();
 
       const subscription = client
         .subscribeToAll({
           fromPosition: appendResult.position,
         })
         .on("data", eventListenerOne)
-        .on("data", (event) => {
+        .on("data", async (event) => {
           eventListenerTwo(event);
 
           if (event.event?.type === FINISH_TEST) {
+            await delay(500);
             subscription.unsubscribe();
           }
         })
         .on("data", offListener)
         .once("data", onceListener)
         .on("end", endListener)
+        .on("caughtUp", caughtUpListener)
         .off("data", offListener);
 
       await client.appendToStream(STREAM_NAME, [
@@ -405,6 +433,9 @@ describe("subscribeToAll", () => {
       expect(onceListener).toBeCalledTimes(1);
       expect(endListener).toBeCalledTimes(1);
       expect(offListener).not.toBeCalled();
+      if (matchServerVersion`>=23.10`) {
+        expect(caughtUpListener).toBeCalledTimes(1);
+      }
     });
 
     test("pipeline", async () => {

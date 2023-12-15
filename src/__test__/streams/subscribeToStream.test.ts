@@ -1,6 +1,14 @@
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
 import { pipeline, Writable, Readable } from "stream";
 import { promisify } from "util";
-import { createTestNode, Defer, delay, jsonTestEvents } from "@test-utils";
+import {
+  createTestNode,
+  Defer,
+  delay,
+  jsonTestEvents,
+  matchServerVersion,
+} from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -55,6 +63,13 @@ describe("subscribeToStream", () => {
           subscription.unsubscribe();
         }
       });
+      const handleCaughtUp = jest.fn(() => {
+        try {
+          expect(handleEvent).toBeCalledTimes(4);
+        } catch (error) {
+          defer.reject(error);
+        }
+      });
 
       const subscription = client
         .subscribeToStream(STREAM_NAME)
@@ -62,6 +77,7 @@ describe("subscribeToStream", () => {
         .on("data", handleEvent)
         .on("close", handleClose)
         .on("confirmation", handleConfirmation)
+        .on("caughtUp", handleCaughtUp)
         .on("end", handleEnd);
 
       await delay(500);
@@ -76,6 +92,10 @@ describe("subscribeToStream", () => {
       expect(handleError).not.toBeCalled();
       expect(handleConfirmation).toBeCalledTimes(1);
       expect(handleEvent).toBeCalledTimes(8);
+
+      if (matchServerVersion`>=23.10`) {
+        expect(handleCaughtUp).toBeCalledTimes(1);
+      }
     });
 
     test("from end", async () => {
@@ -95,6 +115,13 @@ describe("subscribeToStream", () => {
           subscription.unsubscribe();
         }
       });
+      const handleCaughtUp = jest.fn(() => {
+        try {
+          expect(handleEvent).toBeCalledTimes(0);
+        } catch (error) {
+          defer.reject(error);
+        }
+      });
 
       const subscription = client
         .subscribeToStream(STREAM_NAME, {
@@ -104,6 +131,7 @@ describe("subscribeToStream", () => {
         .on("data", handleEvent)
         .on("close", handleClose)
         .on("confirmation", handleConfirmation)
+        .on("caughtUp", handleCaughtUp)
         .on("end", handleEnd);
 
       await delay(500);
@@ -138,6 +166,14 @@ describe("subscribeToStream", () => {
           subscription.unsubscribe();
         }
       });
+      const handleCaughtUp = jest.fn(() => {
+        try {
+          // It should throw 1 because we are starting from revision 2
+          expect(handleEvent).toBeCalledTimes(1);
+        } catch (error) {
+          defer.reject(error);
+        }
+      });
 
       const subscription = client
         .subscribeToStream(STREAM_NAME, {
@@ -148,6 +184,7 @@ describe("subscribeToStream", () => {
         .on("data", handleEvent)
         .on("close", handleClose)
         .on("confirmation", handleConfirmation)
+        .on("caughtUp", handleCaughtUp)
         .on("end", handleEnd);
 
       await delay(500);
@@ -163,6 +200,10 @@ describe("subscribeToStream", () => {
       expect(handleEvent).toBeCalledTimes(5);
       expect(handleEnd).toBeCalledTimes(1);
       expect(handleError).not.toBeCalled();
+
+      if (matchServerVersion`>=23.10`) {
+        expect(handleCaughtUp).toBeCalledTimes(1);
+      }
     });
   });
 

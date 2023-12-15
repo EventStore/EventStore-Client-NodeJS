@@ -472,6 +472,33 @@ export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
   ): Promise<void>;
 }
 
+// Other listeners that are only supported in regular subscriptions
+export interface RegularSubscription<S> {
+  addListener(event: "caughtUp", listener: (subscription: S) => void): S;
+  addListener(event: "fellBehind", listener: (subscription: S) => void): S;
+
+  on(event: "caughtUp", listener: (subscription: S) => void): S;
+  on(event: "fellBehind", listener: (subscription: S) => void): S;
+
+  once(event: "caughtUp", listener: (subscription: S) => void): S;
+  once(event: "fellBehind", listener: (subscription: S) => void): S;
+
+  prependListener(event: "caughtUp", listener: (subscription: S) => void): S;
+  prependListener(event: "fellBehind", listener: (subscription: S) => void): S;
+
+  prependOnceListener(
+    event: "caughtUp",
+    listener: (subscription: S) => void
+  ): S;
+  prependOnceListener(
+    event: "fellBehind",
+    listener: (subscription: S) => void
+  ): S;
+
+  removeListener(event: "caughtUp", listener: (subscription: S) => void): S;
+  removeListener(event: "fellBehind", listener: (subscription: S) => void): S;
+}
+
 export type PersistentSubscriptionToStream<E extends EventType = EventType> =
   PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>>;
 
@@ -479,9 +506,11 @@ export type PersistentSubscriptionToAll =
   PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent>;
 
 export type StreamSubscription<E extends EventType = EventType> =
-  ReadableSubscription<ResolvedEvent<E>>;
+  ReadableSubscription<ResolvedEvent<E>> &
+    RegularSubscription<StreamSubscription>;
 export type AllStreamSubscription =
-  ReadableSubscription<AllStreamResolvedEvent>;
+  ReadableSubscription<AllStreamResolvedEvent> &
+    RegularSubscription<AllStreamSubscription>;
 
 export { VNodeState };
 export * from "./events";
