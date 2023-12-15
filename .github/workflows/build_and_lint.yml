@@ -9,6 +9,22 @@ on:
     - cron: "0 3 * * 0" # Every sunday at 3am UTC.
 
 jobs:
+  validation:
+    name: Code quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install
+        run: yarn
+      - name: Linting
+        run: yarn lint
+      - name: Build on Ubuntu
+        run: yarn build
+      - name: All generated code is commited
+        run: |
+          git update-index --refresh
+          git diff-index --exit-code --name-status HEAD --
+
   build:
     name: Build
     strategy:
@@ -23,10 +39,6 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
-      - name: All generated code is commited
-        run: |
-          git update-index --refresh
-          git diff-index --exit-code --name-status HEAD --
 
   package:
     name: Package compiles as a dependency
@@ -68,12 +80,3 @@ jobs:
           --target es2018
           --lib es2020
           --types node
-  linting:
-    name: Linting
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install
-        run: yarn
-      - name: Linting
-        run: yarn lint
