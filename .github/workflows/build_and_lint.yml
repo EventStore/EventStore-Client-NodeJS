@@ -23,6 +23,10 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
+      - name: All generated code is commited
+        run: |
+          git update-index --refresh
+          git diff-index --exit-code --name-status HEAD --
 
   package:
     name: Package compiles as a dependency
