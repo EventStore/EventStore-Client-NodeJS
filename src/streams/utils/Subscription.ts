@@ -58,11 +58,11 @@ export class Subscription<E>
     }
 
     if (resp.hasCaughtUp?.()) {
-      this.emit("caughtUp", this);
+      this.emit("caughtUp");
     }
 
     if (resp.hasFellBehind?.()) {
-      this.emit("fellBehind", this);
+      this.emit("fellBehind");
     }
 
     if (resp.hasCheckpoint?.() && this.#checkpointReached) {

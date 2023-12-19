@@ -473,30 +473,24 @@ export interface PersistentSubscriptionBase<E> extends ReadableSubscription<E> {
 }
 
 // Other listeners that are only supported in regular subscriptions
-export interface RegularSubscription<S> {
-  addListener(event: "caughtUp", listener: (subscription: S) => void): S;
-  addListener(event: "fellBehind", listener: (subscription: S) => void): S;
+export interface RegularSubscription {
+  addListener(event: "caughtUp", listener: () => void): this;
+  addListener(event: "fellBehind", listener: () => void): this;
 
-  on(event: "caughtUp", listener: (subscription: S) => void): S;
-  on(event: "fellBehind", listener: (subscription: S) => void): S;
+  on(event: "caughtUp", listener: () => void): this;
+  on(event: "fellBehind", listener: () => void): this;
 
-  once(event: "caughtUp", listener: (subscription: S) => void): S;
-  once(event: "fellBehind", listener: (subscription: S) => void): S;
+  once(event: "caughtUp", listener: () => void): this;
+  once(event: "fellBehind", listener: () => void): this;
 
-  prependListener(event: "caughtUp", listener: (subscription: S) => void): S;
-  prependListener(event: "fellBehind", listener: (subscription: S) => void): S;
+  prependListener(event: "caughtUp", listener: () => void): this;
+  prependListener(event: "fellBehind", listener: () => void): this;
 
-  prependOnceListener(
-    event: "caughtUp",
-    listener: (subscription: S) => void
-  ): S;
-  prependOnceListener(
-    event: "fellBehind",
-    listener: (subscription: S) => void
-  ): S;
+  prependOnceListener(event: "caughtUp", listener: () => void): this;
+  prependOnceListener(event: "fellBehind", listener: () => void): this;
 
-  removeListener(event: "caughtUp", listener: (subscription: S) => void): S;
-  removeListener(event: "fellBehind", listener: (subscription: S) => void): S;
+  removeListener(event: "caughtUp", listener: () => void): this;
+  removeListener(event: "fellBehind", listener: () => void): this;
 }
 
 export type PersistentSubscriptionToStream<E extends EventType = EventType> =
@@ -506,11 +500,9 @@ export type PersistentSubscriptionToAll =
   PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent>;
 
 export type StreamSubscription<E extends EventType = EventType> =
-  ReadableSubscription<ResolvedEvent<E>> &
-    RegularSubscription<StreamSubscription>;
+  ReadableSubscription<ResolvedEvent<E>> & RegularSubscription;
 export type AllStreamSubscription =
-  ReadableSubscription<AllStreamResolvedEvent> &
-    RegularSubscription<AllStreamSubscription>;
+  ReadableSubscription<AllStreamResolvedEvent> & RegularSubscription;
 
 export { VNodeState };
 export * from "./events";
