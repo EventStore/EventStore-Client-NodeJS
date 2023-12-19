@@ -1,3 +1,20 @@
+## [v6.1.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v6.0.0...v6.1.0) (2023-12-19)
+
+## Features
+
+*  Add support for caught up and fell behind subscription message [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/e00beb1b2a800e0e3d111e7de3de571d67e635fa)
+
+## Enhancements
+
+*  Increase test coverage for reconnection [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/acf48997607b4b7b64fd1f1683fd579cb286c371)
+*  Use dynamic tags instead of hardcoding esdb versions [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/2bdbaab7a7f7884301c15f4cf6c090ab90fa7309)
+*  Update TypeScript, ESLint and other dependencies [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/d3de1747df72efb00e8fcbbdc393ce2121f6d82f)
+*  Update grpc-js to 1.9.12 [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/91fb2aac898ea2c6dce072f94393466390ccf89c)
+
+## Thanks
+
+:tada: Thanks for @jokesterfr and @Imanghvs for their contributions! :tada:
+
 ## [v6.0.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v5.0.1...v6.0.0) (2023-08-25)
 
 ## Breaking changes
