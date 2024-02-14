@@ -1,5 +1,5 @@
 const esdbImage = ((): string => {
-  const version = process.env.EVENTSTORE_IMAGE ?? "github:ci";
+  const version = process.env.EVENTSTORE_IMAGE ?? "eventstore-ce:ci";
   switch (true) {
     case version.startsWith("local:"):
       return version.replace("local:", "");
@@ -7,6 +7,8 @@ const esdbImage = ((): string => {
       return version.replace("github:", "ghcr.io/eventstore/eventstore:");
     case version.startsWith("dockerhub:"):
       return version.replace("dockerhub:", "eventstore/eventstore:");
+    case version.startsWith("eventstore-ce:"):
+      return version.replace("docker.eventstore.com/eventstore-ce/eventstoredb-ce:");
     default:
       return version;
   }
