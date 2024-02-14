@@ -69,7 +69,7 @@ describe("resetProjection", () => {
       await expect(
         client.updateProjection(PROJECTION_NAME, projection)
       ).rejects.toThrowError(
-        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+        matchServerVersion`>=24.6` ? NotFoundError : UnknownError
       );
     });
   });

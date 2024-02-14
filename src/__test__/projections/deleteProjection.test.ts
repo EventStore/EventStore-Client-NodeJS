@@ -84,7 +84,7 @@ describe("deleteProjection", () => {
     } catch (error) {
       // projection is already deleted
       expect(error).toBeInstanceOf(
-        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+        matchServerVersion`>=24.6` ? NotFoundError : UnknownError
       );
     }
   });
@@ -96,7 +96,7 @@ describe("deleteProjection", () => {
       await expect(
         client.deleteProjection(PROJECTION_NAME)
       ).rejects.toThrowError(
-        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+        matchServerVersion`>=24.6` ? NotFoundError : UnknownError
       );
     });
   });
