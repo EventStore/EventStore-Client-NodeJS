@@ -1,4 +1,5 @@
 [![npm][npm-badge]][npm-badge-url]
+
 [![Github action CI workflow][ci-badge]][ci-badge-url]
 [![license][license-badge]][license-badge-url]
 
