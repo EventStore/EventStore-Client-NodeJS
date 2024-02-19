@@ -23,6 +23,7 @@ message StreamIdentifier {
 }
 
 message AllStreamPosition {
+  option deprecated = true;
 	uint64 commit_position = 1 [jstype = JS_STRING];
 	uint64 prepare_position = 2 [jstype = JS_STRING];
 }
@@ -30,13 +31,13 @@ message AllStreamPosition {
 message WrongExpectedVersion {
 	oneof current_stream_revision_option {
 		uint64 current_stream_revision = 1 [jstype = JS_STRING];
-		google.protobuf.Empty current_no_stream = 2;
+		google.protobuf.Empty current_no_stream = 2 [deprecated = true];
 	}
 	oneof expected_stream_position_option {
 		uint64 expected_stream_position = 3 [jstype = JS_STRING];
-		google.protobuf.Empty expected_any = 4;
-		google.protobuf.Empty expected_stream_exists = 5;
-		google.protobuf.Empty expected_no_stream = 6;
+		google.protobuf.Empty expected_any = 4 [deprecated = true];
+		google.protobuf.Empty expected_stream_exists = 5 [deprecated = true];
+		google.protobuf.Empty expected_no_stream = 6 [deprecated = true];
 	}
 }
 
@@ -57,5 +58,6 @@ message MaximumAppendSizeExceeded {
 }
 
 message BadRequest {
+  option deprecated = true;
 	string message = 1;
 }

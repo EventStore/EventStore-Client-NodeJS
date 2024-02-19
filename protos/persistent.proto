@@ -34,25 +34,25 @@ message ReadReq {
 
 		message UUIDOption {
 			oneof content {
-				event_store.client.Empty structured = 1;
+				event_store.client.Empty structured = 1 [deprecated = true];
 				event_store.client.Empty string = 2;
 			}
 		}
 	}
 
 	message Ack {
-		bytes id = 1;
+		bytes id = 1 [deprecated = true];
 		repeated event_store.client.UUID ids = 2;
 	}
 
 	message Nack {
-		bytes id = 1;
+		bytes id = 1 [deprecated = true];
 		repeated event_store.client.UUID ids = 2;
 		Action action = 3;
 		string reason = 4;
 
 		enum Action {
-			Unknown = 0;
+			Unknown = 0 [deprecated = true];
 			Park = 1;
 			Retry = 2;
 			Skip = 3;
@@ -71,11 +71,11 @@ message ReadResp {
 		RecordedEvent link = 2;
 		oneof position {
 			uint64 commit_position = 3 [jstype = JS_STRING];
-			event_store.client.Empty no_position = 4;
+			event_store.client.Empty no_position = 4 [deprecated = true];
 		}
 		oneof count {
 			int32 retry_count = 5;
-			event_store.client.Empty no_retry_count = 6;
+			event_store.client.Empty no_retry_count = 6 [deprecated = true];
 		}
 		message RecordedEvent {
 			event_store.client.UUID id = 1;
@@ -98,10 +98,10 @@ message CreateReq {
 
 	message Options {
 		oneof stream_option {
-			StreamOptions stream = 4;
+			StreamOptions stream = 4 [deprecated = true];
 			AllOptions all = 5;
 		}
-		event_store.client.StreamIdentifier stream_identifier = 1 [deprecated=true];
+		event_store.client.StreamIdentifier stream_identifier = 1;
 		string group_name = 2;
 		Settings settings = 3;
 	}
@@ -161,14 +161,14 @@ message CreateReq {
 		int32 history_buffer_size = 12;
 		ConsumerStrategy named_consumer_strategy = 13 [deprecated = true];
 		oneof message_timeout {
-			int64 message_timeout_ticks = 4 [jstype = JS_STRING];
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING, deprecated = true];
 			int32 message_timeout_ms = 14;
 		}
 		oneof checkpoint_after {
-			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING];
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
 			int32 checkpoint_after_ms = 15;
 		}
-		string consumer_strategy = 16;
+		string consumer_strategy = 16 [deprecated = true];
 	}
 
 	enum ConsumerStrategy {
@@ -186,10 +186,10 @@ message UpdateReq {
 
 	message Options {
 		oneof stream_option {
-			StreamOptions stream = 4;
+			StreamOptions stream = 4 [deprecated = true];
 			AllOptions all = 5;
 		}
-		event_store.client.StreamIdentifier stream_identifier = 1 [deprecated = true];
+		event_store.client.StreamIdentifier stream_identifier = 1;
 		string group_name = 2;
 		Settings settings = 3;
 	}
@@ -229,11 +229,11 @@ message UpdateReq {
 		int32 history_buffer_size = 12;
 		ConsumerStrategy named_consumer_strategy = 13;
 		oneof message_timeout {
-			int64 message_timeout_ticks = 4 [jstype = JS_STRING];
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING, deprecated = true];
 			int32 message_timeout_ms = 14;
 		}
 		oneof checkpoint_after {
-			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING];
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
 			int32 checkpoint_after_ms = 15;
 		}
 	}
@@ -278,6 +278,7 @@ message GetInfoReq {
 }
 
 message GetInfoResp {
+  option deprecated = true;
 	SubscriptionInfo subscription_info = 1;
 }
 
