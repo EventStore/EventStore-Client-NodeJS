@@ -23,13 +23,14 @@ message CreateReq {
 
 	message Options {
 		oneof mode {
-			event_store.client.Empty one_time = 1;
-			Transient transient = 2;
+			event_store.client.Empty one_time = 1 [deprecated = true];
+			Transient transient = 2 [deprecated = true];
 			Continuous continuous = 3;
 		}
 		string query = 4;
 
 		message Transient {
+      option deprecated = true;
 			string name = 1;
 		}
 		message Continuous {
@@ -78,10 +79,10 @@ message StatisticsReq {
 	message Options {
 		oneof mode {
 			string name = 1;
-			event_store.client.Empty all = 2;
-			event_store.client.Empty transient = 3;
+			event_store.client.Empty all = 2 [deprecated = true];
+			event_store.client.Empty transient = 3 [deprecated = true];
 			event_store.client.Empty continuous = 4;
-			event_store.client.Empty one_time = 5;
+			event_store.client.Empty one_time = 5 [deprecated = true];
 		}
 	}
 }
@@ -90,6 +91,7 @@ message StatisticsResp {
 	Details details = 1;
 
 	message Details {
+    option deprecated = true;
 		int64 coreProcessingTime = 1 [jstype = JS_STRING];
 		int64 version = 2 [jstype = JS_STRING];
 		int64 epoch = 3 [jstype = JS_STRING];
