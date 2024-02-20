@@ -94,12 +94,7 @@ describe("write after end", () => {
 
       const error = await errorPromise;
 
-      // The reason for this discrepancy is explained in mid-stream.test.ts
-      if (matchServerVersion`<=23.10`) {
-        expect(error).toBeInstanceOf(CancelledError);
-      } else {
-        expect(error).toBeInstanceOf(UnavailableError);
-      }
+      expect(error).toBeInstanceOf(CancelledError);
 
       // wait for any unhandled rejections
       await delay(5_000);

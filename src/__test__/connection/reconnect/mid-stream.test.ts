@@ -5,13 +5,11 @@ import {
   delay,
   getCurrentConnection,
   jsonTestEvents,
-  matchServerVersion,
 } from "@test-utils";
 import {
   jsonEvent,
   EventStoreDBClient,
   CancelledError,
-  UnavailableError,
 } from "@eventstore/db-client";
 
 // This test can take time.
@@ -54,22 +52,7 @@ describe("reconnect", () => {
 
       expect(i).toBe("unreachable");
     } catch (error) {
-      if (matchServerVersion`<=23.10`) {
-        // In ESDB versions below 24, the default value for
-        // HostOptions.ShutdownTimeout in the .NET runtime is 5 seconds.  This
-        // means the client will wait for 5 seconds for a server response before
-        // timing out. If the server shuts down during this period, the client
-        // will encounter a CancelledError. Previously, a CancelledError was
-        // incorrectly thrown for keep alive ping errors due to a lack of error
-        // handling in grpc-js. This issue was addressed in
-        // https://github.com/grpc/grpc-node/pull/2563/commits/83789c15dbe9de3bc9069bc0d7c63f13d71f5b6e
-        expect(error).toBeInstanceOf(CancelledError);
-      } else {
-        // Starting with ESDB version 24, the default ShutdownTimeout value has
-        // been increased to 30 seconds. This change gives us a longer grace
-        // period for the client to handle server shutdowns.
-        expect(error).toBeInstanceOf(UnavailableError);
-      }
+      expect(error).toBeInstanceOf(CancelledError);
     }
 
     // wait for leader to be ready
