@@ -11,6 +11,7 @@ import type { EndPoint } from "../../types";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
+import { delay } from "./delay";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
@@ -267,6 +268,7 @@ export class Cluster {
     const response = await stopOne(nodeId, {
       cwd: this.path(),
     });
+    delay(1000);
 
     if (response.exitCode === 0) return;
 
