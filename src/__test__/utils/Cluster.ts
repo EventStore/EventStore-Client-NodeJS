@@ -5,7 +5,7 @@ import * as cp from "child_process";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
-import { upAll, down, exec, stopOne, logs } from "docker-compose";
+import { upAll, down, exec, stopOne, logs } from "docker-compose/dist/v2";
 
 import type { EndPoint } from "../../types";
 
@@ -268,7 +268,7 @@ export class Cluster {
     const response = await stopOne(nodeId, {
       cwd: this.path(),
     });
-    delay(1000);
+    await delay(1000);
 
     if (response.exitCode === 0) return;
 
