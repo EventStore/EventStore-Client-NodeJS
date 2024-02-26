@@ -5,7 +5,7 @@ import * as cp from "child_process";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
-import { upAll, down, exec, stopOne, logs } from "docker-compose/dist/v2";
+import { upAll, down, exec, stopOne, logs } from "docker-compose";
 
 import type { EndPoint } from "../../types";
 
