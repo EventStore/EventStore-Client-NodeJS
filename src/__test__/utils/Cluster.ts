@@ -268,7 +268,6 @@ export class Cluster {
     const response = await stopOne(nodeId, {
       cwd: this.path(),
     });
-    await delay(1000);
 
     if (response.exitCode === 0) return;
 
