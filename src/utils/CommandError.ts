@@ -485,6 +485,13 @@ export const convertToCommandError = (error: Error): CommandError | Error => {
     }
   }
 
+  // This is a temporary workaround for a bug in node js. Must be removed when the bug is fixed.
+  // https://github.com/grpc/grpc-node/issues/2502
+  // and https://github.com/nodejs/node/issues/49147
+  if (error.details.includes("write after end")) {
+    return new UnavailableError(error);
+  }
+
   return new UnknownError(error);
 };
 

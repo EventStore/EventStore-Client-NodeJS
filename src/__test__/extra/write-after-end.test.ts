@@ -1,5 +1,4 @@
 /** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
   createTestNode,
@@ -31,11 +30,11 @@ const neverEndingEvents: Array<EventData> = (function* neverEndingEvents() {
       },
     });
   }
-})() as any;
+})() as never;
 
 // neverEndingEvents really is an array...
 const isArray = Array.isArray;
-Array.isArray = (arg): arg is any[] => {
+Array.isArray = (arg): arg is never[] => {
   if (isArray(arg)) return true;
   if (arg === neverEndingEvents) return true;
   return false;
@@ -62,22 +61,20 @@ describe("write after end", () => {
       credentials: { username: "admin", password: "changeit" },
     });
 
-    const neverEndingAppend = client.appendToStream(
-      STREAM_NAME,
-      neverEndingEvents,
-      {
+    const neverEndingAppend = client
+      .appendToStream(STREAM_NAME, neverEndingEvents, {
         // credentials enforces classic append
         credentials: { username: "admin", password: "changeit" },
         deadline: Infinity,
-      }
-    ).catch(err => err);
+      })
+      .catch((err) => err);
 
     // let the write get started
     await delay(1);
 
     await node.killNode(node.endpoints[0]);
 
-    const error = await neverEndingAppend
+    const error = await neverEndingAppend;
     expect(error).toBeInstanceOf(UnavailableError);
 
     // wait for any unhandled rejections
