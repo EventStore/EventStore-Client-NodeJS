@@ -42,7 +42,7 @@ Array.isArray = (arg): arg is any[] => {
 };
 
 describe("write after end", () => {
-  test.only("Should not write after end", async () => {
+  test("Should not write after end", async () => {
     // We are going to do a huge append, so tell eventstore not to reject it
     const node = createTestNode().setOption(
       "EVENTSTORE_MAX_APPEND_SIZE",
@@ -70,14 +70,15 @@ describe("write after end", () => {
         credentials: { username: "admin", password: "changeit" },
         deadline: Infinity,
       }
-    );
+    ).catch(err => err);
 
     // let the write get started
     await delay(1);
 
     await node.killNode(node.endpoints[0]);
 
-    await expect(neverEndingAppend).rejects.toBeInstanceOf(UnavailableError);
+    const error = await neverEndingAppend
+    expect(error).toBeInstanceOf(UnavailableError);
 
     // wait for any unhandled rejections
     await delay(5_000);
