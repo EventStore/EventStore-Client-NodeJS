@@ -12,7 +12,6 @@ import {
   EventData,
   EventStoreDBClient,
   jsonEvent,
-  JSONEventType,
   UnavailableError,
 } from "@eventstore/db-client";
 
