@@ -9,16 +9,43 @@ import {
 } from "@test-utils";
 import {
   CancelledError,
+  EventData,
   EventStoreDBClient,
+  jsonEvent,
   UnavailableError,
 } from "@eventstore/db-client";
 
 // These tests can take time.
 jest.setTimeout(120_000);
 
+const neverEndingEvents: Array<EventData> = (function* neverEndingEvents() {
+  let i = 0;
+  while (true) {
+    yield jsonEvent({
+      type: "test",
+      data: {
+        message: "test",
+        index: i++,
+      },
+    });
+  }
+})() as never;
+
+// neverEndingEvents really is an array...
+const isArray = Array.isArray;
+Array.isArray = (arg): arg is never[] => {
+  if (isArray(arg)) return true;
+  if (arg === neverEndingEvents) return true;
+  return false;
+};
+
 describe("write after end", () => {
   test("Should not write after end", async () => {
-    const node = createTestNode();
+    // We are going to do a huge append, so tell eventstore not to reject it
+    const node = createTestNode().setOption(
+      "EVENTSTORE_MAX_APPEND_SIZE",
+      10_000_000
+    );
     await node.up();
 
     const client = new EventStoreDBClient(
@@ -33,26 +60,20 @@ describe("write after end", () => {
       credentials: { username: "admin", password: "changeit" },
     });
 
-    const writeUntilError = () =>
-      new Promise((resolve) => {
-        const writeOnLoop = (): Promise<never> =>
-          client
-            .appendToStream(STREAM_NAME, jsonTestEvents(30_000), {
-              // credentials enforces classic append
-              credentials: { username: "admin", password: "changeit" },
-            })
-            .then(writeOnLoop);
+    const neverEndingAppend = client
+      .appendToStream(STREAM_NAME, neverEndingEvents, {
+        // credentials enforces classic append
+        credentials: { username: "admin", password: "changeit" },
+        deadline: Infinity,
+      })
+      .catch((err) => err);
 
-        writeOnLoop().catch((e) => {
-          resolve(e);
-        });
-      });
-
-    const errorPromise = writeUntilError();
+    // let the write get started
+    await delay(1);
 
     await node.killNode(node.endpoints[0]);
 
-    const error = await errorPromise;
+    const error = await neverEndingAppend;
     expect(error).toBeInstanceOf(UnavailableError);
 
     // wait for any unhandled rejections
@@ -94,12 +115,7 @@ describe("write after end", () => {
 
       const error = await errorPromise;
 
-      // The reason for this discrepancy is explained in mid-stream.test.ts
-      if (matchServerVersion`<=23.10`) {
-        expect(error).toBeInstanceOf(CancelledError);
-      } else {
-        expect(error).toBeInstanceOf(UnavailableError);
-      }
+      expect(error).toBeInstanceOf(CancelledError);
 
       // wait for any unhandled rejections
       await delay(5_000);
