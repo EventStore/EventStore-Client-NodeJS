@@ -22,7 +22,7 @@ $ npm install --save @eventstore/db-client
 
 This client is compatible with version `20.6.1` upwards.
 
-Server setup instructions can be found in the [Event Store Docs], follow the docker setup for the simplest configuration.
+Server setup instructions can be found under the installation section of the [Event Store Docs]. Follow the Docker setup for the simplest configuration.
 
 ## Documentation
 
@@ -40,35 +40,51 @@ const {
   jsonEvent,
   FORWARDS,
   START,
-} = require("@eventstore/db-client");
+} = require('@eventstore/db-client');
 
-const client = new EventStoreDBClient({
-  endpoint: "localhost:2113",
-});
+const client = new EventStoreDBClient(
+  {
+    endpoint: 'localhost:2113',
+  },
+  { insecure: true }
+);
 
-async function simpleTest() {
-  const streamName = "es_supported_clients";
+(async () => {
+  try {
+    const streamName = 'booking-transactions';
 
-  const event = jsonEvent({
-    type: "grpc-client",
-    data: {
-      languages: ["typescript", "javascript"],
-      runtime: "NodeJS",
-    },
-  });
+    const event = jsonEvent({
+      type: 'booking-initiated',
+      data: {
+        bookingId: 'booking-456',
+        userId: 'user-789',
+        event: 'Concert of The Rolling Stones',
+        timestamp: new Date().toISOString(),
+      },
+      metadata: {
+        createdByUserId: 'user-789',
+        sourceIp: '192.168.1.100',
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      }
+    });
 
-  const appendResult = await client.appendToStream(streamName, [event]);
+    await client.appendToStream(streamName, [event]);
 
-  const events = client.readStream(streamName, {
-    fromRevision: START,
-    direction: FORWARDS,
-    maxCount: 10,
-  });
+    const events = client.readStream(streamName, {
+      fromRevision: START,
+      direction: FORWARDS,
+      maxCount: 10,
+    });
 
-  for await (const event of events) {
-    doSomethingProductive(event);
+    for await (const { event } of events) {
+      console.log('Appended event: ', event);
+    }
+  } catch (error) {
+    console.error('An error occured: ', error);
+  } finally {
+    await client.dispose();
   }
-}
+})();
 ```
 
 ###### Typescript example:
@@ -81,10 +97,6 @@ import {
   START,
   JSONEventType,
 } from "@eventstore/db-client";
-
-const client = new EventStoreDBClient({
-  endpoint: "localhost:2113",
-});
 
 interface Reservation {
   reservationId: string;
@@ -113,10 +125,27 @@ type SeatChangedEvent = JSONEventType<
 
 type ReservationEvents = SeatReservedEvent | SeatChangedEvent;
 
-async function simpleTest(): Promise<void> {
-  const streamName = "booking-abc123";
+const client = EventStoreDBClient.connectionString`esdb://localhost:2113?tls=false`;
 
-  const event = jsonEvent<SeatReservedEvent>({
+(async () => {
+  try {
+    const streamName = "booking-abc123";
+    console.log("Creating and appending events...");
+
+    await createAndAppendEvents(client, streamName);
+    console.log("Reading and processing events...");
+
+    const reservation = await readAndProcessEvents(client, streamName);
+    console.log("Final reservation state:", reservation);
+  } catch (error) {
+    console.error("An error occured", error)
+  } finally {
+    await client.dispose();
+  }
+})()
+
+async function createAndAppendEvents(client: EventStoreDBClient, streamName: string): Promise<void> {
+  const seatReservedEvent = jsonEvent<SeatReservedEvent>({
     type: "seat-reserved",
     data: {
       reservationId: "abc123",
@@ -126,8 +155,19 @@ async function simpleTest(): Promise<void> {
     },
   });
 
-  const appendResult = await client.appendToStream(streamName, event);
+  const seatChangedEvent = jsonEvent<SeatChangedEvent>({
+    type: "seat-changed",
+    data: {
+      reservationId: "abc123",
+      newSeatId: "5c",
+    },
+  });
 
+  await client.appendToStream(streamName, [seatReservedEvent, seatChangedEvent]);
+  console.log("Events appended to stream.");
+}
+
+async function readAndProcessEvents(client: EventStoreDBClient, streamName: string): Promise<Partial<Reservation>> {
   const events = client.readStream<ReservationEvents>(streamName, {
     fromRevision: START,
     direction: FORWARDS,
@@ -137,8 +177,9 @@ async function simpleTest(): Promise<void> {
   const reservation: Partial<Reservation> = {};
 
   for await (const { event } of events) {
-    switch (event.type) {
+    switch (event?.type) {
       case "seat-reserved": {
+        console.log("Applying 'seat-reserved' event to reservation state.");
         reservation.reservationId = event.data.reservationId;
         reservation.movieId = event.data.movieId;
         reservation.seatId = event.data.seatId;
@@ -146,15 +187,15 @@ async function simpleTest(): Promise<void> {
         break;
       }
       case "seat-changed": {
+        console.log("Applying 'seat-changed' event to reservation state.");
         reservation.seatId = event.data.newSeatId;
         break;
       }
-      default: {
-        const _exhaustiveCheck: never = event;
+      default:
         break;
-      }
     }
   }
+  return reservation;
 }
 ```
 
@@ -232,7 +273,7 @@ Information on support can be found on our website: [Event Store Support]
 Development is done on the `master` branch. We attempt to do our best to ensure that the history remains clean and to do so, we generally ask contributors to squash their commits into a set or single logical commit.
 
 [event store support]: https://eventstore.com/support/
-[event store docs]: https://developers.eventstore.com/server/v20.10/docs/installation/
+[event store docs]: https://developers.eventstore.com/latest.html
 [event store grpc client docs]: https://developers.eventstore.com/clients/grpc
 [event store discuss]: https://discuss.eventstore.com/
 [yarn]: https://yarnpkg.com/
