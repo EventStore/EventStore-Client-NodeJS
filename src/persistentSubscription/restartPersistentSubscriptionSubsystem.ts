@@ -59,7 +59,8 @@ const restartPersistentSubscriptionSubsystemGRPC = async function (
             return resolve();
           }
         );
-      })
+      }),
+    baseOptions.userCertificate
   );
 };
 

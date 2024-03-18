@@ -87,6 +87,7 @@ Client.prototype.updatePersistentSubscriptionToAll = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
+    baseOptions.userCertificate
   );
 };

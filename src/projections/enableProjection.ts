@@ -48,6 +48,7 @@ Client.prototype.enableProjection = async function (
           if (error) return reject(convertToCommandError(error));
           return resolve();
         });
-      })
+      }),
+    baseOptions.userCertificate
   );
 };

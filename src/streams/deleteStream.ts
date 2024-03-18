@@ -90,6 +90,7 @@ Client.prototype.deleteStream = async function (
             return resolve(result);
           }
         );
-      })
+      }),
+    baseOptions.userCertificate
   );
 };

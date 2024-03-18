@@ -86,7 +86,8 @@ describe("appendToStream - batch append", () => {
       expect(executeSpy).toHaveBeenCalledWith(
         StreamsClient,
         "appendToStream",
-        expect.any(Function)
+        expect.any(Function),
+        undefined
       );
     });
 

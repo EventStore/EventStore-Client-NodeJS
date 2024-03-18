@@ -24,6 +24,10 @@ export interface BaseOptions {
    */
   credentials?: Credentials;
   /**
+   * Overwrite the client certificates.
+   */
+  userCertificate?: UserCertificate;
+  /**
    * Command requires a leader node.
    */
   requiresLeader?: boolean;
@@ -329,6 +333,11 @@ export type Filter = RegexFilter | PrefixesFilter;
 export interface Credentials {
   username: string;
   password: string;
+}
+
+export interface UserCertificate {
+  certPath: Buffer;
+  certKeyPath: Buffer;
 }
 
 export interface StreamingRead<E> extends Readable {

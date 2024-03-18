@@ -28,6 +28,7 @@ import type {
   EndPoint,
   Credentials,
   BaseOptions,
+  UserCertificate,
 } from "../types";
 import {
   CancelledError,
@@ -40,6 +41,7 @@ import { discoverEndpoint } from "./discovery";
 import { parseConnectionString } from "./parseConnectionString";
 import { ServerFeatures } from "./ServerFeatures";
 import { HTTP } from "./http";
+import { isDeepStrictEqual } from "util";
 
 interface ClientOptions {
   /**
@@ -139,6 +141,8 @@ export class Client {
     new Map();
   #http: HTTP;
   #connectionName: string;
+  #rootCertificate: Buffer | undefined;
+  #clientCertificate: UserCertificate | undefined;
 
   // eslint-disable-next-line jsdoc/require-param
   /**
@@ -184,6 +188,31 @@ export class Client {
 
         channelCredentials.rootCertificate = readFileSync(resolvedPath);
       }
+    }
+
+    if (options.certPath || options.certKeyPath) {
+      if (!options.certPath || !options.certKeyPath) {
+        throw new Error(
+          "Both certPath and certKeyPath must be provided, or neither should be provided"
+        );
+      }
+
+      const certPathResolved = isAbsolute(options.certPath)
+        ? options.certPath
+        : resolve(process.cwd(), options.certPath);
+
+      const certKeyPathResolved = isAbsolute(options.certKeyPath)
+        ? options.certKeyPath
+        : resolve(process.cwd(), options.certKeyPath);
+
+      if (!existsSync(certPathResolved) || !existsSync(certKeyPathResolved)) {
+        throw new Error(
+          "Failed to load certificate or key file. File was not found."
+        );
+      }
+
+      channelCredentials.privateKey = readFileSync(certKeyPathResolved);
+      channelCredentials.certChain = readFileSync(certPathResolved);
     }
 
     if (options.dnsDiscover) {
@@ -311,18 +340,30 @@ export class Client {
       debug.connection("Using insecure channel");
       this.#channelCredentials = grpcCredentials.createInsecure();
     } else {
+      this.#clientCertificate = {
+        certKeyPath: channelCredentials!.privateKey!,
+        certPath: channelCredentials!.certChain!,
+      };
+
       debug.connection(
         "Using secure channel with credentials %O",
         channelCredentials
       );
-      this.#channelCredentials = grpcCredentials.createSsl(
-        channelCredentials.rootCertificate,
-        channelCredentials.privateKey,
-        channelCredentials.certChain,
-        channelCredentials.verifyOptions
-      );
+      this.#channelCredentials = this.setSslCredentials(channelCredentials);
+      this.#rootCertificate = channelCredentials.rootCertificate;
     }
   }
+
+  protected setSslCredentials = (
+    channelCredentials: ChannelCredentialOptions
+  ) => {
+    return grpcCredentials.createSsl(
+      channelCredentials.rootCertificate,
+      channelCredentials.privateKey,
+      channelCredentials.certChain,
+      channelCredentials.verifyOptions
+    );
+  };
 
   /**
    * The name of the connection to use in logs.
@@ -412,9 +453,20 @@ export class Client {
   protected execute = async <Client extends GRPCClient, T>(
     Client: GRPCClientConstructor<Client>,
     debugName: string,
-    action: (client: Client) => Promise<T>
+    action: (client: Client) => Promise<T>,
+    clientCertificate?: UserCertificate
   ): Promise<T> => {
-    const client = await this.getGRPCClient(Client, debugName);
+    let client: Client;
+    if (
+      clientCertificate &&
+      !isDeepStrictEqual(clientCertificate, this.#clientCertificate)
+    ) {
+      debug.connection("Creating temporary client for %s", debugName);
+      client = await this.createGRPCClient(Client, clientCertificate);
+    } else {
+      client = await this.getGRPCClient(Client, debugName);
+    }
+
     try {
       return await action(client);
     } catch (error) {
@@ -427,22 +479,25 @@ export class Client {
     return this.#http.request;
   }
 
-  protected getChannel = async (): Promise<Channel> => {
+  protected getChannel = async (
+    clientCertificate?: UserCertificate
+  ): Promise<Channel> => {
     if (this.#channel) {
       debug.connection("Using existing connection");
       return this.#channel;
     }
 
-    this.#channel = this.createChannel();
+    this.#channel = this.createChannel(clientCertificate);
 
     return this.#channel;
   };
 
   private createGRPCClient = async <T extends GRPCClient>(
-    Client: GRPCClientConstructor<T>
+    Client: GRPCClientConstructor<T>,
+    clientCertificate?: UserCertificate
   ): Promise<T> => {
     const channelOverride: GRPCClientOptions["channelOverride"] =
-      await this.getChannel();
+      await this.getChannel(clientCertificate);
 
     const client = new Client(
       null as never,
@@ -508,7 +563,9 @@ export class Client {
     };
   };
 
-  private createChannel = async (): Promise<Channel> => {
+  private createChannel = async (
+    userCertificate?: UserCertificate
+  ): Promise<Channel> => {
     const uri = await this.resolveUri();
 
     debug.connection(
@@ -519,18 +576,30 @@ export class Client {
     );
 
     this.#nextChannelSettings = undefined;
-    return new Channel(uri, this.#channelCredentials, {
-      "grpc.keepalive_time_ms":
-        this.#keepAliveInterval < 0
-          ? Number.MAX_VALUE
-          : this.#keepAliveInterval,
-      "grpc.keepalive_timeout_ms":
-        this.#keepAliveTimeout < 0 ? Number.MAX_VALUE : this.#keepAliveTimeout,
-      // EventStore allows events of up to 16mb to be written internally.
-      // While you can't write events this large through gRPC, you could do so through the TCP client, or through projections.
-      // To allow the client to read any event that EventStoreDB was able to write, we want to hardcode the max receive message length to 17mb.
-      "grpc.max_receive_message_length": 17 * 1024 * 1024,
-    });
+    return new Channel(
+      uri,
+      userCertificate
+        ? this.setSslCredentials({
+            privateKey: userCertificate.certKeyPath,
+            certChain: userCertificate.certPath,
+            rootCertificate: this.#rootCertificate,
+          })
+        : this.#channelCredentials,
+      {
+        "grpc.keepalive_time_ms":
+          this.#keepAliveInterval < 0
+            ? Number.MAX_VALUE
+            : this.#keepAliveInterval,
+        "grpc.keepalive_timeout_ms":
+          this.#keepAliveTimeout < 0
+            ? Number.MAX_VALUE
+            : this.#keepAliveTimeout,
+        // EventStore allows events of up to 16mb to be written internally.
+        // While you can't write events this large through gRPC, you could do so through the TCP client, or through projections.
+        // To allow the client to read any event that EventStoreDB was able to write, we want to hardcode the max receive message length to 17mb.
+        "grpc.max_receive_message_length": 17 * 1024 * 1024,
+      }
+    );
   };
 
   private resolveUri = async (): Promise<string> => {

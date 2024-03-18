@@ -76,7 +76,8 @@ const listPersistentSubscriptionsGRPC = async function (
             );
           }
         );
-      })
+      }),
+    baseOptions.userCertificate
   );
 };
 
