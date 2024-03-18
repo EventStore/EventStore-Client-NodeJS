@@ -331,6 +331,11 @@ export interface Credentials {
   password: string;
 }
 
+export interface Certificate {
+  certFile: Buffer;
+  certKeyFile: Buffer;
+}
+
 export interface StreamingRead<E> extends Readable {
   cancel(): Promise<void>;
 

@@ -7,6 +7,11 @@ const esdbImage = ((): string => {
       return version.replace("github:", "ghcr.io/eventstore/eventstore:");
     case version.startsWith("dockerhub:"):
       return version.replace("dockerhub:", "eventstore/eventstore:");
+    case version.startsWith("eventstore-ee:"):
+      return version.replace(
+        "eventstore-ee:",
+        "docker.eventstore.com/eventstore-ee/eventstoredb-commercial:"
+      );
     default:
       return version;
   }
@@ -14,6 +19,6 @@ const esdbImage = ((): string => {
 
 export const dockerImages = {
   volumesProvisioner: "hasnat/volumes-provisioner",
-  certGen: "ghcr.io/eventstore/es-gencert-cli/es-gencert-cli:1.0.2",
+  certGen: "ghcr.io/eventstore/es-gencert-cli:1.3",
   esdb: esdbImage,
 };

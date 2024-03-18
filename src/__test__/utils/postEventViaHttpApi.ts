@@ -81,6 +81,6 @@ export const postEventViaHttpApi = (
   options: Options
 ): Promise<string> => {
   const [endpoint] = cluster.endpoints;
-  const cert = readFileSync(cluster.certPath);
+  const cert = readFileSync(cluster.certPath.root);
   return post(endpoint, cert, options);
 };

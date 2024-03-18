@@ -109,10 +109,25 @@ type ConnectionSettings =
   | SingleNodeOptions;
 
 export interface ChannelCredentialOptions {
+  /**
+   * Whether to use an insecure connection.
+   */
   insecure?: boolean;
+  /**
+   * The root certificate data.
+   */
   rootCertificate?: Buffer;
-  privateKey?: Buffer;
-  certChain?: Buffer;
+  /**
+   * The x.509 private key, if available.
+   */
+  certKeyFile?: Buffer;
+  /**
+   * The x.509 key chain, if available.
+   */
+  certFile?: Buffer;
+  /**
+   * Additional options to modify certificate verification.
+   */
   verifyOptions?: Parameters<typeof ChannelCredentials.createSsl>[3];
 }
 
@@ -184,6 +199,35 @@ export class Client {
 
         channelCredentials.rootCertificate = readFileSync(resolvedPath);
       }
+    }
+
+    if (options.certFile || options.certKeyFile) {
+      if (!options.certFile || !options.certKeyFile) {
+        throw new Error(
+          "Both certPath and certKeyPath must be provided together"
+        );
+      }
+
+      const certPathResolved = isAbsolute(options.certFile)
+        ? options.certFile
+        : resolve(process.cwd(), options.certFile);
+
+      const certKeyPathResolved = isAbsolute(options.certKeyFile)
+        ? options.certKeyFile
+        : resolve(process.cwd(), options.certKeyFile);
+
+      if (!existsSync(certPathResolved)) {
+        throw new Error("Failed to load certificate file. File was not found.");
+      }
+
+      if (!existsSync(certKeyPathResolved)) {
+        throw new Error(
+          "Failed to load certificate key file. File was not found."
+        );
+      }
+
+      channelCredentials.certKeyFile = readFileSync(certKeyPathResolved);
+      channelCredentials.certFile = readFileSync(certPathResolved);
     }
 
     if (options.dnsDiscover) {
@@ -317,8 +361,8 @@ export class Client {
       );
       this.#channelCredentials = grpcCredentials.createSsl(
         channelCredentials.rootCertificate,
-        channelCredentials.privateKey,
-        channelCredentials.certChain,
+        channelCredentials.certKeyFile,
+        channelCredentials.certFile,
         channelCredentials.verifyOptions
       );
     }

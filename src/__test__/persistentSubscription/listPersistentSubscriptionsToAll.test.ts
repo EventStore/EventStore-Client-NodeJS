@@ -33,7 +33,7 @@ describe("listPersistentSubscriptionsToAll", () => {
       {
         endpoint: node.uri,
       },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
   });
@@ -153,7 +153,7 @@ describe("listPersistentSubscriptionsToAll", () => {
           {
             endpoint: emptyNode.uri,
           },
-          { rootCertificate: emptyNode.rootCertificate },
+          { rootCertificate: emptyNode.certs.root },
           { username: "admin", password: "changeit" }
         );
       });

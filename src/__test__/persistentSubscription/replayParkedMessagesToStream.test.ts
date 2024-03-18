@@ -19,7 +19,7 @@ describe("replayParkedMessagesToStream", () => {
 
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
   });

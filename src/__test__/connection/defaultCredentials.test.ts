@@ -16,7 +16,7 @@ describe("defaultCredentials", () => {
     test("bad override", async () => {
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
-        { rootCertificate: node.rootCertificate },
+        { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }
       );
       await expect(
@@ -35,7 +35,7 @@ describe("defaultCredentials", () => {
     test("good override", async () => {
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
-        { rootCertificate: node.rootCertificate },
+        { rootCertificate: node.certs.root },
         { username: "AzureDiamond", password: "hunter2" }
       );
       await expect(

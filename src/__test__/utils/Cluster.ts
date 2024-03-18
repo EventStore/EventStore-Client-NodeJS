@@ -5,9 +5,9 @@ import * as cp from "child_process";
 
 import { v4 as uuid } from "uuid";
 import * as getPort from "get-port";
-import { upAll, down, exec, stopOne, logs } from "docker-compose";
+import { upAll, down, exec, stopOne, logs } from "docker-compose/dist/v2";
 
-import type { EndPoint } from "../../types";
+import type { EndPoint, Certificate } from "../../types";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
@@ -45,13 +45,14 @@ const createCertGen = (
         "cert-gen": {
           image: dockerImages.certGen,
           entrypoint: "bash",
-          command: `-c "es-gencert-cli create-ca -out /tmp/certs/ca &&
-    ${internalIPs
-      .map(
-        ({ ipv4_address }, i) =>
-          `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address} -dns-names ${domain}`
-      )
-      .join(" && ")}"`,
+          command: `-c "es-gencert-cli create-ca -out /tmp/certs/ca && ${internalIPs
+            .map(
+              ({ ipv4_address }, i) =>
+                `es-gencert-cli create-node -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/node${i} -ip-addresses 127.0.0.1,${ipv4_address} -dns-names ${domain}`
+            )
+            .join(
+              " && "
+            )} && es-gencert-cli create-user -username admin -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/user-admin && es-gencert-cli create-user -username invalid -ca-certificate /tmp/certs/ca/ca.crt -ca-key /tmp/certs/ca/ca.key -out /tmp/certs/user-invalid && chown -R 1000:1000 /tmp/certs && chmod -R 755 /tmp/certs"`,
           user: "1000:1000",
           volumes: ["./certs:/tmp/certs"],
           depends_on: ["volumes-provisioner"],
@@ -90,6 +91,7 @@ const createNodes = (
           "EVENTSTORE_RUN_PROJECTIONS=All",
           "EVENTSTORE_LOG_CONFIG=/etc/eventstore/config/logconfig.json",
           "EVENTSTORE_DISCOVER_VIA_DNS=false",
+          "EventStore__Plugins__UserCertificates__Enabled=true",
           ...(insecure
             ? [`EVENTSTORE_INSECURE=true`]
             : [
@@ -130,7 +132,13 @@ export class Cluster {
   private count: number;
   private insecure: boolean;
   private ipStub!: string;
-  private cert?: Buffer;
+  private certificates?: {
+    root: Buffer;
+    users: {
+      admin: Certificate;
+      invalid: Certificate;
+    };
+  };
   private retryCount = 3;
   private locations: ClusterLocation[] = [];
   private ready: Promise<void>;
@@ -161,19 +169,33 @@ export class Cluster {
     return this;
   };
 
-  public get rootCertificate(): Buffer {
+  public get certs() {
     if (this.insecure) {
       throw new Error("No Cert for insecure cluster");
     }
-    if (this.failed || !this.cert) {
+    if (this.failed || !this.certificates) {
       throw new Error("Cluster failed to initialize");
     }
+    if (Object.values(this.certificates).some((value) => value === null)) {
+      throw new Error("One or more certificate properties are null");
+    }
 
-    return this.cert;
+    return this.certificates;
   }
-  public get certPath(): string {
+  public get certPath() {
     if (this.insecure) throw new Error("No Cert for insecure cluster");
-    return this.path("./certs/ca/ca.crt");
+
+    return {
+      root: this.path("./certs/ca/ca.crt"),
+      admin: {
+        certPath: this.path("./certs/user-admin/user-admin.crt"),
+        certKeyPath: this.path("./certs/user-admin/user-admin.key"),
+      },
+      invalid: {
+        certPath: this.path("./certs/user-invalid/user-invalid.crt"),
+        certKeyPath: this.path("./certs/user-invalid/user-invalid.key"),
+      },
+    };
   }
   public domain = "client.bespin.dev";
   public get uri(): string {
@@ -220,7 +242,19 @@ export class Cluster {
     }
 
     if (!this.insecure) {
-      this.cert = await readFile(this.certPath);
+      this.certificates = {
+        root: await readFile(this.certPath.root),
+        users: {
+          admin: {
+            certFile: await readFile(this.certPath.admin.certPath),
+            certKeyFile: await readFile(this.certPath.admin.certKeyPath),
+          },
+          invalid: {
+            certFile: await readFile(this.certPath.invalid.certPath),
+            certKeyFile: await readFile(this.certPath.invalid.certKeyPath),
+          },
+        },
+      };
     }
   };
 
@@ -235,7 +269,7 @@ export class Cluster {
 
       console.log(
         "Leaving cluster open for inspection. Dont forget to take it down: \n",
-        `docker-compose -f ${composeFile} down --volumes && rm -rf ${folder}`
+        `docker compose -f ${composeFile} down --volumes && rm -rf ${folder}`
       );
 
       return;

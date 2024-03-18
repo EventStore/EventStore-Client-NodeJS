@@ -109,3 +109,5 @@ dist
 package-lock.json
 
 src/__test__/utils/instances
+
+.vscode

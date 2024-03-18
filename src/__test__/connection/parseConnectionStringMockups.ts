@@ -468,6 +468,20 @@ export const valid: Array<
       ],
     },
   ],
+  [
+    "esdb://host?certFile=/home/user/dev/cert.ca&certKeyFile=/home/user/dev/cert.key",
+    {
+      dnsDiscover: false,
+      certFile: "/home/user/dev/cert.ca",
+      certKeyFile: "/home/user/dev/cert.key",
+      hosts: [
+        {
+          address: "host",
+          port: 2113,
+        },
+      ],
+    },
+  ],
 ];
 
 export const invalid: string[] = [

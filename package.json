@@ -86,7 +86,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "cross-env": "^7.0.3",
-    "docker-compose": "^0.23.19",
+    "docker-compose": "^0.24.7",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-jsdoc": "^40.3.0",

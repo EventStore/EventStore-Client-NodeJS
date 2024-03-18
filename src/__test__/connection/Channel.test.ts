@@ -18,7 +18,7 @@ describe("Channel", () => {
         endpoints: cluster.endpoints,
         nodePreference: "random",
       },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
 

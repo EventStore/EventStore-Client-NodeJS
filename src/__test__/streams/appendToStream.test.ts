@@ -25,7 +25,7 @@ describe("appendToStream", () => {
     await node.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
   });
@@ -50,7 +50,7 @@ describe("appendToStream", () => {
 
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
-        { rootCertificate: node.rootCertificate },
+        { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }
       );
 
@@ -560,7 +560,7 @@ describe("appendToStream", () => {
     test("throws on true", async () => {
       const throwingClient = new EventStoreDBClient(
         { endpoint: node.uri, throwOnAppendFailure: true },
-        { rootCertificate: node.rootCertificate },
+        { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }
       );
 
@@ -592,7 +592,7 @@ describe("appendToStream", () => {
     test("returns failure result on false", async () => {
       const nonThrowingClient = new EventStoreDBClient(
         { endpoint: node.uri, throwOnAppendFailure: false },
-        { rootCertificate: node.rootCertificate },
+        { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }
       );
 

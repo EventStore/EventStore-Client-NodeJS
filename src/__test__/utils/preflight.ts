@@ -13,7 +13,7 @@ const checkFor = async (dependancy: string) => {
     console.error(`
 Missing dependancy: ${dependancy}
 
-Tests require docker and docker-compose to run. 
+Tests require docker and docker compose V2 to run. 
 Please see https://github.com/EventStore/EventStore-Client-NodeJS#run-tests for more details.
 `);
     process.exit(1);
@@ -42,6 +42,6 @@ const pullImages = async () => {
 module.exports = async () => {
   loadDotEnv();
   await checkFor("docker");
-  await checkFor("docker-compose");
+  await checkFor("docker compose");
   await pullImages();
 };

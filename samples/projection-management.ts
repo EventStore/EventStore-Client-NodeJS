@@ -31,7 +31,7 @@ describe("[sample] projection-management", () => {
 
     client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
 
