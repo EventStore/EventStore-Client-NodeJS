@@ -1,6 +1,12 @@
-import { createTestNode } from "@test-utils";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
 
-import { EventStoreDBClient, UnknownError } from "@eventstore/db-client";
+import { createTestNode, matchServerVersion } from "@test-utils";
+
+import {
+  EventStoreDBClient,
+  NotFoundError,
+  UnknownError,
+} from "@eventstore/db-client";
 
 describe("getProjectionStatus", () => {
   const node = createTestNode();
@@ -48,7 +54,9 @@ describe("getProjectionStatus", () => {
       const REQUESTED_NAME = "some-non-existant-projection";
       await expect(
         client.getProjectionStatus(REQUESTED_NAME)
-      ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+      ).rejects.toThrowError(
+        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+      );
     });
   });
 });

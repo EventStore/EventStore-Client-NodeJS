@@ -1,9 +1,11 @@
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
 import { v4 as uuid } from "uuid";
 
 import { EventStoreDBClient, isCommandError } from "@eventstore/db-client";
-import { createTestNode, delay, jsonTestEvents } from "@test-utils";
+import { createTestNode, delay, jsonTestEvents, matchServerVersion, optionalDescribe } from "@test-utils";
 
-describe("[sample] projection-management", () => {
+optionalDescribe(matchServerVersion`<=23.10`)("[sample] projection-management", () => {
   const noop = (...args: unknown[]) => {
     // do nothing
   };

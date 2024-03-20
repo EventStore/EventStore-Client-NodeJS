@@ -5,6 +5,7 @@ import { createTestNode, matchServerVersion } from "@test-utils";
 import {
   ABORTED,
   EventStoreDBClient,
+  NotFoundError,
   RUNNING,
   STOPPED,
   UnknownError,
@@ -71,7 +72,9 @@ describe("disable / abort", () => {
 
       await expect(
         client.disableProjection(PROJECTION_NAME)
-      ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+      ).rejects.toThrowError(
+        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+      );
     });
   });
 
@@ -107,7 +110,9 @@ describe("disable / abort", () => {
 
         await expect(
           client.abortProjection(PROJECTION_NAME)
-        ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+        ).rejects.toThrowError(
+          matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+        );
       });
     });
   });
