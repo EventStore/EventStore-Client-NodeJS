@@ -1,10 +1,18 @@
-import { createTestNode, delay, jsonTestEvents } from "@test-utils";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
 
 import {
-  UnknownError,
+  createTestNode,
+  delay,
+  jsonTestEvents,
+  matchServerVersion,
+} from "@test-utils";
+
+import {
   RUNNING,
   EventStoreDBClient,
   jsonEvent,
+  NotFoundError,
+  UnknownError,
 } from "@eventstore/db-client";
 
 describe("getProjectionResult", () => {
@@ -162,7 +170,9 @@ describe("getProjectionResult", () => {
 
       await expect(
         client.getProjectionResult(PROJECTION_NAME)
-      ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+      ).rejects.toThrowError(
+        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+      );
     });
   });
 });

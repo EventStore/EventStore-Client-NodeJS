@@ -5,6 +5,7 @@ import { createTestNode, matchServerVersion } from "@test-utils";
 import {
   ABORTED,
   EventStoreDBClient,
+  NotFoundError,
   RUNNING,
   STOPPED,
   UnknownError,
@@ -69,7 +70,7 @@ describe("enableProjection", () => {
     const PROJECTION_NAME = "doesnt exist";
 
     await expect(client.enableProjection(PROJECTION_NAME)).rejects.toThrowError(
-      UnknownError
-    ); // https://github.com/EventStore/EventStore/issues/2732
+      matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+    );
   });
 });

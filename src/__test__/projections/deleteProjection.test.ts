@@ -1,4 +1,6 @@
-import { createTestNode } from "@test-utils";
+/** @jest-environment ./src/__test__/utils/enableVersionCheck.ts */
+
+import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
   EventStoreDBClient,
@@ -6,6 +8,7 @@ import {
   DELETING,
   STOPPED,
   ABORTED,
+  NotFoundError,
   UnknownError,
 } from "@eventstore/db-client";
 
@@ -80,17 +83,21 @@ describe("deleteProjection", () => {
       expect(afterDetails.projectionStatus).toBe(DELETING);
     } catch (error) {
       // projection is already deleted
-      expect(error).toBeInstanceOf(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+      expect(error).toBeInstanceOf(
+        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+      );
     }
   });
 
   describe("errors", () => {
-    test("projection doesnt exist", async () => {
+    test.only("projection doesnt exist", async () => {
       const PROJECTION_NAME = "doesnt exist";
 
       await expect(
         client.deleteProjection(PROJECTION_NAME)
-      ).rejects.toThrowError(UnknownError); // https://github.com/EventStore/EventStore/issues/2732
+      ).rejects.toThrowError(
+        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+      );
     });
   });
 });

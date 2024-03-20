@@ -19,6 +19,7 @@ export enum ErrorType {
   NOT_LEADER = "not-leader",
   STREAM_NOT_FOUND = "stream-not-found",
   NO_STREAM = "no-stream",
+  NOT_FOUND = "not-found",
   ACCESS_DENIED = "access-denied",
   INVALID_ARGUMENT = "invalid-argument",
   INVALID_TRANSACTION = "invalid-transaction",
@@ -69,6 +70,10 @@ export class UnavailableError extends CommandErrorBase {
 
 export class CancelledError extends CommandErrorBase {
   public type: ErrorType.CANCELLED = ErrorType.CANCELLED;
+}
+
+export class NotFoundError extends CommandErrorBase {
+  public type: ErrorType.NOT_FOUND = ErrorType.NOT_FOUND;
 }
 
 export class UnknownError extends CommandErrorBase {
@@ -479,6 +484,8 @@ export const convertToCommandError = (error: Error): CommandError | Error => {
       return new UnavailableError(error);
     case StatusCode.UNAUTHENTICATED:
       return new AccessDeniedError(error);
+    case StatusCode.NOT_FOUND:
+      return new NotFoundError(error);
     case StatusCode.CANCELLED: {
       if (isClientCancellationError(error)) break;
       return new CancelledError(error);
