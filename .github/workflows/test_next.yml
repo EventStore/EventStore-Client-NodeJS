@@ -17,3 +17,5 @@ jobs:
     secrets:
       eventstore_cloud_id: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       tailscale_auth: ${{ secrets.TAILSCALE_AUTH }}
+      CLOUDSMITH_CICD_USER: ${{ secrets.CLOUDSMITH_CICD_USER }}
+      CLOUDSMITH_CICD_TOKEN: ${{ secrets.CLOUDSMITH_CICD_TOKEN }}
