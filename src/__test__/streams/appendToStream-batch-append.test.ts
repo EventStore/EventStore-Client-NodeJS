@@ -22,7 +22,7 @@ describe("appendToStream - batch append", () => {
     await node.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
     batchSpy = spyOn.call(client, "GRPCStreamCreator");
@@ -67,7 +67,9 @@ describe("appendToStream - batch append", () => {
         StreamsClient,
         "appendToStream",
         expect.any(Function),
-        expect.any(WeakMap)
+        {
+          cache: expect.any(WeakMap),
+        }
       );
     });
 
@@ -91,12 +93,16 @@ describe("appendToStream - batch append", () => {
       );
     });
 
-    test("Batches events into batches", async () => {
+    test.only("Batches events into batches", async () => {
       await client.appendToStream("open_stream", jsonTestEvents());
+
+      const [clientConstructor, name, _, options] = batchSpy.mock.calls[0];
 
       const stream = await extractBatchStream.call(
         client,
-        ...batchSpy.mock.calls[0]
+        clientConstructor,
+        name,
+        options
       );
 
       const writeSpy = jest.spyOn(stream, "write");
@@ -125,19 +131,40 @@ function spyOn(this: EventStoreDBClient, method: string) {
   return jest.spyOn(this, method as never) as any;
 }
 
+// function extractBatchStream(
+//   this: EventStoreDBClient,
+//   clientConstructor: any,
+//   name: any,
+//   _: any,
+//   cache: any
+// ): Promise<Duplex> {
+//   return this.GRPCStreamCreator(
+//     clientConstructor,
+//     name,
+//     () => {
+//       throw "Creator shouldn't be called as it will take the client from the cache";
+//     },
+//     {
+//       cache,
+//     }
+//   )();
+// }
+
 function extractBatchStream(
   this: EventStoreDBClient,
   clientConstructor: any,
   name: any,
-  _: any,
-  cache: any
+  options: any
 ): Promise<Duplex> {
+  const cache = options.cache;
   return this.GRPCStreamCreator(
     clientConstructor,
     name,
     () => {
       throw "Creator shouldn't be called as it will take the client from the cache";
     },
-    cache
+    {
+      cache,
+    }
   )();
 }

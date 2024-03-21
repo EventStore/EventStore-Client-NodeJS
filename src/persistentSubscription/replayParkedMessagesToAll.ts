@@ -75,6 +75,6 @@ Client.prototype.replayParkedMessagesToAll = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

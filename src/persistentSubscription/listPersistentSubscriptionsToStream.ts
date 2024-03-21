@@ -95,7 +95,7 @@ const listPersistentSubscriptionsToStreamGRPC = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };
 

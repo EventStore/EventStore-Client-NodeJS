@@ -49,6 +49,6 @@ Client.prototype.enableProjection = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

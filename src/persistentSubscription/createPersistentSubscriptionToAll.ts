@@ -143,6 +143,6 @@ Client.prototype.createPersistentSubscriptionToAll = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

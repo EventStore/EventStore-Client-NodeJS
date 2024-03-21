@@ -24,9 +24,9 @@ export interface BaseOptions {
    */
   credentials?: Credentials;
   /**
-   * Overwrite the client certificates.
+   * Overwrite the user certificate.
    */
-  userCertificate?: UserCertificate;
+  certificate?: Certificate;
   /**
    * Command requires a leader node.
    */
@@ -335,7 +335,7 @@ export interface Credentials {
   password: string;
 }
 
-export interface UserCertificate {
+export interface Certificate {
   certPath: Buffer;
   certKeyPath: Buffer;
 }

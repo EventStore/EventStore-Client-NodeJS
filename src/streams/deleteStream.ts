@@ -91,6 +91,6 @@ Client.prototype.deleteStream = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

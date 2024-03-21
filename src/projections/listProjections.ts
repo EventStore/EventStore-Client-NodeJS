@@ -62,6 +62,6 @@ Client.prototype.listProjections = async function (
         });
       });
     },
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

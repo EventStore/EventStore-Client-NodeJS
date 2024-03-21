@@ -94,7 +94,7 @@ const createProjectionGRPC = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };
 

@@ -63,6 +63,6 @@ Client.prototype.getProjectionStatus = async function (
         });
       });
     },
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

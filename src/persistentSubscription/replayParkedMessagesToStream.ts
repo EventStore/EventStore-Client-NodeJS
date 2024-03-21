@@ -106,7 +106,7 @@ const replayParkedMessagesToStreamGRPC = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };
 

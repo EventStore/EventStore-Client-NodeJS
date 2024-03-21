@@ -94,6 +94,6 @@ Client.prototype.tombstoneStream = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

@@ -85,7 +85,7 @@ function disableProjection(debugName: string, writeCheckpoint: boolean) {
             return resolve();
           });
         }),
-      baseOptions.userCertificate
+      baseOptions.certificate
     );
   };
 }

@@ -50,6 +50,6 @@ Client.prototype.resetProjection = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

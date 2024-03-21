@@ -50,7 +50,7 @@ describe("write after end", () => {
 
     const client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
 
@@ -90,7 +90,7 @@ describe("write after end", () => {
 
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
-        { rootCertificate: node.rootCertificate },
+        { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }
       );
 

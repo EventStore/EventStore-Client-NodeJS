@@ -61,6 +61,6 @@ Client.prototype.getProjectionResult = async function <T = unknown>(
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

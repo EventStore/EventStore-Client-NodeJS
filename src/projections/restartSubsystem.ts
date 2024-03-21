@@ -42,6 +42,6 @@ Client.prototype.restartSubsystem = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

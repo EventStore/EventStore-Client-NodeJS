@@ -81,6 +81,6 @@ Client.prototype.updatePersistentSubscriptionToStream = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

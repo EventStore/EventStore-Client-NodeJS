@@ -80,6 +80,6 @@ Client.prototype.deleteProjection = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

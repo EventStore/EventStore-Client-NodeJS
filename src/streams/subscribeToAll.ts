@@ -156,7 +156,10 @@ Client.prototype.subscribeToAll = function (
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
-      )
+      ),
+    {
+      userCertificate: baseOptions.certificate,
+    }
   );
 
   return new Subscription(

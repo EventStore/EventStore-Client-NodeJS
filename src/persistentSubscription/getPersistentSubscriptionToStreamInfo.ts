@@ -102,7 +102,7 @@ const getPersistentSubscriptionToStreamInfoGRPC = async function (
           }
         );
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };
 

@@ -28,7 +28,7 @@ import type {
   EndPoint,
   Credentials,
   BaseOptions,
-  UserCertificate,
+  Certificate,
 } from "../types";
 import {
   CancelledError,
@@ -142,7 +142,7 @@ export class Client {
   #http: HTTP;
   #connectionName: string;
   #rootCertificate: Buffer | undefined;
-  #clientCertificate: UserCertificate | undefined;
+  #userCertificate: Certificate | undefined;
 
   // eslint-disable-next-line jsdoc/require-param
   /**
@@ -340,7 +340,7 @@ export class Client {
       debug.connection("Using insecure channel");
       this.#channelCredentials = grpcCredentials.createInsecure();
     } else {
-      this.#clientCertificate = {
+      this.#userCertificate = {
         certKeyPath: channelCredentials!.privateKey!,
         certPath: channelCredentials!.certChain!,
       };
@@ -376,14 +376,32 @@ export class Client {
   // Internal access to grpc client.
   private getGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>,
-    debugName: string
+    debugName: string,
+    userCertificate?: Certificate
   ): Promise<T> => {
-    if (this.#grpcClients.has(Client)) {
-      debug.connection("Using existing grpc client for %s", debugName);
-    } else {
-      debug.connection("Creating client for %s", debugName);
-      this.#grpcClients.set(Client, this.createGRPCClient(Client));
+    const isSameCertificate = isDeepStrictEqual(
+      this.#userCertificate,
+      userCertificate
+    );
+
+    if (!isSameCertificate) {
+      this.#channel = undefined;
+      this.#grpcClients.delete(Client);
     }
+
+    const clientExists = this.#grpcClients.has(Client);
+
+    if (clientExists && isSameCertificate) {
+      debug.connection("Using existing grpc client for %s", debugName);
+      return this.#grpcClients.get(Client) as Promise<T>;
+    }
+
+    debug.connection("Creating client for %s", debugName);
+    this.#grpcClients.set(
+      Client,
+      this.createGRPCClient(Client, userCertificate)
+    );
+    this.#userCertificate = userCertificate;
 
     return this.#grpcClients.get(Client) as Promise<T>;
   };
@@ -396,10 +414,18 @@ export class Client {
       Client: GRPCClientConstructor<Client>,
       debugName: string,
       creator: (client: Client) => T | Promise<T>,
-      cache?: WeakMap<Client, T | Promise<T>>
+      options: {
+        cache?: WeakMap<Client, T | Promise<T>>;
+        userCertificate?: Certificate;
+      }
     ) =>
     async (): Promise<T> => {
-      const client = await this.getGRPCClient(Client, debugName);
+      const { cache, userCertificate } = options;
+      const client = await this.getGRPCClient(
+        Client,
+        debugName,
+        userCertificate
+      );
 
       if (cache && cache.has(client)) return cache.get(client)!;
 
@@ -454,18 +480,9 @@ export class Client {
     Client: GRPCClientConstructor<Client>,
     debugName: string,
     action: (client: Client) => Promise<T>,
-    clientCertificate?: UserCertificate
+    userCertificate?: Certificate
   ): Promise<T> => {
-    let client: Client;
-    if (
-      clientCertificate &&
-      !isDeepStrictEqual(clientCertificate, this.#clientCertificate)
-    ) {
-      debug.connection("Creating temporary client for %s", debugName);
-      client = await this.createGRPCClient(Client, clientCertificate);
-    } else {
-      client = await this.getGRPCClient(Client, debugName);
-    }
+    const client = await this.getGRPCClient(Client, debugName, userCertificate);
 
     try {
       return await action(client);
@@ -480,24 +497,24 @@ export class Client {
   }
 
   protected getChannel = async (
-    clientCertificate?: UserCertificate
+    userCertificate?: Certificate
   ): Promise<Channel> => {
     if (this.#channel) {
       debug.connection("Using existing connection");
       return this.#channel;
     }
 
-    this.#channel = this.createChannel(clientCertificate);
+    this.#channel = this.createChannel(userCertificate);
 
     return this.#channel;
   };
 
   private createGRPCClient = async <T extends GRPCClient>(
     Client: GRPCClientConstructor<T>,
-    clientCertificate?: UserCertificate
+    userCertificate?: Certificate
   ): Promise<T> => {
     const channelOverride: GRPCClientOptions["channelOverride"] =
-      await this.getChannel(clientCertificate);
+      await this.getChannel(userCertificate);
 
     const client = new Client(
       null as never,
@@ -564,7 +581,7 @@ export class Client {
   };
 
   private createChannel = async (
-    userCertificate?: UserCertificate
+    userCertificate?: Certificate
   ): Promise<Channel> => {
     const uri = await this.resolveUri();
 

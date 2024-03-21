@@ -58,6 +58,6 @@ Client.prototype.deletePersistentSubscriptionToAll = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

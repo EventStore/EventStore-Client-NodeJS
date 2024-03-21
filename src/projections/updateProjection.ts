@@ -68,6 +68,6 @@ Client.prototype.updateProjection = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

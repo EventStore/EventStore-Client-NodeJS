@@ -28,7 +28,7 @@ describe("http api", () => {
     test("dns", async () => {
       const client = new EventStoreDBClient(
         { endpoints: cluster.endpoints },
-        { rootCertificate: cluster.rootCertificate }
+        { rootCertificate: cluster.certs.root }
       );
 
       const result = await ping.call(client);
@@ -43,7 +43,7 @@ describe("http api", () => {
             port,
           })),
         },
-        { rootCertificate: cluster.rootCertificate }
+        { rootCertificate: cluster.certs.root }
       );
 
       const result = await ping.call(client);
@@ -53,7 +53,7 @@ describe("http api", () => {
     test("error transform", async () => {
       const client = new EventStoreDBClient(
         { endpoints: cluster.endpoints },
-        { rootCertificate: cluster.rootCertificate }
+        { rootCertificate: cluster.certs.root }
       );
 
       class TestError extends Error {

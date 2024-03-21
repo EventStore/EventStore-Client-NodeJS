@@ -178,6 +178,6 @@ export const append = async function (
 
         sink.end();
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };

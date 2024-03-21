@@ -133,7 +133,10 @@ Client.prototype.readAll = function (
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
-      )
+      ),
+    {
+      userCertificate: baseOptions.certificate,
+    }
   );
 
   return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);

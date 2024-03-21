@@ -55,6 +55,6 @@ Client.prototype.deletePersistentSubscriptionToStream = async function (
           return resolve();
         });
       }),
-    baseOptions.userCertificate
+    baseOptions.certificate
   );
 };
