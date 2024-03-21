@@ -84,7 +84,8 @@ function disableProjection(debugName: string, writeCheckpoint: boolean) {
             if (error) return reject(convertToCommandError(error));
             return resolve();
           });
-        })
+        }),
+      baseOptions.certificate
     );
   };
 }

@@ -3,6 +3,8 @@ import type { Credentials, EndPoint, NodePreference } from "../types";
 import { debug } from "../utils";
 
 export interface QueryOptions {
+  certPath?: string;
+  certKeyPath?: string;
   maxDiscoverAttempts?: number;
   connectionName?: string;
   defaultDeadline?: number;
@@ -54,6 +56,8 @@ const mapToNodePreference = caseMap<NodePreference>({
 });
 
 const mapToQueryOption = caseMap<keyof QueryOptions>({
+  certPath: "certPath",
+  certKeyPath: "certKeyPath",
   maxDiscoverAttempts: "maxDiscoverAttempts",
   connectionName: "connectionName",
   defaultDeadline: "defaultDeadline",
@@ -289,6 +293,12 @@ const verifyKeyValuePair = (
     }
     case "connectionName":
     case "tlsCAFile": {
+      return { key, value: decodeURIComponent(value) };
+    }
+    case "certPath": {
+      return { key, value: decodeURIComponent(value) };
+    }
+    case "certKeyPath": {
       return { key, value: decodeURIComponent(value) };
     }
     case "maxDiscoverAttempts":

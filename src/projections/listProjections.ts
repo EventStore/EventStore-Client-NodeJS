@@ -39,24 +39,29 @@ Client.prototype.listProjections = async function (
   });
   debug.command_grpc("%s: %g", "listProjections", req);
 
-  return this.execute(ProjectionsClient, "listProjections", (client) => {
-    const stream = client.statistics(req, ...this.callArguments(baseOptions));
+  return this.execute(
+    ProjectionsClient,
+    "listProjections",
+    (client) => {
+      const stream = client.statistics(req, ...this.callArguments(baseOptions));
 
-    return new Promise((resolve, reject) => {
-      const projectionDetails: ProjectionDetails[] = [];
+      return new Promise((resolve, reject) => {
+        const projectionDetails: ProjectionDetails[] = [];
 
-      stream.on("error", (error: ServiceError) => {
-        reject(convertToCommandError(error));
+        stream.on("error", (error: ServiceError) => {
+          reject(convertToCommandError(error));
+        });
+
+        stream.on("data", (resp: StatisticsResp) => {
+          if (!resp.hasDetails()) return;
+          projectionDetails.push(mapGrpcProjectionDetails(resp.getDetails()!));
+        });
+
+        stream.on("end", () => {
+          resolve(projectionDetails);
+        });
       });
-
-      stream.on("data", (resp: StatisticsResp) => {
-        if (!resp.hasDetails()) return;
-        projectionDetails.push(mapGrpcProjectionDetails(resp.getDetails()!));
-      });
-
-      stream.on("end", () => {
-        resolve(projectionDetails);
-      });
-    });
-  });
+    },
+    baseOptions.certificate
+  );
 };

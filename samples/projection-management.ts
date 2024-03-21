@@ -33,7 +33,7 @@ optionalDescribe(matchServerVersion`<=23.10`)("[sample] projection-management", 
 
     client = new EventStoreDBClient(
       { endpoint: node.uri },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
 

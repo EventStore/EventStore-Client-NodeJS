@@ -91,6 +91,9 @@ Client.prototype.subscribeToPersistentSubscriptionToAll = function (
         );
         stream.write(req);
         return stream;
+      },
+      {
+        userCertificate: baseOptions.certificate,
       }
     ),
     convertPersistentSubscriptionGrpcEvent,

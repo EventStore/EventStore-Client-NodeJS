@@ -112,7 +112,10 @@ Client.prototype.subscribeToStream = function <
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
-      )
+      ),
+    {
+      userCertificate: baseOptions.certificate,
+    }
   );
 
   return new Subscription(createGRPCStream, convertGrpcEvent, readableOptions);

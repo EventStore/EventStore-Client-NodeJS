@@ -7,6 +7,6 @@ connectionStringTests({
   createServer: createTestCluster,
   createUri: ({ endpoints }) =>
     endpoints.map(({ address, port }) => `${address}:${port}`).join(","),
-  createQueryString: ({ certPath }) => `tlsCAFile=${certPath}`,
+  createQueryString: ({ certPath }) => `tlsCAFile=${certPath.root}`,
   streamPrefix: "secure-cluster",
 });

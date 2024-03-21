@@ -93,6 +93,7 @@ Client.prototype.tombstoneStream = async function (
             return resolve(result);
           }
         );
-      })
+      }),
+    baseOptions.certificate
   );
 };

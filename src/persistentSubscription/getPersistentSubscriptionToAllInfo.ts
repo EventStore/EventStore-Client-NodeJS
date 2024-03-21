@@ -69,6 +69,7 @@ Client.prototype.getPersistentSubscriptionToAllInfo = async function (
             );
           }
         );
-      })
+      }),
+    baseOptions.certificate
   );
 };

@@ -66,6 +66,7 @@ Client.prototype.listPersistentSubscriptionsToAll = async function (
             );
           }
         );
-      })
+      }),
+    baseOptions.certificate
   );
 };

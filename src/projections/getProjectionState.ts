@@ -60,6 +60,7 @@ Client.prototype.getProjectionState = async function <T = unknown>(
             return resolve(response.getState()?.toJavaScript() as T);
           }
         );
-      })
+      }),
+    baseOptions.certificate
   );
 };

@@ -115,7 +115,10 @@ export const batchAppend = async function (
           }
           promiseBank.clear();
         }),
-    streamCache
+    {
+      cache: streamCache,
+      userCertificate: baseOptions.certificate,
+    }
   )();
 
   return new Promise(async (...batchPromise) => {
