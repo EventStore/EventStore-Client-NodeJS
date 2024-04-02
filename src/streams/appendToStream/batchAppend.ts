@@ -46,7 +46,7 @@ export const batchAppend = async function (
 ): Promise<AppendResult> {
   const correlationId = uuid();
 
-  const stream = await this.GRPCStreamCreator(
+  const stream = await this.execute(
     StreamsClient,
     "appendToStream",
     (client) =>
@@ -116,7 +116,7 @@ export const batchAppend = async function (
           promiseBank.clear();
         }),
     streamCache
-  )();
+  );
 
   return new Promise(async (...batchPromise) => {
     promiseBank.set(correlationId, batchPromise);

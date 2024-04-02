@@ -15,7 +15,6 @@ describe("appendToStream - batch append", () => {
 
   const node = createTestNode();
   let client!: EventStoreDBClient;
-  let batchSpy!: jest.SpiedFunction<EventStoreDBClient["GRPCStreamCreator"]>;
   let executeSpy!: jest.SpiedFunction<EventStoreDBClient["execute"]>;
 
   beforeAll(async () => {
@@ -25,7 +24,6 @@ describe("appendToStream - batch append", () => {
       { rootCertificate: node.rootCertificate },
       { username: "admin", password: "changeit" }
     );
-    batchSpy = spyOn.call(client, "GRPCStreamCreator");
     executeSpy = spyOn.call(client, "execute");
   });
 
@@ -34,7 +32,6 @@ describe("appendToStream - batch append", () => {
   });
 
   afterEach(() => {
-    batchSpy.mockClear();
     executeSpy.mockClear();
   });
 
@@ -46,7 +43,6 @@ describe("appendToStream - batch append", () => {
       expect(result).toBeDefined();
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-      expect(batchSpy).not.toHaveBeenCalled();
       expect(executeSpy).toHaveBeenCalledWith(
         StreamsClient,
         "appendToStream",
@@ -63,7 +59,7 @@ describe("appendToStream - batch append", () => {
       expect(result).toBeDefined();
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-      expect(batchSpy).toHaveBeenCalledWith(
+      expect(executeSpy).toHaveBeenCalledWith(
         StreamsClient,
         "appendToStream",
         expect.any(Function),
@@ -82,7 +78,6 @@ describe("appendToStream - batch append", () => {
       expect(result).toBeDefined();
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
-      expect(batchSpy).not.toHaveBeenCalled();
       expect(executeSpy).toHaveBeenCalledWith(
         StreamsClient,
         "appendToStream",
@@ -95,7 +90,7 @@ describe("appendToStream - batch append", () => {
 
       const stream = await extractBatchStream.call(
         client,
-        ...batchSpy.mock.calls[0]
+        ...executeSpy.mock.calls[0]
       );
 
       const writeSpy = jest.spyOn(stream, "write");
@@ -124,19 +119,19 @@ function spyOn(this: EventStoreDBClient, method: string) {
   return jest.spyOn(this, method as never) as any;
 }
 
-function extractBatchStream(
+async function extractBatchStream(
   this: EventStoreDBClient,
   clientConstructor: any,
   name: any,
   _: any,
   cache: any
 ): Promise<Duplex> {
-  return this.GRPCStreamCreator(
+  return this.execute(
     clientConstructor,
     name,
     () => {
       throw "Creator shouldn't be called as it will take the client from the cache";
     },
     cache
-  )();
+  );
 }

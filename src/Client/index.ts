@@ -349,36 +349,44 @@ export class Client {
 
   private disposableStreams: Set<Writable | Readable | Duplex> = new Set();
 
+  protected execute = async <Client extends GRPCClient, T>(
+    Client: GRPCClientConstructor<Client>,
+    debugName: string,
+    action: (client: Client) => Promise<T> | T,
+    cache?: WeakMap<Client, T | Promise<T>>
+  ): Promise<T> => {
+    const client = await this.getGRPCClient(Client, debugName);
+
+    if (cache && cache.has(client)) return cache.get(client)!;
+
+    const resultPromise = (async () => {
+      try {
+        const result = await action(client);
+        if (
+          result instanceof ClientWritableStreamImpl ||
+          result instanceof ClientDuplexStreamImpl ||
+          result instanceof ClientReadableStreamImpl
+        ) {
+          this.disposableStreams.add(result);
+          finished(result, (err) => {
+            cache?.delete(client);
+            this.disposableStreams.delete(result);
+            if (err) this.handleError(client, err);
+          });
+        }
+        return result;
+      } catch (error) {
+        this.handleError(client, error);
+        throw error;
+      }
+    })();
+
+    cache?.set(client, resultPromise);
+
+    return resultPromise;
+  };
+
   // Internal handled execution
-  protected GRPCStreamCreator =
-    <Client extends GRPCClient, T extends Writable | Readable | Duplex>(
-      Client: GRPCClientConstructor<Client>,
-      debugName: string,
-      creator: (client: Client) => T | Promise<T>,
-      cache?: WeakMap<Client, T | Promise<T>>
-    ) =>
-    async (): Promise<T> => {
-      const client = await this.getGRPCClient(Client, debugName);
-
-      if (cache && cache.has(client)) return cache.get(client)!;
-
-      const streamPromise = creator(client);
-
-      cache?.set(client, streamPromise);
-
-      const stream = await streamPromise;
-
-      this.disposableStreams.add(stream);
-
-      finished(stream, (err) => {
-        cache?.delete(client);
-        this.disposableStreams.delete(stream);
-        if (err) this.handleError(client, err);
-      });
-
-      return stream;
-    };
-
   public dispose = async () => {
     debug.command(`Disposing ${this.disposableStreams.size} streams.`);
 
@@ -406,21 +414,6 @@ export class Client {
     await Promise.allSettled(promises);
 
     debug.command(`Disposed ${promises.length} streams.`);
-  };
-
-  // Internal handled execution
-  protected execute = async <Client extends GRPCClient, T>(
-    Client: GRPCClientConstructor<Client>,
-    debugName: string,
-    action: (client: Client) => Promise<T>
-  ): Promise<T> => {
-    const client = await this.getGRPCClient(Client, debugName);
-    try {
-      return await action(client);
-    } catch (error) {
-      this.handleError(client, error);
-      throw error;
-    }
   };
 
   protected get HTTPRequest() {

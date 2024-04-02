@@ -147,17 +147,15 @@ Client.prototype.readStream = function <
   });
   debug.command_grpc("readStream: %g", req);
 
-  const createGRPCStream = this.GRPCStreamCreator(
-    StreamsClient,
-    "readStream",
-    (client) =>
+  const createGRPCStream = () =>
+    this.execute(StreamsClient, "readStream", (client) =>
       client.read(
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
       )
-  );
+    );
 
   return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);
 };

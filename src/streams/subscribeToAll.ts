@@ -147,17 +147,15 @@ Client.prototype.subscribeToAll = function (
   });
   debug.command_grpc("subscribeToAll: %g", req);
 
-  const createGRPCStream = this.GRPCStreamCreator(
-    StreamsClient,
-    "subscribeToAll",
-    (client) =>
+  const createGRPCStream = () =>
+    this.execute(StreamsClient, "subscribeToAll", (client) =>
       client.read(
         req,
         ...this.callArguments(baseOptions, {
           deadline: Infinity,
         })
       )
-  );
+    );
 
   return new Subscription(
     createGRPCStream,

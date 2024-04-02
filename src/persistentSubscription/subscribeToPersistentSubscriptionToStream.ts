@@ -56,44 +56,45 @@ Client.prototype.subscribeToPersistentSubscriptionToStream = function <
   duplexOptions: DuplexOptions = {}
 ): PersistentSubscriptionToStream<E> {
   return new PersistentSubscriptionImpl(
-    this.GRPCStreamCreator(
-      PersistentSubscriptionsClient,
-      "subscribeToPersistentSubscriptionToStream",
-      (client) => {
-        const req = new ReadReq();
-        const options = new ReadReq.Options();
-        const identifier = createStreamIdentifier(streamName);
-        const uuidOption = new ReadReq.Options.UUIDOption();
+    () =>
+      this.execute(
+        PersistentSubscriptionsClient,
+        "subscribeToPersistentSubscriptionToStream",
+        (client) => {
+          const req = new ReadReq();
+          const options = new ReadReq.Options();
+          const identifier = createStreamIdentifier(streamName);
+          const uuidOption = new ReadReq.Options.UUIDOption();
 
-        uuidOption.setString(new Empty());
-        options.setStreamIdentifier(identifier);
-        options.setGroupName(groupName);
-        options.setBufferSize(bufferSize);
-        options.setUuidOption(uuidOption);
-        req.setOptions(options);
+          uuidOption.setString(new Empty());
+          options.setStreamIdentifier(identifier);
+          options.setGroupName(groupName);
+          options.setBufferSize(bufferSize);
+          options.setUuidOption(uuidOption);
+          req.setOptions(options);
 
-        debug.command("subscribeToPersistentSubscriptionToStream: %O", {
-          streamName,
-          groupName,
-          options: {
-            bufferSize,
-            ...baseOptions,
-          },
-        });
-        debug.command_grpc(
-          "subscribeToPersistentSubscriptionToStream: %g",
-          req
-        );
+          debug.command("subscribeToPersistentSubscriptionToStream: %O", {
+            streamName,
+            groupName,
+            options: {
+              bufferSize,
+              ...baseOptions,
+            },
+          });
+          debug.command_grpc(
+            "subscribeToPersistentSubscriptionToStream: %g",
+            req
+          );
 
-        const stream = client.read(
-          ...this.callArguments(baseOptions, {
-            deadline: Infinity,
-          })
-        );
-        stream.write(req);
-        return stream;
-      }
-    ),
+          const stream = client.read(
+            ...this.callArguments(baseOptions, {
+              deadline: Infinity,
+            })
+          );
+          stream.write(req);
+          return stream;
+        }
+      ),
     convertPersistentSubscriptionGrpcEvent,
     duplexOptions
   );
