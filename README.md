@@ -4,7 +4,7 @@
 
 # EventStoreDB NodeJS Client
 
-EventStoreDB is the open-source, functional database with Complex Event Processing in Javascript.
+EventStoreDB is the event-native database, where business events are immutably stored and streamed. Designed for event-sourced, event-driven, and microservices architectures.
 
 This is the repository for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
 
@@ -221,9 +221,11 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 
 Information on support can be found on our website: [Event Store Support]
 
-## Community
+## Communities
 
-We have a community discussion space at [Event Store Discuss].
+- [Discuss](https://discuss.eventstore.com/)
+- [Discord (Event Store)](https://discord.gg/Phn9pmCw3t)
+- [Discord (ddd-cqrs-es)](https://discord.com/invite/sEZGSHNNbH)
 
 ## Contributing
 
