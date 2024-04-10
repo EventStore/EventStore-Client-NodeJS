@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createTestNode, jsonTestEvents } from "@test-utils";
-import { AccessDeniedError, EventStoreDBClient } from "@eventstore/db-client";
 
-describe("client certificates", () => {
+/**
+ * Test constructor with deprecated fields, certChain and privateKey in the client.
+ * NOTE: This test should be removed in the next major relase.
+ */
+
+import { createTestNode, jsonTestEvents } from "@test-utils";
+import {
+  AccessDeniedError,
+  ChannelCredentialOptions,
+  EventStoreDBClient,
+} from "@eventstore/db-client";
+
+describe("client certificates (with deprecated credential options)", () => {
   const node = createTestNode();
 
   beforeAll(async () => {
@@ -13,55 +23,54 @@ describe("client certificates", () => {
     await node.down();
   });
 
-  describe("throw error when constructor is initialised with incorrect channel credentials combinations", () => {
+  describe("show warnings and/or error when constructor is initialised with incorrect channel credentials combinations", () => {
     test.each([
       [
-        "certFile",
+        "certChain only",
         () =>
           new EventStoreDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              certFile: node.certs.users.admin.certFile,
+              certChain: node.certs.users.admin.certFile,
             }
           ),
       ],
       [
-        "certKeyFile",
+        "privateKey only",
         () =>
           new EventStoreDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              certKeyFile: node.certs.users.admin.certKeyFile,
+              privateKey: node.certs.users.admin.certKeyFile,
             }
           ),
       ],
-    ])("constructor initialised with %s only", (_, makeCall) => {
+      [
+        "both privateKey and certChain",
+        () =>
+          new EventStoreDBClient(
+            { endpoint: node.uri },
+            {
+              rootCertificate: node.certs.root,
+              privateKey: node.certs.users.admin.certKeyFile,
+              certChain: node.certs.users.admin.certFile,
+            }
+          ),
+      ],
+    ])("constructor initialised with %s", (_, makeCall) => {
+      const warnSpy = jest.spyOn(console, "warn").mockImplementation();
       try {
         makeCall();
       } catch (error) {
         expect(error).toMatchSnapshot();
       }
-    });
 
-    test.each([
-      [
-        "certFile",
-        () =>
-          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&certFile=${node.certPath.admin.certPath}`,
-      ],
-      [
-        "certKeyFile",
-        () =>
-          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&certKeyFile=${node.certPath.admin.certKeyPath}`,
-      ],
-    ])("connection string with %s only", (_, connection) => {
-      try {
-        connection();
-      } catch (error) {
-        expect(error).toMatchSnapshot();
-      }
+      expect(warnSpy).toHaveBeenCalled();
+      expect(warnSpy.mock.calls).toMatchSnapshot();
+
+      warnSpy.mockRestore();
     });
   });
 
@@ -73,8 +82,8 @@ describe("client certificates", () => {
         { endpoint: node.uri },
         {
           rootCertificate: node.certs.root,
-          certFile: node.certs.users.admin.certFile,
-          certKeyFile: node.certs.users.admin.certKeyFile,
+          certChain: node.certs.users.admin.certFile,
+          privateKey: node.certs.users.admin.certKeyFile,
         }
       );
     });
@@ -108,8 +117,8 @@ describe("client certificates", () => {
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
-        certFile: node.certs.users.admin.certFile,
-        certKeyFile: node.certs.users.admin.certKeyFile,
+        certChain: node.certs.users.admin.certFile,
+        privateKey: node.certs.users.admin.certKeyFile,
       },
       {
         username: "wrong",
@@ -130,8 +139,8 @@ describe("client certificates", () => {
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
-        certFile: node.certs.users.invalid.certFile,
-        certKeyFile: node.certs.users.invalid.certKeyFile,
+        certChain: node.certs.users.invalid.certFile,
+        privateKey: node.certs.users.invalid.certKeyFile,
       }
     );
 

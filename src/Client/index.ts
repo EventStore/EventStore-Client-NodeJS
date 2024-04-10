@@ -118,6 +118,16 @@ export interface ChannelCredentialOptions {
    */
   rootCertificate?: Buffer;
   /**
+   * This has been deprecated in favor of {@link certKeyFile}.
+   * @deprecated
+   */
+  privateKey?: Buffer;
+  /**
+   * This has been deprecated in favor of {@link certFile}.
+   * @deprecated
+   */
+  certChain?: Buffer;
+  /**
    * The x.509 private key, if available.
    */
   certKeyFile?: Buffer;
@@ -203,9 +213,7 @@ export class Client {
 
     if (options.certFile || options.certKeyFile) {
       if (!options.certFile || !options.certKeyFile) {
-        throw new Error(
-          "Both certPath and certKeyPath must be provided together"
-        );
+        throw new Error("certPath must be given with accompanying certKeyPath");
       }
 
       const certPathResolved = isAbsolute(options.certFile)
@@ -341,6 +349,12 @@ export class Client {
       );
     }
 
+    if (channelCredentials.certChain || channelCredentials.privateKey) {
+      console.warn(
+        "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use certFile and certKeyFile instead."
+      );
+    }
+
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#keepAliveInterval = keepAliveInterval;
     this.#keepAliveTimeout = keepAliveTimeout;
@@ -359,10 +373,11 @@ export class Client {
         "Using secure channel with credentials %O",
         channelCredentials
       );
+
       this.#channelCredentials = grpcCredentials.createSsl(
         channelCredentials.rootCertificate,
-        channelCredentials.certKeyFile,
-        channelCredentials.certFile,
+        channelCredentials.certKeyFile ?? channelCredentials.privateKey,
+        channelCredentials.certFile ?? channelCredentials.certChain,
         channelCredentials.verifyOptions
       );
     }

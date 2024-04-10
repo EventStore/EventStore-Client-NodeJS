@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`client certificates throw error when constructor is initialised with incorrect channel credentials combinations connection string with certFile only 1`] = `[Error: certPath must be given with accompanying certKeyPath]`;
+
+exports[`client certificates throw error when constructor is initialised with incorrect channel credentials combinations connection string with certKeyFile only 1`] = `[Error: certPath must be given with accompanying certKeyPath]`;
+
+exports[`client certificates throw error when constructor is initialised with incorrect channel credentials combinations constructor initialised with certFile only 1`] = `[Error: Certificate chain must be given with accompanying private key]`;
+
+exports[`client certificates throw error when constructor is initialised with incorrect channel credentials combinations constructor initialised with certKeyFile only 1`] = `[Error: Private key must be given with accompanying certificate chain]`;
