@@ -1,44 +1,18 @@
 {
-  "name": "@eventstore/db-client",
-  "version": "6.2.0",
-  "description": "NodeJS EventStoreDB version 20+ and uses gRPC as the communication protocol.",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "name": "eventstore-node-client-repository",
+  "private": true,
   "scripts": {
-    "build": "run-s generate build:*",
-    "build:ts": "tsc",
+    "build": "lerna run --stream build",
+    "build:ts": "lerna run --stream build:ts",
+    "build:watch": "lerna run --stream build:watch",
     "lint": "run-s -c lint:*",
-    "lint:prettier": "prettier --check \"src/**/**/!(*.d).{ts,json}\"",
-    "lint:eslint": "eslint \"src/**/*.ts\"",
-    "prettier:fix": "prettier --write \"src/**/**/!(*.d).{ts,json}\"",
-    "test": "jest",
-    "test:debug": "yarn cross-env NODE_OPTIONS=\"--no-deprecation\" DEBUG=\"esdb:*\" DEBUG_DEPTH=6 DEBUG_COLORS=\"true\" jest --verbose --run-in-band",
-    "test:flake": "jest --testSequencer=./src/__test__/utils/FlakeFinder.js",
-    "latest": "yarn cross-env EVENTSTORE_IMAGE=github:latest jest",
-    "previous-lts": "yarn cross-env EVENTSTORE_IMAGE=github:previous-lts jest",
-    "generate": "run-s generate:*",
-    "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
-    "generate:sed-insert": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
-    "generate:folder": "shx mkdir -p ./generated",
-    "generate:js": "grpc_tools_node_protoc ./protos/*.proto --proto_path=./protos --grpc_out=grpc_js:./generated --js_out=import_style=commonjs,binary:./generated --ts_out=generate_package_definition:./generated",
-    "clean": "run-s clean:*",
-    "clean:generated": "shx rm -rf ./generated",
-    "clean:dist": "shx rm -rf ./dist",
-    "clean:test-instances": "shx rm -rf ./src/__test__/utils/instances",
-    "prepublishOnly": "run-s clean build test"
+    "lint:prettier": "prettier --check \"packages/*/src/**/**/!(*.d).{ts,json}\"",
+    "lint:eslint": "eslint \"packages/*/src/**/*.ts\"",
+    "prettier:fix": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\"",
+    "clean": "lerna run --stream clean",
+    "prepublishOnly": "run-s clean build test",
+    "test": "lerna run --stream test --"
   },
-  "files": [
-    "dist/",
-    "generated/"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
-  },
-  "keywords": [
-    "EventStore",
-    "EventSourcing"
-  ],
   "author": "Event Store Limited",
   "license": "Apache-2.0",
   "bugs": {
@@ -48,56 +22,19 @@
   "engines": {
     "node": "^12.18.3 || >=14"
   },
-  "jest": {
-    "testTimeout": 60000,
-    "preset": "ts-jest",
-    "testMatch": [
-      "**/samples/**/*.[jt]s?(x)",
-      "**/__tests__/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[jt]s?(x)"
-    ],
-    "globalSetup": "./src/__test__/utils/preflight.ts",
-    "moduleNameMapper": {
-      "@eventstore/db-client": "<rootDir>/src/index.ts",
-      "@test-utils": "<rootDir>/src/__test__/utils"
-    },
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "./src/__test__/tsconfig.json"
-      }
-    },
-    "collectCoverageFrom": [
-      "./src/**/*",
-      "!./src/__test__/**/*"
-    ]
-  },
-  "dependencies": {
-    "@grpc/grpc-js": "^1.9.12",
-    "@types/debug": "^4.1.12",
-    "@types/google-protobuf": "^3.15.12",
-    "@types/node": "^16.18.67",
-    "debug": "^4.3.2",
-    "google-protobuf": "^3.21.2",
-    "uuid": "^8.3.2"
-  },
   "devDependencies": {
-    "@types/jest": "^27.5.2",
-    "@types/uuid": "^8.3.4",
+    "@tsconfig/node14": "^14.1.2",
+    "@types/node": "^16.18.67",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "cross-env": "^7.0.3",
-    "docker-compose": "^0.24.7",
-    "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "get-port": "^5.1.1",
-    "grpc-tools": "^1.12.4",
-    "grpc_tools_node_protoc_ts": "^5.3.3",
-    "jest": "^27.5.1",
+    "lerna": "^6.6.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
-    "shx": "^0.3.4",
-    "ts-jest": "^27.1.5",
     "typescript": "^4.9.5"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

@@ -6,7 +6,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: "0 * * * 0" # Every day at 3am UTC.
+    - cron: "0 3 * * *" # Every day at 3am UTC.
 
 jobs:
   test:

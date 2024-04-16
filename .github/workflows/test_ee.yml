@@ -6,7 +6,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: "0 * * * 0" # Every day at 3am UTC.
+    - cron: "0 3 * * *" # Every day at 3am UTC.
 
 jobs:
   tests:
@@ -16,7 +16,7 @@ jobs:
       matrix:
         group:
           - name: plugins
-            path: ./src/__test__/plugins
+            path: ./src/plugins
             tailscale: true
     env:
       # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
@@ -46,6 +46,8 @@ jobs:
           password: ${{ secrets.CLOUDSMITH_CICD_TOKEN }}
       - name: Install
         run: yarn
+      - name: Build 
+        run: yarn build
       - name: Run Tests
         run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:

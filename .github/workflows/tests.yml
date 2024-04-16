@@ -13,31 +13,31 @@ on:
         required: false
 
 jobs:
-  tests:
+  build-and-test:
     name: "${{ matrix.group.name }}"
     strategy:
       fail-fast: false
       matrix:
         group:
           - name: samples
-            path: ./samples
+            path: ./src/samples
             tailscale: true
 
           - name: connection
-            path: ./src/__test__/connection
+            path: ./src/connection
             tailscale: true
 
           - name: extra
-            path: ./src/__test__/extra
+            path: ./src/extra
 
           - name: persistentSubscription
-            path: ./src/__test__/persistentSubscription
+            path: ./src/persistentSubscription
 
           - name: projections
-            path: ./src/__test__/projections
+            path: ./src/projections
 
           - name: streams
-            path: ./src/__test__/streams
+            path: ./src/streams
     env:
       # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
       SECRETS_AVAILABLE: ${{ secrets.eventstore_cloud_id != null }}
@@ -59,6 +59,8 @@ jobs:
         run: node -v
       - name: Install
         run: yarn
+      - name: Build 
+        run: yarn build
       - name: Run Tests
         run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:

@@ -1,0 +1,63 @@
+{
+  "name": "@eventstore/db-client",
+  "version": "6.1.0",
+  "description": "NodeJS EventStoreDB version 20+ and uses gRPC as the communication protocol.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "npm-run-all generate build:ts",
+    "build:ts": "tsc --build",
+    "build:watch": "npm-run-all generate build:ts-watch",
+    "build:ts-watch": "tsc --build --watch",
+    "generate": "run-s generate:*",
+    "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
+    "generate:sed-insert": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
+    "generate:folder": "shx mkdir -p ./generated",
+    "generate:js": "grpc_tools_node_protoc ./protos/*.proto --proto_path=./protos --grpc_out=grpc_js:./generated --js_out=import_style=commonjs,binary:./generated --ts_out=generate_package_definition:./generated",
+    "clean": "run-s clean:*",
+    "clean:generated": "shx rm -rf ./generated",
+    "clean:dist": "shx rm -rf ./dist",
+    "clean:buildinfo": "shx rm -rf *.tsbuildinfo"
+  },
+  "files": [
+    "dist/",
+    "generated/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
+  },
+  "keywords": [
+    "EventStore",
+    "EventSourcing",
+    "Client"
+  ],
+  "author": "Event Store Limited",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
+  },
+  "homepage": "https://developers.eventstore.com/clients/grpc/getting-started?codeLanguage=NodeJS",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": "^12.18.3 || >=14"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.12",
+    "@types/debug": "^4.1.12",
+    "@types/google-protobuf": "^3.15.12",
+    "@types/node": "^16.18.67",
+    "debug": "^4.3.2",
+    "google-protobuf": "^3.21.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.4",
+    "grpc-tools": "^1.12.4",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.4"
+  }
+}

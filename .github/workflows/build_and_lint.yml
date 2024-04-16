@@ -57,29 +57,27 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
-      - name: Create package
-        id: package
+      - name: Create and Test All Packages
         run: |
-          echo "package=$(echo $PWD)$(echo "/")$(npm pack)" >> $GITHUB_OUTPUT
-          echo "file=$(echo $PWD)$(echo "/.github/files/package_check.txt")" >> $GITHUB_OUTPUT
-      - name: Create test project
-        run: |
-          cd ../
-          mkdir ./temp
-          cd ./temp
-          yarn init -y
-          yarn add ${{ steps.package.outputs.package }}
-          yarn add --dev typescript
-          cp ${{ steps.package.outputs.file }} ./main.ts
-      - name: Test project compiles
-        working-directory: ../temp
-        run: yarn tsc main.ts
-          --alwaysStrict
-          --noImplicitAny
-          --noImplicitReturns
-          --strictNullChecks
-          --module system
-          --moduleResolution node
-          --target es2018
-          --lib es2020
-          --types node
+          for DIR in packages/*; do
+            if [ -d "$DIR" ]; then
+              cd $DIR
+              if [ -f "package.json" ]; then
+                PACKAGE_NAME=$(node -p "require('./package.json').name")
+                SHOULD_PUBLISH=$(node -p "require('./package.json').publishConfig && require('./package.json').publishConfig.public ? 'true' : 'false'")
+                if [[ $PACKAGE_NAME == @eventstore/* ]] && [[ $SHOULD_PUBLISH == 'true' ]]; then
+                  npm pack
+                  PACKAGE_PATH=$(pwd)/$(ls *.tgz)
+                  mkdir -p ../../../temp/$PACKAGE_NAME
+                  cd ../../../temp/$PACKAGE_NAME
+                  yarn init -y
+                  yarn add $PACKAGE_PATH
+                  yarn add --dev typescript
+                  cp ../../..$DIR/.github/files/package_check.txt ./main.ts
+                  yarn tsc main.ts --alwaysStrict --noImplicitAny --noImplicitReturns --strictNullChecks --module system --moduleResolution node --target es2018 --lib es2020 --types node
+                  cd ../../..
+                fi
+              fi
+              cd ..
+            fi
+          done
