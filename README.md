@@ -47,35 +47,22 @@ const {
   START,
 } = require('@eventstore/db-client');
 
-const client = new EventStoreDBClient(
-  {
-    endpoint: 'localhost:2113',
-  },
-  { insecure: true }
-);
+const client = new EventStoreDBClient({
+  endpoint: "localhost:2113",
+});
 
-(async () => {
-  try {
-    const streamName = 'booking-transactions';
+async function simpleTest() {
+  const streamName = "es_supported_clients";
 
-    // define an event
-    const event = jsonEvent({
-      type: 'booking-initiated',
-      data: {
-        bookingId: 'booking-456',
-        userId: 'user-789',
-        event: 'Concert of The Rolling Stones',
-        timestamp: new Date().toISOString(),
-      },
-      metadata: {
-        createdByUserId: 'user-789',
-        sourceIp: '192.168.1.100',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-      }
-    });
+  const event = jsonEvent({
+    type: "grpc-client",
+    data: {
+      languages: ["typescript", "javascript"],
+      runtime: "NodeJS",
+    },
+  });
 
-    // append the event
-    await client.appendToStream(streamName, [event]);
+  const appendResult = await client.appendToStream(streamName, [event]);
 
     // read the event
     const events = client.readStream(streamName, {
@@ -103,16 +90,22 @@ import {
   jsonEvent,
   FORWARDS,
   START,
-  type JSONEventType,
+  JSONEventType,
 } from "@eventstore/db-client";
 
-// Create a client to connect to EventStoreDB
-const client = EventStoreDBClient.connectionString`esdb://localhost:2113`;
+const client = new EventStoreDBClient({
+  endpoint: "localhost:2113",
+});
 
-// Define the events that can occur during a booking
+interface Reservation {
+  reservationId: string;
+  movieId: string;
+  userId: string;
+  seatId: string;
+}
 
 type SeatReservedEvent = JSONEventType<
-  "seat-reserved",
+  'seat-reserved',
   {
     reservationId: string;
     movieId: string;
@@ -122,7 +115,7 @@ type SeatReservedEvent = JSONEventType<
 >;
 
 type SeatChangedEvent = JSONEventType<
-  "seat-changed",
+  'seat-changed',
   {
     reservationId: string;
     newSeatId: string;
@@ -131,19 +124,18 @@ type SeatChangedEvent = JSONEventType<
 
 type ReservationEvents = SeatReservedEvent | SeatChangedEvent;
 
-// Write events to a stream that describe the history of our booking
+async function simpleTest(): Promise<void> {
+  const streamName = "booking-abc123";
 
-const streamName = "booking-abc123";
-
-const event = jsonEvent<SeatReservedEvent>({
-  type: "seat-reserved",
-  data: {
-    reservationId: "abc123",
-    movieId: "tt0368226",
-    userId: "nm0802995",
-    seatId: "4b",
-  },
-});
+  const event = jsonEvent<SeatReservedEvent>({
+    type: "seat-reserved",
+    data: {
+      reservationId: "abc123",
+      movieId: "tt0368226",
+      userId: "nm0802995",
+      seatId: "4b",
+    },
+  });
 
 const appendResult = await client.appendToStream<ReservationEvents>(
   streamName,
@@ -167,18 +159,23 @@ const events = client.readStream<ReservationEvents>(streamName, {
 
 const reservation: Partial<Reservation> = {};
 
-for await (const { event } of events) {
-  switch (event?.type) {
-    case "seat-reserved": {
-      reservation.reservationId = event.data.reservationId;
-      reservation.movieId = event.data.movieId;
-      reservation.seatId = event.data.seatId;
-      reservation.userId = event.data.userId;
-      break;
-    }
-    case "seat-changed": {
-      reservation.seatId = event.data.newSeatId;
-      break;
+  for await (const { event } of events) {
+    switch (event.type) {
+      case "seat-reserved": {
+        reservation.reservationId = event.data.reservationId;
+        reservation.movieId = event.data.movieId;
+        reservation.seatId = event.data.seatId;
+        reservation.userId = event.data.userId;
+        break;
+      }
+      case "seat-changed": {
+        reservation.seatId = event.data.newSeatId;
+        break;
+      }
+      default: {
+        const _exhaustiveCheck: never = event;
+        break;
+      }
     }
   }
 }
@@ -209,14 +206,10 @@ Information on support can be found on our website: [Event Store Support]
 
 ## Contributing
 
-Refer to our [Contribution Guidelines]
+Development is done on the `master` branch. We attempt to do our best to ensure that the history remains clean and to do so, we generally ask contributors to squash their commits into a set or single logical commit.
 
 [event store support]: https://eventstore.com/support/
-[event store docs]: https://developers.eventstore.com/latest.html
-[contribution guidelines]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/main/CONTRIBUTING.md
-[discuss]: https://discuss.eventstore.com/
-[discord-event-store]: https://discord.gg/Phn9pmCw3t
-[Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
+[event store docs]: https://developers.eventstore.com/server/v20.10/docs/installation/
 [event store grpc client docs]: https://developers.eventstore.com/clients/grpc
 [event store discuss]: https://discuss.eventstore.com/
 [yarn]: https://yarnpkg.com/
