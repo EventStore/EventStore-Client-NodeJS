@@ -332,8 +332,8 @@ export interface Credentials {
 }
 
 export interface Certificate {
-  certFile: Buffer;
-  certKeyFile: Buffer;
+  userCertFile: Buffer;
+  userKeyFile: Buffer;
 }
 
 export interface StreamingRead<E> extends Readable {

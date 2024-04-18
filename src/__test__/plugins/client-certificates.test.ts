@@ -16,24 +16,24 @@ describe("client certificates", () => {
   describe("throw error when constructor is initialised with incorrect channel credentials combinations", () => {
     test.each([
       [
-        "certFile",
+        "userCertFile",
         () =>
           new EventStoreDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              certFile: node.certs.users.admin.certFile,
+              userCertFile: node.certs.users.admin.userCertFile,
             }
           ),
       ],
       [
-        "certKeyFile",
+        "userKeyFile",
         () =>
           new EventStoreDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              certKeyFile: node.certs.users.admin.certKeyFile,
+              userKeyFile: node.certs.users.admin.userKeyFile,
             }
           ),
       ],
@@ -47,14 +47,14 @@ describe("client certificates", () => {
 
     test.each([
       [
-        "certFile",
+        "userCertFile",
         () =>
-          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&certFile=${node.certPath.admin.certPath}`,
+          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userCertFile=${node.certPath.admin.certPath}`,
       ],
       [
-        "certKeyFile",
+        "userKeyFile",
         () =>
-          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&certKeyFile=${node.certPath.admin.certKeyPath}`,
+          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}`,
       ],
     ])("connection string with %s only", (_, connection) => {
       try {
@@ -73,8 +73,8 @@ describe("client certificates", () => {
         { endpoint: node.uri },
         {
           rootCertificate: node.certs.root,
-          certFile: node.certs.users.admin.certFile,
-          certKeyFile: node.certs.users.admin.certKeyFile,
+          userCertFile: node.certs.users.admin.userCertFile,
+          userKeyFile: node.certs.users.admin.userKeyFile,
         }
       );
     });
@@ -108,8 +108,8 @@ describe("client certificates", () => {
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
-        certFile: node.certs.users.admin.certFile,
-        certKeyFile: node.certs.users.admin.certKeyFile,
+        userCertFile: node.certs.users.admin.userCertFile,
+        userKeyFile: node.certs.users.admin.userKeyFile,
       },
       {
         username: "wrong",
@@ -130,8 +130,8 @@ describe("client certificates", () => {
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
-        certFile: node.certs.users.invalid.certFile,
-        certKeyFile: node.certs.users.invalid.certKeyFile,
+        userCertFile: node.certs.users.invalid.userCertFile,
+        userKeyFile: node.certs.users.invalid.userKeyFile,
       }
     );
 

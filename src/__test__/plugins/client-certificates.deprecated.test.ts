@@ -32,7 +32,7 @@ describe("client certificates (with deprecated credential options)", () => {
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              certChain: node.certs.users.admin.certFile,
+              certChain: node.certs.users.admin.userCertFile,
             }
           ),
       ],
@@ -43,7 +43,7 @@ describe("client certificates (with deprecated credential options)", () => {
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              privateKey: node.certs.users.admin.certKeyFile,
+              privateKey: node.certs.users.admin.userKeyFile,
             }
           ),
       ],
@@ -54,8 +54,8 @@ describe("client certificates (with deprecated credential options)", () => {
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
-              privateKey: node.certs.users.admin.certKeyFile,
-              certChain: node.certs.users.admin.certFile,
+              privateKey: node.certs.users.admin.userKeyFile,
+              certChain: node.certs.users.admin.userCertFile,
             }
           ),
       ],
@@ -82,8 +82,8 @@ describe("client certificates (with deprecated credential options)", () => {
         { endpoint: node.uri },
         {
           rootCertificate: node.certs.root,
-          certChain: node.certs.users.admin.certFile,
-          privateKey: node.certs.users.admin.certKeyFile,
+          certChain: node.certs.users.admin.userCertFile,
+          privateKey: node.certs.users.admin.userKeyFile,
         }
       );
     });
@@ -117,8 +117,8 @@ describe("client certificates (with deprecated credential options)", () => {
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
-        certChain: node.certs.users.admin.certFile,
-        privateKey: node.certs.users.admin.certKeyFile,
+        certChain: node.certs.users.admin.userCertFile,
+        privateKey: node.certs.users.admin.userKeyFile,
       },
       {
         username: "wrong",
@@ -139,8 +139,8 @@ describe("client certificates (with deprecated credential options)", () => {
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
-        certChain: node.certs.users.invalid.certFile,
-        privateKey: node.certs.users.invalid.certKeyFile,
+        certChain: node.certs.users.invalid.userCertFile,
+        privateKey: node.certs.users.invalid.userKeyFile,
       }
     );
 

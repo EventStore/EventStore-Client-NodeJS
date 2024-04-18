@@ -3,7 +3,7 @@
 exports[`client certificates (with deprecated credential options) show warnings and/or error when constructor is initialised with incorrect channel credentials combinations constructor initialised with both privateKey and certChain 1`] = `
 Array [
   Array [
-    "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use certFile and certKeyFile instead.",
+    "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use userCertFile and userKeyFile instead.",
   ],
 ]
 `;
@@ -13,7 +13,7 @@ exports[`client certificates (with deprecated credential options) show warnings 
 exports[`client certificates (with deprecated credential options) show warnings and/or error when constructor is initialised with incorrect channel credentials combinations constructor initialised with certChain only 2`] = `
 Array [
   Array [
-    "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use certFile and certKeyFile instead.",
+    "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use userCertFile and userKeyFile instead.",
   ],
 ]
 `;
@@ -23,7 +23,7 @@ exports[`client certificates (with deprecated credential options) show warnings 
 exports[`client certificates (with deprecated credential options) show warnings and/or error when constructor is initialised with incorrect channel credentials combinations constructor initialised with privateKey only 2`] = `
 Array [
   Array [
-    "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use certFile and certKeyFile instead.",
+    "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use userCertFile and userKeyFile instead.",
   ],
 ]
 `;

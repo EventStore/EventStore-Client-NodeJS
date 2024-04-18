@@ -469,11 +469,11 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?certFile=/home/user/dev/cert.ca&certKeyFile=/home/user/dev/cert.key",
+    "esdb://host?userCertFile=/home/user/dev/cert.ca&userKeyFile=/home/user/dev/cert.key",
     {
       dnsDiscover: false,
-      certFile: "/home/user/dev/cert.ca",
-      certKeyFile: "/home/user/dev/cert.key",
+      userCertFile: "/home/user/dev/cert.ca",
+      userKeyFile: "/home/user/dev/cert.key",
       hosts: [
         {
           address: "host",

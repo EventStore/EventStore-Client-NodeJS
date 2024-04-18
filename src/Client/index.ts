@@ -118,23 +118,23 @@ export interface ChannelCredentialOptions {
    */
   rootCertificate?: Buffer;
   /**
-   * This has been deprecated in favor of {@link certKeyFile}.
+   * This has been deprecated in favor of {@link userKeyFile}.
    * @deprecated
    */
   privateKey?: Buffer;
   /**
-   * This has been deprecated in favor of {@link certFile}.
+   * This has been deprecated in favor of {@link userCertFile}.
    * @deprecated
    */
   certChain?: Buffer;
   /**
-   * The x.509 private key, if available.
+   * The file containing the user certificate’s matching private key in PEM format.
    */
-  certKeyFile?: Buffer;
+  userKeyFile?: Buffer;
   /**
-   * The x.509 key chain, if available.
+   * The file containing the X.509 user certificate in PEM format.
    */
-  certFile?: Buffer;
+  userCertFile?: Buffer;
   /**
    * Additional options to modify certificate verification.
    */
@@ -211,18 +211,20 @@ export class Client {
       }
     }
 
-    if (options.certFile || options.certKeyFile) {
-      if (!options.certFile || !options.certKeyFile) {
-        throw new Error("certPath must be given with accompanying certKeyPath");
+    if (options.userCertFile || options.userKeyFile) {
+      if (!options.userCertFile || !options.userKeyFile) {
+        throw new Error(
+          "userCertFile must be given with accompanying userKeyFile"
+        );
       }
 
-      const certPathResolved = isAbsolute(options.certFile)
-        ? options.certFile
-        : resolve(process.cwd(), options.certFile);
+      const certPathResolved = isAbsolute(options.userCertFile)
+        ? options.userCertFile
+        : resolve(process.cwd(), options.userCertFile);
 
-      const certKeyPathResolved = isAbsolute(options.certKeyFile)
-        ? options.certKeyFile
-        : resolve(process.cwd(), options.certKeyFile);
+      const certKeyPathResolved = isAbsolute(options.userKeyFile)
+        ? options.userKeyFile
+        : resolve(process.cwd(), options.userKeyFile);
 
       if (!existsSync(certPathResolved)) {
         throw new Error("Failed to load certificate file. File was not found.");
@@ -234,8 +236,8 @@ export class Client {
         );
       }
 
-      channelCredentials.certKeyFile = readFileSync(certKeyPathResolved);
-      channelCredentials.certFile = readFileSync(certPathResolved);
+      channelCredentials.userKeyFile = readFileSync(certKeyPathResolved);
+      channelCredentials.userCertFile = readFileSync(certPathResolved);
     }
 
     if (options.dnsDiscover) {
@@ -351,7 +353,7 @@ export class Client {
 
     if (channelCredentials.certChain || channelCredentials.privateKey) {
       console.warn(
-        "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use certFile and certKeyFile instead."
+        "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use userCertFile and userKeyFile instead."
       );
     }
 
@@ -376,8 +378,8 @@ export class Client {
 
       this.#channelCredentials = grpcCredentials.createSsl(
         channelCredentials.rootCertificate,
-        channelCredentials.certKeyFile ?? channelCredentials.privateKey,
-        channelCredentials.certFile ?? channelCredentials.certChain,
+        channelCredentials.userKeyFile ?? channelCredentials.privateKey,
+        channelCredentials.userCertFile ?? channelCredentials.certChain,
         channelCredentials.verifyOptions
       );
     }

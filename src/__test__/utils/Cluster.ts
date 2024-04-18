@@ -246,12 +246,12 @@ export class Cluster {
         root: await readFile(this.certPath.root),
         users: {
           admin: {
-            certFile: await readFile(this.certPath.admin.certPath),
-            certKeyFile: await readFile(this.certPath.admin.certKeyPath),
+            userCertFile: await readFile(this.certPath.admin.certPath),
+            userKeyFile: await readFile(this.certPath.admin.certKeyPath),
           },
           invalid: {
-            certFile: await readFile(this.certPath.invalid.certPath),
-            certKeyFile: await readFile(this.certPath.invalid.certKeyPath),
+            userCertFile: await readFile(this.certPath.invalid.certPath),
+            userKeyFile: await readFile(this.certPath.invalid.certKeyPath),
           },
         },
       };
