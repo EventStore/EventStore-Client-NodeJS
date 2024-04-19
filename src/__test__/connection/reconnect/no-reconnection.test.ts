@@ -23,7 +23,7 @@ describe("reconnect", () => {
         // so it's better not to have deadlines here to force the errors we are testing.
         defaultDeadline: Infinity,
       },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
 
@@ -76,7 +76,7 @@ describe("reconnect", () => {
         // so it's better not to have deadlines here to force the errors we are testing.
         defaultDeadline: Infinity,
       },
-      { rootCertificate: timeoutNode.rootCertificate },
+      { rootCertificate: timeoutNode.certs.root },
       { username: "admin", password: "changeit" }
     );
 

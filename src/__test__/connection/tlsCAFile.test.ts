@@ -15,11 +15,11 @@ describe("tlsCAFile", () => {
   });
 
   test.each([
-    ["relative", () => relative(process.cwd(), node.certPath)],
+    ["relative", () => relative(process.cwd(), node.certPath.root)],
     [
       "absolute",
-      // in case node.certPath implementation changes to be relative, make certain it is absolute
-      () => resolve(process.cwd(), relative(process.cwd(), node.certPath)),
+      // in case node.certPath.root implementation changes to be relative, make certain it is absolute
+      () => resolve(process.cwd(), relative(process.cwd(), node.certPath.root)),
     ],
   ])("Path can be %s", async (name, tlsCAFile) => {
     const STREAM_NAME = `${name}_stream`;

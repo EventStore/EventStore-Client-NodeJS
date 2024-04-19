@@ -22,7 +22,7 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
         endpoint: node.uri,
         connectionName: "getPersistentSubscriptionInfo test client",
       },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
   });

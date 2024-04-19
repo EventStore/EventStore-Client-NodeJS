@@ -23,7 +23,7 @@ describe("reconnect", () => {
 
     const client = new EventStoreDBClient(
       { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
 

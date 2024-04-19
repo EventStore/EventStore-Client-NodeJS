@@ -24,7 +24,7 @@ describe("deletePersistentSubscriptionToAll", () => {
       {
         endpoint: node.uri,
       },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
   });

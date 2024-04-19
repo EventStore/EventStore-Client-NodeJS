@@ -25,7 +25,7 @@ describe("appendToStream - errors", () => {
     await node.up();
     client = new EventStoreDBClient(
       { endpoint: node.uri, throwOnAppendFailure: true },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
   });

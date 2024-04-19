@@ -17,7 +17,7 @@ describe("cluster", () => {
   test("should successfully connect", async () => {
     const client = new EventStoreDBClient(
       { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
 
@@ -42,7 +42,7 @@ describe("cluster", () => {
         ],
         maxDiscoverAttempts,
       },
-      { rootCertificate: cluster.rootCertificate }
+      { rootCertificate: cluster.certs.root }
     );
 
     await expect(

@@ -22,7 +22,7 @@ describe("deadline", () => {
         () =>
           new EventStoreDBClient(
             { endpoints: cluster.endpoints, defaultDeadline: 1 },
-            { rootCertificate: cluster.rootCertificate },
+            { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
           ).listProjections(),
       ],
@@ -31,7 +31,7 @@ describe("deadline", () => {
         () =>
           new EventStoreDBClient(
             { endpoints: cluster.endpoints },
-            { rootCertificate: cluster.rootCertificate },
+            { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
           ).listProjections({
             deadline: 1,
@@ -42,7 +42,7 @@ describe("deadline", () => {
         () =>
           new EventStoreDBClient(
             { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.rootCertificate },
+            { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
           ).listProjections({
             deadline: 1,
@@ -53,7 +53,7 @@ describe("deadline", () => {
         () =>
           new EventStoreDBClient(
             { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.rootCertificate },
+            { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
           ).appendToStream("deadline", jsonTestEvents(), {
             deadline: 1,

@@ -6,6 +6,6 @@ connectionStringTests({
   title: "Secure Single Node",
   createServer: createTestNode,
   createUri: ({ uri }) => uri,
-  createQueryString: ({ certPath }) => `tlsCAFile=${certPath}`,
+  createQueryString: ({ certPath }) => `tlsCAFile=${certPath.root}`,
   streamPrefix: "secure-single-node",
 });

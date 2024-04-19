@@ -46,7 +46,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
     client = new EventStoreDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
   });
@@ -649,7 +649,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           endpoints: cluster.endpoints,
           nodePreference: "follower",
         },
-        { rootCertificate: cluster.rootCertificate },
+        { rootCertificate: cluster.certs.root },
         { username: "admin", password: "changeit" }
       );
 
@@ -681,7 +681,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
               {
                 endpoint: error.leader,
               },
-              { rootCertificate: cluster.rootCertificate },
+              { rootCertificate: cluster.certs.root },
               { username: "admin", password: "changeit" }
             );
 

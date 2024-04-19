@@ -28,7 +28,7 @@ describe("not-leader", () => {
         endpoints: cluster.endpoints,
         nodePreference: FOLLOWER,
       },
-      { rootCertificate: cluster.rootCertificate },
+      { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
     );
 
@@ -66,7 +66,7 @@ describe("not-leader", () => {
           {
             endpoint: error.leader,
           },
-          { rootCertificate: cluster.rootCertificate },
+          { rootCertificate: cluster.certs.root },
           { username: "admin", password: "changeit" }
         );
 

@@ -16,7 +16,7 @@ describe("deletePersistentSubscriptionToStream", () => {
       {
         endpoint: node.uri,
       },
-      { rootCertificate: node.rootCertificate },
+      { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
     );
   });
