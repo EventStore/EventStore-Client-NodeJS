@@ -8,10 +8,11 @@ EventStoreDB is the event-native database, where business events are immutably s
 
 This monorepo contains the following packages:
 
-| Subfolder                                    | Package                                                                     |
-| -------------------------------------------- | --------------------------------------------------------------------------- |
-| [`packages/db-client/`](packages/db-client/) | [`@eventstore/client`](https://www.npmjs.com/package/@eventstore/db-client) |
-| [`packages/test/`](packages/test/)           | Client internal tests                                                       |
+| Subfolder                                            | Package                                                                                |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [`packages/db-client/`](packages/db-client/)         | [`@eventstore/client`](https://www.npmjs.com/package/@eventstore/db-client)            |
+| [`packages/opentelemetry/`](packages/opentelemetry/) | [`@eventstore/opentelemetry`](https://www.npmjs.com/package/@eventstore/opentelemetry) |
+| [`packages/test/`](packages/test/)                   | Client internal tests                                                                  |
 
 ## Installation
 

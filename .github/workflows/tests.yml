@@ -38,6 +38,9 @@ jobs:
 
           - name: streams
             path: ./src/streams
+
+          - name: opentelemetry
+            path: ./src/opentelemetry
     env:
       # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
       SECRETS_AVAILABLE: ${{ secrets.eventstore_cloud_id != null }}

@@ -24,7 +24,8 @@ export class PersistentSubscriptionImpl<E>
   implements PersistentSubscriptionBase<E>
 {
   #grpcStream: Promise<ClientDuplexStream<ReadReq, ReadResp>>;
-  #convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
+  protected convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
+  public id?: string;
 
   constructor(
     createGRPCStream: CreateGRPCStream,
@@ -33,7 +34,7 @@ export class PersistentSubscriptionImpl<E>
   ) {
     super({ ...options, objectMode: true });
     this.#grpcStream = createGRPCStream();
-    this.#convertGrpcEvent = convertGrpcEvent;
+    this.convertGrpcEvent = convertGrpcEvent;
     this.initialize();
   }
 
@@ -53,11 +54,12 @@ export class PersistentSubscriptionImpl<E>
 
   _transform(resp: ReadResp, _encoding: string, next: TransformCallback): void {
     if (resp.hasSubscriptionConfirmation()) {
+      this.id = resp.getSubscriptionConfirmation()?.getSubscriptionId();
       this.emit("confirmation");
     }
 
     if (resp.hasEvent()) {
-      const resolved = this.#convertGrpcEvent(resp.getEvent()!);
+      const resolved = this.convertGrpcEvent(resp.getEvent()!);
       next(null, resolved);
       return;
     }

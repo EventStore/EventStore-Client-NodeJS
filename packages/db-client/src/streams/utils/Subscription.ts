@@ -17,9 +17,10 @@ export class Subscription<E>
   extends Transform
   implements ReadableSubscription<E>
 {
-  #convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
+  protected convertGrpcEvent: ConvertGrpcEvent<ReadResp.ReadEvent, E>;
   #grpcStream: Promise<ClientReadableStream<ReadResp>>;
   #checkpointReached?: Filter["checkpointReached"];
+  public id?: string;
 
   constructor(
     createGRPCStream: CreateGRPCStream,
@@ -28,7 +29,7 @@ export class Subscription<E>
     checkpointReached?: Filter["checkpointReached"]
   ) {
     super({ ...options, objectMode: true });
-    this.#convertGrpcEvent = convertGrpcEvent;
+    this.convertGrpcEvent = convertGrpcEvent;
     this.#grpcStream = createGRPCStream();
     this.#checkpointReached = checkpointReached;
     this.initialize();
@@ -54,6 +55,7 @@ export class Subscription<E>
     next: TransformCallback
   ): Promise<void> {
     if (resp.hasConfirmation?.()) {
+      this.id = resp.getConfirmation()?.getSubscriptionId();
       this.emit("confirmation");
     }
 
@@ -75,7 +77,7 @@ export class Subscription<E>
     }
 
     if (resp.hasEvent?.()) {
-      const resolved = this.#convertGrpcEvent(resp.getEvent()!);
+      const resolved = this.convertGrpcEvent(resp.getEvent()!);
       return next(null, resolved);
     }
 

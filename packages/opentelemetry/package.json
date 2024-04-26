@@ -1,0 +1,50 @@
+{
+  "name": "@eventstore/opentelemetry",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "npm-run-all build:ts",
+    "build:ts": "tsc --build",
+    "build:watch": "npm-run-all build:ts-watch",
+    "build:ts-watch": "tsc --build --watch",
+    "clean": "run-s clean:*",
+    "clean:dist": "shx rm -rf ./dist",
+    "clean:buildinfo": "shx rm -rf *.tsbuildinfo"
+  },
+  "files": [
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
+  },
+  "keywords": [
+    "EventStore",
+    "EventSourcing",
+    "OpenTelemetry"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": "^12.18.3 || >=14"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/instrumentation": "^0.50.0",
+    "@opentelemetry/sdk-node": "^0.50.0",
+    "@opentelemetry/semantic-conventions": "^1.23.0"
+  },
+  "devDependencies": {
+    "@eventstore/db-client": "*",
+    "@opentelemetry/context-async-hooks": "^1.23.0",
+    "@opentelemetry/core": "^1.23.0",
+    "@opentelemetry/sdk-trace-base": "^1.23.0",
+    "@opentelemetry/sdk-trace-node": "^1.23.0"
+  },
+  "peerDependencies": {
+    "@eventstore/db-client": "^6"
+  }
+}

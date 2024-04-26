@@ -498,16 +498,26 @@ export interface CatchupSubscription {
   removeListener(event: "fellBehind", listener: () => void): this;
 }
 
+export interface SubscriptionDetails {
+  id?: string;
+}
+
 export type PersistentSubscriptionToStream<E extends EventType = EventType> =
-  PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>>;
+  PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>> &
+    SubscriptionDetails;
 
 export type PersistentSubscriptionToAll =
-  PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent>;
+  PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent> &
+    SubscriptionDetails;
 
 export type StreamSubscription<E extends EventType = EventType> =
-  ReadableSubscription<ResolvedEvent<E>> & CatchupSubscription;
+  ReadableSubscription<ResolvedEvent<E>> &
+    CatchupSubscription &
+    SubscriptionDetails;
 export type AllStreamSubscription =
-  ReadableSubscription<AllStreamResolvedEvent> & CatchupSubscription;
+  ReadableSubscription<AllStreamResolvedEvent> &
+    CatchupSubscription &
+    SubscriptionDetails;
 
 export { VNodeState };
 export * from "./events";
