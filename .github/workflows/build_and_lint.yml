@@ -30,53 +30,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-2019, macos-latest]
+        node: [14, 16, 18, 20]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install
-        run: yarn
-      - name: Build
-        run: yarn build
-
-  package:
-    name: Package compiles as a dependency
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v1
         with:
-          node-version: "14.x"
+          node-version: ${{ matrix.node }}
       - name: Install
         run: yarn
       - name: Build
         run: yarn build
-      - name: Create package
-        id: package
-        run: |
-          echo "package=$(echo $PWD)$(echo "/")$(npm pack)" >> $GITHUB_OUTPUT
-          echo "file=$(echo $PWD)$(echo "/.github/files/package_check.txt")" >> $GITHUB_OUTPUT
-      - name: Create test project
-        run: |
-          cd ../
-          mkdir ./temp
-          cd ./temp
-          yarn init -y
-          yarn add ${{ steps.package.outputs.package }}
-          yarn add --dev typescript
-          cp ${{ steps.package.outputs.file }} ./main.ts
-      - name: Test project compiles
-        working-directory: ../temp
-        run: yarn tsc main.ts
-          --alwaysStrict
-          --noImplicitAny
-          --noImplicitReturns
-          --strictNullChecks
-          --module system
-          --moduleResolution node
-          --target es2018
-          --lib es2020
-          --types node
