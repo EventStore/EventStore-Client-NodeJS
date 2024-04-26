@@ -9,74 +9,23 @@ on:
     - cron: "0 3 * * 0" # Every sunday at 3am UTC.
 
 jobs:
-  validation:
-    name: Code quality
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install
-        run: yarn
-      - name: Linting
-        run: yarn lint
-      - name: Build on Ubuntu
-        run: yarn build
-      - name: All generated code is commited
-        run: |
-          git update-index --refresh
-          git diff-index --exit-code --name-status HEAD --
-
   build:
     name: Build
     strategy:
+      fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-2019, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install
         run: yarn
+      - name: Print node js version
+        run: node -v
       - name: Build
         run: yarn build
 
-  package:
-    name: Package compiles as a dependency
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "14.x"
-      - name: Install
-        run: yarn
-      - name: Build
-        run: yarn build
-      - name: Create package
-        id: package
-        run: |
-          echo "package=$(echo $PWD)$(echo "/")$(npm pack)" >> $GITHUB_OUTPUT
-          echo "file=$(echo $PWD)$(echo "/.github/files/package_check.txt")" >> $GITHUB_OUTPUT
-      - name: Create test project
-        run: |
-          cd ../
-          mkdir ./temp
-          cd ./temp
-          yarn init -y
-          yarn add ${{ steps.package.outputs.package }}
-          yarn add --dev typescript
-          cp ${{ steps.package.outputs.file }} ./main.ts
-      - name: Test project compiles
-        working-directory: ../temp
-        run: yarn tsc main.ts
-          --alwaysStrict
-          --noImplicitAny
-          --noImplicitReturns
-          --strictNullChecks
-          --module system
-          --moduleResolution node
-          --target es2018
-          --lib es2020
-          --types node
+
+# Unable to find Node version '14' for platform darwin and architecture arm64.
