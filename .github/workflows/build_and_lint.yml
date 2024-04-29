@@ -28,13 +28,18 @@ jobs:
   build:
     name: Build
     strategy:
+      fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-2019, macos-latest]
-
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .github/files/.nvmrc
+      - name: NodeJS version
+        run: node -v
       - name: Install
         run: yarn
       - name: Build
@@ -45,11 +50,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "14.x"
+        uses: actions/checkout@v4
+      - name: NodeJS version
+        run: node -v
       - name: Install
         run: yarn
       - name: Build
