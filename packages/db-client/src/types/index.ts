@@ -396,6 +396,8 @@ export interface StreamingRead<E> extends Readable {
 }
 
 export interface ReadableSubscription<E> extends Readable {
+  id?: string;
+
   unsubscribe(): Promise<void>;
 
   addListener(event: "close", listener: () => void): this;
@@ -498,26 +500,17 @@ export interface CatchupSubscription {
   removeListener(event: "fellBehind", listener: () => void): this;
 }
 
-export interface SubscriptionDetails {
-  id?: string;
-}
-
 export type PersistentSubscriptionToStream<E extends EventType = EventType> =
-  PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>> &
-    SubscriptionDetails;
+  PersistentSubscriptionBase<PersistentSubscriptionToStreamResolvedEvent<E>>;
 
 export type PersistentSubscriptionToAll =
-  PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent> &
-    SubscriptionDetails;
+  PersistentSubscriptionBase<PersistentSubscriptionToAllResolvedEvent>;
 
 export type StreamSubscription<E extends EventType = EventType> =
-  ReadableSubscription<ResolvedEvent<E>> &
-    CatchupSubscription &
-    SubscriptionDetails;
+  ReadableSubscription<ResolvedEvent<E>> & CatchupSubscription;
+
 export type AllStreamSubscription =
-  ReadableSubscription<AllStreamResolvedEvent> &
-    CatchupSubscription &
-    SubscriptionDetails;
+  ReadableSubscription<AllStreamResolvedEvent> & CatchupSubscription;
 
 export { VNodeState };
 export * from "./events";
