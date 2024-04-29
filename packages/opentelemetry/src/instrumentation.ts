@@ -371,21 +371,9 @@ export class Instrumentation extends InstrumentationBase {
   };
 
   private static handleError = (error: any, span: Span) => {
-    const attributes: Attributes = {};
-    attributes[EventStoreDBAttributes.EXCEPTION_MESSAGE] = error.message;
-    attributes[EventStoreDBAttributes.EXCEPTION_STACKTRACE] = error.stack;
-    attributes[EventStoreDBAttributes.EXCEPTION_TYPE] =
-      error.type ?? error.name;
-
-    span.setAttributes(attributes);
-
-    throw Instrumentation.setError(span, error);
-  };
-
-  private static setError = (span: Span, error: Error) => {
     span.recordException(error);
     span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });
-    return error;
+    throw error;
   };
 
   private static getServerAddress = (resolvedUri: string) => {

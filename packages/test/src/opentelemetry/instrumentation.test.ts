@@ -4,6 +4,10 @@ import {
   InMemorySpanExporter,
   SimpleSpanProcessor,
 } from "@opentelemetry/sdk-trace-base";
+import {
+  SEMATTRS_EXCEPTION_STACKTRACE,
+  SEMATTRS_EXCEPTION_TYPE,
+} from "@opentelemetry/semantic-conventions";
 import { EventStoreDBInstrumentation } from "@eventstore/opentelemetry";
 import { EventStoreDBAttributes } from "@eventstore/opentelemetry/dist/attributes";
 import { v4 } from "uuid";
@@ -147,18 +151,22 @@ describe("instrumentation", () => {
 
         const failedSpan = spans[1];
 
-        const attributes = failedSpan.attributes;
+        const failedEvents = failedSpan.events;
+
+        expect(failedEvents.length).toBe(1);
+
+        const failedEvent = failedEvents[0];
 
         if (error instanceof WrongExpectedVersionError) {
           expect(error).toBeInstanceOf(WrongExpectedVersionError);
-          expect(attributes[EventStoreDBAttributes.EXCEPTION_STACKTRACE]).toBe(
-            error.stack
-          );
-          expect(attributes[EventStoreDBAttributes.EXCEPTION_MESSAGE]).toBe(
-            error.message
-          );
-          expect(attributes[EventStoreDBAttributes.EXCEPTION_TYPE]).toBe(
-            error.type
+          expect(failedEvent).toEqual(
+            expect.objectContaining({
+              name: "exception",
+              attributes: {
+                [SEMATTRS_EXCEPTION_TYPE]: "Error",
+                [SEMATTRS_EXCEPTION_STACKTRACE]: error.stack,
+              },
+            })
           );
         }
       }
