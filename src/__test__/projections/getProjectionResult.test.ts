@@ -171,7 +171,7 @@ describe("getProjectionResult", () => {
       await expect(
         client.getProjectionResult(PROJECTION_NAME)
       ).rejects.toThrowError(
-        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+        matchServerVersion`>=24.6` ? NotFoundError : UnknownError
       );
     });
   });

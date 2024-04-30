@@ -73,7 +73,7 @@ describe("disable / abort", () => {
       await expect(
         client.disableProjection(PROJECTION_NAME)
       ).rejects.toThrowError(
-        matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+        matchServerVersion`>=24.6` ? NotFoundError : UnknownError
       );
     });
   });
@@ -111,7 +111,7 @@ describe("disable / abort", () => {
         await expect(
           client.abortProjection(PROJECTION_NAME)
         ).rejects.toThrowError(
-          matchServerVersion`<=23.10` ? UnknownError : NotFoundError
+          matchServerVersion`>=24.6` ? NotFoundError : UnknownError
         );
       });
     });
