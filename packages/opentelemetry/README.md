@@ -14,7 +14,7 @@ npm install --save @eventstore/opentelemetry
 
 - `[6.x]`
 
-It's likely that the instrumentation would support earlier versions of EventStoreDB, but I haven't tested it.
+It's likely that the instrumentation would support earlier versions of EventStoreDB, but this has not been tested.
 
 ## Usage
 

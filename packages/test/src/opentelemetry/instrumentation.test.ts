@@ -1,9 +1,9 @@
 import { createTestNode, Defer, delay, jsonTestEvents } from "@test-utils";
-import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import {
+  NodeTracerProvider,
   InMemorySpanExporter,
   SimpleSpanProcessor,
-} from "@opentelemetry/sdk-trace-base";
+} from "@opentelemetry/sdk-trace-node";
 import {
   SEMATTRS_EXCEPTION_STACKTRACE,
   SEMATTRS_EXCEPTION_TYPE,
@@ -323,8 +323,7 @@ describe("instrumentation", () => {
         (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) =>
-          span.name === EventStoreDBAttributes.STREAM_PERSISTENT_SUBSCRIBE
+        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
       );
 
       expect(parentSpan).toBeDefined();
@@ -426,8 +425,7 @@ describe("instrumentation", () => {
         (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) =>
-          span.name === EventStoreDBAttributes.STREAM_PERSISTENT_SUBSCRIBE
+        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
       );
 
       expect(parentSpan).toBeDefined();

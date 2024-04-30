@@ -344,7 +344,7 @@ export class Instrumentation extends InstrumentationBase {
 
         this.resolveUri().then((uri) =>
           Instrumentation.applySubscriptionInstrumentation(
-            EventStoreDBAttributes.STREAM_PERSISTENT_SUBSCRIBE,
+            EventStoreDBAttributes.STREAM_SUBSCIBE,
             subscription,
             uri,
             operation,

@@ -13,10 +13,9 @@ export const EventStoreDBAttributes = {
 
   STREAM_APPEND: `${streams}.append`,
   STREAM_SUBSCIBE: `${streams}.subscribe`,
-  STREAM_PERSISTENT_SUBSCRIBE: `${streams}.persistent_susbcribe`,
 
   EVENT_STORE_STREAM: `${esdb}.stream`,
-  EVENT_STORE_SUBSCRIPTION_ID: `${esdb}.subscription_id`,
+  EVENT_STORE_SUBSCRIPTION_ID: `${esdb}.subscription.id`,
   EVENT_STORE_EVENT_ID: `${esdb}.event.id`,
   EVENT_STORE_EVENT_TYPE: `${esdb}.event.type`,
 };
