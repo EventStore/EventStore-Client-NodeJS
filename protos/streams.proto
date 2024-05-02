@@ -56,15 +56,12 @@ message ReadReq {
 			}
 		}
 		message SubscriptionOptions {
-      option deprecated = true;
 		}
 		message Position {
 			uint64 commit_position = 1 [jstype = JS_STRING];
 			uint64 prepare_position = 2 [jstype = JS_STRING];
 		}
 		message FilterOptions {
-      option deprecated = true;
-
 			oneof filter {
 				Expression stream_identifier = 1;
 				Expression event_type = 2;
@@ -82,7 +79,7 @@ message ReadReq {
 		}
 		message UUIDOption {
 			oneof content {
-				event_store.client.Empty structured = 1 [deprecated = true];
+				event_store.client.Empty structured = 1;
 				event_store.client.Empty string = 2;
 			}
 		}
@@ -116,7 +113,7 @@ message ReadResp {
 		RecordedEvent link = 2;
 		oneof position {
 			uint64 commit_position = 3 [jstype = JS_STRING];
-			event_store.client.Empty no_position = 4 [deprecated = true];
+			event_store.client.Empty no_position = 4;
 		}
 
 		message RecordedEvent {
@@ -179,11 +176,11 @@ message AppendResp {
 	message Success {
 		oneof current_revision_option {
 			uint64 current_revision = 1 [jstype = JS_STRING];
-			event_store.client.Empty no_stream = 2 [deprecated = true];
+			event_store.client.Empty no_stream = 2;
 		}
 		oneof position_option {
 			Position position = 3;
-			event_store.client.Empty no_position = 4 [deprecated = true];
+			event_store.client.Empty no_position = 4;
 		}
 	}
 
@@ -199,13 +196,13 @@ message AppendResp {
 		}
 		oneof current_revision_option {
 			uint64 current_revision = 6 [jstype = JS_STRING];
-			event_store.client.Empty current_no_stream = 7 [deprecated = true];
+			event_store.client.Empty current_no_stream = 7;
 		}
 		oneof expected_revision_option {
 			uint64 expected_revision = 8 [jstype = JS_STRING];
-			event_store.client.Empty expected_any = 9 [deprecated = true];
-			event_store.client.Empty expected_stream_exists = 10 [deprecated = true];
-			event_store.client.Empty expected_no_stream = 11 [deprecated = true];
+			event_store.client.Empty expected_any = 9;
+			event_store.client.Empty expected_stream_exists = 10;
+			event_store.client.Empty expected_no_stream = 11;
 		}
 
 	}
@@ -246,20 +243,20 @@ message BatchAppendResp {
 	event_store.client.StreamIdentifier stream_identifier = 4;
 
 	oneof expected_stream_position {
-		uint64 stream_position = 5 [jstype = JS_STRING, deprecated = true];
-		google.protobuf.Empty no_stream = 6 [deprecated = true];
-		google.protobuf.Empty any = 7 [deprecated = true];
-		google.protobuf.Empty stream_exists = 8 [deprecated = true];
+		uint64 stream_position = 5 [jstype = JS_STRING];
+		google.protobuf.Empty no_stream = 6;
+		google.protobuf.Empty any = 7;
+		google.protobuf.Empty stream_exists = 8;
 	}
 
 	message Success {
 		oneof current_revision_option {
 			uint64 current_revision = 1 [jstype = JS_STRING];
-			google.protobuf.Empty no_stream = 2 [deprecated = true];
+			google.protobuf.Empty no_stream = 2;
 		}
 		oneof position_option {
 			event_store.client.AllStreamPosition position = 3;
-			google.protobuf.Empty no_position = 4 [deprecated = true];
+			google.protobuf.Empty no_position = 4;
 		}
 	}
 }
@@ -273,7 +270,7 @@ message DeleteReq {
 			uint64 revision = 2 [jstype = JS_STRING];
 			event_store.client.Empty no_stream = 3;
 			event_store.client.Empty any = 4;
-			event_store.client.Empty stream_exists = 5 [deprecated = true];
+			event_store.client.Empty stream_exists = 5;
 		}
 	}
 }
@@ -281,7 +278,7 @@ message DeleteReq {
 message DeleteResp {
 	oneof position_option {
 		Position position = 1;
-		event_store.client.Empty no_position = 2 [deprecated = true];
+		event_store.client.Empty no_position = 2;
 	}
 
 	message Position {
@@ -307,7 +304,7 @@ message TombstoneReq {
 message TombstoneResp {
 	oneof position_option {
 		Position position = 1;
-		event_store.client.Empty no_position = 2 [deprecated = true];
+		event_store.client.Empty no_position = 2;
 	}
 
 	message Position {

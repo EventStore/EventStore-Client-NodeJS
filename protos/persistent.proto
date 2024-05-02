@@ -34,25 +34,25 @@ message ReadReq {
 
 		message UUIDOption {
 			oneof content {
-				event_store.client.Empty structured = 1 [deprecated = true];
+				event_store.client.Empty structured = 1;
 				event_store.client.Empty string = 2;
 			}
 		}
 	}
 
 	message Ack {
-		bytes id = 1 [deprecated = true];
+		bytes id = 1;
 		repeated event_store.client.UUID ids = 2;
 	}
 
 	message Nack {
-		bytes id = 1 [deprecated = true];
+		bytes id = 1;
 		repeated event_store.client.UUID ids = 2;
 		Action action = 3;
 		string reason = 4;
 
 		enum Action {
-			Unknown = 0 [deprecated = true];
+			Unknown = 0;
 			Park = 1;
 			Retry = 2;
 			Skip = 3;
@@ -71,11 +71,11 @@ message ReadResp {
 		RecordedEvent link = 2;
 		oneof position {
 			uint64 commit_position = 3 [jstype = JS_STRING];
-			event_store.client.Empty no_position = 4 [deprecated = true];
+			event_store.client.Empty no_position = 4;
 		}
 		oneof count {
 			int32 retry_count = 5;
-			event_store.client.Empty no_retry_count = 6 [deprecated = true];
+			event_store.client.Empty no_retry_count = 6;
 		}
 		message RecordedEvent {
 			event_store.client.UUID id = 1;
@@ -107,6 +107,7 @@ message CreateReq {
 	}
 
 	message StreamOptions {
+    option deprecated = true;
 		event_store.client.StreamIdentifier stream_identifier = 1;
 		oneof revision_option {
 			uint64 revision = 2 [jstype = JS_STRING];
@@ -168,7 +169,7 @@ message CreateReq {
 			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
 			int32 checkpoint_after_ms = 15;
 		}
-		string consumer_strategy = 16 [deprecated = true];
+		string consumer_strategy = 16;
 	}
 
 	enum ConsumerStrategy {
@@ -189,7 +190,7 @@ message UpdateReq {
 			StreamOptions stream = 4 [deprecated = true];
 			AllOptions all = 5;
 		}
-		event_store.client.StreamIdentifier stream_identifier = 1;
+		event_store.client.StreamIdentifier stream_identifier = 1 [deprecated = true];
 		string group_name = 2;
 		Settings settings = 3;
 	}
@@ -278,7 +279,6 @@ message GetInfoReq {
 }
 
 message GetInfoResp {
-  option deprecated = true;
 	SubscriptionInfo subscription_info = 1;
 }
 
