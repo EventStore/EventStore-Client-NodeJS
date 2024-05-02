@@ -10,7 +10,7 @@ import { ANY, NO_STREAM } from "../constants";
 export interface DeleteStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before deleting.
-   * @default ANY
+   * @defaultValue ANY
    */
   expectedRevision?: ExpectedRevision;
 }
@@ -19,8 +19,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Soft-deletes a stream.
-     * @param streamName A stream name.
-     * @param options Deletion options.
+     * @param streamName - A stream name.
+     * @param options - Deletion options.
      */
     deleteStream(
       streamName: string,

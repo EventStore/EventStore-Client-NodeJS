@@ -20,7 +20,7 @@ export interface SubscribeToPersistentSubscriptionToAllOptions
   extends BaseOptions {
   /**
    * The buffer size to use for the persistent subscription.
-   * @default 10
+   * @defaultValue 10
    */
   bufferSize?: number;
 }
@@ -29,9 +29,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Connects to a persistent subscription.
-     * @param stream A stream name.
-     * @param group A group name.
-     * @param options Connection options.
+     * @param stream - A stream name.
+     * @param group - A group name.
+     * @param options - Connection options.
      */
     subscribeToPersistentSubscriptionToAll(
       groupName: string,

@@ -35,8 +35,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Reads the metadata for a stream.
-     * @param streamName A stream name.
-     * @param options Read options.
+     * @param streamName - A stream name.
+     * @param options - Read options.
      */
     getStreamMetadata<
       CustomMetadata extends CustomStreamMetadata = CustomStreamMetadata

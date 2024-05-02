@@ -13,7 +13,7 @@ import { metastreamOf } from "./utils/systemStreams";
 export interface SetStreamMetadataOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
-   * @default ANY
+   * @defaultValue ANY
    */
   expectedRevision?: AppendExpectedRevision;
 }
@@ -22,9 +22,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Sets metadata for steam.
-     * @param streamName A stream name.
-     * @param metadata Metadata to write.
-     * @param options Writing options.
+     * @param streamName - A stream name.
+     * @param metadata - Metadata to write.
+     * @param options - Writing options.
      */
     setStreamMetadata<MetadataType extends StreamMetadata = StreamMetadata>(
       streamName: string,

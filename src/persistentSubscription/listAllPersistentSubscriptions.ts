@@ -22,7 +22,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Lists all persistent subscriptions.
-     * @param options List persistent subscriptions options.
+     * @param options - List persistent subscriptions options.
      */
     listAllPersistentSubscriptions(
       options?: ListPersistentSubscriptionsOptions

@@ -11,12 +11,12 @@ import { debug, convertToCommandError } from "../utils";
 export interface CreateProjectionOptions extends BaseOptions {
   /**
    * Enables emitting from the projection.
-   * @default false
+   * @defaultValue false
    */
   emitEnabled?: boolean;
   /**
    * Enables tracking emitted streams.
-   * @default false
+   * @defaultValue false
    */
   trackEmittedStreams?: boolean;
 }
@@ -25,9 +25,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Creates a continuous projection.
-     * @param projectionName The name of the projection.
-     * @param query The query to run.
-     * @param options Projection options.
+     * @param projectionName - The name of the projection.
+     * @param query - The query to run.
+     * @param options - Projection options.
      */
     createProjection(
       projectionName: string,

@@ -26,9 +26,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Gets information and statistics on the specified persistent subscription and its connections.
-     * @param streamName A stream name.
-     * @param groupName A group name.
-     * @param options Get persistent subscription info options.
+     * @param streamName - A stream name.
+     * @param groupName - A group name.
+     * @param options - Get persistent subscription info options.
      */
     getPersistentSubscriptionToStreamInfo(
       streamName: string,

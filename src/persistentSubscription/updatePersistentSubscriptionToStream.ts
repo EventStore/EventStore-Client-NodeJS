@@ -13,11 +13,11 @@ declare module "../Client" {
   interface Client {
     /**
      * Updates a persistent subscription configuration.
-     * @param streamName A stream name.
-     * @param groupName A group name.
-     * @param settings PersistentSubscription settings.
+     * @param streamName - A stream name.
+     * @param groupName - A group name.
+     * @param settings - PersistentSubscription settings.
      * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
-     * @param options Command options.
+     * @param options - Command options.
      */
     updatePersistentSubscriptionToStream(
       streamName: string,

@@ -11,7 +11,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Restarts the entire projection subsystem.
-     * @param options Restart subsystem options.
+     * @param options - Restart subsystem options.
      */
     restartSubsystem(options?: RestartSubsystemOptions): Promise<void>;
   }

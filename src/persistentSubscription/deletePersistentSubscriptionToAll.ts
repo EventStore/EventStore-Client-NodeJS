@@ -15,9 +15,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Deletes a persistent subscription.
-     * @param streamName A stream name.
-     * @param groupName A group name.
-     * @param options Deletion options.
+     * @param streamName - A stream name.
+     * @param groupName - A group name.
+     * @param options - Deletion options.
      */
     deletePersistentSubscriptionToAll(
       groupName: string,
