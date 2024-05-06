@@ -53,6 +53,7 @@ const client = new EventStoreDBClient(
   try {
     const streamName = 'booking-transactions';
 
+    // define an event
     const event = jsonEvent({
       type: 'booking-initiated',
       data: {
@@ -68,8 +69,10 @@ const client = new EventStoreDBClient(
       }
     });
 
+    // append the event
     await client.appendToStream(streamName, [event]);
 
+    // read the event
     const events = client.readStream(streamName, {
       fromRevision: START,
       direction: FORWARDS,
@@ -95,15 +98,13 @@ import {
   jsonEvent,
   FORWARDS,
   START,
-  JSONEventType,
+  type JSONEventType,
 } from "@eventstore/db-client";
 
-interface Reservation {
-  reservationId: string;
-  movieId: string;
-  userId: string;
-  seatId: string;
-}
+// Create a client to connect to EventStoreDB
+const client = EventStoreDBClient.connectionString`esdb://localhost:2113`;
+
+// Define the events that can occur during a booking
 
 type SeatReservedEvent = JSONEventType<
   "seat-reserved",
@@ -125,78 +126,60 @@ type SeatChangedEvent = JSONEventType<
 
 type ReservationEvents = SeatReservedEvent | SeatChangedEvent;
 
-const client = EventStoreDBClient.connectionString`esdb://localhost:2113?tls=false`;
+// Write events to a stream that describe the history of our booking
 
-(async () => {
-  try {
-    const streamName = "booking-abc123";
-    console.log("Creating and appending events...");
+const streamName = "booking-abc123";
 
-    await createAndAppendEvents(client, streamName);
-    console.log("Reading and processing events...");
+const event = jsonEvent<SeatReservedEvent>({
+  type: "seat-reserved",
+  data: {
+    reservationId: "abc123",
+    movieId: "tt0368226",
+    userId: "nm0802995",
+    seatId: "4b",
+  },
+});
 
-    const reservation = await readAndProcessEvents(client, streamName);
-    console.log("Final reservation state:", reservation);
-  } catch (error) {
-    console.error("An error occured", error)
-  } finally {
-    await client.dispose();
-  }
-})()
+const appendResult = await client.appendToStream<ReservationEvents>(
+  streamName,
+  event
+);
 
-async function createAndAppendEvents(client: EventStoreDBClient, streamName: string): Promise<void> {
-  const seatReservedEvent = jsonEvent<SeatReservedEvent>({
-    type: "seat-reserved",
-    data: {
-      reservationId: "abc123",
-      movieId: "tt0368226",
-      userId: "nm0802995",
-      seatId: "4b",
-    },
-  });
+// By reading the events in the stream, we can construct the current state of the booking
 
-  const seatChangedEvent = jsonEvent<SeatChangedEvent>({
-    type: "seat-changed",
-    data: {
-      reservationId: "abc123",
-      newSeatId: "5c",
-    },
-  });
-
-  await client.appendToStream(streamName, [seatReservedEvent, seatChangedEvent]);
-  console.log("Events appended to stream.");
+interface Reservation {
+  reservationId: string;
+  movieId: string;
+  userId: string;
+  seatId: string;
 }
 
-async function readAndProcessEvents(client: EventStoreDBClient, streamName: string): Promise<Partial<Reservation>> {
-  const events = client.readStream<ReservationEvents>(streamName, {
-    fromRevision: START,
-    direction: FORWARDS,
-    maxCount: 10,
-  });
+const events = client.readStream<ReservationEvents>(streamName, {
+  fromRevision: START,
+  direction: FORWARDS,
+  maxCount: 10,
+});
 
-  const reservation: Partial<Reservation> = {};
+const reservation: Partial<Reservation> = {};
 
-  for await (const { event } of events) {
-    switch (event?.type) {
-      case "seat-reserved": {
-        console.log("Applying 'seat-reserved' event to reservation state.");
-        reservation.reservationId = event.data.reservationId;
-        reservation.movieId = event.data.movieId;
-        reservation.seatId = event.data.seatId;
-        reservation.userId = event.data.userId;
-        break;
-      }
-      case "seat-changed": {
-        console.log("Applying 'seat-changed' event to reservation state.");
-        reservation.seatId = event.data.newSeatId;
-        break;
-      }
-      default:
-        break;
+for await (const { event } of events) {
+  switch (event?.type) {
+    case "seat-reserved": {
+      reservation.reservationId = event.data.reservationId;
+      reservation.movieId = event.data.movieId;
+      reservation.seatId = event.data.seatId;
+      reservation.userId = event.data.userId;
+      break;
+    }
+    case "seat-changed": {
+      reservation.seatId = event.data.newSeatId;
+      break;
     }
   }
-  return reservation;
 }
+
+// Do something with our reservation
+console.log(reservation);
 ```
 
 ## Build from source
