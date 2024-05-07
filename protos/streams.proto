@@ -34,7 +34,7 @@ message ReadReq {
 			event_store.client.Empty no_filter = 8;
 		}
 		UUIDOption uuid_option = 9;
-		ControlOption control_option = 10;
+		ControlOption control_option = 10 [deprecated = true];
 
 		enum ReadDirection {
 			Forwards = 0;
@@ -84,6 +84,8 @@ message ReadReq {
 			}
 		}
 		message ControlOption {
+      option deprecated = true;
+
 			uint32 compatibility = 1;
 		}
 	}
@@ -95,9 +97,9 @@ message ReadResp {
 		SubscriptionConfirmation confirmation = 2;
 		Checkpoint checkpoint = 3;
 		StreamNotFound stream_not_found = 4;
-		uint64 first_stream_position = 5 [jstype = JS_STRING];
-		uint64 last_stream_position = 6 [jstype = JS_STRING];
-		AllStreamPosition last_all_stream_position = 7;
+		uint64 first_stream_position = 5 [jstype = JS_STRING, deprecated = true];
+		uint64 last_stream_position = 6 [jstype = JS_STRING, deprecated = true];
+		AllStreamPosition last_all_stream_position = 7 [deprecated = true];
 		CaughtUp caught_up = 8;
     FellBehind fell_behind = 9;
 	}
@@ -184,13 +186,13 @@ message AppendResp {
 
 	message WrongExpectedVersion {
 		oneof current_revision_option_20_6_0 {
-			uint64 current_revision_20_6_0 = 1;
-			event_store.client.Empty no_stream_20_6_0 = 2;
+			uint64 current_revision_20_6_0 = 1 [deprecated = true];
+			event_store.client.Empty no_stream_20_6_0 = 2 [deprecated = true];
 		}
 		oneof expected_revision_option_20_6_0 {
-			uint64 expected_revision_20_6_0 = 3;
-			event_store.client.Empty any_20_6_0 = 4;
-			event_store.client.Empty stream_exists_20_6_0 = 5;
+			uint64 expected_revision_20_6_0 = 3 [deprecated = true];
+			event_store.client.Empty any_20_6_0 = 4 [deprecated = true];
+			event_store.client.Empty stream_exists_20_6_0 = 5 [deprecated = true];
 		}
 		oneof current_revision_option {
 			uint64 current_revision = 6 [jstype = JS_STRING];

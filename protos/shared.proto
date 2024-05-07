@@ -23,6 +23,7 @@ message StreamIdentifier {
 }
 
 message AllStreamPosition {
+  option deprecated = true;
 	uint64 commit_position = 1 [jstype = JS_STRING];
 	uint64 prepare_position = 2 [jstype = JS_STRING];
 }
@@ -57,5 +58,6 @@ message MaximumAppendSizeExceeded {
 }
 
 message BadRequest {
+  option deprecated = true;
 	string message = 1;
 }

@@ -24,12 +24,13 @@ message CreateReq {
 	message Options {
 		oneof mode {
 			event_store.client.Empty one_time = 1;
-			Transient transient = 2;
+			Transient transient = 2 [deprecated = true];
 			Continuous continuous = 3;
 		}
 		string query = 4;
 
 		message Transient {
+      option deprecated = true;
 			string name = 1;
 		}
 		message Continuous {
@@ -79,7 +80,7 @@ message StatisticsReq {
 		oneof mode {
 			string name = 1;
 			event_store.client.Empty all = 2;
-			event_store.client.Empty transient = 3;
+			event_store.client.Empty transient = 3 [deprecated = true];
 			event_store.client.Empty continuous = 4;
 			event_store.client.Empty one_time = 5;
 		}
