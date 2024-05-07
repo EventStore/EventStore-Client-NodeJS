@@ -3,3 +3,4 @@ dist
 generated
 protos
 **/*.js
+**/*.test.ts

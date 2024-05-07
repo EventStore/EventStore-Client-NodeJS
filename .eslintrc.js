@@ -1,12 +1,8 @@
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint", "jsdoc"],
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jsdoc/recommended",
-  ],
+  plugins: ["@typescript-eslint", "eslint-plugin-tsdoc"],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   rules: {
     "no-constant-condition": ["error", { checkLoops: false }],
     // prettier decides
@@ -22,17 +18,6 @@ module.exports = {
     // better handled by ts itself
     "@typescript-eslint/no-unused-vars": ["off"],
 
-    "jsdoc/check-alignment": ["off"],
-    "jsdoc/check-examples": ["warn"],
-    "jsdoc/check-indentation": ["warn"],
-    "jsdoc/check-syntax": ["warn"],
-    "jsdoc/check-tag-names": ["warn", { definedTags: ["jest-environment"] }],
-    "jsdoc/newline-after-description": ["warn", "never"],
-    "jsdoc/no-types": ["error", { contexts: ["any"] }],
-    "jsdoc/require-description": ["warn"],
-    "jsdoc/require-description-complete-sentence": ["warn"],
-    "jsdoc/require-jsdoc": ["off"],
-    "jsdoc/require-param-type": ["off"],
-    "jsdoc/require-returns": ["off"],
+    "tsdoc/syntax": "warn",
   },
 };

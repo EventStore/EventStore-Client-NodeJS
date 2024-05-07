@@ -16,7 +16,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Lists projections.
-     * @param options List projections options.
+     * @param options - List projections options.
      */
     listProjections(
       options?: ListProjectionsOptions

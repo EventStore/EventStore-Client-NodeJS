@@ -19,10 +19,10 @@ declare module "../Client" {
   interface Client {
     /**
      * Updates a persistent subscription to all configuration.
-     * @param groupName A group name.
-     * @param settings PersistentSubscriptionToAll settings.
+     * @param groupName - A group name.
+     * @param settings - PersistentSubscriptionToAll settings.
      * @see {@link persistentSubscriptionToAllSettingsFromDefaults}
-     * @param options Command options.
+     * @param options - Command options.
      */
     updatePersistentSubscriptionToAll(
       groupName: string,

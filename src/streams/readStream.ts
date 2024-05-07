@@ -26,24 +26,24 @@ import { ReadStream } from "./utils/ReadStream";
 export interface ReadStreamOptions extends BaseOptions {
   /**
    * The number of events to read.
-   * @default Number.MAX_SAFE_INTEGER
+   * @defaultValue Number.MAX_SAFE_INTEGER
    */
   maxCount?: number | bigint;
   /**
    * Starts the read at the given event revision.
-   * @default START
+   * @defaultValue START
    */
   fromRevision?: ReadRevision;
   /**
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
-   * @default false
+   * @defaultValue false
    */
   resolveLinkTos?: boolean;
   /**
    * Sets the read direction of the stream.
-   * @default FORWARDS
+   * @defaultValue FORWARDS
    */
   direction?: Direction;
 }
@@ -52,8 +52,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Reads events from a given stream.
-     * @param streamName A stream name.
-     * @param options Reading options.
+     * @param streamName - A stream name.
+     * @param options - Reading options.
      */
     readStream<KnownEventType extends EventType = EventType>(
       streamName: string,

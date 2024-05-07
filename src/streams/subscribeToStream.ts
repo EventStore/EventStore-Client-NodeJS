@@ -19,14 +19,14 @@ import { Subscription } from "./utils/Subscription";
 export interface SubscribeToStreamOptions extends BaseOptions {
   /**
    * Starts the read at the given event revision.
-   * @default START
+   * @defaultValue START
    */
   fromRevision?: ReadRevision;
   /**
    * The best way to explain link resolution is when using system projections. When reading the stream `$streams` (which
    * contains all streams), each event is actually a link pointing to the first event of a stream. By enabling link
    * resolution feature, the server will also return the event targeted by the link.
-   * @default false
+   * @defaultValue false
    */
   resolveLinkTos?: boolean;
 }
@@ -35,9 +35,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Subscribe to events on the given stream.
-     * @param streamName A stream name.
-     * @param options Subscription options.
-     * @param readableOptions Readable stream options.
+     * @param streamName - A stream name.
+     * @param options - Subscription options.
+     * @param readableOptions - Readable stream options.
      */
     subscribeToStream<KnownEventType extends EventType = EventType>(
       streamName: string,

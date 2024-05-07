@@ -12,7 +12,7 @@ import { Client } from "../Client";
 export interface ReplayParkedMessagesToAllOptions extends BaseOptions {
   /**
    * When to stop replaying parked messages. Leave undefined to have no limit.
-   * @default undefined
+   * @defaultValue undefined
    */
   stopAt?: number | bigint;
 }
@@ -21,8 +21,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Replays the parked messages of a persistent subscription to $all.
-     * @param groupName A group name.
-     * @param options Replay options.
+     * @param groupName - A group name.
+     * @param options - Replay options.
      */
     replayParkedMessagesToAll(
       groupName: string,

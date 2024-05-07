@@ -27,10 +27,10 @@ declare module "../Client" {
      * server remembers where the read offset is. This allows for many different modes of operations compared to a
      * regular subscription where the client holds the read offset. The group name must be unique.
      * Available from server version 21.10 onwards.
-     * @param groupName A group name.
-     * @param settings PersistentSubscription settings.
+     * @param groupName - A group name.
+     * @param settings - PersistentSubscription settings.
      * @see {@link persistentSubscriptionToStreamSettingsFromDefaults}
-     * @param options Command options.
+     * @param options - Command options.
      */
     createPersistentSubscriptionToAll(
       groupName: string,

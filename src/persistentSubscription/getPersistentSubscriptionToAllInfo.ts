@@ -20,8 +20,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Gets information and statistics on the specified persistent subscription to $all and its connections.
-     * @param groupName A group name.
-     * @param options Get persistent subscription to all options.
+     * @param groupName - A group name.
+     * @param options - Get persistent subscription to all options.
      */
     getPersistentSubscriptionToAllInfo(
       groupName: string,

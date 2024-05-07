@@ -12,8 +12,8 @@ declare module "../Client" {
   interface Client {
     /**
      * Disables a projection.
-     * @param projectionName The name of the projection to disable.
-     * @param options Disable projection options.
+     * @param projectionName - The name of the projection to disable.
+     * @param options - Disable projection options.
      */
     disableProjection(
       projectionName: string,
@@ -21,8 +21,8 @@ declare module "../Client" {
     ): Promise<void>;
     /**
      * Aborts a projection.
-     * @param projectionName The name of the projection to disable.
-     * @param options Disable projection options.
+     * @param projectionName - The name of the projection to disable.
+     * @param options - Disable projection options.
      */
     abortProjection(
       projectionName: string,

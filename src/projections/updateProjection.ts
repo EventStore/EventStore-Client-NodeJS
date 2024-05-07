@@ -10,7 +10,7 @@ export interface UpdateProjectionOptions extends BaseOptions {
   /**
    * Enables emitting events from the projection.
    * Passing `undefined` will leave emitEnabled at its current value.
-   * @default undefined
+   * @defaultValue undefined
    */
   emitEnabled?: boolean;
 }
@@ -19,9 +19,9 @@ declare module "../Client" {
   interface Client {
     /**
      * Updates a projection.
-     * @param projectionName The name of the projection.
-     * @param query The query to run.
-     * @param options Projection options.
+     * @param projectionName - The name of the projection.
+     * @param query - The query to run.
+     * @param options - Projection options.
      */
     updateProjection(
       projectionName: string,

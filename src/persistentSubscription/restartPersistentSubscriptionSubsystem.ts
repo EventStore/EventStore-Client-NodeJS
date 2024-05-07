@@ -15,7 +15,7 @@ declare module "../Client" {
   interface Client {
     /**
      * Restarts the persistent subscription subsystem.
-     * @param options Restart subsystem options.
+     * @param options - Restart subsystem options.
      */
     restartPersistentSubscriptionSubsystem(
       options?: RestartPersistentSubscriptionSubsystemOptions

@@ -16,12 +16,12 @@ import { batchAppend } from "./batchAppend";
 export interface AppendToStreamOptions extends BaseOptions {
   /**
    * Asks the server to check the stream is at specific revision before writing events.
-   * @default ANY
+   * @defaultValue ANY
    */
   expectedRevision?: AppendExpectedRevision;
   /**
    * The batch size, in bytes.
-   * @default 3 * 1024 * 1024
+   * @defaultValue 3 * 1024 * 1024
    */
   batchAppendSize?: number;
 }
@@ -30,9 +30,9 @@ declare module "../../Client" {
   interface Client {
     /**
      * Appends events to a given stream.
-     * @param streamName A stream name.
-     * @param events Events or event to write.
-     * @param options Writing options.
+     * @param streamName - A stream name.
+     * @param events - Events or event to write.
+     * @param options - Writing options.
      */
     appendToStream<KnownEventType extends EventType = EventType>(
       streamName: string,
