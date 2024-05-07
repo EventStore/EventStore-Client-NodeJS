@@ -29,6 +29,6 @@ const esdbImage = ((): string => {
 
 export const dockerImages = {
   volumesProvisioner: "hasnat/volumes-provisioner",
-  certGen: "ghcr.io/eventstore/es-gencert-cli:1.3",
+  certGen: "docker.eventstore.com/eventstore-utils/es-gencert-cli:latest",
   esdb: esdbImage,
 };
