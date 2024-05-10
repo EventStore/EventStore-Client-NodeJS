@@ -19,9 +19,6 @@
     "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
   },
   "homepage": "https://developers.eventstore.com/clients/grpc/getting-started?codeLanguage=NodeJS",
-  "engines": {
-    "node": "^12.18.3 || >=14"
-  },
   "devDependencies": {
     "@tsconfig/node14": "^14.1.2",
     "@types/node": "^16.18.67",
