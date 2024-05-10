@@ -1,3 +1,21 @@
+## [v6.2.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v6.1.0...v6.2.0) (2024-05-10)
+
+## Features
+*  Support providing an x.509 certificate for user authentication (#361) [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/03f3afa536d5e470231655cf9ee6a91e3e71b549)
+
+## Changed
+### Updated error handling to use `NotFoundError` instead of `UnknownError` in projection operations when the projection doesn't exist 
+* Previously, the server was returning UnknownError when a projection didn't exist. EventStoreDB now returns NotFoundError. This change updates the client to use NotFoundError instead of UnknownError when a projection doesn't exist. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/7cf6ed0b0cbbe4781374c3e8c9145a653ebb456e)
+> ⚠️ This only affects users who are using EventStoreDB versions 24.6 and greater.
+
+### Expect CancelledError when node is terminated to align with server version 24.4
+* EventStoreDB recently configured the [ShutdownTimeout](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.server.kestrel.kestrelserveroptions.shutdowntimeout?view=aspnetcore-1.1) to 5s after being set to 30s in recent .NET releases resulting to different error status code returned from the server. The client now expects a CancelledError when the node is terminated. [View](https://github.com/EventStore/EventStore-Client-NodeJS/commit/3543b83e6090555f1d1900a6a1fc8330af568a87)
+> ️⚠️ This only affects users who are using EventStoreDB versions 24.4 and greater.
+
+### Miscellaneous
+* The tests are now run against Node LTS (v20.12.2 as of this release).
+* We are now using tsdoc for documentation comments as [eslint-plugin-jsdoc](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/package.json) does not support NodeJS versions below 18.
+
 ## [v6.1.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v6.0.0...v6.1.0) (2023-12-19)
 
 ## Features
