@@ -108,6 +108,4 @@ dist
 .npmrc
 package-lock.json
 
-src/__test__/utils/instances
-
 .vscode

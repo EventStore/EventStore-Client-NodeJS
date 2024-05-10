@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "paths": {
+      "@test-utils": [
+        "./src/utils"
+      ]
+    },
+    "noUnusedLocals": false
+  },
+  "references": [
+    {
+      "path": "../db-client"
+    }
+  ],
+  "include": [
+    "./src/**/*.ts",
+  ]
+}

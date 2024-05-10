@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "useUnknownInCatchVariables": false,
+    "importsNotUsedAsValues": "error",
+    "esModuleInterop": false,
+    "noUnusedLocals": true,
+  }
+}
