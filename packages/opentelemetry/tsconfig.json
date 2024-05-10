@@ -2,23 +2,15 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
-    "paths": {
-      "@test-utils": [
-        "./src/utils"
-      ]
-    },
-    "noUnusedLocals": false
+    "rootDir": "./src"
   },
   "references": [
     {
       "path": "../db-client"
-    },
-    {
-      "path": "../opentelemetry"
     }
   ],
   "include": [
     "./src/**/*.ts",
+    "./generated"
   ]
 }

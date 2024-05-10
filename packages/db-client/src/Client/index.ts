@@ -591,7 +591,7 @@ export class Client {
     });
   };
 
-  private resolveUri = async (): Promise<string> => {
+  protected resolveUri = async (): Promise<string> => {
     if (this.#nextChannelSettings?.nextEndpoint) {
       const { address, port } = this.#nextChannelSettings.nextEndpoint;
       return `${address}:${port}`;

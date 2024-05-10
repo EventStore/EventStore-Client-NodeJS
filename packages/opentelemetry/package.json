@@ -1,0 +1,44 @@
+{
+  "name": "@eventstore/opentelemetry",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "npm-run-all build:ts",
+    "build:ts": "tsc --build",
+    "build:watch": "npm-run-all build:ts-watch",
+    "build:ts-watch": "tsc --build --watch",
+    "clean": "run-s clean:*",
+    "clean:dist": "shx rm -rf ./dist",
+    "clean:buildinfo": "shx rm -rf *.tsbuildinfo"
+  },
+  "files": [
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
+  },
+  "keywords": [
+    "EventStore",
+    "EventSourcing",
+    "OpenTelemetry"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": "^12.18.3 || >=14"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/instrumentation": "^0.50.0"
+  },
+  "devDependencies": {
+    "@eventstore/db-client": "file:../db-client"
+  },
+  "peerDependencies": {
+    "@eventstore/db-client": "^6"
+  }
+}

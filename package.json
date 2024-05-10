@@ -4,14 +4,15 @@
   "scripts": {
     "build": "lerna run --stream build",
     "build:ts": "lerna run --stream build:ts",
-    "build:watch": "lerna run --stream build:watch",
+    "build:watch": "lerna run build:watch --parallel",
     "lint": "run-s -c lint:*",
     "lint:prettier": "prettier --check \"packages/*/src/**/**/!(*.d).{ts,json}\"",
     "lint:eslint": "eslint \"packages/*/src/**/*.ts\"",
     "prettier:fix": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\"",
     "clean": "lerna run --stream clean",
     "prepublishOnly": "run-s clean build test",
-    "test": "lerna run --stream test --"
+    "test": "lerna run --stream test --",
+    "postinstall": "yarn build"
   },
   "author": "Event Store Limited",
   "license": "Apache-2.0",
@@ -24,6 +25,7 @@
     "@types/node": "^16.18.67",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "lerna": "^6.6.2",

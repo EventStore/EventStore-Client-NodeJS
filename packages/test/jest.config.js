@@ -6,7 +6,9 @@ module.exports = {
   moduleNameMapper: {
     '@test-utils': '<rootDir>/src/utils',
     "^@eventstore/db-client$": "<rootDir>/../db-client/dist/index",
-    "^@eventstore/db-client/(.*)$": "<rootDir>/../db-client/$1"
+    "^@eventstore/db-client/(.*)$": "<rootDir>/../db-client/$1",
+    "^@eventstore/opentelemetry$": "<rootDir>/../opentelemetry/dist/index",
+    "^@eventstore/opentelemetry/(.*)$": "<rootDir>/../opentelemetry/$1",
   },
   globals: {
     'ts-jest': {

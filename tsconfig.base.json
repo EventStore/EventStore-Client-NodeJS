@@ -2,7 +2,6 @@
   "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "incremental": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,

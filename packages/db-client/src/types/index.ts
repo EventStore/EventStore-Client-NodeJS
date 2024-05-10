@@ -396,6 +396,8 @@ export interface StreamingRead<E> extends Readable {
 }
 
 export interface ReadableSubscription<E> extends Readable {
+  id?: string;
+
   unsubscribe(): Promise<void>;
 
   addListener(event: "close", listener: () => void): this;
@@ -506,6 +508,7 @@ export type PersistentSubscriptionToAll =
 
 export type StreamSubscription<E extends EventType = EventType> =
   ReadableSubscription<ResolvedEvent<E>> & CatchupSubscription;
+
 export type AllStreamSubscription =
   ReadableSubscription<AllStreamResolvedEvent> & CatchupSubscription;
 
