@@ -1,6 +1,6 @@
 {
   "name": "@eventstore/opentelemetry",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
@@ -36,7 +36,7 @@
     "@opentelemetry/instrumentation": "^0.50.0"
   },
   "devDependencies": {
-    "@eventstore/db-client": "*"
+    "@eventstore/db-client": "file:../db-client"
   },
   "peerDependencies": {
     "@eventstore/db-client": "^6"
