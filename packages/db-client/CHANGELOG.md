@@ -1,5 +1,10 @@
 # `@eventstore/db-client`
 
+## [v6.2.1](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v6.2.0...v6.2.1) (2024-05-13)
+
+## Bug fixes
+* Include dist in release 
+
 ## [v6.2.0](https://github.com/EventStore/EventStore-Client-NodeJS/compare/v6.1.0...v6.2.0) (2024-05-10)
 
 ## Features
