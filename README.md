@@ -8,11 +8,11 @@ EventStoreDB is the event-native database, where business events are immutably s
 
 This monorepo contains the following packages:
 
-| Subfolder                                            | Package                                                                     |
-| ---------------------------------------------------- | --------------------------------------------------------------------------- |
-| [`packages/db-client/`](packages/db-client/)         | [`@eventstore/client`](https://www.npmjs.com/package/@eventstore/db-client) |
-| [`packages/opentelemetry/`](packages/opentelemetry/) | Unpublished                                                                 |
-| [`packages/test/`](packages/test/)                   | Internal tests                                                              |
+| Subfolder                                            | Package                                                                                |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [`packages/db-client/`](packages/db-client/)         | [`@eventstore/client`](https://www.npmjs.com/package/@eventstore/db-client)            |
+| [`packages/opentelemetry/`](packages/opentelemetry/) | [`@eventstore/opentelemetry`](https://www.npmjs.com/package/@eventstore/opentelemetry) |
+| [`packages/test/`](packages/test/)                   | Internal tests                                                                         |
 
 ## Support
 
@@ -31,7 +31,7 @@ Refer to our [Contribution Guidelines]
 [event store support]: https://eventstore.com/support/
 [discuss]: https://discuss.eventstore.com/
 [discord-event-store]: https://discord.gg/Phn9pmCw3t
-[Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
+[discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [license-badge]: https://img.shields.io/npm/l/@eventstore/db-client.svg
 [license-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/LICENSE
-[Contribution Guidelines]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/CONTRIBUTING.md
+[contribution guidelines]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/CONTRIBUTING.md

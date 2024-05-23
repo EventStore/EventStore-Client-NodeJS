@@ -4,3 +4,4 @@ generated
 protos
 **/*.js
 **/*.test.ts
+samples

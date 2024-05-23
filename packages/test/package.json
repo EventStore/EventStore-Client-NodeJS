@@ -28,8 +28,8 @@
     "Test"
   ],
   "dependencies": {
-    "@eventstore/db-client": "*",
-    "@eventstore/opentelemetry": "*",
+    "@eventstore/db-client": "file:../db-client",
+    "@eventstore/opentelemetry": "file:../opentelemetry",
     "jest": "^27.5.1",
     "ts-jest": "^27.1.5"
   },

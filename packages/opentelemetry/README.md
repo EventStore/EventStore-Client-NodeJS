@@ -1,4 +1,4 @@
-# OpenTelemetry EventStoreDB Instrumentation for Node.js
+# @eventstore/opentelemetry
 
 [![license][license-badge]][license-badge-url]
 [![Github action CI workflow][ci-badge]][ci-badge-url]
