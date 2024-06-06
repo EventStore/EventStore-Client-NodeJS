@@ -1,5 +1,6 @@
 # EventStoreDB NodeJS Client
 
+
 [![license][license-badge]][license-badge-url]
 
 EventStoreDB is the event-native database, where business events are immutably stored and streamed. Designed for event-sourced, event-driven, and microservices architectures.
