@@ -34,8 +34,8 @@ import type {
 import type { ReadResp as StreamsReadResp } from "@eventstore/db-client/generated/streams_pb";
 import type { ReadResp as PersistentReadResp } from "@eventstore/db-client/generated/persistent_pb";
 import { EventStoreDBAttributes } from "./attributes";
-import type { PersistentSubscriptionImpl } from "@eventstore/db-client/src/persistentSubscription/utils/PersistentSubscriptionImpl";
-import type { Subscription } from "@eventstore/db-client/src/streams/utils/Subscription";
+import type { PersistentSubscriptionImpl } from "@eventstore/db-client/dist/persistentSubscription/utils/PersistentSubscriptionImpl";
+import type { Subscription } from "@eventstore/db-client/dist/streams/utils/Subscription";
 import { INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION } from "./version";
 import type {
   AppendToStreamParams,
