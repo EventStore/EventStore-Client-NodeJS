@@ -67,7 +67,7 @@ jobs:
       - name: Run Tests
         run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
-          EVENTSTORE_IMAGE: eventstore-ce:${{ inputs.version }}
+          EVENTSTORE_IMAGE: eventstore-staging-ce:${{ inputs.version }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.eventstore_cloud_id }}
       - name: Disconnect from tailscale
         if: ${{ always() && matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}

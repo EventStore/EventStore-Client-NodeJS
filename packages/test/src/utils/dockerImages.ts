@@ -20,7 +20,7 @@ const esdbImage = ((): string => {
     case version.startsWith("eventstore-staging-ce:"):
       return version.replace(
         "eventstore-staging-ce:",
-        "docker.eventstore.com/eventstore-staging-ce/eventstoredb-ce:"
+        "docker.eventstore.com/eventstore-staging-ce/eventstoredb-oss:"
       );
     default:
       return version;
