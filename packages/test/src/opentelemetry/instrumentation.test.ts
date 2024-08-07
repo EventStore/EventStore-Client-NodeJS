@@ -1,4 +1,10 @@
-import { createTestNode, Defer, delay, jsonTestEvents } from "@test-utils";
+import {
+  createTestNode,
+  Defer,
+  delay,
+  jsonTestEvents,
+  binaryTestEvents,
+} from "@test-utils";
 import {
   NodeTracerProvider,
   InMemorySpanExporter,
@@ -22,6 +28,7 @@ instrumentation.disable();
 import * as esdb from "@eventstore/db-client";
 import {
   AppendToStreamOptions,
+  binaryEvent,
   ResolvedEvent,
   streamNameFilter,
   WrongExpectedVersionError,
@@ -255,6 +262,77 @@ describe("instrumentation", () => {
         [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
         [EventStoreDBAttributes.DATABASE_OPERATION]: "appendToStream",
       });
+    });
+
+    test("non json events are not instrumented in subscription", async () => {
+      const defer = new Defer();
+      const { EventStoreDBClient, jsonEvent, binaryEvent } = await import(
+        "@eventstore/db-client"
+      );
+
+      const STREAM = v4();
+
+      const client = new EventStoreDBClient(
+        { endpoint: node.uri },
+        { rootCertificate: node.certs.root },
+        { username: "admin", password: "changeit" }
+      );
+
+      const handleError = jest.fn((error) => {
+        defer.reject(error);
+      });
+      const handleEvent = jest.fn((event: ResolvedEvent) => {
+        if (event.event?.streamId == STREAM) {
+          subscription.unsubscribe();
+        }
+      });
+      const handleEnd = jest.fn(defer.resolve);
+      const handleConfirmation = jest.fn();
+
+      const event1 = binaryEvent({
+        type: "SomeType",
+        data: Buffer.from("hello"),
+      });
+      const event2 = jsonEvent({
+        type: "SomeType",
+        data: {},
+      });
+
+      await client.appendToStream(STREAM, [event1, event2]);
+
+      const subscription = client
+        .subscribeToStream(STREAM, {
+          credentials: {
+            username: "admin",
+            password: "changeit",
+          },
+        })
+        .on("error", handleError)
+        .on("data", handleEvent)
+        .on("end", handleEnd)
+        .on("confirmation", handleConfirmation);
+
+      await delay(500);
+      await defer.promise;
+
+      const spans = memoryExporter.getFinishedSpans();
+
+      const childSpans = spans.filter(
+        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
+      );
+
+      expect(handleConfirmation).toHaveBeenCalledTimes(1);
+
+      expect(childSpans).toBeDefined();
+
+      expect(childSpans).toHaveLength(1);
+
+      expect(
+        childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_ID]
+      ).toBe(event2.id);
+      expect(
+        childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]
+      ).toBe(event2.type);
     });
   });
 
