@@ -227,6 +227,9 @@ export class Instrumentation extends InstrumentationBase {
 
       const resolvedEvent = resolved as ResolvedEvent;
       const metadata = resolvedEvent?.event?.metadata;
+
+      if (!resolvedEvent.event?.isJson) return;
+
       const parentContext = Instrumentation.restoreContext(metadata!);
 
       const { hostname, port } = Instrumentation.getServerAddress(uri);
@@ -250,7 +253,7 @@ export class Instrumentation extends InstrumentationBase {
       return context.with(parentContext, () => {
         const span = tracer.startSpan(spanName, {
           attributes,
-          kind: SpanKind.CLIENT,
+          kind: SpanKind.CONSUMER,
         });
 
         try {
