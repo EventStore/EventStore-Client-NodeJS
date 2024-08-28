@@ -228,9 +228,9 @@ export class Instrumentation extends InstrumentationBase {
       const resolvedEvent = resolved as ResolvedEvent;
       const metadata = resolvedEvent?.event?.metadata;
 
-      if (!resolvedEvent.event?.isJson) return;
+      if (typeof metadata !== "object" || metadata === null) return resolved;
 
-      const parentContext = Instrumentation.restoreContext(metadata!);
+      const parentContext = Instrumentation.restoreContext(metadata);
 
       const { hostname, port } = Instrumentation.getServerAddress(uri);
 
@@ -360,7 +360,10 @@ export class Instrumentation extends InstrumentationBase {
     };
   }
 
-  private static restoreContext = (metadata: esdb.MetadataType): Context => {
+  private static restoreContext = (
+    metadata: esdb.MetadataType,
+    isRemote = true
+  ): Context => {
     const traceId = metadata[TRACE_ID] as string;
     const spanId = metadata[SPAN_ID] as string;
 
@@ -368,6 +371,7 @@ export class Instrumentation extends InstrumentationBase {
       traceId,
       spanId,
       traceFlags: TraceFlags.SAMPLED,
+      isRemote,
     });
 
     return parentContext;
