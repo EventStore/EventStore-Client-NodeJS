@@ -1,10 +1,4 @@
-import {
-  createTestNode,
-  Defer,
-  delay,
-  jsonTestEvents,
-  binaryTestEvents,
-} from "@test-utils";
+import { createTestNode, Defer, delay, jsonTestEvents } from "@test-utils";
 import {
   NodeTracerProvider,
   InMemorySpanExporter,
@@ -28,7 +22,6 @@ instrumentation.disable();
 import * as esdb from "@eventstore/db-client";
 import {
   AppendToStreamOptions,
-  binaryEvent,
   ResolvedEvent,
   streamNameFilter,
   WrongExpectedVersionError,
@@ -264,7 +257,7 @@ describe("instrumentation", () => {
       });
     });
 
-    test("non json events are not instrumented in subscription", async () => {
+    test.only("events with non-json metadata are not traced in subscriptions", async () => {
       const defer = new Defer();
       const { EventStoreDBClient, jsonEvent, binaryEvent } = await import(
         "@eventstore/db-client"
@@ -292,10 +285,16 @@ describe("instrumentation", () => {
       const event1 = binaryEvent({
         type: "SomeType",
         data: Buffer.from("hello"),
+        metadata: {
+          "some-data": "some-value",
+        },
       });
       const event2 = jsonEvent({
         type: "SomeType",
-        data: {},
+        data: {
+          "some-data": "some-value",
+        },
+        metadata: 2,
       });
 
       await client.appendToStream(STREAM, [event1, event2]);
@@ -317,11 +316,17 @@ describe("instrumentation", () => {
 
       const spans = memoryExporter.getFinishedSpans();
 
+      const parentSpans = spans.filter(
+        (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
+      );
+
       const childSpans = spans.filter(
         (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
       );
 
       expect(handleConfirmation).toHaveBeenCalledTimes(1);
+
+      expect(parentSpans.length).toBe(1);
 
       expect(childSpans).toBeDefined();
 
@@ -329,10 +334,10 @@ describe("instrumentation", () => {
 
       expect(
         childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_ID]
-      ).toBe(event2.id);
+      ).toBe(event1.id);
       expect(
         childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]
-      ).toBe(event2.type);
+      ).toBe(event1.type);
     });
   });
 
