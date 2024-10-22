@@ -340,13 +340,12 @@ describe("instrumentation", () => {
       ).toBe(event1.type);
     });
 
-    test.only("linked events from deleted stream are not instrumented", async () => {
+    test("events from deleted stream are not traced", async () => {
       const defer = new Defer();
-      const { EventStoreDBClient, jsonEvent, binaryEvent } = await import(
-        "@eventstore/db-client"
-      );
+      const { EventStoreDBClient } = await import("@eventstore/db-client");
 
-      const STREAM = v4();
+      var category = v4().replace(/-/g, "");
+      const STREAM = `${category}-stream`;
 
       const client = new EventStoreDBClient(
         { endpoint: node.uri },
@@ -358,29 +357,27 @@ describe("instrumentation", () => {
         defer.reject(error);
       });
       const handleEvent = jest.fn((event: ResolvedEvent) => {
-        if (event.event?.streamId == STREAM) {
+        if (event.event?.type == "$metadata") {
           subscription.unsubscribe();
         }
       });
       const handleEnd = jest.fn(defer.resolve);
       const handleConfirmation = jest.fn();
 
-      const event = jsonEvent({
-        type: "SomeType",
-        data: {
-          "some-data": "some-value",
-        },
-        metadata: 2,
-      });
+      await client.appendToStream(
+        STREAM,
+        jsonTestEvents(1, `${category}-confirmed`)
+      );
 
-      await client.appendToStream(STREAM, [event]);
+      await client.deleteStream(STREAM);
 
       const subscription = client
-        .subscribeToStream(STREAM, {
+        .subscribeToStream(`$ce-${category}`, {
           credentials: {
             username: "admin",
             password: "changeit",
           },
+          resolveLinkTos: true,
         })
         .on("error", handleError)
         .on("data", handleEvent)
@@ -403,6 +400,7 @@ describe("instrumentation", () => {
       expect(handleConfirmation).toHaveBeenCalledTimes(1);
 
       expect(parentSpans.length).toBe(1);
+      expect(childSpans).toBeDefined();
       expect(childSpans).toHaveLength(0);
     });
   });

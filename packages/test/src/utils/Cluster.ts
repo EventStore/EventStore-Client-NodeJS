@@ -89,6 +89,7 @@ const createNodes = (
           `EVENTSTORE_CLUSTER_SIZE=${internalIPs.length}`,
           "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true",
           "EVENTSTORE_RUN_PROJECTIONS=All",
+          "EVENTSTORE_START_STANDARD_PROJECTIONS=true",
           "EVENTSTORE_LOG_CONFIG=/etc/eventstore/config/logconfig.json",
           "EVENTSTORE_DISCOVER_VIA_DNS=false",
           "EventStore__Plugins__UserCertificates__Enabled=true",
