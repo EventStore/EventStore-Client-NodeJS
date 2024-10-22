@@ -257,7 +257,7 @@ describe("instrumentation", () => {
       });
     });
 
-    test.only("events with non-json metadata are not traced in subscriptions", async () => {
+    test("events with non-json metadata are not traced in subscriptions", async () => {
       const defer = new Defer();
       const { EventStoreDBClient, jsonEvent, binaryEvent } = await import(
         "@eventstore/db-client"
@@ -338,6 +338,72 @@ describe("instrumentation", () => {
       expect(
         childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]
       ).toBe(event1.type);
+    });
+
+    test.only("linked events from deleted stream are not instrumented", async () => {
+      const defer = new Defer();
+      const { EventStoreDBClient, jsonEvent, binaryEvent } = await import(
+        "@eventstore/db-client"
+      );
+
+      const STREAM = v4();
+
+      const client = new EventStoreDBClient(
+        { endpoint: node.uri },
+        { rootCertificate: node.certs.root },
+        { username: "admin", password: "changeit" }
+      );
+
+      const handleError = jest.fn((error) => {
+        defer.reject(error);
+      });
+      const handleEvent = jest.fn((event: ResolvedEvent) => {
+        if (event.event?.streamId == STREAM) {
+          subscription.unsubscribe();
+        }
+      });
+      const handleEnd = jest.fn(defer.resolve);
+      const handleConfirmation = jest.fn();
+
+      const event = jsonEvent({
+        type: "SomeType",
+        data: {
+          "some-data": "some-value",
+        },
+        metadata: 2,
+      });
+
+      await client.appendToStream(STREAM, [event]);
+
+      const subscription = client
+        .subscribeToStream(STREAM, {
+          credentials: {
+            username: "admin",
+            password: "changeit",
+          },
+        })
+        .on("error", handleError)
+        .on("data", handleEvent)
+        .on("end", handleEnd)
+        .on("confirmation", handleConfirmation);
+
+      await delay(500);
+      await defer.promise;
+
+      const spans = memoryExporter.getFinishedSpans();
+
+      const parentSpans = spans.filter(
+        (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
+      );
+
+      const childSpans = spans.filter(
+        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
+      );
+
+      expect(handleConfirmation).toHaveBeenCalledTimes(1);
+
+      expect(parentSpans.length).toBe(1);
+      expect(childSpans).toHaveLength(0);
     });
   });
 
