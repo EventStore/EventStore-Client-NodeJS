@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import { createTestNode } from "@test-utils";
 import {
   AppendResult,
-  EventStoreDBClient,
+  KurrentDBClient,
   EventType,
   jsonEvent,
   JSONEventType,
@@ -14,11 +14,11 @@ import {
 
 describe("typed events should compile", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
@@ -161,7 +161,7 @@ describe("typed events should compile", () => {
 
     const create =
       <Command, StreamEvent extends JSONEventType>(
-        client: EventStoreDBClient,
+        client: KurrentDBClient,
         handle: (command: Command) => StreamEvent
       ) =>
       (streamName: string, command: Command): Promise<AppendResult> => {

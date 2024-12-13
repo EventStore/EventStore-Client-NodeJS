@@ -1,9 +1,9 @@
-const esdb = "db.eventstoredb";
+const kdb = "db.kdb";
 const db = "db";
 const server = "server";
 const streams = "streams";
 
-export const EventStoreDBAttributes = {
+export const KurrentDBAttributes = {
   DATABASE_USER: `${db}.user`,
   DATABASE_SYSTEM: `${db}.system`,
   DATABASE_OPERATION: `${db}.operation`,
@@ -12,10 +12,10 @@ export const EventStoreDBAttributes = {
   SERVER_PORT: `${server}.port`,
 
   STREAM_APPEND: `${streams}.append`,
-  STREAM_SUBSCIBE: `${streams}.subscribe`,
+  STREAM_SUBSCRIBE: `${streams}.subscribe`,
 
-  EVENT_STORE_STREAM: `${esdb}.stream`,
-  EVENT_STORE_SUBSCRIPTION_ID: `${esdb}.subscription.id`,
-  EVENT_STORE_EVENT_ID: `${esdb}.event.id`,
-  EVENT_STORE_EVENT_TYPE: `${esdb}.event.type`,
+  KURRENT_DB_STREAM: `${kdb}.stream`,
+  KURRENT_DB_SUBSCRIPTION_ID: `${kdb}.subscription.id`,
+  KURRENT_DB_EVENT_ID: `${kdb}.event.id`,
+  KURRENT_DB_EVENT_TYPE: `${kdb}.event.type`,
 };

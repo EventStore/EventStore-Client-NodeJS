@@ -6,19 +6,19 @@ import {
   SimpleSpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
-import { EventStoreDBInstrumentation } from "@eventstore/opentelemetry";
+import { KurrentDBInstrumentation } from "@eventstore/opentelemetry";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
 import {} from "@opentelemetry/sdk-trace-node";
 // endregion import-required-packages
 import { createTestNode } from "@test-utils";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 
 import * as esdb from "@eventstore/db-client";
 
 // region register-instrumentation
 const provider = new NodeTracerProvider();
 
-const instrumentation = new EventStoreDBInstrumentation();
+const instrumentation = new KurrentDBInstrumentation();
 
 registerInstrumentations({
   instrumentations: [instrumentation],
@@ -30,7 +30,7 @@ instrumentation.disable();
 
 describe("[sample] opentelemetry", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   // region setup-exporter
   const memoryExporter = new InMemorySpanExporter();
@@ -47,7 +47,7 @@ describe("[sample] opentelemetry", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
@@ -70,11 +70,11 @@ describe("[sample] opentelemetry", () => {
 
   test("tracing", async () => {
     // region setup-client-for-tracing
-    const { EventStoreDBClient, jsonEvent } = await import(
+    const { KurrentDBClient, jsonEvent } = await import(
       "@eventstore/db-client"
     );
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

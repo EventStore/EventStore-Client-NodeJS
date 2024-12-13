@@ -1,6 +1,6 @@
 import {
   START,
-  EventStoreDBClient,
+  KurrentDBClient,
   excludeSystemEvents,
   eventTypeFilter,
   streamNameFilter,
@@ -10,11 +10,11 @@ import { createTestNode, jsonTestEvents } from "@test-utils";
 describe("[sample] server-side-filtering", () => {
   const log = console.log;
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

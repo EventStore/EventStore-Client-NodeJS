@@ -3,7 +3,7 @@ import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionDoesNotExistError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   ROUND_ROBIN,
@@ -12,12 +12,12 @@ import {
 
 describe("getPersistentSubscriptionToStreamInfo", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
         connectionName: "getPersistentSubscriptionInfo test client",

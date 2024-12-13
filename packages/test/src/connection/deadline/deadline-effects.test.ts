@@ -1,6 +1,6 @@
 import { createTestCluster, jsonTestEvents } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   DeadlineExceededError,
 } from "@eventstore/db-client";
 
@@ -20,7 +20,7 @@ describe("deadline", () => {
       [
         "client settings",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoints: cluster.endpoints, defaultDeadline: 1 },
             { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
@@ -29,7 +29,7 @@ describe("deadline", () => {
       [
         "call options",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoints: cluster.endpoints },
             { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
@@ -40,7 +40,7 @@ describe("deadline", () => {
       [
         "call options override",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
             { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }
@@ -51,7 +51,7 @@ describe("deadline", () => {
       [
         "append",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
             { rootCertificate: cluster.certs.root },
             { username: "admin", password: "changeit" }

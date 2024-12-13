@@ -1,7 +1,7 @@
 import { createTestCluster, createTestNode, jsonTestEvents } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   StreamNotFoundError,
   TimeoutError,
   WrongExpectedVersionError,
@@ -16,7 +16,7 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       {
         endpoints: cluster.endpoints,
         // The timing of this test can be a bit variable,
@@ -69,7 +69,7 @@ describe("reconnect", () => {
     const credentials = { username: "admin", password: "changeit" };
     const STREAM_NAME = "try_get_timeout";
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       {
         endpoint: timeoutNode.uri,
         // The timing of this test can be a bit variable,

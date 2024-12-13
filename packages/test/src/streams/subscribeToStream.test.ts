@@ -11,7 +11,7 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   ResolvedEvent,
   jsonEvent,
   END,
@@ -21,7 +21,7 @@ const asyncPipeline = promisify(pipeline);
 
 describe("subscribeToStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const finishEvent = () =>
     jsonEvent({
@@ -33,7 +33,7 @@ describe("subscribeToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

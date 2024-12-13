@@ -3,14 +3,14 @@
 import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   NotFoundError,
   UnknownError,
 } from "@eventstore/db-client";
 
 describe("resetProjection", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const projection = `
     fromAll()
@@ -25,7 +25,7 @@ describe("resetProjection", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

@@ -13,7 +13,7 @@ import {
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionDoesNotExistError,
   Position,
   ROUND_ROBIN,
@@ -24,12 +24,12 @@ import {
 describe("listPersistentSubscriptionsToAll", () => {
   const supported = matchServerVersion`>=21.10.1`;
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
       },
@@ -144,12 +144,12 @@ describe("listPersistentSubscriptionsToAll", () => {
 
     describe("errors", () => {
       const emptyNode = createTestNode();
-      let client!: EventStoreDBClient;
+      let client!: KurrentDBClient;
 
       beforeAll(async () => {
         await emptyNode.up();
 
-        client = new EventStoreDBClient(
+        client = new KurrentDBClient(
           {
             endpoint: emptyNode.uri,
           },

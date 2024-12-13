@@ -2,18 +2,18 @@ import { createTestNode } from "@test-utils";
 
 import {
   PINNED,
-  EventStoreDBClient,
+  KurrentDBClient,
   persistentSubscriptionToStreamSettingsFromDefaults,
 } from "@eventstore/db-client";
 
 describe("updatePersistentSubscriptionToStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
       },

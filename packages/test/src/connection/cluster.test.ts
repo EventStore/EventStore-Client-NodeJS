@@ -1,5 +1,5 @@
 import { collect, createTestCluster } from "@test-utils";
-import { jsonEvent, EventStoreDBClient } from "@eventstore/db-client";
+import { jsonEvent, KurrentDBClient } from "@eventstore/db-client";
 
 describe("cluster", () => {
   const cluster = createTestCluster();
@@ -15,7 +15,7 @@ describe("cluster", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       { endpoints: cluster.endpoints },
       { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
@@ -33,7 +33,7 @@ describe("cluster", () => {
   test("maxDiscoverAttempts", async () => {
     const maxDiscoverAttempts = 3;
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       {
         endpoints: [
           { address: "localhost", port: 8888 },
@@ -64,7 +64,7 @@ describe("cluster", () => {
     const client2DiscoveryInterval = 5_000;
 
     const client1Start = Date.now();
-    const client1 = new EventStoreDBClient({
+    const client1 = new KurrentDBClient({
       endpoints,
       maxDiscoverAttempts,
       discoveryInterval: client1DiscoveryInterval,
@@ -77,7 +77,7 @@ describe("cluster", () => {
     const client1Duration = Date.now() - client1Start;
 
     const client2Start = Date.now();
-    const client2 = new EventStoreDBClient({
+    const client2 = new KurrentDBClient({
       endpoints,
       maxDiscoverAttempts,
       discoveryInterval: client2DiscoveryInterval,

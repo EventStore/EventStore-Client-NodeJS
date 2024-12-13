@@ -1,5 +1,5 @@
 import { Channel } from "@grpc/grpc-js";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 
 jest.mock("@grpc/grpc-js/build/src/channel.js");
 const ChannelMock = Channel as jest.Mock<Channel>;
@@ -96,12 +96,12 @@ describe("keepAlive settings", () => {
       test.each([
         [
           "connectionString",
-          () => EventStoreDBClient.connectionString(connectionString),
+          () => KurrentDBClient.connectionString(connectionString),
         ],
         [
           "constructor",
           () =>
-            new EventStoreDBClient({
+            new KurrentDBClient({
               endpoint,
               ...constructorOptions,
             }),
@@ -134,12 +134,12 @@ describe("keepAlive settings", () => {
         [
           "connectionString",
           (option: string, value: number) =>
-            EventStoreDBClient.connectionString`esdb://host?${option}=${value}`,
+            KurrentDBClient.connectionString`esdb://host?${option}=${value}`,
         ],
         [
           "constructor",
           (option: string, value: number) =>
-            new EventStoreDBClient({ endpoint, [option]: value }),
+            new KurrentDBClient({ endpoint, [option]: value }),
         ],
       ])("%s", (_, testCase) => {
         expect(() => testCase(option, value)).toThrowErrorMatchingSnapshot();
@@ -152,12 +152,12 @@ describe("keepAlive settings", () => {
       [
         "connectionString",
         (value: number) =>
-          EventStoreDBClient.connectionString`esdb://host?keepAliveInterval=${value}`,
+          KurrentDBClient.connectionString`esdb://host?keepAliveInterval=${value}`,
       ],
       [
         "constructor",
         (value: number) =>
-          new EventStoreDBClient({ endpoint, keepAliveInterval: value }),
+          new KurrentDBClient({ endpoint, keepAliveInterval: value }),
       ],
     ])("%s", (_, testCase) => {
       for (const keepAliveInterval of [0, 1, 10, 1000, 9999]) {

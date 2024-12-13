@@ -34,7 +34,7 @@ export interface BaseOptions {
 }
 
 /**
- * A structure referring to a potential logical record position in the EventStoreDB transaction file.
+ * A structure referring to a potential logical record position in the KurrentDB transaction file.
  */
 export type Position = {
   commit: bigint;
@@ -53,10 +53,10 @@ export type ReadPosition =
 
 /**
  * Constants used for expected version control. The use of expected version can be a bit tricky especially when
- * discussing assurances given by the EventStoreDB server.
+ * discussing assurances given by the KurrentDB server.
  *
- * The EventStoreDB server will assure idempotency for all operations using any value in ExpectedVersion except
- * {@link ANY}. When using {@link ANY}., the EventStoreDB server will do its best to assure
+ * The KurrentDB server will assure idempotency for all operations using any value in ExpectedVersion except
+ * {@link ANY}. When using {@link ANY}., the KurrentDB server will do its best to assure
  * idempotency but will not guarantee idempotency.
  */
 export type ExpectedRevision =
@@ -105,7 +105,7 @@ export interface AppendResult {
    */
   nextExpectedRevision: bigint;
   /**
-   * The logical record position in the EventStoreDB transaction file.
+   * The logical record position in the KurrentDB transaction file.
    */
   position?: Position;
 }

@@ -367,7 +367,7 @@ export class Cluster {
       },
       networks: {
         clusternetwork: {
-          name: `${this.id}.eventstoredb.local`,
+          name: `${this.id}.kurrentdb.local`,
           driver: "bridge",
           ipam: {
             driver: "default",

@@ -4,7 +4,7 @@ import {
   WrongExpectedVersionError,
   StreamDeletedError,
   NO_STREAM,
-  EventStoreDBClient,
+  KurrentDBClient,
   BACKWARDS,
   END,
 } from "@eventstore/db-client";
@@ -12,11 +12,11 @@ import {
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {
     const node = createTestNode();
-    let client!: EventStoreDBClient;
+    let client!: KurrentDBClient;
 
     beforeAll(async () => {
       await node.up();
-      client = new EventStoreDBClient(
+      client = new KurrentDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }

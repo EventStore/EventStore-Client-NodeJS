@@ -2,7 +2,7 @@ import { createTestNode } from "@test-utils";
 import {
   binaryEvent,
   BinaryEventType,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   JSONEventType,
   persistentSubscriptionToStreamSettingsFromDefaults,
@@ -10,11 +10,11 @@ import {
 
 describe("typed events should compile", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

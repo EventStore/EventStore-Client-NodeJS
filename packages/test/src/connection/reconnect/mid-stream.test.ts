@@ -8,7 +8,7 @@ import {
 } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   CancelledError,
 } from "@eventstore/db-client";
 
@@ -21,7 +21,7 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       { endpoints: cluster.endpoints },
       { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }

@@ -1,7 +1,7 @@
 import { createTestNode } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionExistsError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
@@ -9,12 +9,12 @@ import {
 
 describe("createPersistentSubscriptionToStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
       },

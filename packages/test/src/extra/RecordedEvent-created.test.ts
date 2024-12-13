@@ -1,13 +1,13 @@
 import { createTestNode, jsonTestEvents, delay } from "@test-utils";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 
 describe("RecordedEvent created", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

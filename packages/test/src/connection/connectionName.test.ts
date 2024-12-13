@@ -1,9 +1,9 @@
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 
 describe("connectionName", () => {
   test("constructor", async () => {
     const CONNECTION_NAME = "my great connection";
-    const client = new EventStoreDBClient({
+    const client = new KurrentDBClient({
       endpoint: "somewhere",
       connectionName: CONNECTION_NAME,
     });
@@ -13,13 +13,13 @@ describe("connectionName", () => {
 
   test("connection string", async () => {
     const CONNECTION_NAME = "my great connection";
-    const client = EventStoreDBClient.connectionString`esdb://host?connectionName=${CONNECTION_NAME}`;
+    const client = KurrentDBClient.connectionString`esdb://host?connectionName=${CONNECTION_NAME}`;
 
     expect(client.connectionName).toBe(CONNECTION_NAME);
   });
 
   test("default", async () => {
-    const client = new EventStoreDBClient({
+    const client = new KurrentDBClient({
       endpoint: "somewhere",
     });
 

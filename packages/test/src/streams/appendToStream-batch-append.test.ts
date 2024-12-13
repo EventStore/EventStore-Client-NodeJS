@@ -7,20 +7,20 @@ import {
   matchServerVersion,
   optionalDescribe,
 } from "@test-utils";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 import { StreamsClient } from "@eventstore/db-client/generated/streams_grpc_pb";
 
 describe("appendToStream - batch append", () => {
   const supported = matchServerVersion`>=21.10`;
 
   const node = createTestNode();
-  let client!: EventStoreDBClient;
-  let batchSpy!: jest.SpiedFunction<EventStoreDBClient["GRPCStreamCreator"]>;
-  let executeSpy!: jest.SpiedFunction<EventStoreDBClient["execute"]>;
+  let client!: KurrentDBClient;
+  let batchSpy!: jest.SpiedFunction<KurrentDBClient["GRPCStreamCreator"]>;
+  let executeSpy!: jest.SpiedFunction<KurrentDBClient["execute"]>;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
@@ -120,12 +120,12 @@ describe("appendToStream - batch append", () => {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-function spyOn(this: EventStoreDBClient, method: string) {
+function spyOn(this: KurrentDBClient, method: string) {
   return jest.spyOn(this, method as never) as any;
 }
 
 function extractBatchStream(
-  this: EventStoreDBClient,
+  this: KurrentDBClient,
   clientConstructor: any,
   name: any,
   _: any,

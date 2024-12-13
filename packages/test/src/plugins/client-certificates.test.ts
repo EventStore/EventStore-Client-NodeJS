@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createTestNode, jsonTestEvents } from "@test-utils";
-import { AccessDeniedError, EventStoreDBClient } from "@eventstore/db-client";
+import { AccessDeniedError, KurrentDBClient } from "@eventstore/db-client";
 
 describe("client certificates", () => {
   const node = createTestNode();
@@ -18,7 +18,7 @@ describe("client certificates", () => {
       [
         "userCertFile",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
@@ -29,7 +29,7 @@ describe("client certificates", () => {
       [
         "userKeyFile",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
@@ -49,12 +49,12 @@ describe("client certificates", () => {
       [
         "userCertFile",
         () =>
-          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userCertFile=${node.certPath.admin.certPath}`,
+          KurrentDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userCertFile=${node.certPath.admin.certPath}`,
       ],
       [
         "userKeyFile",
         () =>
-          EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}`,
+          KurrentDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}`,
       ],
     ])("connection string with %s only", (_, connection) => {
       try {
@@ -66,10 +66,10 @@ describe("client certificates", () => {
   });
 
   describe("client initialized with only the admin certificate", () => {
-    let client: EventStoreDBClient;
+    let client: KurrentDBClient;
 
     beforeEach(() => {
-      client = new EventStoreDBClient(
+      client = new KurrentDBClient(
         { endpoint: node.uri },
         {
           rootCertificate: node.certs.root,
@@ -104,7 +104,7 @@ describe("client certificates", () => {
   });
 
   test("user credentials takes precedence over the client certificate during initialization", async () => {
-    const clientWithCredentials = new EventStoreDBClient(
+    const clientWithCredentials = new KurrentDBClient(
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
@@ -126,7 +126,7 @@ describe("client certificates", () => {
   });
 
   test("When the client is initialized with invalid certificate, user credentials take precendence if overriden during a call", async () => {
-    const clientWithBadCertificate = new EventStoreDBClient(
+    const clientWithBadCertificate = new KurrentDBClient(
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,

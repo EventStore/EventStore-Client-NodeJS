@@ -1,5 +1,5 @@
 import { collect, createTestCluster, jsonTestEvents } from "@test-utils";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 
 describe("Channel", () => {
   const cluster = createTestCluster();
@@ -13,7 +13,7 @@ describe("Channel", () => {
   });
 
   test("a single client should connect to a single node", async () => {
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       {
         endpoints: cluster.endpoints,
         nodePreference: "random",

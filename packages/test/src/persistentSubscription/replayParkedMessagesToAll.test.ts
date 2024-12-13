@@ -10,7 +10,7 @@ import {
 
 import {
   AccessDeniedError,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   PARK,
   PersistentSubscriptionDoesNotExistError,
@@ -23,12 +23,12 @@ import {
 describe("replayParkedMessagesToAll", () => {
   const supported = matchServerVersion`>=21.10.1`;
   const cluster = createTestCluster();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }

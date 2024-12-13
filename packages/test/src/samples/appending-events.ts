@@ -3,7 +3,7 @@ import {
   NO_STREAM,
   START,
   FORWARDS,
-  EventStoreDBClient,
+  KurrentDBClient,
   JSONEventType,
   AppendExpectedRevision,
   WrongExpectedVersionError,
@@ -13,11 +13,11 @@ import { v4 as uuid } from "uuid";
 
 describe("[sample] appending-events", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

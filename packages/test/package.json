@@ -2,7 +2,7 @@
   "name": "@eventstore/test",
   "version": "0.0.1",
   "private": true,
-  "description": "EventStoreDB Client Tests",
+  "description": "KurrentDB Client Tests",
   "scripts": {
     "build": "npm-run-all build:ts*",
     "build:ts": "tsc --build",

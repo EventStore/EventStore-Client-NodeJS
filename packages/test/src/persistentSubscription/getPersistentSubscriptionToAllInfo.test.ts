@@ -11,7 +11,7 @@ import {
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionDoesNotExistError,
   persistentSubscriptionToAllSettingsFromDefaults,
   Position,
@@ -23,12 +23,12 @@ import {
 describe("getPersistentSubscriptionToAllInfo", () => {
   const supported = matchServerVersion`>=21.10.1`;
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
       },

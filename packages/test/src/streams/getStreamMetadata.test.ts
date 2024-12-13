@@ -1,13 +1,13 @@
 import { createTestNode, jsonTestEvents } from "@test-utils";
-import { EventStoreDBClient, StreamMetadata } from "@eventstore/db-client";
+import { KurrentDBClient, StreamMetadata } from "@eventstore/db-client";
 
 describe("getStreamMetadata", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

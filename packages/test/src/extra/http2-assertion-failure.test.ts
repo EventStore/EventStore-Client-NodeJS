@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { createInsecureTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   NO_STREAM,
   ResolvedEvent,
   START,
@@ -9,12 +9,12 @@ import {
 
 describe("http2 assertion failure", () => {
   const node = createInsecureTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient({ endpoint: node.uri }, { insecure: true });
+    client = new KurrentDBClient({ endpoint: node.uri }, { insecure: true });
   });
 
   afterAll(async () => {

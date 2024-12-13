@@ -4,9 +4,9 @@
 import NodeEnvironment = require("jest-environment-node");
 
 import { Cluster } from "./Cluster";
-import { EventStoreDBClient } from "@eventstore/db-client/dist/index";
+import { KurrentDBClient } from "@eventstore/db-client/dist/index";
 
-async function extractVersion(this: EventStoreDBClient) {
+async function extractVersion(this: KurrentDBClient) {
   const capabilities = await this.capabilities;
   return capabilities;
 }
@@ -15,7 +15,7 @@ const checkCapabilities = async () => {
   const node = new Cluster(1);
   await node.up();
 
-  const client = new EventStoreDBClient(
+  const client = new KurrentDBClient(
     {
       endpoint: node.uri,
     },

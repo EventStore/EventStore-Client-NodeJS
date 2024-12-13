@@ -14,7 +14,7 @@ import {
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionToAll,
   PINNED,
   Position,
@@ -26,7 +26,7 @@ describe("listAllPersistentSubscriptions", () => {
   const psToAllSupported = matchServerVersion`>=21.10.1`;
 
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
   const created: Array<CreatedPSToAll | CreatedPS> = [];
   let psOfInterestToAll: CreatedPSToAll;
   let psOfInterestToStream: CreatedPS;
@@ -34,7 +34,7 @@ describe("listAllPersistentSubscriptions", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
       },
@@ -176,12 +176,12 @@ describe("listAllPersistentSubscriptions", () => {
 
   describe("errors", () => {
     const emptyNode = createTestNode();
-    let client!: EventStoreDBClient;
+    let client!: KurrentDBClient;
 
     beforeAll(async () => {
       await emptyNode.up();
 
-      client = new EventStoreDBClient(
+      client = new KurrentDBClient(
         {
           endpoint: emptyNode.uri,
         },

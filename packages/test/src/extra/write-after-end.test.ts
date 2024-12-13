@@ -10,7 +10,7 @@ import {
 import {
   CancelledError,
   EventData,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   UnavailableError,
 } from "@eventstore/db-client";
@@ -48,7 +48,7 @@ describe("write after end", () => {
     );
     await node.up();
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
@@ -88,7 +88,7 @@ describe("write after end", () => {
       const node = createTestNode();
       await node.up();
 
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }

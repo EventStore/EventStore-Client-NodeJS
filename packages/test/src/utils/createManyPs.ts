@@ -1,5 +1,5 @@
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionToStreamSettings,
   persistentSubscriptionToStreamSettingsFromDefaults,
   PersistentSubscriptionToAllSettings,
@@ -13,7 +13,7 @@ export type CreatedPS = [
 ];
 
 export const createManyPs =
-  (client: EventStoreDBClient) =>
+  (client: KurrentDBClient) =>
   async (
     streamName: (i: number) => string,
     groupName: (i: number) => string,
@@ -43,7 +43,7 @@ export type CreatedPSToAll = [
 ];
 
 export const createManyPsToAll =
-  (client: EventStoreDBClient) =>
+  (client: KurrentDBClient) =>
   async (
     groupName: (i: number) => string,
     settingsChanges: Partial<PersistentSubscriptionToAllSettings>[]

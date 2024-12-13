@@ -2,7 +2,7 @@
 
 import {
   AllStreamResolvedEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   JSONEventType,
   PARK,
@@ -26,12 +26,12 @@ describe("[sample] persistent-subscriptions", () => {
   const node = createTestNode();
   const log = console.log;
 
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

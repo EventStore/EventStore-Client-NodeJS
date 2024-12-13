@@ -6,17 +6,17 @@ import {
   matchServerVersion,
   optionalDescribe,
 } from "@test-utils";
-import { EventStoreDBClient, jsonEvent } from "@eventstore/db-client";
+import { KurrentDBClient, jsonEvent } from "@eventstore/db-client";
 
 describe("appendToStream - batch append - flood", () => {
   const supported = matchServerVersion`>=21.10`;
 
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

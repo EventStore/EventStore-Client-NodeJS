@@ -1,7 +1,7 @@
 import { createTestCluster, delay, getCurrentConnection } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   UnavailableError,
 } from "@eventstore/db-client";
 
@@ -20,7 +20,7 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       {
         endpoints: cluster.endpoints,
         // The timing of this test can be a bit variable,

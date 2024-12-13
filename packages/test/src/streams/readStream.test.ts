@@ -10,7 +10,7 @@ import {
   optionalDescribe,
 } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   BACKWARDS,
   END,
   jsonEvent,
@@ -25,14 +25,14 @@ import {
 
 describe("readStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
   let appendResult: AppendResult;
   const STREAM_NAME = "test_stream_name";
   const OUT_OF_STREAM_NAME = "out_of_stream_name";
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

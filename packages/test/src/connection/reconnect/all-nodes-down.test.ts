@@ -1,7 +1,7 @@
 import { collect, createTestCluster, delay } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   UnavailableError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   StreamNotFoundError,
@@ -14,12 +14,12 @@ const STREAM_NAME = "my_stream";
 
 describe("reconnect", () => {
   const cluster = createTestCluster();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoints: cluster.endpoints,
         // The timing of this test can be a bit variable,
@@ -54,7 +54,7 @@ describe("reconnect", () => {
     expect(firstEvent?.data).toStrictEqual({ message: "test" });
     expect(firstEvent?.type).toBe("first-append");
 
-    // make successfull subscription to stream
+    // make successful subscription to stream
     const firstCreateSubscription =
       await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
@@ -68,7 +68,7 @@ describe("reconnect", () => {
     expect(firstDeleteStream).toBeDefined();
     await expect(
       collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
-    ).rejects.toThrowError(StreamNotFoundError);
+    ).rejects.toThrow(StreamNotFoundError);
 
     // Kill all nodes
     for (const endpoint of cluster.endpoints) {
@@ -85,7 +85,7 @@ describe("reconnect", () => {
         // batch append triggers reconnect as soon as stream drops, so we need to force regular append
         { credentials: { username: "admin", password: "changeit" } }
       )
-    ).rejects.toThrowError(UnavailableError);
+    ).rejects.toThrow(UnavailableError);
     // read the stream
     await expect(async () => {
       let count = 0;
@@ -95,7 +95,7 @@ describe("reconnect", () => {
     }).rejects.toThrowErrorMatchingInlineSnapshot(
       '"Failed to discover after 10 attempts."'
     );
-    // create subsctiption
+    // create subscription
     await expect(
       client.createPersistentSubscriptionToStream(
         STREAM_NAME,
@@ -133,7 +133,7 @@ describe("reconnect", () => {
     }).rejects.toThrowErrorMatchingInlineSnapshot(
       '"Failed to discover after 10 attempts."'
     );
-    // create subsctiption
+    // create subscription
     await expect(
       client.createPersistentSubscriptionToStream(
         STREAM_NAME,
@@ -172,18 +172,18 @@ describe("reconnect", () => {
     expect(reconnectEvent?.data).toStrictEqual({ message: "test" });
     expect(reconnectEvent?.type).toBe("reconnect-append");
 
-    const reconndectedCreateSubscription =
+    const reconnectedCreateSubscription =
       await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         "fourth-test-group",
         persistentSubscriptionToStreamSettingsFromDefaults()
       );
-    expect(reconndectedCreateSubscription).toBeUndefined();
+    expect(reconnectedCreateSubscription).toBeUndefined();
 
     const reconnectedDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(reconnectedDeleteStream).toBeDefined();
     await expect(
       collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
-    ).rejects.toThrowError(StreamNotFoundError);
+    ).rejects.toThrow(StreamNotFoundError);
   });
 });

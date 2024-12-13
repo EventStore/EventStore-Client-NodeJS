@@ -3,7 +3,7 @@ import { Channel } from "@grpc/grpc-js";
 import {
   BaseOptions,
   DNSClusterOptions,
-  EventStoreDBClient,
+  KurrentDBClient,
 } from "@eventstore/db-client";
 
 /*
@@ -60,12 +60,12 @@ describe("deadline", () => {
     test.each([
       [
         "connectionString",
-        () => EventStoreDBClient.connectionString(connectionString),
+        () => KurrentDBClient.connectionString(connectionString),
       ],
       [
         "constructor",
         () =>
-          new EventStoreDBClient({
+          new KurrentDBClient({
             endpoint: "host:1234",
             ...constructorOptions,
           }),
@@ -124,12 +124,12 @@ describe("deadline", () => {
     test.each([
       [
         "connectionString",
-        () => EventStoreDBClient.connectionString(connectionString),
+        () => KurrentDBClient.connectionString(connectionString),
       ],
       [
         "constructor",
         () =>
-          new EventStoreDBClient({
+          new KurrentDBClient({
             endpoint: "host:1234",
             ...constructorOptions,
           }),

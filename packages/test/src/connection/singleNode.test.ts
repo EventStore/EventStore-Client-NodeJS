@@ -1,5 +1,5 @@
 import { collect, createTestNode } from "@test-utils";
-import { EventStoreDBClient, jsonEvent } from "@eventstore/db-client";
+import { KurrentDBClient, jsonEvent } from "@eventstore/db-client";
 
 describe("singleNodeConnection", () => {
   const node = createTestNode();
@@ -15,7 +15,7 @@ describe("singleNodeConnection", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

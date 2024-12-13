@@ -7,7 +7,7 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   persistentSubscriptionToAllSettingsFromDefaults,
   UnsupportedError,
 } from "@eventstore/db-client";
@@ -15,12 +15,12 @@ import {
 describe("deletePersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       {
         endpoint: node.uri,
       },

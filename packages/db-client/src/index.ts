@@ -3,7 +3,7 @@ export * from "./projections";
 export * from "./streams";
 
 export {
-  Client as EventStoreDBClient,
+  Client as KurrentDBClient,
   DNSClusterOptions,
   GossipClusterOptions,
   SingleNodeOptions,

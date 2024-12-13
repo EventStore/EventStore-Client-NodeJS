@@ -1,6 +1,6 @@
 import { collect, jsonTestEvents, optionalDescribe } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   NodePreference,
   NotLeaderError,
@@ -18,14 +18,14 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
     [
       "connectionString",
       (nodePreference?: NodePreference) =>
-        EventStoreDBClient.connectionString`esdb+discover://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud${
+        KurrentDBClient.connectionString`esdb+discover://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud${
           nodePreference ? `?nodePreference=${nodePreference}` : ""
         }`,
     ],
     [
       "new client",
       (nodePreference?: NodePreference) =>
-        new EventStoreDBClient({
+        new KurrentDBClient({
           discover: {
             address: `${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud`,
             port: 2113,

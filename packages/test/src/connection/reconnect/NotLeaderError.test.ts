@@ -1,7 +1,7 @@
 import { createTestCluster, getCurrentConnection } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   NotLeaderError,
   FOLLOWER,
   EndPoint,
@@ -16,7 +16,7 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
+    const client = new KurrentDBClient(
       {
         endpoints: cluster.endpoints,
         nodePreference: FOLLOWER,

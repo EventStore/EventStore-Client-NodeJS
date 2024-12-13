@@ -9,7 +9,7 @@ import { createTestNode, jsonTestEvents } from "@test-utils";
 import {
   AccessDeniedError,
   ChannelCredentialOptions,
-  EventStoreDBClient,
+  KurrentDBClient,
 } from "@eventstore/db-client";
 
 describe("client certificates (with deprecated credential options)", () => {
@@ -28,7 +28,7 @@ describe("client certificates (with deprecated credential options)", () => {
       [
         "certChain only",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
@@ -39,7 +39,7 @@ describe("client certificates (with deprecated credential options)", () => {
       [
         "privateKey only",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
@@ -50,7 +50,7 @@ describe("client certificates (with deprecated credential options)", () => {
       [
         "both privateKey and certChain",
         () =>
-          new EventStoreDBClient(
+          new KurrentDBClient(
             { endpoint: node.uri },
             {
               rootCertificate: node.certs.root,
@@ -75,10 +75,10 @@ describe("client certificates (with deprecated credential options)", () => {
   });
 
   describe("client initialized with only the admin certificate", () => {
-    let client: EventStoreDBClient;
+    let client: KurrentDBClient;
 
     beforeEach(() => {
-      client = new EventStoreDBClient(
+      client = new KurrentDBClient(
         { endpoint: node.uri },
         {
           rootCertificate: node.certs.root,
@@ -113,7 +113,7 @@ describe("client certificates (with deprecated credential options)", () => {
   });
 
   test("user credentials takes precedence over the client certificate during initialization", async () => {
-    const clientWithCredentials = new EventStoreDBClient(
+    const clientWithCredentials = new KurrentDBClient(
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,
@@ -135,7 +135,7 @@ describe("client certificates (with deprecated credential options)", () => {
   });
 
   test("When the client is initialized with invalid certificate, user credentials take precendence if overriden during a call", async () => {
-    const clientWithBadCertificate = new EventStoreDBClient(
+    const clientWithBadCertificate = new KurrentDBClient(
       { endpoint: node.uri },
       {
         rootCertificate: node.certs.root,

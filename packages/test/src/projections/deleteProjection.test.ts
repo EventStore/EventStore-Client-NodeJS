@@ -3,7 +3,7 @@
 import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   RUNNING,
   DELETING,
   STOPPED,
@@ -14,7 +14,7 @@ import {
 
 describe("deleteProjection", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const projection = `
   fromAll()
@@ -29,7 +29,7 @@ describe("deleteProjection", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

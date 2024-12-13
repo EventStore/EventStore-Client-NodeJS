@@ -1,5 +1,5 @@
 import { collect, createTestNode } from "@test-utils";
-import { EventStoreDBClient, AccessDeniedError } from "@eventstore/db-client";
+import { KurrentDBClient, AccessDeniedError } from "@eventstore/db-client";
 
 describe("defaultCredentials", () => {
   const node = createTestNode();
@@ -14,7 +14,7 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.certs.root },
         { username: "admin", password: "changeit" }
@@ -33,7 +33,7 @@ describe("defaultCredentials", () => {
     });
 
     test("good override", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoint: node.uri },
         { rootCertificate: node.certs.root },
         { username: "AzureDiamond", password: "hunter2" }

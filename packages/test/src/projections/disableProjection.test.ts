@@ -4,7 +4,7 @@ import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
   ABORTED,
-  EventStoreDBClient,
+  KurrentDBClient,
   NotFoundError,
   RUNNING,
   STOPPED,
@@ -13,7 +13,7 @@ import {
 
 describe("disable / abort", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const projection = `
   fromAll()
@@ -28,7 +28,7 @@ describe("disable / abort", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }

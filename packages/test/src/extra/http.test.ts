@@ -1,12 +1,12 @@
 import { createInsecureTestCluster, createTestCluster } from "@test-utils";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@eventstore/db-client";
 
 describe("http api", () => {
   interface PingResult {
     msgTypeId: number;
     text: string;
   }
-  function ping(this: EventStoreDBClient) {
+  function ping(this: KurrentDBClient) {
     return this.HTTPRequest<PingResult>("GET", "/ping", {});
   }
   const goodPing = {
@@ -26,7 +26,7 @@ describe("http api", () => {
     });
 
     test("dns", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoints: cluster.endpoints },
         { rootCertificate: cluster.certs.root }
       );
@@ -36,7 +36,7 @@ describe("http api", () => {
     });
 
     test("ip", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         {
           endpoints: cluster.endpoints.map(({ address: _, port }) => ({
             address: "127.0.0.1",
@@ -51,7 +51,7 @@ describe("http api", () => {
     });
 
     test("error transform", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoints: cluster.endpoints },
         { rootCertificate: cluster.certs.root }
       );
@@ -64,7 +64,7 @@ describe("http api", () => {
         }
       }
 
-      function nonsense(this: EventStoreDBClient) {
+      function nonsense(this: KurrentDBClient) {
         return this.HTTPRequest<PingResult>("POST", "/asdpoijsad", {
           transformError: (statusCode, statusMessage) => {
             if (statusCode === 404) {
@@ -96,7 +96,7 @@ describe("http api", () => {
     });
 
     test("dns", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoints: cluster.endpoints },
         { insecure: true }
       );
@@ -106,7 +106,7 @@ describe("http api", () => {
     });
 
     test("ip", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         {
           endpoints: cluster.endpoints.map(({ address: _, port }) => ({
             address: "127.0.0.1",
@@ -121,7 +121,7 @@ describe("http api", () => {
     });
 
     test("error transform", async () => {
-      const client = new EventStoreDBClient(
+      const client = new KurrentDBClient(
         { endpoints: cluster.endpoints },
         { insecure: true }
       );
@@ -134,7 +134,7 @@ describe("http api", () => {
         }
       }
 
-      function nonsense(this: EventStoreDBClient) {
+      function nonsense(this: KurrentDBClient) {
         return this.HTTPRequest<PingResult>("POST", "/asdpoijsad", {
           transformError: (statusCode, statusMessage) => {
             if (statusCode === 404) {

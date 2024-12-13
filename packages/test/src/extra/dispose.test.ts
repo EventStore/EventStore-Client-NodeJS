@@ -12,7 +12,7 @@ import {
   optionalDescribe,
 } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   persistentSubscriptionToAllSettingsFromDefaults,
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
@@ -23,11 +23,11 @@ describe("dispose", () => {
   const supported = matchServerVersion`>=21.10`;
 
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoint: node.uri },
       { rootCertificate: node.certs.root },
       { username: "admin", password: "changeit" }
@@ -47,7 +47,7 @@ describe("dispose", () => {
     const STREAM_NAME_2 = uuid();
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents(100), {
-      // We dont want to use a stream for this, so we can use the same number regardless of server support.
+      // We don't want to use a stream for this, so we can use the same number regardless of server support.
       credentials: { username: "admin", password: "changeit" },
     });
 
@@ -389,7 +389,7 @@ describe("dispose", () => {
   });
 });
 
-function extractKnownStreams(this: EventStoreDBClient): Set<Stream> {
+function extractKnownStreams(this: KurrentDBClient): Set<Stream> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (this as any).disposableStreams;
 }

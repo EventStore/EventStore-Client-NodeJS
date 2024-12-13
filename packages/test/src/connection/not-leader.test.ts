@@ -4,7 +4,7 @@ import {
   FOLLOWER,
   ErrorType,
   NotLeaderError,
-  EventStoreDBClient,
+  KurrentDBClient,
   BACKWARDS,
   END,
 } from "@eventstore/db-client";
@@ -23,7 +23,7 @@ describe("not-leader", () => {
   });
 
   test("should get an error here", async () => {
-    const followerClient = new EventStoreDBClient(
+    const followerClient = new KurrentDBClient(
       {
         endpoints: cluster.endpoints,
         nodePreference: FOLLOWER,
@@ -39,7 +39,7 @@ describe("not-leader", () => {
 
     expect(appendResult).toBeDefined();
 
-    const readFromTestStream = (client: EventStoreDBClient) => {
+    const readFromTestStream = (client: KurrentDBClient) => {
       return collect(
         client.readStream(STREAM_NAME, {
           maxCount: 10,
@@ -62,7 +62,7 @@ describe("not-leader", () => {
         expect(error.leader).toBeDefined();
         expect(cluster.endpoints).toContainEqual(error.leader);
 
-        const leaderClient = new EventStoreDBClient(
+        const leaderClient = new KurrentDBClient(
           {
             endpoint: error.leader,
           },

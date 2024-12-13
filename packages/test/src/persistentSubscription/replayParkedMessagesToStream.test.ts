@@ -2,7 +2,7 @@ import { createTestCluster, delay, jsonTestEvents } from "@test-utils";
 
 import {
   AccessDeniedError,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   PARK,
   PersistentSubscriptionDoesNotExistError,
@@ -12,12 +12,12 @@ import {
 
 describe("replayParkedMessagesToStream", () => {
   const cluster = createTestCluster();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
+    client = new KurrentDBClient(
       { endpoints: cluster.endpoints, nodePreference: "leader" },
       { rootCertificate: cluster.certs.root },
       { username: "admin", password: "changeit" }
