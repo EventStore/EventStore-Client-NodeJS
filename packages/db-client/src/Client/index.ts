@@ -523,7 +523,7 @@ export class Client {
     }
 
     if (error.message.includes("RST_STREAM")) {
-      return [true]
+      return [true];
     }
 
     return [

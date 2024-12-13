@@ -39,8 +39,8 @@ import type { Subscription } from "@eventstore/db-client/src/streams/utils/Subsc
 import { INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION } from "./version";
 import type {
   AppendToStreamParams,
-  SubscribeParameters,
   PersistentSubscribeParameters,
+  SubscribeParameters,
 } from "./types";
 import { hasConvertGrpcEventMethod, isJSONEventData } from "./utils";
 
@@ -53,16 +53,12 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   protected init() {
-    const moduleDefinition = new InstrumentationNodeModuleDefinition<
-      typeof kdb
-    >(
+    return new InstrumentationNodeModuleDefinition(
       "@eventstore/db-client",
       ["6.*"],
       this._onPatchMain(),
       this._onUnPatchMain()
     );
-
-    return moduleDefinition;
   }
 
   private _onPatchMain() {

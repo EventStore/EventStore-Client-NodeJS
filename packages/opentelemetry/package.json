@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
-    "@opentelemetry/instrumentation": "^0.50.0"
+    "@opentelemetry/instrumentation": "^0.56.0"
   },
   "devDependencies": {
     "@eventstore/db-client": "file:../db-client"

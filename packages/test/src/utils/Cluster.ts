@@ -11,7 +11,7 @@ import type { EndPoint, Certificate } from "@eventstore/db-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
-import {kill} from "docker-compose";
+import { kill } from "docker-compose";
 
 const rmdir = promisify(fs.rm);
 const mkdir = promisify(fs.mkdir);
