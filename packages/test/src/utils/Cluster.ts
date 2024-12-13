@@ -11,8 +11,9 @@ import type { EndPoint, Certificate } from "@eventstore/db-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
+import {kill} from "docker-compose";
 
-const rmdir = promisify(fs.rmdir);
+const rmdir = promisify(fs.rm);
 const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -298,7 +299,10 @@ export class Cluster {
 
   public killNode = async (node: EndPoint): Promise<void> => {
     const nodeId = this.endpointToNodeId(node);
-    const response = await stopOne(nodeId, {
+    // const response = await stopOne(nodeId, {
+    //   cwd: this.path(),
+    // });
+    const response = await kill({
       cwd: this.path(),
     });
 

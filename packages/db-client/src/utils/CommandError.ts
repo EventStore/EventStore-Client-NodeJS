@@ -436,9 +436,9 @@ export type CommandError =
 export const convertToCommandError = (error: Error): CommandError | Error => {
   if (isCommandError(error) || !isServiceError(error)) return error;
 
-  const exeption = error.metadata?.getMap()["exception"]?.toString();
+  const exception = error.metadata?.getMap()["exception"]?.toString();
 
-  switch (exeption) {
+  switch (exception) {
     case ErrorType.NOT_LEADER:
       return new NotLeaderError(error);
     case ErrorType.STREAM_NOT_FOUND:
@@ -492,7 +492,7 @@ export const convertToCommandError = (error: Error): CommandError | Error => {
     }
   }
 
-  // This is a temporary workaround for a bug in node js. Must be removed when the bug is fixed.
+  // This is a temporary workaround for a bug in Node.js. Must be removed when the bug is fixed.
   // https://github.com/grpc/grpc-node/issues/2502
   // and https://github.com/nodejs/node/issues/49147
   if (error.details.includes("write after end")) {

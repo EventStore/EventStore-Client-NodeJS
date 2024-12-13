@@ -525,7 +525,7 @@ export class Client {
     return [
       // Server is unavailable to take request
       error instanceof UnavailableError ||
-        // Server has cancelled a long running request
+        // Server has cancelled a long-running request
         error instanceof CancelledError,
     ];
   };

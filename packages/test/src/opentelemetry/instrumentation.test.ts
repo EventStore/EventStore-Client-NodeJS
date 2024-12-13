@@ -106,8 +106,7 @@ describe("instrumentation", () => {
         const expectedAttributes = {
           [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
           [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-          [KurrentDBAttributes.SERVER_PORT]:
-            node.endpoints[0].port.toString(),
+          [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
           [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
           [KurrentDBAttributes.DATABASE_OPERATION]: "appendToStream",
         };

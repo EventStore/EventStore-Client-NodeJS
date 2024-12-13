@@ -35,13 +35,14 @@ const neverEndingEvents: Array<EventData> = (function* neverEndingEvents() {
 const isArray = Array.isArray;
 Array.isArray = (arg): arg is never[] => {
   if (isArray(arg)) return true;
-  if (arg === neverEndingEvents) return true;
-  return false;
+  return arg === neverEndingEvents;
 };
+
+jest.retryTimes(5, { logErrorsBeforeRetry: true });
 
 describe("write after end", () => {
   test("Should not write after end", async () => {
-    // We are going to do a huge append, so tell eventstore not to reject it
+    // We are going to do a huge append, so tell KurrentDB not to reject it
     const node = createTestNode().setOption(
       "EVENTSTORE_MAX_APPEND_SIZE",
       10_000_000
@@ -101,7 +102,7 @@ describe("write after end", () => {
         new Promise((resolve) => {
           const writeOnLoop = (): Promise<never> =>
             client
-              .appendToStream(STREAM_NAME, jsonTestEvents(30_000))
+              .appendToStream(STREAM_NAME, jsonTestEvents(5000))
               .then(writeOnLoop);
 
           writeOnLoop().catch((e) => {

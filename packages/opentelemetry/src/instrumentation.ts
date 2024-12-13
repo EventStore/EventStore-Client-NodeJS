@@ -110,10 +110,7 @@ export class Instrumentation extends InstrumentationBase {
     return (moduleExports: typeof kdb) => {
       this._diag.debug("un-patching");
 
-      this._unwrap(
-        moduleExports.KurrentDBClient.prototype,
-        "appendToStream"
-      );
+      this._unwrap(moduleExports.KurrentDBClient.prototype, "appendToStream");
       this._unwrap(
         moduleExports.KurrentDBClient.prototype,
         "subscribeToStream"
@@ -237,11 +234,9 @@ export class Instrumentation extends InstrumentationBase {
       const subscriptionId = subscription.id;
 
       const attributes: Attributes = {
-        [KurrentDBAttributes.KURRENT_DB_STREAM]:
-          resolvedEvent?.event?.streamId,
+        [KurrentDBAttributes.KURRENT_DB_STREAM]: resolvedEvent?.event?.streamId,
         [KurrentDBAttributes.KURRENT_DB_EVENT_ID]: resolvedEvent?.event?.id,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]:
-          resolvedEvent?.event?.type,
+        [KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]: resolvedEvent?.event?.type,
         [KurrentDBAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscriptionId,
         [KurrentDBAttributes.SERVER_ADDRESS]: hostname,
         [KurrentDBAttributes.SERVER_PORT]: port,
