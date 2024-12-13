@@ -522,6 +522,10 @@ export class Client {
       return [true, error.leader];
     }
 
+    if (error.message.includes("RST_STREAM")) {
+      return [true]
+    }
+
     return [
       // Server is unavailable to take request
       error instanceof UnavailableError ||

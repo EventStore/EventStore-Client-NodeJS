@@ -299,10 +299,7 @@ export class Cluster {
 
   public killNode = async (node: EndPoint): Promise<void> => {
     const nodeId = this.endpointToNodeId(node);
-    // const response = await stopOne(nodeId, {
-    //   cwd: this.path(),
-    // });
-    const response = await kill({
+    const response = await stopOne(nodeId, {
       cwd: this.path(),
     });
 

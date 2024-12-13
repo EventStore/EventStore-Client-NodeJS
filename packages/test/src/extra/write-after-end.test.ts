@@ -116,7 +116,7 @@ describe("write after end", () => {
 
       const error = await errorPromise;
 
-      expect(error).toBeInstanceOf(CancelledError);
+      expect(error).toBeInstanceOf(UnavailableError);
 
       // wait for any unhandled rejections
       await delay(5_000);
