@@ -8,7 +8,6 @@ import {
   optionalTest,
 } from "@test-utils";
 import {
-  CancelledError,
   EventData,
   KurrentDBClient,
   jsonEvent,

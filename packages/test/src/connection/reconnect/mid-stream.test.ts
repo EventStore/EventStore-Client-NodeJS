@@ -10,6 +10,7 @@ import {
   jsonEvent,
   KurrentDBClient,
   CancelledError,
+  UnavailableError,
 } from "@eventstore/db-client";
 
 // This test can take time.
@@ -52,7 +53,7 @@ describe("reconnect", () => {
 
       expect(i).toBe("unreachable");
     } catch (error) {
-      expect(error).toBeInstanceOf(CancelledError);
+      expect(error).toBeInstanceOf(UnavailableError);
     }
 
     // wait for leader to be ready
