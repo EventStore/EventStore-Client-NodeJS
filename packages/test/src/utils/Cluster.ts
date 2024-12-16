@@ -75,7 +75,7 @@ const createNodes = (
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
       ...acc,
       [`esdb-node-${i}`]: {
-        image: dockerImages.esdb,
+        image: dockerImages.kdb,
         environment: [
           `EVENTSTORE_GOSSIP_SEED=${ipAddresses
             .reduce<string[]>(

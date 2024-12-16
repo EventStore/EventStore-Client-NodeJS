@@ -21,7 +21,7 @@ jobs:
     env:
       # GitHub only passes secrets to the main repo, so we need to skip some things if they are unavailable
       SECRETS_AVAILABLE: ${{ secrets.EVENTSTORE_CLOUD_ID != null }}
-      EVENTSTORE_VERSION: "24.2.0-jammy"
+      KURRENT_VERSION: "24.2.0-jammy"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
           curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.list | sudo tee /etc/apt/sources.list.d/tailscale.list
           sudo apt-get update
           sudo apt-get install tailscale
-          sudo tailscale up --authkey ${{ secrets.TAILSCALE_AUTH }} --hostname "node-client-ci-${{ env.EVENTSTORE_VERSION }}-$(date +'%Y-%m-%d-%H-%M-%S')" --advertise-tags=tag:ci --accept-routes
+          sudo tailscale up --authkey ${{ secrets.TAILSCALE_AUTH }} --hostname "node-client-ci-${{ env.KURRENT_VERSION }}-$(date +'%Y-%m-%d-%H-%M-%S')" --advertise-tags=tag:ci --accept-routes
       - uses: actions/setup-node@v4
         with:
           node-version-file: .github/files/.nvmrc
@@ -51,7 +51,7 @@ jobs:
       - name: Run Tests
         run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
-          EVENTSTORE_IMAGE: eventstore-ee:${{ env.EVENTSTORE_VERSION }}
+          KURRENT_IMAGE: eventstore-ee:${{ env.KURRENT_VERSION }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       - name: Disconnect from tailscale
         if: ${{ always() && matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}

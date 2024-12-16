@@ -1,12 +1,8 @@
-const esdbImage = ((): string => {
-  const version = process.env.EVENTSTORE_IMAGE ?? "eventstore-ce:ci";
+const kdbImage = ((): string => {
+  const version = process.env.KURRENT_IMAGE ?? "eventstore-ce:ci";
   switch (true) {
     case version.startsWith("local:"):
       return version.replace("local:", "");
-    case version.startsWith("github:"):
-      return version.replace("github:", "ghcr.io/eventstore/eventstore:");
-    case version.startsWith("dockerhub:"):
-      return version.replace("dockerhub:", "eventstore/eventstore:");
     case version.startsWith("eventstore-ee:"):
       return version.replace(
         "eventstore-ee:",
@@ -30,5 +26,5 @@ const esdbImage = ((): string => {
 export const dockerImages = {
   volumesProvisioner: "hasnat/volumes-provisioner",
   certGen: "docker.eventstore.com/eventstore-utils/es-gencert-cli:latest",
-  esdb: esdbImage,
+  kdb: kdbImage,
 };

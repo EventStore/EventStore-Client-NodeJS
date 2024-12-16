@@ -42,7 +42,7 @@ jobs:
           - name: opentelemetry
             path: ./src/opentelemetry
     env:
-      # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
+      # GitHub only passes secrets to the main repo, so we need to skip some things if they are unavailable
       SECRETS_AVAILABLE: ${{ secrets.eventstore_cloud_id != null }}
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +67,7 @@ jobs:
       - name: Run Tests
         run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
-          EVENTSTORE_IMAGE: eventstore-ce:${{ inputs.version }}
+          KURRENT_IMAGE: eventstore-ce:${{ inputs.version }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.eventstore_cloud_id }}
       - name: Disconnect from tailscale
         if: ${{ always() && matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}

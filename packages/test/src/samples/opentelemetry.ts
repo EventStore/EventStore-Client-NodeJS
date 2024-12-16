@@ -13,7 +13,7 @@ import {} from "@opentelemetry/sdk-trace-node";
 import { createTestNode } from "@test-utils";
 import { KurrentDBClient } from "@kurrent/db-client";
 
-import * as esdb from "@kurrent/db-client";
+import * as kdb from "@kurrent/db-client";
 
 // region register-instrumentation
 const provider = new NodeTracerProvider();
@@ -43,7 +43,7 @@ describe("[sample] opentelemetry", () => {
   // endregion setup-exporter
 
   // @ts-expect-error the moduleExports property is private. This is needed to make the test work with auto-mocking
-  instrumentation._modules[0].moduleExports = esdb;
+  instrumentation._modules[0].moduleExports = kdb;
 
   beforeAll(async () => {
     await node.up();

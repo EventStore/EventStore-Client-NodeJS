@@ -70,10 +70,10 @@ $ yarn test:debug // debug all tests
 $ yarn test:debug ReadAll // only the ReadAll tests
 ```
 
-Specific docker images can be specified via the enviroment variable `EVENTSTORE_IMAGE`.
+Specific docker images can be specified via the enviroment variable `KURRENT_IMAGE`.
 
 ```shell script
-$ yarn cross-env EVENTSTORE_IMAGE=77d63f3f0ab3 jest
+$ yarn cross-env KURRENT_IMAGE=77d63f3f0ab3 jest
 ```
 
 See [Jest] documentation for more options.
