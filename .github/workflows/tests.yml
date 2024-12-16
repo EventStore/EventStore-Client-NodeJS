@@ -61,11 +61,11 @@ jobs:
       - name: NodeJS version
         run: node -v
       - name: Install
-        run: yarn
+        run: npm install
       - name: Build 
-        run: yarn build
+        run: npm run build
       - name: Run Tests
-        run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
+        run: npm run test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
           KURRENT_IMAGE: eventstore-ce:${{ inputs.version }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.eventstore_cloud_id }}

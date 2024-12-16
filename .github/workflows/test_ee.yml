@@ -45,11 +45,11 @@ jobs:
           username: ${{ secrets.CLOUDSMITH_CICD_USER }}
           password: ${{ secrets.CLOUDSMITH_CICD_TOKEN }}
       - name: Install
-        run: yarn
+        run: npm install
       - name: Build 
-        run: yarn build
+        run: npm run build
       - name: Run Tests
-        run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
+        run: npm run test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
           KURRENT_IMAGE: eventstore-ee:${{ env.KURRENT_VERSION }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}

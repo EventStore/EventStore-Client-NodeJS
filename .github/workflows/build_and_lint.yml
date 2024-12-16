@@ -15,11 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install
-        run: yarn
+        run: npm install
       - name: Linting
-        run: yarn lint
+        run: npm run lint
       - name: Build on Ubuntu
-        run: yarn build
+        run: npm run build
       - name: All generated code is commited
         run: |
           git update-index --refresh
@@ -41,6 +41,6 @@ jobs:
       - name: NodeJS version
         run: node -v
       - name: Install
-        run: yarn
+        run: npm install
       - name: Build
-        run: yarn build
+        run: npm run build

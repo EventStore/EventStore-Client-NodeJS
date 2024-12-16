@@ -15,15 +15,15 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
    ```
 2. Install all necessary dependencies:
    ```bash
-   yarn install
+   npm install
    ```
 3. Build the project for the first time:
    ```bash
-   yarn build
+   npm run build
    ```
    In case of build errors, refresh your setup with:
    ```bash
-   npx lerna clean -y && yarn install
+   npx lerna clean -y && npm run install
    ```
 
 ## Development Practices
@@ -31,21 +31,21 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 **Code Compilation:**
 - Standard Build:
   ```bash
-  yarn run build
+  npm run build
   ```
 - Continuous Build on Changes:
   ```bash
-  yarn run build:watch
+  npm run build:watch
   ```
 
 **Testing and Linting:**
 - Run the complete test suite:
   ```bash
-  yarn run test
+  npm run test
   ```
 - Perform code style checks:
   ```bash
-  yarn run lint
+  npm run lint
   ```
 
 ### Tests
@@ -53,27 +53,27 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 Tests are written using [Jest] and require [Docker] and [Docker Compose] to be installed. Then run test with:
 
 ```shell script
-yarn test
+npm run test
 ```
 
 Tests can be filtered by prepending the test file or folder to the command
 
 ```shell script
-$ yarn test connection // all connection tests
-$ yarn test ReadAll // only the ReadAll tests
+$ npm run test connection // all connection tests
+$ npm run test ReadAll // only the ReadAll tests
 ```
 
 To get debug information when running tests use the `test:debug` command.
 
 ```shell script
-$ yarn test:debug // debug all tests
-$ yarn test:debug ReadAll // only the ReadAll tests
+$ npm run test:debug // debug all tests
+$ npm run test:debug ReadAll // only the ReadAll tests
 ```
 
 Specific docker images can be specified via the enviroment variable `KURRENT_IMAGE`.
 
 ```shell script
-$ yarn cross-env KURRENT_IMAGE=77d63f3f0ab3 jest
+$ npx cross-env KURRENT_IMAGE=77d63f3f0ab3 jest
 ```
 
 See [Jest] documentation for more options.
