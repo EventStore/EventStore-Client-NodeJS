@@ -7,8 +7,8 @@ import {
   matchServerVersion,
   optionalDescribe,
 } from "@test-utils";
-import { KurrentDBClient } from "@eventstore/db-client";
-import { StreamsClient } from "@eventstore/db-client/generated/streams_grpc_pb";
+import { KurrentDBClient } from "@kurrent/db-client";
+import { StreamsClient } from "@kurrent/db-client/generated/streams_grpc_pb";
 
 describe("appendToStream - batch append", () => {
   const supported = matchServerVersion`>=21.10`;

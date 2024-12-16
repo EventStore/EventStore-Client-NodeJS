@@ -1,5 +1,5 @@
 {
-  "name": "@eventstore/test",
+  "name": "test",
   "version": "0.0.1",
   "private": true,
   "description": "KurrentDB Client Tests",
@@ -28,8 +28,8 @@
     "Test"
   ],
   "dependencies": {
-    "@eventstore/db-client": "file:../db-client",
-    "@eventstore/opentelemetry": "file:../opentelemetry",
+    "@kurrent/db-client": "file:../db-client",
+    "@kurrent/opentelemetry": "file:../opentelemetry",
     "jest": "^27.5.1",
     "ts-jest": "^27.1.5"
   },

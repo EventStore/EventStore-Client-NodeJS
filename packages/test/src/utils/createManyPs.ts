@@ -4,7 +4,7 @@ import {
   persistentSubscriptionToStreamSettingsFromDefaults,
   PersistentSubscriptionToAllSettings,
   persistentSubscriptionToAllSettingsFromDefaults,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 export type CreatedPS = [
   streamName: string,

@@ -9,7 +9,7 @@ import {
   RUNNING,
   STOPPED,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("enableProjection", () => {
   const node = createTestNode();

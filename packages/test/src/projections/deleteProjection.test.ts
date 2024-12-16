@@ -10,7 +10,7 @@ import {
   ABORTED,
   NotFoundError,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("deleteProjection", () => {
   const node = createTestNode();

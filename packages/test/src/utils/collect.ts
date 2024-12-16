@@ -1,4 +1,4 @@
-import type { StreamingRead } from "@eventstore/db-client";
+import type { StreamingRead } from "@kurrent/db-client";
 
 export const collect = async <
   T extends StreamingRead<unknown>,

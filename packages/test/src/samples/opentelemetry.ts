@@ -6,14 +6,14 @@ import {
   SimpleSpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
-import { KurrentDBInstrumentation } from "@eventstore/opentelemetry";
+import { KurrentDBInstrumentation } from "@kurrent/opentelemetry";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
 import {} from "@opentelemetry/sdk-trace-node";
 // endregion import-required-packages
 import { createTestNode } from "@test-utils";
-import { KurrentDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/db-client";
 
-import * as esdb from "@eventstore/db-client";
+import * as esdb from "@kurrent/db-client";
 
 // region register-instrumentation
 const provider = new NodeTracerProvider();
@@ -70,9 +70,7 @@ describe("[sample] opentelemetry", () => {
 
   test("tracing", async () => {
     // region setup-client-for-tracing
-    const { KurrentDBClient, jsonEvent } = await import(
-      "@eventstore/db-client"
-    );
+    const { KurrentDBClient, jsonEvent } = await import("@kurrent/db-client");
 
     const client = new KurrentDBClient(
       { endpoint: node.uri },

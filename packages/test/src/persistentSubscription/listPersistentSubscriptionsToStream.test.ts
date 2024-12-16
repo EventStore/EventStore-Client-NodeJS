@@ -12,7 +12,7 @@ import {
   PersistentSubscriptionDoesNotExistError,
   ROUND_ROBIN,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("listPersistentSubscriptions", () => {
   const node = createTestNode();

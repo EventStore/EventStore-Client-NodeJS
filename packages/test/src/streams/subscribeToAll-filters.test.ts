@@ -18,7 +18,7 @@ import {
   excludeSystemEvents,
   AllStreamSubscription,
   Position,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();

@@ -1,4 +1,4 @@
-import { KurrentDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/db-client";
 
 describe("keepAlive settings", () => {
   const endpoint = "host:1234";

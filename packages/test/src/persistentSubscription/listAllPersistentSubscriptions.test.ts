@@ -20,7 +20,7 @@ import {
   Position,
   ROUND_ROBIN,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("listAllPersistentSubscriptions", () => {
   const psToAllSupported = matchServerVersion`>=21.10.1`;

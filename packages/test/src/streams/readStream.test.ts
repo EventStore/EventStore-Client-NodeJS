@@ -21,7 +21,7 @@ import {
   Position,
   AppendResult,
   InvalidArgumentError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("readStream", () => {
   const node = createTestNode();

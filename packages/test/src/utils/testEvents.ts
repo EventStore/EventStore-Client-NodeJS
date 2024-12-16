@@ -1,4 +1,4 @@
-import { EventData, jsonEvent, binaryEvent } from "@eventstore/db-client";
+import { EventData, jsonEvent, binaryEvent } from "@kurrent/db-client";
 
 export interface TestEventData {
   message: "test";

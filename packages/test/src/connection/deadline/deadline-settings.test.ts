@@ -1,4 +1,4 @@
-import { DNSClusterOptions, KurrentDBClient } from "@eventstore/db-client";
+import { DNSClusterOptions, KurrentDBClient } from "@kurrent/db-client";
 
 describe("deadline", () => {
   describe.each<

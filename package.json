@@ -1,5 +1,5 @@
 {
-  "name": "eventstore-node-client-repository",
+  "name": "kurrent-node-client-repository",
   "private": true,
   "scripts": {
     "build": "lerna run --stream build",

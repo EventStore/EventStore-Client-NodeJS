@@ -9,7 +9,7 @@ import {
   RUNNING,
   STOPPED,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("disable / abort", () => {
   const node = createTestNode();

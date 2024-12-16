@@ -4,7 +4,7 @@ import {
   jsonEvent,
   ResolvedEvent,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("encoding", () => {
   const node = createTestNode();

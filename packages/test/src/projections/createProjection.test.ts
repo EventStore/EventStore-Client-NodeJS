@@ -4,7 +4,7 @@ import {
   KurrentDBClient,
   jsonEvent,
   StreamNotFoundError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("createProjection", () => {
   const node = createTestNode();

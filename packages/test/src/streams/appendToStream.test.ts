@@ -15,7 +15,7 @@ import {
   binaryEvent,
   BinaryEventType,
   JSONEventType,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("appendToStream", () => {
   const node = createTestNode();

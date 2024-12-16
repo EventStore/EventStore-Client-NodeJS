@@ -1,5 +1,5 @@
 import { createInsecureTestCluster, createTestCluster } from "@test-utils";
-import { KurrentDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/db-client";
 
 describe("http api", () => {
   interface PingResult {

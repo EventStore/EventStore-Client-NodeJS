@@ -2,7 +2,7 @@ import { request } from "https";
 import { readFileSync } from "fs";
 import { URL } from "url";
 
-import type { EndPoint } from "@eventstore/db-client";
+import type { EndPoint } from "@kurrent/db-client";
 
 import type { Cluster } from "./Cluster";
 

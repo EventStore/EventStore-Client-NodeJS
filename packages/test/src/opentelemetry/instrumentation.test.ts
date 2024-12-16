@@ -8,8 +8,8 @@ import {
   SEMATTRS_EXCEPTION_STACKTRACE,
   SEMATTRS_EXCEPTION_TYPE,
 } from "@opentelemetry/semantic-conventions";
-import { KurrentDBInstrumentation } from "@eventstore/opentelemetry";
-import { KurrentDBAttributes } from "@eventstore/opentelemetry/dist/attributes";
+import { KurrentDBInstrumentation } from "@kurrent/opentelemetry";
+import { KurrentDBAttributes } from "@kurrent/opentelemetry/dist/attributes";
 import { v4 } from "uuid";
 import { collect } from "@test-utils";
 
@@ -19,17 +19,17 @@ tracerProvider.register();
 const instrumentation = new KurrentDBInstrumentation();
 instrumentation.disable();
 
-import * as esdb from "@eventstore/db-client";
+import * as esdb from "@kurrent/db-client";
 import {
   AppendToStreamOptions,
   ResolvedEvent,
   streamNameFilter,
   WrongExpectedVersionError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("instrumentation", () => {
   const node = createTestNode();
-  const moduleName = "@eventstore/opentelemetry";
+  const moduleName = "@kurrent/opentelemetry";
 
   const memoryExporter = new InMemorySpanExporter();
   instrumentation.setTracerProvider(tracerProvider);
@@ -63,7 +63,7 @@ describe("instrumentation", () => {
       "should create a span for append operation, withCredentials: $withCredentials",
       async ({ withCredentials, credentials }) => {
         const { KurrentDBClient, jsonEvent } = await import(
-          "@eventstore/db-client"
+          "@kurrent/db-client"
         );
 
         const STREAM = v4();
@@ -122,7 +122,7 @@ describe("instrumentation", () => {
     );
 
     test("span contains error when append fails", async () => {
-      const { KurrentDBClient } = await import("@eventstore/db-client");
+      const { KurrentDBClient } = await import("@kurrent/db-client");
 
       const client = new KurrentDBClient(
         { endpoint: node.uri },
@@ -175,9 +175,7 @@ describe("instrumentation", () => {
   describe("catch up subscriptions", () => {
     test("should create child span in subscription to stream", async () => {
       const defer = new Defer();
-      const { KurrentDBClient, jsonEvent } = await import(
-        "@eventstore/db-client"
-      );
+      const { KurrentDBClient, jsonEvent } = await import("@kurrent/db-client");
 
       const STREAM = v4();
 
@@ -259,7 +257,7 @@ describe("instrumentation", () => {
     test.only("events with non-json metadata are not traced in subscriptions", async () => {
       const defer = new Defer();
       const { KurrentDBClient, jsonEvent, binaryEvent } = await import(
-        "@eventstore/db-client"
+        "@kurrent/db-client"
       );
 
       const STREAM = v4();
@@ -347,7 +345,7 @@ describe("instrumentation", () => {
         jsonEvent,
         persistentSubscriptionToStreamSettingsFromDefaults,
         START,
-      } = await import("@eventstore/db-client");
+      } = await import("@kurrent/db-client");
 
       const STREAM = v4();
       const GROUP = v4();
@@ -439,7 +437,7 @@ describe("instrumentation", () => {
         jsonEvent,
         persistentSubscriptionToAllSettingsFromDefaults,
         START,
-      } = await import("@eventstore/db-client");
+      } = await import("@kurrent/db-client");
 
       const GROUP = v4();
       const STREAM = v4();

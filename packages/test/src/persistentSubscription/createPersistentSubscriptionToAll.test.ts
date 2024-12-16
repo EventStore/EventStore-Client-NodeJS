@@ -14,7 +14,7 @@ import {
   persistentSubscriptionToAllSettingsFromDefaults,
   START,
   UnsupportedError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("createPersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;

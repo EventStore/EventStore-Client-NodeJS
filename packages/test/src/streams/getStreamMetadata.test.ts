@@ -1,5 +1,5 @@
 import { createTestNode, jsonTestEvents } from "@test-utils";
-import { KurrentDBClient, StreamMetadata } from "@eventstore/db-client";
+import { KurrentDBClient, StreamMetadata } from "@kurrent/db-client";
 
 describe("getStreamMetadata", () => {
   const node = createTestNode();

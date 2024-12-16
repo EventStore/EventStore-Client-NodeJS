@@ -11,7 +11,7 @@ import {
   ResolvedEvent,
   START,
   streamNameFilter,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 import {
   createTestNode,
   jsonTestEvents,

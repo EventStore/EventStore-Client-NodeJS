@@ -7,7 +7,7 @@ import {
   KurrentDBClient,
   BACKWARDS,
   END,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();

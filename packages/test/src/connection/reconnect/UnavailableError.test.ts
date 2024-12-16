@@ -3,7 +3,7 @@ import {
   jsonEvent,
   KurrentDBClient,
   UnavailableError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 import { setLogger, setLogVerbosity, logVerbosity } from "@grpc/grpc-js";
 

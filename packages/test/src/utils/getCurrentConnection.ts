@@ -1,4 +1,4 @@
-import type { KurrentDBClient, EndPoint } from "@eventstore/db-client";
+import type { KurrentDBClient, EndPoint } from "@kurrent/db-client";
 
 export const getCurrentConnection = async (
   client: KurrentDBClient

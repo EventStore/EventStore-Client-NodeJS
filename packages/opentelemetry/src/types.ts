@@ -1,4 +1,4 @@
-import type * as kdb from "@eventstore/db-client";
+import type * as kdb from "@kurrent/db-client";
 
 export type SubscribeToStreamParameters = Parameters<
   kdb.KurrentDBClient["subscribeToStream"]

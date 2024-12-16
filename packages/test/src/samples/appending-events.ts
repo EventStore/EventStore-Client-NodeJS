@@ -7,7 +7,7 @@ import {
   JSONEventType,
   AppendExpectedRevision,
   WrongExpectedVersionError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 import { createTestNode } from "@test-utils";
 import { v4 as uuid } from "uuid";
 

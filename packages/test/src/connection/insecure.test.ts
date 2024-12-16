@@ -1,5 +1,5 @@
 import { collect, createInsecureTestNode } from "@test-utils";
-import { KurrentDBClient, jsonEvent } from "@eventstore/db-client";
+import { KurrentDBClient, jsonEvent } from "@kurrent/db-client";
 
 describe("insecure", () => {
   const node = createInsecureTestNode();

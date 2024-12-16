@@ -10,7 +10,7 @@ import {
   AccessDeniedError,
   ChannelCredentialOptions,
   KurrentDBClient,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("client certificates (with deprecated credential options)", () => {
   const node = createTestNode();

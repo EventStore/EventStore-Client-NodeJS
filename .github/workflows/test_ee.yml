@@ -19,7 +19,7 @@ jobs:
             path: ./src/plugins
             tailscale: true
     env:
-      # Github only passes secrets to the main repo, so we need to skip some things if they are unavailable
+      # GitHub only passes secrets to the main repo, so we need to skip some things if they are unavailable
       SECRETS_AVAILABLE: ${{ secrets.EVENTSTORE_CLOUD_ID != null }}
       EVENTSTORE_VERSION: "24.2.0-jammy"
     runs-on: ubuntu-latest

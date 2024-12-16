@@ -1,5 +1,5 @@
 import { collect, createTestNode } from "@test-utils";
-import { KurrentDBClient, AccessDeniedError } from "@eventstore/db-client";
+import { KurrentDBClient, AccessDeniedError } from "@kurrent/db-client";
 
 describe("defaultCredentials", () => {
   const node = createTestNode();

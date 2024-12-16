@@ -13,7 +13,7 @@ import {
   jsonEvent,
   NotFoundError,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("getProjectionResult", () => {
   const node = createTestNode();

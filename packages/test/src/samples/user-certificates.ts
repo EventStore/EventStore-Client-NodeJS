@@ -1,4 +1,4 @@
-import { KurrentDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/db-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 import { v4 as uuid } from "uuid";
 

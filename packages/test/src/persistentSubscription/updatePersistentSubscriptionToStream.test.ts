@@ -4,7 +4,7 @@ import {
   PINNED,
   KurrentDBClient,
   persistentSubscriptionToStreamSettingsFromDefaults,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("updatePersistentSubscriptionToStream", () => {
   const node = createTestNode();

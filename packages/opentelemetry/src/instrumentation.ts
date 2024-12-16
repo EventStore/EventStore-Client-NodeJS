@@ -18,7 +18,7 @@ import {
   InstrumentationConfig,
   InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
-import type * as kdb from "@eventstore/db-client";
+import type * as kdb from "@kurrent/db-client";
 import type {
   AppendResult,
   BinaryEventType,
@@ -30,12 +30,12 @@ import type {
   SubscribeToPersistentSubscriptionToAllOptions,
   SubscribeToPersistentSubscriptionToStreamOptions,
   SubscribeToStreamOptions,
-} from "@eventstore/db-client";
-import type { ReadResp as StreamsReadResp } from "@eventstore/db-client/generated/streams_pb";
-import type { ReadResp as PersistentReadResp } from "@eventstore/db-client/generated/persistent_pb";
+} from "@kurrent/db-client";
+import type { ReadResp as StreamsReadResp } from "@kurrent/db-client/generated/streams_pb";
+import type { ReadResp as PersistentReadResp } from "@kurrent/db-client/generated/persistent_pb";
 import { KurrentDBAttributes } from "./attributes";
-import type { PersistentSubscriptionImpl } from "@eventstore/db-client/src/persistentSubscription/utils/PersistentSubscriptionImpl";
-import type { Subscription } from "@eventstore/db-client/src/streams/utils/Subscription";
+import type { PersistentSubscriptionImpl } from "@kurrent/db-client/src/persistentSubscription/utils/PersistentSubscriptionImpl";
+import type { Subscription } from "@kurrent/db-client/src/streams/utils/Subscription";
 import { INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION } from "./version";
 import type {
   AppendToStreamParams,
@@ -54,7 +54,7 @@ export class Instrumentation extends InstrumentationBase {
 
   protected init() {
     return new InstrumentationNodeModuleDefinition(
-      "@eventstore/db-client",
+      "@kurrent/db-client",
       ["6.*"],
       this._onPatchMain(),
       this._onUnPatchMain()

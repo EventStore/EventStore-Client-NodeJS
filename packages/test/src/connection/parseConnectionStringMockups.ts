@@ -1,4 +1,4 @@
-import type { ConnectionOptions } from "@eventstore/db-client/dist/Client/parseConnectionString";
+import type { ConnectionOptions } from "@kurrent/db-client/dist/Client/parseConnectionString";
 
 export const valid: Array<
   [connectionString: string, expected: ConnectionOptions]

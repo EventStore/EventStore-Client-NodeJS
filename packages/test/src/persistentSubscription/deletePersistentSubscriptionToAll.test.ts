@@ -10,7 +10,7 @@ import {
   KurrentDBClient,
   persistentSubscriptionToAllSettingsFromDefaults,
   UnsupportedError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("deletePersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;

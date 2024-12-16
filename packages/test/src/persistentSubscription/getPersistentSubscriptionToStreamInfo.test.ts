@@ -8,7 +8,7 @@ import {
   persistentSubscriptionToStreamSettingsFromDefaults,
   ROUND_ROBIN,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("getPersistentSubscriptionToStreamInfo", () => {
   const node = createTestNode();

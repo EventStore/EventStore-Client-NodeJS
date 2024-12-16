@@ -18,7 +18,7 @@ import {
   ROUND_ROBIN,
   START,
   UnsupportedError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("getPersistentSubscriptionToAllInfo", () => {
   const supported = matchServerVersion`>=21.10.1`;

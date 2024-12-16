@@ -3,7 +3,7 @@ import {
   isSystemStream,
   metastreamOf,
   originalStreamOf,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("systemStreams helpers", () => {
   describe("isSystemStream", () => {

@@ -1,7 +1,7 @@
 import { relative, resolve } from "path";
 
 import { collect, createTestNode, jsonTestEvents } from "@test-utils";
-import { KurrentDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/db-client";
 
 describe("tlsCAFile", () => {
   const node = createTestNode();

@@ -18,7 +18,7 @@ import {
   START,
   streamNameFilter,
   UnsupportedError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("replayParkedMessagesToAll", () => {
   const supported = matchServerVersion`>=21.10.1`;

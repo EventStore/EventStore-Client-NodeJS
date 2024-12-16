@@ -6,7 +6,7 @@ import {
   matchServerVersion,
   optionalDescribe,
 } from "@test-utils";
-import { KurrentDBClient, jsonEvent } from "@eventstore/db-client";
+import { KurrentDBClient, jsonEvent } from "@kurrent/db-client";
 
 describe("appendToStream - batch append - flood", () => {
   const supported = matchServerVersion`>=21.10`;

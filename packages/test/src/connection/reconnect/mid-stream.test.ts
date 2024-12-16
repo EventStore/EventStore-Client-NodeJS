@@ -11,7 +11,7 @@ import {
   KurrentDBClient,
   CancelledError,
   UnavailableError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 // This test can take time.
 jest.setTimeout(120_000);

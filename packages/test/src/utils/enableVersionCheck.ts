@@ -4,7 +4,7 @@
 import NodeEnvironment = require("jest-environment-node");
 
 import { Cluster } from "./Cluster";
-import { KurrentDBClient } from "@eventstore/db-client/dist/index";
+import { KurrentDBClient } from "@kurrent/db-client/dist/index";
 
 async function extractVersion(this: KurrentDBClient) {
   const capabilities = await this.capabilities;

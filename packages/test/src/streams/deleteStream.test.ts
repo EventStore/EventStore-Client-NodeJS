@@ -5,7 +5,7 @@ import {
   NO_STREAM,
   StreamNotFoundError,
   BACKWARDS,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("deleteStream", () => {
   const node = createTestNode();

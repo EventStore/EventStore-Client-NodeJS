@@ -6,7 +6,7 @@ import {
   KurrentDBClient,
   NotFoundError,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("getProjectionStatus", () => {
   const node = createTestNode();

@@ -6,7 +6,7 @@ import {
   jsonEvent,
   JSONEventType,
   persistentSubscriptionToStreamSettingsFromDefaults,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("typed events should compile", () => {
   const node = createTestNode();

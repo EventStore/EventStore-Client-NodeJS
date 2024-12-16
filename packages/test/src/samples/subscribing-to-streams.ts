@@ -8,7 +8,7 @@ import {
   AllStreamResolvedEvent,
   streamNameFilter,
   ReadPosition,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 
 describe("[sample] server-side-filtering", () => {

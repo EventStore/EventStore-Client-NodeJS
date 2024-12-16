@@ -16,7 +16,7 @@ import {
   END,
   excludeSystemEvents,
   eventTypeFilter,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   const supported = matchServerVersion`>=21.10`;

@@ -7,7 +7,7 @@ import {
   jsonEvent,
   AllStreamBinaryRecordedEvent,
   LinkEvent,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("readAll", () => {
   const node = createTestNode();

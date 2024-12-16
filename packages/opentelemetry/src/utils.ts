@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { EventData, JSONEventData } from "@eventstore/db-client";
+import type { EventData, JSONEventData } from "@kurrent/db-client";
 
 export function hasConvertGrpcEventMethod(
   obj: any

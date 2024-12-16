@@ -17,7 +17,7 @@ import {
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
   streamNameFilter,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("dispose", () => {
   const supported = matchServerVersion`>=21.10`;

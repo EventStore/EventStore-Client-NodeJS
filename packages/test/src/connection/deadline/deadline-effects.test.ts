@@ -1,5 +1,5 @@
 import { createTestCluster, jsonTestEvents } from "@test-utils";
-import { KurrentDBClient, DeadlineExceededError } from "@eventstore/db-client";
+import { KurrentDBClient, DeadlineExceededError } from "@kurrent/db-client";
 
 describe("deadline", () => {
   const cluster = createTestCluster();

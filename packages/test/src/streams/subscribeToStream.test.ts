@@ -15,7 +15,7 @@ import {
   ResolvedEvent,
   jsonEvent,
   END,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 const asyncPipeline = promisify(pipeline);
 

@@ -13,7 +13,7 @@ import {
   NotFoundError,
   RUNNING,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("getProjectionState", () => {
   const node = createTestNode();

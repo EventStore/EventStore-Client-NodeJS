@@ -5,7 +5,7 @@ import {
   PersistentSubscriptionExistsError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("createPersistentSubscriptionToStream", () => {
   const node = createTestNode();

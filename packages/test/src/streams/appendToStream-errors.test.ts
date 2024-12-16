@@ -15,7 +15,7 @@ import {
   MaxAppendSizeExceededError,
   AccessDeniedError,
   DeadlineExceededError,
-} from "@eventstore/db-client";
+} from "@kurrent/db-client";
 
 describe("appendToStream - errors", () => {
   const node = createTestNode();
