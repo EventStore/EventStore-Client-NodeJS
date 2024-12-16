@@ -10,8 +10,8 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 **Repository Setup:**
 1. Clone the repository:
    ```bash
-   $ git clone git@github.com:EventStore/EventStore-Client-NodeJS.git
-   $ cd EventStore-Client-NodeJS
+   $ git clone git@github.com:Kurrent/Kurrent-Client-NodeJS.git
+   $ cd Kurrent-Client-NodeJS
    ```
 2. Install all necessary dependencies:
    ```bash
@@ -103,4 +103,4 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 [jest]: https://jestjs.io/
 [debug]: https://github.com/visionmedia/debug
 [`util.inspect()`]: https://nodejs.org/api/util.html#util_util_inspect_object_options
-[eventstore-client-nodejs]: https://github.com/EventStore/EventStore-Client-NodeJS
+[kurrent-client-nodejs]: https://github.com/Kurrent/Kurrent-Client-NodeJS

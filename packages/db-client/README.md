@@ -1,26 +1,26 @@
-# @eventstore/db-client
+# @kurrent/db-client
 
 [![npm][npm-badge]][npm-badge-url]
 [![Github action CI workflow][ci-badge]][ci-badge-url]
 [![license][license-badge]][license-badge-url]
 
-This is the package for the NodeJS client for EventStoreDB 20+ and uses gRPC as the communication protocol.
+This is the package for the NodeJS client for KurrentDB 20+ and uses gRPC as the communication protocol.
 
 ## Installation
 
 ```shell script
 # Yarn
-$ yarn add @eventstore/db-client
+$ yarn add @kurrent/db-client
 
 # NPM
-$ npm install --save @eventstore/db-client
+$ npm install --save @kurrent/db-client
 ```
 
-## EventStoreDB Server Compatibility
+## KurrentDB Server Compatibility
 
-This client is compatible with version `20.6.1` upwards.
+Tests are run exclusively against Long-Term Support (LTS) versions. While the code may function with older versions, we do not provide any guarantees or support for them.
 
-Server setup instructions can be found under the installation section of the [Event Store Docs]. Follow the Docker setup for the simplest configuration.
+Server setup instructions can be found under the installation section of the [Kurrent Docs]. Follow the Docker setup for the simplest configuration.
 
 ## Example
 
@@ -30,13 +30,13 @@ The following snippet showcases a simple example where we form a connection, the
 
 ```javascript
 const {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   FORWARDS,
   START,
-} = require('@eventstore/db-client');
+} = require('@kurrent/db-client');
 
-const client = new EventStoreDBClient({
+const client = new KurrentDBClient({
   endpoint: "localhost:2113",
 });
 
@@ -75,14 +75,14 @@ async function simpleTest() {
 
 ```typescript
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   FORWARDS,
   START,
   JSONEventType,
-} from '@eventstore/db-client';
+} from '@kurrent/db-client';
 
-const client = new EventStoreDBClient({
+const client = new KurrentDBClient({
   endpoint: 'localhost:2113',
 });
 
@@ -175,27 +175,27 @@ console.log(reservation);
 
 ## Support
 
-Information on support can be found on our website: [Event Store Support]
+Information on support can be found on our website: [Kurrent Support]
 
 ## Communities
 
 - [Discuss]
-- [Discord (Event Store)][discord-event-store]
+- [Discord (Kurrent)][discord-kurrent]
 - [Discord (ddd-cqrs-es)][discord-ddd-cqrs-es]
 
 ## Contributing
 
 Refer to our [Contribution Guidelines]
 
-[event store support]: https://eventstore.com/support/
+[Kurrent support]: https://kurrent.io/support/
 [discuss]: https://discuss.eventstore.com/
-[discord-event-store]: https://discord.gg/Phn9pmCw3t
+[discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
-[npm-badge]: https://img.shields.io/npm/v/@eventstore/db-client.svg
-[npm-badge-url]: https://www.npmjs.com/package/@eventstore/db-client
-[ci-badge]: https://github.com/EventStore/EventStore-Client-NodeJS/workflows/CI/badge.svg?branch=master
-[ci-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/actions
-[license-badge]: https://img.shields.io/npm/l/@eventstore/db-client.svg
-[license-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/LICENSE
-[contribution guidelines]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/CONTRIBUTING.md
-[event store docs]: https://developers.eventstore.com/server/v20.10/docs/installation/
+[npm-badge]: https://img.shields.io/npm/v/@kurrent/db-client.svg
+[npm-badge-url]: https://www.npmjs.com/package/@kurrent/db-client
+[ci-badge]: https://github.com/Kurrent/Kurrent-Client-NodeJS/workflows/CI/badge.svg?branch=master
+[ci-badge-url]: https://github.com/Kurrent/Kurrent-Client-NodeJS/actions
+[license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
+[license-badge-url]: https://github.com/Kurrent/Kurrent-Client-NodeJS/blob/master/LICENSE
+[contribution guidelines]: https://github.com/Kurrent/Kurrent-Client-NodeJS/blob/master/CONTRIBUTING.md
+[Kurrent docs]: https://developers.eventstore.com/server/v24.6/quick-start/installation
