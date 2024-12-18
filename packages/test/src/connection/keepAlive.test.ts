@@ -13,7 +13,7 @@ describe("keepAlive settings", () => {
         [
           "connectionString",
           (option: string, value: number) =>
-            KurrentDBClient.connectionString`esdb://host?${option}=${value}`,
+            KurrentDBClient.connectionString`kurrent://host?${option}=${value}`,
         ],
         [
           "constructor",
@@ -31,7 +31,7 @@ describe("keepAlive settings", () => {
       [
         "connectionString",
         (value: number) =>
-          KurrentDBClient.connectionString`esdb://host?keepAliveInterval=${value}`,
+          KurrentDBClient.connectionString`kurrent://host?keepAliveInterval=${value}`,
       ],
       [
         "constructor",

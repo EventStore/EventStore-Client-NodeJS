@@ -33,7 +33,7 @@ import type {
 } from "@kurrent/db-client";
 import type { ReadResp as StreamsReadResp } from "@kurrent/db-client/generated/streams_pb";
 import type { ReadResp as PersistentReadResp } from "@kurrent/db-client/generated/persistent_pb";
-import { KurrentDBAttributes } from "./attributes";
+import { KurrentAttributes } from "./attributes";
 import type { PersistentSubscriptionImpl } from "@kurrent/db-client/src/persistentSubscription/utils/PersistentSubscriptionImpl";
 import type { Subscription } from "@kurrent/db-client/src/streams/utils/Subscription";
 import { INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION } from "./version";
@@ -144,19 +144,19 @@ export class Instrumentation extends InstrumentationBase {
         const { hostname, port } = Instrumentation.getServerAddress(uri);
 
         const attributes: Attributes = {
-          [KurrentDBAttributes.KURRENT_DB_STREAM]: streamName,
-          [KurrentDBAttributes.SERVER_ADDRESS]: hostname,
-          [KurrentDBAttributes.SERVER_PORT]: port,
-          [KurrentDBAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
-          [KurrentDBAttributes.DATABASE_OPERATION]: operation,
+          [KurrentAttributes.KURRENT_DB_STREAM]: streamName,
+          [KurrentAttributes.SERVER_ADDRESS]: hostname,
+          [KurrentAttributes.SERVER_PORT]: port,
+          [KurrentAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
+          [KurrentAttributes.DATABASE_OPERATION]: operation,
         };
 
         if (options?.credentials) {
-          attributes[KurrentDBAttributes.DATABASE_USER] =
+          attributes[KurrentAttributes.DATABASE_USER] =
             options.credentials.username;
         }
 
-        const span = tracer.startSpan(KurrentDBAttributes.STREAM_APPEND, {
+        const span = tracer.startSpan(KurrentAttributes.STREAM_APPEND, {
           kind: SpanKind.CLIENT,
           attributes,
         });
@@ -230,31 +230,33 @@ export class Instrumentation extends InstrumentationBase {
       const subscriptionId = subscription.id;
 
       const attributes: Attributes = {
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: resolvedEvent?.event?.streamId,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_ID]: resolvedEvent?.event?.id,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]: resolvedEvent?.event?.type,
-        [KurrentDBAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscriptionId,
-        [KurrentDBAttributes.SERVER_ADDRESS]: hostname,
-        [KurrentDBAttributes.SERVER_PORT]: port,
-        [KurrentDBAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
-        [KurrentDBAttributes.DATABASE_OPERATION]: operation,
-        [KurrentDBAttributes.DATABASE_USER]: options?.credentials?.username,
+        [KurrentAttributes.KURRENT_DB_STREAM]: resolvedEvent?.event?.streamId,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: resolvedEvent?.event?.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: resolvedEvent?.event?.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscriptionId,
+        [KurrentAttributes.SERVER_ADDRESS]: hostname,
+        [KurrentAttributes.SERVER_PORT]: port,
+        [KurrentAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
+        [KurrentAttributes.DATABASE_OPERATION]: operation,
+        [KurrentAttributes.DATABASE_USER]: options?.credentials?.username,
       };
 
-      return context.with(parentContext, () => {
-        const span = tracer.startSpan(spanName, {
+      const span = tracer.startSpan(
+        spanName,
+        {
           attributes,
           kind: SpanKind.CONSUMER,
-        });
+        },
+        parentContext
+      );
 
-        try {
-          return resolved;
-        } catch (error) {
-          throw Instrumentation.handleError(error, span);
-        } finally {
-          span.end();
-        }
-      });
+      try {
+        return resolved;
+      } catch (error) {
+        throw Instrumentation.handleError(error, span);
+      } finally {
+        span.end();
+      }
     };
   }
 
@@ -291,7 +293,7 @@ export class Instrumentation extends InstrumentationBase {
 
         this.resolveUri().then((uri) =>
           Instrumentation.applySubscriptionInstrumentation(
-            KurrentDBAttributes.STREAM_SUBSCRIBE,
+            KurrentAttributes.STREAM_SUBSCRIBE,
             subscription,
             uri,
             operation,
@@ -338,7 +340,7 @@ export class Instrumentation extends InstrumentationBase {
 
         this.resolveUri().then((uri) =>
           Instrumentation.applySubscriptionInstrumentation(
-            KurrentDBAttributes.STREAM_SUBSCRIBE,
+            KurrentAttributes.STREAM_SUBSCRIBE,
             subscription,
             uri,
             operation,

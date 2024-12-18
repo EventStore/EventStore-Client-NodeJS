@@ -33,5 +33,5 @@ Refer to our [Contribution Guidelines]
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
-[license-badge-url]: https://github.com/Kurrent/Kurrent-Client-NodeJS/blob/master/LICENSE
-[contribution guidelines]: https://github.com/Kurrent/Kurrent-Client-NodeJS/blob/master/CONTRIBUTING.md
+[license-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/LICENSE
+[contribution guidelines]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/CONTRIBUTING.md

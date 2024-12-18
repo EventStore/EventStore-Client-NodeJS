@@ -5,11 +5,11 @@ import {
   SimpleSpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 import {
-  SEMATTRS_EXCEPTION_STACKTRACE,
-  SEMATTRS_EXCEPTION_TYPE,
+  ATTR_EXCEPTION_STACKTRACE,
+  ATTR_EXCEPTION_TYPE,
 } from "@opentelemetry/semantic-conventions";
 import { KurrentDBInstrumentation } from "@kurrent/opentelemetry";
-import { KurrentDBAttributes } from "@kurrent/opentelemetry/dist/attributes";
+import { KurrentAttributes } from "@kurrent/opentelemetry/dist/attributes";
 import { v4 } from "uuid";
 import { collect } from "@test-utils";
 
@@ -19,7 +19,7 @@ tracerProvider.register();
 const instrumentation = new KurrentDBInstrumentation();
 instrumentation.disable();
 
-import * as esdb from "@kurrent/db-client";
+import * as kdb from "@kurrent/db-client";
 import {
   AppendToStreamOptions,
   ResolvedEvent,
@@ -36,7 +36,7 @@ describe("instrumentation", () => {
   tracerProvider.addSpanProcessor(new SimpleSpanProcessor(memoryExporter));
 
   // @ts-expect-error the moduleExports property is private. This is needed to make the test work with auto-mocking
-  instrumentation._modules[0].moduleExports = esdb;
+  instrumentation._modules[0].moduleExports = kdb;
 
   beforeAll(async () => {
     await node.up();
@@ -104,15 +104,15 @@ describe("instrumentation", () => {
         });
 
         const expectedAttributes = {
-          [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-          [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-          [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-          [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-          [KurrentDBAttributes.DATABASE_OPERATION]: "appendToStream",
+          [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+          [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+          [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+          [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+          [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
         };
 
         if (withCredentials) {
-          expectedAttributes[KurrentDBAttributes.DATABASE_USER] =
+          expectedAttributes[KurrentAttributes.DATABASE_USER] =
             credentials!.username;
         }
 
@@ -162,8 +162,8 @@ describe("instrumentation", () => {
             expect.objectContaining({
               name: "exception",
               attributes: {
-                [SEMATTRS_EXCEPTION_TYPE]: "Error",
-                [SEMATTRS_EXCEPTION_STACKTRACE]: error.stack,
+                [ATTR_EXCEPTION_TYPE]: "Error",
+                [ATTR_EXCEPTION_STACKTRACE]: error.stack,
               },
             })
           );
@@ -221,10 +221,10 @@ describe("instrumentation", () => {
       const spans = memoryExporter.getFinishedSpans();
 
       const parentSpan = spans.find(
-        (span) => span.name === KurrentDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) => span.name === KurrentDBAttributes.STREAM_SUBSCRIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(handleConfirmation).toHaveBeenCalledTimes(1);
@@ -234,27 +234,27 @@ describe("instrumentation", () => {
       expect(parentSpan?.spanContext().spanId).toBe(childSpan?.parentSpanId);
 
       expect(childSpan?.attributes).toMatchObject({
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_ID]: event.id,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
-        [KurrentDBAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
-        [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [KurrentDBAttributes.DATABASE_OPERATION]: "subscribeToStream",
-        [KurrentDBAttributes.DATABASE_USER]: "admin",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: event.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "subscribeToStream",
+        [KurrentAttributes.DATABASE_USER]: "admin",
       });
 
       expect(parentSpan?.attributes).toMatchObject({
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-        [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [KurrentDBAttributes.DATABASE_OPERATION]: "appendToStream",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
       });
     });
 
-    test.only("events with non-json metadata are not traced in subscriptions", async () => {
+    test("events with non-json metadata are not traced in subscriptions", async () => {
       const defer = new Defer();
       const { KurrentDBClient, jsonEvent, binaryEvent } = await import(
         "@kurrent/db-client"
@@ -314,11 +314,11 @@ describe("instrumentation", () => {
       const spans = memoryExporter.getFinishedSpans();
 
       const parentSpans = spans.filter(
-        (span) => span.name === KurrentDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
 
       const childSpans = spans.filter(
-        (span) => span.name === KurrentDBAttributes.STREAM_SUBSCRIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(handleConfirmation).toHaveBeenCalledTimes(1);
@@ -330,10 +330,10 @@ describe("instrumentation", () => {
       expect(childSpans).toHaveLength(1);
 
       expect(
-        childSpans[0].attributes[KurrentDBAttributes.KURRENT_DB_EVENT_ID]
+        childSpans[0].attributes[KurrentAttributes.KURRENT_DB_EVENT_ID]
       ).toBe(event1.id);
       expect(
-        childSpans[0].attributes[KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]
+        childSpans[0].attributes[KurrentAttributes.KURRENT_DB_EVENT_TYPE]
       ).toBe(event1.type);
     });
   });
@@ -400,10 +400,10 @@ describe("instrumentation", () => {
       expect(handleEvent).toHaveBeenCalledTimes(1);
 
       const parentSpan = spans.find(
-        (span) => span.name === KurrentDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) => span.name === KurrentDBAttributes.STREAM_SUBSCRIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(parentSpan).toBeDefined();
@@ -411,23 +411,23 @@ describe("instrumentation", () => {
       expect(parentSpan?.spanContext().spanId).toBe(childSpan?.parentSpanId);
 
       expect(childSpan?.attributes).toMatchObject({
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_ID]: event.id,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
-        [KurrentDBAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
-        [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [KurrentDBAttributes.DATABASE_OPERATION]:
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: event.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]:
           "subscribeToPersistentSubscriptionToStream",
       });
 
       expect(parentSpan?.attributes).toMatchObject({
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-        [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [KurrentDBAttributes.DATABASE_OPERATION]: "appendToStream",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
       });
     });
 
@@ -502,10 +502,10 @@ describe("instrumentation", () => {
       const spans = memoryExporter.getFinishedSpans();
 
       const parentSpan = spans.find(
-        (span) => span.name === KurrentDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) => span.name === KurrentDBAttributes.STREAM_SUBSCRIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(parentSpan).toBeDefined();
@@ -513,24 +513,24 @@ describe("instrumentation", () => {
       expect(parentSpan?.spanContext().spanId).toBe(childSpan?.parentSpanId);
 
       expect(childSpan?.attributes).toMatchObject({
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_ID]: event.id,
-        [KurrentDBAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
-        [KurrentDBAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
-        [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [KurrentDBAttributes.DATABASE_OPERATION]:
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: event.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]:
           "subscribeToPersistentSubscriptionToAll",
-        [KurrentDBAttributes.DATABASE_USER]: "admin",
+        [KurrentAttributes.DATABASE_USER]: "admin",
       });
 
       expect(parentSpan?.attributes).toMatchObject({
-        [KurrentDBAttributes.KURRENT_DB_STREAM]: STREAM,
-        [KurrentDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [KurrentDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [KurrentDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [KurrentDBAttributes.DATABASE_OPERATION]: "appendToStream",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
       });
     });
   });

@@ -49,12 +49,12 @@ describe("client certificates", () => {
       [
         "userCertFile",
         () =>
-          KurrentDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userCertFile=${node.certPath.admin.certPath}`,
+          KurrentDBClient.connectionString`kurrent://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userCertFile=${node.certPath.admin.certPath}`,
       ],
       [
         "userKeyFile",
         () =>
-          KurrentDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}`,
+          KurrentDBClient.connectionString`kurrent://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}`,
       ],
     ])("connection string with %s only", (_, connection) => {
       try {
@@ -125,7 +125,7 @@ describe("client certificates", () => {
     ).rejects.toThrow(AccessDeniedError);
   });
 
-  test("When the client is initialized with invalid certificate, user credentials take precendence if overriden during a call", async () => {
+  test("When the client is initialized with invalid certificate, user credentials take precedence if overridden during a call", async () => {
     const clientWithBadCertificate = new KurrentDBClient(
       { endpoint: node.uri },
       {

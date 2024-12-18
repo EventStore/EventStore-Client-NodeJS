@@ -18,7 +18,7 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
     [
       "connectionString",
       (nodePreference?: NodePreference) =>
-        KurrentDBClient.connectionString`esdb+discover://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud${
+        KurrentDBClient.connectionString`kurrent+discover://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud${
           nodePreference ? `?nodePreference=${nodePreference}` : ""
         }`,
     ],

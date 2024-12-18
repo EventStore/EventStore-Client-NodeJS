@@ -1,35 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connection string parser Should throw on invalid strings esbd+discovery://localhost 1`] = `"Unexpected \\"esbd+discovery://\\" at position 0, expected esdb:// or esdb+discover://."`;
+exports[`connection string parser Should throw on invalid strings esbd+discovery://localhost 1`] = `"Unexpected \\"esbd+discovery://\\" at position 0, expected kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://host1,host2:200:300?throwOnAppendFailure=false 1`] = `"Unexpected \\":300\\" at position 22, expected , or ?key=value."`;
+exports[`connection string parser Should throw on invalid strings https://console.eventstore.cloud/ 1`] = `"Unexpected \\"https://\\" at position 0, expected kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://host1;host2;host3?throwOnAppendFailure=false 1`] = `"Unexpected \\";\\" at position 12, expected ?key=value."`;
+exports[`connection string parser Should throw on invalid strings kurrent://host1,host2:200:300?throwOnAppendFailure=false 1`] = `"Unexpected \\":300\\" at position 25, expected , or ?key=value."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost/&throwOnAppendFailure=false 1`] = `"Unexpected \\"&\\" at position 17, expected ?key=value."`;
+exports[`connection string parser Should throw on invalid strings kurrent://host1;host2;host3?throwOnAppendFailure=false 1`] = `"Unexpected \\";\\" at position 15, expected ?key=value."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?keepAliveInterval=XXIV 1`] = `"Unexpected \\"XXIV\\" at position 35, expected Integer."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost/&throwOnAppendFailure=false 1`] = `"Unexpected \\"&\\" at position 20, expected ?key=value."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?keepAliveTimeout=please 1`] = `"Unexpected \\"please\\" at position 34, expected Integer."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost?keepAliveInterval=XXIV 1`] = `"Unexpected \\"XXIV\\" at position 38, expected Integer."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=false&nodePreference=any 1`] = `"Unexpected \\"any\\" at position 59, expected leader or follower or read_only_replica or random."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost?keepAliveTimeout=please 1`] = `"Unexpected \\"please\\" at position 37, expected Integer."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=false?nodePreference=follower 1`] = `"Unexpected \\"?\\" at position 43, expected &key=value."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost?throwOnAppendFailure=false&nodePreference=any 1`] = `"Unexpected \\"any\\" at position 62, expected leader or follower or read_only_replica or random."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=if you feel like it 1`] = `"Unexpected \\"if you feel like it\\" at position 38, expected true or false."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost?throwOnAppendFailure=false?nodePreference=follower 1`] = `"Unexpected \\"?\\" at position 46, expected &key=value."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://localhost?throwOnAppendFailure=sometimes 1`] = `"Unexpected \\"sometimes\\" at position 38, expected true or false."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost?throwOnAppendFailure=if you feel like it 1`] = `"Unexpected \\"if you feel like it\\" at position 41, expected true or false."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://my:great@username:UyeXx8$^PsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false 1`] = `"Unexpected \\"UyeXx8\\" at position 25, expected port number."`;
+exports[`connection string parser Should throw on invalid strings kurrent://localhost?throwOnAppendFailure=sometimes 1`] = `"Unexpected \\"sometimes\\" at position 41, expected true or false."`;
 
-exports[`connection string parser Should throw on invalid strings esdb://throwOnAppendFailure=false 1`] = `"Unexpected \\"=\\" at position 27, expected ?key=value."`;
+exports[`connection string parser Should throw on invalid strings kurrent://my:great@username:UyeXx8$^PsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false 1`] = `"Unexpected \\"UyeXx8\\" at position 28, expected port number."`;
 
-exports[`connection string parser Should throw on invalid strings https://console.eventstore.cloud/ 1`] = `"Unexpected \\"https://\\" at position 0, expected esdb:// or esdb+discover://."`;
+exports[`connection string parser Should throw on invalid strings kurrent://throwOnAppendFailure=false 1`] = `"Unexpected \\"=\\" at position 30, expected ?key=value."`;
 
-exports[`connection string parser Should throw on invalid strings localhost 1`] = `"Unexpected \\"l\\" at position 0, expected esdb:// or esdb+discover://."`;
+exports[`connection string parser Should throw on invalid strings localhost 1`] = `"Unexpected \\"l\\" at position 0, expected kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
 
 exports[`connection string parser Should warn on unknown and unsupported keys esdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false 1`] = `
 Array [
+  Array [
+    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+  ],
   Array [
     "Unknown option key \\"catchOnAppendFailure\\", setting will be ignored.
 esdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false
@@ -38,30 +41,40 @@ esdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false
 ]
 `;
 
-exports[`connection string parser Should warn on unknown and unsupported keys esdb://localhost?someNonsense=follower&doTheThing=true 1`] = `
+exports[`connection string parser Should warn on unknown and unsupported keys kurrent://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false 1`] = `
 Array [
   Array [
-    "Unknown option key \\"someNonsense\\", setting will be ignored.
-esdb://localhost?someNonsense=follower&doTheThing=true
-                 ^^^^^^^^^^^^",
-  ],
-  Array [
-    "Unknown option key \\"doTheThing\\", setting will be ignored.
-esdb://localhost?someNonsense=follower&doTheThing=true
-                                       ^^^^^^^^^^",
+    "Unknown option key \\"catchOnAppendFailure\\", setting will be ignored.
+kurrent://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false
+                    ^^^^^^^^^^^^^^^^^^^^",
   ],
 ]
 `;
 
-exports[`connection string parser Should warn on unknown and unsupported keys esdb://localhost?tlsVerifyCert=false 1`] = `
+exports[`connection string parser Should warn on unknown and unsupported keys kurrent://localhost?someNonsense=follower&doTheThing=true 1`] = `
+Array [
+  Array [
+    "Unknown option key \\"someNonsense\\", setting will be ignored.
+kurrent://localhost?someNonsense=follower&doTheThing=true
+                    ^^^^^^^^^^^^",
+  ],
+  Array [
+    "Unknown option key \\"doTheThing\\", setting will be ignored.
+kurrent://localhost?someNonsense=follower&doTheThing=true
+                                          ^^^^^^^^^^",
+  ],
+]
+`;
+
+exports[`connection string parser Should warn on unknown and unsupported keys kurrent://localhost?tlsVerifyCert=false 1`] = `
 Array [
   Array [
     "\\"tlsVerifyCert\\" is not currently supported by this client, and will have no effect.
 Consider either:
     Passing \\"tlsCAFile\\" in the connection string.
     Setting NODE_EXTRA_CA_CERTS https://nodejs.org/api/cli.html#cli_node_extra_ca_certs_file
-esdb://localhost?tlsVerifyCert=false
-                 ^^^^^^^^^^^^^^^^^^^",
+kurrent://localhost?tlsVerifyCert=false
+                    ^^^^^^^^^^^^^^^^^^^",
   ],
 ]
 `;

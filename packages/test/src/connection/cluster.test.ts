@@ -1,6 +1,8 @@
 import { collect, createTestCluster } from "@test-utils";
 import { jsonEvent, KurrentDBClient } from "@kurrent/db-client";
 
+jest.setTimeout(120_000);
+
 describe("cluster", () => {
   const cluster = createTestCluster();
   const STREAM_NAME = "test_stream_name";

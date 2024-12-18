@@ -3,7 +3,7 @@ const db = "db";
 const server = "server";
 const streams = "streams";
 
-export const KurrentDBAttributes = {
+export const KurrentAttributes = {
   DATABASE_USER: `${db}.user`,
   DATABASE_SYSTEM: `${db}.system`,
   DATABASE_OPERATION: `${db}.operation`,

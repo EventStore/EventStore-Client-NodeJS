@@ -16,11 +16,11 @@ describe("[sample] user certificates", () => {
   });
 
   test("connection string", async () => {
-    const connectionStringTemplate = `esdb://admin:changeit@{endpoint}?tls=true&userCertFile={pathToCaFile}&userKeyFile={pathToKeyFile}`;
+    const connectionStringTemplate = `kurrent://admin:changeit@{endpoint}?tls=true&userCertFile={pathToCaFile}&userKeyFile={pathToKeyFile}`;
 
     try {
       // region client-with-user-certificates
-      const connectionString = `esdb://admin:changeit@{endpoint}?tls=true&userCertFile={pathToCaFile}&userKeyFile={pathToKeyFile}`;
+      const connectionString = `kurrent://admin:changeit@{endpoint}?tls=true&userCertFile={pathToCaFile}&userKeyFile={pathToKeyFile}`;
       const client = KurrentDBClient.connectionString(connectionString);
       // endregion client-with-user-certificates
 

@@ -74,7 +74,7 @@ const createNodes = (
   internalIPs.reduce(
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
       ...acc,
-      [`esdb-node-${i}`]: {
+      [`kdb-node-${i}`]: {
         image: dockerImages.kdb,
         environment: [
           `EVENTSTORE_GOSSIP_SEED=${ipAddresses
@@ -397,7 +397,7 @@ export class Cluster {
 
   private healthy = async (...nodes: string[]) => {
     nodes = !nodes.length
-      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      ? Array.from({ length: this.count }, (_, i) => `kdb-node-${i}`)
       : nodes;
 
     const healthy = new Set();
@@ -429,7 +429,7 @@ export class Cluster {
 
   private leaderElected = async (...nodes: string[]) => {
     nodes = !nodes.length
-      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      ? Array.from({ length: this.count }, (_, i) => `kdb-node-${i}`)
       : nodes;
 
     const ready = new Set();
@@ -494,6 +494,6 @@ export class Cluster {
       throw new Error(`unknown node ${endpoint.address}:${endpoint.port}`);
     }
 
-    return `esdb-node-${index}`;
+    return `kdb-node-${index}`;
   };
 }

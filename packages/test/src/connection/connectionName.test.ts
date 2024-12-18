@@ -13,7 +13,7 @@ describe("connectionName", () => {
 
   test("connection string", async () => {
     const CONNECTION_NAME = "my great connection";
-    const client = KurrentDBClient.connectionString`esdb://host?connectionName=${CONNECTION_NAME}`;
+    const client = KurrentDBClient.connectionString`kurrent://host?connectionName=${CONNECTION_NAME}`;
 
     expect(client.connectionName).toBe(CONNECTION_NAME);
   });

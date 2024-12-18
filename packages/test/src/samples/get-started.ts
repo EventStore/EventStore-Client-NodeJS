@@ -19,7 +19,7 @@ const client = KurrentDBClient.connectionString`{connectionString}`;
 
 optionalDescribe(!!CLOUD_ID)("[sample] get-started", () => {
   test("get-started", async () => {
-    const client = KurrentDBClient.connectionString`esdb+discover://${CLOUD_ID}.mesdb.eventstore.cloud`;
+    const client = KurrentDBClient.connectionString`kurrent+discover://${CLOUD_ID}.mesdb.eventstore.cloud`;
 
     // region createEvent
     type TestEvent = JSONEventType<

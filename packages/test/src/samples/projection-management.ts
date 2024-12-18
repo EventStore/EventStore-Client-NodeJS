@@ -65,7 +65,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
 
       // region createClient
       const client = KurrentDBClient.connectionString`
-        esdb+discover://${ADMIN}:${PASSWORD}@${ENDPOINT}?nodePreference=leader
+        kurrent+discover://${ADMIN}:${PASSWORD}@${ENDPOINT}?nodePreference=leader
     `;
       // endregion createClient
 

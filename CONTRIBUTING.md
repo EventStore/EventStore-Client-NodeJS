@@ -10,7 +10,7 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 **Repository Setup:**
 1. Clone the repository:
    ```bash
-   $ git clone git@github.com:Kurrent/Kurrent-Client-NodeJS.git
+   $ git clone git@github.com:EventStore/Kurrent-Client-NodeJS.git
    $ cd Kurrent-Client-NodeJS
    ```
 2. Install all necessary dependencies:
@@ -70,7 +70,7 @@ $ npm run test:debug // debug all tests
 $ npm run test:debug ReadAll // only the ReadAll tests
 ```
 
-Specific docker images can be specified via the enviroment variable `KURRENT_IMAGE`.
+Specific docker images can be specified via the environment variable `KURRENT_IMAGE`.
 
 ```shell script
 $ npx cross-env KURRENT_IMAGE=77d63f3f0ab3 jest
@@ -81,8 +81,8 @@ See [Jest] documentation for more options.
 ### Debugging
 
 This project uses the [debug] module internally to log information about connections, options and GRPC requests.
-To see all the internal logs, set the DEBUG environment variable to `esdb:*` when launching your app.
-Logs can be further filtered with glob patterns, for example, only connection logs: `esdb:connection`, everything but grpc logs: `esdb:*,-*:grpc`.
+To see all the internal logs, set the DEBUG environment variable to `kdb:*` when launching your app.
+Logs can be further filtered with glob patterns, for example, only connection logs: `kdb:connection`, everything but grpc logs: `kdb:*,-*:grpc`.
 
 You can set a few environment variables that will further change the behavior of the debug logging:
 
@@ -103,4 +103,4 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 [jest]: https://jestjs.io/
 [debug]: https://github.com/visionmedia/debug
 [`util.inspect()`]: https://nodejs.org/api/util.html#util_util_inspect_object_options
-[kurrent-client-nodejs]: https://github.com/Kurrent/Kurrent-Client-NodeJS
+[kurrent-client-nodejs]: https://github.com/EventStore/Kurrent-Client-NodeJS

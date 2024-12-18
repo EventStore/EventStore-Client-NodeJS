@@ -67,8 +67,8 @@ Refer to our [contribution guidelines][contributing-guidelines].
 [Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [contributing-guidelines]: https://github.com/prisma/prisma/blob/main/CONTRIBUTING.md
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
-[license-badge-url]: https://github.com/Kurrent/Kurrent-Client-NodeJS/blob/master/LICENSE
-[ci-badge-url]: https://github.com/Kurrent/Kurrent-Client-NodeJS/actions
-[Kurrent-Client-NodeJS]: https://github.com/Kurrent/Kurrent-Client-NodeJS
-[ci-badge]: https://github.com/Kurrent/Kurrent-Client-NodeJS/workflows/CI/badge.svg?branch=master
-[ci-badge-url]: https://github.com/Kurrent/Kurrent-Client-NodeJS/actions
+[license-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/LICENSE
+[ci-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/actions
+[Kurrent-Client-NodeJS]: https://github.com/EventStore/Kurrent-Client-NodeJS
+[ci-badge]: https://github.com/EventStore/Kurrent-Client-NodeJS/workflows/CI/badge.svg?branch=master
+[ci-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/actions
