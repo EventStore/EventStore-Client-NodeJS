@@ -1,15 +1,16 @@
 {
   "name": "@kurrent/opentelemetry",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Kurrent NodeJS Client SDK interceptors for tracing with OpenTelemetry",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "npm-run-all build:ts",
+    "build": "pnpm run build:ts",
     "build:ts": "tsc --build",
-    "build:watch": "npm-run-all build:ts-watch",
+    "build:watch": "pnpm run build:ts-watch",
     "build:ts-watch": "tsc --build --watch",
-    "clean": "run-s clean:*",
+    "clean": "pnpm run \"/^clean:.*/\"",
     "clean:dist": "shx rm -rf ./dist",
     "clean:buildinfo": "shx rm -rf *.tsbuildinfo"
   },
@@ -18,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EventStore/EventStore-Client-NodeJS.git"
+    "url": "git+https://github.com/EventStore/Kurrent-Client-NodeJS.git"
   },
   "keywords": [
     "EventStore",
@@ -32,13 +33,13 @@
     "node": "^12.18.3 || >=14"
   },
   "dependencies": {
-    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/instrumentation": "^0.56.0"
   },
   "devDependencies": {
-    "@kurrent/db-client": "file:../db-client"
+    "@kurrent/db-client": "workspace:*"
   },
   "peerDependencies": {
-    "@eventstore/db-client": "^6"
+    "@kurrent/db-client": "^1"
   }
 }

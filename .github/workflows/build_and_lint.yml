@@ -14,12 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
       - name: Install
-        run: npm install
+        run: pnpm install
+
       - name: Linting
-        run: npm run lint
+        run: pnpm run lint
+
       - name: Build on Ubuntu
-        run: npm run build
+        run: pnpm run build
+
       - name: All generated code is commited
         run: |
           git update-index --refresh
@@ -30,17 +38,28 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .github/files/.nvmrc
+
       - name: NodeJS version
         run: node -v
+
+      - name: PNPM version
+        run: pnpm --version
+
       - name: Install
-        run: npm install
+        run: pnpm install
+
       - name: Build
-        run: npm run build
+        run: pnpm run build

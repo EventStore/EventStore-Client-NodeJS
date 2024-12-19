@@ -19,11 +19,11 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
    ```
 3. Build the project for the first time:
    ```bash
-   npm run build
+   pnpm run build
    ```
    In case of build errors, refresh your setup with:
    ```bash
-   npx lerna clean -y && npm run install
+   npx lerna clean -y && pnpm run install
    ```
 
 ## Development Practices
@@ -31,21 +31,21 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 **Code Compilation:**
 - Standard Build:
   ```bash
-  npm run build
+  pnpm run build
   ```
 - Continuous Build on Changes:
   ```bash
-  npm run build:watch
+  pnpm run build:watch
   ```
 
 **Testing and Linting:**
 - Run the complete test suite:
   ```bash
-  npm run test
+  pnpm run test
   ```
 - Perform code style checks:
   ```bash
-  npm run lint
+  pnpm run lint
   ```
 
 ### Tests
@@ -53,21 +53,21 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 Tests are written using [Jest] and require [Docker] and [Docker Compose] to be installed. Then run test with:
 
 ```shell script
-npm run test
+pnpm run test
 ```
 
 Tests can be filtered by prepending the test file or folder to the command
 
 ```shell script
-$ npm run test connection // all connection tests
-$ npm run test ReadAll // only the ReadAll tests
+$ pnpm run test connection // all connection tests
+$ pnpm run test ReadAll // only the ReadAll tests
 ```
 
 To get debug information when running tests use the `test:debug` command.
 
 ```shell script
-$ npm run test:debug // debug all tests
-$ npm run test:debug ReadAll // only the ReadAll tests
+$ pnpm run test:debug // debug all tests
+$ pnpm run test:debug ReadAll // only the ReadAll tests
 ```
 
 Specific docker images can be specified via the environment variable `KURRENT_IMAGE`.

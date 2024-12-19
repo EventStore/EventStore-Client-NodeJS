@@ -1,0 +1,8 @@
+packages:
+  - packages/*
+
+catalog:
+  '@types/debug': ^4.1.12
+  '@types/uuid': ^9.0.8
+  uuid: 11.0.3
+  debug: ^4.4.0

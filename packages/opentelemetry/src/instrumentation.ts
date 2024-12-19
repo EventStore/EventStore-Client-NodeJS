@@ -55,7 +55,7 @@ export class Instrumentation extends InstrumentationBase {
   protected init() {
     return new InstrumentationNodeModuleDefinition(
       "@kurrent/db-client",
-      ["6.*"],
+      ["1.*"],
       this._onPatchMain(),
       this._onUnPatchMain()
     );
@@ -360,14 +360,12 @@ export class Instrumentation extends InstrumentationBase {
     const traceId = metadata[TRACE_ID] as string;
     const spanId = metadata[SPAN_ID] as string;
 
-    const parentContext = trace.setSpanContext(context.active(), {
+    return trace.setSpanContext(context.active(), {
       traceId,
       spanId,
       traceFlags: TraceFlags.SAMPLED,
       isRemote,
     });
-
-    return parentContext;
   };
 
   private static handleError = (error: any, span: Span) => {
@@ -377,7 +375,7 @@ export class Instrumentation extends InstrumentationBase {
   };
 
   private static getServerAddress = (resolvedUri: string) => {
-    const uri = new URL(`http://${resolvedUri}`);
+    const uri = new URL(`http://${resolvedUri}`); // the protocol is not important because we are only interested in the hostname and port
 
     const hostname = uri.hostname;
     const port = uri.port;

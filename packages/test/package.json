@@ -4,10 +4,11 @@
   "private": true,
   "description": "KurrentDB Client Tests",
   "scripts": {
-    "build": "npm-run-all build:ts*",
+    "build": "pnpm run build:ts",
     "build:ts": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "clean": "run-s clean:*",
+    "build:watch": "pnpm run build:ts-watch",
+    "build:ts-watch": "tsc --build --watch",
+    "clean": "pnpm run \"/^clean:.*/\"",
     "clean:dist": "shx rm -rf ./dist",
     "clean:buildinfo": "shx rm -rf *.tsbuildinfo",
     "clean:test-instances": "shx rm -rf ./src/utils/instances",
@@ -21,28 +22,33 @@
   "bugs": {
     "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
   },
-  "homepage": "https://developers.eventstore.com/clients/grpc/getting-started?codeLanguage=NodeJS",
+  "homepage": "https://developers.kurrent.io/clients/grpc/getting-started?codeLanguage=NodeJS",
   "keywords": [
     "EventStore",
     "EventSourcing",
     "Test"
   ],
   "dependencies": {
-    "@kurrent/db-client": "file:../db-client",
-    "@kurrent/opentelemetry": "file:../opentelemetry",
-    "jest": "^27.5.1",
-    "ts-jest": "^27.1.5"
+    "@kurrent/db-client": "workspace:*",
+    "@kurrent/opentelemetry": "workspace:*"
   },
   "devDependencies": {
-    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/api": "^1.9.0",
+    "@grpc/grpc-js": "^1.12.4",
+    "@opentelemetry/instrumentation": "^0.56.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.51.1",
-    "@opentelemetry/sdk-trace-node": "^1.23.0",
-    "@opentelemetry/semantic-conventions": "^1.23.0",
-    "@types/jest": "^29.5.12",
+    "@opentelemetry/sdk-trace-node": "^1.30.0",
+    "@opentelemetry/semantic-conventions": "^1.28.0",
+    "@types/jest": "^29.5.14",
     "docker-compose": "^0.24.8",
+    "dotenv": "^16.4.7",
     "get-port": "^5.1.1",
-    "dotenv": "^16.4.5",
-    "npm-run-all": "^4.1.5",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.5",
+    "@types/uuid": "catalog:",
+    "@types/debug": "catalog:",
+    "debug": "catalog:",
+    "uuid": "catalog:"
   }
 }

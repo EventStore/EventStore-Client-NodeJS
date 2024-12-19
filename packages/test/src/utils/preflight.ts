@@ -14,7 +14,7 @@ const checkFor = async (dependancy: string) => {
 Missing dependancy: ${dependancy}
 
 Tests require docker and docker compose V2 to run. 
-Please see https://github.com/EventStore/EventStore-Client-NodeJS#run-tests for more details.
+Please see https://github.com/EventStore/Kurrent-Client-NodeJS#run-tests for more details.
 `);
     process.exit(1);
   }
