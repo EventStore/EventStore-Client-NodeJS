@@ -21,4 +21,4 @@ version = "1"
 features = ["full"]
 
 [dependencies.eventstore]
-path = "../eventstore"
+version = "3.0.0"
