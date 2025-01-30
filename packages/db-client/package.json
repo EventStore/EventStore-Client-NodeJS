@@ -9,7 +9,7 @@
     "build:ts": "tsc --build",
     "build:watch": "npm-run-all generate build:ts-watch",
     "build:ts-watch": "tsc --build --watch",
-    "generate": "run-s generate:*",
+    "generate": "run-s \"generate:*\"",
     "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
     "generate:sed-insert": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
     "generate:folder": "shx mkdir -p ./generated",
@@ -45,6 +45,7 @@
     "node": "^12.18.3 || >=14"
   },
   "dependencies": {
+    "@eventstore/db-client-bridge": "workspace:*",
     "@grpc/grpc-js": "^1.9.12",
     "@types/debug": "^4.1.12",
     "@types/google-protobuf": "^3.15.12",
