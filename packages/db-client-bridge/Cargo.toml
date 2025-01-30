@@ -1,5 +1,5 @@
 [package]
-name = "eventstore-rs-js-bridge"
+name = "db-client-bridge"
 version = "0.1.0"
 description = "A NodeJS binding for the EventStore Rust client"
 authors = ["Yorick Laupa <yo.eight@gmail.com>"]
