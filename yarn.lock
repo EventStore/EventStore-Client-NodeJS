@@ -562,13 +562,14 @@ __metadata:
     "@neon-rs/load": "npm:^0.1.82"
     "@tsconfig/node20": "npm:^20.1.4"
     "@types/node": "npm:^20.11.16"
+    npm-run-all: "npm:^4.1.5"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
 
 "@eventstore/db-client@file:../db-client::locator=%40eventstore%2Fopentelemetry%40workspace%3Apackages%2Fopentelemetry":
   version: 6.2.1
-  resolution: "@eventstore/db-client@file:../db-client#../db-client::hash=51d060&locator=%40eventstore%2Fopentelemetry%40workspace%3Apackages%2Fopentelemetry"
+  resolution: "@eventstore/db-client@file:../db-client#../db-client::hash=8bbfad&locator=%40eventstore%2Fopentelemetry%40workspace%3Apackages%2Fopentelemetry"
   dependencies:
     "@eventstore/db-client-bridge": "workspace:*"
     "@grpc/grpc-js": "npm:^1.9.12"
@@ -578,13 +579,13 @@ __metadata:
     debug: "npm:^4.3.2"
     google-protobuf: "npm:^3.21.2"
     uuid: "npm:^8.3.2"
-  checksum: 10c0/d3e51aba97b7a5943933f73d4f05b3b557f9d755a8cb4215eb46e6af65557686ee669e7047b830358f7e2490b55840c87a169a8663fe582e4e2695671f32ed2d
+  checksum: 10c0/beef4d70cdb4e2e5e3b0c73fb48d7cdbfde7e54a0919ca4c4874207f1d657a24d4fda6542a020c4e74bda465fb87c4d1bcf97e034b6958d06c8075d463c60465
   languageName: node
   linkType: hard
 
 "@eventstore/db-client@file:../db-client::locator=%40eventstore%2Ftest%40workspace%3Apackages%2Ftest":
   version: 6.2.1
-  resolution: "@eventstore/db-client@file:../db-client#../db-client::hash=51d060&locator=%40eventstore%2Ftest%40workspace%3Apackages%2Ftest"
+  resolution: "@eventstore/db-client@file:../db-client#../db-client::hash=8bbfad&locator=%40eventstore%2Ftest%40workspace%3Apackages%2Ftest"
   dependencies:
     "@eventstore/db-client-bridge": "workspace:*"
     "@grpc/grpc-js": "npm:^1.9.12"
@@ -594,7 +595,7 @@ __metadata:
     debug: "npm:^4.3.2"
     google-protobuf: "npm:^3.21.2"
     uuid: "npm:^8.3.2"
-  checksum: 10c0/d3e51aba97b7a5943933f73d4f05b3b557f9d755a8cb4215eb46e6af65557686ee669e7047b830358f7e2490b55840c87a169a8663fe582e4e2695671f32ed2d
+  checksum: 10c0/beef4d70cdb4e2e5e3b0c73fb48d7cdbfde7e54a0919ca4c4874207f1d657a24d4fda6542a020c4e74bda465fb87c4d1bcf97e034b6958d06c8075d463c60465
   languageName: node
   linkType: hard
 
@@ -620,13 +621,13 @@ __metadata:
 
 "@eventstore/opentelemetry@file:../opentelemetry::locator=%40eventstore%2Ftest%40workspace%3Apackages%2Ftest":
   version: 0.1.0
-  resolution: "@eventstore/opentelemetry@file:../opentelemetry#../opentelemetry::hash=e3bfdd&locator=%40eventstore%2Ftest%40workspace%3Apackages%2Ftest"
+  resolution: "@eventstore/opentelemetry@file:../opentelemetry#../opentelemetry::hash=c0e6b0&locator=%40eventstore%2Ftest%40workspace%3Apackages%2Ftest"
   dependencies:
     "@opentelemetry/api": "npm:^1.8.0"
     "@opentelemetry/instrumentation": "npm:^0.50.0"
   peerDependencies:
     "@eventstore/db-client": ^6
-  checksum: 10c0/d444c077e670657226c37e537b95353893134c56c708fe2498c9c85c0ec90fab8816970526e01fcc2ce2d80c8746642f1947e937ed573d432eabe5d6654aced0
+  checksum: 10c0/827fe17e13ad60a458ed93f0bc4edb8a2406efe24aff31e797c8ea396cc7315cc4e9d8acb88af4cefb263b394303fc2d39b66872d8055a308e0a3a5948b2f251
   languageName: node
   linkType: hard
 
