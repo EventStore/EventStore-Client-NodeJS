@@ -1,5 +1,5 @@
 import type { ReadableOptions } from "stream";
-import { RustReadStreamOptions } from "@eventstore/db-client-bridge";
+import * as bridge from "@eventstore/db-client-bridge";
 
 import { Client } from "../Client";
 import { FORWARDS, START, END } from "../constants";
@@ -53,7 +53,7 @@ declare module "../Client" {
   }
 }
 
-Client.prototype.readStream = async function* <
+Client.prototype.readStream = async function<
     KnownEventType extends EventType = EventType
 >(
     this: Client,
@@ -66,7 +66,7 @@ Client.prototype.readStream = async function* <
       ...baseOptions
     }: ReadStreamOptions = {},
 ): Promise<AsyncIterableIterator<ResolvedEvent<KnownEventType>>> {
-  const options: RustReadStreamOptions = {
+  const options: bridge.RustReadStreamOptions = {
     maxCount: BigInt(maxCount),
     fromRevision,
     resolveLinks: resolveLinkTos,
@@ -104,9 +104,13 @@ Client.prototype.readStream = async function* <
     }
   }
 
+  const convert = async function* (stream: AsyncIterable<bridge.ResolvedEvent>) {
+    for await (const event of stream) {
+      yield convertRustEvent(event);
+    }
+  }
+
   const stream = await this.rustClient.readStream(streamName, options);
 
-  for await (const event of stream) {
-    yield convertRustEvent(event);
-  }
+  return convert(stream);
 };
