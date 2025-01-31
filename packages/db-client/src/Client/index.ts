@@ -706,7 +706,7 @@ export class Client {
     return this.#throwOnAppendFailure;
   }
 
-  protected get rustClient(): bridge.RustClient {
+  public get rustClient(): bridge.RustClient {
     return this.#rustClient;
   }
 }
