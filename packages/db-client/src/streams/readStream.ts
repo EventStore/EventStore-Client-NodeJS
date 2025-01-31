@@ -11,6 +11,7 @@ import type {
   ResolvedEvent,
 } from "../types";
 import {InvalidArgumentError} from "../utils";
+import { convertRustEvent} from "../utils/convertRustEvent";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**
@@ -106,36 +107,6 @@ Client.prototype.readStream = async function* <
   const stream = await this.rustClient.readStream(streamName, options);
 
   for await (const event of stream) {
-    const resolved: ResolvedEvent = {};
-
-    if (event.event != undefined) {
-        resolved.event = {
-          streamId: event.event.streamId,
-          id: event.event.id,
-          revision: event.event.revision,
-          type: event.event.type,
-          isJson: event.event.isJson,
-          data: event.event.data,
-          metadata: event.event.metadata,
-          position: event.event.position,
-          created: event.event.created,
-        };
-    }
-
-    if (event.link != undefined) {
-      resolved.link = {
-        streamId: event.link.streamId,
-        id: event.link.id,
-        revision: event.link.revision,
-        type: event.link.type,
-        isJson: false,
-        data: event.link.data,
-        metadata: event.link.metadata,
-        position: event.link.position,
-        created: event.link.created,
-      };
-    }
-
-    yield resolved;
+    yield convertRustEvent(event);
   }
 };
