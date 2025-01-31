@@ -63,13 +63,14 @@ Client.prototype.getStreamMetadata = async function <
 
   try {
     let metadataEvent;
-
-    for await (const e of this.readStream(metadataStreamName, {
+    const stream = await this.readStream(metadataStreamName, {
       ...baseOptions,
       fromRevision: END,
       maxCount: 1,
       direction: BACKWARDS,
-    })) {
+    });
+
+    for await (const e of stream) {
       metadataEvent = e;
     }
 

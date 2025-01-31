@@ -51,18 +51,22 @@ pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromis
         x => cx.throw_error(format!("invalid direction value: '{}'", x))?,
     };
 
-    let options = match params
-        .get::<JsBigInt, _, _>(&mut cx, "fromRevision")?
-        .to_u64(&mut cx)
+    let options = if let Ok(value) = params
+        .get_value(&mut cx, "fromRevision")?
+        .downcast::<JsString, _>(&mut cx)
     {
-        Ok(r) => {
-            if r == 0 {
-                options.position(StreamPosition::Start)
-            } else {
-                options.position(StreamPosition::Position(r))
-            }
+        match value.value(&mut cx).as_str() {
+            "start" => options.position(StreamPosition::Start),
+            "end" => options.position(StreamPosition::End),
+            x => cx.throw_error(format!("invalid fromRevision value: '{}'", x))?,
         }
-        Err(e) => cx.throw_error(e.to_string())?,
+    } else if let Ok(value) = params.get::<JsBigInt, _, _>(&mut cx, "fromRevision") {
+        match value.to_u64(&mut cx) {
+            Ok(r) => options.position(StreamPosition::Position(r)),
+            Err(e) => cx.throw_error(e.to_string())?,
+        }
+    } else {
+        cx.throw_error("fromRevision can only be 'start', 'end' or a bigint")?
     };
 
     let options = match params
@@ -77,6 +81,16 @@ pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromis
         .get::<JsBoolean, _, _>(&mut cx, "requiresLeader")?
         .value(&mut cx);
     let options = options.requires_leader(require_leader);
+
+    let resolve_links = params
+        .get::<JsBoolean, _, _>(&mut cx, "resolvesLink")?
+        .value(&mut cx);
+
+    let options = if resolve_links {
+        options.resolve_link_tos()
+    } else {
+        options
+    };
 
     let (deferred, promise) = cx.promise();
     let channel = cx.channel();

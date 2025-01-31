@@ -14,18 +14,19 @@ export type Iterable = {
 }
 
 export type RustClient = {
-  readStream(stream: string, options: ReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>>;
+  readStream(stream: string, options: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>>;
 };
 
 export type RawClient = {
-  readStream(stream: string, options: ReadStreamOptions): Promise<Iterable>;
+  readStream(stream: string, options: RustReadStreamOptions): Promise<Iterable>;
 }
 
-export type ReadStreamOptions = {
-  fromRevision: bigint;
+export type RustReadStreamOptions = {
+  fromRevision: bigint | string;
   direction: string;
   maxCount: bigint;
   requiresLeader: boolean;
+  resolveLinks: boolean;
 };
 
 export type ResolvedEvent = {
@@ -51,15 +52,11 @@ export type Position = {
   prepare: bigint;
 };
 
-export type Greeting = {
-  message: string
-};
-
 export function createClient(connStr: string): RustClient {
   const client = addon.createClient(connStr);
 
   return {
-    async readStream(stream: string, options: ReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>> {
+    async readStream(stream: string, options: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>> {
       const iterable = await client.readStream(stream, options);
 
       return {

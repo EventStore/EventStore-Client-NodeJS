@@ -1,27 +1,16 @@
 import type { ReadableOptions } from "stream";
-
-import { Empty } from "../../generated/shared_pb";
-import { StreamsClient } from "../../generated/streams_grpc_pb";
-import { ReadReq } from "../../generated/streams_pb";
+import { RustReadStreamOptions } from "@eventstore/db-client-bridge";
 
 import { Client } from "../Client";
-import { BACKWARDS, END, FORWARDS, START } from "../constants";
+import { FORWARDS, START, END } from "../constants";
 import type {
   BaseOptions,
   Direction,
   EventType,
   ReadRevision,
   ResolvedEvent,
-  StreamingRead,
 } from "../types";
-import {
-  debug,
-  convertGrpcEvent,
-  createStreamIdentifier,
-  InvalidArgumentError,
-} from "../utils";
-
-import { ReadStream } from "./utils/ReadStream";
+import {InvalidArgumentError} from "../utils";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**
@@ -59,105 +48,94 @@ declare module "../Client" {
       streamName: string,
       options?: ReadStreamOptions,
       readableOptions?: ReadableOptions
-    ): StreamingRead<ResolvedEvent<KnownEventType>>;
+    ): Promise<AsyncIterableIterator<ResolvedEvent<KnownEventType>>>;
   }
 }
 
-Client.prototype.readStream = function <
-  KnownEventType extends EventType = EventType
+Client.prototype.readStream = async function* <
+    KnownEventType extends EventType = EventType
 >(
-  this: Client,
-  streamName: string,
-  {
-    maxCount = Number.MAX_SAFE_INTEGER,
-    fromRevision = START,
-    resolveLinkTos = false,
-    direction = FORWARDS,
-    ...baseOptions
-  }: ReadStreamOptions = {},
-  readableOptions: ReadableOptions = {}
-): StreamingRead<ResolvedEvent<KnownEventType>> {
-  const req = new ReadReq();
-  const options = new ReadReq.Options();
-  const streamOptions = new ReadReq.Options.StreamOptions();
-  const uuidOption = new ReadReq.Options.UUIDOption();
-  const identifier = createStreamIdentifier(streamName);
-
-  uuidOption.setString(new Empty());
-  streamOptions.setStreamIdentifier(identifier);
-
+    this: Client,
+    streamName: string,
+    {
+      maxCount = Number.MAX_SAFE_INTEGER,
+      fromRevision = START,
+      resolveLinkTos = false,
+      direction = FORWARDS,
+      ...baseOptions
+    }: ReadStreamOptions = {},
+): Promise<AsyncIterableIterator<ResolvedEvent<KnownEventType>>> {
+  const options: RustReadStreamOptions = {
+    maxCount: BigInt(maxCount),
+    fromRevision,
+    resolveLinks: resolveLinkTos,
+    direction,
+    requiresLeader: baseOptions.requiresLeader ?? true,
+  };
   switch (fromRevision) {
     case START: {
-      streamOptions.setStart(new Empty());
       break;
     }
+
     case END: {
-      streamOptions.setEnd(new Empty());
       break;
     }
+
     default: {
       const lowerBound = BigInt("0");
       const upperBound = BigInt("0xffffffffffffffff");
 
       if (fromRevision < lowerBound) {
         throw new InvalidArgumentError(
-          `fromRevision value must be a non-negative integer. Value Received: ${fromRevision}`
+            `fromRevision value must be a non-negative integer. Value Received: ${fromRevision}`
         );
       }
 
       if (fromRevision > upperBound) {
         throw new InvalidArgumentError(
-          `fromRevision value must be a non-negative integer, range from 0 to 18446744073709551615. Value Received: ${fromRevision}`
+            `fromRevision value must be a non-negative integer, range from 0 to 18446744073709551615. Value Received: ${fromRevision}`
         );
       }
 
-      streamOptions.setRevision(fromRevision.toString(10));
+      options.fromRevision = fromRevision;
+
       break;
     }
   }
 
-  options.setStream(streamOptions);
-  options.setResolveLinks(resolveLinkTos);
-  options.setCount(maxCount.toString(10));
-  options.setUuidOption(uuidOption);
-  options.setNoFilter(new Empty());
+  const stream = await this.rustClient.readStream(streamName, options);
 
-  switch (direction) {
-    case FORWARDS: {
-      options.setReadDirection(0);
-      break;
+  for await (const event of stream) {
+    const resolved: ResolvedEvent = {};
+
+    if (event.event != undefined) {
+        resolved.event = {
+          streamId: event.event.streamId,
+          id: event.event.id,
+          revision: event.event.revision,
+          type: event.event.type,
+          isJson: event.event.isJson,
+          data: event.event.data,
+          metadata: event.event.metadata,
+          position: event.event.position,
+          created: event.event.created,
+        };
     }
-    case BACKWARDS: {
-      options.setReadDirection(1);
-      break;
+
+    if (event.link != undefined) {
+      resolved.link = {
+        streamId: event.link.streamId,
+        id: event.link.id,
+        revision: event.link.revision,
+        type: event.link.type,
+        isJson: false,
+        data: event.link.data,
+        metadata: event.link.metadata,
+        position: event.link.position,
+        created: event.link.created,
+      };
     }
+
+    yield resolved;
   }
-
-  req.setOptions(options);
-
-  debug.command("readStream: %O", {
-    streamName,
-    maxCount,
-    options: {
-      fromRevision,
-      resolveLinkTos,
-      direction,
-      ...baseOptions,
-    },
-  });
-  debug.command_grpc("readStream: %g", req);
-
-  const createGRPCStream = this.GRPCStreamCreator(
-    StreamsClient,
-    "readStream",
-    (client) =>
-      client.read(
-        req,
-        ...this.callArguments(baseOptions, {
-          deadline: Infinity,
-        })
-      )
-  );
-
-  return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);
 };
