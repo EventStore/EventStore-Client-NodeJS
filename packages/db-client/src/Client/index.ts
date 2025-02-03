@@ -252,7 +252,6 @@ export class Client {
       }
 
       return new Client(
-        rustClient,
         {
           discover,
           nodePreference: options.nodePreference,
@@ -266,13 +265,13 @@ export class Client {
           connectionName: options.connectionName,
         },
         channelCredentials,
-        options.defaultCredentials
+        options.defaultCredentials,
+        rustClient
       );
     }
 
     if (options.hosts.length > 1) {
       return new Client(
-        rustClient,
         {
           endpoints: options.hosts,
           nodePreference: options.nodePreference,
@@ -286,12 +285,12 @@ export class Client {
           connectionName: options.connectionName,
         },
         channelCredentials,
-        options.defaultCredentials
+        options.defaultCredentials,
+        rustClient
       );
     }
 
     return new Client(
-      rustClient,
       {
         endpoint: options.hosts[0],
         throwOnAppendFailure: options.throwOnAppendFailure,
@@ -301,30 +300,30 @@ export class Client {
         connectionName: options.connectionName,
       },
       channelCredentials,
-      options.defaultCredentials
+      options.defaultCredentials,
+      rustClient,
     );
   }
 
   constructor(
-    rustClient: bridge.RustClient,
     connectionSettings: DNSClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient,
   );
   constructor(
-    rustClient: bridge.RustClient,
     connectionSettings: GossipClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient,
   );
   constructor(
-    rustClient: bridge.RustClient,
     connectionSettings: SingleNodeOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient,
   );
   constructor(
-    rustClient: bridge.RustClient,
     {
       throwOnAppendFailure = true,
       keepAliveInterval = 10_000,
@@ -334,7 +333,8 @@ export class Client {
       ...connectionSettings
     }: ConnectionSettings,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient,
   ) {
     if (keepAliveInterval < -1) {
       throw new Error(
@@ -366,7 +366,6 @@ export class Client {
       );
     }
 
-    this.#rustClient = rustClient;
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#keepAliveInterval = keepAliveInterval;
     this.#keepAliveTimeout = keepAliveTimeout;
@@ -376,6 +375,24 @@ export class Client {
     this.#defaultCredentials = defaultUserCredentials;
     this.#connectionName = connectionName;
     this.#http = new HTTP(this, channelCredentials, defaultUserCredentials);
+
+    let newRustClient: bridge.RustClient | undefined = rustClient;
+
+    if (newRustClient === undefined) {
+      if ("endpoint" in connectionSettings) {
+        newRustClient = bridge.createClient((this.#connectionSettings as SingleNodeOptions).endpoint.toString());
+      } else if ("endpoints" in connectionSettings) {
+        newRustClient = bridge.createClient((this.#connectionSettings as GossipClusterOptions).endpoints.reduce<string>(
+          (acc, chunk, i) => `${acc}${chunk}${(this.#connectionSettings as GossipClusterOptions).endpoints[i] ?? ""}`,
+          ""));
+      } else if ("discover" in connectionSettings) {
+        newRustClient = bridge.createClient((this.#connectionSettings as GossipClusterOptions).endpoints.reduce<string>(
+          (acc, chunk, i) => `${acc}${chunk}${(this.#connectionSettings as GossipClusterOptions).endpoints[i] ?? ""}`,
+          ""));
+      }
+    }
+
+    this.#rustClient = newRustClient!;
 
     if (this.#insecure) {
       debug.connection("Using insecure channel");
