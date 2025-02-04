@@ -396,7 +396,7 @@
     "@types/debug" "^4.1.12"
     "@types/google-protobuf" "^3.15.12"
     "@types/node" "^16.18.67"
-    db-client-bridge "file:../../AppData/Local/Yarn/Cache/v6/npm-@eventstore-db-client-6.2.1-a1d5aa97-9c32-424e-ba0f-e2b402aeba87-1738650704163/node_modules/@eventstore/db-client-bridge"
+    db-client-bridge "file:../../AppData/Local/Yarn/Cache/v6/npm-@eventstore-db-client-6.2.1-c2822d52-b821-436b-a1d8-a4f48d6daf01-1738656659334/node_modules/@eventstore/db-client-bridge"
     debug "^4.3.2"
     google-protobuf "^3.21.2"
     uuid "^8.3.2"
@@ -1583,11 +1583,6 @@
   version "14.1.2"
   resolved "https://registry.npmjs.org/@tsconfig/node14/-/node14-14.1.2.tgz"
   integrity sha512-1vncsbfCZ3TBLPxesRYz02Rn7SNJfbLoDVkcZ7F/ixOV6nwxwgdhD1mdPcc5YQ413qBJ8CvMxXMFfJ7oawjo7Q==
-
-"@tsconfig/node20@^20.1.4":
-  version "20.1.4"
-  resolved "https://registry.yarnpkg.com/@tsconfig/node20/-/node20-20.1.4.tgz#3457d42eddf12d3bde3976186ab0cd22b85df928"
-  integrity sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==
 
 "@tufjs/canonical-json@1.0.0":
   version "1.0.0"
