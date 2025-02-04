@@ -12,9 +12,9 @@ module.exports = {
     "^@eventstore/opentelemetry$": "<rootDir>/../opentelemetry/dist/index",
     "^@eventstore/opentelemetry/(.*)$": "<rootDir>/../opentelemetry/$1",
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: './tsconfig.json',
-    },
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.json',
+    }]
   },
 };
