@@ -20,6 +20,7 @@
   "author": "Yorick Laupa",
   "license": "MIT",
   "exports": {
+    "./darwin-arm64": "platforms/darwin-arm64",
     ".": {
       "import": {
         "types": "./lib/src/index.d.mts",
@@ -37,7 +38,7 @@
   ],
   "neon": {
     "type": "library",
-    "org": "@eventstore-rs-js-bridge",
+    "org": "@eventstore",
     "platforms": "common",
     "load": "./src/load.cts"
   },

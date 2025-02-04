@@ -8,11 +8,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = require('@neon-rs/load').proxy({
     platforms: {
-        'win32-x64-msvc': () => require('@eventstore-rs-js-bridge/win32-x64-msvc'),
-        'darwin-x64': () => require('@eventstore-rs-js-bridge/darwin-x64'),
-        'darwin-arm64': () => require('@eventstore-rs-js-bridge/darwin-arm64'),
-        'linux-x64-gnu': () => require('@eventstore-rs-js-bridge/linux-x64-gnu'),
-        'linux-arm64-gnu': () => require('@eventstore-rs-js-bridge/linux-arm64-gnu')
+        'win32-x64-msvc': () => require('@eventstore/db-client-bridge/win32-x64-msvc'),
+        'darwin-x64': () => require('@eventstore/db-client-bridge/darwin-x64'),
+        'darwin-arm64': () => require('@eventstore/db-client-bridge/darwin-arm64'),
+        'linux-x64-gnu': () => require('@eventstore/db-client-bridge/linux-x64-gnu'),
+        'linux-arm64-gnu': () => require('@eventstore/db-client-bridge/linux-arm64-gnu')
     },
     debug: () => require('../index.node')
 });
