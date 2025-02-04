@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
 import { Readable, Writable, Duplex, finished } from "stream";
@@ -22,6 +23,8 @@ import {
   ClientReadableStreamImpl,
 } from "@grpc/grpc-js/build/src/call";
 
+import * as bridge from "db-client-bridge";
+
 import type {
   NodePreference,
   GRPCClientConstructor,
@@ -29,6 +32,7 @@ import type {
   Credentials,
   BaseOptions,
 } from "../types";
+
 import {
   CancelledError,
   convertToCommandError,
@@ -145,6 +149,7 @@ interface NextChannelSettings {
 }
 
 export class Client {
+  #rustClient?: bridge.RustClient;
   #throwOnAppendFailure: boolean;
   #connectionSettings: ConnectionSettings;
   #channelCredentials: ChannelCredentials;
@@ -237,6 +242,7 @@ export class Client {
       channelCredentials.userCertFile = readFileSync(certPathResolved);
     }
 
+    const rustClient = bridge.createClient(string);
     if (options.dnsDiscover) {
       const [discover] = options.hosts;
 
@@ -260,7 +266,8 @@ export class Client {
           connectionName: options.connectionName,
         },
         channelCredentials,
-        options.defaultCredentials
+        options.defaultCredentials,
+        rustClient
       );
     }
 
@@ -279,7 +286,8 @@ export class Client {
           connectionName: options.connectionName,
         },
         channelCredentials,
-        options.defaultCredentials
+        options.defaultCredentials,
+        rustClient
       );
     }
 
@@ -293,24 +301,28 @@ export class Client {
         connectionName: options.connectionName,
       },
       channelCredentials,
-      options.defaultCredentials
+      options.defaultCredentials,
+      rustClient
     );
   }
 
   constructor(
     connectionSettings: DNSClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient
   );
   constructor(
     connectionSettings: GossipClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient
   );
   constructor(
     connectionSettings: SingleNodeOptions,
     channelCredentials?: ChannelCredentialOptions,
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient
   );
   constructor(
     {
@@ -322,7 +334,8 @@ export class Client {
       ...connectionSettings
     }: ConnectionSettings,
     channelCredentials: ChannelCredentialOptions = { insecure: false },
-    defaultUserCredentials?: Credentials
+    defaultUserCredentials?: Credentials,
+    rustClient?: bridge.RustClient
   ) {
     if (keepAliveInterval < -1) {
       throw new Error(
@@ -363,6 +376,28 @@ export class Client {
     this.#defaultCredentials = defaultUserCredentials;
     this.#connectionName = connectionName;
     this.#http = new HTTP(this, channelCredentials, defaultUserCredentials);
+
+    if (!rustClient) {
+      console.log("1", this.isDNSClusterOptions(this.#connectionSettings));
+      console.log("2", this.isGossipSeedsNodeOptions(this.#connectionSettings));
+      console.log("3", this.isSingleNodeOptions(this.#connectionSettings));
+
+      if (this.isDNSClusterOptions(this.#connectionSettings)) {
+        this.#rustClient = bridge.createClient(
+          this.#connectionSettings.discover.address
+        );
+      } else if (this.isGossipSeedsNodeOptions(this.#connectionSettings)) {
+        this.#rustClient = bridge.createClient(
+          this.#connectionSettings.endpoints[0].address
+        );
+      } else if (this.isSingleNodeOptions(this.#connectionSettings)) {
+        this.#rustClient = bridge.createClient(
+          this.#connectionSettings.endpoint.toString()
+        );
+      }
+    } else {
+      this.#rustClient = rustClient;
+    }
 
     if (this.#insecure) {
       debug.connection("Using insecure channel");
@@ -691,5 +726,21 @@ export class Client {
 
   protected get throwOnAppendFailure(): boolean {
     return this.#throwOnAppendFailure;
+  }
+
+  public get rustClient(): bridge.RustClient {
+    return this.#rustClient!;
+  }
+
+  protected isSingleNodeOptions(obj: any): obj is SingleNodeOptions {
+    return obj && typeof obj === "object" && "endpoint" in obj;
+  }
+
+  protected isGossipSeedsNodeOptions(obj: any): obj is GossipClusterOptions {
+    return obj && typeof obj === "object" && "endpoints" in obj;
+  }
+
+  protected isDNSClusterOptions(obj: any): obj is DNSClusterOptions {
+    return obj && typeof obj === "object" && "discover" in obj;
   }
 }
