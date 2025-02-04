@@ -1,5 +1,5 @@
 import type { ReadableOptions } from "stream";
-import * as bridge from "db-client-bridge";
+import * as bridge from "@eventstore/db-client-bridge";
 
 import { Client } from "../Client";
 import { FORWARDS, START, END } from "../constants";

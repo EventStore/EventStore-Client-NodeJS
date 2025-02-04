@@ -23,7 +23,7 @@ import {
   ClientReadableStreamImpl,
 } from "@grpc/grpc-js/build/src/call";
 
-import * as bridge from "db-client-bridge";
+import * as bridge from "@eventstore/db-client-bridge";
 
 import type {
   NodePreference,

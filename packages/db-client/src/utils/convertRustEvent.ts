@@ -6,7 +6,7 @@ import type {
 } from "../types";
 
 import { debug } from "./debug";
-import * as bridge from "db-client-bridge";
+import * as bridge from "@eventstore/db-client-bridge";
 
 export const convertRustEvent = <T extends ResolvedEvent>(
   rustClient: bridge.ResolvedEvent

@@ -1,5 +1,5 @@
 {
-  "name": "db-client-bridge",
+  "name": "@eventstore/db-client-bridge",
   "version": "0.1.0",
   "description": "A NodeJS binding for the EventStore Rust client",
   "main": "./lib/index.cjs",
@@ -37,7 +37,7 @@
   ],
   "neon": {
     "type": "library",
-    "org": "@eventstore-rs-js-bridge",
+    "org": "@eventstore/db-client-bridge",
     "platforms": "common",
     "load": "./src/load.cts"
   },

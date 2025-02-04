@@ -389,14 +389,19 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@eventstore/db-client-bridge@file:packages/db-client-bridge":
+  version "0.1.0"
+  dependencies:
+    "@neon-rs/load" "^0.1.82"
+
 "@eventstore/db-client@file:packages/db-client":
   version "6.2.1"
   dependencies:
+    "@eventstore/db-client-bridge" "file:../../AppData/Local/Yarn/Cache/v6/npm-@eventstore-db-client-6.2.1-8e482ae5-87ff-4bfa-9a94-063b00c6e6ae-1738657003379/node_modules/@eventstore/db-client-bridge"
     "@grpc/grpc-js" "^1.9.12"
     "@types/debug" "^4.1.12"
     "@types/google-protobuf" "^3.15.12"
     "@types/node" "^16.18.67"
-    db-client-bridge "file:../../AppData/Local/Yarn/Cache/v6/npm-@eventstore-db-client-6.2.1-c2822d52-b821-436b-a1d8-a4f48d6daf01-1738656659334/node_modules/@eventstore/db-client-bridge"
     debug "^4.3.2"
     google-protobuf "^3.21.2"
     uuid "^8.3.2"
@@ -2786,11 +2791,6 @@ dateformat@^3.0.0:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
-
-"db-client-bridge@file:packages/db-client-bridge":
-  version "0.1.0"
-  dependencies:
-    "@neon-rs/load" "^0.1.82"
 
 debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4:
   version "4.3.4"
