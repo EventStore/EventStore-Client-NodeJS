@@ -2,7 +2,7 @@
   "name": "@eventstore/db-client-bridge",
   "version": "0.1.0",
   "description": "A NodeJS binding for the EventStore Rust client",
-  "main": "./lib/index.cjs",
+  "main": "./dist/index.cjs",
   "scripts": {
     "test": "tsc && cargo test",
     "cargo-build": "tsc && cargo build --message-format=json-render-diagnostics > cargo.log",
@@ -22,18 +22,18 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./lib/index.d.mts",
-        "default": "./lib/index.mjs"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "./lib/index.d.cts",
-        "default": "./lib/index.cjs"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
-  "types": "./lib/index.d.cts",
+  "types": "./dist/index.d.cts",
   "files": [
-    "lib/**/*.?({c,m}){t,j}s"
+    "dist/**/*.?({c,m}){t,j}s"
   ],
   "neon": {
     "type": "library",
