@@ -3,7 +3,7 @@ import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { TombstoneReq } from "../../generated/streams_pb";
 
 import { Client } from "../Client";
-import { ANY, NO_STREAM, STREAM_EXISTS } from "../constants";
+import { ANY, NO_STREAM } from "../constants";
 import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
 import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 
@@ -47,10 +47,6 @@ Client.prototype.tombstoneStream = async function (
     }
     case NO_STREAM: {
       options.setNoStream(new Empty());
-      break;
-    }
-    case STREAM_EXISTS: {
-      options.setStreamExists(new Empty());
       break;
     }
     default: {

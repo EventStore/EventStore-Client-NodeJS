@@ -1,13 +1,13 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
+    "module": "Node16",
     "composite": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "sourceMap": true,
     "experimentalDecorators": true,
     "useUnknownInCatchVariables": false,
-    "esModuleInterop": false,
-    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true
   }
 }

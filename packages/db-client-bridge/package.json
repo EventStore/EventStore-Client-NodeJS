@@ -42,9 +42,7 @@
     "load": "./src/load.cts"
   },
   "devDependencies": {
-    "@neon-rs/cli": "^0.1.82",
-    "@types/node": "^20.17.17",
-    "typescript": "^5.3.3"
+    "@neon-rs/cli": "^0.1.82"
   },
   "dependencies": {
     "@neon-rs/load": "^0.1.82"
