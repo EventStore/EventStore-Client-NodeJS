@@ -378,10 +378,6 @@ export class Client {
     this.#http = new HTTP(this, channelCredentials, defaultUserCredentials);
 
     if (!rustClient) {
-      console.log("1", this.isDNSClusterOptions(this.#connectionSettings));
-      console.log("2", this.isGossipSeedsNodeOptions(this.#connectionSettings));
-      console.log("3", this.isSingleNodeOptions(this.#connectionSettings));
-
       if (this.isDNSClusterOptions(this.#connectionSettings)) {
         this.#rustClient = bridge.createClient(
           this.#connectionSettings.discover.address
@@ -391,9 +387,12 @@ export class Client {
           this.#connectionSettings.endpoints[0].address
         );
       } else if (this.isSingleNodeOptions(this.#connectionSettings)) {
-        this.#rustClient = bridge.createClient(
-          this.#connectionSettings.endpoint.toString()
-        );
+        const { endpoint } = this.#connectionSettings;
+        const address =
+          typeof endpoint === "string"
+            ? endpoint
+            : `${endpoint.address}:${endpoint.port}`;
+        this.#rustClient = bridge.createClient(`esdb://${address}?tls=false`);
       }
     } else {
       this.#rustClient = rustClient;

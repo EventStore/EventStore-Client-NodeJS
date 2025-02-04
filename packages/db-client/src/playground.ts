@@ -2,7 +2,12 @@ import { EventStoreDBClient, jsonEvent } from ".";
 import { v4 } from "uuid";
 
 (async () => {
-  const client = EventStoreDBClient.connectionString`esdb://localhost:2113?tls=false`;
+  // const client = EventStoreDBClient.connectionString`esdb://localhost:2113?tls=false`;
+
+  const client = new EventStoreDBClient(
+    { endpoint: "localhost:2113" },
+    { insecure: true }
+  );
 
   const streamName = v4();
 
@@ -24,4 +29,6 @@ import { v4 } from "uuid";
   })) {
     console.log(resolved);
   }
+
+  await client.dispose();
 })();
