@@ -3,10 +3,7 @@ import { EventStoreDBClient } from "@eventstore/db-client";
 describe("connectionName", () => {
   test("constructor", async () => {
     const CONNECTION_NAME = "my great connection";
-    const client = new EventStoreDBClient({
-      endpoint: "somewhere",
-      connectionName: CONNECTION_NAME,
-    });
+    const client = EventStoreDBClient.connectionString`esdb://somewhere?connectionName=${CONNECTION_NAME}`;
 
     expect(client.connectionName).toBe(CONNECTION_NAME);
   });
@@ -19,9 +16,7 @@ describe("connectionName", () => {
   });
 
   test("default", async () => {
-    const client = new EventStoreDBClient({
-      endpoint: "somewhere",
-    });
+    const client = EventStoreDBClient.connectionString`esdb://somewhere`;
 
     expect(client.connectionName).toMatch(
       // a (v4) uuid

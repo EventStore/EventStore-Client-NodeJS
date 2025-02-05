@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // @ts-ignore
-import NodeEnvironment from require("jest-environment-node");
+import NodeEnvironment from "jest-environment-node";
 
 import { Cluster } from "./Cluster";
 import { EventStoreDBClient } from "@eventstore/db-client/dist/index";
@@ -15,13 +15,7 @@ const checkCapabilities = async () => {
   const node = new Cluster(1);
   await node.up();
 
-  const client = new EventStoreDBClient(
-    {
-      endpoint: node.uri,
-    },
-    { rootCertificate: node.certs.root },
-    { username: "admin", password: "changeit" }
-  );
+  const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
   const capabilities = await extractVersion.call(client);
 

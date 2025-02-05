@@ -14,11 +14,7 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
       await expect(
         collect(client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
@@ -33,11 +29,7 @@ describe("defaultCredentials", () => {
     });
 
     test("good override", async () => {
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "AzureDiamond", password: "hunter2" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://AzureDiamond:hunter2@${node.uri}?tlsCaFile=${node.certPath.root}`;
       await expect(
         collect(client.readAll({ maxCount: 10 }))
       ).rejects.toThrowError(AccessDeniedError);

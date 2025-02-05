@@ -68,11 +68,7 @@ describe("instrumentation", () => {
 
         const STREAM = v4();
 
-        const client = new EventStoreDBClient(
-          { endpoint: node.uri },
-          { rootCertificate: node.certs.root },
-          { username: "admin", password: "changeit" }
-        );
+        const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
         const appendOptions: AppendToStreamOptions = {
           expectedRevision: "any",
@@ -125,11 +121,7 @@ describe("instrumentation", () => {
     test("span contains error when append fails", async () => {
       const { EventStoreDBClient } = await import("@eventstore/db-client");
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
       const STREAM_NAME = v4();
 
@@ -182,11 +174,7 @@ describe("instrumentation", () => {
 
       const STREAM = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -265,11 +253,7 @@ describe("instrumentation", () => {
 
       const STREAM = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -353,11 +337,7 @@ describe("instrumentation", () => {
       const STREAM = v4();
       const GROUP = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
       await client.createPersistentSubscriptionToStream(
         STREAM,
@@ -445,11 +425,7 @@ describe("instrumentation", () => {
       const GROUP = v4();
       const STREAM = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
 
       await client.createPersistentSubscriptionToAll(
         GROUP,

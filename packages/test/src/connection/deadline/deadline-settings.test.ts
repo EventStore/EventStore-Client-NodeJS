@@ -65,10 +65,7 @@ describe("deadline", () => {
       [
         "constructor",
         () =>
-          new EventStoreDBClient({
-            endpoint: "host:1234",
-            ...constructorOptions,
-          }),
+          EventStoreDBClient.connectionString`esdb://host:1234&defaultDeadline=${constructorOptions.defaultDeadline!}`,
       ],
     ])("%s", async (_, createClient) => {
       const warnSpy = jest.spyOn(console, "warn").mockImplementation();
@@ -129,10 +126,7 @@ describe("deadline", () => {
       [
         "constructor",
         () =>
-          new EventStoreDBClient({
-            endpoint: "host:1234",
-            ...constructorOptions,
-          }),
+          EventStoreDBClient.connectionString`esdb://host:1234&defaultDeadline=${constructorOptions.defaultDeadline!}`,
       ],
     ])("%s", async (_, createClient) => {
       expect(() => createClient()).toThrowErrorMatchingSnapshot();

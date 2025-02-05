@@ -28,11 +28,7 @@ describe("replayParkedMessagesToAll", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&nodePreference=leader`;
   });
 
   afterAll(async () => {

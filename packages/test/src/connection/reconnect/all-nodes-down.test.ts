@@ -19,16 +19,9 @@ describe("reconnect", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    // The timing of this test can be a bit variable,
+    // so it's better not to have deadlines here to force the errors we are testing.
+    client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&defaultDeadline=Infinity`;
   });
 
   afterAll(async () => {

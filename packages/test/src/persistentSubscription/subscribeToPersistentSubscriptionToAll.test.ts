@@ -44,11 +44,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&nodePreference=leader`;
   });
 
   afterAll(async () => {
@@ -644,14 +640,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
     test("should throw on follower node", async () => {
       // Create connection to a follower node
-      const followerClient = new EventStoreDBClient(
-        {
-          endpoints: cluster.endpoints,
-          nodePreference: "follower",
-        },
-        { rootCertificate: cluster.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const followerClient = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&nodePreference=follower`;
 
       const STREAM_NAME = "follower_node_test";
       const GROUP_NAME = "follower_node_test";
@@ -677,13 +666,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           // Our command is good, but must be executed on the leader
           if (error instanceof NotLeaderError) {
             // Create new client connected to the reported leader node
-            const leaderClient = new EventStoreDBClient(
-              {
-                endpoint: error.leader,
-              },
-              { rootCertificate: cluster.certs.root },
-              { username: "admin", password: "changeit" }
-            );
+            const leaderClient = EventStoreDBClient.connectionString`esdb://admin:changeit@${error.leader.address}:${error.leader.port}?tlsCaFile=${cluster.certPath.root}&nodePreference=follower`;
 
             // try again with new connection
             return createAndConnectWithAutoReconnect(leaderClient);

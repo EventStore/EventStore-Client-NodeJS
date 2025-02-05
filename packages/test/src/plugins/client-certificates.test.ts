@@ -18,37 +18,6 @@ describe("client certificates", () => {
       [
         "userCertFile",
         () =>
-          new EventStoreDBClient(
-            { endpoint: node.uri },
-            {
-              rootCertificate: node.certs.root,
-              userCertFile: node.certs.users.admin.userCertFile,
-            }
-          ),
-      ],
-      [
-        "userKeyFile",
-        () =>
-          new EventStoreDBClient(
-            { endpoint: node.uri },
-            {
-              rootCertificate: node.certs.root,
-              userKeyFile: node.certs.users.admin.userKeyFile,
-            }
-          ),
-      ],
-    ])("constructor initialised with %s only", (_, makeCall) => {
-      try {
-        makeCall();
-      } catch (error) {
-        expect(error).toMatchSnapshot();
-      }
-    });
-
-    test.each([
-      [
-        "userCertFile",
-        () =>
           EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userCertFile=${node.certPath.admin.certPath}`,
       ],
       [
@@ -69,14 +38,7 @@ describe("client certificates", () => {
     let client: EventStoreDBClient;
 
     beforeEach(() => {
-      client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        {
-          rootCertificate: node.certs.root,
-          userCertFile: node.certs.users.admin.userCertFile,
-          userKeyFile: node.certs.users.admin.userKeyFile,
-        }
-      );
+      client = EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}&userCertFile=${node.certPath.admin.certPath}`;
     });
 
     test("using default only certificates", async () => {
@@ -104,18 +66,7 @@ describe("client certificates", () => {
   });
 
   test("user credentials takes precedence over the client certificate during initialization", async () => {
-    const clientWithCredentials = new EventStoreDBClient(
-      { endpoint: node.uri },
-      {
-        rootCertificate: node.certs.root,
-        userCertFile: node.certs.users.admin.userCertFile,
-        userKeyFile: node.certs.users.admin.userKeyFile,
-      },
-      {
-        username: "wrong",
-        password: "password",
-      }
-    );
+    const clientWithCredentials = EventStoreDBClient.connectionString`esdb://wrong:password@${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.admin.certKeyPath}&userCertFile=${node.certPath.admin.certPath}`;
 
     await expect(
       clientWithCredentials.appendToStream(
@@ -126,14 +77,7 @@ describe("client certificates", () => {
   });
 
   test("When the client is initialized with invalid certificate, user credentials take precendence if overriden during a call", async () => {
-    const clientWithBadCertificate = new EventStoreDBClient(
-      { endpoint: node.uri },
-      {
-        rootCertificate: node.certs.root,
-        userCertFile: node.certs.users.invalid.userCertFile,
-        userKeyFile: node.certs.users.invalid.userKeyFile,
-      }
-    );
+    const clientWithBadCertificate = EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true&tlsCAFile=${node.certPath.root}&userKeyFile=${node.certPath.invalid.certKeyPath}&userCertFile=${node.certPath.invalid.certPath}`;
 
     expect(
       await clientWithBadCertificate.appendToStream(

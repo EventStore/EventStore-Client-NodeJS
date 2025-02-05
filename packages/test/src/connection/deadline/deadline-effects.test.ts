@@ -20,44 +20,36 @@ describe("deadline", () => {
       [
         "client settings",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 1 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).listProjections(),
+          EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&defaultDeadline=1`.listProjections(),
       ],
       [
         "call options",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).listProjections({
-            deadline: 1,
-          }),
+          EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}`.listProjections(
+            {
+              deadline: 1,
+            }
+          ),
       ],
       [
         "call options override",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).listProjections({
-            deadline: 1,
-          }),
+          EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&defaultDeadline=200000`.listProjections(
+            {
+              deadline: 1,
+            }
+          ),
       ],
       [
         "append",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).appendToStream("deadline", jsonTestEvents(), {
-            deadline: 1,
-          }),
+          EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&defaultDeadline=200000`.appendToStream(
+            "deadline",
+            jsonTestEvents(),
+            {
+              deadline: 1,
+            }
+          ),
       ],
     ])("%s", async (_, makeCall) => {
       try {

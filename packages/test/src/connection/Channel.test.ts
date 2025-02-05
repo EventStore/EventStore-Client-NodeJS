@@ -14,18 +14,11 @@ describe("Channel", () => {
 
   test("a single client should connect to a single node", async () => {
     cluster.buildConnectionString({
-        nodePreference: "random",
-        defaultUserCredentials: { username: "admin", password: "changeit" }
+      nodePreference: "random",
+      defaultUserCredentials: { username: "admin", password: "changeit" },
     });
 
-    const client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        nodePreference: "random",
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?nodePreference=random&tlsCaFile=${cluster.certPath.root}`;
 
     /*
      Spying on an internal api is more implementation specific than

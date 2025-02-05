@@ -15,11 +15,7 @@ describe("singleNodeConnection", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=true&tlsCAFile=${node.certPath.root}`;
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = await collect(

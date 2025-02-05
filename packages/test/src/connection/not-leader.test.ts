@@ -1,7 +1,6 @@
 import { collect, createTestCluster } from "@test-utils";
 import {
   jsonEvent,
-  FOLLOWER,
   ErrorType,
   NotLeaderError,
   EventStoreDBClient,
@@ -23,14 +22,7 @@ describe("not-leader", () => {
   });
 
   test("should get an error here", async () => {
-    const followerClient = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        nodePreference: FOLLOWER,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const followerClient = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?nodePreference=FOLLOWER&tlsCaFile=${cluster.certPath.root}`;
 
     const appendResult = await followerClient.appendToStream(
       STREAM_NAME,
@@ -62,13 +54,7 @@ describe("not-leader", () => {
         expect(error.leader).toBeDefined();
         expect(cluster.endpoints).toContainEqual(error.leader);
 
-        const leaderClient = new EventStoreDBClient(
-          {
-            endpoint: error.leader,
-          },
-          { rootCertificate: cluster.certs.root },
-          { username: "admin", password: "changeit" }
-        );
+        const leaderClient = EventStoreDBClient.connectionString`esdb://admin:changeit@${error.leader.address}:${error.leader.port}?nodePreference=FOLLOWER&tlsCaFile=${cluster.certPath.root}`;
 
         const readResult = await readFromTestStream(leaderClient);
 

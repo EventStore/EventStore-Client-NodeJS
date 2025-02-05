@@ -25,13 +25,7 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
     [
       "new client",
       (nodePreference?: NodePreference) =>
-        new EventStoreDBClient({
-          discover: {
-            address: `${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud`,
-            port: 2113,
-          },
-          nodePreference,
-        }),
+        EventStoreDBClient.connectionString`esdb://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud:2113?nodePreference=${nodePreference!}&dnsDiscover=true`,
     ],
   ])("%s", (clientType, createClient) => {
     test("should successfully connect", async () => {

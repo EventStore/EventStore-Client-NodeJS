@@ -23,11 +23,7 @@ describe("appendToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=true&tlsCAFile=${node.certPath.root}`;
   });
 
   afterAll(async () => {
@@ -48,11 +44,7 @@ describe("appendToStream", () => {
       const STREAM_NAME = "encode1";
       const KILLER = "CC ‐ 1830";
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=true&tlsCAFile=${node.certPath.root}`;
 
       await client.appendToStream(
         STREAM_NAME,
@@ -558,11 +550,7 @@ describe("appendToStream", () => {
 
   describe("throwOnAppendFailure", () => {
     test("throws on true", async () => {
-      const throwingClient = new EventStoreDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: true },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const throwingClient = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}&throwOnAppendFailure=true`;
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
 
@@ -590,11 +578,7 @@ describe("appendToStream", () => {
     });
 
     test("returns failure result on false", async () => {
-      const nonThrowingClient = new EventStoreDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: false },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const nonThrowingClient = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}&throwOnAppendFailure=false`;
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";
 

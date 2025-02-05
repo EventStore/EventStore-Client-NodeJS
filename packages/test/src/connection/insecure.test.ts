@@ -15,10 +15,7 @@ describe("insecure", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { insecure: true }
-    );
+    const client = EventStoreDBClient.connectionString`esdb://${node.uri}?tls=true`;
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = await collect(

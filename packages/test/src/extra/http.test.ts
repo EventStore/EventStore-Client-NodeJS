@@ -6,9 +6,11 @@ describe("http api", () => {
     msgTypeId: number;
     text: string;
   }
+
   function ping(this: EventStoreDBClient) {
     return this.HTTPRequest<PingResult>("GET", "/ping", {});
   }
+
   const goodPing = {
     msgTypeId: expect.any(Number),
     text: "Ping request successfully handled",
@@ -26,38 +28,28 @@ describe("http api", () => {
     });
 
     test("dns", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { rootCertificate: cluster.certs.root }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://${cluster.uri}?tlsCaFile=${cluster.certPath.root}`;
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("ip", async () => {
-      const client = new EventStoreDBClient(
-        {
-          endpoints: cluster.endpoints.map(({ address: _, port }) => ({
-            address: "127.0.0.1",
-            port,
-          })),
-        },
-        { rootCertificate: cluster.certs.root }
-      );
+      const endpoint = cluster.endpoints
+        .map((endpoint) => `127.0.0.1:${endpoint.port}`)
+        .join(",");
+      const client = EventStoreDBClient.connectionString`esdb://${endpoint}?tlsCaFile=${cluster.certPath.root}`;
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("error transform", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { rootCertificate: cluster.certs.root }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://${cluster.uri}?tlsCaFile=${cluster.certPath.root}`;
 
       class TestError extends Error {
         public code: number;
+
         constructor(code: number, message: string) {
           super(message);
           this.code = code;
@@ -96,38 +88,28 @@ describe("http api", () => {
     });
 
     test("dns", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { insecure: true }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://${cluster.uri}?tls=false`;
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("ip", async () => {
-      const client = new EventStoreDBClient(
-        {
-          endpoints: cluster.endpoints.map(({ address: _, port }) => ({
-            address: "127.0.0.1",
-            port,
-          })),
-        },
-        { insecure: true }
-      );
+      const endpoint = cluster.endpoints
+        .map((endpoint) => `127.0.0.1:${endpoint.port}`)
+        .join(",");
+      const client = EventStoreDBClient.connectionString`esdb://${endpoint}?tls=false`;
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("error transform", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { insecure: true }
-      );
+      const client = EventStoreDBClient.connectionString`esdb://${cluster.uri}?tls=false`;
 
       class TestError extends Error {
         public code: number;
+
         constructor(code: number, message: string) {
           super(message);
           this.code = code;

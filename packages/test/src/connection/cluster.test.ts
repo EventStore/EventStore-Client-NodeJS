@@ -15,11 +15,7 @@ describe("cluster", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}`;
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = collect(
@@ -33,17 +29,7 @@ describe("cluster", () => {
   test("maxDiscoverAttempts", async () => {
     const maxDiscoverAttempts = 3;
 
-    const client = new EventStoreDBClient(
-      {
-        endpoints: [
-          { address: "localhost", port: 8888 },
-          { address: "localhost", port: 8889 },
-          { address: "localhost", port: 8890 },
-        ],
-        maxDiscoverAttempts,
-      },
-      { rootCertificate: cluster.certs.root }
-    );
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@localhost:8888,localhost:8889,localhost:8890?tlsCaFile=${cluster.certPath.root}&maxDiscoverAttempts=${maxDiscoverAttempts}`;
 
     await expect(
       client.appendToStream(STREAM_NAME, event)
@@ -64,11 +50,8 @@ describe("cluster", () => {
     const client2DiscoveryInterval = 5_000;
 
     const client1Start = Date.now();
-    const client1 = new EventStoreDBClient({
-      endpoints,
-      maxDiscoverAttempts,
-      discoveryInterval: client1DiscoveryInterval,
-    });
+    const client1 = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}?discoveryInterval=${client1DiscoveryInterval}&maxDiscoverAttempts=${maxDiscoverAttempts}`;
+
     await expect(
       client1.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -77,11 +60,8 @@ describe("cluster", () => {
     const client1Duration = Date.now() - client1Start;
 
     const client2Start = Date.now();
-    const client2 = new EventStoreDBClient({
-      endpoints,
-      maxDiscoverAttempts,
-      discoveryInterval: client2DiscoveryInterval,
-    });
+    const client2 = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}?discoveryInterval=${client2DiscoveryInterval}&maxDiscoverAttempts=${maxDiscoverAttempts}`;
+
     await expect(
       client2.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(

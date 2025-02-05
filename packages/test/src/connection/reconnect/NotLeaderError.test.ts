@@ -16,17 +16,9 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        nodePreference: FOLLOWER,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    // The timing of this test can be a bit variable,
+    // so it's better not to have deadlines (Infinity) here to force the errors we are testing.
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?nodePreference=FOLLOWER&tlsCaFile=${cluster.certPath.root}&defaultDeadline=Infinity`;
 
     // make successful append to follower node
     const firstAppend = await client.appendToStream(

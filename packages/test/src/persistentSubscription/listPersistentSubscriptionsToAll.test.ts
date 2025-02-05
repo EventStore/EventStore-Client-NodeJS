@@ -29,13 +29,7 @@ describe("listPersistentSubscriptionsToAll", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCaFile=${node.certPath.root}`;
   });
 
   afterAll(async () => {
@@ -149,13 +143,7 @@ describe("listPersistentSubscriptionsToAll", () => {
       beforeAll(async () => {
         await emptyNode.up();
 
-        client = new EventStoreDBClient(
-          {
-            endpoint: emptyNode.uri,
-          },
-          { rootCertificate: emptyNode.certs.root },
-          { username: "admin", password: "changeit" }
-        );
+        client = EventStoreDBClient.connectionString`esdb://admin:changeit@${emptyNode.uri}?tlsCaFile=${emptyNode.certPath.root}`;
       });
 
       afterAll(async () => {

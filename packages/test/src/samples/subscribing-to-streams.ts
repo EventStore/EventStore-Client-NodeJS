@@ -23,11 +23,7 @@ describe("[sample] server-side-filtering", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString`esdb://admin:changeit@${node.uri}?tls=true&tlsCAFile=${node.certPath.root}`;
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn();

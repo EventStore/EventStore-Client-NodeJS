@@ -16,16 +16,9 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    // The timing of this test can be a bit variable,
+    // so it's better not to have deadlines here to force the errors we are testing.
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${cluster.uri}?tlsCaFile=${cluster.certPath.root}&defaultDeadline=Infinity`;
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
@@ -69,16 +62,9 @@ describe("reconnect", () => {
     const credentials = { username: "admin", password: "changeit" };
     const STREAM_NAME = "try_get_timeout";
 
-    const client = new EventStoreDBClient(
-      {
-        endpoint: timeoutNode.uri,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: timeoutNode.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    // The timing of this test can be a bit variable,
+    // so it's better not to have deadlines here to force the errors we are testing.
+    const client = EventStoreDBClient.connectionString`esdb://admin:changeit@${timeoutNode.uri}?tlsCaFile=${timeoutNode.certPath.root}&defaultDeadline=Infinity`;
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
