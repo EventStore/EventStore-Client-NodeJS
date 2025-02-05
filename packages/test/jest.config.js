@@ -7,12 +7,15 @@ module.exports = {
     '@test-utils': '<rootDir>/src/utils',
     "^@eventstore/db-client$": "<rootDir>/../db-client/dist/index",
     "^@eventstore/db-client/(.*)$": "<rootDir>/../db-client/$1",
+    "^@eventstore/db-client-bridge$": "<rootDir>/../db-client-bridge/lib/index",
+    "^@eventstore/db-client-bridge/(.*)$": "<rootDir>/../db-client-bridge/$1",
     "^@eventstore/opentelemetry$": "<rootDir>/../opentelemetry/dist/index",
     "^@eventstore/opentelemetry/(.*)$": "<rootDir>/../opentelemetry/$1",
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: './tsconfig.json',
-    },
+
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.json',
+    }]
   },
 };

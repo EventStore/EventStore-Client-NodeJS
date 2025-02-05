@@ -22,6 +22,8 @@ import {
   ClientReadableStreamImpl,
 } from "@grpc/grpc-js/build/src/call";
 
+import * as bridge from "@eventstore/db-client-bridge";
+
 import type {
   NodePreference,
   GRPCClientConstructor,
@@ -29,6 +31,7 @@ import type {
   Credentials,
   BaseOptions,
 } from "../types";
+
 import {
   CancelledError,
   convertToCommandError,
@@ -145,6 +148,7 @@ interface NextChannelSettings {
 }
 
 export class Client {
+  #rustClient: bridge.RustClient;
   #throwOnAppendFailure: boolean;
   #connectionSettings: ConnectionSettings;
   #channelCredentials: ChannelCredentials;
@@ -237,6 +241,7 @@ export class Client {
       channelCredentials.userCertFile = readFileSync(certPathResolved);
     }
 
+    const rustClient = bridge.createClient(string);
     if (options.dnsDiscover) {
       const [discover] = options.hosts;
 
@@ -247,6 +252,7 @@ export class Client {
       }
 
       return new Client(
+        rustClient,
         {
           discover,
           nodePreference: options.nodePreference,
@@ -266,6 +272,7 @@ export class Client {
 
     if (options.hosts.length > 1) {
       return new Client(
+        rustClient,
         {
           endpoints: options.hosts,
           nodePreference: options.nodePreference,
@@ -284,6 +291,7 @@ export class Client {
     }
 
     return new Client(
+      rustClient,
       {
         endpoint: options.hosts[0],
         throwOnAppendFailure: options.throwOnAppendFailure,
@@ -298,21 +306,25 @@ export class Client {
   }
 
   constructor(
+    rustClient: bridge.RustClient,
     connectionSettings: DNSClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
   constructor(
+    rustClient: bridge.RustClient,
     connectionSettings: GossipClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
   constructor(
+    rustClient: bridge.RustClient,
     connectionSettings: SingleNodeOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
   constructor(
+    rustClient: bridge.RustClient,
     {
       throwOnAppendFailure = true,
       keepAliveInterval = 10_000,
@@ -354,6 +366,7 @@ export class Client {
       );
     }
 
+    this.#rustClient = rustClient;
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#keepAliveInterval = keepAliveInterval;
     this.#keepAliveTimeout = keepAliveTimeout;
@@ -691,5 +704,9 @@ export class Client {
 
   protected get throwOnAppendFailure(): boolean {
     return this.#throwOnAppendFailure;
+  }
+
+  public get rustClient(): bridge.RustClient {
+    return this.#rustClient;
   }
 }

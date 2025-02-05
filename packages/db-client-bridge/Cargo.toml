@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/db-client-bridge"]
+resolver = "2"

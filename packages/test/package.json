@@ -30,8 +30,8 @@
   "dependencies": {
     "@eventstore/db-client": "file:../db-client",
     "@eventstore/opentelemetry": "file:../opentelemetry",
-    "jest": "^27.5.1",
-    "ts-jest": "^27.1.5"
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
   },
   "devDependencies": {
     "@opentelemetry/api": "^1.8.0",

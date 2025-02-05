@@ -31,9 +31,13 @@
     "lerna": "^6.6.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.7.3"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
+  "dependencies": {
+    "@tsconfig/node18": "^18.2.4"
+  }
 }

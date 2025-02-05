@@ -1,11 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "module": "node16",
     "outDir": "./dist",
     "rootDir": "./src"
   },
   "include": [
     "./src/**/*.ts",
     "./generated"
+  ],
+  "references": [
+    {
+      "path": "../db-client-bridge"
+    }
   ]
 }

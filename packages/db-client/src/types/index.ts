@@ -66,6 +66,10 @@ export type ExpectedRevision =
    */
   | typeof constants.NO_STREAM
   /**
+   * The stream being written to should exist. If it does not exist, treats that as a concurrency problem.
+   */
+  | typeof constants.STREAM_EXISTS
+  /**
    * States that the last event written to the stream should have an event number matching your expected value.
    */
   | bigint;
