@@ -11,6 +11,7 @@ import type { EndPoint, Certificate } from "@eventstore/db-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
+import {ConnectionFeatures} from "./index";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
@@ -206,6 +207,27 @@ export class Cluster {
       address: this.domain,
       port,
     }));
+  }
+
+  public buildConnectionString = (features: ConnectionFeatures): string => {
+    const endpoints = this.endpoints.map(x => `${x.address}:${x.port}`).join(",");
+    const params: string[] = []
+    let credentials = "";
+    let paramsString = "";
+
+    if (features.defaultUserCredentials) {
+      credentials = `${features.defaultUserCredentials.username}:${features.defaultUserCredentials.password}@`;
+    }
+
+    if (features.nodePreference) {
+      params.push(`nodePreference=${features.nodePreference}`);
+    }
+
+    if (params.length > 0) {
+      paramsString = `?${params.join("&")}`;
+    }
+
+    return `esdb://${credentials}${endpoints}${paramsString}`;
   }
 
   public up = async (): Promise<void> => {
