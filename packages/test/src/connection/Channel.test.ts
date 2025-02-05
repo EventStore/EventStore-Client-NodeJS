@@ -13,19 +13,9 @@ describe("Channel", () => {
   });
 
   test("a single client should connect to a single node", async () => {
-    cluster.buildConnectionString({
+    const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
         nodePreference: "random",
-        defaultUserCredentials: { username: "admin", password: "changeit" }
-    });
-
-    const client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        nodePreference: "random",
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    }));
 
     /*
      Spying on an internal api is more implementation specific than

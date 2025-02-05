@@ -305,25 +305,25 @@ export class Client {
     );
   }
 
-  constructor(
+  protected constructor(
     rustClient: bridge.RustClient,
     connectionSettings: DNSClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
-  constructor(
+  protected constructor(
     rustClient: bridge.RustClient,
     connectionSettings: GossipClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
-  constructor(
+  protected constructor(
     rustClient: bridge.RustClient,
     connectionSettings: SingleNodeOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
-  constructor(
+  protected constructor(
     rustClient: bridge.RustClient,
     {
       throwOnAppendFailure = true,
