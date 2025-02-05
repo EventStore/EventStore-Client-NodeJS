@@ -1,7 +1,8 @@
 use std::sync::Arc;
 
 use eventstore::{
-    Client, ClientSettings, ReadStream, ReadStreamOptions, RecordedEvent, StreamPosition,
+    Client, ClientSettings, Position, ReadAllOptions, ReadStream, ReadStreamOptions, RecordedEvent,
+    StreamPosition,
 };
 use neon::{
     object::Object,
@@ -32,9 +33,22 @@ pub fn create(mut cx: FunctionContext) -> JsResult<JsObject> {
     let client_read_stream =
         JsFunction::new(&mut cx, move |cx| read_stream(local_client.clone(), cx))?;
 
+    let local_client = client.clone();
+    let client_read_all = JsFunction::new(&mut cx, move |cx| read_all(local_client.clone(), cx))?;
+
     obj.set(&mut cx, "readStream", client_read_stream)?;
+    obj.set(&mut cx, "readAll", client_read_all)?;
 
     Ok(obj)
+}
+
+pub enum Options {
+    Regular {
+        stream_name: String,
+        options: ReadStreamOptions,
+    },
+
+    All(ReadAllOptions),
 }
 
 pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> {
@@ -92,11 +106,96 @@ pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromis
         options
     };
 
+    let options = Options::Regular {
+        stream_name,
+        options,
+    };
+
+    read_internal(client, options, cx)
+}
+
+pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> {
+    let params = cx.argument::<JsObject>(0)?;
+    let options = ReadAllOptions::default();
+
+    let direction_str = params
+        .get::<JsString, _, _>(&mut cx, "direction")?
+        .value(&mut cx);
+    let options = match direction_str.as_str() {
+        "forwards" => options.forwards(),
+        "backwards" => options.backwards(),
+        x => cx.throw_error(format!("invalid direction value: '{}'", x))?,
+    };
+
+    let options = if let Ok(value) = params
+        .get_value(&mut cx, "fromPosition")?
+        .downcast::<JsString, _>(&mut cx)
+    {
+        match value.value(&mut cx).as_str() {
+            "start" => options.position(StreamPosition::Start),
+            "end" => options.position(StreamPosition::End),
+            x => cx.throw_error(format!("invalid fromPosition value: '{}'", x))?,
+        }
+    } else if let Ok(obj) = params.get::<JsObject, _, _>(&mut cx, "fromRevision") {
+        let commit = obj
+            .get::<JsBigInt, _, _>(&mut cx, "commit")?
+            .to_u64(&mut cx);
+        let prepare = obj
+            .get::<JsBigInt, _, _>(&mut cx, "prepare")?
+            .to_u64(&mut cx);
+
+        let position = commit.and_then(|commit| {
+            prepare.map(|prepare| StreamPosition::Position(Position { commit, prepare }))
+        });
+
+        match position {
+            Ok(p) => options.position(p),
+            Err(e) => cx.throw_error(e.to_string())?,
+        }
+    } else {
+        cx.throw_error("fromRevision can only be 'start', 'end' or a bigint")?
+    };
+
+    let options = match params
+        .get::<JsBigInt, _, _>(&mut cx, "maxCount")?
+        .to_u64(&mut cx)
+    {
+        Ok(r) => options.max_count(r as usize),
+        Err(e) => cx.throw_error(e.to_string())?,
+    };
+
+    let require_leader = params
+        .get::<JsBoolean, _, _>(&mut cx, "requiresLeader")?
+        .value(&mut cx);
+    let options = options.requires_leader(require_leader);
+
+    let resolve_links = params
+        .get::<JsBoolean, _, _>(&mut cx, "resolvesLink")?
+        .value(&mut cx);
+
+    let options = if resolve_links {
+        options.resolve_link_tos()
+    } else {
+        options
+    };
+
+    read_internal(client, Options::All(options), cx)
+}
+
+fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> JsResult<JsPromise> {
     let (deferred, promise) = cx.promise();
     let channel = cx.channel();
 
     RUNTIME.spawn(async move {
-        let result = client.read_stream(stream_name.as_str(), &options).await;
+        let result = match options {
+            Options::Regular {
+                stream_name,
+                options,
+            } => client.read_stream(stream_name.as_str(), &options).await,
+
+            Options::All(options) => client.read_all(&options).await,
+        };
+
         deferred.settle_with(&channel, |mut cx| {
             let stream = result.or_else(|e| cx.throw_error(e.to_string()))?;
             async_iterator_object(cx, stream)
