@@ -21,11 +21,7 @@ describe("getProjectionState", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
     await client.enableProjection("$by_category");
   });
 

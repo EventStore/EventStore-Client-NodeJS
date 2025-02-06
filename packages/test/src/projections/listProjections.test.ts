@@ -19,11 +19,7 @@ describe("list projections", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
 
     for (const name of projectionNames) {
       await client.createProjection(name, basicProjection);
