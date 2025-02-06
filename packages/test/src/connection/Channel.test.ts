@@ -26,7 +26,7 @@ describe("Channel", () => {
     const promises: Promise<unknown>[] = [
       client.appendToStream("stream_1", jsonTestEvents()),
       collect(
-        client.readAll({
+        await client.readAll({
           maxCount: 1,
           fromPosition: "start",
           direction: "forwards",

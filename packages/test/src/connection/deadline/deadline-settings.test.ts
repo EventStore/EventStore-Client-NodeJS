@@ -62,14 +62,6 @@ describe("deadline", () => {
         "connectionString",
         () => EventStoreDBClient.connectionString(connectionString),
       ],
-      [
-        "constructor",
-        () =>
-          new EventStoreDBClient({
-            endpoint: "host:1234",
-            ...constructorOptions,
-          }),
-      ],
     ])("%s", async (_, createClient) => {
       const warnSpy = jest.spyOn(console, "warn").mockImplementation();
       const client = createClient();
@@ -125,14 +117,6 @@ describe("deadline", () => {
       [
         "connectionString",
         () => EventStoreDBClient.connectionString(connectionString),
-      ],
-      [
-        "constructor",
-        () =>
-          new EventStoreDBClient({
-            endpoint: "host:1234",
-            ...constructorOptions,
-          }),
       ],
     ])("%s", async (_, createClient) => {
       expect(() => createClient()).toThrowErrorMatchingSnapshot();

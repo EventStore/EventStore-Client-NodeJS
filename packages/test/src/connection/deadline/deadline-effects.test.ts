@@ -20,42 +20,32 @@ describe("deadline", () => {
       [
         "client settings",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 1 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).listProjections(),
+          EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+            defaultDeadline: 1,
+          })).listProjections(),
       ],
       [
         "call options",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).listProjections({
+          EventStoreDBClient.connectionString(cluster.connectionString()).listProjections({
             deadline: 1,
           }),
       ],
       [
         "call options override",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).listProjections({
+          EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+            defaultDeadline: 200_000,
+          })).listProjections({
             deadline: 1,
           }),
       ],
       [
         "append",
         () =>
-          new EventStoreDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
-          ).appendToStream("deadline", jsonTestEvents(), {
+          EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+            defaultDeadline: 200_000,
+          })).appendToStream("deadline", jsonTestEvents(), {
             deadline: 1,
           }),
       ],

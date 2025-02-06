@@ -34,17 +34,11 @@ describe("listAllPersistentSubscriptions", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
 
     if (psToAllSupported) {
       let position!: Position;
-      for await (const { event } of client.readAll({ maxCount: 60 })) {
+      for await (const { event } of await client.readAll({ maxCount: 60 })) {
         if (!event) continue;
         position = event.position;
       }
@@ -181,13 +175,7 @@ describe("listAllPersistentSubscriptions", () => {
     beforeAll(async () => {
       await emptyNode.up();
 
-      client = new EventStoreDBClient(
-        {
-          endpoint: emptyNode.uri,
-        },
-        { rootCertificate: emptyNode.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = EventStoreDBClient.connectionString(emptyNode.connectionString());
     });
 
     afterAll(async () => {

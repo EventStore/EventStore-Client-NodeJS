@@ -98,14 +98,6 @@ describe("keepAlive settings", () => {
           "connectionString",
           () => EventStoreDBClient.connectionString(connectionString),
         ],
-        [
-          "constructor",
-          () =>
-            new EventStoreDBClient({
-              endpoint,
-              ...constructorOptions,
-            }),
-        ],
       ])("%s", async (_, createClient) => {
         const warnSpy = jest.spyOn(console, "warn").mockImplementation();
         const client = createClient();
@@ -136,11 +128,6 @@ describe("keepAlive settings", () => {
           (option: string, value: number) =>
             EventStoreDBClient.connectionString`esdb://host?${option}=${value}`,
         ],
-        [
-          "constructor",
-          (option: string, value: number) =>
-            new EventStoreDBClient({ endpoint, [option]: value }),
-        ],
       ])("%s", (_, testCase) => {
         expect(() => testCase(option, value)).toThrowErrorMatchingSnapshot();
       });
@@ -153,11 +140,6 @@ describe("keepAlive settings", () => {
         "connectionString",
         (value: number) =>
           EventStoreDBClient.connectionString`esdb://host?keepAliveInterval=${value}`,
-      ],
-      [
-        "constructor",
-        (value: number) =>
-          new EventStoreDBClient({ endpoint, keepAliveInterval: value }),
       ],
     ])("%s", (_, testCase) => {
       for (const keepAliveInterval of [0, 1, 10, 1000, 9999]) {

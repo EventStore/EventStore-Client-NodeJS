@@ -34,11 +34,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(cluster.connectionString());
   });
 
   afterAll(async () => {

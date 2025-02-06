@@ -16,16 +16,9 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+      defaultDeadline: Infinity,
+    }));
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
@@ -41,7 +34,7 @@ describe("reconnect", () => {
 
     // attempt to read a stream that doesn't exist should fail
     await expect(async () => {
-      for await (const event of client.readStream("doesn't-exist")) {
+      for await (const event of await client.readStream("doesn't-exist")) {
         expect(event).toBe("unreachable");
       }
     }).rejects.toThrowError(StreamNotFoundError);
@@ -69,16 +62,9 @@ describe("reconnect", () => {
     const credentials = { username: "admin", password: "changeit" };
     const STREAM_NAME = "try_get_timeout";
 
-    const client = new EventStoreDBClient(
-      {
-        endpoint: timeoutNode.uri,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
+    const client = EventStoreDBClient.connectionString(timeoutNode.connectionStringWithOverrides({
         defaultDeadline: Infinity,
-      },
-      { rootCertificate: timeoutNode.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    }));
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(

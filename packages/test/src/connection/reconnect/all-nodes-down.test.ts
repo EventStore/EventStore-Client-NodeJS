@@ -19,16 +19,9 @@ describe("reconnect", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+      defaultDeadline: Infinity,
+    }))
   });
 
   afterAll(async () => {
@@ -47,7 +40,7 @@ describe("reconnect", () => {
 
     // read the stream successfully
     const firstReadStream = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 })
+      await client.readStream(STREAM_NAME, { maxCount: 10 })
     );
     expect(firstReadStream.length).toBe(1);
     const firstEvent = firstReadStream[0].event;
@@ -67,7 +60,7 @@ describe("reconnect", () => {
     const firstDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(firstDeleteStream).toBeDefined();
     await expect(
-      collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
+      collect(await client.readStream(STREAM_NAME, { maxCount: 10 }))
     ).rejects.toThrowError(StreamNotFoundError);
 
     // Kill all nodes
@@ -89,7 +82,7 @@ describe("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of client.readStream(STREAM_NAME, { maxCount: 10 })) {
+      for await (const e of await client.readStream(STREAM_NAME, { maxCount: 10 })) {
         count++;
       }
     }).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -127,7 +120,7 @@ describe("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of client.readStream(STREAM_NAME, { maxCount: 10 })) {
+      for await (const e of await client.readStream(STREAM_NAME, { maxCount: 10 })) {
         count++;
       }
     }).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -165,7 +158,7 @@ describe("reconnect", () => {
     expect(reconnectedAppend).toBeDefined();
 
     const reconnectReadStream = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 })
+      await client.readStream(STREAM_NAME, { maxCount: 10 })
     );
     expect(reconnectReadStream.length).toBe(1);
     const reconnectEvent = reconnectReadStream[0].event;
@@ -183,7 +176,7 @@ describe("reconnect", () => {
     const reconnectedDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(reconnectedDeleteStream).toBeDefined();
     await expect(
-      collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
+      collect(await client.readStream(STREAM_NAME, { maxCount: 10 }))
     ).rejects.toThrowError(StreamNotFoundError);
   });
 });

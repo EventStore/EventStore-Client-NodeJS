@@ -9,6 +9,8 @@ export type ConnectionFeatures = {
     discoveryInterval?: number,
     endpoints?: EndPoint[],
     throwOnAppend?: boolean,
+    defaultDeadline?: number,
+    connectionName?: string,
 };
 
 export const createTestNode = (): Cluster => new Cluster(1);

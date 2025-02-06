@@ -256,7 +256,15 @@ export class Cluster {
     }
 
     if (features.throwOnAppend != undefined && features.throwOnAppend!) {
-        params.push(`throwOnAppend=true`);
+      params.push(`throwOnAppend=true`);
+    }
+
+    if (features.defaultDeadline) {
+      params.push(`defaultDeadline=${features.defaultDeadline}`);
+    }
+
+    if (features.connectionName) {
+      params.push(`connectionName=${features.connectionName}`);
     }
 
     if (params.length > 0) {

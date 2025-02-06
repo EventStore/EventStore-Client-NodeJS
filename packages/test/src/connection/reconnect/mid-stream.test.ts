@@ -21,11 +21,7 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString(cluster.connectionString());
 
     // make successful append of 2000 events to node
     const firstAppend = await client.appendToStream(
@@ -38,7 +34,7 @@ describe("reconnect", () => {
 
     try {
       let i = 0;
-      for await (const event of client.readStream("my_stream")) {
+      for await (const event of await client.readStream("my_stream")) {
         expect(event).toBeDefined();
 
         if (i === 12) {
