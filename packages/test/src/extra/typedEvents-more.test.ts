@@ -18,11 +18,7 @@ describe("typed events should compile", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -40,7 +36,7 @@ describe("typed events should compile", () => {
         when: EventAggregator<Entity, StreamEvents>
       ) =>
       async (
-        eventStream: StreamingRead<ResolvedEvent<StreamEvents>>
+        eventStream: AsyncIterableIterator<ResolvedEvent<StreamEvents>>
       ): Promise<Entity> => {
         let currentState: Entity | undefined = undefined;
         for await (const { event } of eventStream) {
@@ -298,7 +294,7 @@ describe("typed events should compile", () => {
       jsonEvents
     );
 
-    const shoppingCartStream = client.readStream<ShoppingCartEvent>(
+    const shoppingCartStream = await client.readStream<ShoppingCartEvent>(
       `shoppingcart-${shoppingCartId}`
     );
 

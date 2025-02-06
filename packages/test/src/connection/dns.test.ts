@@ -22,24 +22,13 @@ optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
           nodePreference ? `?nodePreference=${nodePreference}` : ""
         }`,
     ],
-    [
-      "new client",
-      (nodePreference?: NodePreference) =>
-        new EventStoreDBClient({
-          discover: {
-            address: `${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud`,
-            port: 2113,
-          },
-          nodePreference,
-        }),
-    ],
   ])("%s", (clientType, createClient) => {
     test("should successfully connect", async () => {
       const client = createClient();
 
       const appendResult = await client.appendToStream(STREAM_NAME, event);
       const readResult = await collect(
-        client.readStream(STREAM_NAME, { maxCount: 10 })
+        await client.readStream(STREAM_NAME, { maxCount: 10 })
       );
 
       expect(appendResult).toBeDefined();

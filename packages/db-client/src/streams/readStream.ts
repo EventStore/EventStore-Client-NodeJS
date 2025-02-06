@@ -72,6 +72,7 @@ Client.prototype.readStream = async function <
     resolveLinks: resolveLinkTos,
     direction,
     requiresLeader: baseOptions.requiresLeader ?? true,
+    credentials: baseOptions.credentials,
   };
   switch (fromRevision) {
     case START: {

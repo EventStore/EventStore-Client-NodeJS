@@ -23,11 +23,7 @@ describe("appendToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -48,11 +44,7 @@ describe("appendToStream", () => {
       const STREAM_NAME = "encode1";
       const KILLER = "CC ‐ 1830";
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = EventStoreDBClient.connectionString(node.connectionString());
 
       await client.appendToStream(
         STREAM_NAME,
@@ -63,7 +55,7 @@ describe("appendToStream", () => {
       );
 
       let count = 0;
-      for await (const { event } of client.readStream(STREAM_NAME, {
+      for await (const { event } of await client.readStream(STREAM_NAME, {
         maxCount: 1,
       })) {
         expect(event?.data).toStrictEqual(KILLER);
@@ -101,14 +93,14 @@ describe("appendToStream", () => {
       );
 
       const [trueEvent] = await collect(
-        client.readStream(LINK_TO_STREAM_NAME, {
+        await client.readStream(LINK_TO_STREAM_NAME, {
           fromRevision: LINK_REVISION,
           maxCount: 1,
         })
       );
 
       const [linkEvent] = await collect(
-        client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
+        await client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
       );
 
       expect(trueEvent.event).toBeDefined();
@@ -149,7 +141,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeDefined();
@@ -175,7 +167,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeDefined();
@@ -216,7 +208,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeDefined();
@@ -243,7 +235,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeDefined();
@@ -285,7 +277,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeDefined();
@@ -312,7 +304,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeDefined();
@@ -341,7 +333,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream(STREAM_NAME, {
+          for await (const { event } of await client.readStream(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeUndefined();
@@ -363,7 +355,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream(STREAM_NAME, {
+          for await (const { event } of await client.readStream(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeUndefined();
@@ -558,11 +550,9 @@ describe("appendToStream", () => {
 
   describe("throwOnAppendFailure", () => {
     test("throws on true", async () => {
-      const throwingClient = new EventStoreDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: true },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const throwingClient = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
+        throwOnAppend: true,
+      }));
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
 
@@ -590,11 +580,7 @@ describe("appendToStream", () => {
     });
 
     test("returns failure result on false", async () => {
-      const nonThrowingClient = new EventStoreDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: false },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const nonThrowingClient = EventStoreDBClient.connectionString(node.connectionString());
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";
 

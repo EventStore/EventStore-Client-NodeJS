@@ -15,10 +15,12 @@ export type Iterable = {
 
 export type RustClient = {
   readStream(stream: string, options: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>>;
+  readAll(options: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent>>;
 };
 
 export type RawClient = {
   readStream(stream: string, options: RustReadStreamOptions): Promise<Iterable>;
+  readAll(options: RustReadAllOptions): Promise<Iterable>;
 }
 
 export type RustReadStreamOptions = {
@@ -27,6 +29,16 @@ export type RustReadStreamOptions = {
   maxCount: bigint;
   requiresLeader: boolean;
   resolveLinks: boolean;
+  credentials?: { username: string, password: string };
+};
+
+export type RustReadAllOptions = {
+  fromPosition: { commit: bigint, prepare: bigint } | string;
+  direction: string;
+  maxCount: bigint;
+  requiresLeader: boolean;
+  resolveLinks: boolean;
+  credentials?: { username: string, password: string };
 };
 
 export type ResolvedEvent = {
@@ -58,6 +70,20 @@ export function createClient(connStr: string): RustClient {
   return {
     async readStream(stream: string, options: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>> {
       const iterable = await client.readStream(stream, options);
+
+      return {
+        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent> {
+          return {
+            next() {
+              return iterable.next();
+            }
+          };
+        }
+      };
+    },
+
+    async readAll(options: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent>> {
+      const iterable = await client.readAll(options);
 
       return {
         [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent> {

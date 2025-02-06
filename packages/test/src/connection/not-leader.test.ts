@@ -23,14 +23,9 @@ describe("not-leader", () => {
   });
 
   test("should get an error here", async () => {
-    const followerClient = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        nodePreference: FOLLOWER,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const followerClient = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+      nodePreference: FOLLOWER,
+    }));
 
     const appendResult = await followerClient.appendToStream(
       STREAM_NAME,
@@ -39,9 +34,9 @@ describe("not-leader", () => {
 
     expect(appendResult).toBeDefined();
 
-    const readFromTestStream = (client: EventStoreDBClient) => {
+    const readFromTestStream = async (client: EventStoreDBClient) => {
       return collect(
-        client.readStream(STREAM_NAME, {
+        await client.readStream(STREAM_NAME, {
           maxCount: 10,
           direction: BACKWARDS,
           fromRevision: END,
@@ -62,13 +57,9 @@ describe("not-leader", () => {
         expect(error.leader).toBeDefined();
         expect(cluster.endpoints).toContainEqual(error.leader);
 
-        const leaderClient = new EventStoreDBClient(
-          {
-            endpoint: error.leader,
-          },
-          { rootCertificate: cluster.certs.root },
-          { username: "admin", password: "changeit" }
-        );
+        const leaderClient = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+          endpoints: [error.leader]
+        }));
 
         const readResult = await readFromTestStream(leaderClient);
 

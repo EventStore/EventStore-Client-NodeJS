@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use eventstore::{
-    Client, ClientSettings, Position, ReadAllOptions, ReadStream, ReadStreamOptions, RecordedEvent,
-    StreamPosition,
+    Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions,
+    RecordedEvent, StreamPosition,
 };
 use neon::{
     object::Object,
@@ -83,6 +83,17 @@ pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromis
         cx.throw_error("fromRevision can only be 'start', 'end' or a bigint")?
     };
 
+    let options = if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "credentials")? {
+        let login = obj.get::<JsString, _, _>(&mut cx, "username")?.value(&mut cx);
+        let password = obj
+            .get::<JsString, _, _>(&mut cx, "password")?
+            .value(&mut cx);
+
+        options.authenticated(Credentials::new(login, password))
+    } else {
+        options
+    };
+
     let options = match params
         .get::<JsBigInt, _, _>(&mut cx, "maxCount")?
         .to_u64(&mut cx)
@@ -153,7 +164,18 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
             Err(e) => cx.throw_error(e.to_string())?,
         }
     } else {
-        cx.throw_error("fromRevision can only be 'start', 'end' or a bigint")?
+        cx.throw_error("fromPosition can only be 'start', 'end' or a bigint")?
+    };
+
+    let options = if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "credentials")? {
+        let login = obj.get::<JsString, _, _>(&mut cx, "username")?.value(&mut cx);
+        let password = obj
+            .get::<JsString, _, _>(&mut cx, "password")?
+            .value(&mut cx);
+
+        options.authenticated(Credentials::new(login, password))
+    } else {
+        options
     };
 
     let options = match params

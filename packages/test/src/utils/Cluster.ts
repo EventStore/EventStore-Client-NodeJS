@@ -255,6 +255,10 @@ export class Cluster {
       params.push(`discoveryInterval=${features.discoveryInterval}`);
     }
 
+    if (features.throwOnAppend != undefined && features.throwOnAppend!) {
+        params.push(`throwOnAppend=true`);
+    }
+
     if (params.length > 0) {
       paramsString = `?${params.join("&")}`;
     }

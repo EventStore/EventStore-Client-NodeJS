@@ -14,11 +14,7 @@ describe("typed events should compile", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -178,7 +174,7 @@ describe("typed events should compile", () => {
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);
 
-    for await (const { event } of client.readStream<KnownEvents>(STREAM_NAME, {
+    for await (const { event } of await client.readStream<KnownEvents>(STREAM_NAME, {
       maxCount: 1,
     })) {
       switch (event?.type) {

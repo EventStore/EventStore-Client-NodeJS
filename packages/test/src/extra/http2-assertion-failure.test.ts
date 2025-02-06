@@ -14,7 +14,7 @@ describe("http2 assertion failure", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient({ endpoint: node.uri }, { insecure: true });
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

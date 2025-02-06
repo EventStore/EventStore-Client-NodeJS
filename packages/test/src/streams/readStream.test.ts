@@ -32,11 +32,7 @@ describe("readStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
 
     appendResult = await client.appendToStream(STREAM_NAME, [
       ...jsonTestEvents(4, "json-test"),
@@ -58,7 +54,7 @@ describe("readStream", () => {
       test("json event", async () => {
         let resolvedEvent!: ResolvedEvent;
 
-        for await (const event of client.readStream(STREAM_NAME, {
+        for await (const event of await client.readStream(STREAM_NAME, {
           maxCount: 1,
           fromRevision: BigInt(1),
         })) {
@@ -78,7 +74,7 @@ describe("readStream", () => {
       test("binary event", async () => {
         let resolvedEvent!: ResolvedEvent;
 
-        for await (const event of client.readStream(STREAM_NAME, {
+        for await (const event of await client.readStream(STREAM_NAME, {
           maxCount: 1,
           fromRevision: BigInt(5),
         })) {
@@ -98,7 +94,7 @@ describe("readStream", () => {
       test("from start", async () => {
         let count = 0;
 
-        for await (const _ of client.readStream(STREAM_NAME)) {
+        for await (const _ of await client.readStream(STREAM_NAME)) {
           count++;
         }
 
@@ -108,7 +104,7 @@ describe("readStream", () => {
       test("from revision", async () => {
         let count = 0;
 
-        for await (const _ of client.readStream(STREAM_NAME, {
+        for await (const _ of await client.readStream(STREAM_NAME, {
           fromRevision: BigInt(1),
         })) {
           count++;
@@ -120,7 +116,7 @@ describe("readStream", () => {
       test("backwards from end", async () => {
         let count = 0;
 
-        for await (const _ of client.readStream(STREAM_NAME, {
+        for await (const _ of await client.readStream(STREAM_NAME, {
           direction: BACKWARDS,
           fromRevision: END,
         })) {
@@ -133,7 +129,7 @@ describe("readStream", () => {
       test("backwards from revision", async () => {
         let count = 0;
 
-        for await (const _ of client.readStream(STREAM_NAME, {
+        for await (const _ of await client.readStream(STREAM_NAME, {
           direction: BACKWARDS,
           fromRevision: BigInt(1),
         })) {
@@ -146,7 +142,7 @@ describe("readStream", () => {
       test("maxCount", async () => {
         let count = 0;
 
-        for await (const _ of client.readStream(STREAM_NAME, { maxCount: 2 })) {
+        for await (const _ of await client.readStream(STREAM_NAME, { maxCount: 2 })) {
           count++;
         }
 
@@ -178,7 +174,7 @@ describe("readStream", () => {
         await delay(1000);
 
         // by default, resolveLinkTos should be false
-        const noResolveLink = client.readStream<LinkEvent>("a-thing", {
+        const noResolveLink = await client.readStream<LinkEvent>("a-thing", {
           maxCount: 1,
         });
         const [noResolveEvent] = await collect(noResolveLink);
@@ -187,7 +183,7 @@ describe("readStream", () => {
         expect(noResolveEvent.event).toBeDefined();
         expect(noResolveEvent.event?.type).toBe("$>");
 
-        const doResolveLink = client.readStream("a-thing", {
+        const doResolveLink = await client.readStream("a-thing", {
           maxCount: 1,
           resolveLinkTos: true,
         });
@@ -215,7 +211,7 @@ describe("readStream", () => {
         const NO_STREAM_NAME = "this_is_not_a_stream";
 
         try {
-          for await (const e of client.readStream(NO_STREAM_NAME)) {
+          for await (const e of await client.readStream(NO_STREAM_NAME)) {
             expect(e).toBe("UNREACHABLE");
           }
         } catch (error) {
@@ -230,7 +226,7 @@ describe("readStream", () => {
       test("stream revision invalid argument lower bound", async () => {
         let count = 0;
         try {
-          for await (const e of client.readStream(STREAM_NAME, {
+          for await (const e of await client.readStream(STREAM_NAME, {
             direction: BACKWARDS,
             fromRevision: BigInt(-1),
           })) {
@@ -244,7 +240,7 @@ describe("readStream", () => {
       test("stream revision invalid argument upper bound", async () => {
         let count = 0;
         try {
-          for await (const e of client.readStream(STREAM_NAME, {
+          for await (const e of await client.readStream(STREAM_NAME, {
             direction: BACKWARDS,
             fromRevision: BigInt("18446744073709551616"),
           })) {
@@ -264,7 +260,7 @@ describe("readStream", () => {
         expect(result).toBeDefined();
 
         try {
-          for await (const event of client.readStream(DELETE_STREAM_NAME, {
+          for await (const event of await client.readStream(DELETE_STREAM_NAME, {
             maxCount: 10,
           })) {
             expect(event).toBe("Unreachable");
@@ -282,7 +278,7 @@ describe("readStream", () => {
     optionalDescribe(supported)("Supported (>=22.6.0)", () => {
       test("populates log position", async () => {
         const [resolvedEvent] = await collect(
-          client.readStream(STREAM_NAME, {
+          await client.readStream(STREAM_NAME, {
             maxCount: 1,
             fromRevision: END,
             direction: BACKWARDS,

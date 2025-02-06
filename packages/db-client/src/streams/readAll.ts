@@ -1,21 +1,16 @@
 import type { ReadableOptions } from "stream";
 
-import { Empty } from "../../generated/shared_pb";
-import { StreamsClient } from "../../generated/streams_grpc_pb";
-import { ReadReq } from "../../generated/streams_pb";
-
 import type {
   BaseOptions,
   ReadPosition,
   Direction,
   AllStreamResolvedEvent,
-  StreamingRead,
 } from "../types";
-import { debug, convertGrpcEvent } from "../utils";
-import { BACKWARDS, FORWARDS, START } from "../constants";
+import {FORWARDS, START} from "../constants";
 import { Client } from "../Client";
 
-import { ReadStream } from "./utils/ReadStream";
+import * as bridge from "@eventstore/db-client-bridge";
+import {convertRustEvent} from "../utils/convertRustEvent";
 
 export interface ReadAllOptions extends BaseOptions {
   /**
@@ -52,11 +47,11 @@ declare module "../Client" {
     readAll(
       options?: ReadAllOptions,
       readableOptions?: ReadableOptions
-    ): StreamingRead<AllStreamResolvedEvent>;
+    ): Promise<AsyncIterableIterator<AllStreamResolvedEvent>>;
   }
 }
 
-Client.prototype.readAll = function (
+Client.prototype.readAll = async function (
   this: Client,
   {
     maxCount = Number.MAX_SAFE_INTEGER,
@@ -65,76 +60,26 @@ Client.prototype.readAll = function (
     direction = FORWARDS,
     ...baseOptions
   }: ReadAllOptions = {},
-  readableOptions: ReadableOptions = {}
-): StreamingRead<AllStreamResolvedEvent> {
-  const req = new ReadReq();
-  const options = new ReadReq.Options();
+): Promise<AsyncIterableIterator<AllStreamResolvedEvent>> {
 
-  const uuidOption = new ReadReq.Options.UUIDOption();
-  uuidOption.setString(new Empty());
+  const options: bridge.RustReadAllOptions = {
+    maxCount: BigInt(maxCount),
+    fromPosition,
+    resolveLinks: resolveLinkTos,
+    direction,
+    requiresLeader: baseOptions.requiresLeader ?? true,
+    credentials: baseOptions.credentials,
+  };
 
-  const allOptions = new ReadReq.Options.AllOptions();
-
-  switch (fromPosition) {
-    case "start": {
-      allOptions.setStart(new Empty());
-      break;
+  const convert = async function* (
+      stream: AsyncIterable<bridge.ResolvedEvent>
+  ) {
+    for await (const event of stream) {
+      yield convertRustEvent<AllStreamResolvedEvent>(event);
     }
+  };
 
-    case "end": {
-      allOptions.setEnd(new Empty());
-      break;
-    }
+  const stream = await this.rustClient.readAll(options);
 
-    default: {
-      const pos = new ReadReq.Options.Position();
-      pos.setCommitPosition(fromPosition.commit.toString(10));
-      pos.setPreparePosition(fromPosition.prepare.toString(10));
-      allOptions.setPosition(pos);
-      break;
-    }
-  }
-
-  options.setAll(allOptions);
-  options.setResolveLinks(resolveLinkTos);
-  options.setCount(maxCount.toString(10));
-  options.setUuidOption(uuidOption);
-  options.setNoFilter(new Empty());
-
-  switch (direction) {
-    case FORWARDS: {
-      options.setReadDirection(0);
-      break;
-    }
-    case BACKWARDS: {
-      options.setReadDirection(1);
-      break;
-    }
-  }
-
-  req.setOptions(options);
-
-  debug.command("readAll: %O", {
-    maxCount,
-    options: {
-      fromPosition,
-      direction,
-      ...baseOptions,
-    },
-  });
-  debug.command_grpc("readAll: %g", req);
-
-  const createGRPCStream = this.GRPCStreamCreator(
-    StreamsClient,
-    "readAll",
-    (client) =>
-      client.read(
-        req,
-        ...this.callArguments(baseOptions, {
-          deadline: Infinity,
-        })
-      )
-  );
-
-  return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);
+  return convert(stream);
 };

@@ -1,4 +1,4 @@
-import { createInsecureTestCluster, createTestCluster } from "@test-utils";
+import {ConnectionFeatures, createInsecureTestCluster, createTestCluster} from "@test-utils";
 import { EventStoreDBClient } from "@eventstore/db-client";
 
 describe("http api", () => {
@@ -26,35 +26,27 @@ describe("http api", () => {
     });
 
     test("dns", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { rootCertificate: cluster.certs.root }
-      );
+      const client = EventStoreDBClient.connectionString(cluster.connectionString());
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("ip", async () => {
-      const client = new EventStoreDBClient(
-        {
-          endpoints: cluster.endpoints.map(({ address: _, port }) => ({
-            address: "127.0.0.1",
-            port,
-          })),
-        },
-        { rootCertificate: cluster.certs.root }
-      );
+      const overrides: ConnectionFeatures = {
+        endpoints: cluster.endpoints.map(({ address: _, port }) => ({
+          address: "127.0.0.1",
+          port,
+        })),
+      };
+      const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides(overrides));
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("error transform", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { rootCertificate: cluster.certs.root }
-      );
+      const client = EventStoreDBClient.connectionString(cluster.connectionString());
 
       class TestError extends Error {
         public code: number;
@@ -96,35 +88,26 @@ describe("http api", () => {
     });
 
     test("dns", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { insecure: true }
-      );
-
+      const client = EventStoreDBClient.connectionString(cluster.connectionString());
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("ip", async () => {
-      const client = new EventStoreDBClient(
-        {
-          endpoints: cluster.endpoints.map(({ address: _, port }) => ({
-            address: "127.0.0.1",
-            port,
-          })),
-        },
-        { insecure: true }
-      );
+      const overrides: ConnectionFeatures = {
+        endpoints: cluster.endpoints.map(({ address: _, port }) => ({
+          address: "127.0.0.1",
+          port,
+        })),
+      };
+      const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides(overrides));
 
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
     });
 
     test("error transform", async () => {
-      const client = new EventStoreDBClient(
-        { endpoints: cluster.endpoints },
-        { insecure: true }
-      );
+      const client = EventStoreDBClient.connectionString(cluster.connectionString());
 
       class TestError extends Error {
         public code: number;
