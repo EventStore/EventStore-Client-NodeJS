@@ -15,14 +15,7 @@ const checkCapabilities = async () => {
   const node = new Cluster(1);
   await node.up();
 
-  const client = new EventStoreDBClient(
-    {
-      endpoint: node.uri,
-    },
-    { rootCertificate: node.certs.root },
-    { username: "admin", password: "changeit" }
-  );
-
+  const client = EventStoreDBClient.connectionString(node.connectionString());
   const capabilities = await extractVersion.call(client);
 
   await node.down();

@@ -29,13 +29,7 @@ describe("subscribeToAll", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      {
-        rootCertificate: node.certs.root,
-      },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents(4));
     await client.appendToStream(STREAM_NAME_B, jsonTestEvents(4));

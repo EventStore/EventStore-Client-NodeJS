@@ -11,11 +11,7 @@ describe("setStreamMetadata", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -131,7 +127,7 @@ describe("setStreamMetadata", () => {
       await client.appendToStream(STREAM_NAME, jsonTestEvents(20));
 
       let count = 0;
-      for await (const _ of client.readStream(STREAM_NAME, {
+      for await (const _ of await client.readStream(STREAM_NAME, {
         fromRevision: START,
         maxCount: 200,
       })) {

@@ -33,11 +33,7 @@ describe("subscribeToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
     await client.appendToStream("out_of_stream_name", jsonTestEvents(4));
   });
 

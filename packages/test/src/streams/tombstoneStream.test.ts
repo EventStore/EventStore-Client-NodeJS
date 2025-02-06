@@ -16,11 +16,7 @@ describe("tombstoneStream", () => {
 
     beforeAll(async () => {
       await node.up();
-      client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = EventStoreDBClient.connectionString(node.connectionString());
     });
 
     afterAll(async () => {
@@ -39,7 +35,7 @@ describe("tombstoneStream", () => {
         expect(result).toBeDefined();
 
         try {
-          for await (const event of client.readStream(ANY_REVISION_STREAM, {
+          for await (const event of await client.readStream(ANY_REVISION_STREAM, {
             maxCount: 10,
           })) {
             expect(event).toBe("Unreachable");
@@ -81,7 +77,7 @@ describe("tombstoneStream", () => {
         it("succeeds", async () => {
           let revision!: bigint;
 
-          for await (const { event } of client.readStream(STREAM, {
+          for await (const { event } of await client.readStream(STREAM, {
             maxCount: 1,
             direction: BACKWARDS,
             fromRevision: END,
@@ -96,7 +92,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           try {
-            for await (const event of client.readStream(STREAM, {
+            for await (const event of await client.readStream(STREAM, {
               maxCount: 10,
             })) {
               expect(event).toBeDefined();
@@ -143,8 +139,8 @@ describe("tombstoneStream", () => {
 
           expect(result).toBeDefined();
 
-          await expect(() =>
-            collect(client.readStream(NOT_A_STREAM, { maxCount: 10 }))
+          await expect(async () =>
+            collect(await client.readStream(NOT_A_STREAM, { maxCount: 10 }))
           ).rejects.toThrowError(StreamDeletedError);
         });
       });
