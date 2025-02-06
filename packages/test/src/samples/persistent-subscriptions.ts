@@ -31,11 +31,7 @@ describe("[sample] persistent-subscriptions", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn(log);

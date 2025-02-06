@@ -47,11 +47,7 @@ describe("[sample] opentelemetry", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   beforeAll(async () => {
@@ -74,11 +70,7 @@ describe("[sample] opentelemetry", () => {
       "@eventstore/db-client"
     );
 
-    const client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = EventStoreDBClient.connectionString(node.connectionString());
     // endregion setup-client-for-tracing
 
     const response = await client.appendToStream(
