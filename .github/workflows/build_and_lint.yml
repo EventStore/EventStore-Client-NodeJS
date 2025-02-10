@@ -53,6 +53,8 @@ jobs:
         uses: actions/checkout@v4
       - name: NodeJS version
         run: node -v
+      - name: Corepack
+        run: corepack enable
       - name: Install
         run: yarn
       - name: Build

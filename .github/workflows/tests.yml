@@ -60,6 +60,8 @@ jobs:
           node-version-file: .github/files/.nvmrc
       - name: NodeJS version
         run: node -v
+      - name: Corepack
+        run: corepack enable
       - name: Install
         run: yarn
       - name: Build 
