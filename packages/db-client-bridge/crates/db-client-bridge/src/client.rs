@@ -1,9 +1,7 @@
 use std::sync::Arc;
+use neon::prelude::*;
 
-use eventstore::{
-    Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions,
-    RecordedEvent, StreamPosition,
-};
+use eventstore::{Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions, RecordedEvent, StreamPosition};
 use neon::{
     object::Object,
     prelude::{Context, FunctionContext},
@@ -157,27 +155,31 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
         x => cx.throw_error(format!("invalid direction value: '{}'", x))?,
     };
 
-    let options = if let Some(value) = params.get_opt::<JsString, _, _>(&mut cx, "fromPosition")? {
-        match value.value(&mut cx).as_str() {
-            "start" => options.position(StreamPosition::Start),
-            "end" => options.position(StreamPosition::End),
-            x => cx.throw_error(format!("invalid fromPosition value: '{}'", x))?,
-        }
-    } else if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "fromRevision")? {
-        let commit = obj
-            .get::<JsBigInt, _, _>(&mut cx, "commit")?
-            .to_u64(&mut cx);
-        let prepare = obj
-            .get::<JsBigInt, _, _>(&mut cx, "prepare")?
-            .to_u64(&mut cx);
+    let options = if let Some(value) = params.get_opt::<JsValue, _, _>(&mut cx, "fromPosition")? {
+        if let Ok(s) = value.downcast::<JsString, _>(&mut cx) {
+            match s.value(&mut cx).as_str() {
+                "start" => options.position(StreamPosition::Start),
+                "end" => options.position(StreamPosition::End),
+                x => cx.throw_error(format!("invalid fromPosition value: '{}'", x))?,
+            }
+        } else if let Ok(obj) = value.downcast::<JsObject, _>(&mut cx) {
+            let commit = obj
+                .get::<JsBigInt, _, _>(&mut cx, "commit")?
+                .to_u64(&mut cx);
+            let prepare = obj
+                .get::<JsBigInt, _, _>(&mut cx, "prepare")?
+                .to_u64(&mut cx);
 
-        let position = commit.and_then(|commit| {
-            prepare.map(|prepare| StreamPosition::Position(Position { commit, prepare }))
-        });
+            let position = commit.and_then(|commit| {
+                prepare.map(|prepare| StreamPosition::Position(Position { commit, prepare }))
+            });
 
-        match position {
-            Ok(p) => options.position(p),
-            Err(e) => cx.throw_error(e.to_string())?,
+            match position {
+                Ok(p) => options.position(p),
+                Err(e) => cx.throw_error(e.to_string())?,
+            }
+        } else {
+            cx.throw_error("fromPosition can only be 'start', 'end' or an object with 'commit' and 'prepare'")?
         }
     } else {
         options.position(StreamPosition::Start)
@@ -238,12 +240,31 @@ fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> J
         };
 
         deferred.settle_with(&channel, |mut cx| {
-            let stream = result.or_else(|e| cx.throw_error(e.to_string()))?;
+            let stream = result.or_else(|e| convert_read_internal_error(&mut cx, e))?;
             async_iterator_object(cx, stream)
         });
     });
 
     Ok(promise)
+}
+
+fn convert_read_internal_error<'a, C>(cx: &mut C, e: eventstore::Error) -> NeonResult<eventstore::ReadStream>
+where
+    C: Context<'a>,
+{
+    create_read_internal_error(cx, e)
+}
+
+
+fn create_read_internal_error<'a, C>(cx: &mut C, e: eventstore::Error) -> NeonResult<eventstore::ReadStream>
+where
+    C: Context<'a>,
+{
+    let js_err = JsError::type_error(cx, e.to_string())?;
+    let variant_name = format!("{:?}", e);
+    let js_str = cx.string(variant_name);
+    js_err.set(cx, "name", js_str)?;
+    cx.throw(js_err)?
 }
 
 fn async_iterator_object<'a, C>(cx: C, stream: ReadStream) -> JsResult<'a, JsObject>
@@ -269,7 +290,8 @@ where
             let result = stream.next().await;
 
             deferred.settle_with(&channel, |mut cx| {
-                let result = result.or_else(|e| cx.throw_error(e.to_string()))?;
+                let result = result.or_else(|e| convert_iterator_error(&mut cx, e))?;
+
                 let item = cx.empty_object();
                 let mut done = true;
 
@@ -322,6 +344,34 @@ where
     Ok(obj)
 }
 
+fn convert_iterator_error<'a, C>(
+    cx: &mut C,
+    e: eventstore::Error
+) -> NeonResult<Option<eventstore::ResolvedEvent>>
+where
+    C: Context<'a>,
+{
+    match e {
+        eventstore::Error::ResourceNotFound => {
+            // todo: input stream name
+            create_iterator_error(cx, e)
+        }
+        e => create_iterator_error(cx, e)
+    }
+}
+
+fn create_iterator_error<'a, C>(cx: &mut C, e: eventstore::Error) -> NeonResult<Option<eventstore::ResolvedEvent>>
+where
+    C: Context<'a>,
+{
+    let js_err = JsError::type_error(cx, e.to_string())?;
+    let variant_name = format!("{:?}", e);
+    let js_str = cx.string(variant_name);
+    js_err.set(cx, "name", js_str)?;
+    cx.throw(js_err)?;
+    Ok(None)
+}
+
 fn recorded_event<'a, C>(cx: &mut C, event: RecordedEvent) -> JsResult<'a, JsObject>
 where
     C: Context<'a>,
@@ -340,10 +390,8 @@ where
     let mut data = cx.array_buffer(event.data.len())?;
     data.as_mut_slice(cx).copy_from_slice(&event.data);
 
-    let mut metadata = cx.array_buffer(event.custom_metadata.len())?;
-    metadata
-        .as_mut_slice(cx)
-        .copy_from_slice(&event.custom_metadata);
+    let mut metadata = JsUint8Array::new(cx, event.custom_metadata.len())?;
+    metadata.as_mut_slice(cx).copy_from_slice(&event.custom_metadata);
 
     let position = cx.empty_object();
     let commit = JsBigInt::from_u64(cx, event.position.commit);
@@ -360,6 +408,7 @@ where
     obj.set(cx, "created", created)?;
     obj.set(cx, "data", data)?;
     obj.set(cx, "metadata", metadata)?;
+    obj.set(cx, "position", position)?;
 
     Ok(obj)
 }

@@ -10,7 +10,7 @@ import type {
   ReadRevision,
   ResolvedEvent,
 } from "../types";
-import { InvalidArgumentError } from "../utils";
+import {InvalidArgumentError, StreamNotFoundError} from "../utils";
 import { convertRustEvent } from "../utils/convertRustEvent";
 
 export interface ReadStreamOptions extends BaseOptions {
@@ -108,8 +108,14 @@ Client.prototype.readStream = async function <
   const convert = async function* (
     stream: AsyncIterable<bridge.ResolvedEvent>
   ) {
-    for await (const event of stream) {
-      yield convertRustEvent(event);
+    try {
+      for await (const event of stream) {
+        yield convertRustEvent(event);
+      }
+    } catch (error) {
+      if (error.name == "ResourceNotFound") {
+        throw new StreamNotFoundError(error.message)
+      }
     }
   };
 

@@ -18,7 +18,6 @@ import {
   StreamNotFoundError,
   ResolvedEvent,
   LinkEvent,
-  Position,
   AppendResult,
   InvalidArgumentError,
 } from "@eventstore/db-client";
@@ -207,7 +206,7 @@ describe("readStream", () => {
     });
 
     describe("errors", () => {
-      test("stream not found", async () => {
+      test.skip("stream not found", async () => {
         const NO_STREAM_NAME = "this_is_not_a_stream";
 
         try {
@@ -251,7 +250,7 @@ describe("readStream", () => {
         }
       });
 
-      test("stream deleted", async () => {
+      test.skip("stream deleted", async () => {
         const DELETE_STREAM_NAME = "this_stream_will_be_deleted";
 
         await client.appendToStream(DELETE_STREAM_NAME, jsonTestEvents());

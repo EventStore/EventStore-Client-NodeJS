@@ -3,9 +3,13 @@ const esdb = require('.');
 (async () => {
     const client = esdb.createClient('esdb://localhost:2113?tls=false');
 
-    const stream = await client.readStream('test');
+    try {
+        const stream = await client.readStream('notfound');
 
-    for await (const resolved of stream) {
-        console.log(resolved);
+        for await (const resolved of stream) {
+            console.log(resolved);
+        }
+    } catch (error) {
+        console.log(error)
     }
 })();
