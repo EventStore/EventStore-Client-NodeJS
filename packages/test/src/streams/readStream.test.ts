@@ -141,7 +141,9 @@ describe("readStream", () => {
       test("maxCount", async () => {
         let count = 0;
 
-        for await (const _ of await client.readStream(STREAM_NAME, { maxCount: 2 })) {
+        for await (const _ of await client.readStream(STREAM_NAME, {
+          maxCount: 2,
+        })) {
           count++;
         }
 
@@ -259,9 +261,12 @@ describe("readStream", () => {
         expect(result).toBeDefined();
 
         try {
-          for await (const event of await client.readStream(DELETE_STREAM_NAME, {
-            maxCount: 10,
-          })) {
+          for await (const event of await client.readStream(
+            DELETE_STREAM_NAME,
+            {
+              maxCount: 10,
+            }
+          )) {
             expect(event).toBe("Unreachable");
           }
         } catch (error) {

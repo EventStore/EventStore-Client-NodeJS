@@ -33,7 +33,9 @@ describe("deleteStream", () => {
         expect(result).toBeDefined();
 
         await expect(
-          collect(await client.readStream(ANY_REVISION_STREAM, { maxCount: 10 }))
+          collect(
+            await client.readStream(ANY_REVISION_STREAM, { maxCount: 10 })
+          )
         ).rejects.toThrowError(StreamNotFoundError);
       });
     });

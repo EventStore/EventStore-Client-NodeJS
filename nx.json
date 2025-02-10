@@ -1,0 +1,17 @@
+{
+    "targetDefaults": {
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": ["{projectRoot}/dist"],
+            "cache": true
+        },
+        "test": {
+            "cache": false
+        },
+        "lint": {
+            "cache": false
+        }
+    },
+    "defaultBase": "main",
+    "useInferencePlugins": false
+}

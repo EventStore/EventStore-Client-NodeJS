@@ -16,9 +16,11 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-      defaultDeadline: Infinity,
-    }));
+    const client = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        defaultDeadline: Infinity,
+      })
+    );
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(
@@ -62,9 +64,11 @@ describe("reconnect", () => {
     const credentials = { username: "admin", password: "changeit" };
     const STREAM_NAME = "try_get_timeout";
 
-    const client = EventStoreDBClient.connectionString(timeoutNode.connectionStringWithOverrides({
+    const client = EventStoreDBClient.connectionString(
+      timeoutNode.connectionStringWithOverrides({
         defaultDeadline: Infinity,
-    }));
+      })
+    );
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(

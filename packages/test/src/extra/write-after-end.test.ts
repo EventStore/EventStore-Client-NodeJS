@@ -84,7 +84,9 @@ describe("write after end", () => {
       const node = createTestNode();
       await node.up();
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       const STREAM_NAME = "json_stream_name";
       await client.appendToStream(STREAM_NAME, jsonTestEvents());

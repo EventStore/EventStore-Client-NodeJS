@@ -20,32 +20,40 @@ describe("deadline", () => {
       [
         "client settings",
         () =>
-          EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-            defaultDeadline: 1,
-          })).listProjections(),
+          EventStoreDBClient.connectionString(
+            cluster.connectionStringWithOverrides({
+              defaultDeadline: 1,
+            })
+          ).listProjections(),
       ],
       [
         "call options",
         () =>
-          EventStoreDBClient.connectionString(cluster.connectionString()).listProjections({
+          EventStoreDBClient.connectionString(
+            cluster.connectionString()
+          ).listProjections({
             deadline: 1,
           }),
       ],
       [
         "call options override",
         () =>
-          EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-            defaultDeadline: 200_000,
-          })).listProjections({
+          EventStoreDBClient.connectionString(
+            cluster.connectionStringWithOverrides({
+              defaultDeadline: 200_000,
+            })
+          ).listProjections({
             deadline: 1,
           }),
       ],
       [
         "append",
         () =>
-          EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-            defaultDeadline: 200_000,
-          })).appendToStream("deadline", jsonTestEvents(), {
+          EventStoreDBClient.connectionString(
+            cluster.connectionStringWithOverrides({
+              defaultDeadline: 200_000,
+            })
+          ).appendToStream("deadline", jsonTestEvents(), {
             deadline: 1,
           }),
       ],

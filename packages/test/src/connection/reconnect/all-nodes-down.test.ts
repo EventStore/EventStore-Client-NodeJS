@@ -19,9 +19,11 @@ describe("reconnect", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-      defaultDeadline: Infinity,
-    }))
+    client = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        defaultDeadline: Infinity,
+      })
+    );
   });
 
   afterAll(async () => {
@@ -82,7 +84,9 @@ describe("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of await client.readStream(STREAM_NAME, { maxCount: 10 })) {
+      for await (const e of await client.readStream(STREAM_NAME, {
+        maxCount: 10,
+      })) {
         count++;
       }
     }).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -120,7 +124,9 @@ describe("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of await client.readStream(STREAM_NAME, { maxCount: 10 })) {
+      for await (const e of await client.readStream(STREAM_NAME, {
+        maxCount: 10,
+      })) {
         count++;
       }
     }).rejects.toThrowErrorMatchingInlineSnapshot(

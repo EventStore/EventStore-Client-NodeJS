@@ -1,4 +1,4 @@
-import {collect, ConnectionFeatures, createTestCluster} from "@test-utils";
+import { collect, ConnectionFeatures, createTestCluster } from "@test-utils";
 import { jsonEvent, EventStoreDBClient } from "@eventstore/db-client";
 
 describe("cluster", () => {
@@ -15,7 +15,9 @@ describe("cluster", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = EventStoreDBClient.connectionString(cluster.connectionString());
+    const client = EventStoreDBClient.connectionString(
+      cluster.connectionString()
+    );
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = collect(
@@ -28,15 +30,17 @@ describe("cluster", () => {
 
   test("maxDiscoverAttempts", async () => {
     const maxDiscoverAttempts = 3;
-    const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-      endpoints: [
-        { address: "localhost", port: 8888 },
-        { address: "localhost", port: 8889 },
-        { address: "localhost", port: 8890 },
-      ],
+    const client = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        endpoints: [
+          { address: "localhost", port: 8888 },
+          { address: "localhost", port: 8889 },
+          { address: "localhost", port: 8890 },
+        ],
 
-      maxDiscoverAttempts: 3,
-    }));
+        maxDiscoverAttempts: 3,
+      })
+    );
 
     await expect(
       client.appendToStream(STREAM_NAME, event)
@@ -58,7 +62,9 @@ describe("cluster", () => {
     };
 
     const client1DiscoveryInterval = overrides.discoveryInterval!;
-    const client1 = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides(overrides));
+    const client1 = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides(overrides)
+    );
     const client1Start = Date.now();
 
     await expect(
@@ -70,7 +76,9 @@ describe("cluster", () => {
 
     overrides.discoveryInterval = 5_000;
     const client2Start = Date.now();
-    const client2 = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides(overrides));
+    const client2 = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides(overrides)
+    );
     await expect(
       client2.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(

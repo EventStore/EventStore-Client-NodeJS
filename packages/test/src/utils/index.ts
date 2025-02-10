@@ -1,16 +1,16 @@
 import { Cluster } from "./Cluster";
-import {Credentials, EndPoint, NodePreference} from "@eventstore/db-client";
+import { Credentials, EndPoint, NodePreference } from "@eventstore/db-client";
 
 export type ConnectionFeatures = {
-    defaultUserCredentials?: Credentials,
-    nodePreference?: NodePreference,
-    userCertificates?: "valid" | "invalid",
-    maxDiscoverAttempts?: number,
-    discoveryInterval?: number,
-    endpoints?: EndPoint[],
-    throwOnAppend?: boolean,
-    defaultDeadline?: number,
-    connectionName?: string,
+  defaultUserCredentials?: Credentials;
+  nodePreference?: NodePreference;
+  userCertificates?: "valid" | "invalid";
+  maxDiscoverAttempts?: number;
+  discoveryInterval?: number;
+  endpoints?: EndPoint[];
+  throwOnAppend?: boolean;
+  defaultDeadline?: number;
+  connectionName?: string;
 };
 
 export const createTestNode = (): Cluster => new Cluster(1);

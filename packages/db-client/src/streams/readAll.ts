@@ -6,11 +6,11 @@ import type {
   Direction,
   AllStreamResolvedEvent,
 } from "../types";
-import {FORWARDS, START} from "../constants";
+import { FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
 import * as bridge from "@eventstore/db-client-bridge";
-import {convertRustEvent} from "../utils/convertRustEvent";
+import { convertRustEvent } from "../utils/convertRustEvent";
 
 export interface ReadAllOptions extends BaseOptions {
   /**
@@ -59,9 +59,8 @@ Client.prototype.readAll = async function (
     resolveLinkTos = false,
     direction = FORWARDS,
     ...baseOptions
-  }: ReadAllOptions = {},
+  }: ReadAllOptions = {}
 ): Promise<AsyncIterableIterator<AllStreamResolvedEvent>> {
-
   const options: bridge.RustReadAllOptions = {
     maxCount: BigInt(maxCount),
     fromPosition,
@@ -72,7 +71,7 @@ Client.prototype.readAll = async function (
   };
 
   const convert = async function* (
-      stream: AsyncIterable<bridge.ResolvedEvent>
+    stream: AsyncIterable<bridge.ResolvedEvent>
   ) {
     for await (const event of stream) {
       yield convertRustEvent<AllStreamResolvedEvent>(event);

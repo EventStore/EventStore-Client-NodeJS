@@ -35,9 +35,12 @@ describe("tombstoneStream", () => {
         expect(result).toBeDefined();
 
         try {
-          for await (const event of await client.readStream(ANY_REVISION_STREAM, {
-            maxCount: 10,
-          })) {
+          for await (const event of await client.readStream(
+            ANY_REVISION_STREAM,
+            {
+              maxCount: 10,
+            }
+          )) {
             expect(event).toBe("Unreachable");
           }
         } catch (error) {

@@ -640,9 +640,11 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
     test("should throw on follower node", async () => {
       // Create connection to a follower node
-      const followerClient = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-        nodePreference: "follower",
-      }))
+      const followerClient = EventStoreDBClient.connectionString(
+        cluster.connectionStringWithOverrides({
+          nodePreference: "follower",
+        })
+      );
 
       const STREAM_NAME = "follower_node_test";
       const GROUP_NAME = "follower_node_test";
@@ -668,9 +670,11 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           // Our command is good, but must be executed on the leader
           if (error instanceof NotLeaderError) {
             // Create new client connected to the reported leader node
-            const leaderClient = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-              endpoints: [error.leader],
-            }));
+            const leaderClient = EventStoreDBClient.connectionString(
+              cluster.connectionStringWithOverrides({
+                endpoints: [error.leader],
+              })
+            );
 
             // try again with new connection
             return createAndConnectWithAutoReconnect(leaderClient);

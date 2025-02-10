@@ -38,9 +38,11 @@ describe("client certificates", () => {
     let client: EventStoreDBClient;
 
     beforeEach(() => {
-      client = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
-        userCertificates: "valid",
-      }));
+      client = EventStoreDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          userCertificates: "valid",
+        })
+      );
     });
 
     test("using default only certificates", async () => {
@@ -68,10 +70,12 @@ describe("client certificates", () => {
   });
 
   test("user credentials takes precedence over the client certificate during initialization", async () => {
-    const clientWithCredentials = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
-      userCertificates: "valid",
-      defaultUserCredentials: { username: "wrong", password: "password" },
-    }));
+    const clientWithCredentials = EventStoreDBClient.connectionString(
+      node.connectionStringWithOverrides({
+        userCertificates: "valid",
+        defaultUserCredentials: { username: "wrong", password: "password" },
+      })
+    );
 
     await expect(
       clientWithCredentials.appendToStream(
@@ -82,10 +86,11 @@ describe("client certificates", () => {
   });
 
   test("When the client is initialized with invalid certificate, user credentials take precendence if overriden during a call", async () => {
-
-    const clientWithBadCertificate = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
-      userCertificates: "invalid",
-    }));
+    const clientWithBadCertificate = EventStoreDBClient.connectionString(
+      node.connectionStringWithOverrides({
+        userCertificates: "invalid",
+      })
+    );
 
     expect(
       await clientWithBadCertificate.appendToStream(

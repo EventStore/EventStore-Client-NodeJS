@@ -11,7 +11,7 @@ import type { EndPoint, Certificate } from "@eventstore/db-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
-import {ConnectionFeatures} from "./index";
+import { ConnectionFeatures } from "./index";
 
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
@@ -209,11 +209,16 @@ export class Cluster {
     }));
   }
 
-  public connectionString = (): string => this.connectionStringWithOverrides({});
+  public connectionString = (): string =>
+    this.connectionStringWithOverrides({});
 
-  public connectionStringWithOverrides = (features: ConnectionFeatures): string => {
-    const endpoints = (features.endpoints ?? this.endpoints).map(x => `${x.address}:${x.port}`).join(",");
-    const params: string[] = []
+  public connectionStringWithOverrides = (
+    features: ConnectionFeatures
+  ): string => {
+    const endpoints = (features.endpoints ?? this.endpoints)
+      .map((x) => `${x.address}:${x.port}`)
+      .join(",");
+    const params: string[] = [];
     let credentials = "";
     let paramsString = "";
 
@@ -272,7 +277,7 @@ export class Cluster {
     }
 
     return `esdb://${credentials}@${endpoints}${paramsString}`;
-  }
+  };
 
   public up = async (): Promise<void> => {
     await this.ready;

@@ -44,12 +44,14 @@ jobs:
           registry: docker.eventstore.com
           username: ${{ secrets.CLOUDSMITH_CICD_USER }}
           password: ${{ secrets.CLOUDSMITH_CICD_TOKEN }}
+      - name: Corepack
+        run: corepack enable
       - name: Install
         run: yarn
       - name: Build 
         run: yarn build
       - name: Run Tests
-        run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
+        run: yarn test ${{ matrix.group.path }} -- --ci --run-in-band --forceExit
         env:
           EVENTSTORE_IMAGE: eventstore-ee:${{ env.EVENTSTORE_VERSION }}
           EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}

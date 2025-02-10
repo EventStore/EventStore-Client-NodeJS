@@ -20,9 +20,11 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-      defaultDeadline: Infinity,
-    }));
+    const client = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        defaultDeadline: Infinity,
+      })
+    );
 
     // make successful append to connect to node
     const firstAppend = await client.appendToStream(

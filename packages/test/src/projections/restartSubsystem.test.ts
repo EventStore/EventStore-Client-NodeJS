@@ -8,7 +8,7 @@ describe("restartSubsystem", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = EventStoreDBClient.connectionString(node.connectionString())
+    client = EventStoreDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

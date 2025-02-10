@@ -17,9 +17,11 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
-      connectionName: "getPersistentSubscriptionInfo test client",
-    }));
+    client = EventStoreDBClient.connectionString(
+      node.connectionStringWithOverrides({
+        connectionName: "getPersistentSubscriptionInfo test client",
+      })
+    );
   });
 
   afterAll(async () => {

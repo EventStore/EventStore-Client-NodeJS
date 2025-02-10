@@ -23,9 +23,11 @@ describe("not-leader", () => {
   });
 
   test("should get an error here", async () => {
-    const followerClient = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-      nodePreference: FOLLOWER,
-    }));
+    const followerClient = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        nodePreference: FOLLOWER,
+      })
+    );
 
     const appendResult = await followerClient.appendToStream(
       STREAM_NAME,
@@ -57,9 +59,11 @@ describe("not-leader", () => {
         expect(error.leader).toBeDefined();
         expect(cluster.endpoints).toContainEqual(error.leader);
 
-        const leaderClient = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
-          endpoints: [error.leader]
-        }));
+        const leaderClient = EventStoreDBClient.connectionString(
+          cluster.connectionStringWithOverrides({
+            endpoints: [error.leader],
+          })
+        );
 
         const readResult = await readFromTestStream(leaderClient);
 

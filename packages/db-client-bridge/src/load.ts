@@ -5,13 +5,16 @@
 //
 //   https://www.npmjs.com/package/@neon-rs/cli
 
-module.exports = require('@neon-rs/load').proxy({
+module.exports = require("@neon-rs/load").proxy({
   platforms: {
-    'win32-x64-msvc': () => require('@eventstore/db-client-bridge/win32-x64-msvc'),
-    'darwin-x64': () => require('@eventstore/db-client-bridge/darwin-x64'),
-    'darwin-arm64': () => require('@eventstore/db-client-bridge/darwin-arm64'),
-    'linux-x64-gnu': () => require('@eventstore/db-client-bridge/linux-x64-gnu'),
-    'linux-arm64-gnu': () => require('@eventstore/db-client-bridge/linux-arm64-gnu')
+    "win32-x64-msvc": () =>
+      require("@eventstore/db-client-bridge/win32-x64-msvc"),
+    "darwin-x64": () => require("@eventstore/db-client-bridge/darwin-x64"),
+    "darwin-arm64": () => require("@eventstore/db-client-bridge/darwin-arm64"),
+    "linux-x64-gnu": () =>
+      require("@eventstore/db-client-bridge/linux-x64-gnu"),
+    "linux-arm64-gnu": () =>
+      require("@eventstore/db-client-bridge/linux-arm64-gnu"),
   },
-  debug: () => require('../index.node')
+  debug: () => require("../index.node"),
 });

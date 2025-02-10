@@ -116,3 +116,5 @@ package-lock.json
 !/.yarn/releases
 !/.yarn/sdks
 /.pnp.*
+
+.nx/

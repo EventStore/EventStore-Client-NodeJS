@@ -68,7 +68,9 @@ describe("instrumentation", () => {
 
         const STREAM = v4();
 
-        const client = EventStoreDBClient.connectionString(node.connectionString());
+        const client = EventStoreDBClient.connectionString(
+          node.connectionString()
+        );
 
         const appendOptions: AppendToStreamOptions = {
           expectedRevision: "any",
@@ -121,7 +123,9 @@ describe("instrumentation", () => {
     test("span contains error when append fails", async () => {
       const { EventStoreDBClient } = await import("@eventstore/db-client");
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       const STREAM_NAME = v4();
 
@@ -174,7 +178,9 @@ describe("instrumentation", () => {
 
       const STREAM = v4();
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -253,7 +259,9 @@ describe("instrumentation", () => {
 
       const STREAM = v4();
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -337,7 +345,9 @@ describe("instrumentation", () => {
       const STREAM = v4();
       const GROUP = v4();
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       await client.createPersistentSubscriptionToStream(
         STREAM,
@@ -425,7 +435,9 @@ describe("instrumentation", () => {
       const GROUP = v4();
       const STREAM = v4();
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       await client.createPersistentSubscriptionToAll(
         GROUP,

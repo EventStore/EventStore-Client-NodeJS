@@ -14,7 +14,9 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
       await expect(
         collect(await client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
@@ -29,9 +31,14 @@ describe("defaultCredentials", () => {
     });
 
     test("good override", async () => {
-      const client = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
-        defaultUserCredentials: { username: "AzureDiamond", password: "hunter2" }
-      }));
+      const client = EventStoreDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          defaultUserCredentials: {
+            username: "AzureDiamond",
+            password: "hunter2",
+          },
+        })
+      );
 
       await expect(
         collect(await client.readAll({ maxCount: 10 }))

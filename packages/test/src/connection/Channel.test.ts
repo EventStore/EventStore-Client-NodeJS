@@ -13,9 +13,11 @@ describe("Channel", () => {
   });
 
   test("a single client should connect to a single node", async () => {
-    const client = EventStoreDBClient.connectionString(cluster.connectionStringWithOverrides({
+    const client = EventStoreDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
         nodePreference: "random",
-    }));
+      })
+    );
 
     /*
      Spying on an internal api is more implementation specific than

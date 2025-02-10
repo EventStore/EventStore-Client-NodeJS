@@ -44,7 +44,9 @@ describe("appendToStream", () => {
       const STREAM_NAME = "encode1";
       const KILLER = "CC ‐ 1830";
 
-      const client = EventStoreDBClient.connectionString(node.connectionString());
+      const client = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       await client.appendToStream(
         STREAM_NAME,
@@ -141,9 +143,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             expect(event?.metadata.metaMessage).toMatch(METADATA.metaMessage);
             count++;
@@ -167,9 +172,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             expect(event?.metadata.metaMessage).toMatch(METADATA.metaMessage);
             count++;
@@ -208,9 +216,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -235,9 +246,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -277,9 +291,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -304,9 +321,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -550,9 +570,11 @@ describe("appendToStream", () => {
 
   describe("throwOnAppendFailure", () => {
     test("throws on true", async () => {
-      const throwingClient = EventStoreDBClient.connectionString(node.connectionStringWithOverrides({
-        throwOnAppend: true,
-      }));
+      const throwingClient = EventStoreDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppend: true,
+        })
+      );
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
 
@@ -580,7 +602,9 @@ describe("appendToStream", () => {
     });
 
     test("returns failure result on false", async () => {
-      const nonThrowingClient = EventStoreDBClient.connectionString(node.connectionString());
+      const nonThrowingClient = EventStoreDBClient.connectionString(
+        node.connectionString()
+      );
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";
 

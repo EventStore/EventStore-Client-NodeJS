@@ -21,7 +21,9 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = EventStoreDBClient.connectionString(cluster.connectionString());
+    const client = EventStoreDBClient.connectionString(
+      cluster.connectionString()
+    );
 
     // make successful append of 2000 events to node
     const firstAppend = await client.appendToStream(

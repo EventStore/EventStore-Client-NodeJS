@@ -35,15 +35,21 @@
     "ts-jest": "^29.2.5"
   },
   "devDependencies": {
+    "@grpc/grpc-js": "^1.9.12",
     "@opentelemetry/api": "^1.8.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.51.1",
+    "@opentelemetry/instrumentation": "^0.50.0",
     "@opentelemetry/sdk-trace-node": "^1.23.0",
     "@opentelemetry/semantic-conventions": "^1.23.0",
+    "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.12",
+    "@types/uuid": "^8.3.4",
+    "debug": "^4.3.2",
     "docker-compose": "^0.24.8",
     "dotenv": "^16.4.5",
     "get-port": "^5.1.1",
     "npm-run-all": "^4.1.5",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "uuid": "^8.3.2"
   }
 }

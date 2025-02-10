@@ -10,7 +10,7 @@ import type {
   ReadRevision,
   ResolvedEvent,
 } from "../types";
-import {InvalidArgumentError, StreamNotFoundError} from "../utils";
+import { InvalidArgumentError, StreamNotFoundError } from "../utils";
 import { convertRustEvent } from "../utils/convertRustEvent";
 
 export interface ReadStreamOptions extends BaseOptions {
@@ -114,7 +114,7 @@ Client.prototype.readStream = async function <
       }
     } catch (error) {
       if (error.name == "ResourceNotFound") {
-        throw new StreamNotFoundError(error.message)
+        throw new StreamNotFoundError(error.message);
       }
     }
   };

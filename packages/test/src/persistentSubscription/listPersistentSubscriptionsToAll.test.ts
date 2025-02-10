@@ -143,7 +143,9 @@ describe("listPersistentSubscriptionsToAll", () => {
       beforeAll(async () => {
         await emptyNode.up();
 
-        client = EventStoreDBClient.connectionString(emptyNode.connectionString());
+        client = EventStoreDBClient.connectionString(
+          emptyNode.connectionString()
+        );
       });
 
       afterAll(async () => {

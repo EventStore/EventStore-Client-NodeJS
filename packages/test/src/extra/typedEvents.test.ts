@@ -174,9 +174,12 @@ describe("typed events should compile", () => {
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);
 
-    for await (const { event } of await client.readStream<KnownEvents>(STREAM_NAME, {
-      maxCount: 1,
-    })) {
+    for await (const { event } of await client.readStream<KnownEvents>(
+      STREAM_NAME,
+      {
+        maxCount: 1,
+      }
+    )) {
       switch (event?.type) {
         case "my-event":
           // `hello` exists on the data of `my-event` so we can access it deirectly
