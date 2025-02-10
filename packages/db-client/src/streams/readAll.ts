@@ -65,7 +65,7 @@ Client.prototype.readAll = async function (
   const options: bridge.RustReadAllOptions = {
     maxCount: BigInt(maxCount),
     fromPosition,
-    resolveLinks: resolveLinkTos,
+    resolvesLink: resolveLinkTos,
     direction,
     requiresLeader: baseOptions.requiresLeader ?? true,
     credentials: baseOptions.credentials,

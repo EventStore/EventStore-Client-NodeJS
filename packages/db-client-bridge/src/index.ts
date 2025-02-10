@@ -1,44 +1,44 @@
 // This module is the CJS entry point for the library.
 
 // The Rust addon.
-import * as addon from './load.cjs';
+import * as addon from "./load";
 
 // Use this declaration to assign types to the addon's exports,
 // which otherwise by default are `any`.
-declare module "./load.cjs" {
+declare module "./load" {
   function createClient(connStr: string): RawClient;
 }
 
 export type Iterable = {
-  next(): Promise<{ value: ResolvedEvent, done: boolean }>;
-}
+  next(): Promise<{ value: ResolvedEvent; done: boolean }>;
+};
 
 export type RustClient = {
-  readStream(stream: string, options: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>>;
-  readAll(options: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent>>;
+  readStream(stream: string, options?: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>>;
+  readAll(options?: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent>>;
 };
 
 export type RawClient = {
-  readStream(stream: string, options: RustReadStreamOptions): Promise<Iterable>;
-  readAll(options: RustReadAllOptions): Promise<Iterable>;
-}
+  readStream(stream: string, options?: RustReadStreamOptions): Promise<Iterable>;
+  readAll(options?: RustReadAllOptions): Promise<Iterable>;
+};
 
 export type RustReadStreamOptions = {
   fromRevision: bigint | string;
   direction: string;
   maxCount: bigint;
   requiresLeader: boolean;
-  resolveLinks: boolean;
-  credentials?: { username: string, password: string };
+  resolvesLink: boolean;
+  credentials?: { username: string; password: string };
 };
 
 export type RustReadAllOptions = {
-  fromPosition: { commit: bigint, prepare: bigint } | string;
+  fromPosition: { commit: bigint; prepare: bigint } | string;
   direction: string;
   maxCount: bigint;
   requiresLeader: boolean;
-  resolveLinks: boolean;
-  credentials?: { username: string, password: string };
+  resolvesLink: boolean;
+  credentials?: { username: string; password: string };
 };
 
 export type ResolvedEvent = {
@@ -68,7 +68,10 @@ export function createClient(connStr: string): RustClient {
   const client = addon.createClient(connStr);
 
   return {
-    async readStream(stream: string, options: RustReadStreamOptions): Promise<AsyncIterable<ResolvedEvent>> {
+    async readStream(
+        stream: string,
+        options: RustReadStreamOptions
+    ): Promise<AsyncIterable<ResolvedEvent>> {
       const iterable = await client.readStream(stream, options);
 
       return {
@@ -76,13 +79,15 @@ export function createClient(connStr: string): RustClient {
           return {
             next() {
               return iterable.next();
-            }
+            },
           };
-        }
+        },
       };
     },
 
-    async readAll(options: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent>> {
+    async readAll(
+        options: RustReadAllOptions
+    ): Promise<AsyncIterable<ResolvedEvent>> {
       const iterable = await client.readAll(options);
 
       return {
@@ -90,10 +95,14 @@ export function createClient(connStr: string): RustClient {
           return {
             next() {
               return iterable.next();
-            }
+            },
           };
-        }
+        },
       };
-    }
+    },
   };
 }
+
+module.exports = {
+  createClient,
+};

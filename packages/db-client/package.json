@@ -5,16 +5,16 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "npm-run-all generate build:ts",
+    "build": "yarn generate && yarn build:ts",
     "build:ts": "tsc --build",
-    "build:watch": "npm-run-all generate build:ts-watch",
+    "build:watch": "yarn generate && yarn build:ts-watch",
     "build:ts-watch": "tsc --build --watch",
-    "generate": "run-s generate:*",
+    "generate": "yarn generate:sed-append && yarn generate:sed-insert && yarn generate:folder && yarn generate:js",
     "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
     "generate:sed-insert": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
     "generate:folder": "shx mkdir -p ./generated",
     "generate:js": "grpc_tools_node_protoc ./protos/*.proto --proto_path=./protos --grpc_out=grpc_js:./generated --js_out=import_style=commonjs,binary:./generated --ts_out=generate_package_definition:./generated",
-    "clean": "run-s clean:*",
+    "clean": "yarn clean:generated && yarn clean:dist && yarn clean:buildinfo",
     "clean:generated": "shx rm -rf ./generated",
     "clean:dist": "shx rm -rf ./dist",
     "clean:buildinfo": "shx rm -rf *.tsbuildinfo"
@@ -42,7 +42,7 @@
     "access": "public"
   },
   "engines": {
-    "node": "^12.18.3 || >=14"
+    "node": ">=18"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.9.12",
@@ -54,7 +54,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@eventstore/db-client-bridge": "file:../db-client-bridge",
+    "@eventstore/db-client-bridge": "workspace:^",
     "@types/uuid": "^8.3.4",
     "grpc-tools": "^1.12.4",
     "grpc_tools_node_protoc_ts": "^5.3.3",

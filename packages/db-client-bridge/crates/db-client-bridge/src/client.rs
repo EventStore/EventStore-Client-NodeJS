@@ -8,7 +8,7 @@ use neon::{
     object::Object,
     prelude::{Context, FunctionContext},
     result::JsResult,
-    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString},
+    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue},
 };
 use tokio::sync::Mutex;
 
@@ -53,65 +53,73 @@ pub enum Options {
 
 pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> {
     let stream_name = cx.argument::<JsString>(0)?.value(&mut cx);
-    let params = cx.argument::<JsObject>(1)?;
-    let options = ReadStreamOptions::default();
-
-    let direction_str = params
-        .get::<JsString, _, _>(&mut cx, "direction")?
-        .value(&mut cx);
-    let options = match direction_str.as_str() {
-        "forwards" => options.forwards(),
-        "backwards" => options.backwards(),
-        x => cx.throw_error(format!("invalid direction value: '{}'", x))?,
-    };
-
-    let options = if let Ok(value) = params
-        .get_value(&mut cx, "fromRevision")?
-        .downcast::<JsString, _>(&mut cx)
-    {
-        match value.value(&mut cx).as_str() {
-            "start" => options.position(StreamPosition::Start),
-            "end" => options.position(StreamPosition::End),
-            x => cx.throw_error(format!("invalid fromRevision value: '{}'", x))?,
-        }
-    } else if let Ok(value) = params.get::<JsBigInt, _, _>(&mut cx, "fromRevision") {
-        match value.to_u64(&mut cx) {
-            Ok(r) => options.position(StreamPosition::Position(r)),
-            Err(e) => cx.throw_error(e.to_string())?,
+    let params = if cx.len() >= 2 {
+        if let Ok(arg) = cx.argument::<JsValue>(1) {
+            arg.downcast::<JsObject, _>(&mut cx)
+                .unwrap_or_else(|_| cx.empty_object())
+        } else {
+            cx.empty_object()
         }
     } else {
-        cx.throw_error("fromRevision can only be 'start', 'end' or a bigint")?
+        cx.empty_object()
+    };
+    let mut options = ReadStreamOptions::default();
+
+    let direction_str = match params.get_opt::<JsString, _, _>(&mut cx, "direction")? {
+        Some(s) => s.value(&mut cx),
+        None => "forwards".to_string(),
+    };
+    options = match direction_str.as_str() {
+        "forwards" => options.forwards(),
+        "backwards" => options.backwards(),
+        x => return cx.throw_error(format!("invalid direction value: '{}'", x)),
     };
 
-    let options = if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "credentials")? {
-        let login = obj.get::<JsString, _, _>(&mut cx, "username")?.value(&mut cx);
+    if let Some(value) = params.get_opt::<JsValue, _, _>(&mut cx, "fromRevision")? {
+        if let Ok(s) = value.downcast::<JsString, _>(&mut cx) {
+            options = match s.value(&mut cx).as_str() {
+                "start" => options.position(StreamPosition::Start),
+                "end" => options.position(StreamPosition::End),
+                x => return cx.throw_error(format!("invalid fromRevision value: '{}'", x)),
+            };
+        } else if let Ok(n) = value.downcast::<JsBigInt, _>(&mut cx) {
+            match n.to_u64(&mut cx) {
+                Ok(r) => options = options.position(StreamPosition::Position(r)),
+                Err(e) => return cx.throw_error(e.to_string()),
+            };
+        } else {
+            return cx.throw_error("fromRevision can only be 'start', 'end' or a bigint");
+        }
+    }
+
+    if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "credentials")? {
+        let login = obj
+            .get::<JsString, _, _>(&mut cx, "username")?
+            .value(&mut cx);
         let password = obj
             .get::<JsString, _, _>(&mut cx, "password")?
             .value(&mut cx);
+        options = options.authenticated(Credentials::new(login, password));
+    }
 
-        options.authenticated(Credentials::new(login, password))
-    } else {
-        options
-    };
-
-    let options = match params
-        .get::<JsBigInt, _, _>(&mut cx, "maxCount")?
-        .to_u64(&mut cx)
-    {
-        Ok(r) => options.max_count(r as usize),
-        Err(e) => cx.throw_error(e.to_string())?,
-    };
+    if let Some(js_bigint) = params.get_opt::<JsBigInt, _, _>(&mut cx, "maxCount")? {
+        match js_bigint.to_u64(&mut cx) {
+            Ok(r) => options = options.max_count(r as usize),
+            Err(e) => return cx.throw_error(e.to_string()),
+        }
+    }
 
     let require_leader = params
-        .get::<JsBoolean, _, _>(&mut cx, "requiresLeader")?
-        .value(&mut cx);
-    let options = options.requires_leader(require_leader);
+        .get_opt::<JsBoolean, _, _>(&mut cx, "requiresLeader")?
+        .map(|b| b.value(&mut cx))
+        .unwrap_or(false);
+    options = options.requires_leader(require_leader);
 
     let resolve_links = params
-        .get::<JsBoolean, _, _>(&mut cx, "resolvesLink")?
-        .value(&mut cx);
-
-    let options = if resolve_links {
+        .get_opt::<JsBoolean, _, _>(&mut cx, "resolvesLink")?
+        .map(|b| b.value(&mut cx))
+        .unwrap_or(false);
+    options = if resolve_links {
         options.resolve_link_tos()
     } else {
         options
@@ -126,28 +134,36 @@ pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromis
 }
 
 pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> {
-    let params = cx.argument::<JsObject>(0)?;
+    let params = if cx.len() >= 1 {
+        if let Ok(arg) = cx.argument::<JsValue>(0) {
+            arg.downcast::<JsObject, _>(&mut cx)
+                .unwrap_or_else(|_| cx.empty_object())
+        } else {
+            cx.empty_object()
+        }
+    } else {
+        cx.empty_object()
+    };
+
     let options = ReadAllOptions::default();
 
-    let direction_str = params
-        .get::<JsString, _, _>(&mut cx, "direction")?
-        .value(&mut cx);
+    let direction_str = match params.get_opt::<JsString, _, _>(&mut cx, "direction")? {
+        Some(s) => s.value(&mut cx),
+        None => "forwards".to_string(),
+    };
     let options = match direction_str.as_str() {
         "forwards" => options.forwards(),
         "backwards" => options.backwards(),
         x => cx.throw_error(format!("invalid direction value: '{}'", x))?,
     };
 
-    let options = if let Ok(value) = params
-        .get_value(&mut cx, "fromPosition")?
-        .downcast::<JsString, _>(&mut cx)
-    {
+    let options = if let Some(value) = params.get_opt::<JsString, _, _>(&mut cx, "fromPosition")? {
         match value.value(&mut cx).as_str() {
             "start" => options.position(StreamPosition::Start),
             "end" => options.position(StreamPosition::End),
             x => cx.throw_error(format!("invalid fromPosition value: '{}'", x))?,
         }
-    } else if let Ok(obj) = params.get::<JsObject, _, _>(&mut cx, "fromRevision") {
+    } else if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "fromRevision")? {
         let commit = obj
             .get::<JsBigInt, _, _>(&mut cx, "commit")?
             .to_u64(&mut cx);
@@ -164,37 +180,40 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
             Err(e) => cx.throw_error(e.to_string())?,
         }
     } else {
-        cx.throw_error("fromPosition can only be 'start', 'end' or a bigint")?
+        options.position(StreamPosition::Start)
     };
 
     let options = if let Some(obj) = params.get_opt::<JsObject, _, _>(&mut cx, "credentials")? {
-        let login = obj.get::<JsString, _, _>(&mut cx, "username")?.value(&mut cx);
+        let login = obj
+            .get::<JsString, _, _>(&mut cx, "username")?
+            .value(&mut cx);
         let password = obj
             .get::<JsString, _, _>(&mut cx, "password")?
             .value(&mut cx);
-
         options.authenticated(Credentials::new(login, password))
     } else {
         options
     };
 
-    let options = match params
-        .get::<JsBigInt, _, _>(&mut cx, "maxCount")?
-        .to_u64(&mut cx)
-    {
-        Ok(r) => options.max_count(r as usize),
-        Err(e) => cx.throw_error(e.to_string())?,
+    let options = if let Some(js_bigint) = params.get_opt::<JsBigInt, _, _>(&mut cx, "maxCount")? {
+        match js_bigint.to_u64(&mut cx) {
+            Ok(r) => options.max_count(r as usize),
+            Err(e) => return cx.throw_error(e.to_string()),
+        }
+    } else {
+        options
     };
 
     let require_leader = params
-        .get::<JsBoolean, _, _>(&mut cx, "requiresLeader")?
-        .value(&mut cx);
+        .get_opt::<JsBoolean, _, _>(&mut cx, "requiresLeader")?
+        .map(|b| b.value(&mut cx))
+        .unwrap_or(false);
     let options = options.requires_leader(require_leader);
 
     let resolve_links = params
-        .get::<JsBoolean, _, _>(&mut cx, "resolvesLink")?
-        .value(&mut cx);
-
+        .get_opt::<JsBoolean, _, _>(&mut cx, "resolvesLink")?
+        .map(|b| b.value(&mut cx))
+        .unwrap_or(false);
     let options = if resolve_links {
         options.resolve_link_tos()
     } else {

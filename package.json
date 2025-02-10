@@ -2,17 +2,16 @@
   "name": "eventstore-node-client-repository",
   "private": true,
   "scripts": {
-    "build": "lerna run --stream build",
-    "build:ts": "lerna run --stream build:ts",
-    "build:watch": "lerna run build:watch --parallel",
-    "lint": "run-s -c lint:*",
+    "build": "yarn lerna run --stream build",
+    "build:ts": "yarn lerna run --stream build:ts",
+    "build:watch": "yarn lerna run build:watch --parallel",
+    "lint": "yarn lint:prettier && yarn lint:eslint",
     "lint:prettier": "prettier --check \"packages/*/src/**/**/!(*.d).{ts,json}\"",
     "lint:eslint": "eslint \"packages/*/src/**/*.ts\"",
     "prettier:fix": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\"",
-    "clean": "lerna run --stream clean",
-    "prepublishOnly": "run-s clean build test",
-    "test": "lerna run --stream test --",
-    "postinstall": "yarn build"
+    "clean": "yarn lerna run --stream clean",
+    "prepublishOnly": "yarn clean && yarn build && yarn test",
+    "test": "yarn lerna run --stream test --"
   },
   "author": "Event Store Limited",
   "license": "Apache-2.0",
@@ -36,8 +35,8 @@
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
   "dependencies": {
     "@tsconfig/node18": "^18.2.4"
-  }
+  },
+  "packageManager": "yarn@4.6.0+sha512.5383cc12567a95f1d668fbe762dfe0075c595b4bfff433be478dbbe24e05251a8e8c3eb992a986667c1d53b6c3a9c85b8398c35a960587fbd9fa3a0915406728"
 }

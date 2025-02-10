@@ -69,7 +69,7 @@ Client.prototype.readStream = async function <
   const options: bridge.RustReadStreamOptions = {
     maxCount: BigInt(maxCount),
     fromRevision,
-    resolveLinks: resolveLinkTos,
+    resolvesLink: resolveLinkTos,
     direction,
     requiresLeader: baseOptions.requiresLeader ?? true,
     credentials: baseOptions.credentials,

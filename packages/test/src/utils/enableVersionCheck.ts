@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // @ts-ignore
-import NodeEnvironment from require("jest-environment-node");
+import NodeEnvironment from "jest-environment-node";
 
 import { Cluster } from "./Cluster";
 import { EventStoreDBClient } from "@eventstore/db-client/dist/index";
