@@ -6,7 +6,7 @@ use neon::{
     object::Object,
     prelude::{Context, FunctionContext},
     result::JsResult,
-    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue, JsDate},
+    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue},
 };
 use tokio::sync::Mutex;
 
