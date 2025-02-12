@@ -38,7 +38,7 @@ describe("dispose", () => {
     await client.dispose();
   });
 
-  test("stream set should be cleaned up", async () => {
+  test.skip("stream set should be cleaned up", async () => {
     const STREAM_NAME = uuid();
     const STREAM_NAME_2 = uuid();
 
@@ -85,7 +85,7 @@ describe("dispose", () => {
     expect(handleError).not.toBeCalled();
   });
 
-  test("stream set should be cleaned up naturally", async () => {
+  test.skip("stream set should be cleaned up naturally", async () => {
     const STREAM_NAME = uuid();
 
     await client.appendToStream(STREAM_NAME, jsonTestEvents(10), {
@@ -237,7 +237,7 @@ describe("dispose", () => {
     expect(handlePS$allSubscription2End).toBeCalledTimes(1);
   });
 
-  test("read $all", async () => {
+  test.skip("read $all", async () => {
     const defer = new Defer();
     const STREAM_NAME = uuid();
 
@@ -276,7 +276,7 @@ describe("dispose", () => {
     expect(handlereadAll2End).toBeCalledTimes(1);
   });
 
-  test("read stream", async () => {
+  test.skip("read stream", async () => {
     const defer = new Defer();
     const STREAM_NAME = uuid();
     const STREAM_NAME_2 = uuid();

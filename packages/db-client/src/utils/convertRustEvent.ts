@@ -58,7 +58,7 @@ export const convertRustRecord = <E extends EventType = EventType>(
   const type = rustEvent.type;
   const streamId = rustEvent.streamId;
   const id = rustEvent.id;
-  const created = rustEvent.created;
+  const created = new Date(rustEvent.created);
   const revision = rustEvent.revision;
   const metadata: E["metadata"] = parseMetadata(rustEvent, id);
   const isJson = rustEvent.isJson;

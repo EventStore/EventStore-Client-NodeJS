@@ -6,7 +6,7 @@ use neon::{
     object::Object,
     prelude::{Context, FunctionContext},
     result::JsResult,
-    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue},
+    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue, JsDate},
 };
 use tokio::sync::Mutex;
 
@@ -384,7 +384,7 @@ where
     let is_json = cx.boolean(event.is_json);
     let revision = JsBigInt::from_u64(cx, event.revision);
     let created = cx
-        .date(event.created.timestamp() as f64)
+        .date(event.created.timestamp() as f64 * 1000.0)
         .or_else(|e| cx.throw_error(e.to_string()))?;
 
     let mut data = cx.array_buffer(event.data.len())?;

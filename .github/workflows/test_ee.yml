@@ -54,7 +54,7 @@ jobs:
         run: yarn test ${{ matrix.group.path }} -- --ci --run-in-band --forceExit
         env:
           EVENTSTORE_IMAGE: eventstore-ee:${{ env.EVENTSTORE_VERSION }}
-          EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
+#          EVENTSTORE_CLOUD_ID: ${{ secrets.EVENTSTORE_CLOUD_ID }}
       - name: Disconnect from tailscale
         if: ${{ always() && matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}
         run: sudo tailscale down
