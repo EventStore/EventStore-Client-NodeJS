@@ -10,7 +10,11 @@ import type {
   ReadRevision,
   ResolvedEvent,
 } from "../types";
-import {InvalidArgumentError, StreamDeletedError, StreamNotFoundError} from "../utils";
+import {
+  InvalidArgumentError,
+  StreamDeletedError,
+  StreamNotFoundError,
+} from "../utils";
 import { convertRustEvent } from "../utils/convertRustEvent";
 
 export interface ReadStreamOptions extends BaseOptions {
@@ -120,7 +124,7 @@ Client.prototype.readStream = async function <
   }
 
   const convert = async function* (
-      stream: AsyncIterable<bridge.ResolvedEvent>
+    stream: AsyncIterable<bridge.ResolvedEvent>
   ) {
     try {
       for await (const event of stream) {

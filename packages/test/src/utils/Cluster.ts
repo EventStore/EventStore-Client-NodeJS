@@ -260,8 +260,11 @@ export class Cluster {
       params.push(`discoveryInterval=${features.discoveryInterval}`);
     }
 
-    if (features.throwOnAppendFailure != undefined && features.throwOnAppendFailure!) {
-      params.push(`throwOnAppendFailure=true`);
+    if (
+      features.throwOnAppendFailure != undefined &&
+      !features.throwOnAppendFailure
+    ) {
+      params.push(`throwOnAppendFailure=false`);
     }
 
     if (features.defaultDeadline) {
