@@ -8,7 +8,7 @@ export type ConnectionFeatures = {
   maxDiscoverAttempts?: number;
   discoveryInterval?: number;
   endpoints?: EndPoint[];
-  throwOnAppend?: boolean;
+  throwOnAppendFailure?: boolean;
   defaultDeadline?: number;
   connectionName?: string;
 };

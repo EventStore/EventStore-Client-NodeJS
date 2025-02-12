@@ -572,7 +572,7 @@ describe("appendToStream", () => {
     test("throws on true", async () => {
       const throwingClient = EventStoreDBClient.connectionString(
         node.connectionStringWithOverrides({
-          throwOnAppend: true,
+          throwOnAppendFailure: true,
         })
       );
 
@@ -603,7 +603,9 @@ describe("appendToStream", () => {
 
     test("returns failure result on false", async () => {
       const nonThrowingClient = EventStoreDBClient.connectionString(
-        node.connectionString()
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: false,
+        })
       );
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";

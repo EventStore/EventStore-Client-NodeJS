@@ -10,7 +10,7 @@ import type {
   ReadRevision,
   ResolvedEvent,
 } from "../types";
-import { InvalidArgumentError, StreamNotFoundError } from "../utils";
+import {InvalidArgumentError, StreamDeletedError, StreamNotFoundError} from "../utils";
 import { convertRustEvent } from "../utils/convertRustEvent";
 
 export interface ReadStreamOptions extends BaseOptions {
@@ -105,21 +105,38 @@ Client.prototype.readStream = async function <
     }
   }
 
+  let stream;
+  try {
+    stream = await this.rustClient.readStream(streamName, options);
+  } catch (error) {
+    switch (error.name) {
+      case "ResourceNotFound":
+        throw new StreamNotFoundError(error.message, streamName);
+      case "ResourceDeleted":
+        throw StreamDeletedError.fromStreamName(streamName);
+      default:
+        throw error;
+    }
+  }
+
   const convert = async function* (
-    stream: AsyncIterable<bridge.ResolvedEvent>
+      stream: AsyncIterable<bridge.ResolvedEvent>
   ) {
     try {
       for await (const event of stream) {
         yield convertRustEvent(event);
       }
     } catch (error) {
-      if (error.name == "ResourceNotFound") {
-        throw new StreamNotFoundError(error.message);
+      switch (error.name) {
+        case "ResourceNotFound":
+          throw new StreamNotFoundError(error.message, streamName);
+        case "ResourceDeleted":
+          throw StreamDeletedError.fromStreamName(streamName);
+        default:
+          throw error;
       }
     }
   };
-
-  const stream = await this.rustClient.readStream(streamName, options);
 
   return convert(stream);
 };
