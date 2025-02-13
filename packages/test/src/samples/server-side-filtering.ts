@@ -91,7 +91,7 @@ describe("[sample] server-side-filtering", () => {
     excludeSystemEvents({
       async checkpointReached(_subscription, position) {
         // The subscription will wait until the promise is resolved
-        // Code to save commit position to a persistent store as a checkpoint
+        // Save commit position to a persistent store as a checkpoint
         await doSomethingAsync();
         console.log(`checkpoint taken at ${position.commit}`);
       },
@@ -105,7 +105,7 @@ describe("[sample] server-side-filtering", () => {
       regex: "^[^$].*",
       checkpointInterval: 1000,
       checkpointReached(_subscription, position) {
-        // Code to save commit position to a persistent store as a checkpoint
+        // Save commit position to a persistent store as a checkpoint
         console.log(`checkpoint taken at ${position.commit}`);
       },
     });
