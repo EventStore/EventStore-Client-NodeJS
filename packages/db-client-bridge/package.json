@@ -19,7 +19,7 @@
     "clinic": "yarn run clinic:profile &&yarn run clinic:flame &&yarn run clinic:heap",
     "clinic:profile": "clinic doctor -- node ./benchmark/benchmark.js",
     "clinic:flame": "clinic flame -- node ./benchmark/benchmark.js",
-    "clinic:heap": "clinic heapprofiler -- node ./benchmark/benchmark.js",
+    "clinic:heap": "clinic heapprofiler -- node ./benchmark/benchmark.js"
   },
   "author": "Kurrent",
   "license": "Apache-2.0",
