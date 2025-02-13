@@ -7,6 +7,7 @@ import * as addon from "./load";
 // which otherwise by default are `any`.
 declare module "./load" {
   function createClient(connStr: string): RawClient;
+  function readStreamNext(raw: RawReadStream): Promise<{ value: ResolvedEvent; done: boolean }>;
 }
 
 export type Iterable = {
@@ -28,6 +29,8 @@ export type RawClient = {
   ): Promise<Iterable>;
   readAll(options?: RustReadAllOptions): Promise<Iterable>;
 };
+
+export type RawReadStream = any;
 
 export type RustReadStreamOptions = {
   fromRevision: bigint | string;
@@ -84,7 +87,7 @@ export function createClient(connStr: string): RustClient {
         [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent> {
           return {
             next() {
-              return iterable.next();
+              return addon.readStreamNext(iterable);
             },
           };
         },
@@ -100,7 +103,7 @@ export function createClient(connStr: string): RustClient {
         [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent> {
           return {
             next() {
-              return iterable.next();
+              return addon.readStreamNext(iterable);
             },
           };
         },

@@ -1,14 +1,17 @@
-use std::sync::Arc;
 use neon::prelude::*;
 
-use eventstore::{Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions, RecordedEvent, StreamPosition};
+use eventstore::{
+    Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions,
+    RecordedEvent, ResolvedEvent, StreamPosition,
+};
 use neon::{
     object::Object,
     prelude::{Context, FunctionContext},
     result::JsResult,
-    types::{buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue},
+    types::{
+        buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue,
+    },
 };
-use tokio::sync::Mutex;
 
 use crate::RUNTIME;
 
@@ -132,7 +135,7 @@ pub fn read_stream(client: Client, mut cx: FunctionContext) -> JsResult<JsPromis
 }
 
 pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> {
-    let params = if cx.len() >= 1 {
+    let params = if !cx.is_empty() {
         if let Ok(arg) = cx.argument::<JsValue>(0) {
             arg.downcast::<JsObject, _>(&mut cx)
                 .unwrap_or_else(|_| cx.empty_object())
@@ -179,7 +182,9 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
                 Err(e) => cx.throw_error(e.to_string())?,
             }
         } else {
-            cx.throw_error("fromPosition can only be 'start', 'end' or an object with 'commit' and 'prepare'")?
+            cx.throw_error(
+                "fromPosition can only be 'start', 'end' or an object with 'commit' and 'prepare'",
+            )?
         }
     } else {
         options.position(StreamPosition::Start)
@@ -225,73 +230,58 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
     read_internal(client, Options::All(options), cx)
 }
 
-fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> JsResult<JsPromise> {
-    let (deferred, promise) = cx.promise();
-    let channel = cx.channel();
+type Msg = tokio::sync::oneshot::Sender<eventstore::Result<Option<ResolvedEvent>>>;
 
-    RUNTIME.spawn(async move {
-        let result = match options {
-            Options::Regular {
-                stream_name,
-                options,
-            } => client.read_stream(stream_name.as_str(), &options).await,
+async fn read_process(mut recv: tokio::sync::mpsc::UnboundedReceiver<Msg>, mut stream: ReadStream) {
+    while let Some(req) = recv.recv().await {
+        let result = stream.next().await;
 
-            Options::All(options) => client.read_all(&options).await,
+        let exit = if let Ok(result) = result.as_ref() {
+            result.is_none()
+        } else {
+            true
         };
 
-        deferred.settle_with(&channel, |mut cx| {
-            let stream = result.or_else(|e| convert_read_internal_error(&mut cx, e))?;
-            async_iterator_object(cx, stream)
+        let _ = req.send(result);
+        if exit {
+            break;
+        }
+    }
+}
+
+fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> JsResult<JsPromise> {
+    let promise = cx
+        .task(move || {
+            let result = match options {
+                Options::Regular {
+                    stream_name,
+                    options,
+                } => RUNTIME.block_on(client.read_stream(stream_name.as_str(), &options)),
+
+                Options::All(options) => RUNTIME.block_on(client.read_all(&options)),
+            };
+
+            result
+        })
+        .promise(|mut cx, result| match result {
+            Err(e) => cx.throw_error(e.to_string()),
+            Ok(stream) => wrap_read_stream(&mut cx, stream),
         });
-    });
 
     Ok(promise)
 }
 
-fn convert_read_internal_error<'a, C>(cx: &mut C, e: eventstore::Error) -> NeonResult<eventstore::ReadStream>
-where
-    C: Context<'a>,
-{
-    create_read_internal_error(cx, e)
-}
-
-
-fn create_read_internal_error<'a, C>(cx: &mut C, e: eventstore::Error) -> NeonResult<eventstore::ReadStream>
-where
-    C: Context<'a>,
-{
-    let js_err = JsError::type_error(cx, e.to_string())?;
-    let variant_name = format!("{:?}", e);
-    let js_str = cx.string(variant_name);
-    js_err.set(cx, "name", js_str)?;
-    cx.throw(js_err)?
-}
-
-fn async_iterator_object<'a, C>(cx: C, stream: ReadStream) -> JsResult<'a, JsObject>
-where
-    C: Context<'a>,
-{
-    async_iterator_impl(cx, Arc::new(Mutex::new(stream)))
-}
-
-fn async_iterator_impl<'a, C>(mut cx: C, stream: Arc<Mutex<ReadStream>>) -> JsResult<'a, JsObject>
-where
-    C: Context<'a>,
-{
-    let obj = cx.empty_object();
-
-    let stream_next = JsFunction::new(&mut cx, move |mut cx| {
-        let (deferred, promise) = cx.promise();
-        let stream = stream.clone();
-        let channel = cx.channel();
-
-        RUNTIME.spawn(async move {
-            let mut stream = stream.lock().await;
-            let result = stream.next().await;
-
-            deferred.settle_with(&channel, |mut cx| {
-                let result = result.or_else(|e| convert_iterator_error(&mut cx, e))?;
-
+pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
+    let sender = cx.argument::<JsBox<ReadStreamWrapper>>(0)?.inner.clone();
+    let promise = cx
+        .task(move || {
+            let (req, result) = tokio::sync::oneshot::channel();
+            let _ = sender.send(req);
+            RUNTIME.block_on(result).expect("should never fail")
+        })
+        .promise(|mut cx, result| match result {
+            Err(e) => cx.throw_error(e.to_string()),
+            Ok(result) => {
                 let item = cx.empty_object();
                 let mut done = true;
 
@@ -333,44 +323,164 @@ where
                 item.set(&mut cx, "done", done)?;
 
                 Ok(item)
-            });
+            }
         });
 
-        Ok(promise)
-    })?;
-
-    obj.set(&mut cx, "next", stream_next)?;
-
-    Ok(obj)
+    Ok(promise)
 }
 
-fn convert_iterator_error<'a, C>(
-    cx: &mut C,
-    e: eventstore::Error
-) -> NeonResult<Option<eventstore::ResolvedEvent>>
-where
-    C: Context<'a>,
-{
-    match e {
-        eventstore::Error::ResourceNotFound => {
-            // todo: input stream name
-            create_iterator_error(cx, e)
-        }
-        e => create_iterator_error(cx, e)
+struct ReadStreamWrapper {
+    inner: tokio::sync::mpsc::UnboundedSender<Msg>,
+}
+
+impl ReadStreamWrapper {
+    fn new(inner: tokio::sync::mpsc::UnboundedSender<Msg>) -> Self {
+        Self { inner }
     }
 }
 
-fn create_iterator_error<'a, C>(cx: &mut C, e: eventstore::Error) -> NeonResult<Option<eventstore::ResolvedEvent>>
+impl Finalize for ReadStreamWrapper {}
+
+fn wrap_read_stream<'a, C>(cx: &mut C, stream: ReadStream) -> JsResult<'a, JsBox<ReadStreamWrapper>>
 where
     C: Context<'a>,
 {
-    let js_err = JsError::type_error(cx, e.to_string())?;
-    let variant_name = format!("{:?}", e);
-    let js_str = cx.string(variant_name);
-    js_err.set(cx, "name", js_str)?;
-    cx.throw(js_err)?;
-    Ok(None)
+    let (sender, recv) = tokio::sync::mpsc::unbounded_channel();
+    RUNTIME.spawn(read_process(recv, stream));
+    Ok(JsBox::new(cx, ReadStreamWrapper::new(sender)))
 }
+
+// fn convert_read_internal_error<'a, C>(
+//     cx: &mut C,
+//     e: eventstore::Error,
+// ) -> NeonResult<eventstore::ReadStream>
+// where
+//     C: Context<'a>,
+// {
+//     create_read_internal_error(cx, e)
+// }
+
+// fn create_read_internal_error<'a, C>(
+//     cx: &mut C,
+//     e: eventstore::Error,
+// ) -> NeonResult<eventstore::ReadStream>
+// where
+//     C: Context<'a>,
+// {
+//     let js_err = JsError::type_error(cx, e.to_string())?;
+//     let variant_name = format!("{:?}", e);
+//     let js_str = cx.string(variant_name);
+//     js_err.set(cx, "name", js_str)?;
+//     cx.throw(js_err)?
+// }
+
+// fn async_iterator_object<'a, C>(cx: C, stream: ReadStream) -> JsResult<'a, JsObject>
+// where
+//     C: Context<'a>,
+// {
+//     async_iterator_impl(cx, Arc::new(Mutex::new(stream)))
+// }
+
+// fn async_iterator_impl<'a, C>(mut cx: C, stream: Arc<Mutex<ReadStream>>) -> JsResult<'a, JsObject>
+// where
+//     C: Context<'a>,
+// {
+//     let obj = cx.empty_object();
+
+//     let stream_next = JsFunction::new(&mut cx, move |mut cx| {
+//         let (deferred, promise) = cx.promise();
+//         let stream = stream.clone();
+//         let channel = cx.channel();
+
+//         RUNTIME.spawn(async move {
+//             let mut stream = stream.lock().await;
+//             let result = stream.next().await;
+
+//             deferred.settle_with(&channel, |mut cx| {
+//                 let result = result.or_else(|e| convert_iterator_error(&mut cx, e))?;
+
+//                 let item = cx.empty_object();
+//                 let mut done = true;
+
+//                 if let Some(mut event) = result {
+//                     let value = cx.empty_object();
+//                     done = false;
+
+//                     if let Some(event) = event.event.take() {
+//                         let event = recorded_event(&mut cx, event)?;
+//                         value.set(&mut cx, "event", event)?;
+//                     } else {
+//                         let null = cx.null();
+//                         value.set(&mut cx, "event", null)?;
+//                     }
+
+//                     if let Some(event) = event.link.take() {
+//                         let link = recorded_event(&mut cx, event)?;
+//                         value.set(&mut cx, "link", link)?;
+//                     } else {
+//                         let null = cx.null();
+//                         value.set(&mut cx, "link", null)?;
+//                     }
+
+//                     if let Some(commit) = event.commit_position.take() {
+//                         let commit = JsBigInt::from_u64(&mut cx, commit);
+//                         value.set(&mut cx, "commitPosition", commit)?;
+//                     } else {
+//                         let null = cx.null();
+//                         value.set(&mut cx, "commitPosition", null)?;
+//                     }
+
+//                     item.set(&mut cx, "value", value)?;
+//                 } else {
+//                     let undefined = cx.undefined();
+//                     item.set(&mut cx, "value", undefined)?;
+//                 }
+
+//                 let done = cx.boolean(done);
+//                 item.set(&mut cx, "done", done)?;
+
+//                 Ok(item)
+//             });
+//         });
+
+//         Ok(promise)
+//     })?;
+
+//     obj.set(&mut cx, "next", stream_next)?;
+
+//     Ok(obj)
+// }
+
+// fn convert_iterator_error<'a, C>(
+//     cx: &mut C,
+//     e: eventstore::Error,
+// ) -> NeonResult<Option<eventstore::ResolvedEvent>>
+// where
+//     C: Context<'a>,
+// {
+//     match e {
+//         eventstore::Error::ResourceNotFound => {
+//             // todo: input stream name
+//             create_iterator_error(cx, e)
+//         }
+//         e => create_iterator_error(cx, e),
+//     }
+// }
+
+// fn create_iterator_error<'a, C>(
+//     cx: &mut C,
+//     e: eventstore::Error,
+// ) -> NeonResult<Option<eventstore::ResolvedEvent>>
+// where
+//     C: Context<'a>,
+// {
+//     let js_err = JsError::type_error(cx, e.to_string())?;
+//     let variant_name = format!("{:?}", e);
+//     let js_str = cx.string(variant_name);
+//     js_err.set(cx, "name", js_str)?;
+//     cx.throw(js_err)?;
+//     Ok(None)
+// }
 
 fn recorded_event<'a, C>(cx: &mut C, event: RecordedEvent) -> JsResult<'a, JsObject>
 where
@@ -391,7 +501,9 @@ where
     data.as_mut_slice(cx).copy_from_slice(&event.data);
 
     let mut metadata = JsUint8Array::new(cx, event.custom_metadata.len())?;
-    metadata.as_mut_slice(cx).copy_from_slice(&event.custom_metadata);
+    metadata
+        .as_mut_slice(cx)
+        .copy_from_slice(&event.custom_metadata);
 
     let position = cx.empty_object();
     let commit = JsBigInt::from_u64(cx, event.position.commit);
