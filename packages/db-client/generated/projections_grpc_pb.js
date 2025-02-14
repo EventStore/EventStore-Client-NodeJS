@@ -329,4 +329,4 @@ var ProjectionsService = exports.ProjectionsService = {
   },
 };
 
-exports.ProjectionsClient = grpc.makeGenericClientConstructor(ProjectionsService);
+exports.ProjectionsClient = grpc.makeGenericClientConstructor(ProjectionsService, 'Projections');

@@ -10,7 +10,6 @@
     }
   ],
   "include": [
-    "./src/**/*.ts",
-    "./generated"
+    "./src/**/*.ts"
   ]
 }

@@ -42,4 +42,4 @@ var ServerFeaturesService = exports.ServerFeaturesService = {
   },
 };
 
-exports.ServerFeaturesClient = grpc.makeGenericClientConstructor(ServerFeaturesService);
+exports.ServerFeaturesClient = grpc.makeGenericClientConstructor(ServerFeaturesService, 'ServerFeatures');

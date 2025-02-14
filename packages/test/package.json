@@ -29,8 +29,8 @@
     "Test"
   ],
   "dependencies": {
-    "@kurrent/db-client": "workspace:*",
-    "@kurrent/opentelemetry": "workspace:*"
+    "@kurrent/db-client": "workspace:^",
+    "@kurrent/opentelemetry": "workspace:^"
   },
   "devDependencies": {
     "@grpc/grpc-js": "^1.12.4",

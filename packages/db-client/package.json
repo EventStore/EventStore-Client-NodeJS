@@ -7,8 +7,9 @@
   "scripts": {
     "build": "yarn generate && yarn build:ts",
     "build:ts": "tsc --build",
-    "build:watch": "yarn \"/^generate:.*/\" && pnpm run build:ts-watch",
+    "build:watch": "yarn generate && yarn build:ts-watch",
     "build:ts-watch": "tsc --build --watch",
+    "generate": "yarn generate:folder && yarn generate:sed-append && yarn generate:sed-insert && yarn generate:js",
     "generate:sed-append": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*) \\[deprecated = true\\];/int64 \\$1 = \\$2 [deprecated = true, jstype = JS_STRING];/g\" ./protos/*",
     "generate:sed-insert": "shx sed -i \"s/int64 ([A-z_]*) = ([0-9]*);/int64 \\$1 = \\$2 [jstype = JS_STRING];/g\" ./protos/*",
     "generate:folder": "shx mkdir -p ./generated",
@@ -27,7 +28,7 @@
     "url": "git+https://github.com/EventStore/Kurrent-Client-NodeJS.git"
   },
   "keywords": [
-    "EventStore",
+    "Kurrent",
     "EventSourcing",
     "Client"
   ],
@@ -41,7 +42,7 @@
     "access": "public"
   },
   "engines": {
-    "node": "^12.18.3 || >=14"
+    "node": ">=18"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",

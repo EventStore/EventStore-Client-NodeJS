@@ -1,0 +1,3124 @@
+syntax = "proto3";
+package event_store.cluster;
+option java_package = "com.eventstore.dbclient.proto.cluster";
+
+import "shared.proto";
+
+service Gossip {
+	rpc Update (GossipRequest) returns (ClusterInfo);
+	rpc Read (event_store.client.Empty) returns (ClusterInfo);
+}
+
+service Elections {	
+	rpc ViewChange (ViewChangeRequest) returns (event_store.client.Empty);
+	rpc ViewChangeProof (ViewChangeProofRequest) returns (event_store.client.Empty);
+	rpc Prepare (PrepareRequest) returns (event_store.client.Empty);
+	rpc PrepareOk (PrepareOkRequest) returns (event_store.client.Empty);
+	rpc Proposal (ProposalRequest) returns (event_store.client.Empty);
+	rpc Accept (AcceptRequest) returns (event_store.client.Empty);
+	
+	rpc LeaderIsResigning (LeaderIsResigningRequest) returns (event_store.client.Empty);
+	rpc LeaderIsResigningOk (LeaderIsResigningOkRequest) returns (event_store.client.Empty);
+}
+
+message GossipRequest {
+	ClusterInfo info = 1;
+	EndPoint server = 2;
+}
+
+message ViewChangeRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	int32 attempted_view = 3;
+}
+
+message ViewChangeProofRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	int32 installed_view = 3;
+}
+
+message PrepareRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	int32 view = 3;
+}
+
+message PrepareOkRequest {
+	int32 view = 1;
+	event_store.client.UUID server_id = 2;
+	EndPoint server_http = 3;
+	int32 epoch_number = 4;
+	int64 epoch_position = 5 [jstype = JS_STRING];
+	event_store.client.UUID epoch_id = 6;
+	event_store.client.UUID epoch_leader_instance_id = 7;
+	int64 last_commit_position = 8 [jstype = JS_STRING];
+	int64 writer_checkpoint = 9 [jstype = JS_STRING];
+	int64 chaser_checkpoint = 10 [jstype = JS_STRING];
+	int32 node_priority = 11;
+	ClusterInfo cluster_info = 12;
+}
+
+message ProposalRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	event_store.client.UUID leader_id = 3;
+	EndPoint leader_http = 4;
+	int32 view = 5;
+	int32 epoch_number = 6;
+	int64 epoch_position = 7 [jstype = JS_STRING];
+	event_store.client.UUID epoch_id = 8;
+	event_store.client.UUID epoch_leader_instance_id = 9;
+	int64 last_commit_position = 10 [jstype = JS_STRING];
+	int64 writer_checkpoint = 11 [jstype = JS_STRING];
+	int64 chaser_checkpoint = 12 [jstype = JS_STRING];
+	int32 node_priority = 13;
+}
+
+message AcceptRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	event_store.client.UUID leader_id = 3;
+	EndPoint leader_http = 4;
+	int32 view = 5;
+}
+
+message LeaderIsResigningRequest {
+	event_store.client.UUID leader_id = 1;
+	EndPoint leader_http = 2;
+}
+
+message LeaderIsResigningOkRequest {
+	event_store.client.UUID leader_id = 1;
+	EndPoint leader_http = 2;
+	event_store.client.UUID server_id = 3;
+	EndPoint server_http = 4;
+}
+
+message ClusterInfo {
+	repeated MemberInfo members = 1;
+}
+
+message EndPoint {
+	string address = 1;
+	uint32 port = 2;
+}
+
+message MemberInfo {
+	enum VNodeState {
+		Initializing = 0;
+		DiscoverLeader = 1;
+		Unknown = 2;
+		PreReplica = 3;
+		CatchingUp = 4;
+		Clone = 5;
+		Follower = 6;
+		PreLeader = 7;
+		Leader = 8;
+		Manager = 9;
+		ShuttingDown = 10;
+		Shutdown = 11;
+		ReadOnlyLeaderless = 12;
+		PreReadOnlyReplica = 13;
+		ReadOnlyReplica = 14;
+		ResigningLeader = 15;
+	}
+	event_store.client.UUID instance_id = 1;
+	int64 time_stamp = 2 [jstype = JS_STRING];
+	VNodeState state = 3;
+	bool is_alive = 4;
+	EndPoint http_end_point = 5;
+	EndPoint internal_tcp = 6;
+	EndPoint external_tcp = 7;
+	bool internal_tcp_uses_tls = 8;
+	bool external_tcp_uses_tls = 9;
+	
+    int64 last_commit_position = 10 [jstype = JS_STRING];
+    int64 writer_checkpoint = 11 [jstype = JS_STRING];
+	int64 chaser_checkpoint = 12 [jstype = JS_STRING];
+    int64 epoch_position = 13 [jstype = JS_STRING];
+    int32 epoch_number = 14;
+    event_store.client.UUID epoch_id = 15;
+
+    int32 node_priority = 16;
+    bool is_read_only_replica = 17;
+    string advertise_host_to_client_as = 18;
+    uint32 advertise_http_port_to_client_as = 19;
+    uint32 advertise_tcp_port_to_client_as = 20;
+}
+
+
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package google.rpc;
+
+option go_package = "google.golang.org/genproto/googleapis/rpc/code;code";
+option java_multiple_files = true;
+option java_outer_classname = "CodeProto";
+option java_package = "com.google.rpc";
+option objc_class_prefix = "RPC";
+
+// The canonical error codes for gRPC APIs.
+//
+//
+// Sometimes multiple error codes may apply.  Services should return
+// the most specific error code that applies.  For example, prefer
+// `OUT_OF_RANGE` over `FAILED_PRECONDITION` if both codes apply.
+// Similarly prefer `NOT_FOUND` or `ALREADY_EXISTS` over `FAILED_PRECONDITION`.
+enum Code {
+  // Not an error; returned on success
+  //
+  // HTTP Mapping: 200 OK
+  OK = 0;
+
+  // The operation was cancelled, typically by the caller.
+  //
+  // HTTP Mapping: 499 Client Closed Request
+  CANCELLED = 1;
+
+  // Unknown error.  For example, this error may be returned when
+  // a `Status` value received from another address space belongs to
+  // an error space that is not known in this address space.  Also
+  // errors raised by APIs that do not return enough error information
+  // may be converted to this error.
+  //
+  // HTTP Mapping: 500 Internal Server Error
+  UNKNOWN = 2;
+
+  // The client specified an invalid argument.  Note that this differs
+  // from `FAILED_PRECONDITION`.  `INVALID_ARGUMENT` indicates arguments
+  // that are problematic regardless of the state of the system
+  // (e.g., a malformed file name).
+  //
+  // HTTP Mapping: 400 Bad Request
+  INVALID_ARGUMENT = 3;
+
+  // The deadline expired before the operation could complete. For operations
+  // that change the state of the system, this error may be returned
+  // even if the operation has completed successfully.  For example, a
+  // successful response from a server could have been delayed long
+  // enough for the deadline to expire.
+  //
+  // HTTP Mapping: 504 Gateway Timeout
+  DEADLINE_EXCEEDED = 4;
+
+  // Some requested entity (e.g., file or directory) was not found.
+  //
+  // Note to server developers: if a request is denied for an entire class
+  // of users, such as gradual feature rollout or undocumented whitelist,
+  // `NOT_FOUND` may be used. If a request is denied for some users within
+  // a class of users, such as user-based access control, `PERMISSION_DENIED`
+  // must be used.
+  //
+  // HTTP Mapping: 404 Not Found
+  NOT_FOUND = 5;
+
+  // The entity that a client attempted to create (e.g., file or directory)
+  // already exists.
+  //
+  // HTTP Mapping: 409 Conflict
+  ALREADY_EXISTS = 6;
+
+  // The caller does not have permission to execute the specified
+  // operation. `PERMISSION_DENIED` must not be used for rejections
+  // caused by exhausting some resource (use `RESOURCE_EXHAUSTED`
+  // instead for those errors). `PERMISSION_DENIED` must not be
+  // used if the caller can not be identified (use `UNAUTHENTICATED`
+  // instead for those errors). This error code does not imply the
+  // request is valid or the requested entity exists or satisfies
+  // other pre-conditions.
+  //
+  // HTTP Mapping: 403 Forbidden
+  PERMISSION_DENIED = 7;
+
+  // The request does not have valid authentication credentials for the
+  // operation.
+  //
+  // HTTP Mapping: 401 Unauthorized
+  UNAUTHENTICATED = 16;
+
+  // Some resource has been exhausted, perhaps a per-user quota, or
+  // perhaps the entire file system is out of space.
+  //
+  // HTTP Mapping: 429 Too Many Requests
+  RESOURCE_EXHAUSTED = 8;
+
+  // The operation was rejected because the system is not in a state
+  // required for the operation's execution.  For example, the directory
+  // to be deleted is non-empty, an rmdir operation is applied to
+  // a non-directory, etc.
+  //
+  // Service implementors can use the following guidelines to decide
+  // between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`:
+  //  (a) Use `UNAVAILABLE` if the client can retry just the failing call.
+  //  (b) Use `ABORTED` if the client should retry at a higher level
+  //      (e.g., when a client-specified test-and-set fails, indicating the
+  //      client should restart a read-modify-write sequence).
+  //  (c) Use `FAILED_PRECONDITION` if the client should not retry until
+  //      the system state has been explicitly fixed.  E.g., if an "rmdir"
+  //      fails because the directory is non-empty, `FAILED_PRECONDITION`
+  //      should be returned since the client should not retry unless
+  //      the files are deleted from the directory.
+  //
+  // HTTP Mapping: 400 Bad Request
+  FAILED_PRECONDITION = 9;
+
+  // The operation was aborted, typically due to a concurrency issue such as
+  // a sequencer check failure or transaction abort.
+  //
+  // See the guidelines above for deciding between `FAILED_PRECONDITION`,
+  // `ABORTED`, and `UNAVAILABLE`.
+  //
+  // HTTP Mapping: 409 Conflict
+  ABORTED = 10;
+
+  // The operation was attempted past the valid range.  E.g., seeking or
+  // reading past end-of-file.
+  //
+  // Unlike `INVALID_ARGUMENT`, this error indicates a problem that may
+  // be fixed if the system state changes. For example, a 32-bit file
+  // system will generate `INVALID_ARGUMENT` if asked to read at an
+  // offset that is not in the range [0,2^32-1], but it will generate
+  // `OUT_OF_RANGE` if asked to read from an offset past the current
+  // file size.
+  //
+  // There is a fair bit of overlap between `FAILED_PRECONDITION` and
+  // `OUT_OF_RANGE`.  We recommend using `OUT_OF_RANGE` (the more specific
+  // error) when it applies so that callers who are iterating through
+  // a space can easily look for an `OUT_OF_RANGE` error to detect when
+  // they are done.
+  //
+  // HTTP Mapping: 400 Bad Request
+  OUT_OF_RANGE = 11;
+
+  // The operation is not implemented or is not supported/enabled in this
+  // service.
+  //
+  // HTTP Mapping: 501 Not Implemented
+  UNIMPLEMENTED = 12;
+
+  // Internal errors.  This means that some invariants expected by the
+  // underlying system have been broken.  This error code is reserved
+  // for serious errors.
+  //
+  // HTTP Mapping: 500 Internal Server Error
+  INTERNAL = 13;
+
+  // The service is currently unavailable.  This is most likely a
+  // transient condition, which can be corrected by retrying with
+  // a backoff. Note that it is not always safe to retry
+  // non-idempotent operations.
+  //
+  // See the guidelines above for deciding between `FAILED_PRECONDITION`,
+  // `ABORTED`, and `UNAVAILABLE`.
+  //
+  // HTTP Mapping: 503 Service Unavailable
+  UNAVAILABLE = 14;
+
+  // Unrecoverable data loss or corruption.
+  //
+  // HTTP Mapping: 500 Internal Server Error
+  DATA_LOSS = 15;
+}
+
+syntax = "proto3";
+package event_store.client.gossip;
+option java_package = "com.eventstore.dbclient.proto.gossip";
+
+import "shared.proto";
+
+service Gossip {
+	rpc Read (event_store.client.Empty) returns (ClusterInfo);
+}
+
+message ClusterInfo {
+	repeated MemberInfo members = 1;
+}
+
+message EndPoint {
+	string address = 1;
+	uint32 port = 2;
+}
+
+message MemberInfo {
+	enum VNodeState {
+		Initializing = 0;
+		DiscoverLeader = 1;
+		Unknown = 2;
+		PreReplica = 3;
+		CatchingUp = 4;
+		Clone = 5;
+		Follower = 6;
+		PreLeader = 7;
+		Leader = 8;
+		Manager = 9;
+		ShuttingDown = 10;
+		Shutdown = 11;
+		ReadOnlyLeaderless = 12;
+		PreReadOnlyReplica = 13;
+		ReadOnlyReplica = 14;
+		ResigningLeader = 15;
+	}
+	event_store.client.UUID instance_id = 1;
+	int64 time_stamp = 2 [jstype = JS_STRING];
+	VNodeState state = 3;
+	bool is_alive = 4;
+	EndPoint http_end_point = 5;
+}
+
+syntax = "proto3";
+package event_store.client.monitoring;
+option java_package = "com.eventstore.dbclient.proto.monitoring";
+
+service Monitoring {
+	rpc Stats(StatsReq) returns (stream StatsResp);	
+}
+
+message StatsReq {
+	bool use_metadata = 1;
+	uint64 refresh_time_period_in_ms = 4 [jstype = JS_STRING];
+}
+
+message StatsResp {
+	map<string, string> stats = 1;
+}
+
+syntax = "proto3";
+package event_store.client.operations;
+option java_package = "com.eventstore.dbclient.proto.operations";
+
+import "shared.proto";
+
+service Operations {
+	rpc StartScavenge (StartScavengeReq) returns (ScavengeResp);
+	rpc StopScavenge (StopScavengeReq) returns (ScavengeResp);
+	rpc Shutdown (event_store.client.Empty) returns (event_store.client.Empty);
+	rpc MergeIndexes (event_store.client.Empty) returns (event_store.client.Empty);
+	rpc ResignNode (event_store.client.Empty) returns (event_store.client.Empty);
+	rpc SetNodePriority (SetNodePriorityReq) returns (event_store.client.Empty);
+	rpc RestartPersistentSubscriptions (event_store.client.Empty) returns (event_store.client.Empty);
+}
+
+message StartScavengeReq {
+	Options options = 1;
+	message Options {
+		int32 thread_count = 1;
+		int32 start_from_chunk = 2;
+	}
+}
+
+message StopScavengeReq {
+	Options options = 1;
+	message Options {
+		string scavenge_id = 1;
+	}
+}
+
+message ScavengeResp {
+	string scavenge_id = 1;
+	ScavengeResult scavenge_result = 2;
+
+	enum ScavengeResult {
+		Started = 0;
+		InProgress = 1;
+		Stopped = 2;
+	}
+}
+
+message SetNodePriorityReq {
+	int32 priority = 1;
+}
+
+syntax = "proto3";
+package event_store.client.persistent_subscriptions;
+option java_package = "com.eventstore.dbclient.proto.persistentsubscriptions";
+
+import "shared.proto";
+
+service PersistentSubscriptions {
+	rpc Create (CreateReq) returns (CreateResp);
+	rpc Update (UpdateReq) returns (UpdateResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Read (stream ReadReq) returns (stream ReadResp);
+	rpc GetInfo (GetInfoReq) returns (GetInfoResp);
+	rpc ReplayParked (ReplayParkedReq) returns (ReplayParkedResp);
+	rpc List (ListReq) returns (ListResp);
+	rpc RestartSubsystem (event_store.client.Empty) returns (event_store.client.Empty);
+}
+
+message ReadReq {
+	oneof content {
+		Options options = 1;
+		Ack ack = 2;
+		Nack nack = 3;
+	}
+
+	message Options {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			event_store.client.Empty all = 5;
+		}
+
+		string group_name = 2;
+		int32 buffer_size = 3;
+		UUIDOption uuid_option = 4;
+
+		message UUIDOption {
+			oneof content {
+				event_store.client.Empty structured = 1;
+				event_store.client.Empty string = 2;
+			}
+		}
+	}
+
+	message Ack {
+		bytes id = 1;
+		repeated event_store.client.UUID ids = 2;
+	}
+
+	message Nack {
+		bytes id = 1;
+		repeated event_store.client.UUID ids = 2;
+		Action action = 3;
+		string reason = 4;
+
+		enum Action {
+			Unknown = 0;
+			Park = 1;
+			Retry = 2;
+			Skip = 3;
+			Stop = 4;
+		}
+	}
+}
+
+message ReadResp {
+	oneof content {
+		ReadEvent event = 1;
+		SubscriptionConfirmation subscription_confirmation = 2;
+	}
+	message ReadEvent {
+		RecordedEvent event = 1;
+		RecordedEvent link = 2;
+		oneof position {
+			uint64 commit_position = 3 [jstype = JS_STRING];
+			event_store.client.Empty no_position = 4;
+		}
+		oneof count {
+			int32 retry_count = 5;
+			event_store.client.Empty no_retry_count = 6;
+		}
+		message RecordedEvent {
+			event_store.client.UUID id = 1;
+			event_store.client.StreamIdentifier stream_identifier = 2;
+			uint64 stream_revision = 3 [jstype = JS_STRING];
+			uint64 prepare_position = 4 [jstype = JS_STRING];
+			uint64 commit_position = 5 [jstype = JS_STRING];
+			map<string, string> metadata = 6;
+			bytes custom_metadata = 7;
+			bytes data = 8;
+		}
+	}
+	message SubscriptionConfirmation {
+		string subscription_id = 1;
+	}
+}
+
+message CreateReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			StreamOptions stream = 4 [deprecated = true];
+			AllOptions all = 5;
+		}
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		string group_name = 2;
+		Settings settings = 3;
+	}
+
+	message StreamOptions {
+    option deprecated = true;
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof revision_option {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty start = 3;
+			event_store.client.Empty end = 4;
+		}
+	}
+
+	message AllOptions {
+		oneof all_option {
+			Position position = 1;
+			event_store.client.Empty start = 2;
+			event_store.client.Empty end = 3;
+		}
+		oneof filter_option {
+			FilterOptions filter = 4;
+			event_store.client.Empty no_filter = 5;
+		}
+		message FilterOptions {
+			oneof filter {
+				Expression stream_identifier = 1;
+				Expression event_type = 2;
+			}
+			oneof window {
+				uint32 max = 3;
+				event_store.client.Empty count = 4;
+			}
+			uint32 checkpointIntervalMultiplier = 5;
+
+			message Expression {
+				string regex = 1;
+				repeated string prefix = 2;
+			}
+		}
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+
+	message Settings {
+		bool resolve_links = 1;
+		uint64 revision = 2 [deprecated = true, jstype = JS_STRING];
+		bool extra_statistics = 3;
+		int32 max_retry_count = 5;
+		int32 min_checkpoint_count = 7;
+		int32 max_checkpoint_count = 8;
+		int32 max_subscriber_count = 9;
+		int32 live_buffer_size = 10;
+		int32 read_batch_size = 11;
+		int32 history_buffer_size = 12;
+		ConsumerStrategy named_consumer_strategy = 13 [deprecated = true];
+		oneof message_timeout {
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING, deprecated = true];
+			int32 message_timeout_ms = 14;
+		}
+		oneof checkpoint_after {
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
+			int32 checkpoint_after_ms = 15;
+		}
+		string consumer_strategy = 16;
+	}
+
+	enum ConsumerStrategy {
+		DispatchToSingle = 0;
+		RoundRobin = 1;
+		Pinned = 2;
+	}
+}
+
+message CreateResp {
+}
+
+message UpdateReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			StreamOptions stream = 4 [deprecated = true];
+			AllOptions all = 5;
+		}
+		event_store.client.StreamIdentifier stream_identifier = 1 [deprecated = true];
+		string group_name = 2;
+		Settings settings = 3;
+	}
+
+	message StreamOptions {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof revision_option {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty start = 3;
+			event_store.client.Empty end = 4;
+		}
+	}
+
+	message AllOptions {
+		oneof all_option {
+			Position position = 1;
+			event_store.client.Empty start = 2;
+			event_store.client.Empty end = 3;
+		}
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+
+	message Settings {
+		bool resolve_links = 1;
+		uint64 revision = 2 [deprecated = true, jstype = JS_STRING];
+		bool extra_statistics = 3;
+		int32 max_retry_count = 5;
+		int32 min_checkpoint_count = 7;
+		int32 max_checkpoint_count = 8;
+		int32 max_subscriber_count = 9;
+		int32 live_buffer_size = 10;
+		int32 read_batch_size = 11;
+		int32 history_buffer_size = 12;
+		ConsumerStrategy named_consumer_strategy = 13;
+		oneof message_timeout {
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING, deprecated = true];
+			int32 message_timeout_ms = 14;
+		}
+		oneof checkpoint_after {
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
+			int32 checkpoint_after_ms = 15;
+		}
+	}
+
+	enum ConsumerStrategy {
+		DispatchToSingle = 0;
+		RoundRobin = 1;
+		Pinned = 2;
+	}
+}
+
+message UpdateResp {
+}
+
+message DeleteReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			event_store.client.Empty all = 3;
+		}
+
+		string group_name = 2;
+	}
+}
+
+message DeleteResp {
+}
+
+message GetInfoReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			event_store.client.Empty all = 2;
+		}
+
+		string group_name = 3;
+	}
+}
+
+message GetInfoResp {
+	SubscriptionInfo subscription_info = 1;
+}
+
+message SubscriptionInfo {
+	string event_source = 1;
+	string group_name = 2;
+	string status = 3;
+	repeated ConnectionInfo connections = 4;
+	int32 average_per_second = 5;
+	int64 total_items = 6 [jstype = JS_STRING];
+	int64 count_since_last_measurement = 7 [jstype = JS_STRING];
+	string last_checkpointed_event_position = 8;
+	string last_known_event_position = 9;
+	bool resolve_link_tos = 10;
+	string start_from = 11;
+	int32 message_timeout_milliseconds = 12;
+	bool extra_statistics = 13;
+	int32 max_retry_count = 14;
+	int32 live_buffer_size = 15;
+	int32 buffer_size = 16;
+	int32 read_batch_size = 17;
+	int32 check_point_after_milliseconds = 18;
+	int32 min_check_point_count = 19;
+	int32 max_check_point_count = 20;
+	int32 read_buffer_count = 21;
+	int64 live_buffer_count = 22 [jstype = JS_STRING];
+	int32 retry_buffer_count = 23;
+	int32 total_in_flight_messages = 24;
+	int32 outstanding_messages_count = 25;
+	string named_consumer_strategy = 26;
+	int32 max_subscriber_count = 27;
+	int64 parked_message_count = 28 [jstype = JS_STRING];
+
+	message ConnectionInfo {
+		string from = 1;
+		string username = 2;
+		int32 average_items_per_second = 3;
+		int64 total_items = 4 [jstype = JS_STRING];
+		int64 count_since_last_measurement = 5 [jstype = JS_STRING];
+		repeated Measurement observed_measurements = 6;
+		int32 available_slots = 7;
+		int32 in_flight_messages = 8;
+		string connection_name = 9;
+	}
+
+	message Measurement {
+		string key = 1;
+		int64 value = 2 [jstype = JS_STRING];
+	}
+}
+
+message ReplayParkedReq {
+	Options options = 1;
+
+	message Options {
+		string group_name = 1;
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 2;
+			event_store.client.Empty all = 3;
+		}
+		oneof stop_at_option {
+			int64 stop_at = 4 [jstype = JS_STRING];
+			event_store.client.Empty no_limit = 5;
+		}
+	}
+}
+
+message ReplayParkedResp {
+}
+
+message ListReq {
+	Options options = 1;
+
+	message Options {
+		oneof list_option {
+			event_store.client.Empty list_all_subscriptions = 1;
+			StreamOption list_for_stream = 2;
+		}
+	}
+	message StreamOption {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream = 1;
+			event_store.client.Empty all = 2;
+		}
+	}
+}
+
+message ListResp {
+	repeated SubscriptionInfo subscriptions = 1;
+}
+
+syntax = "proto3";
+package event_store.client.projections;
+option java_package = "com.eventstore.dbclient.proto.projections";
+
+import "google/protobuf/struct.proto";
+import "shared.proto";
+
+service Projections {
+	rpc Create (CreateReq) returns (CreateResp);
+	rpc Update (UpdateReq) returns (UpdateResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Statistics (StatisticsReq) returns (stream StatisticsResp);
+	rpc Disable (DisableReq) returns (DisableResp);
+	rpc Enable (EnableReq) returns (EnableResp);
+	rpc Reset (ResetReq) returns (ResetResp);
+	rpc State (StateReq) returns (StateResp);
+	rpc Result (ResultReq) returns (ResultResp);
+	rpc RestartSubsystem (event_store.client.Empty) returns (event_store.client.Empty);
+}
+
+message CreateReq {
+	Options options = 1;
+
+	message Options {
+		oneof mode {
+			event_store.client.Empty one_time = 1;
+			Transient transient = 2 [deprecated = true];
+			Continuous continuous = 3;
+		}
+		string query = 4;
+
+		message Transient {
+      option deprecated = true;
+			string name = 1;
+		}
+		message Continuous {
+			string name = 1;
+			bool emit_enabled = 2;
+			bool track_emitted_streams = 3;
+		}
+	}
+}
+
+message CreateResp {
+}
+
+message UpdateReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		string query = 2;
+		oneof emit_option {
+			bool emit_enabled = 3;
+			event_store.client.Empty no_emit_options = 4;
+		}
+	}
+}
+
+message UpdateResp {
+}
+
+message DeleteReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		bool delete_emitted_streams = 2;
+		bool delete_state_stream = 3;
+		bool delete_checkpoint_stream = 4;
+	}
+}
+
+message DeleteResp {
+}
+
+message StatisticsReq {
+	Options options = 1;
+	message Options {
+		oneof mode {
+			string name = 1;
+			event_store.client.Empty all = 2;
+			event_store.client.Empty transient = 3 [deprecated = true];
+			event_store.client.Empty continuous = 4;
+			event_store.client.Empty one_time = 5;
+		}
+	}
+}
+
+message StatisticsResp {
+	Details details = 1;
+
+	message Details {
+		int64 coreProcessingTime = 1 [jstype = JS_STRING];
+		int64 version = 2 [jstype = JS_STRING];
+		int64 epoch = 3 [jstype = JS_STRING];
+		string effectiveName = 4;
+		int32 writesInProgress = 5;
+		int32 readsInProgress = 6;
+		int32 partitionsCached = 7;
+		string status = 8;
+		string stateReason = 9;
+		string name = 10;
+		string mode = 11;
+		string position = 12;
+		float progress = 13;
+		string lastCheckpoint = 14;
+		int64 eventsProcessedAfterRestart = 15 [jstype = JS_STRING];
+		string checkpointStatus = 16;
+		int64 bufferedEvents = 17 [jstype = JS_STRING];
+		int32 writePendingEventsBeforeCheckpoint = 18;
+		int32 writePendingEventsAfterCheckpoint = 19;
+	}
+}
+
+message StateReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		string partition = 2;
+	}
+}
+
+message StateResp {
+	google.protobuf.Value state = 1;
+}
+
+message ResultReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		string partition = 2;
+	}
+}
+
+message ResultResp {
+	google.protobuf.Value result = 1;
+}
+
+message ResetReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		bool write_checkpoint = 2;
+	}
+}
+
+message ResetResp {
+}
+
+
+message EnableReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+	}
+}
+
+message EnableResp {
+}
+
+message DisableReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		bool write_checkpoint = 2;
+	}
+}
+
+message DisableResp {
+}
+
+syntax = "proto3";
+package event_store.client.server_features;
+option java_package = "com.eventstore.dbclient.proto.serverfeatures";
+import "shared.proto";
+
+service ServerFeatures {
+	rpc GetSupportedMethods (event_store.client.Empty) returns (SupportedMethods);
+}
+
+message SupportedMethods {
+	repeated SupportedMethod methods = 1;
+	string event_store_server_version = 2;
+}
+
+message SupportedMethod {
+	string method_name = 1;
+	string service_name = 2;
+	repeated string features = 3;
+}
+
+syntax = "proto3";
+package event_store.client;
+option java_package = "com.eventstore.dbclient.proto.shared";
+import "google/protobuf/empty.proto";
+
+message UUID {
+	oneof value {
+		Structured structured = 1;
+		string string = 2;
+	}
+
+	message Structured {
+		int64 most_significant_bits = 1 [jstype = JS_STRING];
+		int64 least_significant_bits = 2 [jstype = JS_STRING];
+	}
+}
+message Empty {
+}
+
+message StreamIdentifier {
+	reserved 1 to 2;
+	bytes stream_name = 3;
+}
+
+message AllStreamPosition {
+  option deprecated = true;
+	uint64 commit_position = 1 [jstype = JS_STRING];
+	uint64 prepare_position = 2 [jstype = JS_STRING];
+}
+
+message WrongExpectedVersion {
+	oneof current_stream_revision_option {
+		uint64 current_stream_revision = 1 [jstype = JS_STRING];
+		google.protobuf.Empty current_no_stream = 2;
+	}
+	oneof expected_stream_position_option {
+		uint64 expected_stream_position = 3 [jstype = JS_STRING];
+		google.protobuf.Empty expected_any = 4;
+		google.protobuf.Empty expected_stream_exists = 5;
+		google.protobuf.Empty expected_no_stream = 6;
+	}
+}
+
+message AccessDenied {}
+
+message StreamDeleted {
+	StreamIdentifier stream_identifier = 1;
+}
+
+message Timeout {}
+
+message Unknown {}
+
+message InvalidTransaction {}
+
+message MaximumAppendSizeExceeded {
+	uint32 maxAppendSize = 1;
+}
+
+message BadRequest {
+  option deprecated = true;
+	string message = 1;
+}
+
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package google.rpc;
+
+import "google/protobuf/any.proto";
+import "code.proto";
+
+option cc_enable_arenas = true;
+option go_package = "google.golang.org/genproto/googleapis/rpc/status;status";
+option java_multiple_files = true;
+option java_outer_classname = "StatusProto";
+option java_package = "com.google.rpc";
+option objc_class_prefix = "RPC";
+
+// The `Status` type defines a logical error model that is suitable for
+// different programming environments, including REST APIs and RPC APIs. It is
+// used by [gRPC](https://github.com/grpc). Each `Status` message contains
+// three pieces of data: error code, error message, and error details.
+//
+// You can find out more about this error model and how to work with it in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
+message Status {
+	// The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+	google.rpc.Code code = 1;
+
+	// A developer-facing error message, which should be in English. Any
+	// user-facing error message should be localized and sent in the
+	// [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+	string message = 2;
+
+	// A list of messages that carry the error details.  There is a common set of
+	// message types for APIs to use.
+	google.protobuf.Any details = 3;
+}
+
+syntax = "proto3";
+package event_store.client.streams;
+option java_package = "com.eventstore.dbclient.proto.streams";
+
+import "shared.proto";
+import "status.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service Streams {
+	rpc Read (ReadReq) returns (stream ReadResp);
+	rpc Append (stream AppendReq) returns (AppendResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Tombstone (TombstoneReq) returns (TombstoneResp);
+	rpc BatchAppend (stream BatchAppendReq) returns (stream BatchAppendResp);
+}
+
+message ReadReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			StreamOptions stream = 1;
+			AllOptions all = 2;
+		}
+		ReadDirection read_direction = 3;
+		bool resolve_links = 4;
+		oneof count_option {
+			uint64 count = 5 [jstype = JS_STRING];
+			SubscriptionOptions subscription = 6;
+		}
+		oneof filter_option {
+			FilterOptions filter = 7;
+			event_store.client.Empty no_filter = 8;
+		}
+		UUIDOption uuid_option = 9;
+		ControlOption control_option = 10 [deprecated = true];
+
+		enum ReadDirection {
+			Forwards = 0;
+			Backwards = 1;
+		}
+		message StreamOptions {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			oneof revision_option {
+				uint64 revision = 2 [jstype = JS_STRING];
+				event_store.client.Empty start = 3;
+				event_store.client.Empty end = 4;
+			}
+		}
+		message AllOptions {
+			oneof all_option {
+				Position position = 1;
+				event_store.client.Empty start = 2;
+				event_store.client.Empty end = 3;
+			}
+		}
+		message SubscriptionOptions {
+		}
+		message Position {
+			uint64 commit_position = 1 [jstype = JS_STRING];
+			uint64 prepare_position = 2 [jstype = JS_STRING];
+		}
+		message FilterOptions {
+			oneof filter {
+				Expression stream_identifier = 1;
+				Expression event_type = 2;
+			}
+			oneof window {
+				uint32 max = 3;
+				event_store.client.Empty count = 4;
+			}
+			uint32 checkpointIntervalMultiplier = 5;
+
+			message Expression {
+				string regex = 1;
+				repeated string prefix = 2;
+			}
+		}
+		message UUIDOption {
+			oneof content {
+				event_store.client.Empty structured = 1;
+				event_store.client.Empty string = 2;
+			}
+		}
+		message ControlOption {
+      option deprecated = true;
+
+			uint32 compatibility = 1;
+		}
+	}
+}
+
+message ReadResp {
+	oneof content {
+		ReadEvent event = 1;
+		SubscriptionConfirmation confirmation = 2;
+		Checkpoint checkpoint = 3;
+		StreamNotFound stream_not_found = 4;
+		uint64 first_stream_position = 5 [jstype = JS_STRING, deprecated = true];
+		uint64 last_stream_position = 6 [jstype = JS_STRING, deprecated = true];
+		AllStreamPosition last_all_stream_position = 7 [deprecated = true];
+		CaughtUp caught_up = 8;
+    FellBehind fell_behind = 9;
+	}
+
+	message CaughtUp {}
+
+	message FellBehind {}
+
+	message ReadEvent {
+		RecordedEvent event = 1;
+		RecordedEvent link = 2;
+		oneof position {
+			uint64 commit_position = 3 [jstype = JS_STRING];
+			event_store.client.Empty no_position = 4;
+		}
+
+		message RecordedEvent {
+			event_store.client.UUID id = 1;
+			event_store.client.StreamIdentifier stream_identifier = 2;
+			uint64 stream_revision = 3 [jstype = JS_STRING];
+			uint64 prepare_position = 4 [jstype = JS_STRING];
+			uint64 commit_position = 5 [jstype = JS_STRING];
+			map<string, string> metadata = 6;
+			bytes custom_metadata = 7;
+			bytes data = 8;
+		}
+	}
+	message SubscriptionConfirmation {
+		string subscription_id = 1;
+	}
+	message Checkpoint {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+	message StreamNotFound {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+	}
+}
+
+message AppendReq {
+	oneof content {
+		Options options = 1;
+		ProposedMessage proposed_message = 2;
+	}
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_revision {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 3;
+			event_store.client.Empty any = 4;
+			event_store.client.Empty stream_exists = 5;
+		}
+	}
+	message ProposedMessage {
+		event_store.client.UUID id = 1;
+		map<string, string> metadata = 2;
+		bytes custom_metadata = 3;
+		bytes data = 4;
+	}
+}
+
+message AppendResp {
+	oneof result {
+		Success success = 1;
+		WrongExpectedVersion wrong_expected_version = 2;
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+
+	message Success {
+		oneof current_revision_option {
+			uint64 current_revision = 1 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 2;
+		}
+		oneof position_option {
+			Position position = 3;
+			event_store.client.Empty no_position = 4;
+		}
+	}
+
+	message WrongExpectedVersion {
+		oneof current_revision_option_20_6_0 {
+			uint64 current_revision_20_6_0 = 1 [deprecated = true];
+			event_store.client.Empty no_stream_20_6_0 = 2 [deprecated = true];
+		}
+		oneof expected_revision_option_20_6_0 {
+			uint64 expected_revision_20_6_0 = 3 [deprecated = true];
+			event_store.client.Empty any_20_6_0 = 4 [deprecated = true];
+			event_store.client.Empty stream_exists_20_6_0 = 5 [deprecated = true];
+		}
+		oneof current_revision_option {
+			uint64 current_revision = 6 [jstype = JS_STRING];
+			event_store.client.Empty current_no_stream = 7;
+		}
+		oneof expected_revision_option {
+			uint64 expected_revision = 8 [jstype = JS_STRING];
+			event_store.client.Empty expected_any = 9;
+			event_store.client.Empty expected_stream_exists = 10;
+			event_store.client.Empty expected_no_stream = 11;
+		}
+
+	}
+}
+
+message BatchAppendReq {
+	event_store.client.UUID correlation_id = 1;
+	Options options = 2;
+	repeated ProposedMessage proposed_messages = 3;
+	bool is_final = 4;
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_position {
+			uint64 stream_position = 2 [jstype = JS_STRING];
+			google.protobuf.Empty no_stream = 3;
+			google.protobuf.Empty any = 4;
+			google.protobuf.Empty stream_exists = 5;
+		}
+		google.protobuf.Timestamp deadline = 6;
+	}
+
+	message ProposedMessage {
+		event_store.client.UUID id = 1;
+		map<string, string> metadata = 2;
+		bytes custom_metadata = 3;
+		bytes data = 4;
+	}
+}
+
+message BatchAppendResp {
+	event_store.client.UUID correlation_id = 1;
+	oneof result {
+		google.rpc.Status error = 2;
+		Success success = 3;
+	}
+
+	event_store.client.StreamIdentifier stream_identifier = 4;
+
+	oneof expected_stream_position {
+		uint64 stream_position = 5 [jstype = JS_STRING];
+		google.protobuf.Empty no_stream = 6;
+		google.protobuf.Empty any = 7;
+		google.protobuf.Empty stream_exists = 8;
+	}
+
+	message Success {
+		oneof current_revision_option {
+			uint64 current_revision = 1 [jstype = JS_STRING];
+			google.protobuf.Empty no_stream = 2;
+		}
+		oneof position_option {
+			event_store.client.AllStreamPosition position = 3;
+			google.protobuf.Empty no_position = 4;
+		}
+	}
+}
+
+message DeleteReq {
+	Options options = 1;
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_revision {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 3;
+			event_store.client.Empty any = 4;
+			event_store.client.Empty stream_exists = 5;
+		}
+	}
+}
+
+message DeleteResp {
+	oneof position_option {
+		Position position = 1;
+		event_store.client.Empty no_position = 2;
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+}
+
+message TombstoneReq {
+	Options options = 1;
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_revision {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 3;
+			event_store.client.Empty any = 4;
+			event_store.client.Empty stream_exists = 5;
+		}
+	}
+}
+
+message TombstoneResp {
+	oneof position_option {
+		Position position = 1;
+		event_store.client.Empty no_position = 2;
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+}
+
+
+syntax = "proto3";
+package event_store.client.users;
+option java_package = "com.eventstore.dbclient.proto.users";
+
+service Users {
+	rpc Create (CreateReq) returns (CreateResp);
+	rpc Update (UpdateReq) returns (UpdateResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Disable (DisableReq) returns (DisableResp);
+	rpc Enable (EnableReq) returns (EnableResp);
+	rpc Details (DetailsReq) returns (stream DetailsResp);
+	rpc ChangePassword (ChangePasswordReq) returns (ChangePasswordResp);
+	rpc ResetPassword (ResetPasswordReq) returns (ResetPasswordResp);
+}
+
+message CreateReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string password = 2;
+		string full_name = 3;
+		repeated string groups = 4;
+	}
+}
+
+message CreateResp {
+
+}
+
+message UpdateReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string password = 2;
+		string full_name = 3;
+		repeated string groups = 4;
+	}
+}
+
+message UpdateResp {
+
+}
+
+message DeleteReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message DeleteResp {
+
+}
+
+message EnableReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message EnableResp {
+
+}
+
+message DisableReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message DisableResp {
+}
+
+message DetailsReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message DetailsResp {
+	UserDetails user_details = 1;
+	message UserDetails {
+		string login_name = 1;
+		string full_name = 2;
+		repeated string groups = 3;
+		DateTime last_updated = 4;
+		bool disabled = 5;
+
+		message DateTime {
+			int64 ticks_since_epoch = 1 [jstype = JS_STRING];
+		}
+	}
+}
+
+message ChangePasswordReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string current_password = 2;
+		string new_password = 3;
+	}
+}
+
+message ChangePasswordResp {
+}
+
+message ResetPasswordReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string new_password = 2;
+	}
+}
+
+message ResetPasswordResp {
+}
+syntax = "proto3";
+package event_store.cluster;
+option java_package = "com.eventstore.dbclient.proto.cluster";
+
+import "shared.proto";
+
+service Gossip {
+	rpc Update (GossipRequest) returns (ClusterInfo);
+	rpc Read (event_store.client.Empty) returns (ClusterInfo);
+}
+
+service Elections {	
+	rpc ViewChange (ViewChangeRequest) returns (event_store.client.Empty);
+	rpc ViewChangeProof (ViewChangeProofRequest) returns (event_store.client.Empty);
+	rpc Prepare (PrepareRequest) returns (event_store.client.Empty);
+	rpc PrepareOk (PrepareOkRequest) returns (event_store.client.Empty);
+	rpc Proposal (ProposalRequest) returns (event_store.client.Empty);
+	rpc Accept (AcceptRequest) returns (event_store.client.Empty);
+	
+	rpc LeaderIsResigning (LeaderIsResigningRequest) returns (event_store.client.Empty);
+	rpc LeaderIsResigningOk (LeaderIsResigningOkRequest) returns (event_store.client.Empty);
+}
+
+message GossipRequest {
+	ClusterInfo info = 1;
+	EndPoint server = 2;
+}
+
+message ViewChangeRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	int32 attempted_view = 3;
+}
+
+message ViewChangeProofRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	int32 installed_view = 3;
+}
+
+message PrepareRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	int32 view = 3;
+}
+
+message PrepareOkRequest {
+	int32 view = 1;
+	event_store.client.UUID server_id = 2;
+	EndPoint server_http = 3;
+	int32 epoch_number = 4;
+	int64 epoch_position = 5 [jstype = JS_STRING];
+	event_store.client.UUID epoch_id = 6;
+	event_store.client.UUID epoch_leader_instance_id = 7;
+	int64 last_commit_position = 8 [jstype = JS_STRING];
+	int64 writer_checkpoint = 9 [jstype = JS_STRING];
+	int64 chaser_checkpoint = 10 [jstype = JS_STRING];
+	int32 node_priority = 11;
+	ClusterInfo cluster_info = 12;
+}
+
+message ProposalRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	event_store.client.UUID leader_id = 3;
+	EndPoint leader_http = 4;
+	int32 view = 5;
+	int32 epoch_number = 6;
+	int64 epoch_position = 7 [jstype = JS_STRING];
+	event_store.client.UUID epoch_id = 8;
+	event_store.client.UUID epoch_leader_instance_id = 9;
+	int64 last_commit_position = 10 [jstype = JS_STRING];
+	int64 writer_checkpoint = 11 [jstype = JS_STRING];
+	int64 chaser_checkpoint = 12 [jstype = JS_STRING];
+	int32 node_priority = 13;
+}
+
+message AcceptRequest {
+	event_store.client.UUID server_id = 1;
+	EndPoint server_http = 2;
+	event_store.client.UUID leader_id = 3;
+	EndPoint leader_http = 4;
+	int32 view = 5;
+}
+
+message LeaderIsResigningRequest {
+	event_store.client.UUID leader_id = 1;
+	EndPoint leader_http = 2;
+}
+
+message LeaderIsResigningOkRequest {
+	event_store.client.UUID leader_id = 1;
+	EndPoint leader_http = 2;
+	event_store.client.UUID server_id = 3;
+	EndPoint server_http = 4;
+}
+
+message ClusterInfo {
+	repeated MemberInfo members = 1;
+}
+
+message EndPoint {
+	string address = 1;
+	uint32 port = 2;
+}
+
+message MemberInfo {
+	enum VNodeState {
+		Initializing = 0;
+		DiscoverLeader = 1;
+		Unknown = 2;
+		PreReplica = 3;
+		CatchingUp = 4;
+		Clone = 5;
+		Follower = 6;
+		PreLeader = 7;
+		Leader = 8;
+		Manager = 9;
+		ShuttingDown = 10;
+		Shutdown = 11;
+		ReadOnlyLeaderless = 12;
+		PreReadOnlyReplica = 13;
+		ReadOnlyReplica = 14;
+		ResigningLeader = 15;
+	}
+	event_store.client.UUID instance_id = 1;
+	int64 time_stamp = 2 [jstype = JS_STRING];
+	VNodeState state = 3;
+	bool is_alive = 4;
+	EndPoint http_end_point = 5;
+	EndPoint internal_tcp = 6;
+	EndPoint external_tcp = 7;
+	bool internal_tcp_uses_tls = 8;
+	bool external_tcp_uses_tls = 9;
+	
+    int64 last_commit_position = 10 [jstype = JS_STRING];
+    int64 writer_checkpoint = 11 [jstype = JS_STRING];
+	int64 chaser_checkpoint = 12 [jstype = JS_STRING];
+    int64 epoch_position = 13 [jstype = JS_STRING];
+    int32 epoch_number = 14;
+    event_store.client.UUID epoch_id = 15;
+
+    int32 node_priority = 16;
+    bool is_read_only_replica = 17;
+    string advertise_host_to_client_as = 18;
+    uint32 advertise_http_port_to_client_as = 19;
+    uint32 advertise_tcp_port_to_client_as = 20;
+}
+
+
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package google.rpc;
+
+option go_package = "google.golang.org/genproto/googleapis/rpc/code;code";
+option java_multiple_files = true;
+option java_outer_classname = "CodeProto";
+option java_package = "com.google.rpc";
+option objc_class_prefix = "RPC";
+
+// The canonical error codes for gRPC APIs.
+//
+//
+// Sometimes multiple error codes may apply.  Services should return
+// the most specific error code that applies.  For example, prefer
+// `OUT_OF_RANGE` over `FAILED_PRECONDITION` if both codes apply.
+// Similarly prefer `NOT_FOUND` or `ALREADY_EXISTS` over `FAILED_PRECONDITION`.
+enum Code {
+  // Not an error; returned on success
+  //
+  // HTTP Mapping: 200 OK
+  OK = 0;
+
+  // The operation was cancelled, typically by the caller.
+  //
+  // HTTP Mapping: 499 Client Closed Request
+  CANCELLED = 1;
+
+  // Unknown error.  For example, this error may be returned when
+  // a `Status` value received from another address space belongs to
+  // an error space that is not known in this address space.  Also
+  // errors raised by APIs that do not return enough error information
+  // may be converted to this error.
+  //
+  // HTTP Mapping: 500 Internal Server Error
+  UNKNOWN = 2;
+
+  // The client specified an invalid argument.  Note that this differs
+  // from `FAILED_PRECONDITION`.  `INVALID_ARGUMENT` indicates arguments
+  // that are problematic regardless of the state of the system
+  // (e.g., a malformed file name).
+  //
+  // HTTP Mapping: 400 Bad Request
+  INVALID_ARGUMENT = 3;
+
+  // The deadline expired before the operation could complete. For operations
+  // that change the state of the system, this error may be returned
+  // even if the operation has completed successfully.  For example, a
+  // successful response from a server could have been delayed long
+  // enough for the deadline to expire.
+  //
+  // HTTP Mapping: 504 Gateway Timeout
+  DEADLINE_EXCEEDED = 4;
+
+  // Some requested entity (e.g., file or directory) was not found.
+  //
+  // Note to server developers: if a request is denied for an entire class
+  // of users, such as gradual feature rollout or undocumented whitelist,
+  // `NOT_FOUND` may be used. If a request is denied for some users within
+  // a class of users, such as user-based access control, `PERMISSION_DENIED`
+  // must be used.
+  //
+  // HTTP Mapping: 404 Not Found
+  NOT_FOUND = 5;
+
+  // The entity that a client attempted to create (e.g., file or directory)
+  // already exists.
+  //
+  // HTTP Mapping: 409 Conflict
+  ALREADY_EXISTS = 6;
+
+  // The caller does not have permission to execute the specified
+  // operation. `PERMISSION_DENIED` must not be used for rejections
+  // caused by exhausting some resource (use `RESOURCE_EXHAUSTED`
+  // instead for those errors). `PERMISSION_DENIED` must not be
+  // used if the caller can not be identified (use `UNAUTHENTICATED`
+  // instead for those errors). This error code does not imply the
+  // request is valid or the requested entity exists or satisfies
+  // other pre-conditions.
+  //
+  // HTTP Mapping: 403 Forbidden
+  PERMISSION_DENIED = 7;
+
+  // The request does not have valid authentication credentials for the
+  // operation.
+  //
+  // HTTP Mapping: 401 Unauthorized
+  UNAUTHENTICATED = 16;
+
+  // Some resource has been exhausted, perhaps a per-user quota, or
+  // perhaps the entire file system is out of space.
+  //
+  // HTTP Mapping: 429 Too Many Requests
+  RESOURCE_EXHAUSTED = 8;
+
+  // The operation was rejected because the system is not in a state
+  // required for the operation's execution.  For example, the directory
+  // to be deleted is non-empty, an rmdir operation is applied to
+  // a non-directory, etc.
+  //
+  // Service implementors can use the following guidelines to decide
+  // between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`:
+  //  (a) Use `UNAVAILABLE` if the client can retry just the failing call.
+  //  (b) Use `ABORTED` if the client should retry at a higher level
+  //      (e.g., when a client-specified test-and-set fails, indicating the
+  //      client should restart a read-modify-write sequence).
+  //  (c) Use `FAILED_PRECONDITION` if the client should not retry until
+  //      the system state has been explicitly fixed.  E.g., if an "rmdir"
+  //      fails because the directory is non-empty, `FAILED_PRECONDITION`
+  //      should be returned since the client should not retry unless
+  //      the files are deleted from the directory.
+  //
+  // HTTP Mapping: 400 Bad Request
+  FAILED_PRECONDITION = 9;
+
+  // The operation was aborted, typically due to a concurrency issue such as
+  // a sequencer check failure or transaction abort.
+  //
+  // See the guidelines above for deciding between `FAILED_PRECONDITION`,
+  // `ABORTED`, and `UNAVAILABLE`.
+  //
+  // HTTP Mapping: 409 Conflict
+  ABORTED = 10;
+
+  // The operation was attempted past the valid range.  E.g., seeking or
+  // reading past end-of-file.
+  //
+  // Unlike `INVALID_ARGUMENT`, this error indicates a problem that may
+  // be fixed if the system state changes. For example, a 32-bit file
+  // system will generate `INVALID_ARGUMENT` if asked to read at an
+  // offset that is not in the range [0,2^32-1], but it will generate
+  // `OUT_OF_RANGE` if asked to read from an offset past the current
+  // file size.
+  //
+  // There is a fair bit of overlap between `FAILED_PRECONDITION` and
+  // `OUT_OF_RANGE`.  We recommend using `OUT_OF_RANGE` (the more specific
+  // error) when it applies so that callers who are iterating through
+  // a space can easily look for an `OUT_OF_RANGE` error to detect when
+  // they are done.
+  //
+  // HTTP Mapping: 400 Bad Request
+  OUT_OF_RANGE = 11;
+
+  // The operation is not implemented or is not supported/enabled in this
+  // service.
+  //
+  // HTTP Mapping: 501 Not Implemented
+  UNIMPLEMENTED = 12;
+
+  // Internal errors.  This means that some invariants expected by the
+  // underlying system have been broken.  This error code is reserved
+  // for serious errors.
+  //
+  // HTTP Mapping: 500 Internal Server Error
+  INTERNAL = 13;
+
+  // The service is currently unavailable.  This is most likely a
+  // transient condition, which can be corrected by retrying with
+  // a backoff. Note that it is not always safe to retry
+  // non-idempotent operations.
+  //
+  // See the guidelines above for deciding between `FAILED_PRECONDITION`,
+  // `ABORTED`, and `UNAVAILABLE`.
+  //
+  // HTTP Mapping: 503 Service Unavailable
+  UNAVAILABLE = 14;
+
+  // Unrecoverable data loss or corruption.
+  //
+  // HTTP Mapping: 500 Internal Server Error
+  DATA_LOSS = 15;
+}
+
+syntax = "proto3";
+package event_store.client.gossip;
+option java_package = "com.eventstore.dbclient.proto.gossip";
+
+import "shared.proto";
+
+service Gossip {
+	rpc Read (event_store.client.Empty) returns (ClusterInfo);
+}
+
+message ClusterInfo {
+	repeated MemberInfo members = 1;
+}
+
+message EndPoint {
+	string address = 1;
+	uint32 port = 2;
+}
+
+message MemberInfo {
+	enum VNodeState {
+		Initializing = 0;
+		DiscoverLeader = 1;
+		Unknown = 2;
+		PreReplica = 3;
+		CatchingUp = 4;
+		Clone = 5;
+		Follower = 6;
+		PreLeader = 7;
+		Leader = 8;
+		Manager = 9;
+		ShuttingDown = 10;
+		Shutdown = 11;
+		ReadOnlyLeaderless = 12;
+		PreReadOnlyReplica = 13;
+		ReadOnlyReplica = 14;
+		ResigningLeader = 15;
+	}
+	event_store.client.UUID instance_id = 1;
+	int64 time_stamp = 2 [jstype = JS_STRING];
+	VNodeState state = 3;
+	bool is_alive = 4;
+	EndPoint http_end_point = 5;
+}
+
+syntax = "proto3";
+package event_store.client.monitoring;
+option java_package = "com.eventstore.dbclient.proto.monitoring";
+
+service Monitoring {
+	rpc Stats(StatsReq) returns (stream StatsResp);	
+}
+
+message StatsReq {
+	bool use_metadata = 1;
+	uint64 refresh_time_period_in_ms = 4 [jstype = JS_STRING];
+}
+
+message StatsResp {
+	map<string, string> stats = 1;
+}
+
+syntax = "proto3";
+package event_store.client.operations;
+option java_package = "com.eventstore.dbclient.proto.operations";
+
+import "shared.proto";
+
+service Operations {
+	rpc StartScavenge (StartScavengeReq) returns (ScavengeResp);
+	rpc StopScavenge (StopScavengeReq) returns (ScavengeResp);
+	rpc Shutdown (event_store.client.Empty) returns (event_store.client.Empty);
+	rpc MergeIndexes (event_store.client.Empty) returns (event_store.client.Empty);
+	rpc ResignNode (event_store.client.Empty) returns (event_store.client.Empty);
+	rpc SetNodePriority (SetNodePriorityReq) returns (event_store.client.Empty);
+	rpc RestartPersistentSubscriptions (event_store.client.Empty) returns (event_store.client.Empty);
+}
+
+message StartScavengeReq {
+	Options options = 1;
+	message Options {
+		int32 thread_count = 1;
+		int32 start_from_chunk = 2;
+	}
+}
+
+message StopScavengeReq {
+	Options options = 1;
+	message Options {
+		string scavenge_id = 1;
+	}
+}
+
+message ScavengeResp {
+	string scavenge_id = 1;
+	ScavengeResult scavenge_result = 2;
+
+	enum ScavengeResult {
+		Started = 0;
+		InProgress = 1;
+		Stopped = 2;
+	}
+}
+
+message SetNodePriorityReq {
+	int32 priority = 1;
+}
+
+syntax = "proto3";
+package event_store.client.persistent_subscriptions;
+option java_package = "com.eventstore.dbclient.proto.persistentsubscriptions";
+
+import "shared.proto";
+
+service PersistentSubscriptions {
+	rpc Create (CreateReq) returns (CreateResp);
+	rpc Update (UpdateReq) returns (UpdateResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Read (stream ReadReq) returns (stream ReadResp);
+	rpc GetInfo (GetInfoReq) returns (GetInfoResp);
+	rpc ReplayParked (ReplayParkedReq) returns (ReplayParkedResp);
+	rpc List (ListReq) returns (ListResp);
+	rpc RestartSubsystem (event_store.client.Empty) returns (event_store.client.Empty);
+}
+
+message ReadReq {
+	oneof content {
+		Options options = 1;
+		Ack ack = 2;
+		Nack nack = 3;
+	}
+
+	message Options {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			event_store.client.Empty all = 5;
+		}
+
+		string group_name = 2;
+		int32 buffer_size = 3;
+		UUIDOption uuid_option = 4;
+
+		message UUIDOption {
+			oneof content {
+				event_store.client.Empty structured = 1;
+				event_store.client.Empty string = 2;
+			}
+		}
+	}
+
+	message Ack {
+		bytes id = 1;
+		repeated event_store.client.UUID ids = 2;
+	}
+
+	message Nack {
+		bytes id = 1;
+		repeated event_store.client.UUID ids = 2;
+		Action action = 3;
+		string reason = 4;
+
+		enum Action {
+			Unknown = 0;
+			Park = 1;
+			Retry = 2;
+			Skip = 3;
+			Stop = 4;
+		}
+	}
+}
+
+message ReadResp {
+	oneof content {
+		ReadEvent event = 1;
+		SubscriptionConfirmation subscription_confirmation = 2;
+	}
+	message ReadEvent {
+		RecordedEvent event = 1;
+		RecordedEvent link = 2;
+		oneof position {
+			uint64 commit_position = 3 [jstype = JS_STRING];
+			event_store.client.Empty no_position = 4;
+		}
+		oneof count {
+			int32 retry_count = 5;
+			event_store.client.Empty no_retry_count = 6;
+		}
+		message RecordedEvent {
+			event_store.client.UUID id = 1;
+			event_store.client.StreamIdentifier stream_identifier = 2;
+			uint64 stream_revision = 3 [jstype = JS_STRING];
+			uint64 prepare_position = 4 [jstype = JS_STRING];
+			uint64 commit_position = 5 [jstype = JS_STRING];
+			map<string, string> metadata = 6;
+			bytes custom_metadata = 7;
+			bytes data = 8;
+		}
+	}
+	message SubscriptionConfirmation {
+		string subscription_id = 1;
+	}
+}
+
+message CreateReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			StreamOptions stream = 4 [deprecated = true];
+			AllOptions all = 5;
+		}
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		string group_name = 2;
+		Settings settings = 3;
+	}
+
+	message StreamOptions {
+    option deprecated = true;
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof revision_option {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty start = 3;
+			event_store.client.Empty end = 4;
+		}
+	}
+
+	message AllOptions {
+		oneof all_option {
+			Position position = 1;
+			event_store.client.Empty start = 2;
+			event_store.client.Empty end = 3;
+		}
+		oneof filter_option {
+			FilterOptions filter = 4;
+			event_store.client.Empty no_filter = 5;
+		}
+		message FilterOptions {
+			oneof filter {
+				Expression stream_identifier = 1;
+				Expression event_type = 2;
+			}
+			oneof window {
+				uint32 max = 3;
+				event_store.client.Empty count = 4;
+			}
+			uint32 checkpointIntervalMultiplier = 5;
+
+			message Expression {
+				string regex = 1;
+				repeated string prefix = 2;
+			}
+		}
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+
+	message Settings {
+		bool resolve_links = 1;
+		uint64 revision = 2 [deprecated = true, jstype = JS_STRING];
+		bool extra_statistics = 3;
+		int32 max_retry_count = 5;
+		int32 min_checkpoint_count = 7;
+		int32 max_checkpoint_count = 8;
+		int32 max_subscriber_count = 9;
+		int32 live_buffer_size = 10;
+		int32 read_batch_size = 11;
+		int32 history_buffer_size = 12;
+		ConsumerStrategy named_consumer_strategy = 13 [deprecated = true];
+		oneof message_timeout {
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING, deprecated = true];
+			int32 message_timeout_ms = 14;
+		}
+		oneof checkpoint_after {
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
+			int32 checkpoint_after_ms = 15;
+		}
+		string consumer_strategy = 16;
+	}
+
+	enum ConsumerStrategy {
+		DispatchToSingle = 0;
+		RoundRobin = 1;
+		Pinned = 2;
+	}
+}
+
+message CreateResp {
+}
+
+message UpdateReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			StreamOptions stream = 4 [deprecated = true];
+			AllOptions all = 5;
+		}
+		event_store.client.StreamIdentifier stream_identifier = 1 [deprecated = true];
+		string group_name = 2;
+		Settings settings = 3;
+	}
+
+	message StreamOptions {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof revision_option {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty start = 3;
+			event_store.client.Empty end = 4;
+		}
+	}
+
+	message AllOptions {
+		oneof all_option {
+			Position position = 1;
+			event_store.client.Empty start = 2;
+			event_store.client.Empty end = 3;
+		}
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+
+	message Settings {
+		bool resolve_links = 1;
+		uint64 revision = 2 [deprecated = true, jstype = JS_STRING];
+		bool extra_statistics = 3;
+		int32 max_retry_count = 5;
+		int32 min_checkpoint_count = 7;
+		int32 max_checkpoint_count = 8;
+		int32 max_subscriber_count = 9;
+		int32 live_buffer_size = 10;
+		int32 read_batch_size = 11;
+		int32 history_buffer_size = 12;
+		ConsumerStrategy named_consumer_strategy = 13;
+		oneof message_timeout {
+			int64 message_timeout_ticks = 4 [jstype = JS_STRING, deprecated = true];
+			int32 message_timeout_ms = 14;
+		}
+		oneof checkpoint_after {
+			int64 checkpoint_after_ticks = 6 [jstype = JS_STRING, deprecated = true];
+			int32 checkpoint_after_ms = 15;
+		}
+	}
+
+	enum ConsumerStrategy {
+		DispatchToSingle = 0;
+		RoundRobin = 1;
+		Pinned = 2;
+	}
+}
+
+message UpdateResp {
+}
+
+message DeleteReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			event_store.client.Empty all = 3;
+		}
+
+		string group_name = 2;
+	}
+}
+
+message DeleteResp {
+}
+
+message GetInfoReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			event_store.client.Empty all = 2;
+		}
+
+		string group_name = 3;
+	}
+}
+
+message GetInfoResp {
+	SubscriptionInfo subscription_info = 1;
+}
+
+message SubscriptionInfo {
+	string event_source = 1;
+	string group_name = 2;
+	string status = 3;
+	repeated ConnectionInfo connections = 4;
+	int32 average_per_second = 5;
+	int64 total_items = 6 [jstype = JS_STRING];
+	int64 count_since_last_measurement = 7 [jstype = JS_STRING];
+	string last_checkpointed_event_position = 8;
+	string last_known_event_position = 9;
+	bool resolve_link_tos = 10;
+	string start_from = 11;
+	int32 message_timeout_milliseconds = 12;
+	bool extra_statistics = 13;
+	int32 max_retry_count = 14;
+	int32 live_buffer_size = 15;
+	int32 buffer_size = 16;
+	int32 read_batch_size = 17;
+	int32 check_point_after_milliseconds = 18;
+	int32 min_check_point_count = 19;
+	int32 max_check_point_count = 20;
+	int32 read_buffer_count = 21;
+	int64 live_buffer_count = 22 [jstype = JS_STRING];
+	int32 retry_buffer_count = 23;
+	int32 total_in_flight_messages = 24;
+	int32 outstanding_messages_count = 25;
+	string named_consumer_strategy = 26;
+	int32 max_subscriber_count = 27;
+	int64 parked_message_count = 28 [jstype = JS_STRING];
+
+	message ConnectionInfo {
+		string from = 1;
+		string username = 2;
+		int32 average_items_per_second = 3;
+		int64 total_items = 4 [jstype = JS_STRING];
+		int64 count_since_last_measurement = 5 [jstype = JS_STRING];
+		repeated Measurement observed_measurements = 6;
+		int32 available_slots = 7;
+		int32 in_flight_messages = 8;
+		string connection_name = 9;
+	}
+
+	message Measurement {
+		string key = 1;
+		int64 value = 2 [jstype = JS_STRING];
+	}
+}
+
+message ReplayParkedReq {
+	Options options = 1;
+
+	message Options {
+		string group_name = 1;
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream_identifier = 2;
+			event_store.client.Empty all = 3;
+		}
+		oneof stop_at_option {
+			int64 stop_at = 4 [jstype = JS_STRING];
+			event_store.client.Empty no_limit = 5;
+		}
+	}
+}
+
+message ReplayParkedResp {
+}
+
+message ListReq {
+	Options options = 1;
+
+	message Options {
+		oneof list_option {
+			event_store.client.Empty list_all_subscriptions = 1;
+			StreamOption list_for_stream = 2;
+		}
+	}
+	message StreamOption {
+		oneof stream_option {
+			event_store.client.StreamIdentifier stream = 1;
+			event_store.client.Empty all = 2;
+		}
+	}
+}
+
+message ListResp {
+	repeated SubscriptionInfo subscriptions = 1;
+}
+
+syntax = "proto3";
+package event_store.client.projections;
+option java_package = "com.eventstore.dbclient.proto.projections";
+
+import "google/protobuf/struct.proto";
+import "shared.proto";
+
+service Projections {
+	rpc Create (CreateReq) returns (CreateResp);
+	rpc Update (UpdateReq) returns (UpdateResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Statistics (StatisticsReq) returns (stream StatisticsResp);
+	rpc Disable (DisableReq) returns (DisableResp);
+	rpc Enable (EnableReq) returns (EnableResp);
+	rpc Reset (ResetReq) returns (ResetResp);
+	rpc State (StateReq) returns (StateResp);
+	rpc Result (ResultReq) returns (ResultResp);
+	rpc RestartSubsystem (event_store.client.Empty) returns (event_store.client.Empty);
+}
+
+message CreateReq {
+	Options options = 1;
+
+	message Options {
+		oneof mode {
+			event_store.client.Empty one_time = 1;
+			Transient transient = 2 [deprecated = true];
+			Continuous continuous = 3;
+		}
+		string query = 4;
+
+		message Transient {
+      option deprecated = true;
+			string name = 1;
+		}
+		message Continuous {
+			string name = 1;
+			bool emit_enabled = 2;
+			bool track_emitted_streams = 3;
+		}
+	}
+}
+
+message CreateResp {
+}
+
+message UpdateReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		string query = 2;
+		oneof emit_option {
+			bool emit_enabled = 3;
+			event_store.client.Empty no_emit_options = 4;
+		}
+	}
+}
+
+message UpdateResp {
+}
+
+message DeleteReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		bool delete_emitted_streams = 2;
+		bool delete_state_stream = 3;
+		bool delete_checkpoint_stream = 4;
+	}
+}
+
+message DeleteResp {
+}
+
+message StatisticsReq {
+	Options options = 1;
+	message Options {
+		oneof mode {
+			string name = 1;
+			event_store.client.Empty all = 2;
+			event_store.client.Empty transient = 3 [deprecated = true];
+			event_store.client.Empty continuous = 4;
+			event_store.client.Empty one_time = 5;
+		}
+	}
+}
+
+message StatisticsResp {
+	Details details = 1;
+
+	message Details {
+		int64 coreProcessingTime = 1 [jstype = JS_STRING];
+		int64 version = 2 [jstype = JS_STRING];
+		int64 epoch = 3 [jstype = JS_STRING];
+		string effectiveName = 4;
+		int32 writesInProgress = 5;
+		int32 readsInProgress = 6;
+		int32 partitionsCached = 7;
+		string status = 8;
+		string stateReason = 9;
+		string name = 10;
+		string mode = 11;
+		string position = 12;
+		float progress = 13;
+		string lastCheckpoint = 14;
+		int64 eventsProcessedAfterRestart = 15 [jstype = JS_STRING];
+		string checkpointStatus = 16;
+		int64 bufferedEvents = 17 [jstype = JS_STRING];
+		int32 writePendingEventsBeforeCheckpoint = 18;
+		int32 writePendingEventsAfterCheckpoint = 19;
+	}
+}
+
+message StateReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		string partition = 2;
+	}
+}
+
+message StateResp {
+	google.protobuf.Value state = 1;
+}
+
+message ResultReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		string partition = 2;
+	}
+}
+
+message ResultResp {
+	google.protobuf.Value result = 1;
+}
+
+message ResetReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		bool write_checkpoint = 2;
+	}
+}
+
+message ResetResp {
+}
+
+
+message EnableReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+	}
+}
+
+message EnableResp {
+}
+
+message DisableReq {
+	Options options = 1;
+
+	message Options {
+		string name = 1;
+		bool write_checkpoint = 2;
+	}
+}
+
+message DisableResp {
+}
+
+syntax = "proto3";
+package event_store.client.server_features;
+option java_package = "com.eventstore.dbclient.proto.serverfeatures";
+import "shared.proto";
+
+service ServerFeatures {
+	rpc GetSupportedMethods (event_store.client.Empty) returns (SupportedMethods);
+}
+
+message SupportedMethods {
+	repeated SupportedMethod methods = 1;
+	string event_store_server_version = 2;
+}
+
+message SupportedMethod {
+	string method_name = 1;
+	string service_name = 2;
+	repeated string features = 3;
+}
+
+syntax = "proto3";
+package event_store.client;
+option java_package = "com.eventstore.dbclient.proto.shared";
+import "google/protobuf/empty.proto";
+
+message UUID {
+	oneof value {
+		Structured structured = 1;
+		string string = 2;
+	}
+
+	message Structured {
+		int64 most_significant_bits = 1 [jstype = JS_STRING];
+		int64 least_significant_bits = 2 [jstype = JS_STRING];
+	}
+}
+message Empty {
+}
+
+message StreamIdentifier {
+	reserved 1 to 2;
+	bytes stream_name = 3;
+}
+
+message AllStreamPosition {
+  option deprecated = true;
+	uint64 commit_position = 1 [jstype = JS_STRING];
+	uint64 prepare_position = 2 [jstype = JS_STRING];
+}
+
+message WrongExpectedVersion {
+	oneof current_stream_revision_option {
+		uint64 current_stream_revision = 1 [jstype = JS_STRING];
+		google.protobuf.Empty current_no_stream = 2;
+	}
+	oneof expected_stream_position_option {
+		uint64 expected_stream_position = 3 [jstype = JS_STRING];
+		google.protobuf.Empty expected_any = 4;
+		google.protobuf.Empty expected_stream_exists = 5;
+		google.protobuf.Empty expected_no_stream = 6;
+	}
+}
+
+message AccessDenied {}
+
+message StreamDeleted {
+	StreamIdentifier stream_identifier = 1;
+}
+
+message Timeout {}
+
+message Unknown {}
+
+message InvalidTransaction {}
+
+message MaximumAppendSizeExceeded {
+	uint32 maxAppendSize = 1;
+}
+
+message BadRequest {
+  option deprecated = true;
+	string message = 1;
+}
+
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package google.rpc;
+
+import "google/protobuf/any.proto";
+import "code.proto";
+
+option cc_enable_arenas = true;
+option go_package = "google.golang.org/genproto/googleapis/rpc/status;status";
+option java_multiple_files = true;
+option java_outer_classname = "StatusProto";
+option java_package = "com.google.rpc";
+option objc_class_prefix = "RPC";
+
+// The `Status` type defines a logical error model that is suitable for
+// different programming environments, including REST APIs and RPC APIs. It is
+// used by [gRPC](https://github.com/grpc). Each `Status` message contains
+// three pieces of data: error code, error message, and error details.
+//
+// You can find out more about this error model and how to work with it in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
+message Status {
+	// The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+	google.rpc.Code code = 1;
+
+	// A developer-facing error message, which should be in English. Any
+	// user-facing error message should be localized and sent in the
+	// [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+	string message = 2;
+
+	// A list of messages that carry the error details.  There is a common set of
+	// message types for APIs to use.
+	google.protobuf.Any details = 3;
+}
+
+syntax = "proto3";
+package event_store.client.streams;
+option java_package = "com.eventstore.dbclient.proto.streams";
+
+import "shared.proto";
+import "status.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service Streams {
+	rpc Read (ReadReq) returns (stream ReadResp);
+	rpc Append (stream AppendReq) returns (AppendResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Tombstone (TombstoneReq) returns (TombstoneResp);
+	rpc BatchAppend (stream BatchAppendReq) returns (stream BatchAppendResp);
+}
+
+message ReadReq {
+	Options options = 1;
+
+	message Options {
+		oneof stream_option {
+			StreamOptions stream = 1;
+			AllOptions all = 2;
+		}
+		ReadDirection read_direction = 3;
+		bool resolve_links = 4;
+		oneof count_option {
+			uint64 count = 5 [jstype = JS_STRING];
+			SubscriptionOptions subscription = 6;
+		}
+		oneof filter_option {
+			FilterOptions filter = 7;
+			event_store.client.Empty no_filter = 8;
+		}
+		UUIDOption uuid_option = 9;
+		ControlOption control_option = 10 [deprecated = true];
+
+		enum ReadDirection {
+			Forwards = 0;
+			Backwards = 1;
+		}
+		message StreamOptions {
+			event_store.client.StreamIdentifier stream_identifier = 1;
+			oneof revision_option {
+				uint64 revision = 2 [jstype = JS_STRING];
+				event_store.client.Empty start = 3;
+				event_store.client.Empty end = 4;
+			}
+		}
+		message AllOptions {
+			oneof all_option {
+				Position position = 1;
+				event_store.client.Empty start = 2;
+				event_store.client.Empty end = 3;
+			}
+		}
+		message SubscriptionOptions {
+		}
+		message Position {
+			uint64 commit_position = 1 [jstype = JS_STRING];
+			uint64 prepare_position = 2 [jstype = JS_STRING];
+		}
+		message FilterOptions {
+			oneof filter {
+				Expression stream_identifier = 1;
+				Expression event_type = 2;
+			}
+			oneof window {
+				uint32 max = 3;
+				event_store.client.Empty count = 4;
+			}
+			uint32 checkpointIntervalMultiplier = 5;
+
+			message Expression {
+				string regex = 1;
+				repeated string prefix = 2;
+			}
+		}
+		message UUIDOption {
+			oneof content {
+				event_store.client.Empty structured = 1;
+				event_store.client.Empty string = 2;
+			}
+		}
+		message ControlOption {
+      option deprecated = true;
+
+			uint32 compatibility = 1;
+		}
+	}
+}
+
+message ReadResp {
+	oneof content {
+		ReadEvent event = 1;
+		SubscriptionConfirmation confirmation = 2;
+		Checkpoint checkpoint = 3;
+		StreamNotFound stream_not_found = 4;
+		uint64 first_stream_position = 5 [jstype = JS_STRING, deprecated = true];
+		uint64 last_stream_position = 6 [jstype = JS_STRING, deprecated = true];
+		AllStreamPosition last_all_stream_position = 7 [deprecated = true];
+		CaughtUp caught_up = 8;
+    FellBehind fell_behind = 9;
+	}
+
+	message CaughtUp {}
+
+	message FellBehind {}
+
+	message ReadEvent {
+		RecordedEvent event = 1;
+		RecordedEvent link = 2;
+		oneof position {
+			uint64 commit_position = 3 [jstype = JS_STRING];
+			event_store.client.Empty no_position = 4;
+		}
+
+		message RecordedEvent {
+			event_store.client.UUID id = 1;
+			event_store.client.StreamIdentifier stream_identifier = 2;
+			uint64 stream_revision = 3 [jstype = JS_STRING];
+			uint64 prepare_position = 4 [jstype = JS_STRING];
+			uint64 commit_position = 5 [jstype = JS_STRING];
+			map<string, string> metadata = 6;
+			bytes custom_metadata = 7;
+			bytes data = 8;
+		}
+	}
+	message SubscriptionConfirmation {
+		string subscription_id = 1;
+	}
+	message Checkpoint {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+	message StreamNotFound {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+	}
+}
+
+message AppendReq {
+	oneof content {
+		Options options = 1;
+		ProposedMessage proposed_message = 2;
+	}
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_revision {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 3;
+			event_store.client.Empty any = 4;
+			event_store.client.Empty stream_exists = 5;
+		}
+	}
+	message ProposedMessage {
+		event_store.client.UUID id = 1;
+		map<string, string> metadata = 2;
+		bytes custom_metadata = 3;
+		bytes data = 4;
+	}
+}
+
+message AppendResp {
+	oneof result {
+		Success success = 1;
+		WrongExpectedVersion wrong_expected_version = 2;
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+
+	message Success {
+		oneof current_revision_option {
+			uint64 current_revision = 1 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 2;
+		}
+		oneof position_option {
+			Position position = 3;
+			event_store.client.Empty no_position = 4;
+		}
+	}
+
+	message WrongExpectedVersion {
+		oneof current_revision_option_20_6_0 {
+			uint64 current_revision_20_6_0 = 1 [deprecated = true];
+			event_store.client.Empty no_stream_20_6_0 = 2 [deprecated = true];
+		}
+		oneof expected_revision_option_20_6_0 {
+			uint64 expected_revision_20_6_0 = 3 [deprecated = true];
+			event_store.client.Empty any_20_6_0 = 4 [deprecated = true];
+			event_store.client.Empty stream_exists_20_6_0 = 5 [deprecated = true];
+		}
+		oneof current_revision_option {
+			uint64 current_revision = 6 [jstype = JS_STRING];
+			event_store.client.Empty current_no_stream = 7;
+		}
+		oneof expected_revision_option {
+			uint64 expected_revision = 8 [jstype = JS_STRING];
+			event_store.client.Empty expected_any = 9;
+			event_store.client.Empty expected_stream_exists = 10;
+			event_store.client.Empty expected_no_stream = 11;
+		}
+
+	}
+}
+
+message BatchAppendReq {
+	event_store.client.UUID correlation_id = 1;
+	Options options = 2;
+	repeated ProposedMessage proposed_messages = 3;
+	bool is_final = 4;
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_position {
+			uint64 stream_position = 2 [jstype = JS_STRING];
+			google.protobuf.Empty no_stream = 3;
+			google.protobuf.Empty any = 4;
+			google.protobuf.Empty stream_exists = 5;
+		}
+		google.protobuf.Timestamp deadline = 6;
+	}
+
+	message ProposedMessage {
+		event_store.client.UUID id = 1;
+		map<string, string> metadata = 2;
+		bytes custom_metadata = 3;
+		bytes data = 4;
+	}
+}
+
+message BatchAppendResp {
+	event_store.client.UUID correlation_id = 1;
+	oneof result {
+		google.rpc.Status error = 2;
+		Success success = 3;
+	}
+
+	event_store.client.StreamIdentifier stream_identifier = 4;
+
+	oneof expected_stream_position {
+		uint64 stream_position = 5 [jstype = JS_STRING];
+		google.protobuf.Empty no_stream = 6;
+		google.protobuf.Empty any = 7;
+		google.protobuf.Empty stream_exists = 8;
+	}
+
+	message Success {
+		oneof current_revision_option {
+			uint64 current_revision = 1 [jstype = JS_STRING];
+			google.protobuf.Empty no_stream = 2;
+		}
+		oneof position_option {
+			event_store.client.AllStreamPosition position = 3;
+			google.protobuf.Empty no_position = 4;
+		}
+	}
+}
+
+message DeleteReq {
+	Options options = 1;
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_revision {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 3;
+			event_store.client.Empty any = 4;
+			event_store.client.Empty stream_exists = 5;
+		}
+	}
+}
+
+message DeleteResp {
+	oneof position_option {
+		Position position = 1;
+		event_store.client.Empty no_position = 2;
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+}
+
+message TombstoneReq {
+	Options options = 1;
+
+	message Options {
+		event_store.client.StreamIdentifier stream_identifier = 1;
+		oneof expected_stream_revision {
+			uint64 revision = 2 [jstype = JS_STRING];
+			event_store.client.Empty no_stream = 3;
+			event_store.client.Empty any = 4;
+			event_store.client.Empty stream_exists = 5;
+		}
+	}
+}
+
+message TombstoneResp {
+	oneof position_option {
+		Position position = 1;
+		event_store.client.Empty no_position = 2;
+	}
+
+	message Position {
+		uint64 commit_position = 1 [jstype = JS_STRING];
+		uint64 prepare_position = 2 [jstype = JS_STRING];
+	}
+}
+
+
+syntax = "proto3";
+package event_store.client.users;
+option java_package = "com.eventstore.dbclient.proto.users";
+
+service Users {
+	rpc Create (CreateReq) returns (CreateResp);
+	rpc Update (UpdateReq) returns (UpdateResp);
+	rpc Delete (DeleteReq) returns (DeleteResp);
+	rpc Disable (DisableReq) returns (DisableResp);
+	rpc Enable (EnableReq) returns (EnableResp);
+	rpc Details (DetailsReq) returns (stream DetailsResp);
+	rpc ChangePassword (ChangePasswordReq) returns (ChangePasswordResp);
+	rpc ResetPassword (ResetPasswordReq) returns (ResetPasswordResp);
+}
+
+message CreateReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string password = 2;
+		string full_name = 3;
+		repeated string groups = 4;
+	}
+}
+
+message CreateResp {
+
+}
+
+message UpdateReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string password = 2;
+		string full_name = 3;
+		repeated string groups = 4;
+	}
+}
+
+message UpdateResp {
+
+}
+
+message DeleteReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message DeleteResp {
+
+}
+
+message EnableReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message EnableResp {
+
+}
+
+message DisableReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message DisableResp {
+}
+
+message DetailsReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+	}
+}
+
+message DetailsResp {
+	UserDetails user_details = 1;
+	message UserDetails {
+		string login_name = 1;
+		string full_name = 2;
+		repeated string groups = 3;
+		DateTime last_updated = 4;
+		bool disabled = 5;
+
+		message DateTime {
+			int64 ticks_since_epoch = 1 [jstype = JS_STRING];
+		}
+	}
+}
+
+message ChangePasswordReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string current_password = 2;
+		string new_password = 3;
+	}
+}
+
+message ChangePasswordResp {
+}
+
+message ResetPasswordReq {
+	Options options = 1;
+	message Options {
+		string login_name = 1;
+		string new_password = 2;
+	}
+}
+
+message ResetPasswordResp {
+}

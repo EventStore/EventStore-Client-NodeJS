@@ -22,7 +22,7 @@
     "url": "git+https://github.com/EventStore/Kurrent-Client-NodeJS.git"
   },
   "keywords": [
-    "EventStore",
+    "Kurrent",
     "EventSourcing",
     "OpenTelemetry"
   ],
@@ -30,16 +30,16 @@
     "access": "public"
   },
   "engines": {
-    "node": "^12.18.3 || >=14"
+    "node": ">=18"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/instrumentation": "^0.56.0"
   },
-  "devDependencies": {
-    "@kurrent/db-client": "workspace:*"
-  },
   "peerDependencies": {
     "@kurrent/db-client": "^1"
+  },
+  "devDependencies": {
+    "@kurrent/db-client": "workspace:^"
   }
 }

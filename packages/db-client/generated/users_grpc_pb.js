@@ -272,4 +272,4 @@ var UsersService = exports.UsersService = {
   },
 };
 
-exports.UsersClient = grpc.makeGenericClientConstructor(UsersService);
+exports.UsersClient = grpc.makeGenericClientConstructor(UsersService, 'Users');

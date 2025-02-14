@@ -1,0 +1,2 @@
+src/utils/Cluster.ts(33,19): error TS2349: This expression is not callable.
+  Type '{ default: { (options?: Options | undefined): Promise<number>; makeRange(from: number, to: number): Iterable<number>; }; makeRange(from: number, to: number): Iterable<...>; }' has no call signatures.

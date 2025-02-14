@@ -177,4 +177,4 @@ var StreamsService = exports.StreamsService = {
   },
 };
 
-exports.StreamsClient = grpc.makeGenericClientConstructor(StreamsService);
+exports.StreamsClient = grpc.makeGenericClientConstructor(StreamsService, 'Streams');

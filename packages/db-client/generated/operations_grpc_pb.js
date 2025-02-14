@@ -141,4 +141,4 @@ var OperationsService = exports.OperationsService = {
   },
 };
 
-exports.OperationsClient = grpc.makeGenericClientConstructor(OperationsService);
+exports.OperationsClient = grpc.makeGenericClientConstructor(OperationsService, 'Operations');

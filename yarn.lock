@@ -457,7 +457,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:^1.12.4, @grpc/grpc-js@npm:^1.7.1":
+"@eventstore/db-client@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@eventstore/db-client@npm:6.2.1"
+  dependencies:
+    "@grpc/grpc-js": "npm:^1.9.12"
+    "@types/debug": "npm:^4.1.12"
+    "@types/google-protobuf": "npm:^3.15.12"
+    "@types/node": "npm:^16.18.67"
+    debug: "npm:^4.3.2"
+    google-protobuf: "npm:^3.21.2"
+    uuid: "npm:^8.3.2"
+  checksum: 10c0/196dd21744dc26b5dac8af893d533078191e73f55a62b39568cae855711928a254a463c54ea0aa53d6eee103c07b058ba176ed5005a075ab6c2581ba99baefe6
+  languageName: node
+  linkType: hard
+
+"@grpc/grpc-js@npm:^1.12.4, @grpc/grpc-js@npm:^1.7.1, @grpc/grpc-js@npm:^1.9.12":
   version: 1.12.6
   resolution: "@grpc/grpc-js@npm:1.12.6"
   dependencies:
@@ -824,7 +839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurrent/db-client@workspace:*, @kurrent/db-client@workspace:packages/db-client":
+"@kurrent/db-client@workspace:^, @kurrent/db-client@workspace:packages/db-client":
   version: 0.0.0-use.local
   resolution: "@kurrent/db-client@workspace:packages/db-client"
   dependencies:
@@ -843,11 +858,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurrent/opentelemetry@workspace:*, @kurrent/opentelemetry@workspace:packages/opentelemetry":
+"@kurrent/opentelemetry@workspace:^, @kurrent/opentelemetry@workspace:packages/opentelemetry":
   version: 0.0.0-use.local
   resolution: "@kurrent/opentelemetry@workspace:packages/opentelemetry"
   dependencies:
-    "@kurrent/db-client": "workspace:*"
+    "@kurrent/db-client": "workspace:^"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/instrumentation": "npm:^0.56.0"
   peerDependencies:
@@ -1399,10 +1414,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node14@npm:^14.1.2":
-  version: 14.1.2
-  resolution: "@tsconfig/node14@npm:14.1.2"
-  checksum: 10c0/61235f8f85ac56cd9cab58f8e6eedbe13d2454188b5987ddf499827a8683283983f564d48db904a650c5ce087d5dc827a891900edbf6d7a7e38aacda4194578a
+"@tsconfig/node18@npm:^18.2.4":
+  version: 18.2.4
+  resolution: "@tsconfig/node18@npm:18.2.4"
+  checksum: 10c0/cdfd17f212660374eb2765cd5907b2252e43cfa2623cd52307a49f004327ef49bbe7d53c78b0aca57f33e9a5cb0d7d2eb5ded9be1235e6212f65c9f0699322b6
   languageName: node
   linkType: hard
 
@@ -1539,7 +1554,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.18.122":
+"@types/node@npm:18.19.76":
+  version: 18.19.76
+  resolution: "@types/node@npm:18.19.76"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10c0/211250b264ca3967d4cce41921b8a4cd704d920152f723f95c18dc7b70771c43472c69a6adc1be1a8364007cfa6ae17408424b3b0bc1d55b5f29bab4a6741336
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.18.67":
   version: 16.18.126
   resolution: "@types/node@npm:16.18.126"
   checksum: 10c0/5c137eb141d33de32b16ff26047ff6d449432b58d0d25f7cced2040c97727d81fe1099a7581eb336d14a6840f5b09e363bdd43d7a6995e8e81eb47aa51e413fc
@@ -2507,7 +2531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:^4.0.1, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.4, debug@npm:^4.3.5, debug@npm:^4.4.0":
+"debug@npm:4, debug@npm:^4.0.1, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4, debug@npm:^4.3.5, debug@npm:^4.4.0":
   version: 4.4.0
   resolution: "debug@npm:4.4.0"
   dependencies:
@@ -3381,7 +3405,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-protobuf@npm:^3.21.4":
+"google-protobuf@npm:^3.21.2, google-protobuf@npm:^3.21.4":
   version: 3.21.4
   resolution: "google-protobuf@npm:3.21.4"
   checksum: 10c0/28f2800f7fe1a8fc55eb58ba76e158268407bfb3b90646eaf8a177dd92a2e522459b773f8132ae546e60ac3b6f5947557a1cf3d963a05bb594f43bcde640f54f
@@ -4548,16 +4572,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kurrent-node-client-repository@workspace:."
   dependencies:
-    "@tsconfig/node14": "npm:^14.1.2"
-    "@types/node": "npm:^16.18.122"
+    "@eventstore/db-client": "npm:^6.2.1"
+    "@kurrent/db-client": "workspace:^"
+    "@tsconfig/node18": "npm:^18.2.4"
+    "@types/node": "npm:18.19.76"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
     cross-env: "npm:^7.0.3"
     eslint: "npm:^7.32.0"
     eslint-plugin-tsdoc: "npm:^0.2.17"
+    nx: "npm:20.1.3"
     prettier: "npm:^2.8.8"
     semver: "npm:^7.6.3"
-    typescript: "npm:^4.9.5"
+    typescript: "npm:^5.7.3"
   languageName: unknown
   linkType: soft
 
@@ -6129,8 +6156,8 @@ __metadata:
   resolution: "test@workspace:packages/test"
   dependencies:
     "@grpc/grpc-js": "npm:^1.12.4"
-    "@kurrent/db-client": "workspace:*"
-    "@kurrent/opentelemetry": "workspace:*"
+    "@kurrent/db-client": "workspace:^"
+    "@kurrent/opentelemetry": "workspace:^"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/exporter-trace-otlp-grpc": "npm:^0.51.1"
     "@opentelemetry/instrumentation": "npm:^0.56.0"
@@ -6323,23 +6350,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.9.5":
-  version: 4.9.5
-  resolution: "typescript@npm:4.9.5"
+"typescript@npm:^5.7.3":
+  version: 5.7.3
+  resolution: "typescript@npm:5.7.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/5f6cad2e728a8a063521328e612d7876e12f0d8a8390d3b3aaa452a6a65e24e9ac8ea22beb72a924fd96ea0a49ea63bb4e251fb922b12eedfb7f7a26475e5c56
+  checksum: 10c0/b7580d716cf1824736cc6e628ab4cd8b51877408ba2be0869d2866da35ef8366dd6ae9eb9d0851470a39be17cbd61df1126f9e211d8799d764ea7431d5435afa
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.9.5#optional!builtin<compat/typescript>":
-  version: 4.9.5
-  resolution: "typescript@patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"
+"typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>":
+  version: 5.7.3
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/e3333f887c6829dfe0ab6c1dbe0dd1e3e2aeb56c66460cb85c5440c566f900c833d370ca34eb47558c0c69e78ced4bfe09b8f4f98b6de7afed9b84b8d1dd06a1
+  checksum: 10c0/6fd7e0ed3bf23a81246878c613423730c40e8bdbfec4c6e4d7bf1b847cbb39076e56ad5f50aa9d7ebd89877999abaee216002d3f2818885e41c907caaa192cc4
   languageName: node
   linkType: hard
 
@@ -6349,6 +6376,13 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10c0/83b0a90eca35f778e07cad9622b80c448b6aad457c9ff8e568afed978212b42930a95f9e1be943a1ffa4258a3340fbb899f41461131c05bb1d0a9c303aed8479
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 10c0/bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
   languageName: node
   linkType: hard
 
@@ -6430,6 +6464,15 @@ __metadata:
   bin:
     uuid: dist/esm/bin/uuid
   checksum: 10c0/cee762fc76d949a2ff9205770334699e0043d52bb766472593a25f150077c9deed821230251ea3d6ab3943a5ea137d2826678797f1d5f6754c7ce5ce27e9f7a6
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^8.3.2":
+  version: 8.3.2
+  resolution: "uuid@npm:8.3.2"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
   languageName: node
   linkType: hard
 
