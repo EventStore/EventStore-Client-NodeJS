@@ -50,12 +50,12 @@ interface ClientOptions {
   keepAliveInterval?: number;
   /**
    * The amount of time (in milliseconds) the sender of the keepalive ping waits for an acknowledgement.
-   * If it does not receive an acknowledgment within this time, it will close the connection.
+   * If it does not receive an acknowledgement within this time, it will close the connection.
    * @defaultValue 10_000
    */
   keepAliveTimeout?: number;
   /**
-   * Whether or not to immediately throw an exception when an append fails.
+   * Whether to immediately throw an exception when an append fails.
    * @defaultValue true
    */
   throwOnAppendFailure?: boolean;
@@ -117,14 +117,6 @@ export interface ChannelCredentialOptions {
    * The root certificate data.
    */
   rootCertificate?: Buffer;
-  /**
-   * @deprecated Use the new {@link userKeyFile} instead.
-   */
-  privateKey?: Buffer;
-  /**
-   * @deprecated Use the new {@link userCertFile} instead.
-   */
-  certChain?: Buffer;
   /**
    * The file containing the user certificate’s matching private key in PEM format.
    */
@@ -348,12 +340,6 @@ export class Client {
       );
     }
 
-    if (channelCredentials.certChain || channelCredentials.privateKey) {
-      console.warn(
-        "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use userCertFile and userKeyFile instead."
-      );
-    }
-
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#keepAliveInterval = keepAliveInterval;
     this.#keepAliveTimeout = keepAliveTimeout;
@@ -375,8 +361,8 @@ export class Client {
 
       this.#channelCredentials = grpcCredentials.createSsl(
         channelCredentials.rootCertificate,
-        channelCredentials.userKeyFile ?? channelCredentials.privateKey,
-        channelCredentials.userCertFile ?? channelCredentials.certChain,
+        channelCredentials.userKeyFile,
+        channelCredentials.userCertFile,
         channelCredentials.verifyOptions
       );
     }
