@@ -11,6 +11,7 @@ import { Client } from "../Client";
 
 import * as bridge from "@eventstore/db-client-bridge";
 import { convertRustEvent } from "../utils/convertRustEvent";
+import { convertBridgeError } from "../utils/convertBridgeError";
 
 export interface ReadAllOptions extends BaseOptions {
   /**
@@ -70,17 +71,26 @@ Client.prototype.readAll = async function (
     credentials: baseOptions.credentials,
   };
 
+  let stream;
+  try {
+    stream = await this.rustClient.readAll(options);
+  } catch (error) {
+    return convertBridgeError(error);
+  }
+
   const convert = async function* (
     stream: AsyncIterable<bridge.ResolvedEvent[]>
   ) {
-    for await (const events of stream) {
-      for (const event of events) {
-        yield convertRustEvent<AllStreamResolvedEvent>(event);
+    try {
+      for await (const events of stream) {
+        for (const event of events) {
+          yield convertRustEvent<AllStreamResolvedEvent>(event);
+        }
       }
+    } catch (error) {
+      return convertBridgeError(error);
     }
   };
-
-  const stream = await this.rustClient.readAll(options);
 
   return convert(stream);
 };

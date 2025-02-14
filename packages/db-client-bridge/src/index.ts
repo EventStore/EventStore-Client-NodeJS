@@ -2,7 +2,7 @@
 
 // The Rust addon.
 import * as addon from "./load";
-import { Buffer } from "buffer"
+import { Buffer } from "buffer";
 
 // Use this declaration to assign types to the addon's exports,
 // which otherwise by default are `any`.
@@ -20,7 +20,9 @@ export type RustClient = {
     stream: string,
     options?: RustReadStreamOptions
   ): Promise<AsyncIterable<ResolvedEvent[]>>;
-  readAll(options?: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent[]>>;
+  readAll(
+    options?: RustReadAllOptions
+  ): Promise<AsyncIterable<ResolvedEvent[]>>;
 };
 
 export type RawClient = {
@@ -90,8 +92,8 @@ export function createClient(connStr: string): RustClient {
             async next() {
               let buffer = await addon.readStreamNext(iterable);
               return JSON.parse(buffer.toString()) as {
-                value: ResolvedEvent[],
-                done: boolean
+                value: ResolvedEvent[];
+                done: boolean;
               };
             },
           };
@@ -110,8 +112,8 @@ export function createClient(connStr: string): RustClient {
             async next() {
               let buffer = await addon.readStreamNext(iterable);
               return JSON.parse(buffer.toString()) as {
-                value: ResolvedEvent[],
-                done: boolean
+                value: ResolvedEvent[];
+                done: boolean;
               };
             },
           };

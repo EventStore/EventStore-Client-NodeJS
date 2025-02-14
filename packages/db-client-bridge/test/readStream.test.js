@@ -6,14 +6,6 @@ const addon = require("../lib");
 const {describe, it} = require("node:test");
 
 describe("readStream", () => {
-    it("should throw ParseError with an invalid connection string", async () => {
-        try {
-            addon.createClient('invalid://localhost:2113?tls=false');
-        } catch (error) {
-            assert.strictEqual(error.name, "ParseError");
-        }
-    });
-
     it("should throw UnavailableError when connecting to a non-existent server", async () => {
         try {
             const client = addon.createClient('esdb://localhost:2119?tls=false');

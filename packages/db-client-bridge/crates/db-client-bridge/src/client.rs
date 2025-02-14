@@ -3,7 +3,7 @@ use std::sync::Arc;
 use chrono::{DateTime, Utc};
 use neon::prelude::*;
 
-use crate::error::{create_js_error, ErrorKind};
+use crate::error::create_js_error;
 use crate::RUNTIME;
 use eventstore::{
     Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions,
@@ -274,6 +274,7 @@ struct ValueItem<'a> {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 struct JsResolvedEvent<'a> {
     event: Option<JsRecordedEvent<'a>>,
     link: Option<JsRecordedEvent<'a>>,
@@ -281,6 +282,7 @@ struct JsResolvedEvent<'a> {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 struct JsRecordedEvent<'a> {
     stream_id: &'a str,
     id: Uuid,

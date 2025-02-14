@@ -36,5 +36,4 @@ where
     let name = cx.string(error_name);
     error.set(cx, "name", name)?;
     Ok(error)
-
 }
