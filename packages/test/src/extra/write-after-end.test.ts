@@ -1,12 +1,6 @@
 /** @jest-environment ./src/utils/enableVersionCheck.ts */
 
-import {
-  createTestNode,
-  delay,
-  jsonTestEvents,
-  matchServerVersion,
-  optionalTest,
-} from "@test-utils";
+import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
   EventData,
   KurrentDBClient,
@@ -37,7 +31,7 @@ Array.isArray = (arg): arg is never[] => {
   return arg === neverEndingEvents;
 };
 
-jest.retryTimes(5, { logErrorsBeforeRetry: true });
+// jest.retryTimes(5, { logErrorsBeforeRetry: true });
 
 describe("write after end", () => {
   test("Should not write after end", async () => {
@@ -82,43 +76,78 @@ describe("write after end", () => {
     await node.down();
   });
 
-  optionalTest(matchServerVersion`>=21.10`)(
-    "Should not write after end (batch append)",
-    async () => {
-      const node = createTestNode();
-      await node.up();
+  test("Should not write after end (batch append)", async () => {
+    // We are going to do a huge append, so tell KurrentDB not to reject it
+    const node = createTestNode().setOption(
+      "EVENTSTORE_MAX_APPEND_SIZE",
+      10_000_000
+    );
+    await node.up();
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+    const client = new KurrentDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.certs.root },
+      { username: "admin", password: "changeit" }
+    );
 
-      const STREAM_NAME = "json_stream_name";
-      await client.appendToStream(STREAM_NAME, jsonTestEvents());
+    const STREAM_NAME = "json_stream_name";
+    await client.appendToStream(STREAM_NAME, jsonTestEvents());
 
-      const writeUntilError = () =>
-        new Promise((resolve) => {
-          const writeOnLoop = (): Promise<never> =>
-            client
-              .appendToStream(STREAM_NAME, jsonTestEvents(5000))
-              .then(writeOnLoop);
+    const neverEndingAppend = client
+      .appendToStream(STREAM_NAME, neverEndingEvents, {
+        deadline: Infinity,
+      })
+      .catch((err) => err);
 
-          writeOnLoop().catch((e) => {
-            resolve(e);
-          });
+    // let the write get started
+    await delay(1);
+
+    await node.killNode(node.endpoints[0]);
+
+    const error = await neverEndingAppend;
+    expect(error).toBeInstanceOf(UnavailableError);
+
+    // wait for any unhandled rejections
+    await delay(5_000);
+
+    await node.down();
+  });
+
+  // todo: investigate why this test does not work in ci only
+  test.skip("Should not write after end (batch append)", async () => {
+    const node = createTestNode();
+    await node.up();
+
+    const client = new KurrentDBClient(
+      { endpoint: node.uri },
+      { rootCertificate: node.certs.root },
+      { username: "admin", password: "changeit" }
+    );
+
+    const STREAM_NAME = "json_stream_name";
+    await client.appendToStream(STREAM_NAME, jsonTestEvents());
+
+    const writeUntilError = () =>
+      new Promise((resolve) => {
+        const writeOnLoop = (): Promise<never> =>
+          client
+            .appendToStream(STREAM_NAME, jsonTestEvents(5000))
+            .then(writeOnLoop);
+
+        writeOnLoop().catch((e) => {
+          resolve(e);
         });
+      });
 
-      const errorPromise = writeUntilError();
+    const errorPromise = writeUntilError();
 
-      await node.killNode(node.endpoints[0]);
+    await node.killNode(node.endpoints[0]);
 
-      const error = await errorPromise;
+    const error = await errorPromise;
 
-      expect(error).toBeInstanceOf(UnavailableError);
+    expect(error).toBeInstanceOf(UnavailableError);
 
-      // wait for any unhandled rejections
-      await delay(5_000);
-    }
-  );
+    // wait for any unhandled rejections
+    await delay(5_000);
+  });
 });
