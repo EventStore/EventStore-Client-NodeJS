@@ -116,3 +116,5 @@ dist
 package-lock.json
 
 .vscode
+
+.nx/
