@@ -1,9 +1,0 @@
-{
-  "run": {
-    "command": "nx run-many --target=lint:eslint",
-    "startTime": "2025-02-14T16:45:49.699Z",
-    "endTime": "2025-02-14T16:45:49.715Z",
-    "inner": false
-  },
-  "tasks": []
-}

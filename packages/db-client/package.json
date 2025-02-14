@@ -32,7 +32,7 @@
     "EventSourcing",
     "Client"
   ],
-  "author": "Event Store Limited",
+  "author": "Kurrent Inc",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/EventStore/Kurrent-Client-NodeJS/issues"
