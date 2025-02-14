@@ -1,0 +1,50 @@
+name: Benchmark
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  benchmark:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .github/files/.nvmrc
+
+      - name: Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Run Benchmarks
+        run: nx run @kurrent/db-client-bridge:benchmark | tee benchmark-output.txt
+
+      - name: Add PR Comment with Results
+        if: github.event_name == 'pull_request'
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            🚀 **Benchmark Results (${{
+              matrix.os }})**
+            ```
+            $(cat benchmark-output.txt)
+            ```
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Save Benchmark Summary
+        run: |
+          echo "## 🚀 Benchmark Results (${{ matrix.os }})" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat benchmark-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

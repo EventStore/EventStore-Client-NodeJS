@@ -68,11 +68,9 @@ describe("instrumentation", () => {
 
         const STREAM = v4();
 
-        const client = new KurrentDBClient(
-          { endpoint: node.uri },
-          { rootCertificate: node.certs.root },
-          { username: "admin", password: "changeit" }
-        );
+          const client = KurrentDBClient.connectionString(
+        node.connectionString()
+      );
 
         const appendOptions: AppendToStreamOptions = {
           expectedRevision: "any",
@@ -94,7 +92,7 @@ describe("instrumentation", () => {
         const spans = memoryExporter.getFinishedSpans();
         const span = spans[0];
 
-        const events = await collect(client.readStream(STREAM));
+        const events = await collect(await client.readStream(STREAM));
         const event = events[0];
 
         expect(events.length).toBe(1);
@@ -124,11 +122,7 @@ describe("instrumentation", () => {
     test("span contains error when append fails", async () => {
       const { KurrentDBClient } = await import("@kurrent/db-client");
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString())
 
       const STREAM_NAME = v4();
 
@@ -179,11 +173,7 @@ describe("instrumentation", () => {
 
       const STREAM = v4();
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString())
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -262,11 +252,7 @@ describe("instrumentation", () => {
 
       const STREAM = v4();
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString())
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -350,11 +336,7 @@ describe("instrumentation", () => {
       const STREAM = v4();
       const GROUP = v4();
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString())
 
       await client.createPersistentSubscriptionToStream(
         STREAM,
@@ -442,11 +424,7 @@ describe("instrumentation", () => {
       const GROUP = v4();
       const STREAM = v4();
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString())
 
       await client.createPersistentSubscriptionToAll(
         GROUP,

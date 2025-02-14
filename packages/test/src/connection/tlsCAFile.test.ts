@@ -24,7 +24,7 @@ describe("tlsCAFile", () => {
   ])("Path can be %s", async (name, tlsCAFile) => {
     const STREAM_NAME = `${name}_stream`;
 
-    const client = KurrentDBClient.connectionString`kurrent://admin:changeit@${
+    const client = KurrentDBClient.connectionString`esdb://admin:changeit@${
       node.uri
     }?tlsCAFile=${tlsCAFile()}`;
 
@@ -33,7 +33,7 @@ describe("tlsCAFile", () => {
       jsonTestEvents()
     );
     const readResult = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 })
+      await client.readStream(STREAM_NAME, { maxCount: 10 })
     );
 
     expect(appendResult).toBeDefined();
@@ -43,7 +43,7 @@ describe("tlsCAFile", () => {
   test("If a file was not found, error should be thrown", () => {
     expect(
       () =>
-        KurrentDBClient.connectionString`kurrent://admin:changeit@${node.uri}?tlsCAFile=/some/path.ca`
+        KurrentDBClient.connectionString`esdb://admin:changeit@${node.uri}?tlsCAFile=/some/path.ca`
     ).toThrowErrorMatchingSnapshot();
   });
 });

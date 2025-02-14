@@ -14,11 +14,7 @@ describe("typed events should compile", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -27,9 +23,9 @@ describe("typed events should compile", () => {
 
   test("jsonEvent", () => {
     type MyFirstEvent = JSONEventType<
-      "my-first-event",
-      { hello: string },
-      { meta: string }
+        "my-first-event",
+        { hello: string },
+        { meta: string }
     >;
 
     jsonEvent<MyFirstEvent>({
@@ -39,11 +35,11 @@ describe("typed events should compile", () => {
     });
 
     jsonEvent<MyFirstEvent>(
-      // @ts-expect-error metadata is required in the event type
-      {
-        type: "my-first-event",
-        data: { hello: "hi" },
-      }
+        // @ts-expect-error metadata is required in the event type
+        {
+          type: "my-first-event",
+          data: { hello: "hi" },
+        }
     );
 
     jsonEvent<MyFirstEvent>({
@@ -97,11 +93,11 @@ describe("typed events should compile", () => {
     });
 
     binaryEvent<MySecondEvent>(
-      // @ts-expect-error metadata is required in the event type
-      {
-        type: "my-second-event",
-        data: new Uint8Array(),
-      }
+        // @ts-expect-error metadata is required in the event type
+        {
+          type: "my-second-event",
+          data: new Uint8Array(),
+        }
     );
 
     binaryEvent<MySecondEvent>({
@@ -151,15 +147,15 @@ describe("typed events should compile", () => {
     // set up event types
 
     type MyEvent = JSONEventType<
-      "my-event",
-      { hello: string },
-      { meta: string }
+        "my-event",
+        { hello: string },
+        { meta: string }
     >;
 
     type MyOtherEvent = JSONEventType<
-      "my-other-event",
-      { hi: string },
-      { metadata: string }
+        "my-other-event",
+        { hi: string },
+        { metadata: string }
     >;
 
     type KnownEvents = MyEvent | MyOtherEvent;
@@ -178,9 +174,12 @@ describe("typed events should compile", () => {
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);
 
-    for await (const { event } of client.readStream<KnownEvents>(STREAM_NAME, {
-      maxCount: 1,
-    })) {
+    for await (const { event } of await client.readStream<KnownEvents>(
+        STREAM_NAME,
+        {
+          maxCount: 1,
+        }
+    )) {
       switch (event?.type) {
         case "my-event":
           // `hello` exists on the data of `my-event` so we can access it deirectly
@@ -200,9 +199,9 @@ describe("typed events should compile", () => {
     // set up event types
 
     type MyGreatEvent = JSONEventType<
-      "my-great-event",
-      { yay: true; reason: string },
-      { feels: string }
+        "my-great-event",
+        { yay: true; reason: string },
+        { feels: string }
     >;
 
     enum WhatWentWrong {
@@ -211,9 +210,9 @@ describe("typed events should compile", () => {
     }
 
     type MyNotSoGreatEvent = JSONEventType<
-      "my-not-so-great-event",
-      { ohno: WhatWentWrong },
-      { feels: string }
+        "my-not-so-great-event",
+        { ohno: WhatWentWrong },
+        { feels: string }
     >;
 
     type KnownEvents = MyGreatEvent | MyNotSoGreatEvent;
@@ -233,7 +232,7 @@ describe("typed events should compile", () => {
     await client.appendToStream(STREAM_NAME, [event1, event2]);
 
     for await (const { event } of client.subscribeToStream<KnownEvents>(
-      STREAM_NAME
+        STREAM_NAME
     )) {
       switch (event?.type) {
         case "my-great-event":
@@ -246,7 +245,7 @@ describe("typed events should compile", () => {
           //  jest infers this type as being `WhatWentWrong` so we can see that enum types work
           expect(event.data.ohno).not.toBe(WhatWentWrong["kinda-bad-stuff"]);
           break;
-        // @ts-expect-error this type doesnt exist
+          // @ts-expect-error this type doesnt exist
         case "my-other-event":
           // event is never
           expect(event).not.toBeDefined();
@@ -265,9 +264,9 @@ describe("typed events should compile", () => {
     // set up event types
 
     type MyGreatEvent = JSONEventType<
-      "my-great-event",
-      { yay: true; reason: string },
-      { feels: string }
+        "my-great-event",
+        { yay: true; reason: string },
+        { feels: string }
     >;
 
     enum WhatWentWrong {
@@ -276,9 +275,9 @@ describe("typed events should compile", () => {
     }
 
     type MyNotSoGreatEvent = JSONEventType<
-      "my-not-so-great-event",
-      { ohno: WhatWentWrong },
-      { feels: string }
+        "my-not-so-great-event",
+        { ohno: WhatWentWrong },
+        { feels: string }
     >;
 
     type KnownEvents = MyGreatEvent | MyNotSoGreatEvent;
@@ -296,9 +295,9 @@ describe("typed events should compile", () => {
     });
 
     await client.createPersistentSubscriptionToStream(
-      STREAM_NAME,
-      GROUP_NAME,
-      persistentSubscriptionToStreamSettingsFromDefaults()
+        STREAM_NAME,
+        GROUP_NAME,
+        persistentSubscriptionToStreamSettingsFromDefaults()
     );
 
     await client.appendToStream(STREAM_NAME, [event1, event2]);
@@ -306,8 +305,8 @@ describe("typed events should compile", () => {
     for await (const {
       event,
     } of client.subscribeToPersistentSubscriptionToStream<KnownEvents>(
-      STREAM_NAME,
-      GROUP_NAME
+        STREAM_NAME,
+        GROUP_NAME
     )) {
       switch (event?.type) {
         case "my-great-event":
@@ -320,7 +319,7 @@ describe("typed events should compile", () => {
           //  jest infers this type as being `WhatWentWrong` so we can see that enum types work
           expect(event.data.ohno).not.toBe(WhatWentWrong["kinda-bad-stuff"]);
           break;
-        // @ts-expect-error this type doesnt exist
+          // @ts-expect-error this type doesnt exist
         case "my-other-event":
           // event is never
           expect(event).not.toBeDefined();

@@ -28,13 +28,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -76,7 +70,7 @@ describe("getPersistentSubscriptionToAllInfo", () => {
       expect(info.connections).toHaveLength(0);
 
       let position!: Position;
-      for await (const { event } of client.readAll({ maxCount: 60 })) {
+      for await (const { event } of await client.readAll({ maxCount: 60 })) {
         if (!event) continue;
         position = event.position;
       }

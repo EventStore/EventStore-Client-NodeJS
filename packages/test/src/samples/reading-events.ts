@@ -24,11 +24,7 @@ describe("[sample] reading-events", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn();
@@ -41,7 +37,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-stream", async () => {
     // region read-from-stream
-    const events = client.readStream<SomeEvent>("some-stream", {
+    const events = await client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: START,
       maxCount: 10,
@@ -57,7 +53,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-stream-position", async () => {
     // region read-from-stream-position
-    const events = client.readStream<SomeEvent>("some-stream", {
+    const events = await client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: BigInt(10),
       maxCount: 20,
@@ -74,7 +70,7 @@ describe("[sample] reading-events", () => {
   test("read-from-stream-position-check", async () => {
     // region checking-for-stream-presence
 
-    const events = client.readStream<SomeEvent>("some-stream", {
+    const events = await client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: BigInt(10),
       maxCount: 20,
@@ -102,7 +98,7 @@ describe("[sample] reading-events", () => {
       password: "changeit",
     };
 
-    const events = client.readStream<SomeEvent>("some-stream", {
+    const events = await client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: START,
       credentials,
@@ -117,7 +113,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-stream-backwards", async () => {
     // region reading-backwards
-    const events = client.readStream<SomeEvent>("some-stream", {
+    const events = await client.readStream<SomeEvent>("some-stream", {
       direction: BACKWARDS,
       fromRevision: END,
       maxCount: 10,
@@ -131,7 +127,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-all-stream", async () => {
     // region read-from-all-stream
-    const events = client.readAll({
+    const events = await client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       maxCount: 10,
@@ -147,7 +143,7 @@ describe("[sample] reading-events", () => {
 
   test("ignore-system-events", async () => {
     // region ignore-system-events
-    const events = client.readAll({
+    const events = await client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       maxCount: 10,
@@ -165,7 +161,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-all-stream-backwards", async () => {
     // region read-from-all-stream-backwards
-    const events = client.readAll({
+    const events = await client.readAll({
       direction: BACKWARDS,
       fromPosition: END,
       maxCount: 10,
@@ -188,7 +184,7 @@ describe("[sample] reading-events", () => {
       password: "changeit",
     };
 
-    const events = client.readAll({
+    const events = await client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       credentials,
@@ -203,7 +199,7 @@ describe("[sample] reading-events", () => {
 
   test("filter-out-system-events", async () => {
     // region filter-out-system-events
-    const events = client.readAll({
+    const events = await client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       maxCount: 10,
@@ -220,7 +216,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-all-stream-resolving-link-tos", async () => {
     // region read-from-all-stream-resolving-link-Tos
-    const events = client.readAll({
+    const events = await client.readAll({
       direction: BACKWARDS,
       fromPosition: END,
       resolveLinkTos: true,

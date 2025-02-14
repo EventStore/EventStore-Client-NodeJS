@@ -12,11 +12,7 @@ describe("encoding", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -37,7 +33,7 @@ describe("encoding", () => {
 
     let resolvedEvent!: ResolvedEvent;
 
-    for await (const event of client.readStream(STREAM_NAME, {
+    for await (const event of await client.readStream(STREAM_NAME, {
       maxCount: 1,
       fromRevision: START,
     })) {
@@ -65,7 +61,7 @@ describe("encoding", () => {
 
     let resolvedEvent!: ResolvedEvent;
 
-    for await (const event of client.readStream(STREAM_NAME, {
+    for await (const event of await client.readStream(STREAM_NAME, {
       maxCount: 1,
       fromRevision: START,
     })) {

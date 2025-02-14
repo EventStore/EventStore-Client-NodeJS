@@ -14,17 +14,15 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const client = KurrentDBClient.connectionString(
+        node.connectionString()
       );
       await expect(
-        collect(client.readAll({ maxCount: 10 }))
+        collect(await client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
       await expect(
         collect(
-          client.readAll({
+          await client.readAll({
             maxCount: 10,
             credentials: { username: "AzureDiamond", password: "hunter2" },
           })
@@ -33,17 +31,21 @@ describe("defaultCredentials", () => {
     });
 
     test("good override", async () => {
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "AzureDiamond", password: "hunter2" }
+      const client = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          defaultUserCredentials: {
+            username: "AzureDiamond",
+            password: "hunter2",
+          },
+        })
       );
+
       await expect(
-        collect(client.readAll({ maxCount: 10 }))
+        collect(await client.readAll({ maxCount: 10 }))
       ).rejects.toThrowError(AccessDeniedError);
       await expect(
         collect(
-          client.readAll({
+          await client.readAll({
             maxCount: 10,
             credentials: { username: "admin", password: "changeit" },
           })

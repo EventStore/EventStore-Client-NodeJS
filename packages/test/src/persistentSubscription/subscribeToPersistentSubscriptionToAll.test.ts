@@ -44,11 +44,7 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new KurrentDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(cluster.connectionString());
   });
 
   afterAll(async () => {
@@ -644,13 +640,10 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
 
     test("should throw on follower node", async () => {
       // Create connection to a follower node
-      const followerClient = new KurrentDBClient(
-        {
-          endpoints: cluster.endpoints,
+      const followerClient = KurrentDBClient.connectionString(
+        cluster.connectionStringWithOverrides({
           nodePreference: "follower",
-        },
-        { rootCertificate: cluster.certs.root },
-        { username: "admin", password: "changeit" }
+        })
       );
 
       const STREAM_NAME = "follower_node_test";
@@ -677,12 +670,10 @@ describe("subscribeToPersistentSubscriptionToAll", () => {
           // Our command is good, but must be executed on the leader
           if (error instanceof NotLeaderError) {
             // Create new client connected to the reported leader node
-            const leaderClient = new KurrentDBClient(
-              {
-                endpoint: error.leader,
-              },
-              { rootCertificate: cluster.certs.root },
-              { username: "admin", password: "changeit" }
+            const leaderClient = KurrentDBClient.connectionString(
+              cluster.connectionStringWithOverrides({
+                endpoints: [error.leader],
+              })
             );
 
             // try again with new connection

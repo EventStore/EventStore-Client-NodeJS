@@ -19,15 +19,10 @@ describe("reconnect", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new KurrentDBClient(
-      {
-        endpoints: cluster.endpoints,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
+    client = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
         defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
+      })
     );
   });
 
@@ -47,14 +42,14 @@ describe("reconnect", () => {
 
     // read the stream successfully
     const firstReadStream = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 })
+      await client.readStream(STREAM_NAME, { maxCount: 10 })
     );
     expect(firstReadStream.length).toBe(1);
     const firstEvent = firstReadStream[0].event;
     expect(firstEvent?.data).toStrictEqual({ message: "test" });
     expect(firstEvent?.type).toBe("first-append");
 
-    // make successful subscription to stream
+    // make successfull subscription to stream
     const firstCreateSubscription =
       await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
@@ -67,8 +62,8 @@ describe("reconnect", () => {
     const firstDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(firstDeleteStream).toBeDefined();
     await expect(
-      collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
-    ).rejects.toThrow(StreamNotFoundError);
+      collect(await client.readStream(STREAM_NAME, { maxCount: 10 }))
+    ).rejects.toThrowError(StreamNotFoundError);
 
     // Kill all nodes
     for (const endpoint of cluster.endpoints) {
@@ -85,17 +80,19 @@ describe("reconnect", () => {
         // batch append triggers reconnect as soon as stream drops, so we need to force regular append
         { credentials: { username: "admin", password: "changeit" } }
       )
-    ).rejects.toThrow(UnavailableError);
+    ).rejects.toThrowError(UnavailableError);
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of client.readStream(STREAM_NAME, { maxCount: 10 })) {
+      for await (const e of await client.readStream(STREAM_NAME, {
+        maxCount: 10,
+      })) {
         count++;
       }
     }).rejects.toThrowErrorMatchingInlineSnapshot(
       '"Failed to discover after 10 attempts."'
     );
-    // create subscription
+    // create subsctiption
     await expect(
       client.createPersistentSubscriptionToStream(
         STREAM_NAME,
@@ -127,13 +124,15 @@ describe("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of client.readStream(STREAM_NAME, { maxCount: 10 })) {
+      for await (const e of await client.readStream(STREAM_NAME, {
+        maxCount: 10,
+      })) {
         count++;
       }
     }).rejects.toThrowErrorMatchingInlineSnapshot(
       '"Failed to discover after 10 attempts."'
     );
-    // create subscription
+    // create subsctiption
     await expect(
       client.createPersistentSubscriptionToStream(
         STREAM_NAME,
@@ -165,25 +164,25 @@ describe("reconnect", () => {
     expect(reconnectedAppend).toBeDefined();
 
     const reconnectReadStream = await collect(
-      client.readStream(STREAM_NAME, { maxCount: 10 })
+      await client.readStream(STREAM_NAME, { maxCount: 10 })
     );
     expect(reconnectReadStream.length).toBe(1);
     const reconnectEvent = reconnectReadStream[0].event;
     expect(reconnectEvent?.data).toStrictEqual({ message: "test" });
     expect(reconnectEvent?.type).toBe("reconnect-append");
 
-    const reconnectedCreateSubscription =
+    const reconndectedCreateSubscription =
       await client.createPersistentSubscriptionToStream(
         STREAM_NAME,
         "fourth-test-group",
         persistentSubscriptionToStreamSettingsFromDefaults()
       );
-    expect(reconnectedCreateSubscription).toBeUndefined();
+    expect(reconndectedCreateSubscription).toBeUndefined();
 
     const reconnectedDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(reconnectedDeleteStream).toBeDefined();
     await expect(
-      collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
-    ).rejects.toThrow(StreamNotFoundError);
+      collect(await client.readStream(STREAM_NAME, { maxCount: 10 }))
+    ).rejects.toThrowError(StreamNotFoundError);
   });
 });

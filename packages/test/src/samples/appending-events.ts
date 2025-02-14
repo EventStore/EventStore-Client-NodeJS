@@ -17,11 +17,7 @@ describe("[sample] appending-events", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -143,7 +139,7 @@ describe("[sample] appending-events", () => {
       );
 
       // region append-with-concurrency-check
-      const events = client.readStream<SomeEvent>("concurrency-stream", {
+      const events = await client.readStream<SomeEvent>("concurrency-stream", {
         fromRevision: START,
         direction: FORWARDS,
       });

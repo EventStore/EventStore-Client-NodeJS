@@ -13,13 +13,10 @@ describe("Channel", () => {
   });
 
   test("a single client should connect to a single node", async () => {
-    const client = new KurrentDBClient(
-      {
-        endpoints: cluster.endpoints,
+    const client = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
         nodePreference: "random",
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
+      })
     );
 
     /*
@@ -31,7 +28,7 @@ describe("Channel", () => {
     const promises: Promise<unknown>[] = [
       client.appendToStream("stream_1", jsonTestEvents()),
       collect(
-        client.readAll({
+        await client.readAll({
           maxCount: 1,
           fromPosition: "start",
           direction: "forwards",

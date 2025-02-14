@@ -12,11 +12,7 @@ describe("createProjection", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -67,13 +63,13 @@ describe("createProjection", () => {
 
     await delay(500);
 
-    const [emitted] = await collect(client.readStream(EMIT_STREAMNAME));
+    const [emitted] = await collect(await client.readStream(EMIT_STREAMNAME));
 
     expect(emitted).toBeDefined();
     expect(emitted.event?.type).toBe(EMIT_EVENT_TYPE);
 
     try {
-      for await (const e of client.readStream(
+      for await (const e of await client.readStream(
         `$projections-${PROJECTION_NAME}-emittedstreams`
       )) {
         expect(e).toBe("UNREACHABLE");
@@ -110,13 +106,13 @@ describe("createProjection", () => {
 
     await delay(500);
 
-    const [emitted] = await collect(client.readStream(EMIT_STREAMNAME));
+    const [emitted] = await collect(await client.readStream(EMIT_STREAMNAME));
 
     expect(emitted).toBeDefined();
     expect(emitted.event?.type).toBe(EMIT_EVENT_TYPE);
 
     const [emittedStream] = await collect(
-      client.readStream(`$projections-${PROJECTION_NAME}-emittedstreams`)
+      await client.readStream(`$projections-${PROJECTION_NAME}-emittedstreams`)
     );
 
     expect(emittedStream).toBeDefined();

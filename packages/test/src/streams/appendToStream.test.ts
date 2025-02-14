@@ -23,11 +23,7 @@ describe("appendToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -48,11 +44,7 @@ describe("appendToStream", () => {
       const STREAM_NAME = "encode1";
       const KILLER = "CC ‐ 1830";
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.appendToStream(
         STREAM_NAME,
@@ -63,7 +55,7 @@ describe("appendToStream", () => {
       );
 
       let count = 0;
-      for await (const { event } of client.readStream(STREAM_NAME, {
+      for await (const { event } of await client.readStream(STREAM_NAME, {
         maxCount: 1,
       })) {
         expect(event?.data).toStrictEqual(KILLER);
@@ -101,14 +93,14 @@ describe("appendToStream", () => {
       );
 
       const [trueEvent] = await collect(
-        client.readStream(LINK_TO_STREAM_NAME, {
+        await client.readStream(LINK_TO_STREAM_NAME, {
           fromRevision: LINK_REVISION,
           maxCount: 1,
         })
       );
 
       const [linkEvent] = await collect(
-        client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
+        await client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
       );
 
       expect(trueEvent.event).toBeDefined();
@@ -149,9 +141,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             expect(event?.metadata.metaMessage).toMatch(METADATA.metaMessage);
             count++;
@@ -175,9 +170,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             expect(event?.metadata.metaMessage).toMatch(METADATA.metaMessage);
             count++;
@@ -216,9 +214,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -243,9 +244,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -285,9 +289,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -312,9 +319,12 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream<E>(STREAM_NAME, {
-            maxCount: 1,
-          })) {
+          for await (const { event } of await client.readStream<E>(
+            STREAM_NAME,
+            {
+              maxCount: 1,
+            }
+          )) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -341,7 +351,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream(STREAM_NAME, {
+          for await (const { event } of await client.readStream(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeUndefined();
@@ -363,7 +373,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of client.readStream(STREAM_NAME, {
+          for await (const { event } of await client.readStream(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeUndefined();
@@ -558,10 +568,10 @@ describe("appendToStream", () => {
 
   describe("throwOnAppendFailure", () => {
     test("throws on true", async () => {
-      const throwingClient = new KurrentDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: true },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const throwingClient = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: true,
+        })
       );
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
@@ -590,10 +600,10 @@ describe("appendToStream", () => {
     });
 
     test("returns failure result on false", async () => {
-      const nonThrowingClient = new KurrentDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: false },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const nonThrowingClient = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: false,
+        })
       );
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";

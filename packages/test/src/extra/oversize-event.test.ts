@@ -1,47 +1,43 @@
 import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
-  KurrentDBClient,
-  jsonEvent,
-  JSONEventType,
-  RUNNING,
+    KurrentDBClient,
+    jsonEvent,
+    JSONEventType,
+    RUNNING,
 } from "@kurrent/db-client";
 
 describe("oversize events", () => {
-  const node = createTestNode();
+    const node = createTestNode();
 
-  let client!: KurrentDBClient;
+    let client!: KurrentDBClient;
 
-  beforeAll(async () => {
-    await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
-  });
+    beforeAll(async () => {
+        await node.up();
+        client = KurrentDBClient.connectionString(node.connectionString());
+    });
 
-  afterAll(async () => {
-    // await node.openInBrowser(false);
-    await node.down();
-  });
+    afterAll(async () => {
+        // await node.openInBrowser(false);
+        await node.down();
+    });
 
-  test("oversize events", async () => {
-    const STREAM_NAME = "big_event";
-    const TRIGGER = "big_event_trigger";
-    const FINISH_TEST = "big_event_finish_test";
-    const PROJECTION_NAME = "big_event_projection";
-    const doSomething = jest.fn();
+    test("oversize events", async () => {
+        const STREAM_NAME = "big_event";
+        const TRIGGER = "big_event_trigger";
+        const FINISH_TEST = "big_event_finish_test";
+        const PROJECTION_NAME = "big_event_projection";
+        const doSomething = jest.fn();
 
-    const BIG_EVENT = "big_event";
-    const bigData = "r" + "e".repeat(15 * 1024 * 1024);
+        const BIG_EVENT = "big_event";
+        const bigData = "r" + "e".repeat(15 * 1024 * 1024);
 
-    type BigEvent = JSONEventType<
-      typeof BIG_EVENT,
-      { message: string },
-      { message: string }
-    >;
+        type BigEvent = JSONEventType<
+            typeof BIG_EVENT,
+            { message: string },
+            { message: string }
+        >;
 
-    const projection = `
+        const projection = `
     fromStream("${STREAM_NAME}")
       .when({
         $init() {
@@ -53,37 +49,37 @@ describe("oversize events", () => {
       });
 `;
 
-    await client.createProjection(PROJECTION_NAME, projection, {
-      emitEnabled: true,
+        await client.createProjection(PROJECTION_NAME, projection, {
+            emitEnabled: true,
+        });
+
+        // give it a chance to get up and running
+        await delay(1000);
+
+        const state = await client.getProjectionStatus(PROJECTION_NAME);
+        expect(state.projectionStatus).toBe(RUNNING);
+
+        await client.appendToStream(STREAM_NAME, [
+            jsonEvent({ type: TRIGGER, data: "hi" }),
+            ...jsonTestEvents(5),
+            jsonEvent({ type: FINISH_TEST, data: "hi" }),
+        ]);
+
+        // check that the big event hasn't blown it up
+        const state2 = await client.getProjectionStatus(PROJECTION_NAME);
+        expect(state2.projectionStatus).toBe(RUNNING);
+
+        const subscription = client.subscribeToStream<BigEvent>(
+            `${STREAM_NAME}_emit`
+        );
+
+        for await (const { event } of subscription) {
+            if (event?.type !== BIG_EVENT) continue;
+            doSomething(event);
+            expect(event.data.message).toBe(bigData);
+            break;
+        }
+
+        expect(doSomething).toBeCalled();
     });
-
-    // give it a chance to get up and running
-    await delay(1000);
-
-    const state = await client.getProjectionStatus(PROJECTION_NAME);
-    expect(state.projectionStatus).toBe(RUNNING);
-
-    await client.appendToStream(STREAM_NAME, [
-      jsonEvent({ type: TRIGGER, data: "hi" }),
-      ...jsonTestEvents(5),
-      jsonEvent({ type: FINISH_TEST, data: "hi" }),
-    ]);
-
-    // check that the big event hasn't blown it up
-    const state2 = await client.getProjectionStatus(PROJECTION_NAME);
-    expect(state2.projectionStatus).toBe(RUNNING);
-
-    const subscription = client.subscribeToStream<BigEvent>(
-      `${STREAM_NAME}_emit`
-    );
-
-    for await (const { event } of subscription) {
-      if (event?.type !== BIG_EVENT) continue;
-      doSomething(event);
-      expect(event.data.message).toBe(bigData);
-      break;
-    }
-
-    expect(doSomething).toBeCalled();
-  });
 });

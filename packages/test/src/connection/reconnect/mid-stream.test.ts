@@ -10,7 +10,6 @@ import {
   jsonEvent,
   KurrentDBClient,
   CancelledError,
-  UnavailableError,
 } from "@kurrent/db-client";
 
 // This test can take time.
@@ -22,10 +21,8 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new KurrentDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
+    const client = KurrentDBClient.connectionString(
+      cluster.connectionString()
     );
 
     // make successful append of 2000 events to node
@@ -39,7 +36,7 @@ describe("reconnect", () => {
 
     try {
       let i = 0;
-      for await (const event of client.readStream("my_stream")) {
+      for await (const event of await client.readStream("my_stream")) {
         expect(event).toBeDefined();
 
         if (i === 12) {
@@ -53,7 +50,7 @@ describe("reconnect", () => {
 
       expect(i).toBe("unreachable");
     } catch (error) {
-      expect(error).toBeInstanceOf(UnavailableError);
+      expect(error).toBeInstanceOf(CancelledError);
     }
 
     // wait for leader to be ready

@@ -14,7 +14,7 @@ describe("http2 assertion failure", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient({ endpoint: node.uri }, { insecure: true });
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -56,7 +56,7 @@ describe("http2 assertion failure", () => {
 
       while (received.length < 10) await delay(10);
       expect(received.map((e) => e.event?.id)).toStrictEqual(
-        [...priorEvents, ...postEvents].map((e) => e.id)
+          [...priorEvents, ...postEvents].map((e) => e.id)
       );
       await sub.unsubscribe();
     }
