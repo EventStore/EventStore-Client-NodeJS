@@ -4,11 +4,11 @@
   "private": true,
   "description": "KurrentDB Client Tests",
   "scripts": {
-    "build": "pnpm run build:ts",
+    "build": "yarn build:ts",
     "build:ts": "tsc --build",
-    "build:watch": "pnpm run build:ts-watch",
+    "build:watch": "yarn build:ts-watch",
     "build:ts-watch": "tsc --build --watch",
-    "clean": "pnpm run \"/^clean:.*/\"",
+    "clean": "yarn clean:dist && yarn clean:buildinfo && yarn clean:test-instances",
     "clean:dist": "shx rm -rf ./dist",
     "clean:buildinfo": "shx rm -rf *.tsbuildinfo",
     "clean:test-instances": "shx rm -rf ./src/utils/instances",
@@ -33,22 +33,22 @@
     "@kurrent/opentelemetry": "workspace:*"
   },
   "devDependencies": {
-    "@opentelemetry/api": "^1.9.0",
     "@grpc/grpc-js": "^1.12.4",
-    "@opentelemetry/instrumentation": "^0.56.0",
+    "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.51.1",
+    "@opentelemetry/instrumentation": "^0.56.0",
     "@opentelemetry/sdk-trace-node": "^1.30.0",
     "@opentelemetry/semantic-conventions": "^1.28.0",
+    "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.14",
+    "@types/uuid": "^9.0.8",
+    "debug": "^4.4.0",
     "docker-compose": "^0.24.8",
     "dotenv": "^16.4.7",
     "get-port": "^5.1.1",
-    "shx": "^0.3.4",
     "jest": "^27.5.1",
+    "shx": "^0.3.4",
     "ts-jest": "^27.1.5",
-    "@types/uuid": "catalog:",
-    "@types/debug": "catalog:",
-    "debug": "catalog:",
-    "uuid": "catalog:"
+    "uuid": "11.0.3"
   }
 }
