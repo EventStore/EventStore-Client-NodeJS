@@ -15,10 +15,21 @@ crate-type = ["cdylib"]
 [dependencies]
 neon = "1"
 lazy_static = "1"
+serde_json = "1"
+serde = "1"
+
 
 [dependencies.tokio]
 version = "1"
 features = ["full"]
+
+[dependencies.chrono]
+version = "0.4"
+features = ["serde"]
+
+[dependencies.uuid]
+version = "1"
+features = ["serde", "v4"]
 
 [dependencies.eventstore]
 version = "4.0.0"

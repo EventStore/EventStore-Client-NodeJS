@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use chrono::{DateTime, Utc};
 use neon::prelude::*;
 
 use eventstore::{
@@ -12,6 +15,9 @@ use neon::{
         buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue,
     },
 };
+use serde::Serialize;
+use tokio::sync::{Mutex, OnceCell};
+use uuid::Uuid;
 
 use crate::RUNTIME;
 
@@ -250,92 +256,130 @@ async fn read_process(mut recv: tokio::sync::mpsc::UnboundedReceiver<Msg>, mut s
 }
 
 fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> JsResult<JsPromise> {
-    let promise = cx
-        .task(move || {
-            let result = match options {
-                Options::Regular {
-                    stream_name,
-                    options,
-                } => RUNTIME.block_on(client.read_stream(stream_name.as_str(), &options)),
+    let channel = cx.channel();
+    let (deffered, promise) = cx.promise();
+    RUNTIME.spawn(async move {
+        let result = match options {
+            Options::Regular {
+                stream_name,
+                options,
+            } => client.read_stream(stream_name.as_str(), &options).await,
 
-                Options::All(options) => RUNTIME.block_on(client.read_all(&options)),
-            };
+            Options::All(options) => client.read_all(&options).await,
+        };
 
-            result
-        })
-        .promise(|mut cx, result| match result {
+        deffered.settle_with(&channel, |mut cx| match result {
             Err(e) => cx.throw_error(e.to_string()),
             Ok(stream) => wrap_read_stream(&mut cx, stream),
         });
+    });
 
     Ok(promise)
 }
 
+#[derive(Serialize)]
+struct ValueItem<'a> {
+    value: Option<JsResolvedEvent<'a>>,
+    done: bool,
+}
+
+#[derive(Serialize)]
+struct JsResolvedEvent<'a> {
+    event: Option<JsRecordedEvent<'a>>,
+    link: Option<JsRecordedEvent<'a>>,
+    commit_position: Option<u64>,
+}
+
+#[derive(Serialize)]
+struct JsRecordedEvent<'a> {
+    stream_id: &'a str,
+    id: Uuid,
+    r#type: &'a str,
+    is_json: bool,
+    revision: u64,
+    created: DateTime<Utc>,
+    data: &'a [u8],
+    metadata: &'a [u8],
+    position: JsPosition,
+}
+
+#[derive(Serialize)]
+struct JsPosition {
+    commit: u64,
+    prepare: u64,
+}
+
+fn js_resolve_event(event: &ResolvedEvent) -> JsResolvedEvent {
+    let commit_position = event.commit_position;
+    let link = event.link.as_ref().map(js_recorded_event);
+    let event = event.event.as_ref().map(js_recorded_event);
+
+    JsResolvedEvent {
+        event,
+        link,
+        commit_position,
+    }
+}
+
+fn js_recorded_event(event: &RecordedEvent) -> JsRecordedEvent {
+    JsRecordedEvent {
+        stream_id: event.stream_id.as_str(),
+        id: event.id,
+        r#type: event.event_type.as_str(),
+        is_json: event.is_json,
+        revision: event.revision,
+        created: event.created,
+        data: &event.data,
+        metadata: &event.custom_metadata,
+        position: JsPosition {
+            commit: event.position.commit,
+            prepare: event.position.prepare,
+        },
+    }
+}
+
 pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
     let sender = cx.argument::<JsBox<ReadStreamWrapper>>(0)?.inner.clone();
-    let promise = cx
-        .task(move || {
-            let (req, result) = tokio::sync::oneshot::channel();
-            let _ = sender.send(req);
-            RUNTIME.block_on(result).expect("should never fail")
-        })
-        .promise(|mut cx, result| match result {
+    let (deferred, promise) = cx.promise();
+    let channel = cx.channel();
+
+    RUNTIME.spawn(async move {
+        let mut stream = sender.lock().await;
+        let result = stream.next().await;
+
+        deferred.settle_with(&channel, |mut cx| match result {
             Err(e) => cx.throw_error(e.to_string()),
-            Ok(result) => {
-                let item = cx.empty_object();
-                let mut done = true;
+            Ok(event) => {
+                let result = match event {
+                    Some(event) => serde_json::to_vec(&ValueItem {
+                        value: Some(js_resolve_event(&event)),
+                        done: false,
+                    })
+                    .unwrap(),
+                    None => serde_json::to_vec(&ValueItem {
+                        value: None,
+                        done: true,
+                    })
+                    .unwrap(),
+                };
 
-                if let Some(mut event) = result {
-                    let value = cx.empty_object();
-                    done = false;
-
-                    if let Some(event) = event.event.take() {
-                        let event = recorded_event(&mut cx, event)?;
-                        value.set(&mut cx, "event", event)?;
-                    } else {
-                        let null = cx.null();
-                        value.set(&mut cx, "event", null)?;
-                    }
-
-                    if let Some(event) = event.link.take() {
-                        let link = recorded_event(&mut cx, event)?;
-                        value.set(&mut cx, "link", link)?;
-                    } else {
-                        let null = cx.null();
-                        value.set(&mut cx, "link", null)?;
-                    }
-
-                    if let Some(commit) = event.commit_position.take() {
-                        let commit = JsBigInt::from_u64(&mut cx, commit);
-                        value.set(&mut cx, "commitPosition", commit)?;
-                    } else {
-                        let null = cx.null();
-                        value.set(&mut cx, "commitPosition", null)?;
-                    }
-
-                    item.set(&mut cx, "value", value)?;
-                } else {
-                    let undefined = cx.undefined();
-                    item.set(&mut cx, "value", undefined)?;
-                }
-
-                let done = cx.boolean(done);
-                item.set(&mut cx, "done", done)?;
-
-                Ok(item)
+                JsArrayBuffer::from_slice(&mut cx, result.as_slice())
             }
         });
+    });
 
     Ok(promise)
 }
 
 struct ReadStreamWrapper {
-    inner: tokio::sync::mpsc::UnboundedSender<Msg>,
+    inner: Arc<Mutex<ReadStream>>,
 }
 
 impl ReadStreamWrapper {
-    fn new(inner: tokio::sync::mpsc::UnboundedSender<Msg>) -> Self {
-        Self { inner }
+    fn new(inner: ReadStream) -> Self {
+        Self {
+            inner: Arc::new(Mutex::new(inner)),
+        }
     }
 }
 
@@ -345,9 +389,7 @@ fn wrap_read_stream<'a, C>(cx: &mut C, stream: ReadStream) -> JsResult<'a, JsBox
 where
     C: Context<'a>,
 {
-    let (sender, recv) = tokio::sync::mpsc::unbounded_channel();
-    RUNTIME.spawn(read_process(recv, stream));
-    Ok(JsBox::new(cx, ReadStreamWrapper::new(sender)))
+    Ok(JsBox::new(cx, ReadStreamWrapper::new(stream)))
 }
 
 // fn convert_read_internal_error<'a, C>(

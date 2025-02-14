@@ -1,8 +1,8 @@
-const esdb = require("../lib");
+const esdb = require("..");
 const {Bench, nToMs, hrtimeNow} = require("tinybench");
 
 (async () => {
-    const streamName = "my_stream_10_000";
+    const streamName = "my_stream_2_000_000";
     let client = null;
 
     const bench = new Bench({
@@ -25,7 +25,7 @@ const {Bench, nToMs, hrtimeNow} = require("tinybench");
 
     bench
         .add('readStream', async () => {
-            const stream = await client.readStream(streamName);
+            const stream = await client.readStream(streamName, {maxCount: 10_000n});
 
             for await (const resolved of stream)
                 i += 1
@@ -34,12 +34,14 @@ const {Bench, nToMs, hrtimeNow} = require("tinybench");
     await bench.run()
 
     console.log(bench.name)
-    console.table(
-        bench.tasks.map(({name, result}) => ({
-            "Task Name": name,
-            "Period (ms)": result.period,
-            "Average Time (ms)": result.mean,
-            "Samples": result.samples.length,
-        }))
-    );
+    console.log(bench.table());
+    // console.table(bench.table());
+    // console.table(
+    //     bench.tasks.map(({name, result}) => ({
+    //         "Task Name": name,
+    //         "Period (ms)": result.period,
+    //         "Average Time (ms)": result.mean,
+    //         "Samples": result.samples.length,
+    //     }))
+    // );
 })()
