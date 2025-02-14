@@ -1,13 +1,12 @@
-const esdb = require("..");
-const {Bench, nToMs, hrtimeNow} = require("tinybench");
+const esdb = require("../lib");
+const {Bench, hrtimeNow} = require("tinybench");
 
 (async () => {
-    const streamName = "my_stream_2_000_000";
+    const streamName = "my_stream_10_000";
     let client = null;
 
     const bench = new Bench({
         name: 'EventStoreDB client bridge',
-        time: 100,
         now: hrtimeNow,
         warmupIterations: 1,
         iterations: 20,
@@ -28,20 +27,19 @@ const {Bench, nToMs, hrtimeNow} = require("tinybench");
             const stream = await client.readStream(streamName, {maxCount: 10_000n});
 
             for await (const resolved of stream)
-                i += 1
+                i += resolved.commitPosition;
         })
 
     await bench.run()
 
     console.log(bench.name)
-    console.table(bench.table());
-    // console.table(bench.table());
-    // console.table(
-    //     bench.tasks.map(({name, result}) => ({
-    //         "Task Name": name,
-    //         "Period (ms)": result.period,
-    //         "Average Time (ms)": result.mean,
-    //         "Samples": result.samples.length,
-    //     }))
-    // );
+    console.table(
+        bench.tasks.map(({name, result}) => ({
+            "Task Name": name,
+            "Period (ms)": result.period,
+            "Average Time (ms)": result.mean,
+            "Samples": result.samples.length,
+        }))
+    );
 })()
+

@@ -3,13 +3,14 @@ use std::sync::Arc;
 use chrono::{DateTime, Utc};
 use neon::prelude::*;
 
+use crate::error::{create_js_error, ErrorKind};
+use crate::RUNTIME;
 use eventstore::{
     Client, ClientSettings, Credentials, Position, ReadAllOptions, ReadStream, ReadStreamOptions,
     RecordedEvent, ResolvedEvent, StreamPosition,
 };
 use neon::{
-    object::Object,
-    prelude::{Context, FunctionContext},
+    prelude::FunctionContext,
     result::JsResult,
     types::{JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue},
 };
@@ -20,18 +21,22 @@ use tokio::sync::{
 };
 use uuid::Uuid;
 
-use crate::RUNTIME;
-
 pub fn create(mut cx: FunctionContext) -> JsResult<JsObject> {
     let conn_string = cx.argument::<JsString>(0)?.value(&mut cx);
 
     let setts = match conn_string.parse::<ClientSettings>() {
-        Err(e) => cx.throw_error(e.to_string())?,
+        Err(e) => {
+            let js_error = create_js_error(&mut cx, e)?;
+            cx.throw(js_error)?
+        }
         Ok(s) => s,
     };
 
     let client = match Client::with_runtime_handle(RUNTIME.handle().clone(), setts) {
-        Err(e) => cx.throw_error(e.to_string())?,
+        Err(e) => {
+            let js_error = create_js_error(&mut cx, e)?;
+            cx.throw(js_error)?
+        }
         Ok(c) => c,
     };
 
@@ -239,7 +244,7 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
 
 fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> JsResult<JsPromise> {
     let channel = cx.channel();
-    let (deffered, promise) = cx.promise();
+    let (deferred, promise) = cx.promise();
     RUNTIME.spawn(async move {
         let result = match options {
             Options::Regular {
@@ -250,8 +255,11 @@ fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> J
             Options::All(options) => client.read_all(&options).await,
         };
 
-        deffered.settle_with(&channel, |mut cx| match result {
-            Err(e) => cx.throw_error(e.to_string()),
+        deferred.settle_with(&channel, |mut cx| match result {
+            Err(e) => {
+                let js_error = create_js_error(&mut cx, e)?;
+                cx.throw(js_error)
+            }
             Ok(stream) => read_stream_ref(&mut cx, stream),
         });
     });
@@ -406,7 +414,9 @@ pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
         let (req, receiver) = oneshot::channel();
         if sender.send(req).await.is_err() {
             let _ = deferred.settle_with(&channel, |mut cx| {
-                cx.throw_error::<_, Handle<JsPromise>>("internal client failure when sending the request")
+                cx.throw_error::<_, Handle<JsPromise>>(
+                    "internal client failure when sending the request",
+                )
             });
             return;
         }
@@ -415,14 +425,19 @@ pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
             Ok(r) => r,
             Err(_) => {
                 let _ = deferred.settle_with(&channel, |mut cx| {
-                    cx.throw_error::<_, Handle<JsPromise>>("internal client failure when waiting for the response")
+                    cx.throw_error::<_, Handle<JsPromise>>(
+                        "internal client failure when waiting for the response",
+                    )
                 });
                 return;
             }
         };
 
         deferred.settle_with(&channel, |mut cx| match result {
-            Err(e) => cx.throw_error(e.to_string()),
+            Err(e) => {
+                let js_error = create_js_error(&mut cx, e)?;
+                cx.throw(js_error)
+            }
             Ok(events) => {
                 let result = match events {
                     Some(events) => {
@@ -481,7 +496,10 @@ pub fn read_stream_next_mutex(mut cx: FunctionContext) -> JsResult<JsPromise> {
         };
 
         deferred.settle_with(&channel, |mut cx| match result {
-            Err(e) => cx.throw_error(e.to_string()),
+            Err(e) => {
+                let js_error = create_js_error(&mut cx, e)?;
+                cx.throw(js_error)
+            }
             Ok(events) => {
                 let result = match events {
                     Some(events) => {
@@ -526,7 +544,9 @@ struct ReadStreamRef {
 
 impl ReadStreamRef {
     fn new(inner: ReadStream) -> Self {
-        Self { inner: Arc::new(Mutex::new(inner)) }
+        Self {
+            inner: Arc::new(Mutex::new(inner)),
+        }
     }
 }
 
@@ -547,58 +567,3 @@ where
 {
     Ok(JsBox::new(cx, ReadStreamRef::new(stream)))
 }
-
-// fn convert_read_internal_error<'a, C>(
-//     cx: &mut C,
-//     e: eventstore::Error,
-// ) -> NeonResult<eventstore::ReadStream>
-// where
-//     C: Context<'a>,
-// {
-//     create_read_internal_error(cx, e)
-// }
-
-// fn create_read_internal_error<'a, C>(
-//     cx: &mut C,
-//     e: eventstore::Error,
-// ) -> NeonResult<eventstore::ReadStream>
-// where
-//     C: Context<'a>,
-// {
-//     let js_err = JsError::type_error(cx, e.to_string())?;
-//     let variant_name = format!("{:?}", e);
-//     let js_str = cx.string(variant_name);
-//     js_err.set(cx, "name", js_str)?;
-//     cx.throw(js_err)?
-// }
-
-// fn convert_iterator_error<'a, C>(
-//     cx: &mut C,
-//     e: eventstore::Error,
-// ) -> NeonResult<Option<eventstore::ResolvedEvent>>
-// where
-//     C: Context<'a>,
-// {
-//     match e {
-//         eventstore::Error::ResourceNotFound => {
-//             // todo: input stream name
-//             create_iterator_error(cx, e)
-//         }
-//         e => create_iterator_error(cx, e),
-//     }
-// }
-
-// fn create_iterator_error<'a, C>(
-//     cx: &mut C,
-//     e: eventstore::Error,
-// ) -> NeonResult<Option<eventstore::ResolvedEvent>>
-// where
-//     C: Context<'a>,
-// {
-//     let js_err = JsError::type_error(cx, e.to_string())?;
-//     let variant_name = format!("{:?}", e);
-//     let js_str = cx.string(variant_name);
-//     js_err.set(cx, "name", js_str)?;
-//     cx.throw(js_err)?;
-//     Ok(None)
-// }

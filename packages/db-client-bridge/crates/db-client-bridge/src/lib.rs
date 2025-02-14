@@ -2,6 +2,7 @@ use neon::prelude::*;
 use tokio::runtime::Runtime;
 
 mod client;
+mod error;
 
 lazy_static::lazy_static! {
     static ref RUNTIME: Runtime = {
