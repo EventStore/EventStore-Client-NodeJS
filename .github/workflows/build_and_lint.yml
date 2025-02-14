@@ -15,18 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.0
+      - name: Corepack
+        run: corepack enable
 
       - name: Install
-        run: pnpm install
+        run: yarn
 
       - name: Linting
-        run: pnpm run lint
+        run: yarn lint
 
       - name: Build on Ubuntu
-        run: pnpm run build
+        run: yarn build
 
       - name: All generated code is commited
         run: |
@@ -44,10 +43,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.0
-
       - uses: actions/setup-node@v4
         with:
           node-version-file: .github/files/.nvmrc
@@ -55,11 +50,14 @@ jobs:
       - name: NodeJS version
         run: node -v
 
-      - name: PNPM version
-        run: pnpm --version
+      - name: Corepack
+        run: corepack enable
+
+      - name: Yarn version
+        run: yarn --version
 
       - name: Install
-        run: pnpm install
+        run: yarn
 
       - name: Build
-        run: pnpm run build
+        run: yarn build

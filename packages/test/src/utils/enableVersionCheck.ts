@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // @ts-ignore
-import NodeEnvironment = require("jest-environment-node");
+import NodeEnvironment from "jest-environment-node";
 
 import { Cluster } from "./Cluster";
 import { KurrentDBClient } from "@kurrent/db-client/dist/index";
 
 async function extractVersion(this: KurrentDBClient) {
-  const capabilities = await this.capabilities;
-  return capabilities;
+  return await this.capabilities;
 }
 
 const checkCapabilities = async () => {

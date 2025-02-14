@@ -23,14 +23,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4.0.0
-        with:
-          version: 9.15.0
+      - name: Corepack
+        run: corepack enable
 
-      - run: pnpm install
+      - run: yarn
 
       - name: Build
-        run: pnpm run build
+        run: yarn build
 
       - name: Cache build artifacts
         uses: actions/cache/save@v4.0.0
@@ -39,9 +38,9 @@ jobs:
           key: ${{ github.sha }}-release:build
 
       - name: Dry-run publishing
-        run: pnpm publish -r --no-git-checks --dry-run
+        run: yarn publish -r --no-git-checks --dry-run
 
       - name: Publish to NPM
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          pnpm publish -r --publish-branch ${{github.event.pull_request.base.ref}} --access public --no-git-checks
+          yarn npm publish -r --publish-branch ${{github.event.pull_request.base.ref}} --access public --no-git-checks

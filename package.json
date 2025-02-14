@@ -13,7 +13,7 @@
     "prettier:fix": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\"",
     "clean": "nx run-many --target=clean",
     "prepublishOnly": "yarn clean && yarn build && yarn test",
-    "test": "nx run @eventstore/test:test"
+    "test": "nx run test:test"
   },
   "author": "Event Store Limited",
   "license": "Apache-2.0",

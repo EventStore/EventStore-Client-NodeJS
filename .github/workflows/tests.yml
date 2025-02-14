@@ -6,11 +6,6 @@ on:
       version:
         required: true
         type: string
-    secrets:
-      eventstore_cloud_id:
-        required: false
-      tailscale_auth:
-        required: false
 
 jobs:
   build-and-test:
@@ -21,11 +16,9 @@ jobs:
         group:
           - name: samples
             path: ./src/samples
-            tailscale: true
 
           - name: connection
             path: ./src/connection
-            tailscale: true
 
           - name: extra
             path: ./src/extra
@@ -41,45 +34,27 @@ jobs:
 
           - name: opentelemetry
             path: ./src/opentelemetry
-    env:
-      # GitHub only passes secrets to the main repo, so we need to skip some things if they are unavailable
-      SECRETS_AVAILABLE: ${{ secrets.eventstore_cloud_id != null }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Connect to tailscale
-        if: ${{ matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}
-        run: |
-          curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.gpg | sudo apt-key add -
-          curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/eoan.list | sudo tee /etc/apt/sources.list.d/tailscale.list
-          sudo apt-get update
-          sudo apt-get install tailscale
-          sudo tailscale up --authkey ${{ secrets.tailscale_auth }} --hostname "node-client-ci-${{ inputs.version }}-$(date +'%Y-%m-%d-%H-%M-%S')" --advertise-tags=tag:ci --accept-routes
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.0
 
       - uses: actions/setup-node@v4
         with:
           node-version-file: .github/files/.nvmrc
-          cache: 'pnpm'
 
       - name: NodeJS version
         run: node -v
 
+      - name: Corepack
+        run: corepack enable
+
       - name: Install
-        run: pnpm install
+        run: yarn
 
       - name: Build 
-        run: pnpm run build
+        run: yarn build
 
       - name: Run Tests
-        run: pnpm run test ${{ matrix.group.path }} --ci --run-in-band --forceExit
+        run: yarn test ${{ matrix.group.path }} --ci --run-in-band --forceExit
         env:
           KURRENT_IMAGE: eventstore-ce:${{ inputs.version }}
-          EVENTSTORE_CLOUD_ID: ${{ secrets.eventstore_cloud_id }}
-
-      - name: Disconnect from tailscale
-        if: ${{ always() && matrix.group.tailscale && env.SECRETS_AVAILABLE == 'true' }}
-        run: sudo tailscale down
