@@ -11,12 +11,13 @@ use neon::{
     object::Object,
     prelude::{Context, FunctionContext},
     result::JsResult,
-    types::{
-        buffer::TypedArray, JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue,
-    },
+    types::{JsBigInt, JsBoolean, JsFunction, JsObject, JsPromise, JsString, JsValue},
 };
 use serde::Serialize;
-use tokio::sync::{Mutex, OnceCell};
+use tokio::sync::{
+    mpsc::{Receiver, Sender},
+    oneshot, Mutex,
+};
 use uuid::Uuid;
 
 use crate::RUNTIME;
@@ -236,25 +237,6 @@ pub fn read_all(client: Client, mut cx: FunctionContext) -> JsResult<JsPromise> 
     read_internal(client, Options::All(options), cx)
 }
 
-type Msg = tokio::sync::oneshot::Sender<eventstore::Result<Option<ResolvedEvent>>>;
-
-async fn read_process(mut recv: tokio::sync::mpsc::UnboundedReceiver<Msg>, mut stream: ReadStream) {
-    while let Some(req) = recv.recv().await {
-        let result = stream.next().await;
-
-        let exit = if let Ok(result) = result.as_ref() {
-            result.is_none()
-        } else {
-            true
-        };
-
-        let _ = req.send(result);
-        if exit {
-            break;
-        }
-    }
-}
-
 fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> JsResult<JsPromise> {
     let channel = cx.channel();
     let (deffered, promise) = cx.promise();
@@ -270,7 +252,7 @@ fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> J
 
         deffered.settle_with(&channel, |mut cx| match result {
             Err(e) => cx.throw_error(e.to_string()),
-            Ok(stream) => wrap_read_stream(&mut cx, stream),
+            Ok(stream) => read_stream_ref(&mut cx, stream),
         });
     });
 
@@ -279,7 +261,7 @@ fn read_internal(client: Client, options: Options, mut cx: FunctionContext) -> J
 
 #[derive(Serialize)]
 struct ValueItem<'a> {
-    value: Option<JsResolvedEvent<'a>>,
+    value: Option<Vec<JsResolvedEvent<'a>>>,
     done: bool,
 }
 
@@ -338,24 +320,120 @@ fn js_recorded_event(event: &RecordedEvent) -> JsRecordedEvent {
     }
 }
 
+type Cmd = oneshot::Sender<eventstore::Result<Option<Vec<ResolvedEvent>>>>;
+
+async fn consume_stream(mut stream: ReadStream, mut receiver: Receiver<Cmd>) {
+    let mut req: Option<Cmd> = None;
+    let batch_size = 64usize;
+    let mut batch = Vec::with_capacity(batch_size);
+
+    enum State {
+        EoS(Option<eventstore::Error>),
+        Event(ResolvedEvent),
+    }
+
+    loop {
+        tokio::select! {
+            result = stream.next() => {
+                let state = match result {
+                    Err(e) => {
+                        State::EoS(Some(e))
+                    }
+
+                    Ok(event) => if let Some(event) = event {
+                        State::Event(event)
+                    } else {
+                        State::EoS(None)
+                    }
+                };
+
+                match state {
+                    State::EoS(e_opt) => {
+                        if req.is_none() {
+                            req = receiver.recv().await;
+                        }
+
+                        if let Some(sender) = req.take() {
+                            if let Some(e) = e_opt {
+                                let _ = sender.send(Err(e));
+                            } else if batch.is_empty() {
+                                let _ = sender.send(Ok(None));
+                            } else {
+                                let _ = sender.send(Ok(Some(batch)));
+                            }
+                        }
+
+                        break;
+                    }
+
+                    State::Event(event) => {
+                        batch.push(event);
+
+                        if batch.len() >= batch_size {
+                            if req.is_none() {
+                                req = receiver.recv().await;
+                            }
+
+                            if let Some(sender) = req.take() {
+                                let _ = sender.send(Ok(Some(batch)));
+                                batch = Vec::with_capacity(batch_size);
+                                continue;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            },
+
+            cmd = receiver.recv() => {
+                req = cmd;
+
+                if req.is_none() {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
     let sender = cx.argument::<JsBox<ReadStreamWrapper>>(0)?.inner.clone();
     let (deferred, promise) = cx.promise();
     let channel = cx.channel();
 
     RUNTIME.spawn(async move {
-        let mut stream = sender.lock().await;
-        let result = stream.next().await;
+        let (req, receiver) = oneshot::channel();
+        if sender.send(req).await.is_err() {
+            let _ = deferred.settle_with(&channel, |mut cx| {
+                cx.throw_error::<_, Handle<JsPromise>>("internal client failure when sending the request")
+            });
+            return;
+        }
+
+        let result = match receiver.await {
+            Ok(r) => r,
+            Err(_) => {
+                let _ = deferred.settle_with(&channel, |mut cx| {
+                    cx.throw_error::<_, Handle<JsPromise>>("internal client failure when waiting for the response")
+                });
+                return;
+            }
+        };
 
         deferred.settle_with(&channel, |mut cx| match result {
             Err(e) => cx.throw_error(e.to_string()),
-            Ok(event) => {
-                let result = match event {
-                    Some(event) => serde_json::to_vec(&ValueItem {
-                        value: Some(js_resolve_event(&event)),
-                        done: false,
-                    })
-                    .unwrap(),
+            Ok(events) => {
+                let result = match events {
+                    Some(events) => {
+                        let js = events.iter().map(js_resolve_event).collect::<Vec<_>>();
+                        serde_json::to_vec(&ValueItem {
+                            value: Some(js),
+                            done: false,
+                        })
+                        .unwrap()
+                    }
+
                     None => serde_json::to_vec(&ValueItem {
                         value: None,
                         done: true,
@@ -363,7 +441,66 @@ pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
                     .unwrap(),
                 };
 
-                JsArrayBuffer::from_slice(&mut cx, result.as_slice())
+                JsBuffer::from_slice(&mut cx, result.as_slice())
+            }
+        });
+    });
+
+    Ok(promise)
+}
+
+pub fn read_stream_next_mutex(mut cx: FunctionContext) -> JsResult<JsPromise> {
+    let sender = cx.argument::<JsBox<ReadStreamRef>>(0)?.inner.clone();
+    let (deferred, promise) = cx.promise();
+    let channel = cx.channel();
+
+    RUNTIME.spawn(async move {
+        let result = {
+            let mut stream = sender.lock().await;
+            let batch_size = 64usize;
+            let mut batch = Vec::with_capacity(batch_size);
+
+            loop {
+                match stream.next().await {
+                    Err(e) => break Err(e),
+                    Ok(event) => {
+                        if let Some(event) = event {
+                            batch.push(event);
+                        } else if batch.is_empty() {
+                            break Ok(None);
+                        } else {
+                            break Ok(Some(batch));
+                        }
+
+                        if batch.len() >= batch_size {
+                            break Ok(Some(batch));
+                        }
+                    }
+                }
+            }
+        };
+
+        deferred.settle_with(&channel, |mut cx| match result {
+            Err(e) => cx.throw_error(e.to_string()),
+            Ok(events) => {
+                let result = match events {
+                    Some(events) => {
+                        let js = events.iter().map(js_resolve_event).collect::<Vec<_>>();
+                        serde_json::to_vec(&ValueItem {
+                            value: Some(js),
+                            done: false,
+                        })
+                        .unwrap()
+                    }
+
+                    None => serde_json::to_vec(&ValueItem {
+                        value: None,
+                        done: true,
+                    })
+                    .unwrap(),
+                };
+
+                JsBuffer::from_slice(&mut cx, result.as_slice())
             }
         });
     });
@@ -372,24 +509,43 @@ pub fn read_stream_next(mut cx: FunctionContext) -> JsResult<JsPromise> {
 }
 
 struct ReadStreamWrapper {
-    inner: Arc<Mutex<ReadStream>>,
+    inner: Sender<Cmd>,
 }
 
 impl ReadStreamWrapper {
-    fn new(inner: ReadStream) -> Self {
-        Self {
-            inner: Arc::new(Mutex::new(inner)),
-        }
+    fn new(inner: Sender<Cmd>) -> Self {
+        Self { inner }
     }
 }
 
 impl Finalize for ReadStreamWrapper {}
 
+struct ReadStreamRef {
+    inner: Arc<Mutex<ReadStream>>,
+}
+
+impl ReadStreamRef {
+    fn new(inner: ReadStream) -> Self {
+        Self { inner: Arc::new(Mutex::new(inner)) }
+    }
+}
+
+impl Finalize for ReadStreamRef {}
+
 fn wrap_read_stream<'a, C>(cx: &mut C, stream: ReadStream) -> JsResult<'a, JsBox<ReadStreamWrapper>>
 where
     C: Context<'a>,
 {
-    Ok(JsBox::new(cx, ReadStreamWrapper::new(stream)))
+    let (sender, receiver) = tokio::sync::mpsc::channel(1);
+    RUNTIME.spawn(consume_stream(stream, receiver));
+    Ok(JsBox::new(cx, ReadStreamWrapper::new(sender)))
+}
+
+fn read_stream_ref<'a, C>(cx: &mut C, stream: ReadStream) -> JsResult<'a, JsBox<ReadStreamRef>>
+where
+    C: Context<'a>,
+{
+    Ok(JsBox::new(cx, ReadStreamRef::new(stream)))
 }
 
 // fn convert_read_internal_error<'a, C>(
@@ -414,83 +570,6 @@ where
 //     let js_str = cx.string(variant_name);
 //     js_err.set(cx, "name", js_str)?;
 //     cx.throw(js_err)?
-// }
-
-// fn async_iterator_object<'a, C>(cx: C, stream: ReadStream) -> JsResult<'a, JsObject>
-// where
-//     C: Context<'a>,
-// {
-//     async_iterator_impl(cx, Arc::new(Mutex::new(stream)))
-// }
-
-// fn async_iterator_impl<'a, C>(mut cx: C, stream: Arc<Mutex<ReadStream>>) -> JsResult<'a, JsObject>
-// where
-//     C: Context<'a>,
-// {
-//     let obj = cx.empty_object();
-
-//     let stream_next = JsFunction::new(&mut cx, move |mut cx| {
-//         let (deferred, promise) = cx.promise();
-//         let stream = stream.clone();
-//         let channel = cx.channel();
-
-//         RUNTIME.spawn(async move {
-//             let mut stream = stream.lock().await;
-//             let result = stream.next().await;
-
-//             deferred.settle_with(&channel, |mut cx| {
-//                 let result = result.or_else(|e| convert_iterator_error(&mut cx, e))?;
-
-//                 let item = cx.empty_object();
-//                 let mut done = true;
-
-//                 if let Some(mut event) = result {
-//                     let value = cx.empty_object();
-//                     done = false;
-
-//                     if let Some(event) = event.event.take() {
-//                         let event = recorded_event(&mut cx, event)?;
-//                         value.set(&mut cx, "event", event)?;
-//                     } else {
-//                         let null = cx.null();
-//                         value.set(&mut cx, "event", null)?;
-//                     }
-
-//                     if let Some(event) = event.link.take() {
-//                         let link = recorded_event(&mut cx, event)?;
-//                         value.set(&mut cx, "link", link)?;
-//                     } else {
-//                         let null = cx.null();
-//                         value.set(&mut cx, "link", null)?;
-//                     }
-
-//                     if let Some(commit) = event.commit_position.take() {
-//                         let commit = JsBigInt::from_u64(&mut cx, commit);
-//                         value.set(&mut cx, "commitPosition", commit)?;
-//                     } else {
-//                         let null = cx.null();
-//                         value.set(&mut cx, "commitPosition", null)?;
-//                     }
-
-//                     item.set(&mut cx, "value", value)?;
-//                 } else {
-//                     let undefined = cx.undefined();
-//                     item.set(&mut cx, "value", undefined)?;
-//                 }
-
-//                 let done = cx.boolean(done);
-//                 item.set(&mut cx, "done", done)?;
-
-//                 Ok(item)
-//             });
-//         });
-
-//         Ok(promise)
-//     })?;
-
-//     obj.set(&mut cx, "next", stream_next)?;
-
-//     Ok(obj)
 // }
 
 // fn convert_iterator_error<'a, C>(
@@ -523,46 +602,3 @@ where
 //     cx.throw(js_err)?;
 //     Ok(None)
 // }
-
-fn recorded_event<'a, C>(cx: &mut C, event: RecordedEvent) -> JsResult<'a, JsObject>
-where
-    C: Context<'a>,
-{
-    let obj = cx.empty_object();
-
-    let stream_id = cx.string(event.stream_id);
-    let r#type = cx.string(event.event_type);
-    let id = cx.string(event.id.to_string());
-    let is_json = cx.boolean(event.is_json);
-    let revision = JsBigInt::from_u64(cx, event.revision);
-    let created = cx
-        .date(event.created.timestamp() as f64 * 1000.0)
-        .or_else(|e| cx.throw_error(e.to_string()))?;
-
-    let mut data = cx.array_buffer(event.data.len())?;
-    data.as_mut_slice(cx).copy_from_slice(&event.data);
-
-    let mut metadata = JsUint8Array::new(cx, event.custom_metadata.len())?;
-    metadata
-        .as_mut_slice(cx)
-        .copy_from_slice(&event.custom_metadata);
-
-    let position = cx.empty_object();
-    let commit = JsBigInt::from_u64(cx, event.position.commit);
-    let prepare = JsBigInt::from_u64(cx, event.position.prepare);
-
-    position.set(cx, "commit", commit)?;
-    position.set(cx, "prepare", prepare)?;
-
-    obj.set(cx, "streamId", stream_id)?;
-    obj.set(cx, "id", id)?;
-    obj.set(cx, "type", r#type)?;
-    obj.set(cx, "isJson", is_json)?;
-    obj.set(cx, "revision", revision)?;
-    obj.set(cx, "created", created)?;
-    obj.set(cx, "data", data)?;
-    obj.set(cx, "metadata", metadata)?;
-    obj.set(cx, "position", position)?;
-
-    Ok(obj)
-}

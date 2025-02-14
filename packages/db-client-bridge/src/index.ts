@@ -2,24 +2,25 @@
 
 // The Rust addon.
 import * as addon from "./load";
+import { Buffer } from "buffer"
 
 // Use this declaration to assign types to the addon's exports,
 // which otherwise by default are `any`.
 declare module "./load" {
   function createClient(connStr: string): RawClient;
-  function readStreamNext(raw: RawReadStream): Promise<ArrayBuffer>;
+  function readStreamNext(raw: RawReadStream): Promise<Buffer>;
 }
 
 export type Iterable = {
-  next(): Promise<{ value: ResolvedEvent; done: boolean }>;
+  next(): Promise<{ value: ResolvedEvent[]; done: boolean }>;
 };
 
 export type RustClient = {
   readStream(
     stream: string,
     options?: RustReadStreamOptions
-  ): Promise<AsyncIterable<ResolvedEvent>>;
-  readAll(options?: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent>>;
+  ): Promise<AsyncIterable<ResolvedEvent[]>>;
+  readAll(options?: RustReadAllOptions): Promise<AsyncIterable<ResolvedEvent[]>>;
 };
 
 export type RawClient = {
@@ -80,16 +81,16 @@ export function createClient(connStr: string): RustClient {
     async readStream(
       stream: string,
       options: RustReadStreamOptions
-    ): Promise<AsyncIterable<ResolvedEvent>> {
+    ): Promise<AsyncIterable<ResolvedEvent[]>> {
       const iterable = await client.readStream(stream, options);
 
       return {
-        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent> {
+        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent[]> {
           return {
             async next() {
               let buffer = await addon.readStreamNext(iterable);
-              return JSON.parse(new TextDecoder().decode(new Uint8Array(buffer))) as {
-                value: ResolvedEvent,
+              return JSON.parse(buffer.toString()) as {
+                value: ResolvedEvent[],
                 done: boolean
               };
             },
@@ -100,16 +101,16 @@ export function createClient(connStr: string): RustClient {
 
     async readAll(
       options: RustReadAllOptions
-    ): Promise<AsyncIterable<ResolvedEvent>> {
+    ): Promise<AsyncIterable<ResolvedEvent[]>> {
       const iterable = await client.readAll(options);
 
       return {
-        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent> {
+        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent[]> {
           return {
             async next() {
               let buffer = await addon.readStreamNext(iterable);
-              return JSON.parse(new TextDecoder().decode(new Uint8Array(buffer))) as {
-                value: ResolvedEvent,
+              return JSON.parse(buffer.toString()) as {
+                value: ResolvedEvent[],
                 done: boolean
               };
             },

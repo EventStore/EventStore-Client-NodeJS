@@ -17,7 +17,7 @@ lazy_static::lazy_static! {
 #[neon::main]
 fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("createClient", client::create)?;
-    cx.export_function("readStreamNext", client::read_stream_next)?;
+    cx.export_function("readStreamNext", client::read_stream_next_mutex)?;
 
     Ok(())
 }

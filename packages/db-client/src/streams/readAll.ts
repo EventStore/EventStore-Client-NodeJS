@@ -71,10 +71,12 @@ Client.prototype.readAll = async function (
   };
 
   const convert = async function* (
-    stream: AsyncIterable<bridge.ResolvedEvent>
+    stream: AsyncIterable<bridge.ResolvedEvent[]>
   ) {
-    for await (const event of stream) {
-      yield convertRustEvent<AllStreamResolvedEvent>(event);
+    for await (const events of stream) {
+      for (const event of events) {
+        yield convertRustEvent<AllStreamResolvedEvent>(event);
+      }
     }
   };
 

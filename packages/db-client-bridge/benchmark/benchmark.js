@@ -34,7 +34,7 @@ const {Bench, nToMs, hrtimeNow} = require("tinybench");
     await bench.run()
 
     console.log(bench.name)
-    console.log(bench.table());
+    console.table(bench.table());
     // console.table(bench.table());
     // console.table(
     //     bench.tasks.map(({name, result}) => ({
