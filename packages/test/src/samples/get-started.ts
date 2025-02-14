@@ -8,7 +8,7 @@ import {
 import { optionalDescribe } from "@test-utils";
 import { v4 as uuid } from "uuid";
 
-const CLOUD_ID = process.env.EVENTSTORE_CLOUD_ID!;
+const CLOUD_ID = process.env.KURRENT_CLOUD_ID!;
 const STREAM_NAME = uuid();
 
 /*

@@ -6,7 +6,7 @@ import {
   NotLeaderError,
 } from "@kurrent/db-client";
 
-optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
+optionalDescribe(!!process.env.KURRENT_CLOUD_ID)("dns discover", () => {
   const STREAM_NAME = "test_stream_name";
   const { EVENTSTORE_CLOUD_ID } = process.env;
   const event = jsonEvent({
