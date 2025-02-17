@@ -28,7 +28,7 @@ jobs:
         run: yarn
 
       - name: Run Benchmarks
-        run: nx run @kurrent/db-client-bridge:benchmark | tee benchmark-output.txt
+        run: yarn nx run @kurrent/db-client-bridge:benchmark | tee benchmark-output.txt
 
       - name: Add PR Comment with Results
         if: github.event_name == 'pull_request'

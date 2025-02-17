@@ -63,7 +63,16 @@ export const convertRustRecord = <E extends EventType = EventType>(
   const metadata: E["metadata"] = parseMetadata(rustEvent, id);
   const isJson = rustEvent.isJson;
 
-  const position = rustEvent.position;
+  const position = {
+    commit:
+      rustEvent.position?.commit !== undefined
+        ? BigInt(rustEvent.position.commit)
+        : undefined,
+    prepare:
+      rustEvent.position?.prepare !== undefined
+        ? BigInt(rustEvent.position.prepare)
+        : undefined,
+  };
 
   if (isJson) {
     const dataStr = Buffer.from(rustEvent.data).toString("utf8");
