@@ -5,8 +5,8 @@ import { Client } from "../Client";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
-export interface DisableProjectionOptions extends BaseOptions {}
-export interface AbortProjectionOptions extends BaseOptions {}
+export type DisableProjectionOptions = BaseOptions;
+export type AbortProjectionOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {
@@ -26,7 +26,7 @@ declare module "../Client" {
      */
     abortProjection(
       projectionName: string,
-      options?: DisableProjectionOptions
+      options?: AbortProjectionOptions
     ): Promise<void>;
   }
 }

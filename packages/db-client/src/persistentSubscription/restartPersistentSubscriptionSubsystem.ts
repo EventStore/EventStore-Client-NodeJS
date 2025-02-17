@@ -8,8 +8,7 @@ import { Client } from "../Client";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
-export interface RestartPersistentSubscriptionSubsystemOptions
-  extends BaseOptions {}
+export type RestartPersistentSubscriptionSubsystemOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

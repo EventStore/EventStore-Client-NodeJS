@@ -5,8 +5,7 @@ import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
-export interface DeletePersistentSubscriptionToStreamOptions
-  extends BaseOptions {}
+export type DeletePersistentSubscriptionToStreamOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

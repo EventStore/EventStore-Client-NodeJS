@@ -16,7 +16,7 @@ import {
   PersistentSubscriptionToEitherInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
 
-interface ListPersistentSubscriptionsOptions extends BaseOptions {}
+type ListPersistentSubscriptionsOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

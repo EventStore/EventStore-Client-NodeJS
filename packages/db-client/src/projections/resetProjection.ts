@@ -5,7 +5,7 @@ import { Client } from "../Client";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
-export interface ResetProjectionOptions extends BaseOptions {}
+export type ResetProjectionOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {
