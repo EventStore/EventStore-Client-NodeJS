@@ -29,7 +29,7 @@ export interface GetStreamMetadataResult<
   metastreamRevision?: bigint;
 }
 
-export interface GetStreamMetadataOptions extends BaseOptions {}
+export type GetStreamMetadataOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

@@ -143,9 +143,7 @@ describe("listPersistentSubscriptionsToAll", () => {
       beforeAll(async () => {
         await emptyNode.up();
 
-        client = KurrentDBClient.connectionString(
-          emptyNode.connectionString()
-        );
+        client = KurrentDBClient.connectionString(emptyNode.connectionString());
       });
 
       afterAll(async () => {

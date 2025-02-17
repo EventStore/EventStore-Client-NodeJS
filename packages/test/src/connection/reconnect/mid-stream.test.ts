@@ -6,11 +6,7 @@ import {
   getCurrentConnection,
   jsonTestEvents,
 } from "@test-utils";
-import {
-  jsonEvent,
-  KurrentDBClient,
-  CancelledError,
-} from "@kurrent/db-client";
+import { jsonEvent, KurrentDBClient, CancelledError } from "@kurrent/db-client";
 
 // This test can take time.
 jest.setTimeout(120_000);
@@ -21,9 +17,7 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = KurrentDBClient.connectionString(
-      cluster.connectionString()
-    );
+    const client = KurrentDBClient.connectionString(cluster.connectionString());
 
     // make successful append of 2000 events to node
     const firstAppend = await client.appendToStream(

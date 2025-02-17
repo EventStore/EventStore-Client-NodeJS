@@ -1,5 +1,5 @@
 import { Cluster } from "./Cluster";
-import { Credentials, EndPoint, NodePreference } from "@eventstore/db-client";
+import { Credentials, EndPoint, NodePreference } from "@kurrent/db-client";
 
 export type ConnectionFeatures = {
   defaultUserCredentials?: Credentials;

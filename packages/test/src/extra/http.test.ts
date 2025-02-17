@@ -31,7 +31,7 @@ describe("http api", () => {
 
     test("dns", async () => {
       const client = KurrentDBClient.connectionString(
-          cluster.connectionString()
+        cluster.connectionString()
       );
 
       const result = await ping.call(client);
@@ -46,7 +46,7 @@ describe("http api", () => {
         })),
       };
       const client = KurrentDBClient.connectionString(
-          cluster.connectionStringWithOverrides(overrides)
+        cluster.connectionStringWithOverrides(overrides)
       );
 
       const result = await ping.call(client);
@@ -55,7 +55,7 @@ describe("http api", () => {
 
     test("error transform", async () => {
       const client = KurrentDBClient.connectionString(
-          cluster.connectionString()
+        cluster.connectionString()
       );
 
       class TestError extends Error {
@@ -99,7 +99,7 @@ describe("http api", () => {
 
     test("dns", async () => {
       const client = KurrentDBClient.connectionString(
-          cluster.connectionString()
+        cluster.connectionString()
       );
       const result = await ping.call(client);
       expect(result).toMatchObject(goodPing);
@@ -113,7 +113,7 @@ describe("http api", () => {
         })),
       };
       const client = KurrentDBClient.connectionString(
-          cluster.connectionStringWithOverrides(overrides)
+        cluster.connectionStringWithOverrides(overrides)
       );
 
       const result = await ping.call(client);
@@ -122,7 +122,7 @@ describe("http api", () => {
 
     test("error transform", async () => {
       const client = KurrentDBClient.connectionString(
-          cluster.connectionString()
+        cluster.connectionString()
       );
 
       class TestError extends Error {

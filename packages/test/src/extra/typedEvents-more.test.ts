@@ -8,7 +8,7 @@ import {
   jsonEvent,
   JSONEventType,
   RecordedEvent,
-  ResolvedEvent
+  ResolvedEvent,
 } from "@kurrent/db-client";
 
 describe("typed events should compile", () => {
@@ -26,25 +26,25 @@ describe("typed events should compile", () => {
 
   test("stream agregator", async () => {
     type EventAggregator<Aggregate, E extends EventType> = (
-        currentState: Aggregate | undefined,
-        event: RecordedEvent<E>
+      currentState: Aggregate | undefined,
+      event: RecordedEvent<E>
     ) => Aggregate;
 
     const createStreamAggregator =
-        <Entity, StreamEvents extends EventType>(
-            when: EventAggregator<Entity, StreamEvents>
-        ) =>
-            async (
-                eventStream: AsyncIterableIterator<ResolvedEvent<StreamEvents>>
-            ): Promise<Entity> => {
-              let currentState: Entity | undefined = undefined;
-              for await (const { event } of eventStream) {
-                if (!event) continue;
-                currentState = when(currentState, event);
-              }
-              if (currentState == null) throw "oh no";
-              return currentState;
-            };
+      <Entity, StreamEvents extends EventType>(
+        when: EventAggregator<Entity, StreamEvents>
+      ) =>
+      async (
+        eventStream: AsyncIterableIterator<ResolvedEvent<StreamEvents>>
+      ): Promise<Entity> => {
+        let currentState: Entity | undefined = undefined;
+        for await (const { event } of eventStream) {
+          if (!event) continue;
+          currentState = when(currentState, event);
+        }
+        if (currentState == null) throw "oh no";
+        return currentState;
+      };
 
     interface ProductItem {
       productId: string;
@@ -63,34 +63,34 @@ describe("typed events should compile", () => {
 
     // using JSONEventType
     type ProductItemAddedToShoppingCart = JSONEventType<
-        "product-item-added-to-shopping-cart",
-        {
-          shoppingCartId: string;
-          productItem: ProductItem;
-        }
+      "product-item-added-to-shopping-cart",
+      {
+        shoppingCartId: string;
+        productItem: ProductItem;
+      }
     >;
 
     type ProductItemRemovedFromShoppingCart = JSONEventType<
-        "product-item-removed-from-shopping-cart",
-        {
-          shoppingCartId: string;
-          productItem: ProductItem;
-        }
+      "product-item-removed-from-shopping-cart",
+      {
+        shoppingCartId: string;
+        productItem: ProductItem;
+      }
     >;
 
     type ShoppingCartConfirmed = JSONEventType<
-        "shopping-cart-confirmed",
-        {
-          shoppingCartId: string;
-          confirmedAt: string;
-        }
+      "shopping-cart-confirmed",
+      {
+        shoppingCartId: string;
+        confirmedAt: string;
+      }
     >;
 
     type ShoppingCartEvent =
-        | ShoppingCartOpened
-        | ProductItemAddedToShoppingCart
-        | ProductItemRemovedFromShoppingCart
-        | ShoppingCartConfirmed;
+      | ShoppingCartOpened
+      | ProductItemAddedToShoppingCart
+      | ProductItemRemovedFromShoppingCart
+      | ShoppingCartConfirmed;
 
     enum ShoppingCartStatus {
       Opened = 1,
@@ -118,8 +118,8 @@ describe("typed events should compile", () => {
     }
 
     const addProductItem = (
-        inventory: ProductItems,
-        { productId, quantity }: ProductItem
+      inventory: ProductItems,
+      { productId, quantity }: ProductItem
     ): ProductItems => {
       const current = inventory.get(productId);
 
@@ -134,8 +134,8 @@ describe("typed events should compile", () => {
     };
 
     const removeProductItem = (
-        inventory: ProductItems,
-        { productId, quantity }: ProductItem
+      inventory: ProductItems,
+      { productId, quantity }: ProductItem
     ): ProductItems => {
       const current = inventory.get(productId);
 
@@ -155,15 +155,15 @@ describe("typed events should compile", () => {
     };
 
     const create =
-        <Command, StreamEvent extends JSONEventType>(
-            client: KurrentDBClient,
-            handle: (command: Command) => StreamEvent
-        ) =>
-            (streamName: string, command: Command): Promise<AppendResult> => {
-              const event = handle(command);
-              const eventData = jsonEvent<StreamEvent>(event);
-              return client.appendToStream<StreamEvent>(streamName, eventData);
-            };
+      <Command, StreamEvent extends JSONEventType>(
+        client: KurrentDBClient,
+        handle: (command: Command) => StreamEvent
+      ) =>
+      (streamName: string, command: Command): Promise<AppendResult> => {
+        const event = handle(command);
+        const eventData = jsonEvent<StreamEvent>(event);
+        return client.appendToStream<StreamEvent>(streamName, eventData);
+      };
 
     create<string, ShoppingCartEvent>(client, () => ({
       type: "shopping-cart-opened",
@@ -175,8 +175,8 @@ describe("typed events should compile", () => {
     }));
 
     const shoppingCartAggregator = createStreamAggregator<
-        ShoppingCart,
-        ShoppingCartEvent
+      ShoppingCart,
+      ShoppingCartEvent
     >((currentState, event) => {
       if (event.type === "shopping-cart-opened") {
         if (currentState != null) throw ShoppingCartErrors.OPENED_EXISTING_CART;
@@ -196,16 +196,16 @@ describe("typed events should compile", () => {
           return {
             ...currentState,
             productItems: addProductItem(
-                currentState.productItems,
-                event.data.productItem
+              currentState.productItems,
+              event.data.productItem
             ),
           };
         case "product-item-removed-from-shopping-cart":
           return {
             ...currentState,
             productItems: removeProductItem(
-                currentState.productItems,
-                event.data.productItem
+              currentState.productItems,
+              event.data.productItem
             ),
           };
         case "shopping-cart-confirmed":
@@ -289,12 +289,12 @@ describe("typed events should compile", () => {
     const jsonEvents = events.map((e) => jsonEvent<ShoppingCartEvent>(e));
 
     await client.appendToStream<ShoppingCartEvent>(
-        `shoppingcart-${shoppingCartId}`,
-        jsonEvents
+      `shoppingcart-${shoppingCartId}`,
+      jsonEvents
     );
 
     const shoppingCartStream = await client.readStream<ShoppingCartEvent>(
-        `shoppingcart-${shoppingCartId}`
+      `shoppingcart-${shoppingCartId}`
     );
 
     const cart = await shoppingCartAggregator(shoppingCartStream);

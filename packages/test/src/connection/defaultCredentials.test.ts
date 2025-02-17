@@ -14,9 +14,7 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const client = KurrentDBClient.connectionString(
-        node.connectionString()
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
       await expect(
         collect(await client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();

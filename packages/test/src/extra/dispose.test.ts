@@ -67,9 +67,9 @@ describe("dispose", () => {
 
     // 4
     client
-        .subscribeToStream(STREAM_NAME)
-        .on("error", handleError)
-        .on("data", handleEvent);
+      .subscribeToStream(STREAM_NAME)
+      .on("error", handleError)
+      .on("data", handleEvent);
 
     // 5
     client.subscribeToAll().on("error", handleError).on("data", handleEvent);
@@ -118,16 +118,16 @@ describe("dispose", () => {
     const handleSubscription2End = jest.fn(defer.resolve);
 
     client
-        .subscribeToStream(STREAM_NAME)
-        .on("error", handleError)
-        .on("data", handleEvent)
-        .on("end", handleSubscription1End);
+      .subscribeToStream(STREAM_NAME)
+      .on("error", handleError)
+      .on("data", handleEvent)
+      .on("end", handleSubscription1End);
 
     client
-        .subscribeToStream(STREAM_NAME_2)
-        .on("error", handleError)
-        .on("data", handleEvent)
-        .on("end", handleSubscription2End);
+      .subscribeToStream(STREAM_NAME_2)
+      .on("error", handleError)
+      .on("data", handleEvent)
+      .on("end", handleSubscription2End);
 
     await delay(500);
 
@@ -156,16 +156,16 @@ describe("dispose", () => {
     const handleSubscription2End = jest.fn(defer.resolve);
 
     client
-        .subscribeToAll()
-        .on("error", handleError)
-        .on("data", handleEvent)
-        .on("end", handleSubscription1End);
+      .subscribeToAll()
+      .on("error", handleError)
+      .on("data", handleEvent)
+      .on("end", handleSubscription1End);
 
     client
-        .subscribeToAll()
-        .on("error", handleError)
-        .on("data", handleEvent)
-        .on("end", handleSubscription2End);
+      .subscribeToAll()
+      .on("error", handleError)
+      .on("data", handleEvent)
+      .on("end", handleSubscription2End);
 
     await delay(500);
 
@@ -190,19 +190,19 @@ describe("dispose", () => {
     await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
 
     await client.createPersistentSubscriptionToStream(
-        STREAM_NAME,
-        GROUP_NAME,
-        persistentSubscriptionToStreamSettingsFromDefaults({
-          startFrom: START,
-        })
+      STREAM_NAME,
+      GROUP_NAME,
+      persistentSubscriptionToStreamSettingsFromDefaults({
+        startFrom: START,
+      })
     );
 
     await client.createPersistentSubscriptionToStream(
-        STREAM_NAME_2,
-        GROUP_NAME_2,
-        persistentSubscriptionToStreamSettingsFromDefaults({
-          startFrom: START,
-        })
+      STREAM_NAME_2,
+      GROUP_NAME_2,
+      persistentSubscriptionToStreamSettingsFromDefaults({
+        startFrom: START,
+      })
     );
 
     const handleError = jest.fn((error) => {
@@ -213,16 +213,16 @@ describe("dispose", () => {
     const handlePS$allSubscription2End = jest.fn(defer.resolve);
 
     client
-        .subscribeToPersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
-        .on("error", handleError)
-        .on("data", handleEvent)
-        .on("end", handlePS$allSubscription1End);
+      .subscribeToPersistentSubscriptionToStream(STREAM_NAME, GROUP_NAME)
+      .on("error", handleError)
+      .on("data", handleEvent)
+      .on("end", handlePS$allSubscription1End);
 
     client
-        .subscribeToPersistentSubscriptionToStream(STREAM_NAME_2, GROUP_NAME_2)
-        .on("error", handleError)
-        .on("data", handleEvent)
-        .on("end", handlePS$allSubscription2End);
+      .subscribeToPersistentSubscriptionToStream(STREAM_NAME_2, GROUP_NAME_2)
+      .on("error", handleError)
+      .on("data", handleEvent)
+      .on("end", handlePS$allSubscription2End);
 
     await delay(500);
 
@@ -323,8 +323,8 @@ describe("dispose", () => {
       expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
       await client.dispose();
       const result2 = await client.appendToStream(
-          STREAM_NAME,
-          jsonTestEvents()
+        STREAM_NAME,
+        jsonTestEvents()
       );
       expect(result2).toBeDefined();
       expect(result2.nextExpectedRevision).toBeGreaterThanOrEqual(0);
@@ -339,18 +339,18 @@ describe("dispose", () => {
       await client.appendToStream(STREAM_NAME, jsonTestEvents(4));
 
       await client.createPersistentSubscriptionToAll(
-          GROUP_NAME,
-          persistentSubscriptionToAllSettingsFromDefaults({
-            startFrom: START,
-          }),
-          { filter: streamNameFilter({ prefixes: [STREAM_NAME] }) }
+        GROUP_NAME,
+        persistentSubscriptionToAllSettingsFromDefaults({
+          startFrom: START,
+        }),
+        { filter: streamNameFilter({ prefixes: [STREAM_NAME] }) }
       );
 
       await client.createPersistentSubscriptionToAll(
-          GROUP_NAME_2,
-          persistentSubscriptionToAllSettingsFromDefaults({
-            startFrom: START,
-          })
+        GROUP_NAME_2,
+        persistentSubscriptionToAllSettingsFromDefaults({
+          startFrom: START,
+        })
       );
 
       const handleError = jest.fn((error) => {
@@ -361,16 +361,16 @@ describe("dispose", () => {
       const handlePS$allSubscription2End = jest.fn(defer.resolve);
 
       client
-          .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
-          .on("error", handleError)
-          .on("data", handleEvent)
-          .on("end", handlePS$allSubscription1End);
+        .subscribeToPersistentSubscriptionToAll(GROUP_NAME)
+        .on("error", handleError)
+        .on("data", handleEvent)
+        .on("end", handlePS$allSubscription1End);
 
       client
-          .subscribeToPersistentSubscriptionToAll(GROUP_NAME_2)
-          .on("error", handleError)
-          .on("data", handleEvent)
-          .on("end", handlePS$allSubscription2End);
+        .subscribeToPersistentSubscriptionToAll(GROUP_NAME_2)
+        .on("error", handleError)
+        .on("data", handleEvent)
+        .on("end", handlePS$allSubscription2End);
 
       await delay(500);
 

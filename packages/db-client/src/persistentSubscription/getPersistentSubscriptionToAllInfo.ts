@@ -13,8 +13,7 @@ import {
   PersistentSubscriptionToAllInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
 
-export interface GetPersistentSubscriptionToAllInfoOptions
-  extends BaseOptions {}
+export type GetPersistentSubscriptionToAllInfoOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

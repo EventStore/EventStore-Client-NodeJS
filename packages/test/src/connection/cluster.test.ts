@@ -15,9 +15,7 @@ describe("cluster", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = KurrentDBClient.connectionString(
-      cluster.connectionString()
-    );
+    const client = KurrentDBClient.connectionString(cluster.connectionString());
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = collect(

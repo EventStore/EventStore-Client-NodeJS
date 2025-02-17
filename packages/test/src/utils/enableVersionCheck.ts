@@ -14,7 +14,7 @@ const checkCapabilities = async () => {
   const node = new Cluster(1);
   await node.up();
 
-  const client = KurrentDBClient.connectionString(node.connectionString())
+  const client = KurrentDBClient.connectionString(node.connectionString());
 
   const capabilities = await extractVersion.call(client);
 

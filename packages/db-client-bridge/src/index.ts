@@ -33,7 +33,7 @@ export type RawClient = {
   readAll(options?: RustReadAllOptions): Promise<Iterable>;
 };
 
-export type RawReadStream = any;
+export type RawReadStream = unknown;
 
 export type RustReadStreamOptions = {
   fromRevision: bigint | string;
@@ -90,7 +90,7 @@ export function createClient(connStr: string): RustClient {
         [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent[]> {
           return {
             async next() {
-              let buffer = await addon.readStreamNext(iterable);
+              const buffer = await addon.readStreamNext(iterable);
               return JSON.parse(buffer.toString()) as {
                 value: ResolvedEvent[];
                 done: boolean;
@@ -110,7 +110,7 @@ export function createClient(connStr: string): RustClient {
         [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent[]> {
           return {
             async next() {
-              let buffer = await addon.readStreamNext(iterable);
+              const buffer = await addon.readStreamNext(iterable);
               return JSON.parse(buffer.toString()) as {
                 value: ResolvedEvent[];
                 done: boolean;

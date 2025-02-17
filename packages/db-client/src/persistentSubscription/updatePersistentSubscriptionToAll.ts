@@ -13,7 +13,7 @@ import type { BaseOptions } from "../types";
 import type { PersistentSubscriptionToAllSettings } from "./utils/persistentSubscriptionSettings";
 import { settingsToGRPC } from "./utils/settingsToGRPC";
 
-export interface UpdatePersistentSubscriptionToAllOptions extends BaseOptions {}
+export type UpdatePersistentSubscriptionToAllOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

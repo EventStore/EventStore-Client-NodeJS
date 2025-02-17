@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 // This module loads the platform-specific build of the addon on
 // the current system. The supported platforms are registered in
 // the `platforms` object below, whose entries can be managed by
