@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { name: INSTRUMENTATION_NAME, version: INSTRUMENTATION_VERSION } =
-  require("../package.json") as {
-    name: string;
-    version: string;
-  };
+import {
+  name as INSTRUMENTATION_NAME,
+  version as INSTRUMENTATION_VERSION,
+} from "../package.json";
 
 export { INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION };
