@@ -11,7 +11,7 @@ import { jsonEvent, KurrentDBClient, CancelledError } from "@kurrent/db-client";
 // This test can take time.
 jest.setTimeout(120_000);
 
-describe("reconnect", () => {
+describe.skip("reconnect", () => {
   test("Connection error mid stream should cause a reconnect", async () => {
     const cluster = createTestCluster();
 

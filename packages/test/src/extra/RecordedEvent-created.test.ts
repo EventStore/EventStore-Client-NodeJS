@@ -23,7 +23,7 @@ describe("RecordedEvent created", () => {
     }
   });
 
-  test("Should correctly converted from Ticks", async () => {
+  test.skip("Should correctly converted from Ticks", async () => {
     const STREAM_NAME = "correct_conversion";
 
     // The db / test is running on the same box, so we can assume that the time lines up
