@@ -1,0 +1,8 @@
+services:
+  esdb:
+    image: docker.eventstore.com/eventstore-ce/eventstoredb-ce:latest
+    ports:
+      - 2113:2113
+    environment:
+      - EVENTSTORE_MEM_DB=true
+      - EVENTSTORE_INSECURE=true

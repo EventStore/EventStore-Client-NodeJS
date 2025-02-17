@@ -2,11 +2,11 @@ import { DNSClusterOptions, KurrentDBClient } from "@kurrent/db-client";
 
 describe("deadline", () => {
   describe.each<
-      [
-        test_name: string,
-        connection_string: string,
-        constructor_options: Partial<DNSClusterOptions>
-      ]
+    [
+      test_name: string,
+      connection_string: string,
+      constructor_options: Partial<DNSClusterOptions>
+    ]
   >([
     [
       "should throw on zero",
@@ -28,7 +28,7 @@ describe("deadline", () => {
       [
         "connectionString",
         () => KurrentDBClient.connectionString(connectionString),
-      ]
+      ],
     ])("%s", async (_, createClient) => {
       expect(() => createClient()).toThrowErrorMatchingSnapshot();
     });

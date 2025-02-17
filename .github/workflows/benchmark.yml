@@ -10,8 +10,9 @@ jobs:
   benchmark:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Checkout Repository
@@ -27,19 +28,32 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
+      - name: Build
+        run: yarn build
+
+      - name: Start KurrentDB
+        run: docker compose -f packages/db-client-bridge/docker-compose.yml up -d
+
+      - name: Load Events
+        run: yarn nx run @kurrent/db-client-bridge:loadEvents
+
       - name: Run Benchmarks
         run: yarn nx run @kurrent/db-client-bridge:benchmark | tee benchmark-output.txt
 
       - name: Add PR Comment with Results
         if: github.event_name == 'pull_request'
+        run: |
+          BENCHMARK_RESULTS=$(cat benchmark-output.txt)
+          echo "🚀 **Benchmark Results (${{ matrix.os }})**" > pr-comment.txt
+          echo '```' >> pr-comment.txt
+          echo "$BENCHMARK_RESULTS" >> pr-comment.txt
+          echo '```' >> pr-comment.txt
+
+      - name: Post Comment
+        if: github.event_name == 'pull_request'
         uses: mshick/add-pr-comment@v2
         with:
-          message: |
-            🚀 **Benchmark Results (${{
-              matrix.os }})**
-            ```
-            $(cat benchmark-output.txt)
-            ```
+          message-path: pr-comment.txt
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Save Benchmark Summary
@@ -48,3 +62,6 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat benchmark-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Shutdown KurrentDB
+        run: docker compose -f packages/db-client-bridge/docker-compose.yml down

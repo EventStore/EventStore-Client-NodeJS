@@ -16,7 +16,8 @@
     "version": "neon bump --binaries platforms && git add .",
     "release": "gh workflow run release.yml -f dryrun=false -f version=patch",
     "dryrun": "gh workflow run publish.yml -f dryrun=true",
-    "benchmark": "node ./benchmark/b1"
+    "benchmark": "node ./benchmark/b1",
+    "loadEvents": "node ./benchmark/load"
   },
   "author": "Kurrent",
   "license": "Apache-2.0",
@@ -44,6 +45,7 @@
     "load": "./src/load.ts"
   },
   "devDependencies": {
+    "@eventstore/db-client": "^6.2.1",
     "@neon-rs/cli": "^0.1.82",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.11.16",
