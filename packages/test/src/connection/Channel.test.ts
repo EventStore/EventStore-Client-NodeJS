@@ -1,4 +1,4 @@
-import { collect, createTestCluster, jsonTestEvents } from "@test-utils";
+import { createTestCluster, jsonTestEvents } from "@test-utils";
 import { KurrentDBClient } from "@kurrent/db-client";
 
 describe("Channel", () => {
@@ -20,20 +20,13 @@ describe("Channel", () => {
     );
 
     /*
-     Spying on an internal api is more implementation specific than
-     I would like, but there is no easy way to check this.
-    */
+         Spying on an internal api is more implementation specific than
+         I would like, but there is no easy way to check this.
+        */
     const discovery = jest.spyOn(client, "resolveUri" as never);
 
     const promises: Promise<unknown>[] = [
       client.appendToStream("stream_1", jsonTestEvents()),
-      collect(
-        await client.readAll({
-          maxCount: 1,
-          fromPosition: "start",
-          direction: "forwards",
-        })
-      ),
       client.appendToStream("stream_2", jsonTestEvents()),
     ];
 

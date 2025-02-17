@@ -198,7 +198,7 @@ export class Cluster {
       },
     };
   }
-  public domain = "client.bespin.dev";
+  public domain = "localhost";
   public get uri(): string {
     return `${this.domain}:${this.locations[0].port}`;
   }

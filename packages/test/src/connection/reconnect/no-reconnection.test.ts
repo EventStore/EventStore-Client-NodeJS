@@ -66,7 +66,7 @@ describe("reconnect", () => {
 
     const client = KurrentDBClient.connectionString(
       timeoutNode.connectionStringWithOverrides({
-        defaultDeadline: Infinity,
+        defaultDeadline: 100_000_000,
       })
     );
 
