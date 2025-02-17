@@ -17,7 +17,7 @@ export const convertBridgeError = (
     case StreamDeletedError.name:
       throw StreamDeletedError.fromStreamName(stream);
     case NotLeaderError.name:
-        throw new NotLeaderError(error);
+      throw new NotLeaderError(error);
     default:
       throw error;
   }
