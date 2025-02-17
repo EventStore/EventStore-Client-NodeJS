@@ -10421,6 +10421,7 @@ __metadata:
     "@types/debug": "npm:^4.1.12"
     "@types/jest": "npm:^29.5.14"
     "@types/uuid": "npm:^9.0.8"
+    cross-env: "npm:^7.0.3"
     debug: "npm:^4.4.0"
     docker-compose: "npm:^0.24.8"
     dotenv: "npm:^16.4.7"

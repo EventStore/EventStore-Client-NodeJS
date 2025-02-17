@@ -42,6 +42,7 @@
     "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.14",
     "@types/uuid": "^9.0.8",
+    "cross-env": "^7.0.3",
     "debug": "^4.4.0",
     "docker-compose": "^0.24.8",
     "dotenv": "^16.4.7",
