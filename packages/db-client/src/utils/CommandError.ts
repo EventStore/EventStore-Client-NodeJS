@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 /* istanbul ignore file */
 
 import { status as StatusCode, ServiceError, Metadata } from "@grpc/grpc-js";
@@ -86,7 +88,9 @@ export class NotLeaderError extends CommandErrorBase {
 
   constructor(error: ServiceError) {
     super(error);
-    const metadata = error.metadata!.getMap();
+    const metadata: any = error.metadata?.getMap
+      ? error.metadata.getMap()
+      : error.metadata;
     this.leader = {
       address: metadata["leader-endpoint-host"].toString(),
       port: parseInt(metadata["leader-endpoint-port"].toString(), 10),
