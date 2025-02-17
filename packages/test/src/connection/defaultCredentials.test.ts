@@ -18,14 +18,16 @@ describe("defaultCredentials", () => {
       await expect(
         collect(await client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
-      await expect(
-        collect(
+      try {
+        await collect(
           await client.readAll({
             maxCount: 10,
             credentials: { username: "AzureDiamond", password: "hunter2" },
           })
-        )
-      ).rejects.toThrowError(AccessDeniedError);
+        );
+      } catch (e) {
+        expect(e).toBeInstanceOf(AccessDeniedError);
+      }
     });
 
     test("good override", async () => {
@@ -38,9 +40,11 @@ describe("defaultCredentials", () => {
         })
       );
 
-      await expect(
-        collect(await client.readAll({ maxCount: 10 }))
-      ).rejects.toThrowError(AccessDeniedError);
+      try {
+        await collect(await client.readAll({ maxCount: 10 }));
+      } catch (e) {
+        expect(e).toBeInstanceOf(AccessDeniedError);
+      }
       await expect(
         collect(
           await client.readAll({

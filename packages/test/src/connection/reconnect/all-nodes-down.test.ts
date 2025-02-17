@@ -21,7 +21,7 @@ describe("reconnect", () => {
 
     client = KurrentDBClient.connectionString(
       cluster.connectionStringWithOverrides({
-        defaultDeadline: Infinity,
+        defaultDeadline: 100_000_000,
       })
     );
   });

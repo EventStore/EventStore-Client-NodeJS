@@ -1,4 +1,5 @@
-use eventstore::Endpoint;
+use std::string::ParseError;
+use eventstore::{Endpoint};
 use neon::{object::Object, prelude::Context, prelude::JsError, result::JsResult};
 
 #[derive(Debug)]
@@ -8,7 +9,8 @@ pub enum ErrorKind {
     StreamDeletedError,
     ParseError,
     NotLeaderError(Endpoint),
-    UnknownError(),
+    AccessDeniedError,
+    UnknownError(String),
 }
 
 impl From<eventstore::Error> for ErrorKind {
@@ -17,8 +19,9 @@ impl From<eventstore::Error> for ErrorKind {
             eventstore::Error::GrpcConnectionError(_) => ErrorKind::UnavailableError,
             eventstore::Error::ResourceNotFound => ErrorKind::StreamNotFoundError,
             eventstore::Error::ResourceDeleted => ErrorKind::StreamDeletedError,
+            eventstore::Error::AccessDenied => ErrorKind::AccessDeniedError,
             eventstore::Error::NotLeaderException(endpoint) => ErrorKind::NotLeaderError(endpoint),
-            _ => ErrorKind::UnknownError(),
+            _ => ErrorKind::UnknownError(err.to_string()),
         }
     }
 }
@@ -43,8 +46,9 @@ where
         ErrorKind::StreamNotFoundError => "StreamNotFoundError",
         ErrorKind::StreamDeletedError => "StreamDeletedError",
         ErrorKind::ParseError => "ParseError",
+        ErrorKind::AccessDeniedError => "AccessDeniedError",
         ErrorKind::NotLeaderError(_) => "NotLeaderError",
-        ErrorKind::UnknownError() => "UnknownError",
+        ErrorKind::UnknownError(_) => "UnknownError"
     };
 
     let error = JsError::error(cx, &error_name)?;

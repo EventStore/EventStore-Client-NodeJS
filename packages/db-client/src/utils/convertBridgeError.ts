@@ -2,6 +2,7 @@ import {
   NotLeaderError,
   StreamNotFoundError,
   StreamDeletedError,
+  AccessDeniedError,
 } from "./CommandError";
 import { ServiceError } from "@grpc/grpc-js";
 
@@ -18,6 +19,8 @@ export const convertBridgeError = (
       throw StreamDeletedError.fromStreamName(stream);
     case NotLeaderError.name:
       throw new NotLeaderError(error);
+    case AccessDeniedError.name:
+      throw new AccessDeniedError(error);
     default:
       throw error;
   }
