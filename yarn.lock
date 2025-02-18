@@ -1115,13 +1115,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kurrent/db-client-bridge@workspace:packages/db-client-bridge"
   dependencies:
-    "@eventstore/db-client": "npm:^6.2.1"
     "@neon-rs/cli": "npm:^0.1.82"
     "@neon-rs/load": "npm:^0.1.82"
     "@tsconfig/node20": "npm:^20.1.4"
     "@types/node": "npm:^20.11.16"
     clinic: "npm:^13.0.0"
-    tinybench: "npm:^3.1.1"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -2768,6 +2766,18 @@ __metadata:
   checksum: 10c0/ddfe85230b32df25aeebfdccfbc61d3bc493ace49c884c9c68575de1f5dcf733a5d7de9def3b0f318b786616b8d85bad50a28b1da1750c43e0012c93badcc148
   languageName: node
   linkType: hard
+
+"benchmark@workspace:packages/benchmark":
+  version: 0.0.0-use.local
+  resolution: "benchmark@workspace:packages/benchmark"
+  dependencies:
+    "@eventstore/db-client": "npm:^6.2.1"
+    "@kurrent/db-client": "workspace:^"
+    "@kurrent/db-client-bridge": "workspace:^"
+    clinic: "npm:^13.0.0"
+    tinybench: "npm:^3.1.1"
+  languageName: unknown
+  linkType: soft
 
 "bit-twiddle@npm:^1.0.0":
   version: 1.0.2

@@ -1,4 +1,4 @@
-const esdb = require("../lib");
+const esdb = require("@kurrent/db-client-bridge");
 const {Bench, hrtimeNow} = require("tinybench");
 
 (async () => {
@@ -6,7 +6,7 @@ const {Bench, hrtimeNow} = require("tinybench");
     let client = null;
 
     const bench = new Bench({
-        name: 'EventStoreDB client bridge',
+        name: 'KurrentDB bridge client (internal)',
         now: hrtimeNow,
         warmupIterations: 1,
         iterations: 20,
@@ -36,7 +36,6 @@ const {Bench, hrtimeNow} = require("tinybench");
     console.table(
         bench.tasks.map(({name, result}) => ({
             "Task Name": name,
-            "Period (ms)": result.period,
             "Average Time (ms)": result.mean,
             "Samples": result.samples.length,
         }))

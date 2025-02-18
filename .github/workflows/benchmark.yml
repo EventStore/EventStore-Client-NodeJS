@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   benchmark:
@@ -32,13 +33,19 @@ jobs:
         run: yarn build
 
       - name: Start KurrentDB
-        run: docker compose -f packages/db-client-bridge/docker-compose.yml up -d
+        run: docker compose -f packages/benchmark/docker-compose.yml up -d
 
       - name: Load Events
-        run: yarn nx run @kurrent/db-client-bridge:loadEvents
+        run: yarn nx run benchmark:loadEvents
 
       - name: Run Benchmarks
-        run: yarn nx run @kurrent/db-client-bridge:benchmark | tee benchmark-bridge-client-output-${{ matrix.os }}.txt
+        run: |
+          echo "Number of events: 10k"
+          echo "Size of each event: 23bytes"
+          echo "Node.js version: $(node --version)"
+          echo "1 warmup iteration"
+          echo "20 iterations"
+          yarn nx run benchmark:benchmark | tee benchmark-bridge-client-output-${{ matrix.os }}.txt
 
       - name: Upload Benchmark Results
         uses: actions/upload-artifact@v4
@@ -47,4 +54,4 @@ jobs:
           path: benchmark-bridge-client-output-${{ matrix.os }}.txt
 
       - name: Shutdown KurrentDB
-        run: docker compose -f packages/db-client-bridge/docker-compose.yml down
+        run: docker compose -f packages/benchmark/docker-compose.yml down

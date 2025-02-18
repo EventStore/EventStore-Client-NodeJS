@@ -30,7 +30,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
