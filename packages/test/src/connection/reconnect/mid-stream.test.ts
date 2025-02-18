@@ -30,7 +30,7 @@ describe.skip("reconnect", () => {
 
     try {
       let i = 0;
-      for await (const event of await client.readStream("my_stream")) {
+      for await (const event of client.readStream("my_stream")) {
         expect(event).toBeDefined();
 
         if (i === 12) {

@@ -92,7 +92,7 @@ describe("instrumentation", () => {
         const spans = memoryExporter.getFinishedSpans();
         const span = spans[0];
 
-        const events = await collect(await client.readStream(STREAM));
+        const events = await collect(client.readStream(STREAM));
         const event = events[0];
 
         expect(events.length).toBe(1);

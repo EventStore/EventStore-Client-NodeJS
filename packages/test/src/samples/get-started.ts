@@ -44,7 +44,7 @@ optionalDescribe(!!CLOUD_ID)("[sample] get-started", () => {
     // endregion appendEvents
 
     // region readStream
-    const events = await client.readStream<TestEvent>(STREAM_NAME, {
+    const events = client.readStream<TestEvent>(STREAM_NAME, {
       direction: FORWARDS,
       fromRevision: START,
       maxCount: 10,

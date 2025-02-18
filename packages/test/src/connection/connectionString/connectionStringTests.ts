@@ -40,7 +40,7 @@ export const connectionStringTests = ({
       );
       await delay(100);
       const readResult = await collect(
-        await client.readStream(STREAM_NAME, {
+        client.readStream(STREAM_NAME, {
           maxCount: 10,
         })
       );
@@ -63,7 +63,7 @@ export const connectionStringTests = ({
       );
       await delay(100);
       const readResult = await collect(
-        await client.readStream(STREAM_NAME, {
+        client.readStream(STREAM_NAME, {
           maxCount: 10,
         })
       );
@@ -77,7 +77,7 @@ export const connectionStringTests = ({
       const query = createQueryString(server);
       const client = KurrentDBClient.connectionString`esdb://admin:changeit@${uri}?${query}`;
       await expect(
-        collect(await client.readAll({ maxCount: 10 }))
+        collect(client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
     });
   });

@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 // This module is the CJS entry point for the library.
 
 // The Rust addon.
@@ -19,10 +21,8 @@ export type RustClient = {
   readStream(
     stream: string,
     options?: RustReadStreamOptions
-  ): Promise<AsyncIterable<ResolvedEvent[]>>;
-  readAll(
-    options?: RustReadAllOptions
-  ): Promise<AsyncIterable<ResolvedEvent[]>>;
+  ): AsyncIterable<ResolvedEvent[]>;
+  readAll(options?: RustReadAllOptions): AsyncIterable<ResolvedEvent[]>;
 };
 
 export type RawClient = {
@@ -80,43 +80,52 @@ export function createClient(connStr: string): RustClient {
   const client = addon.createClient(connStr);
 
   return {
-    async readStream(
+    readStream(
       stream: string,
       options: RustReadStreamOptions
-    ): Promise<AsyncIterable<ResolvedEvent[]>> {
-      const iterable = await client.readStream(stream, options);
+    ): AsyncIterable<ResolvedEvent[]> {
+      let iteratorPromise: Promise<Iterable> | null = null;
+
+      const asyncIterator: AsyncIterator<ResolvedEvent[]> = {
+        async next() {
+          if (!iteratorPromise)
+            iteratorPromise = client.readStream(stream, options);
+
+          const iterator = await iteratorPromise;
+          const buffer = await addon.readStreamNext(iterator);
+          return JSON.parse(buffer.toString()) as {
+            value: ResolvedEvent[];
+            done: boolean;
+          };
+        },
+      };
 
       return {
-        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent[]> {
-          return {
-            async next() {
-              const buffer = await addon.readStreamNext(iterable);
-              return JSON.parse(buffer.toString()) as {
-                value: ResolvedEvent[];
-                done: boolean;
-              };
-            },
-          };
+        [Symbol.asyncIterator]() {
+          return asyncIterator;
         },
       };
     },
 
-    async readAll(
-      options: RustReadAllOptions
-    ): Promise<AsyncIterable<ResolvedEvent[]>> {
-      const iterable = await client.readAll(options);
+    readAll(options: RustReadAllOptions): AsyncIterable<ResolvedEvent[]> {
+      let iteratorPromise: Promise<Iterable> | null = null;
+
+      const asyncIterator: AsyncIterator<ResolvedEvent[]> = {
+        async next() {
+          if (!iteratorPromise) iteratorPromise = client.readAll(options);
+
+          const iterator = await iteratorPromise;
+          const buffer = await addon.readStreamNext(iterator);
+          return JSON.parse(buffer.toString()) as {
+            value: ResolvedEvent[];
+            done: boolean;
+          };
+        },
+      };
 
       return {
-        [Symbol.asyncIterator](): AsyncIterator<ResolvedEvent[]> {
-          return {
-            async next() {
-              const buffer = await addon.readStreamNext(iterable);
-              return JSON.parse(buffer.toString()) as {
-                value: ResolvedEvent[];
-                done: boolean;
-              };
-            },
-          };
+        [Symbol.asyncIterator]() {
+          return asyncIterator;
         },
       };
     },

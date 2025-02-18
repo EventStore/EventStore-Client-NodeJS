@@ -6,7 +6,7 @@ const esdb = require("../lib");
 
     // Warm-up
     console.log("Warming up...");
-    const warmupStream = await client.readStream(streamName);
+    const warmupStream = client.readStream(streamName);
     let warmupCount = 0;
     for await (const _ of warmupStream) {
         if (++warmupCount >= 100) break;
@@ -19,7 +19,7 @@ const esdb = require("../lib");
     const iterations = 20;
 
     for (let iter = 0; iter < iterations; iter++) {
-        const stream = await client.readStream(streamName);
+        const stream = client.readStream(streamName);
         const start = performance.now();
 
         let i = 0;

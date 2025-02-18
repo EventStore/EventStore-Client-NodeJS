@@ -36,7 +36,7 @@ describe("reconnect", () => {
 
     // attempt to read a stream that doesn't exist should fail
     await expect(async () => {
-      for await (const event of await client.readStream("doesn't-exist")) {
+      for await (const event of client.readStream("doesn't-exist")) {
         expect(event).toBe("unreachable");
       }
     }).rejects.toThrowError(StreamNotFoundError);

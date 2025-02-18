@@ -33,7 +33,7 @@ describe("tlsCAFile", () => {
       jsonTestEvents()
     );
     const readResult = await collect(
-      await client.readStream(STREAM_NAME, { maxCount: 10 })
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
 
     expect(appendResult).toBeDefined();

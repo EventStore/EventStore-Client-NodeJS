@@ -38,7 +38,7 @@ describe("not-leader", () => {
 
     const readFromTestStream = async (client: KurrentDBClient) => {
       return collect(
-        await client.readStream(STREAM_NAME, {
+        client.readStream(STREAM_NAME, {
           maxCount: 10,
           direction: BACKWARDS,
           fromRevision: END,

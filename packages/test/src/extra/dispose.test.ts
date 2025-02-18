@@ -93,7 +93,7 @@ describe("dispose", () => {
       credentials: { username: "admin", password: "changeit" },
     });
 
-    for await (const event of await client.readStream(STREAM_NAME, {
+    for await (const event of client.readStream(STREAM_NAME, {
       maxCount: 1,
     })) {
       expect(extractKnownStreams.call(client).size).toBe(1);

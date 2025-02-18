@@ -139,7 +139,7 @@ describe("[sample] appending-events", () => {
       );
 
       // region append-with-concurrency-check
-      const events = await client.readStream<SomeEvent>("concurrency-stream", {
+      const events = client.readStream<SomeEvent>("concurrency-stream", {
         fromRevision: START,
         direction: FORWARDS,
       });

@@ -37,7 +37,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-stream", async () => {
     // region read-from-stream
-    const events = await client.readStream<SomeEvent>("some-stream", {
+    const events = client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: START,
       maxCount: 10,
@@ -53,7 +53,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-stream-position", async () => {
     // region read-from-stream-position
-    const events = await client.readStream<SomeEvent>("some-stream", {
+    const events = client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: BigInt(10),
       maxCount: 20,
@@ -70,7 +70,7 @@ describe("[sample] reading-events", () => {
   test("read-from-stream-position-check", async () => {
     // region checking-for-stream-presence
 
-    const events = await client.readStream<SomeEvent>("some-stream", {
+    const events = client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: BigInt(10),
       maxCount: 20,
@@ -98,7 +98,7 @@ describe("[sample] reading-events", () => {
       password: "changeit",
     };
 
-    const events = await client.readStream<SomeEvent>("some-stream", {
+    const events = client.readStream<SomeEvent>("some-stream", {
       direction: FORWARDS,
       fromRevision: START,
       credentials,
@@ -113,7 +113,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-stream-backwards", async () => {
     // region reading-backwards
-    const events = await client.readStream<SomeEvent>("some-stream", {
+    const events = client.readStream<SomeEvent>("some-stream", {
       direction: BACKWARDS,
       fromRevision: END,
       maxCount: 10,
@@ -127,7 +127,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-all-stream", async () => {
     // region read-from-all-stream
-    const events = await client.readAll({
+    const events = client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       maxCount: 10,
@@ -143,7 +143,7 @@ describe("[sample] reading-events", () => {
 
   test("ignore-system-events", async () => {
     // region ignore-system-events
-    const events = await client.readAll({
+    const events = client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       maxCount: 10,
@@ -161,7 +161,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-all-stream-backwards", async () => {
     // region read-from-all-stream-backwards
-    const events = await client.readAll({
+    const events = client.readAll({
       direction: BACKWARDS,
       fromPosition: END,
       maxCount: 10,
@@ -184,7 +184,7 @@ describe("[sample] reading-events", () => {
       password: "changeit",
     };
 
-    const events = await client.readAll({
+    const events = client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       credentials,
@@ -199,7 +199,7 @@ describe("[sample] reading-events", () => {
 
   test("filter-out-system-events", async () => {
     // region filter-out-system-events
-    const events = await client.readAll({
+    const events = client.readAll({
       direction: FORWARDS,
       fromPosition: START,
       maxCount: 10,
@@ -216,7 +216,7 @@ describe("[sample] reading-events", () => {
 
   test("read-from-all-stream-resolving-link-tos", async () => {
     // region read-from-all-stream-resolving-link-Tos
-    const events = await client.readAll({
+    const events = client.readAll({
       direction: BACKWARDS,
       fromPosition: END,
       resolveLinkTos: true,

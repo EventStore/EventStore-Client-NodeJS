@@ -55,7 +55,7 @@ describe("appendToStream", () => {
       );
 
       let count = 0;
-      for await (const { event } of await client.readStream(STREAM_NAME, {
+      for await (const { event } of client.readStream(STREAM_NAME, {
         maxCount: 1,
       })) {
         expect(event?.data).toStrictEqual(KILLER);
@@ -93,14 +93,14 @@ describe("appendToStream", () => {
       );
 
       const [trueEvent] = await collect(
-        await client.readStream(LINK_TO_STREAM_NAME, {
+        client.readStream(LINK_TO_STREAM_NAME, {
           fromRevision: LINK_REVISION,
           maxCount: 1,
         })
       );
 
       const [linkEvent] = await collect(
-        await client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
+        client.readStream(LINK_FROM_STREAM_NAME, { resolveLinkTos: true })
       );
 
       expect(trueEvent.event).toBeDefined();
@@ -141,12 +141,9 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(
-            STREAM_NAME,
-            {
-              maxCount: 1,
-            }
-          )) {
+          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+            maxCount: 1,
+          })) {
             expect(event?.metadata).toBeDefined();
             expect(event?.metadata.metaMessage).toMatch(METADATA.metaMessage);
             count++;
@@ -170,12 +167,9 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(
-            STREAM_NAME,
-            {
-              maxCount: 1,
-            }
-          )) {
+          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+            maxCount: 1,
+          })) {
             expect(event?.metadata).toBeDefined();
             expect(event?.metadata.metaMessage).toMatch(METADATA.metaMessage);
             count++;
@@ -214,12 +208,9 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(
-            STREAM_NAME,
-            {
-              maxCount: 1,
-            }
-          )) {
+          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+            maxCount: 1,
+          })) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -244,12 +235,9 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(
-            STREAM_NAME,
-            {
-              maxCount: 1,
-            }
-          )) {
+          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+            maxCount: 1,
+          })) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -289,12 +277,9 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(
-            STREAM_NAME,
-            {
-              maxCount: 1,
-            }
-          )) {
+          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+            maxCount: 1,
+          })) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -319,12 +304,9 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream<E>(
-            STREAM_NAME,
-            {
-              maxCount: 1,
-            }
-          )) {
+          for await (const { event } of client.readStream<E>(STREAM_NAME, {
+            maxCount: 1,
+          })) {
             expect(event?.metadata).toBeDefined();
             const metaMessage = Buffer.from(event!.metadata).toString("binary");
             expect(metaMessage).toMatch(MESSAGE);
@@ -351,7 +333,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream(STREAM_NAME, {
+          for await (const { event } of client.readStream(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeUndefined();
@@ -373,7 +355,7 @@ describe("appendToStream", () => {
           expect(result.nextExpectedRevision).toBeGreaterThanOrEqual(0);
 
           let count = 0;
-          for await (const { event } of await client.readStream(STREAM_NAME, {
+          for await (const { event } of client.readStream(STREAM_NAME, {
             maxCount: 1,
           })) {
             expect(event?.metadata).toBeUndefined();

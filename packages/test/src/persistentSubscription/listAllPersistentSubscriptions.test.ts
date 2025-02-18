@@ -38,7 +38,7 @@ describe("listAllPersistentSubscriptions", () => {
 
     if (psToAllSupported) {
       let position!: Position;
-      for await (const { event } of await client.readAll({ maxCount: 60 })) {
+      for await (const { event } of client.readAll({ maxCount: 60 })) {
         if (!event) continue;
         position = event.position;
       }

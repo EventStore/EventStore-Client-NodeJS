@@ -47,7 +47,7 @@ describe.skip("reconnect", () => {
 
     // read the stream successfully
     const firstReadStream = await collect(
-      await client.readStream(STREAM_NAME, { maxCount: 10 })
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
     expect(firstReadStream.length).toBe(1);
     const firstEvent = firstReadStream[0].event;
@@ -67,7 +67,7 @@ describe.skip("reconnect", () => {
     const firstDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(firstDeleteStream).toBeDefined();
     await expect(
-      collect(await client.readStream(STREAM_NAME, { maxCount: 10 }))
+      collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
     ).rejects.toThrowError(StreamNotFoundError);
 
     // Kill all nodes
@@ -89,7 +89,7 @@ describe.skip("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of await client.readStream(STREAM_NAME, {
+      for await (const e of client.readStream(STREAM_NAME, {
         maxCount: 10,
       })) {
         count++;
@@ -129,7 +129,7 @@ describe.skip("reconnect", () => {
     // read the stream
     await expect(async () => {
       let count = 0;
-      for await (const e of await client.readStream(STREAM_NAME, {
+      for await (const e of client.readStream(STREAM_NAME, {
         maxCount: 10,
       })) {
         count++;
@@ -169,7 +169,7 @@ describe.skip("reconnect", () => {
     expect(reconnectedAppend).toBeDefined();
 
     const reconnectReadStream = await collect(
-      await client.readStream(STREAM_NAME, { maxCount: 10 })
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
     expect(reconnectReadStream.length).toBe(1);
     const reconnectEvent = reconnectReadStream[0].event;
@@ -187,7 +187,7 @@ describe.skip("reconnect", () => {
     const reconnectedDeleteStream = await client.deleteStream(STREAM_NAME);
     expect(reconnectedDeleteStream).toBeDefined();
     await expect(
-      collect(await client.readStream(STREAM_NAME, { maxCount: 10 }))
+      collect(client.readStream(STREAM_NAME, { maxCount: 10 }))
     ).rejects.toThrowError(StreamNotFoundError);
   });
 });

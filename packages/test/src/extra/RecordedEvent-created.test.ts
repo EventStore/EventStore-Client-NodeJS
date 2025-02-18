@@ -17,7 +17,7 @@ describe("RecordedEvent created", () => {
   test("Should be a Date", async () => {
     const STREAM_NAME = "test_stream_name";
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
-    for await (const { event } of await client.readStream(STREAM_NAME)) {
+    for await (const { event } of client.readStream(STREAM_NAME)) {
       expect(event).toBeDefined;
       expect(event?.created).toBeInstanceOf(Date);
     }
@@ -34,7 +34,7 @@ describe("RecordedEvent created", () => {
     // Lets wait 5 seconds before reading
     await delay(5_000);
 
-    for await (const { event } of await client.readStream(STREAM_NAME)) {
+    for await (const { event } of client.readStream(STREAM_NAME)) {
       expect(event?.created.valueOf()).toBeGreaterThanOrEqual(before);
       expect(event?.created.valueOf()).toBeLessThanOrEqual(after);
     }

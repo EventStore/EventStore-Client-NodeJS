@@ -19,7 +19,7 @@ describe("singleNodeConnection", () => {
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = await collect(
-      await client.readStream(STREAM_NAME, { maxCount: 10 })
+      client.readStream(STREAM_NAME, { maxCount: 10 })
     );
 
     expect(appendResult).toBeDefined();

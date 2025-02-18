@@ -32,7 +32,7 @@ describe("readAll", () => {
       let count = 0;
       const notSystemStreams = [];
 
-      for await (const { event } of await client.readAll()) {
+      for await (const { event } of client.readAll()) {
         count++;
 
         if (event && !event.streamId.startsWith("$")) {
@@ -48,13 +48,13 @@ describe("readAll", () => {
     test("from position", async () => {
       let eventToExtract!: AllStreamResolvedEvent;
 
-      for await (const event of await client.readAll({ maxCount: 3 })) {
+      for await (const event of client.readAll({ maxCount: 3 })) {
         eventToExtract = event;
       }
       const { position } = eventToExtract!.event!;
 
       let extracted!: AllStreamResolvedEvent;
-      for await (const event of await client.readAll({
+      for await (const event of client.readAll({
         maxCount: 1,
         fromPosition: position,
       })) {
@@ -68,7 +68,7 @@ describe("readAll", () => {
       let count = 0;
       const notSystemStreams = [];
 
-      for await (const { event } of await client.readAll({
+      for await (const { event } of client.readAll({
         direction: BACKWARDS,
         fromPosition: END,
       })) {
@@ -87,7 +87,7 @@ describe("readAll", () => {
     test("maxCount", async () => {
       let count = 0;
 
-      for await (const _ of await client.readAll({ maxCount: 2 })) {
+      for await (const _ of client.readAll({ maxCount: 2 })) {
         count++;
       }
 
@@ -119,7 +119,7 @@ describe("readAll", () => {
       await delay(1000);
 
       // by default, resolveLinkTos should be false
-      const noResolveLink = await client.readAll();
+      const noResolveLink = client.readAll();
 
       let noResolveEvent!: AllStreamResolvedEvent;
 
@@ -136,7 +136,7 @@ describe("readAll", () => {
       expect(noResolveEvent.event).toBeDefined();
       expect(noResolveEvent.event?.type).toBe("$>");
 
-      const doResolveLink = await client.readAll({
+      const doResolveLink = client.readAll({
         maxCount: 1,
         resolveLinkTos: true,
         fromPosition: noResolveEvent.event!.position,

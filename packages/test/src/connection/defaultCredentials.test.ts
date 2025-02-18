@@ -16,11 +16,11 @@ describe("defaultCredentials", () => {
     test("bad override", async () => {
       const client = KurrentDBClient.connectionString(node.connectionString());
       await expect(
-        collect(await client.readAll({ maxCount: 10 }))
+        collect(client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
       try {
         await collect(
-          await client.readAll({
+          client.readAll({
             maxCount: 10,
             credentials: { username: "AzureDiamond", password: "hunter2" },
           })
@@ -41,13 +41,13 @@ describe("defaultCredentials", () => {
       );
 
       try {
-        await collect(await client.readAll({ maxCount: 10 }));
+        await collect(client.readAll({ maxCount: 10 }));
       } catch (e) {
         expect(e).toBeInstanceOf(AccessDeniedError);
       }
       await expect(
         collect(
-          await client.readAll({
+          client.readAll({
             maxCount: 10,
             credentials: { username: "admin", password: "changeit" },
           })

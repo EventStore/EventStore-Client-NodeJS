@@ -1,5 +1,3 @@
-import type { ReadableOptions } from "stream";
-
 import type {
   BaseOptions,
   ReadPosition,
@@ -46,13 +44,12 @@ declare module "../Client" {
      * @param options - Reading options.
      */
     readAll(
-      options?: ReadAllOptions,
-      readableOptions?: ReadableOptions
-    ): Promise<AsyncIterableIterator<AllStreamResolvedEvent>>;
+      options?: ReadAllOptions
+    ): AsyncIterableIterator<AllStreamResolvedEvent>;
   }
 }
 
-Client.prototype.readAll = async function (
+Client.prototype.readAll = function (
   this: Client,
   {
     maxCount = Number.MAX_SAFE_INTEGER,
@@ -61,7 +58,7 @@ Client.prototype.readAll = async function (
     direction = FORWARDS,
     ...baseOptions
   }: ReadAllOptions = {}
-): Promise<AsyncIterableIterator<AllStreamResolvedEvent>> {
+): AsyncIterableIterator<AllStreamResolvedEvent> {
   const options: bridge.RustReadAllOptions = {
     maxCount: BigInt(maxCount),
     fromPosition,
@@ -73,9 +70,9 @@ Client.prototype.readAll = async function (
 
   let stream;
   try {
-    stream = await this.rustClient.readAll(options);
+    stream = this.rustClient.readAll(options);
   } catch (error) {
-    return convertBridgeError(error);
+    throw convertBridgeError(error);
   }
 
   const convert = async function* (
@@ -88,7 +85,7 @@ Client.prototype.readAll = async function (
         }
       }
     } catch (error) {
-      return convertBridgeError(error);
+      throw convertBridgeError(error);
     }
   };
 

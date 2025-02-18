@@ -35,12 +35,9 @@ describe("tombstoneStream", () => {
         expect(result).toBeDefined();
 
         try {
-          for await (const event of await client.readStream(
-            ANY_REVISION_STREAM,
-            {
-              maxCount: 10,
-            }
-          )) {
+          for await (const event of client.readStream(ANY_REVISION_STREAM, {
+            maxCount: 10,
+          })) {
             expect(event).toBe("Unreachable");
           }
         } catch (error) {
@@ -80,7 +77,7 @@ describe("tombstoneStream", () => {
         it("succeeds", async () => {
           let revision!: bigint;
 
-          for await (const { event } of await client.readStream(STREAM, {
+          for await (const { event } of client.readStream(STREAM, {
             maxCount: 1,
             direction: BACKWARDS,
             fromRevision: END,
@@ -95,7 +92,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           try {
-            for await (const event of await client.readStream(STREAM, {
+            for await (const event of client.readStream(STREAM, {
               maxCount: 10,
             })) {
               expect(event).toBeDefined();
@@ -143,7 +140,7 @@ describe("tombstoneStream", () => {
           expect(result).toBeDefined();
 
           await expect(async () =>
-            collect(await client.readStream(NOT_A_STREAM, { maxCount: 10 }))
+            collect(client.readStream(NOT_A_STREAM, { maxCount: 10 }))
           ).rejects.toThrow(StreamDeletedError);
         });
       });

@@ -1,4 +1,3 @@
-import type { ReadableOptions } from "stream";
 import * as bridge from "@kurrent/db-client-bridge";
 
 import { Client } from "../Client";
@@ -48,13 +47,12 @@ declare module "../Client" {
      */
     readStream<KnownEventType extends EventType = EventType>(
       streamName: string,
-      options?: ReadStreamOptions,
-      readableOptions?: ReadableOptions
-    ): Promise<AsyncIterableIterator<ResolvedEvent<KnownEventType>>>;
+      options?: ReadStreamOptions
+    ): AsyncIterableIterator<ResolvedEvent<KnownEventType>>;
   }
 }
 
-Client.prototype.readStream = async function <
+Client.prototype.readStream = function <
   KnownEventType extends EventType = EventType
 >(
   this: Client,
@@ -66,7 +64,7 @@ Client.prototype.readStream = async function <
     direction = FORWARDS,
     ...baseOptions
   }: ReadStreamOptions = {}
-): Promise<AsyncIterableIterator<ResolvedEvent<KnownEventType>>> {
+): AsyncIterableIterator<ResolvedEvent<KnownEventType>> {
   const options: bridge.RustReadStreamOptions = {
     maxCount: BigInt(maxCount),
     fromRevision,
@@ -108,9 +106,9 @@ Client.prototype.readStream = async function <
 
   let stream;
   try {
-    stream = await this.rustClient.readStream(streamName, options);
+    stream = this.rustClient.readStream(streamName, options);
   } catch (error) {
-    return convertBridgeError(error, streamName);
+    throw convertBridgeError(error, streamName);
   }
 
   const convert = async function* (
@@ -123,7 +121,7 @@ Client.prototype.readStream = async function <
         }
       }
     } catch (error) {
-      return convertBridgeError(error, streamName);
+      throw convertBridgeError(error, streamName);
     }
   };
 

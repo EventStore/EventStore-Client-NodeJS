@@ -24,7 +24,7 @@ const {Bench, hrtimeNow} = require("tinybench");
 
     bench
         .add('readStream', async () => {
-            const stream = await client.readStream(streamName, {maxCount: 10_000n});
+            const stream = client.readStream(streamName, {maxCount: 10_000n});
 
             for await (const resolved of stream)
                 i += resolved.commitPosition;

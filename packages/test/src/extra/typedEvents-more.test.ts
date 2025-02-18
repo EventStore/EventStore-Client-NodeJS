@@ -293,7 +293,7 @@ describe("typed events should compile", () => {
       jsonEvents
     );
 
-    const shoppingCartStream = await client.readStream<ShoppingCartEvent>(
+    const shoppingCartStream = client.readStream<ShoppingCartEvent>(
       `shoppingcart-${shoppingCartId}`
     );
 
