@@ -83,9 +83,9 @@ const createNodes = (
               []
             )
             .join(",")}`,
-          `EVENTSTORE_INT_IP=${ipv4_address}`,
+          `EVENTSTORE_REPLICATION_IP=${ipv4_address}`,
           `EVENTSTORE_ADVERTISE_HOST_TO_CLIENT_AS=${domain}`,
-          `EVENTSTORE_ADVERTISE_HTTP_PORT_TO_CLIENT_AS=${port}`,
+          `EVENTSTORE_ADVERTISE_NODE_PORT_TO_CLIENT_AS=${port}`,
           `EVENTSTORE_CLUSTER_SIZE=${internalIPs.length}`,
           "EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true",
           "EVENTSTORE_RUN_PROJECTIONS=All",

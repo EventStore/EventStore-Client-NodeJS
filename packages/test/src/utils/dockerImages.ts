@@ -22,6 +22,11 @@ const esdbImage = ((): string => {
         "eventstore-staging-ce:",
         "docker.eventstore.com/eventstore-staging-ce/eventstoredb-ce:"
       );
+    case version.startsWith("eventstore-preview:"):
+      return version.replace(
+        "eventstore-preview:",
+        "docker.eventstore.com/eventstore-preview/kurrentdb:"
+        );
     default:
       return version;
   }

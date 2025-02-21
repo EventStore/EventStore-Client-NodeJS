@@ -10,8 +10,7 @@ describe("http api", () => {
     return this.HTTPRequest<PingResult>("GET", "/ping", {});
   }
   const goodPing = {
-    msgTypeId: expect.any(Number),
-    text: "Ping request successfully handled",
+    text: "Ping request successfully handled"
   };
 
   describe("secure", () => {
