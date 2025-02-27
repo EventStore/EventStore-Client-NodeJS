@@ -9,7 +9,6 @@ import {
   JSONEventType,
   RecordedEvent,
   ResolvedEvent,
-  StreamingRead,
 } from "@kurrent/db-client";
 
 describe("typed events should compile", () => {
@@ -18,11 +17,7 @@ describe("typed events should compile", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -40,7 +35,7 @@ describe("typed events should compile", () => {
         when: EventAggregator<Entity, StreamEvents>
       ) =>
       async (
-        eventStream: StreamingRead<ResolvedEvent<StreamEvents>>
+        eventStream: AsyncIterableIterator<ResolvedEvent<StreamEvents>>
       ): Promise<Entity> => {
         let currentState: Entity | undefined = undefined;
         for await (const { event } of eventStream) {

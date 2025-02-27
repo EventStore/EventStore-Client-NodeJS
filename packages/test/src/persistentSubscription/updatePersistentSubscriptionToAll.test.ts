@@ -21,13 +21,7 @@ describe("updatePersistentSubscriptionToAll", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

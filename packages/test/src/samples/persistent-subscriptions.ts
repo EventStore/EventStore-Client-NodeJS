@@ -31,11 +31,7 @@ describe("[sample] persistent-subscriptions", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn(log);

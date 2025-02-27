@@ -17,13 +17,10 @@ describe("getPersistentSubscriptionToStreamInfo", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient(
-      {
-        endpoint: node.uri,
+    client = KurrentDBClient.connectionString(
+      node.connectionStringWithOverrides({
         connectionName: "getPersistentSubscriptionInfo test client",
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
+      })
     );
   });
 

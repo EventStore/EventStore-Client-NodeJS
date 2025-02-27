@@ -14,7 +14,7 @@ describe("http2 assertion failure", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient({ endpoint: node.uri }, { insecure: true });
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

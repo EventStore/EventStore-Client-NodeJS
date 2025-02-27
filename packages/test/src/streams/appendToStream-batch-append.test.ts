@@ -20,11 +20,7 @@ describe("appendToStream - batch append", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
     batchSpy = spyOn.call(client, "GRPCStreamCreator");
     executeSpy = spyOn.call(client, "execute");
   });

@@ -16,11 +16,7 @@ describe("tombstoneStream", () => {
 
     beforeAll(async () => {
       await node.up();
-      client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = KurrentDBClient.connectionString(node.connectionString());
     });
 
     afterAll(async () => {
@@ -143,9 +139,9 @@ describe("tombstoneStream", () => {
 
           expect(result).toBeDefined();
 
-          await expect(() =>
+          await expect(async () =>
             collect(client.readStream(NOT_A_STREAM, { maxCount: 10 }))
-          ).rejects.toThrowError(StreamDeletedError);
+          ).rejects.toThrow(StreamDeletedError);
         });
       });
     });

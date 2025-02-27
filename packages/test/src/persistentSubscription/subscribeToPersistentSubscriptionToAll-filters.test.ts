@@ -34,11 +34,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new KurrentDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(cluster.connectionString());
   });
 
   afterAll(async () => {

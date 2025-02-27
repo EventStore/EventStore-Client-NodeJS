@@ -42,10 +42,11 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",
+    "@kurrent/db-client-bridge": "workspace:^",
     "@types/debug": "^4.1.12",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.10.2",

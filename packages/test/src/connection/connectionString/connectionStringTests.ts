@@ -32,7 +32,7 @@ export const connectionStringTests = ({
       const STREAM_NAME = `${streamPrefix}_template_string_stream`;
       const uri = createUri(server);
       const query = createQueryString(server);
-      const client = KurrentDBClient.connectionString`kurrent://admin:changeit@${uri}?${query}`;
+      const client = KurrentDBClient.connectionString`esdb://admin:changeit@${uri}?${query}`;
 
       const appendResult = await client.appendToStream(
         STREAM_NAME,
@@ -54,7 +54,7 @@ export const connectionStringTests = ({
       const uri = createUri(server);
       const query = createQueryString(server);
       const client = KurrentDBClient.connectionString(
-        `kurrent://admin:changeit@${uri}?${query}`
+        `esdb://admin:changeit@${uri}?${query}`
       );
 
       const appendResult = await client.appendToStream(
@@ -75,7 +75,7 @@ export const connectionStringTests = ({
     test("default credentials", async () => {
       const uri = createUri(server);
       const query = createQueryString(server);
-      const client = KurrentDBClient.connectionString`kurrent://admin:changeit@${uri}?${query}`;
+      const client = KurrentDBClient.connectionString`esdb://admin:changeit@${uri}?${query}`;
       await expect(
         collect(client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();

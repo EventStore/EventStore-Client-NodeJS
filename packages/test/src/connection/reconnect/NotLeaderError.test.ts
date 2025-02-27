@@ -16,16 +16,11 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new KurrentDBClient(
-      {
-        endpoints: cluster.endpoints,
-        nodePreference: FOLLOWER,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
+    const client = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        defaultDeadline: 100_000_000,
+        nodePreference: "follower",
+      })
     );
 
     // make successful append to follower node

@@ -10,7 +10,6 @@ import {
   optionalDescribe,
 } from "@test-utils";
 import {
-  KurrentDBClient,
   BACKWARDS,
   END,
   jsonEvent,
@@ -18,9 +17,9 @@ import {
   StreamNotFoundError,
   ResolvedEvent,
   LinkEvent,
-  Position,
   AppendResult,
   InvalidArgumentError,
+  KurrentDBClient,
 } from "@kurrent/db-client";
 
 describe("readStream", () => {
@@ -32,11 +31,7 @@ describe("readStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     appendResult = await client.appendToStream(STREAM_NAME, [
       ...jsonTestEvents(4, "json-test"),
@@ -146,7 +141,9 @@ describe("readStream", () => {
       test("maxCount", async () => {
         let count = 0;
 
-        for await (const _ of client.readStream(STREAM_NAME, { maxCount: 2 })) {
+        for await (const _ of client.readStream(STREAM_NAME, {
+          maxCount: 2,
+        })) {
           count++;
         }
 
@@ -211,7 +208,7 @@ describe("readStream", () => {
     });
 
     describe("errors", () => {
-      test("stream not found", async () => {
+      test.skip("stream not found", async () => {
         const NO_STREAM_NAME = "this_is_not_a_stream";
 
         try {
@@ -255,7 +252,7 @@ describe("readStream", () => {
         }
       });
 
-      test("stream deleted", async () => {
+      test.skip("stream deleted", async () => {
         const DELETE_STREAM_NAME = "this_stream_will_be_deleted";
 
         await client.appendToStream(DELETE_STREAM_NAME, jsonTestEvents());

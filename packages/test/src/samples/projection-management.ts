@@ -39,11 +39,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
     beforeAll(async () => {
       await node.up();
 
-      client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.appendToStream("some-stream", jsonTestEvents());
       console.log = jest.fn(log);
@@ -65,7 +61,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
 
       // region createClient
       const client = KurrentDBClient.connectionString`
-        kurrent+discover://${ADMIN}:${PASSWORD}@${ENDPOINT}?nodePreference=leader
+        esdb+discover://${ADMIN}:${PASSWORD}@${ENDPOINT}?nodePreference=leader
     `;
       // endregion createClient
 

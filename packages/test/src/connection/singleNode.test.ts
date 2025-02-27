@@ -15,11 +15,7 @@ describe("singleNodeConnection", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(node.connectionString());
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = await collect(

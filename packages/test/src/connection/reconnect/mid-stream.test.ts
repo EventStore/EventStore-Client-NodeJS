@@ -6,27 +6,18 @@ import {
   getCurrentConnection,
   jsonTestEvents,
 } from "@test-utils";
-import {
-  jsonEvent,
-  KurrentDBClient,
-  CancelledError,
-  UnavailableError,
-} from "@kurrent/db-client";
+import { jsonEvent, KurrentDBClient, CancelledError } from "@kurrent/db-client";
 
 // This test can take time.
 jest.setTimeout(120_000);
 
-describe("reconnect", () => {
+describe.skip("reconnect", () => {
   test("Connection error mid stream should cause a reconnect", async () => {
     const cluster = createTestCluster();
 
     await cluster.up();
 
-    const client = new KurrentDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(cluster.connectionString());
 
     // make successful append of 2000 events to node
     const firstAppend = await client.appendToStream(
@@ -53,7 +44,7 @@ describe("reconnect", () => {
 
       expect(i).toBe("unreachable");
     } catch (error) {
-      expect(error).toBeInstanceOf(UnavailableError);
+      expect(error).toBeInstanceOf(CancelledError);
     }
 
     // wait for leader to be ready

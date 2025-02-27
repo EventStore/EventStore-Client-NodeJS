@@ -29,14 +29,6 @@ describe("deadline", () => {
         "connectionString",
         () => KurrentDBClient.connectionString(connectionString),
       ],
-      [
-        "constructor",
-        () =>
-          new KurrentDBClient({
-            endpoint: "host:1234",
-            ...constructorOptions,
-          }),
-      ],
     ])("%s", async (_, createClient) => {
       expect(() => createClient()).toThrowErrorMatchingSnapshot();
     });

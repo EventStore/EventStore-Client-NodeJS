@@ -1,6 +1,4 @@
 /** @jest-environment ./src/utils/enableVersionCheck.ts */
-import type { Duplex } from "stream";
-
 import {
   createTestNode,
   matchServerVersion,
@@ -16,11 +14,7 @@ describe("appendToStream - batch append - flood", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

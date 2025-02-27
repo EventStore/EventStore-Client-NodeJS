@@ -1,27 +1,17 @@
-import type { ReadableOptions } from "stream";
-
-import { Empty } from "../../generated/shared_pb";
-import { StreamsClient } from "../../generated/streams_grpc_pb";
-import { ReadReq } from "../../generated/streams_pb";
+import * as bridge from "@kurrent/db-client-bridge";
 
 import { Client } from "../Client";
-import { BACKWARDS, END, FORWARDS, START } from "../constants";
+import { FORWARDS, START, END } from "../constants";
 import type {
   BaseOptions,
   Direction,
   EventType,
   ReadRevision,
   ResolvedEvent,
-  StreamingRead,
 } from "../types";
-import {
-  debug,
-  convertGrpcEvent,
-  createStreamIdentifier,
-  InvalidArgumentError,
-} from "../utils";
-
-import { ReadStream } from "./utils/ReadStream";
+import { InvalidArgumentError } from "../utils";
+import { convertRustEvent } from "../utils/convertRustEvent";
+import { convertBridgeError } from "../utils/convertBridgeError";
 
 export interface ReadStreamOptions extends BaseOptions {
   /**
@@ -57,9 +47,8 @@ declare module "../Client" {
      */
     readStream<KnownEventType extends EventType = EventType>(
       streamName: string,
-      options?: ReadStreamOptions,
-      readableOptions?: ReadableOptions
-    ): StreamingRead<ResolvedEvent<KnownEventType>>;
+      options?: ReadStreamOptions
+    ): AsyncIterableIterator<ResolvedEvent<KnownEventType>>;
   }
 }
 
@@ -74,27 +63,25 @@ Client.prototype.readStream = function <
     resolveLinkTos = false,
     direction = FORWARDS,
     ...baseOptions
-  }: ReadStreamOptions = {},
-  readableOptions: ReadableOptions = {}
-): StreamingRead<ResolvedEvent<KnownEventType>> {
-  const req = new ReadReq();
-  const options = new ReadReq.Options();
-  const streamOptions = new ReadReq.Options.StreamOptions();
-  const uuidOption = new ReadReq.Options.UUIDOption();
-  const identifier = createStreamIdentifier(streamName);
-
-  uuidOption.setString(new Empty());
-  streamOptions.setStreamIdentifier(identifier);
-
+  }: ReadStreamOptions = {}
+): AsyncIterableIterator<ResolvedEvent<KnownEventType>> {
+  const options: bridge.RustReadStreamOptions = {
+    maxCount: BigInt(maxCount),
+    fromRevision,
+    resolvesLink: resolveLinkTos,
+    direction,
+    requiresLeader: baseOptions.requiresLeader ?? true,
+    credentials: baseOptions.credentials,
+  };
   switch (fromRevision) {
     case START: {
-      streamOptions.setStart(new Empty());
       break;
     }
+
     case END: {
-      streamOptions.setEnd(new Empty());
       break;
     }
+
     default: {
       const lowerBound = BigInt("0");
       const upperBound = BigInt("0xffffffffffffffff");
@@ -111,53 +98,32 @@ Client.prototype.readStream = function <
         );
       }
 
-      streamOptions.setRevision(fromRevision.toString(10));
+      options.fromRevision = fromRevision;
+
       break;
     }
   }
 
-  options.setStream(streamOptions);
-  options.setResolveLinks(resolveLinkTos);
-  options.setCount(maxCount.toString(10));
-  options.setUuidOption(uuidOption);
-  options.setNoFilter(new Empty());
-
-  switch (direction) {
-    case FORWARDS: {
-      options.setReadDirection(0);
-      break;
-    }
-    case BACKWARDS: {
-      options.setReadDirection(1);
-      break;
-    }
+  let stream;
+  try {
+    stream = this.rustClient.readStream(streamName, options);
+  } catch (error) {
+    throw convertBridgeError(error, streamName);
   }
 
-  req.setOptions(options);
+  const convert = async function* (
+    stream: AsyncIterable<bridge.ResolvedEvent[]>
+  ) {
+    try {
+      for await (const events of stream) {
+        for (const event of events) {
+          yield convertRustEvent(event);
+        }
+      }
+    } catch (error) {
+      throw convertBridgeError(error, streamName);
+    }
+  };
 
-  debug.command("readStream: %O", {
-    streamName,
-    maxCount,
-    options: {
-      fromRevision,
-      resolveLinkTos,
-      direction,
-      ...baseOptions,
-    },
-  });
-  debug.command_grpc("readStream: %g", req);
-
-  const createGRPCStream = this.GRPCStreamCreator(
-    StreamsClient,
-    "readStream",
-    (client) =>
-      client.read(
-        req,
-        ...this.callArguments(baseOptions, {
-          deadline: Infinity,
-        })
-      )
-  );
-
-  return new ReadStream(createGRPCStream, convertGrpcEvent, readableOptions);
+  return convert(stream);
 };

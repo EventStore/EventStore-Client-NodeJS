@@ -1,12 +1,12 @@
 import { collect, createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
-  KurrentDBClient,
   BACKWARDS,
   END,
   AllStreamResolvedEvent,
   jsonEvent,
   AllStreamBinaryRecordedEvent,
   LinkEvent,
+  KurrentDBClient,
 } from "@kurrent/db-client";
 
 describe("readAll", () => {
@@ -17,11 +17,7 @@ describe("readAll", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents());
     await client.appendToStream(STREAM_NAME_B, jsonTestEvents());

@@ -34,13 +34,7 @@ describe("listAllPersistentSubscriptions", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new KurrentDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     if (psToAllSupported) {
       let position!: Position;
@@ -181,13 +175,7 @@ describe("listAllPersistentSubscriptions", () => {
     beforeAll(async () => {
       await emptyNode.up();
 
-      client = new KurrentDBClient(
-        {
-          endpoint: emptyNode.uri,
-        },
-        { rootCertificate: emptyNode.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = KurrentDBClient.connectionString(emptyNode.connectionString());
     });
 
     afterAll(async () => {

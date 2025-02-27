@@ -23,11 +23,7 @@ describe("appendToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -48,11 +44,7 @@ describe("appendToStream", () => {
       const STREAM_NAME = "encode1";
       const KILLER = "CC ‐ 1830";
 
-      const client = new KurrentDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.appendToStream(
         STREAM_NAME,
@@ -558,10 +550,10 @@ describe("appendToStream", () => {
 
   describe("throwOnAppendFailure", () => {
     test("throws on true", async () => {
-      const throwingClient = new KurrentDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: true },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const throwingClient = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: true,
+        })
       );
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
@@ -590,10 +582,10 @@ describe("appendToStream", () => {
     });
 
     test("returns failure result on false", async () => {
-      const nonThrowingClient = new KurrentDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: false },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const nonThrowingClient = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: false,
+        })
       );
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";

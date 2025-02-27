@@ -42,11 +42,7 @@ describe("write after end", () => {
     );
     await node.up();
 
-    const client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(node.connectionString());
 
     const STREAM_NAME = "json_stream_name";
     await client.appendToStream(STREAM_NAME, jsonTestEvents(), {
@@ -84,11 +80,7 @@ describe("write after end", () => {
     );
     await node.up();
 
-    const client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(node.connectionString());
 
     const STREAM_NAME = "json_stream_name";
     await client.appendToStream(STREAM_NAME, jsonTestEvents());
@@ -118,11 +110,7 @@ describe("write after end", () => {
     const node = createTestNode();
     await node.up();
 
-    const client = new KurrentDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(node.connectionString());
 
     const STREAM_NAME = "json_stream_name";
     await client.appendToStream(STREAM_NAME, jsonTestEvents());

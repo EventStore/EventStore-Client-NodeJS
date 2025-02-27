@@ -6,7 +6,7 @@ import {
   NotLeaderError,
 } from "@kurrent/db-client";
 
-optionalDescribe(!!process.env.KURRENT_CLOUD_ID)("dns discover", () => {
+optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
   const STREAM_NAME = "test_stream_name";
   const { EVENTSTORE_CLOUD_ID } = process.env;
   const event = jsonEvent({
@@ -18,20 +18,9 @@ optionalDescribe(!!process.env.KURRENT_CLOUD_ID)("dns discover", () => {
     [
       "connectionString",
       (nodePreference?: NodePreference) =>
-        KurrentDBClient.connectionString`kurrent+discover://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud${
+        KurrentDBClient.connectionString`esdb+discover://${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud${
           nodePreference ? `?nodePreference=${nodePreference}` : ""
         }`,
-    ],
-    [
-      "new client",
-      (nodePreference?: NodePreference) =>
-        new KurrentDBClient({
-          discover: {
-            address: `${EVENTSTORE_CLOUD_ID!}.mesdb.eventstore.cloud`,
-            port: 2113,
-          },
-          nodePreference,
-        }),
     ],
   ])("%s", (clientType, createClient) => {
     test("should successfully connect", async () => {

@@ -1,8 +1,6 @@
-import type { StreamingRead } from "@kurrent/db-client";
-
 export const collect = async <
-  T extends StreamingRead<unknown>,
-  E = T extends StreamingRead<infer E> ? E : unknown
+  T extends AsyncIterableIterator<unknown>,
+  E = T extends AsyncIterableIterator<infer E> ? E : unknown
 >(
   stream: T
 ): Promise<E[]> => {

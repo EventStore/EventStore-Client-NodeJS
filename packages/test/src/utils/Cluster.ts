@@ -11,7 +11,7 @@ import type { EndPoint, Certificate } from "@kurrent/db-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
-import { kill } from "docker-compose";
+import { ConnectionFeatures } from "./index";
 
 const rmdir = promisify(fs.rm);
 const mkdir = promisify(fs.mkdir);
@@ -198,7 +198,7 @@ export class Cluster {
       },
     };
   }
-  public domain = "client.bespin.dev";
+  public domain = "localhost";
   public get uri(): string {
     return `${this.domain}:${this.locations[0].port}`;
   }
@@ -208,6 +208,78 @@ export class Cluster {
       port,
     }));
   }
+  public connectionString = (): string =>
+    this.connectionStringWithOverrides({});
+
+  public connectionStringWithOverrides = (
+    features: ConnectionFeatures
+  ): string => {
+    const endpoints = (features.endpoints ?? this.endpoints)
+      .map((x) => `${x.address}:${x.port}`)
+      .join(",");
+    const params: string[] = [];
+    let credentials = "";
+    let paramsString = "";
+
+    if (features.defaultUserCredentials) {
+      credentials = `${features.defaultUserCredentials.username}:${features.defaultUserCredentials.password}`;
+    } else {
+      credentials = `admin:changeit`;
+    }
+
+    if (features.nodePreference) {
+      params.push(`nodePreference=${features.nodePreference}`);
+    }
+
+    if (this.insecure) {
+      params.push("tls=false");
+    } else {
+      const paths = this.certPath;
+
+      params.push(`tls=true`);
+      params.push(`tlsCAFile=${paths.root}`);
+
+      switch (features.userCertificates) {
+        case "valid":
+          params.push(`userCertFile=${paths.admin.certPath}`);
+          params.push(`userKeyFile=${paths.admin.certKeyPath}`);
+          break;
+        case "invalid":
+          params.push(`userCertFile=${paths.invalid.certPath}`);
+          params.push(`userKeyFile=${paths.invalid.certKeyPath}`);
+          break;
+      }
+    }
+
+    if (features.maxDiscoverAttempts) {
+      params.push(`maxDiscoverAttempts=${features.maxDiscoverAttempts}`);
+    }
+
+    if (features.discoveryInterval) {
+      params.push(`discoveryInterval=${features.discoveryInterval}`);
+    }
+
+    if (
+      features.throwOnAppendFailure != undefined &&
+      !features.throwOnAppendFailure
+    ) {
+      params.push(`throwOnAppendFailure=false`);
+    }
+
+    if (features.defaultDeadline) {
+      params.push(`defaultDeadline=${features.defaultDeadline}`);
+    }
+
+    if (features.connectionName) {
+      params.push(`connectionName=${features.connectionName}`);
+    }
+
+    if (params.length > 0) {
+      paramsString = `?${params.join("&")}`;
+    }
+
+    return `esdb://${credentials}@${endpoints}${paramsString}`;
+  };
 
   public up = async (): Promise<void> => {
     await this.ready;

@@ -17,19 +17,17 @@ describe("deadline", () => {
       [
         "client settings",
         () =>
-          new KurrentDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 1 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
+          KurrentDBClient.connectionString(
+            cluster.connectionStringWithOverrides({
+              defaultDeadline: 1,
+            })
           ).listProjections(),
       ],
       [
         "call options",
         () =>
-          new KurrentDBClient(
-            { endpoints: cluster.endpoints },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
+          KurrentDBClient.connectionString(
+            cluster.connectionString()
           ).listProjections({
             deadline: 1,
           }),
@@ -37,10 +35,10 @@ describe("deadline", () => {
       [
         "call options override",
         () =>
-          new KurrentDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
+          KurrentDBClient.connectionString(
+            cluster.connectionStringWithOverrides({
+              defaultDeadline: 200_000,
+            })
           ).listProjections({
             deadline: 1,
           }),
@@ -48,10 +46,10 @@ describe("deadline", () => {
       [
         "append",
         () =>
-          new KurrentDBClient(
-            { endpoints: cluster.endpoints, defaultDeadline: 200_000 },
-            { rootCertificate: cluster.certs.root },
-            { username: "admin", password: "changeit" }
+          KurrentDBClient.connectionString(
+            cluster.connectionStringWithOverrides({
+              defaultDeadline: 200_000,
+            })
           ).appendToStream("deadline", jsonTestEvents(), {
             deadline: 1,
           }),
