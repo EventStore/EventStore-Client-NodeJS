@@ -18,7 +18,7 @@ import {
   excludeSystemEvents,
   AllStreamSubscription,
   Position,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();

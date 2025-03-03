@@ -4,7 +4,7 @@ import {
   jsonEvent,
   ResolvedEvent,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("encoding", () => {
   const node = createTestNode();

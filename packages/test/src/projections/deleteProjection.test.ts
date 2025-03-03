@@ -10,7 +10,7 @@ import {
   ABORTED,
   NotFoundError,
   UnknownError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("deleteProjection", () => {
   const node = createTestNode();

@@ -18,7 +18,7 @@ import {
   ROUND_ROBIN,
   START,
   UnsupportedError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("getPersistentSubscriptionToAllInfo", () => {
   const supported = matchServerVersion`>=21.10.1`;

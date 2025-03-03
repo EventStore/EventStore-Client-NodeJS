@@ -7,7 +7,7 @@ exports[`keepAlive settings should throw if < -1 keepAliveTimeout connectionStri
 exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000ms (but more than -1) connectionString 1`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Specified KeepAliveInterval of 0 is less than recommended 10_000 ms.",
@@ -18,7 +18,7 @@ exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000
 exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000ms (but more than -1) connectionString 2`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Specified KeepAliveInterval of 1 is less than recommended 10_000 ms.",
@@ -29,7 +29,7 @@ exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000
 exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000ms (but more than -1) connectionString 3`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Specified KeepAliveInterval of 10 is less than recommended 10_000 ms.",
@@ -40,7 +40,7 @@ exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000
 exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000ms (but more than -1) connectionString 4`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Specified KeepAliveInterval of 1000 is less than recommended 10_000 ms.",
@@ -51,7 +51,7 @@ exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000
 exports[`keepAlive settings should warn if keepAliveInterval is less than 10_000ms (but more than -1) connectionString 5`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Specified KeepAliveInterval of 9999 is less than recommended 10_000 ms.",

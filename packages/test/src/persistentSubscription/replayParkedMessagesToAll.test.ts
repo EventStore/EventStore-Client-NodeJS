@@ -18,7 +18,7 @@ import {
   START,
   streamNameFilter,
   UnsupportedError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("replayParkedMessagesToAll", () => {
   const supported = matchServerVersion`>=21.10.1`;

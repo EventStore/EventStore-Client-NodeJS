@@ -11,9 +11,9 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
 import {} from "@opentelemetry/sdk-trace-node";
 // endregion import-required-packages
 import { createTestNode } from "@test-utils";
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
-import * as esdb from "@kurrent/db-client";
+import * as esdb from "@kurrent/kurrentdb-client";
 
 // region register-instrumentation
 const provider = new NodeTracerProvider();
@@ -66,7 +66,9 @@ describe("[sample] opentelemetry", () => {
 
   test("tracing", async () => {
     // region setup-client-for-tracing
-    const { KurrentDBClient, jsonEvent } = await import("@kurrent/db-client");
+    const { KurrentDBClient, jsonEvent } = await import(
+      "@kurrent/kurrentdb-client"
+    );
 
     const client = KurrentDBClient.connectionString(node.connectionString());
     // endregion setup-client-for-tracing

@@ -8,7 +8,7 @@ import {
   AllStreamResolvedEvent,
   streamNameFilter,
   ReadPosition,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 
 describe("[sample] server-side-filtering", () => {

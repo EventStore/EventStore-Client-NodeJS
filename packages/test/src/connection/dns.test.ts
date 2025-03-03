@@ -4,7 +4,7 @@ import {
   jsonEvent,
   NodePreference,
   NotLeaderError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 optionalDescribe(!!process.env.EVENTSTORE_CLOUD_ID)("dns discover", () => {
   const STREAM_NAME = "test_stream_name";

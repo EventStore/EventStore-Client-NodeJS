@@ -1124,9 +1124,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurrent/db-client@workspace:^, @kurrent/db-client@workspace:packages/db-client":
+"@kurrent/kurrentdb-client@workspace:^, @kurrent/kurrentdb-client@workspace:packages/db-client":
   version: 0.0.0-use.local
-  resolution: "@kurrent/db-client@workspace:packages/db-client"
+  resolution: "@kurrent/kurrentdb-client@workspace:packages/db-client"
   dependencies:
     "@grpc/grpc-js": "npm:^1.12.4"
     "@kurrent/db-client-bridge": "workspace:^"
@@ -1148,11 +1148,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kurrent/opentelemetry@workspace:packages/opentelemetry"
   dependencies:
-    "@kurrent/db-client": "workspace:^"
+    "@kurrent/kurrentdb-client": "workspace:^"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/instrumentation": "npm:^0.56.0"
   peerDependencies:
-    "@kurrent/db-client": ^1
+    "@kurrent/kurrentdb-client": ^1
   languageName: unknown
   linkType: soft
 
@@ -2772,8 +2772,8 @@ __metadata:
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
     "@eventstore/db-client": "npm:^6.2.1"
-    "@kurrent/db-client": "workspace:^"
     "@kurrent/db-client-bridge": "workspace:^"
+    "@kurrent/kurrentdb-client": "workspace:^"
     clinic: "npm:^13.0.0"
     tinybench: "npm:^3.1.1"
   languageName: unknown
@@ -7227,7 +7227,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kurrent-node-client-repository@workspace:."
   dependencies:
-    "@kurrent/db-client": "workspace:^"
+    "@kurrent/kurrentdb-client": "workspace:^"
     "@tsconfig/node18": "npm:^18.2.4"
     "@types/node": "npm:18.19.76"
     "@typescript-eslint/eslint-plugin": "npm:^8.10.0"
@@ -10421,7 +10421,7 @@ __metadata:
   resolution: "test@workspace:packages/test"
   dependencies:
     "@grpc/grpc-js": "npm:^1.12.4"
-    "@kurrent/db-client": "workspace:^"
+    "@kurrent/kurrentdb-client": "workspace:^"
     "@kurrent/opentelemetry": "workspace:^"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/exporter-trace-otlp-grpc": "npm:^0.51.1"

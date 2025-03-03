@@ -4,7 +4,7 @@ import {
   excludeSystemEvents,
   eventTypeFilter,
   streamNameFilter,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 
 describe("[sample] server-side-filtering", () => {

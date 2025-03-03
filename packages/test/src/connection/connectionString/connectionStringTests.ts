@@ -1,6 +1,6 @@
 import { Cluster, collect, delay, jsonTestEvents } from "@test-utils";
 
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 interface ConnectionStringTestsOptions {
   title: string;

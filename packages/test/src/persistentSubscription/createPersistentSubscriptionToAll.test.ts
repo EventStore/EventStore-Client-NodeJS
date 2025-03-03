@@ -14,7 +14,7 @@ import {
   persistentSubscriptionToAllSettingsFromDefaults,
   START,
   UnsupportedError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("createPersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;

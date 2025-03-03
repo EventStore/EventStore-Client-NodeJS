@@ -1,7 +1,7 @@
 {
   "name": "@kurrent/db-client-bridge/darwin-arm64",
   "description": "Prebuilt binary package for `db-client-bridge` on `darwin-arm64`.",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "os": [
     "darwin"
   ],

@@ -7,7 +7,7 @@ import {
   AllStreamBinaryRecordedEvent,
   LinkEvent,
   KurrentDBClient,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("readAll", () => {
   const node = createTestNode();

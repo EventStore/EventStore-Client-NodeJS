@@ -87,7 +87,7 @@ const parseProtocol = (
 ): ConnectionOptions => {
   let nextPosition = position;
   const expected =
-    "kurrent://, kurrent+discover://, kdb://, or kdb+discover://";
+    "kurrentdb://, kurrentdb+discover://, kurrent://, kurrent+discover://, kdb://, or kdb+discover://";
   const match = connectionString
     .substring(position)
     .match(/^(?<protocol>[^:]+):\/\//);
@@ -97,22 +97,24 @@ const parseProtocol = (
 
     if (match.groups.protocol.startsWith("esdb")) {
       console.warn(
-        `The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.`
+        `The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.`
       );
     }
 
     switch (match.groups.protocol) {
       case "esdb":
-      case "kurrent":
-      case "kdb": {
+      case "kurrentdb":
+      case "kdb":
+      case "kurrent": {
         return parseCredentials(connectionString, nextPosition, {
           ...options,
           dnsDiscover: false,
         });
       }
       case "esdb+discover":
-      case "kurrent+discover":
-      case "kdb+discover": {
+      case "kurrentdb+discover":
+      case "kdb+discover":
+      case "kurrent+discover": {
         return parseCredentials(connectionString, nextPosition, {
           ...options,
           dnsDiscover: true,

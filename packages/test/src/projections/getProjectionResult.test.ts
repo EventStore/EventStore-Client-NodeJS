@@ -13,7 +13,7 @@ import {
   jsonEvent,
   NotFoundError,
   UnknownError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("getProjectionResult", () => {
   const node = createTestNode();

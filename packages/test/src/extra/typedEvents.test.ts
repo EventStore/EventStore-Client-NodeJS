@@ -6,7 +6,7 @@ import {
   jsonEvent,
   JSONEventType,
   persistentSubscriptionToStreamSettingsFromDefaults,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("typed events should compile", () => {
   const node = createTestNode();

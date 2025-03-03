@@ -3,7 +3,7 @@ import {
   createInsecureTestCluster,
   createTestCluster,
 } from "@test-utils";
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("http api", () => {
   interface PingResult {

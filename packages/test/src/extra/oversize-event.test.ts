@@ -4,7 +4,7 @@ import {
   jsonEvent,
   JSONEventType,
   RUNNING,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("oversize events", () => {
   const node = createTestNode();

@@ -20,7 +20,7 @@ import {
   AppendResult,
   InvalidArgumentError,
   KurrentDBClient,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("readStream", () => {
   const node = createTestNode();

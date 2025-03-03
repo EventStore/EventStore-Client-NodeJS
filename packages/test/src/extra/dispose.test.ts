@@ -17,7 +17,7 @@ import {
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
   streamNameFilter,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("dispose", () => {
   const supported = matchServerVersion`>=21.10`;

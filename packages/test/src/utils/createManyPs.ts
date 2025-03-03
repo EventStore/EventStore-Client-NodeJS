@@ -4,7 +4,7 @@ import {
   persistentSubscriptionToStreamSettingsFromDefaults,
   PersistentSubscriptionToAllSettings,
   persistentSubscriptionToAllSettingsFromDefaults,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 export type CreatedPS = [
   streamName: string,

@@ -15,7 +15,7 @@ import {
   MaxAppendSizeExceededError,
   AccessDeniedError,
   DeadlineExceededError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("appendToStream - errors", () => {
   const node = createTestNode();

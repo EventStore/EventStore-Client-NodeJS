@@ -29,7 +29,7 @@
     "Test"
   ],
   "dependencies": {
-    "@kurrent/db-client": "workspace:^",
+    "@kurrent/kurrentdb-client": "workspace:^",
     "@kurrent/opentelemetry": "workspace:^"
   },
   "devDependencies": {

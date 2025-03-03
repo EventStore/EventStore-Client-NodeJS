@@ -1,5 +1,5 @@
 import { createTestNode, jsonTestEvents, delay } from "@test-utils";
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("RecordedEvent created", () => {
   const node = createTestNode();

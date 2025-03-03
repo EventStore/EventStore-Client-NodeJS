@@ -9,7 +9,7 @@ import {
   RUNNING,
   STOPPED,
   UnknownError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("enableProjection", () => {
   const node = createTestNode();

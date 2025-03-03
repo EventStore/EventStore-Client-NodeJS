@@ -1,6 +1,6 @@
 import { createTestNode } from "@test-utils";
 
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("list projections", () => {
   const node = createTestNode();

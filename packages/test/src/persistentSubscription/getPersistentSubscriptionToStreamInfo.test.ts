@@ -8,7 +8,7 @@ import {
   persistentSubscriptionToStreamSettingsFromDefaults,
   ROUND_ROBIN,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("getPersistentSubscriptionToStreamInfo", () => {
   const node = createTestNode();

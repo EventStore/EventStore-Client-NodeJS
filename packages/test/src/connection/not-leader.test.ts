@@ -7,7 +7,7 @@ import {
   KurrentDBClient,
   BACKWARDS,
   END,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();

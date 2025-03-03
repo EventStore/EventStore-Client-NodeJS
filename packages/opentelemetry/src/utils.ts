@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { EventData, JSONEventData } from "@kurrent/db-client";
+import type { EventData, JSONEventData } from "@kurrent/kurrentdb-client";
 
 export function hasConvertGrpcEventMethod(
   obj: any

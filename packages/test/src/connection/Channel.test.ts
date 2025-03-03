@@ -1,5 +1,5 @@
 import { createTestCluster, jsonTestEvents } from "@test-utils";
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("Channel", () => {
   const cluster = createTestCluster();

@@ -5,7 +5,7 @@ import {
   PersistentSubscriptionExistsError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("createPersistentSubscriptionToStream", () => {
   const node = createTestNode();

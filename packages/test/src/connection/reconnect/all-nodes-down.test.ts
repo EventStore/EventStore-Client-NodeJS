@@ -5,7 +5,7 @@ import {
   UnavailableError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   StreamNotFoundError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 // This test can take time.
 jest.setTimeout(120_000);

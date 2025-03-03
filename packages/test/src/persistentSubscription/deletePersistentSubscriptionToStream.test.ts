@@ -3,7 +3,7 @@ import { createTestNode } from "@test-utils";
 import {
   KurrentDBClient,
   persistentSubscriptionToStreamSettingsFromDefaults,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("deletePersistentSubscriptionToStream", () => {
   const node = createTestNode();

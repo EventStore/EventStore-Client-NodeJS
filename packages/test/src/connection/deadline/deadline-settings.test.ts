@@ -1,4 +1,4 @@
-import { DNSClusterOptions, KurrentDBClient } from "@kurrent/db-client";
+import { DNSClusterOptions, KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("deadline", () => {
   describe.each<

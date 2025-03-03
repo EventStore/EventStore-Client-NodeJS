@@ -1,4 +1,4 @@
-import { parseConnectionString } from "@kurrent/db-client/dist/Client/parseConnectionString";
+import { parseConnectionString } from "@kurrent/kurrentdb-client/dist/Client/parseConnectionString";
 import { valid, invalid, warning } from "./parseConnectionStringMockups";
 
 describe("connection string parser", () => {

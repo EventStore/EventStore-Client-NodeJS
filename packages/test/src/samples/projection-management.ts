@@ -2,7 +2,7 @@
 
 import { v4 as uuid } from "uuid";
 
-import { KurrentDBClient, isCommandError } from "@kurrent/db-client";
+import { KurrentDBClient, isCommandError } from "@kurrent/kurrentdb-client";
 import {
   createTestNode,
   delay,

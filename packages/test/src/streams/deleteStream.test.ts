@@ -5,7 +5,7 @@ import {
   NO_STREAM,
   StreamNotFoundError,
   BACKWARDS,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("deleteStream", () => {
   const node = createTestNode();

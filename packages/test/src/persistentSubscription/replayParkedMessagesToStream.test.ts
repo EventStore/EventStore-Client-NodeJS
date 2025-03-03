@@ -8,7 +8,7 @@ import {
   PersistentSubscriptionDoesNotExistError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("replayParkedMessagesToStream", () => {
   const cluster = createTestCluster();

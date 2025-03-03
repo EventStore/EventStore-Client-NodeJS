@@ -13,7 +13,7 @@ import {
   NotFoundError,
   RUNNING,
   UnknownError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("getProjectionState", () => {
   const node = createTestNode();

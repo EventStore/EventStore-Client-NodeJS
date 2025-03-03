@@ -16,7 +16,7 @@ import {
   END,
   excludeSystemEvents,
   eventTypeFilter,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   const supported = matchServerVersion`>=21.10`;

@@ -1,6 +1,6 @@
 {
   "name": "@kurrent/db-client-bridge",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "description": "A NodeJS binding for the Kurrent Rust client",
   "main": "./lib/index.js",
   "scripts": {

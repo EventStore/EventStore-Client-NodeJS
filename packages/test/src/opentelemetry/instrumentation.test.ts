@@ -19,13 +19,13 @@ tracerProvider.register();
 const instrumentation = new KurrentDBInstrumentation();
 instrumentation.disable();
 
-import * as kdb from "@kurrent/db-client";
+import * as kdb from "@kurrent/kurrentdb-client";
 import {
   AppendToStreamOptions,
   ResolvedEvent,
   streamNameFilter,
   WrongExpectedVersionError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("instrumentation", () => {
   const node = createTestNode();
@@ -63,7 +63,7 @@ describe("instrumentation", () => {
       "should create a span for append operation, withCredentials: $withCredentials",
       async ({ withCredentials, credentials }) => {
         const { KurrentDBClient, jsonEvent } = await import(
-          "@kurrent/db-client"
+          "@kurrent/kurrentdb-client"
         );
 
         const STREAM = v4();
@@ -120,7 +120,7 @@ describe("instrumentation", () => {
     );
 
     test("span contains error when append fails", async () => {
-      const { KurrentDBClient } = await import("@kurrent/db-client");
+      const { KurrentDBClient } = await import("@kurrent/kurrentdb-client");
 
       const client = KurrentDBClient.connectionString(node.connectionString());
 
@@ -169,7 +169,9 @@ describe("instrumentation", () => {
   describe("catch up subscriptions", () => {
     test("should create child span in subscription to stream", async () => {
       const defer = new Defer();
-      const { KurrentDBClient, jsonEvent } = await import("@kurrent/db-client");
+      const { KurrentDBClient, jsonEvent } = await import(
+        "@kurrent/kurrentdb-client"
+      );
 
       const STREAM = v4();
 
@@ -247,7 +249,7 @@ describe("instrumentation", () => {
     test("events with non-json metadata are not traced in subscriptions", async () => {
       const defer = new Defer();
       const { KurrentDBClient, jsonEvent, binaryEvent } = await import(
-        "@kurrent/db-client"
+        "@kurrent/kurrentdb-client"
       );
 
       const STREAM = v4();
@@ -331,7 +333,7 @@ describe("instrumentation", () => {
         jsonEvent,
         persistentSubscriptionToStreamSettingsFromDefaults,
         START,
-      } = await import("@kurrent/db-client");
+      } = await import("@kurrent/kurrentdb-client");
 
       const STREAM = v4();
       const GROUP = v4();
@@ -419,7 +421,7 @@ describe("instrumentation", () => {
         jsonEvent,
         persistentSubscriptionToAllSettingsFromDefaults,
         START,
-      } = await import("@kurrent/db-client");
+      } = await import("@kurrent/kurrentdb-client");
 
       const GROUP = v4();
       const STREAM = v4();

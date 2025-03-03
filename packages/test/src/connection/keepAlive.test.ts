@@ -1,5 +1,5 @@
 import { Channel } from "@grpc/grpc-js";
-import { KurrentDBClient } from "@kurrent/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 jest.mock("@grpc/grpc-js/build/src/channel.js");
 const ChannelMock = Channel as jest.Mock<Channel>;

@@ -5,7 +5,7 @@ import {
   NO_STREAM,
   ResolvedEvent,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("http2 assertion failure", () => {
   const node = createInsecureTestNode();

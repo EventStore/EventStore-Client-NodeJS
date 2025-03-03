@@ -4,7 +4,7 @@
 import NodeEnvironment from "jest-environment-node";
 
 import { Cluster } from "./Cluster";
-import { KurrentDBClient } from "@kurrent/db-client/dist/index";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client/dist/index";
 
 async function extractVersion(this: KurrentDBClient) {
   return await this.capabilities;

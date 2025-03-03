@@ -6,7 +6,11 @@ import {
   getCurrentConnection,
   jsonTestEvents,
 } from "@test-utils";
-import { jsonEvent, KurrentDBClient, CancelledError } from "@kurrent/db-client";
+import {
+  jsonEvent,
+  KurrentDBClient,
+  CancelledError,
+} from "@kurrent/kurrentdb-client";
 
 // This test can take time.
 jest.setTimeout(120_000);

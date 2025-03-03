@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connection string parser Should throw on invalid strings esbd+discovery://localhost 1`] = `"Unexpected "esbd+discovery://" at position 0, expected kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
+exports[`connection string parser Should throw on invalid strings esbd+discovery://localhost 1`] = `"Unexpected "esbd+discovery://" at position 0, expected kurrentdb://, kurrentdb+discover://, kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
 
 exports[`connection string parser Should throw on invalid strings esdb://host1,host2:200:300?throwOnAppendFailure=false 1`] = `"Unexpected ":300" at position 22, expected , or ?key=value."`;
 
@@ -24,14 +24,14 @@ exports[`connection string parser Should throw on invalid strings esdb://my:grea
 
 exports[`connection string parser Should throw on invalid strings esdb://throwOnAppendFailure=false 1`] = `"Unexpected "=" at position 27, expected ?key=value."`;
 
-exports[`connection string parser Should throw on invalid strings https://console.eventstore.cloud/ 1`] = `"Unexpected "https://" at position 0, expected kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
+exports[`connection string parser Should throw on invalid strings https://console.eventstore.cloud/ 1`] = `"Unexpected "https://" at position 0, expected kurrentdb://, kurrentdb+discover://, kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
 
-exports[`connection string parser Should throw on invalid strings localhost 1`] = `"Unexpected "l" at position 0, expected kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
+exports[`connection string parser Should throw on invalid strings localhost 1`] = `"Unexpected "l" at position 0, expected kurrentdb://, kurrentdb+discover://, kurrent://, kurrent+discover://, kdb://, or kdb+discover://."`;
 
 exports[`connection string parser Should warn on unknown and unsupported keys esdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false 1`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Unknown option key "catchOnAppendFailure", setting will be ignored.
@@ -44,7 +44,7 @@ esdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false
 exports[`connection string parser Should warn on unknown and unsupported keys esdb://localhost?someNonsense=follower&doTheThing=true 1`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     "Unknown option key "someNonsense", setting will be ignored.
@@ -62,7 +62,7 @@ esdb://localhost?someNonsense=follower&doTheThing=true
 exports[`connection string parser Should warn on unknown and unsupported keys esdb://localhost?tlsVerifyCert=false 1`] = `
 [
   [
-    "The 'esdb' protocol is deprecated. Please use 'kurrent' or 'kdb' instead.",
+    "The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.",
   ],
   [
     ""tlsVerifyCert" is not currently supported by this client, and will have no effect.

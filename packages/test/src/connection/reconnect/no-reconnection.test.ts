@@ -5,7 +5,7 @@ import {
   StreamNotFoundError,
   TimeoutError,
   WrongExpectedVersionError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 // This test can take time.
 jest.setTimeout(120_000);

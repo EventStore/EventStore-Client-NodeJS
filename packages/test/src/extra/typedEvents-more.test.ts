@@ -9,7 +9,7 @@ import {
   JSONEventType,
   RecordedEvent,
   ResolvedEvent,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("typed events should compile", () => {
   const node = createTestNode();

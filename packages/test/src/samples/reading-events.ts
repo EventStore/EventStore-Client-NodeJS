@@ -6,7 +6,7 @@ import {
   BACKWARDS,
   END,
   JSONEventType,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 
 type SomeEvent = JSONEventType<

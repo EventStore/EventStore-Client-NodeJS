@@ -1,4 +1,4 @@
-const {KurrentDBClient} = require("@kurrent/db-client");
+const {KurrentDBClient} = require("@kurrent/kurrentdb-client");
 const {Bench, hrtimeNow} = require("tinybench");
 
 // ignore warning messages

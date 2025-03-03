@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createTestNode, jsonTestEvents } from "@test-utils";
-import { AccessDeniedError, KurrentDBClient } from "@kurrent/db-client";
+import { AccessDeniedError, KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("client certificates", () => {
   const node = createTestNode();

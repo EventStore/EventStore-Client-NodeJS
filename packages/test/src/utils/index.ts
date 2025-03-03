@@ -1,5 +1,9 @@
 import { Cluster } from "./Cluster";
-import { Credentials, EndPoint, NodePreference } from "@kurrent/db-client";
+import {
+  Credentials,
+  EndPoint,
+  NodePreference,
+} from "@kurrent/kurrentdb-client";
 
 export type ConnectionFeatures = {
   defaultUserCredentials?: Credentials;

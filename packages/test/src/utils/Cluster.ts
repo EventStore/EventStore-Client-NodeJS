@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 import getPort from "get-port";
 import { upAll, down, exec, stopOne, logs } from "docker-compose/dist/v2";
 
-import type { EndPoint, Certificate } from "@kurrent/db-client";
+import type { EndPoint, Certificate } from "@kurrent/kurrentdb-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";

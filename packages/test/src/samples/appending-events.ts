@@ -7,7 +7,7 @@ import {
   JSONEventType,
   AppendExpectedRevision,
   WrongExpectedVersionError,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode } from "@test-utils";
 import { v4 as uuid } from "uuid";
 

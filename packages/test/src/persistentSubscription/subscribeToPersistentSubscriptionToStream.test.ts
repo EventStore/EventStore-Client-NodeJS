@@ -23,7 +23,7 @@ import {
   jsonEvent,
   persistentSubscriptionToStreamSettingsFromDefaults,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 const asyncPipeline = promisify(pipeline);
 

@@ -1,6 +1,6 @@
 {
   "name": "@kurrent/opentelemetry",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.1",
   "description": "Kurrent NodeJS Client SDK interceptors for tracing with OpenTelemetry",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -37,9 +37,9 @@
     "@opentelemetry/instrumentation": "^0.56.0"
   },
   "peerDependencies": {
-    "@kurrent/db-client": "^1"
+    "@kurrent/kurrentdb-client": "^1"
   },
   "devDependencies": {
-    "@kurrent/db-client": "workspace:^"
+    "@kurrent/kurrentdb-client": "workspace:^"
   }
 }

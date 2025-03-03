@@ -7,7 +7,7 @@ import {
   KurrentDBClient,
   BACKWARDS,
   END,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {

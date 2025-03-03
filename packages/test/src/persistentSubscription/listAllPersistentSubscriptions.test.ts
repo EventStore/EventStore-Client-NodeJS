@@ -20,7 +20,7 @@ import {
   Position,
   ROUND_ROBIN,
   START,
-} from "@kurrent/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("listAllPersistentSubscriptions", () => {
   const psToAllSupported = matchServerVersion`>=21.10.1`;
