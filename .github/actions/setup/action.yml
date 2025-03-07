@@ -13,10 +13,6 @@ inputs:
     description: 'Install cross-rs?'
     required: false
     default: 'false'
-  workspace:
-    description: 'Path to workspace being setup.'
-    required: false
-    default: '.'
 outputs:
   rust:
     description: 'Rust version installed.'
@@ -45,17 +41,14 @@ runs:
     - name: Corepack
       shell: bash
       run: corepack enable
-      working-directory: ${{ inputs.workspace }}
     - name: Install Dependencies
       shell: bash  
       run: yarn install --immutable
-      working-directory: ${{ inputs.workspace }}
     - name: Compute Rust Target
       if: ${{ inputs['use-rust'] == 'true' }}
       id: target
       shell: bash
       run: echo target=$(npx neon list-platforms | jq -r '.["${{ inputs.platform }}"]') | tee -a $GITHUB_OUTPUT
-      working-directory: ${{ inputs.workspace }}
     - name: Install Rust
       if: ${{ inputs['use-rust'] == 'true' }}
       uses: actions-rs/toolchain@v1
@@ -73,11 +66,9 @@ runs:
       shell: bash
       run: |
         echo version=$(node -e 'console.log(process.versions.node)') | tee -a $GITHUB_OUTPUT
-      working-directory: ${{ inputs.workspace }}
     - name: Rust Version
       if: ${{ inputs['use-rust'] == 'true' }}
       id: rust
       shell: bash
       run: |
         echo version=$(cargo -Vv | fgrep release: | cut -d' ' -f2) | tee -a $GITHUB_OUTPUT
-      working-directory: ${{ inputs.workspace }}

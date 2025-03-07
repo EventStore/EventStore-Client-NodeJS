@@ -160,7 +160,9 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
   const position = extractPosition(grpcRecord);
 
   if (isJson) {
-    const dataStr = Buffer.from(grpcRecord.getData() as Uint8Array).toString("utf8");
+    const dataStr = Buffer.from(grpcRecord.getData() as Uint8Array).toString(
+      "utf8"
+    );
 
     const data = safeParseJSON<E["data"]>(
       dataStr,

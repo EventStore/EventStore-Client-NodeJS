@@ -2,7 +2,7 @@
 
 // This module is the CJS entry point for the library.
 
-import * as addon from './load.js';
+import * as addon from "./load.js";
 import { Buffer } from "buffer";
 
 // Use this declaration to assign types to the addon's exports,
@@ -11,7 +11,6 @@ declare module "./load" {
   function createClient(connStr: string): RawClient;
   function readStreamNext(raw: RawReadStream): Promise<Buffer>;
 }
-
 
 export type Iterable = {
   next(): Promise<{ value: ResolvedEvent[]; done: boolean }>;

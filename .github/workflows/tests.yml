@@ -42,16 +42,12 @@ jobs:
         with:
           node-version-file: .github/files/.nvmrc
 
-      - name: NodeJS version
-        run: node -v
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          use-rust: false
 
-      - name: Corepack
-        run: corepack enable
-
-      - name: Install
-        run: yarn
-
-      - name: Build 
+      - name: Build
         run: yarn build
 
       - name: Run Tests

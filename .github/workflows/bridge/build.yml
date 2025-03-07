@@ -46,7 +46,6 @@ jobs:
         uses: ./.github/actions/setup
         with:
           use-rust: false
-          workspace: ./packages/bridge
       - name: Look Up Matrix Data
         id: matrixData
         shell: bash
@@ -91,7 +90,6 @@ jobs:
         with:
           use-cross: ${{ matrix.cfg.script == 'cross' }}
           platform: ${{ matrix.cfg.platform }}
-          workspace: ./packages/bridge
       # - name: Update Version
       #   if: ${{ inputs.update-version }}
       #   shell: bash
@@ -134,7 +132,6 @@ jobs:
         uses: ./.github/actions/setup
         with:
           use-rust: false
-          workspace: ./packages/bridge
       - name: Pack
         id: pack
         shell: bash
