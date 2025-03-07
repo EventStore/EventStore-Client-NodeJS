@@ -14,8 +14,8 @@
     "tinybench": "^3.1.1"
   },
   "devDependencies": {
-    "@kurrent/bridge": "file:../bridge",
-    "@kurrent/kurrentdb-client": "file:../db-client",
+    "@kurrent/bridge": "portal:../bridge",
+    "@kurrent/kurrentdb-client": "portal:../db-client",
     "clinic": "^13.0.0"
   }
 }

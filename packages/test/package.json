@@ -30,8 +30,8 @@
   ],
   "devDependencies": {
     "@grpc/grpc-js": "^1.12.4",
-    "@kurrent/kurrentdb-client": "file:../db-client",
-    "@kurrent/opentelemetry": "file:../opentelemetry",
+    "@kurrent/kurrentdb-client": "portal:../db-client",
+    "@kurrent/opentelemetry": "portal:../opentelemetry",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.51.1",
     "@opentelemetry/instrumentation": "^0.56.0",

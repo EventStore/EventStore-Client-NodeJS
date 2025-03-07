@@ -145,7 +145,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
     throw "Impossible situation where streamIdentifier is undefined in a recorded event";
   }
   const streamId = Buffer.from(
-    grpcRecord.getStreamIdentifier()!.getStreamName()
+    grpcRecord.getStreamIdentifier()!.getStreamName() as Uint8Array
   ).toString("utf8");
 
   if (!grpcRecord.hasId()) {
@@ -160,7 +160,7 @@ export const convertGrpcRecord = <E extends EventType = EventType>(
   const position = extractPosition(grpcRecord);
 
   if (isJson) {
-    const dataStr = Buffer.from(grpcRecord.getData()).toString("utf8");
+    const dataStr = Buffer.from(grpcRecord.getData() as Uint8Array).toString("utf8");
 
     const data = safeParseJSON<E["data"]>(
       dataStr,

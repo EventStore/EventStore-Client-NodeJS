@@ -3,8 +3,8 @@
   "private": true,
   "packageManager": "yarn@4.6.0",
   "scripts": {
-    "build": "nx run-many --target=build --verbose",
-    "build:ts": "nx run-many --target=build:ts --verbose",
+    "build": "nx run-many --target=build --",
+    "build:ts": "nx run-many --target=build:ts --",
     "build:watch": "nx run-many --target=build:watch --parallel",
     "lint": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\" && eslint packages/*/src --ext .ts --no-error-on-unmatched-pattern",
     "prettier:fix": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\"",
@@ -22,7 +22,7 @@
   ],
   "homepage": "https://developers.kurrent.io/clients/grpc/getting-started?codeLanguage=NodeJS",
   "devDependencies": {
-    "@tsconfig/node18": "^18.2.4",
+    "@tsconfig/node20": "^20.1.4",
     "@types/node": "18.19.76",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",

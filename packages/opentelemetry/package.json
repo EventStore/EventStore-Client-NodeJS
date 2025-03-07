@@ -37,6 +37,6 @@
     "@opentelemetry/instrumentation": "^0.56.0"
   },
   "devDependencies": {
-    "@kurrent/kurrentdb-client": "file:../db-client"
+    "@kurrent/kurrentdb-client": "portal:../db-client"
   }
 }

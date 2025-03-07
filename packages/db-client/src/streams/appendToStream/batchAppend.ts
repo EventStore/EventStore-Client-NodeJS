@@ -87,7 +87,7 @@ export const batchAppend = async function (
               unpackToCommandError(
                 grpcError,
                 Buffer.from(
-                  resp.getStreamIdentifier()!.getStreamName()
+                  resp.getStreamIdentifier()!.getStreamName() as Uint8Array
                 ).toString("utf8")
               )
             );
