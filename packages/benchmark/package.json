@@ -1,11 +1,12 @@
 {
   "name": "benchmark",
   "packageManager": "yarn@4.6.0",
+  "version": "1.0.0",
   "scripts": {
-    "benchmark": "yarn benchmark:eventstoreClient && yarn benchmark:kurrentClient && yarn benchmark:bridge",
-    "benchmark:eventstoreClient": "node ./eventstoreClient/readStream.js",
-    "benchmark:kurrentClient": "node ./kurrentClient/readStream.js",
-    "benchmark:bridge": "node ./bridge/readStream.js",
+    "benchmark": "yarn benchmark:legacy-client && yarn benchmark:kurrentdb-client && yarn benchmark:bridge-client",
+    "benchmark:legacy-client": "node ./legacy-client/readStream.js",
+    "benchmark:kurrentdb-client": "node ./kurrentdb-client/readStream.js",
+    "benchmark:bridge-client": "node ./bridge-client/readStream.js",
     "loadEvents": "node ./load"
   },
   "dependencies": {
@@ -13,8 +14,8 @@
     "tinybench": "^3.1.1"
   },
   "devDependencies": {
-    "@kurrent/db-client-bridge": "workspace:^",
-    "@kurrent/kurrentdb-client": "workspace:^",
+    "@kurrent/bridge": "file:../bridge",
+    "@kurrent/kurrentdb-client": "file:../db-client",
     "clinic": "^13.0.0"
   }
 }

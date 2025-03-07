@@ -1,6 +1,6 @@
 {
   "name": "@kurrent/kurrentdb-client",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.4",
   "description": "Kurrent gRPC NodeJS Client SDK",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -46,7 +46,6 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",
-    "@kurrent/db-client-bridge": "*",
     "@types/debug": "^4.1.12",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.10.2",
@@ -55,7 +54,7 @@
     "uuid": "11.0.3"
   },
   "devDependencies": {
-    "@kurrent/db-client-bridge": "workspace:^",
+    "@kurrent/bridge": "file:../bridge",
     "@types/uuid": "^10.0.0",
     "grpc-tools": "^1.12.4",
     "grpc_tools_node_protoc_ts": "^5.3.3",

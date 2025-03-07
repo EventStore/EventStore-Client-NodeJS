@@ -1,10 +1,10 @@
 {
-  "name": "@kurrent/db-client-bridge",
-  "version": "1.0.0-alpha.1",
-  "description": "A NodeJS binding for the Kurrent Rust client",
+  "name": "@kurrent/bridge",
+  "version": "1.0.0-alpha.4",
+  "description": "",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "node --test",
+    "test": "tsc &&cargo test",
     "cargo-build": "tsc &&cargo build --message-format=json-render-diagnostics > cargo.log",
     "cross-build": "tsc &&cross build --message-format=json-render-diagnostics > cross.log",
     "postcargo-build": "neon dist < cargo.log",
@@ -17,7 +17,7 @@
     "release": "gh workflow run release.yml -f dryrun=false -f version=patch",
     "dryrun": "gh workflow run publish.yml -f dryrun=true"
   },
-  "author": "Kurrent",
+  "author": "Kurrent Inc",
   "license": "Apache-2.0",
   "exports": {
     ".": {
@@ -38,7 +38,6 @@
   "neon": {
     "type": "library",
     "org": "@kurrent",
-    "prefix": "db-client-bridge",
     "platforms": "common",
     "load": "./src/load.ts"
   },
@@ -46,21 +45,10 @@
     "@neon-rs/cli": "^0.1.82",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.11.16",
-    "clinic": "^13.0.0",
     "typescript": "^5.3.3"
-  },
-  "engines": {
-    "node": ">=20"
   },
   "dependencies": {
     "@neon-rs/load": "^0.1.82"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EventStore/Kurrent-Client-NodeJS.git"
-  },
-  "bugs": {
-    "url": "https://github.com/EventStore/Kurrent-Client-NodeJS/issues"
-  },
-  "homepage": "https://github.com/EventStore/Kurrent-Client-NodeJS#readme"
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

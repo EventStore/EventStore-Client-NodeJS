@@ -1,0 +1,25 @@
+{
+  "name": "@kurrent/linux-arm64-gnu",
+  "description": "Prebuilt binary package for `@kurrent/kurrentdb-client` on `linux-arm64-gnu`.",
+  "version": "1.0.0-alpha.4",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "index.node",
+  "files": [
+    "index.node"
+  ],
+  "neon": {
+    "type": "binary",
+    "rust": "aarch64-unknown-linux-gnu",
+    "node": "linux-arm64-gnu",
+    "os": "linux",
+    "arch": "arm64",
+    "abi": "gnu"
+  },
+  "author": "",
+  "license": "ISC"
+}
