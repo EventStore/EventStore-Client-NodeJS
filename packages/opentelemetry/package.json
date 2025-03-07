@@ -8,7 +8,7 @@
   "scripts": {
     "build": "yarn build:ts",
     "build:ts": "tsc --build",
-    "build:watch": "pnpm run build:ts-watch",
+    "build:watch": "yarn run build:ts-watch",
     "build:ts-watch": "tsc --build --watch",
     "clean": "yarn clean:dist && yarn clean:buildinfo",
     "clean:dist": "shx rm -rf ./dist",
