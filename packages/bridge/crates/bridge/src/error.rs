@@ -1,4 +1,3 @@
-use std::string::ParseError;
 use eventstore::{Endpoint};
 use neon::{object::Object, prelude::Context, prelude::JsError, result::JsResult};
 
