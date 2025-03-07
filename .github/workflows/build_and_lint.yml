@@ -15,11 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Corepack
-        run: corepack enable
-
-      - name: Install
-        run: yarn
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          use-rust: false
 
       - name: Linting
         run: yarn lint
