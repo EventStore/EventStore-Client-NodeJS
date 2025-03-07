@@ -18,7 +18,7 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup
         with:
-          use-rust: false
+          use-rust: true
 
       - name: Linting
         run: yarn lint
@@ -49,7 +49,7 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup
         with:
-          use-rust: false
+          use-rust: true
 
       - name: Build
         run: yarn build
