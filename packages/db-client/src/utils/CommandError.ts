@@ -7,9 +7,9 @@ import { isClientCancellationError } from ".";
 
 import type { WrongExpectedVersion } from "../../generated/shared_pb";
 import type {
-  CurrentRevision,
+  CurrentStreamState,
   EndPoint,
-  AppendExpectedRevision,
+  AppendStreamState,
 } from "../types";
 
 export enum ErrorType {
@@ -168,22 +168,22 @@ export class ScavengeNotFoundError extends CommandErrorBase {
 
 interface WrongExpectedVersionDetails {
   streamName: string;
-  expected: AppendExpectedRevision;
-  current: CurrentRevision;
+  expected: AppendStreamState;
+  current: CurrentStreamState;
 }
 
 export class WrongExpectedVersionError extends CommandErrorBase {
   public type: ErrorType.WRONG_EXPECTED_VERSION =
     ErrorType.WRONG_EXPECTED_VERSION;
   public streamName: string;
-  public expectedVersion: AppendExpectedRevision;
-  public actualVersion: CurrentRevision;
+  public expectedState: AppendStreamState;
+  public actualState: CurrentStreamState;
 
   static fromWrongExpectedVersion = (
     details: WrongExpectedVersion,
     streamName: string
   ) => {
-    let expected: AppendExpectedRevision = "any";
+    let expected: AppendStreamState = "any";
     switch (true) {
       case details.hasExpectedStreamPosition(): {
         expected = BigInt(details.getExpectedStreamPosition()!);
@@ -215,14 +215,14 @@ export class WrongExpectedVersionError extends CommandErrorBase {
     if (error) {
       const metadata = error.metadata!.getMap();
       this.streamName = metadata["stream-name"].toString();
-      this.expectedVersion = BigInt(metadata["expected-version"].toString());
-      this.actualVersion = metadata["actual-version"]
+      this.expectedState = BigInt(metadata["expected-version"].toString());
+      this.actualState = metadata["actual-version"]
         ? BigInt(metadata["actual-version"].toString())
         : "no_stream";
     } else {
       this.streamName = versions!.streamName;
-      this.expectedVersion = versions!.expected;
-      this.actualVersion = versions!.current;
+      this.expectedState = versions!.expected;
+      this.actualState = versions!.current;
     }
   }
 }

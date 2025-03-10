@@ -4,7 +4,7 @@ import { TombstoneReq } from "../../generated/streams_pb";
 
 import { Client } from "../Client";
 import { ANY, NO_STREAM } from "../constants";
-import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
+import type { BaseOptions, DeleteResult, StreamState } from "../types";
 import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 
 export interface TombstoneStreamOptions extends BaseOptions {
@@ -12,7 +12,7 @@ export interface TombstoneStreamOptions extends BaseOptions {
    * Asks the server to check the stream is at specific revision before deleting.
    * @defaultValue ANY
    */
-  expectedRevision?: ExpectedRevision;
+  expectedRevision?: StreamState;
 }
 
 declare module "../Client" {

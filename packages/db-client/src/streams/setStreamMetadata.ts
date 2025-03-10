@@ -2,7 +2,7 @@ import { Client } from "../Client";
 import type {
   BaseOptions,
   AppendResult,
-  AppendExpectedRevision,
+  AppendStreamState,
 } from "../types";
 import { debug } from "../utils";
 import { jsonEvent } from "../events";
@@ -15,7 +15,7 @@ export interface SetStreamMetadataOptions extends BaseOptions {
    * Asks the server to check the stream is at specific revision before writing events.
    * @defaultValue ANY
    */
-  expectedRevision?: AppendExpectedRevision;
+  expectedRevision?: AppendStreamState;
 }
 
 declare module "../Client" {

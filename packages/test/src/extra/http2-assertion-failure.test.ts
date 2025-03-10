@@ -28,7 +28,7 @@ describe("http2 assertion failure", () => {
       const postEvents = jsonTestEvents(7);
 
       const appendRes = await client.appendToStream(stream, priorEvents, {
-        expectedRevision: NO_STREAM,
+        streamState: NO_STREAM,
         // we want to test classic append
         credentials: { username: "admin", password: "changeit" },
       });
@@ -49,7 +49,7 @@ describe("http2 assertion failure", () => {
       });
       while (received.length < 3) await delay(10);
       await client.appendToStream(stream, postEvents, {
-        expectedRevision: appendRes.nextExpectedRevision,
+        streamState: appendRes.nextExpectedRevision,
         // we want to test classic append
         credentials: { username: "admin", password: "changeit" },
       });

@@ -59,7 +59,7 @@ export type ReadPosition =
  * {@link ANY}. When using {@link ANY}., the KurrentDB server will do its best to assure
  * idempotency but will not guarantee idempotency.
  */
-export type ExpectedRevision =
+export type StreamState =
   | typeof constants.ANY
   /**
    * The stream being written to should not yet exist. If it does exist, treats that as a concurrency problem.
@@ -70,17 +70,17 @@ export type ExpectedRevision =
    */
   | bigint;
 
-export type AppendExpectedRevision =
+export type AppendStreamState =
   /**
    * The stream should exist. If it or a metadata stream does not exist, treats that as a concurrency problem.
    */
   | typeof constants.STREAM_EXISTS
   /**
-   * @see {@link ExpectedRevision}.
+   * @see {@link StreamState}.
    */
-  | ExpectedRevision;
+  | StreamState;
 
-export type CurrentRevision =
+export type CurrentStreamState =
   /**
    * The stream being written to does not yet exist.
    */

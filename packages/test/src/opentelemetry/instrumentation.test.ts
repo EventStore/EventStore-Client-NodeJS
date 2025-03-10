@@ -73,7 +73,7 @@ describe("instrumentation", () => {
         );
 
         const appendOptions: AppendToStreamOptions = {
-          expectedRevision: "any",
+          streamState: "any",
         };
 
         if (withCredentials) {
@@ -133,7 +133,7 @@ describe("instrumentation", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            expectedRevision: "no_stream",
+            streamState: "no_stream",
           }
         );
 

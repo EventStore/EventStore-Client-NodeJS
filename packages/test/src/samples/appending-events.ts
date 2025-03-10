@@ -5,7 +5,7 @@ import {
   FORWARDS,
   KurrentDBClient,
   JSONEventType,
-  AppendExpectedRevision,
+  AppendStreamState,
   WrongExpectedVersionError,
 } from "@kurrent/kurrentdb-client";
 import { createTestNode } from "@test-utils";
@@ -44,7 +44,7 @@ describe("[sample] appending-events", () => {
     });
 
     await client.appendToStream("some-stream", event, {
-      expectedRevision: NO_STREAM,
+      streamState: NO_STREAM,
     });
     // endregion append-to-stream
   });
@@ -104,12 +104,12 @@ describe("[sample] appending-events", () => {
       });
 
       await client.appendToStream("no-stream-stream", eventOne, {
-        expectedRevision: NO_STREAM,
+        streamState: NO_STREAM,
       });
 
       // attempt to append the same event again
       await client.appendToStream("no-stream-stream", eventTwo, {
-        expectedRevision: NO_STREAM,
+        streamState: NO_STREAM,
       });
       // endregion append-with-no-stream
     } catch (error) {
@@ -144,7 +144,7 @@ describe("[sample] appending-events", () => {
         direction: FORWARDS,
       });
 
-      let revision: AppendExpectedRevision = NO_STREAM;
+      let revision: AppendStreamState = NO_STREAM;
       for await (const { event } of events) {
         revision = event?.revision ?? revision;
       }
@@ -159,7 +159,7 @@ describe("[sample] appending-events", () => {
       });
 
       await client.appendToStream("concurrency-stream", clientOneEvent, {
-        expectedRevision: revision,
+        streamState: revision,
       });
 
       const clientTwoEvent = jsonEvent<SomeEvent>({
@@ -172,7 +172,7 @@ describe("[sample] appending-events", () => {
       });
 
       await client.appendToStream("concurrency-stream", clientTwoEvent, {
-        expectedRevision: revision,
+        streamState: revision,
       });
       // endregion append-with-concurrency-check
     } catch (error) {

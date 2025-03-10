@@ -57,7 +57,7 @@ describe("deleteStream", () => {
             expect(error).toBeInstanceOf(WrongExpectedVersionError);
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM);
-              expect(error.expectedVersion).toBe(BigInt(2));
+              expect(error.expectedState).toBe(BigInt(2));
             }
           }
         });

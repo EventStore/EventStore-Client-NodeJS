@@ -44,7 +44,7 @@ describe("appendToStream - errors", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            expectedRevision: "no_stream",
+            streamState: "no_stream",
           }
         );
 
@@ -54,8 +54,8 @@ describe("appendToStream - errors", () => {
 
         if (error instanceof WrongExpectedVersionError) {
           expect(error.streamName).toBe(STREAM_NAME);
-          expect(error.expectedVersion).toBe(NO_STREAM);
-          expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+          expect(error.expectedState).toBe(NO_STREAM);
+          expect(error.actualState).toBeGreaterThanOrEqual(1);
         }
       }
     });
