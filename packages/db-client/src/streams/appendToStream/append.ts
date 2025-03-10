@@ -3,11 +3,7 @@ import { Empty } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
 import type { Client } from "../../Client";
-import type {
-  AppendResult,
-  AppendStreamState,
-  EventData,
-} from "../../types";
+import type { AppendResult, AppendStreamState, EventData } from "../../types";
 import {
   backpressuredWrite,
   convertToCommandError,

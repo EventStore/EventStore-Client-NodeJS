@@ -1,9 +1,5 @@
 import { Client } from "../Client";
-import type {
-  BaseOptions,
-  AppendResult,
-  AppendStreamState,
-} from "../types";
+import type { BaseOptions, AppendResult, AppendStreamState } from "../types";
 import { debug } from "../utils";
 import { jsonEvent } from "../events";
 
