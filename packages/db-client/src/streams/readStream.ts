@@ -1,4 +1,4 @@
-import * as bridge from "@kurrent/db-client-bridge";
+import * as bridge from "@kurrent/bridge";
 
 import { Client } from "../Client";
 import { FORWARDS, START, END } from "../constants";

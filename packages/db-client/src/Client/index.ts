@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
 import { Readable, Writable, Duplex, finished } from "stream";
-import * as bridge from "@kurrent/db-client-bridge";
+import * as bridge from "@kurrent/bridge";
 
 import { v4 as uuid } from "uuid";
 

@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",
-    "@kurrent/db-client-bridge": "*",
+    "@kurrent/bridge": "^1.0.0-alpha.2",
     "@types/debug": "^4.1.12",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.10.2",
@@ -55,7 +55,6 @@
     "uuid": "11.0.3"
   },
   "devDependencies": {
-    "@kurrent/db-client-bridge": "workspace:^",
     "@types/uuid": "^10.0.0",
     "grpc-tools": "^1.12.4",
     "grpc_tools_node_protoc_ts": "^5.3.3",

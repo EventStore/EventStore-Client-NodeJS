@@ -429,76 +429,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cargo-messages/android-arm-eabi@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/android-arm-eabi@npm:0.1.81"
-  conditions: os=android & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/darwin-arm64@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/darwin-arm64@npm:0.1.81"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/darwin-x64@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/darwin-x64@npm:0.1.81"
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/linux-arm-gnueabihf@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/linux-arm-gnueabihf@npm:0.1.81"
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/linux-arm64-gnu@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/linux-arm64-gnu@npm:0.1.81"
-  conditions: os=linux & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/linux-arm64-musl@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/linux-arm64-musl@npm:0.1.81"
-  conditions: os=linux & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/linux-x64-gnu@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/linux-x64-gnu@npm:0.1.81"
-  conditions: os=linux & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/linux-x64-musl@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/linux-x64-musl@npm:0.1.81"
-  conditions: os=linux & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/win32-arm64-msvc@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/win32-arm64-msvc@npm:0.1.81"
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@cargo-messages/win32-x64-msvc@npm:0.1.81":
-  version: 0.1.81
-  resolution: "@cargo-messages/win32-x64-msvc@npm:0.1.81"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@clinic/bubbleprof@npm:^10.0.0":
   version: 10.0.0
   resolution: "@clinic/bubbleprof@npm:10.0.0"
@@ -1111,25 +1041,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurrent/db-client-bridge@workspace:^, @kurrent/db-client-bridge@workspace:packages/db-client-bridge":
-  version: 0.0.0-use.local
-  resolution: "@kurrent/db-client-bridge@workspace:packages/db-client-bridge"
+"@kurrent/bridge@npm:^1.0.0-alpha.2":
+  version: 1.0.0-alpha.2
+  resolution: "@kurrent/bridge@npm:1.0.0-alpha.2"
   dependencies:
-    "@neon-rs/cli": "npm:^0.1.82"
+    "@kurrent/darwin-arm64": "npm:1.0.0-alpha.2"
+    "@kurrent/darwin-x64": "npm:1.0.0-alpha.2"
+    "@kurrent/linux-arm64-gnu": "npm:1.0.0-alpha.2"
+    "@kurrent/linux-x64-gnu": "npm:1.0.0-alpha.2"
+    "@kurrent/win32-x64-msvc": "npm:1.0.0-alpha.2"
     "@neon-rs/load": "npm:^0.1.82"
-    "@tsconfig/node20": "npm:^20.1.4"
-    "@types/node": "npm:^20.11.16"
-    clinic: "npm:^13.0.0"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
+  dependenciesMeta:
+    "@kurrent/darwin-arm64":
+      optional: true
+    "@kurrent/darwin-x64":
+      optional: true
+    "@kurrent/linux-arm64-gnu":
+      optional: true
+    "@kurrent/linux-x64-gnu":
+      optional: true
+    "@kurrent/win32-x64-msvc":
+      optional: true
+  checksum: 10c0/99479f44cef936b8e7127f9ed8e22eccb8a06490a3bdaac05ac0b6749e38c9a7d68cbf7232c46ece29b8c76d673e4b98e21281a1e5a31f07da7107a9a9961259
+  languageName: node
+  linkType: hard
+
+"@kurrent/darwin-arm64@npm:1.0.0-alpha.2":
+  version: 1.0.0-alpha.2
+  resolution: "@kurrent/darwin-arm64@npm:1.0.0-alpha.2"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@kurrent/darwin-x64@npm:1.0.0-alpha.2":
+  version: 1.0.0-alpha.2
+  resolution: "@kurrent/darwin-x64@npm:1.0.0-alpha.2"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
 
 "@kurrent/kurrentdb-client@workspace:^, @kurrent/kurrentdb-client@workspace:packages/db-client":
   version: 0.0.0-use.local
   resolution: "@kurrent/kurrentdb-client@workspace:packages/db-client"
   dependencies:
     "@grpc/grpc-js": "npm:^1.12.4"
-    "@kurrent/db-client-bridge": "workspace:^"
+    "@kurrent/bridge": "npm:^1.0.0-alpha.2"
     "@types/debug": "npm:^4.1.12"
     "@types/google-protobuf": "npm:^3.15.12"
     "@types/node": "npm:^22.10.2"
@@ -1144,6 +1100,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@kurrent/linux-arm64-gnu@npm:1.0.0-alpha.2":
+  version: 1.0.0-alpha.2
+  resolution: "@kurrent/linux-arm64-gnu@npm:1.0.0-alpha.2"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@kurrent/linux-x64-gnu@npm:1.0.0-alpha.2":
+  version: 1.0.0-alpha.2
+  resolution: "@kurrent/linux-x64-gnu@npm:1.0.0-alpha.2"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@kurrent/opentelemetry@workspace:^, @kurrent/opentelemetry@workspace:packages/opentelemetry":
   version: 0.0.0-use.local
   resolution: "@kurrent/opentelemetry@workspace:packages/opentelemetry"
@@ -1155,6 +1125,13 @@ __metadata:
     "@kurrent/kurrentdb-client": ^1
   languageName: unknown
   linkType: soft
+
+"@kurrent/win32-x64-msvc@npm:1.0.0-alpha.2":
+  version: 1.0.0-alpha.2
+  resolution: "@kurrent/win32-x64-msvc@npm:1.0.0-alpha.2"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
 
 "@mapbox/node-pre-gyp@npm:^1.0.5":
   version: 1.0.11
@@ -1212,47 +1189,6 @@ __metadata:
     abort-controller: "npm:^3.0.0"
     sonic-boom: "npm:^1.0.1"
   checksum: 10c0/6ce0d90a6684b5dea501284274a7166d72bd156c6ca0edb2b3739a6332504f4a289ac44a053b68490e19aa253d6d39fd5e42389d3a8189b42016e347affb5def
-  languageName: node
-  linkType: hard
-
-"@neon-rs/cli@npm:^0.1.82":
-  version: 0.1.82
-  resolution: "@neon-rs/cli@npm:0.1.82"
-  dependencies:
-    "@cargo-messages/android-arm-eabi": "npm:0.1.81"
-    "@cargo-messages/darwin-arm64": "npm:0.1.81"
-    "@cargo-messages/darwin-x64": "npm:0.1.81"
-    "@cargo-messages/linux-arm-gnueabihf": "npm:0.1.81"
-    "@cargo-messages/linux-arm64-gnu": "npm:0.1.81"
-    "@cargo-messages/linux-arm64-musl": "npm:0.1.81"
-    "@cargo-messages/linux-x64-gnu": "npm:0.1.81"
-    "@cargo-messages/linux-x64-musl": "npm:0.1.81"
-    "@cargo-messages/win32-arm64-msvc": "npm:0.1.81"
-    "@cargo-messages/win32-x64-msvc": "npm:0.1.81"
-  dependenciesMeta:
-    "@cargo-messages/android-arm-eabi":
-      optional: true
-    "@cargo-messages/darwin-arm64":
-      optional: true
-    "@cargo-messages/darwin-x64":
-      optional: true
-    "@cargo-messages/linux-arm-gnueabihf":
-      optional: true
-    "@cargo-messages/linux-arm64-gnu":
-      optional: true
-    "@cargo-messages/linux-arm64-musl":
-      optional: true
-    "@cargo-messages/linux-x64-gnu":
-      optional: true
-    "@cargo-messages/linux-x64-musl":
-      optional: true
-    "@cargo-messages/win32-arm64-msvc":
-      optional: true
-    "@cargo-messages/win32-x64-msvc":
-      optional: true
-  bin:
-    neon: index.js
-  checksum: 10c0/bd7d3fdd4a0972b9f1eb03c4b231f73a30b3bd0d50770e4f65ecde7194df07a441abff908a445226dc8fed2d9ea5dfc640ce9be227adec73779af6d67c3ac320
   languageName: node
   linkType: hard
 
@@ -1802,13 +1738,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node20@npm:^20.1.4":
-  version: 20.1.4
-  resolution: "@tsconfig/node20@npm:20.1.4"
-  checksum: 10c0/239cd6abaceaaffc758e7a9dd3748ec1acfdabd6de28a9a16a3824c21f17ad69a16184870298460345d2fb6f3663d092c21d5b764bef669a179658b4a7eac739
-  languageName: node
-  linkType: hard
-
 "@tybys/wasm-util@npm:^0.9.0":
   version: 0.9.0
   resolution: "@tybys/wasm-util@npm:0.9.0"
@@ -1964,15 +1893,6 @@ __metadata:
   version: 16.18.126
   resolution: "@types/node@npm:16.18.126"
   checksum: 10c0/5c137eb141d33de32b16ff26047ff6d449432b58d0d25f7cced2040c97727d81fe1099a7581eb336d14a6840f5b09e363bdd43d7a6995e8e81eb47aa51e413fc
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^20.11.16":
-  version: 20.17.19
-  resolution: "@types/node@npm:20.17.19"
-  dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10c0/930e554eadeb0c2848f9225007ef66ea9c7fe987c80e2f2c1a9f316b297036d4054bbc5459b67051cf32cd360a022344c2998dcb1ec7579109f631b6d5f21bf8
   languageName: node
   linkType: hard
 
@@ -2772,7 +2692,7 @@ __metadata:
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
     "@eventstore/db-client": "npm:^6.2.1"
-    "@kurrent/db-client-bridge": "workspace:^"
+    "@kurrent/bridge": "npm:^1.0.0-alpha.2"
     "@kurrent/kurrentdb-client": "workspace:^"
     clinic: "npm:^13.0.0"
     tinybench: "npm:^3.1.1"
@@ -7227,7 +7147,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "kurrent-node-client-repository@workspace:."
   dependencies:
-    "@kurrent/kurrentdb-client": "workspace:^"
     "@tsconfig/node18": "npm:^18.2.4"
     "@types/node": "npm:18.19.76"
     "@typescript-eslint/eslint-plugin": "npm:^8.10.0"
@@ -10792,7 +10711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3, typescript@npm:^5.6.3":
+"typescript@npm:^5.6.3":
   version: 5.7.3
   resolution: "typescript@npm:5.7.3"
   bin:
@@ -10802,7 +10721,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
   version: 5.7.3
   resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"
   bin:
@@ -10849,13 +10768,6 @@ __metadata:
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
   checksum: 10c0/bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~6.19.2":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
   languageName: node
   linkType: hard
 

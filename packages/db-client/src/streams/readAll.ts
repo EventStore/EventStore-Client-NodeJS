@@ -7,7 +7,7 @@ import type {
 import { FORWARDS, START } from "../constants";
 import { Client } from "../Client";
 
-import * as bridge from "@kurrent/db-client-bridge";
+import * as bridge from "@kurrent/bridge";
 import { convertRustEvent } from "../utils/convertRustEvent";
 import { convertBridgeError } from "../utils/convertBridgeError";
 

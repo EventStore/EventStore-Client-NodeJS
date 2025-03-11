@@ -1,4 +1,4 @@
-const esdb = require("@kurrent/db-client-bridge");
+const esdb = require("@kurrent/bridge");
 const {Bench, hrtimeNow} = require("tinybench");
 
 (async () => {

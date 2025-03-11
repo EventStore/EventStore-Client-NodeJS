@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@eventstore/db-client": "^6.2.1",
+    "@kurrent/bridge": "^1.0.0-alpha.2",
     "tinybench": "^3.1.1"
   },
   "devDependencies": {
-    "@kurrent/db-client-bridge": "workspace:^",
     "@kurrent/kurrentdb-client": "workspace:^",
     "clinic": "^13.0.0"
   }
