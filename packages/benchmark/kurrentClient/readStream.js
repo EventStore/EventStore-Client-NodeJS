@@ -9,7 +9,7 @@ console.warn = () => {};
     let client = null;
 
     const bench = new Bench({
-        name: 'KurrentDB Client (v1.0.0-alpha.0)',
+        name: 'KurrentDB Client',
         now: hrtimeNow,
         warmupIterations: 1,
         iterations: 20,
