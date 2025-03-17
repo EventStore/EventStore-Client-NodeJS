@@ -1,6 +1,6 @@
 {
   "name": "@kurrent/opentelemetry",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.1",
   "description": "Kurrent NodeJS Client SDK interceptors for tracing with OpenTelemetry",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
