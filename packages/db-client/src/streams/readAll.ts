@@ -10,9 +10,16 @@ import type {
   Direction,
   AllStreamResolvedEvent,
   StreamingRead,
+  Filter,
 } from "../types";
 import { debug, convertGrpcEvent } from "../utils";
-import { BACKWARDS, FORWARDS, START } from "../constants";
+import {
+  BACKWARDS,
+  EVENT_TYPE,
+  FORWARDS,
+  START,
+  STREAM_NAME,
+} from "../constants";
 import { Client } from "../Client";
 
 import { ReadStream } from "./utils/ReadStream";
@@ -40,6 +47,10 @@ export interface ReadAllOptions extends BaseOptions {
    * @defaultValue FORWARDS
    */
   direction?: Direction;
+  /**
+   * Filters events or streams based upon a predicate.
+   */
+  filter?: Filter;
 }
 
 declare module "../Client" {
@@ -63,6 +74,7 @@ Client.prototype.readAll = function (
     fromPosition = START,
     resolveLinkTos = false,
     direction = FORWARDS,
+    filter,
     ...baseOptions
   }: ReadAllOptions = {},
   readableOptions: ReadableOptions = {}
@@ -110,6 +122,50 @@ Client.prototype.readAll = function (
       options.setReadDirection(1);
       break;
     }
+  }
+
+  if (filter) {
+    const expr = new ReadReq.Options.FilterOptions.Expression();
+
+    if ("prefixes" in filter) {
+      expr.setPrefixList(filter.prefixes);
+    }
+
+    if ("regex" in filter) {
+      expr.setRegex(filter.regex);
+    }
+
+    const filterOptions = new ReadReq.Options.FilterOptions();
+
+    switch (filter.filterOn) {
+      case STREAM_NAME: {
+        filterOptions.setStreamIdentifier(expr);
+        break;
+      }
+      case EVENT_TYPE: {
+        filterOptions.setEventType(expr);
+        break;
+      }
+    }
+
+    if (typeof filter.maxSearchWindow === "number") {
+      if (filter.maxSearchWindow <= 0) {
+        throw new Error("MaxSearchWindow must be greater than 0.");
+      }
+      filterOptions.setMax(filter.maxSearchWindow);
+    } else {
+      filterOptions.setCount(new Empty());
+    }
+
+    if (filter.checkpointInterval <= 0) {
+      throw new Error("CheckpointInterval must be greater than 0.");
+    }
+
+    filterOptions.setCheckpointintervalmultiplier(filter.checkpointInterval);
+
+    options.setFilter(filterOptions);
+  } else {
+    options.setNoFilter(new Empty());
   }
 
   req.setOptions(options);

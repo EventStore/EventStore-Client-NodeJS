@@ -49,6 +49,29 @@ describe("readAll", () => {
       expect(notSystemStreams[0]).toBe(STREAM_NAME_A);
     });
 
+    test("with filter", async () => {
+      let count = 0;
+      const notSystemStreams = [];
+
+      for await (const { event } of client.readAll({
+        filter: {
+          prefixes: [STREAM_NAME_A],
+          filterOn: "streamName",
+          checkpointInterval: 1000,
+        },
+      })) {
+        count++;
+
+        if (event && !event.streamId.startsWith("$")) {
+          notSystemStreams.push(event.streamId);
+        }
+      }
+
+      expect(count).toEqual(4);
+      expect(notSystemStreams.length).toEqual(4);
+      expect(Array.from(new Set(notSystemStreams))).toEqual([STREAM_NAME_A]);
+    });
+
     test("from position", async () => {
       let eventToExtract!: AllStreamResolvedEvent;
 
