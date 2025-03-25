@@ -83,7 +83,7 @@ describe("[sample] opentelemetry", () => {
         },
       }),
       {
-        expectedRevision: "any",
+        streamState: "any",
       }
     );
 

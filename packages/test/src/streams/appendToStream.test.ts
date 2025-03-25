@@ -375,7 +375,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: ANY,
+              streamState: ANY,
             }
           );
 
@@ -392,7 +392,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: NO_STREAM,
+              streamState: NO_STREAM,
             }
           );
 
@@ -410,7 +410,7 @@ describe("appendToStream", () => {
               STREAM_NAME,
               jsonTestEvents(),
               {
-                expectedRevision: "no_stream",
+                streamState: "no_stream",
               }
             );
 
@@ -420,8 +420,8 @@ describe("appendToStream", () => {
 
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM_NAME);
-              expect(error.expectedVersion).toBe(NO_STREAM);
-              expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+              expect(error.expectedState).toBe(NO_STREAM);
+              expect(error.actualState).toBeGreaterThanOrEqual(1);
             }
           }
         });
@@ -437,7 +437,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: STREAM_EXISTS,
+              streamState: STREAM_EXISTS,
             }
           );
           expect(result).toBeDefined();
@@ -452,7 +452,7 @@ describe("appendToStream", () => {
               STREAM_NAME,
               jsonTestEvents(),
               {
-                expectedRevision: STREAM_EXISTS,
+                streamState: STREAM_EXISTS,
               }
             );
 
@@ -462,8 +462,8 @@ describe("appendToStream", () => {
 
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM_NAME);
-              expect(error.expectedVersion).toBe(STREAM_EXISTS);
-              expect(error.actualVersion).toBe(NO_STREAM);
+              expect(error.expectedState).toBe(STREAM_EXISTS);
+              expect(error.actualState).toBe(NO_STREAM);
             }
           }
         });
@@ -482,7 +482,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: nextExpectedRevision,
+              streamState: nextExpectedRevision,
             }
           );
 
@@ -498,7 +498,7 @@ describe("appendToStream", () => {
               const result = await client.appendToStream(
                 STREAM_NAME,
                 jsonTestEvents(),
-                { expectedRevision: BigInt(1) }
+                { streamState: BigInt(1) }
               );
 
               expect(result).toBe("unreachable");
@@ -507,8 +507,8 @@ describe("appendToStream", () => {
 
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
-                expect(error.expectedVersion).toBe(BigInt(1));
-                expect(error.actualVersion).toBe(NO_STREAM);
+                expect(error.expectedState).toBe(BigInt(1));
+                expect(error.actualState).toBe(NO_STREAM);
               }
             }
           });
@@ -526,7 +526,7 @@ describe("appendToStream", () => {
                 STREAM_NAME,
                 jsonTestEvents(),
                 {
-                  expectedRevision: nextExpectedRevision + BigInt(1),
+                  streamState: nextExpectedRevision + BigInt(1),
                 }
               );
 
@@ -536,10 +536,10 @@ describe("appendToStream", () => {
 
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
-                expect(error.expectedVersion).toBe(
+                expect(error.expectedState).toBe(
                   nextExpectedRevision + BigInt(1)
                 );
-                expect(error.actualVersion).toBe(nextExpectedRevision);
+                expect(error.actualState).toBe(nextExpectedRevision);
               }
             }
           });
@@ -565,7 +565,7 @@ describe("appendToStream", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            expectedRevision: "no_stream",
+            streamState: "no_stream",
           }
         );
 
@@ -575,8 +575,8 @@ describe("appendToStream", () => {
 
         if (error instanceof WrongExpectedVersionError) {
           expect(error.streamName).toBe(STREAM_NAME);
-          expect(error.expectedVersion).toBe(NO_STREAM);
-          expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+          expect(error.expectedState).toBe(NO_STREAM);
+          expect(error.actualState).toBeGreaterThanOrEqual(1);
         }
       }
     });
@@ -596,7 +596,7 @@ describe("appendToStream", () => {
         STREAM_NAME,
         jsonTestEvents(),
         {
-          expectedRevision: "no_stream",
+          streamState: "no_stream",
         }
       );
 

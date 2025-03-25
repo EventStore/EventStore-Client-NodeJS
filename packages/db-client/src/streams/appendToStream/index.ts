@@ -5,7 +5,7 @@ import { ANY } from "../../constants";
 import type {
   BaseOptions,
   AppendResult,
-  AppendExpectedRevision,
+  AppendStreamState,
   EventData,
   EventType,
 } from "../../types";
@@ -18,7 +18,7 @@ export interface AppendToStreamOptions extends BaseOptions {
    * Asks the server to check the stream is at specific revision before writing events.
    * @defaultValue ANY
    */
-  expectedRevision?: AppendExpectedRevision;
+  streamState?: AppendStreamState;
   /**
    * The batch size, in bytes.
    * @defaultValue 3 * 1024 * 1024
@@ -49,7 +49,7 @@ Client.prototype.appendToStream = async function <
   streamName: string,
   event: EventData<KnownEventType> | EventData<KnownEventType>[],
   {
-    expectedRevision = ANY,
+    streamState = ANY,
     batchAppendSize = 3 * 1024 * 1024,
     ...baseOptions
   }: AppendToStreamOptions = {}
@@ -61,14 +61,14 @@ Client.prototype.appendToStream = async function <
     (await this.supports(StreamsService.batchAppend))
   ) {
     return batchAppend.call(this, streamName, events, {
-      expectedRevision,
+      streamState: streamState,
       batchAppendSize,
       ...baseOptions,
     });
   }
 
   return append.call(this, streamName, events, {
-    expectedRevision,
+    streamState: streamState,
     batchAppendSize,
     ...baseOptions,
   });

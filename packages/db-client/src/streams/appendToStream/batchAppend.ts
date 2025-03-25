@@ -39,7 +39,7 @@ export const batchAppend = async function (
   streamName: string,
   events: EventData[],
   {
-    expectedRevision,
+    streamState,
     batchAppendSize,
     ...baseOptions
   }: InternalOptions<AppendToStreamOptions>
@@ -131,7 +131,7 @@ export const batchAppend = async function (
     options.setStreamIdentifier(identifier);
     options.setDeadline(deadline);
 
-    switch (expectedRevision) {
+    switch (streamState) {
       case "any": {
         options.setAny(new Empty());
         break;
@@ -145,7 +145,7 @@ export const batchAppend = async function (
         break;
       }
       default: {
-        options.setStreamPosition(expectedRevision.toString(10));
+        options.setStreamPosition(streamState.toString(10));
         break;
       }
     }
