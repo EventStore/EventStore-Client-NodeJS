@@ -10,8 +10,8 @@ Development is done on the `master` branch. We attempt to do our best to ensure 
 **Repository Setup:**
 1. Clone the repository:
    ```bash
-   $ git clone git@github.com:EventStore/Kurrent-Client-NodeJS.git
-   $ cd Kurrent-Client-NodeJS
+   $ git clone git@github.com:EventStore/KurrentDB-Client-NodeJS.git
+   $ cd KurrentDB-Client-NodeJS
    ```
 2. Install all necessary dependencies:
    ```bash
@@ -103,4 +103,4 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 [jest]: https://jestjs.io/
 [debug]: https://github.com/visionmedia/debug
 [`util.inspect()`]: https://nodejs.org/api/util.html#util_util_inspect_object_options
-[kurrent-client-nodejs]: https://github.com/EventStore/Kurrent-Client-NodeJS
+[KurrentDB-Client-NodeJS]: https://github.com/EventStore/KurrentDB-Client-NodeJS

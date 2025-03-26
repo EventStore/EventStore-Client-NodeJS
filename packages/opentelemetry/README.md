@@ -3,7 +3,7 @@
 [![license][license-badge]][license-badge-url]
 [![Github action CI workflow][ci-badge]][ci-badge-url]
 
-This module provides automatic tracing instrumentation for [Kurrent-Client-NodeJS].
+This module provides automatic tracing instrumentation for [KurrentDB-Client-NodeJS].
 
 Compatible with OpenTelemetry JS API and SDK `1.0+`.
 
@@ -67,8 +67,8 @@ Refer to our [contribution guidelines][contributing-guidelines].
 [Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [contributing-guidelines]: https://github.com/prisma/prisma/blob/main/CONTRIBUTING.md
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
-[license-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/LICENSE
-[ci-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/actions
-[Kurrent-Client-NodeJS]: https://github.com/EventStore/Kurrent-Client-NodeJS
-[ci-badge]: https://github.com/EventStore/Kurrent-Client-NodeJS/workflows/CI/badge.svg?branch=master
-[ci-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/actions
+[license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
+[ci-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/actions
+[KurrentDB-Client-NodeJS]: https://github.com/EventStore/KurrentDB-Client-NodeJS
+[ci-badge]: https://github.com/EventStore/KurrentDB-Client-NodeJS/workflows/CI/badge.svg?branch=master
+[ci-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/actions

@@ -193,9 +193,9 @@ Refer to our [Contribution Guidelines]
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [npm-badge]: https://img.shields.io/npm/v/@kurrent/db-client.svg
 [npm-badge-url]: https://www.npmjs.com/package/@kurrent/db-client
-[ci-badge]: https://github.com/EventStore/Kurrent-Client-NodeJS/workflows/CI/badge.svg?branch=master
-[ci-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/actions
+[ci-badge]: https://github.com/EventStore/KurrentDB-Client-NodeJS/workflows/CI/badge.svg?branch=master
+[ci-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/actions
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
-[license-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/LICENSE
-[contribution guidelines]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/CONTRIBUTING.md
+[license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
+[contribution guidelines]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
 [Kurrent docs]: https://developers.kurrent.io/server/v24.6/quick-start/installation

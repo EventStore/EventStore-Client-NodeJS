@@ -12,10 +12,10 @@
     "prepublishOnly": "yarn clean && yarn build && yarn test",
     "test": "nx run test:test"
   },
-  "author": "Kurrent Inc",
+  "author": "Kurrent, Inc",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/EventStore/Kurrent-Client-NodeJS/issues"
+    "url": "https://github.com/EventStore/KurrentDB-Client-NodeJS/issues"
   },
   "workspaces": [
     "packages/*"

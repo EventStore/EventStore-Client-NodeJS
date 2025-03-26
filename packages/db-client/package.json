@@ -1,7 +1,7 @@
 {
   "name": "@kurrent/kurrentdb-client",
   "version": "1.0.0-alpha.4",
-  "description": "Kurrent gRPC NodeJS Client SDK",
+  "description": "KurrentDB gRPC NodeJS Client SDK",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -25,17 +25,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EventStore/Kurrent-Client-NodeJS.git"
+    "url": "git+https://github.com/EventStore/KurrentDB-Client-NodeJS.git"
   },
   "keywords": [
     "Kurrent",
     "EventSourcing",
     "Client"
   ],
-  "author": "Kurrent Inc",
+  "author": "Kurrent, Inc",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/EventStore/Kurrent-Client-NodeJS/issues"
+    "url": "https://github.com/EventStore/KurrentDB-Client-NodeJS/issues"
   },
   "homepage": "https://developers.kurrent.io/clients/grpc/getting-started?codeLanguage=NodeJS",
   "publishConfig": {
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",
-    "@kurrent/bridge": "^1.0.0-alpha.2",
+    "@kurrent/bridge": "^1.0.0-alpha.3",
     "@types/debug": "^4.1.12",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.10.2",

@@ -24,4 +24,4 @@ Refer to our [contribution guidelines][contributing-guidelines].
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [contributing-guidelines]: https://github.com/prisma/prisma/blob/main/CONTRIBUTING.md
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
-[license-badge-url]: https://github.com/EventStore/Kurrent-Client-NodeJS/blob/master/LICENSE
+[license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
