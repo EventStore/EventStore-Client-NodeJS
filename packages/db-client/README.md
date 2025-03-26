@@ -188,7 +188,7 @@ Information on support can be found on our website: [Kurrent Support]
 Refer to our [Contribution Guidelines]
 
 [Kurrent support]: https://kurrent.io/support/
-[discuss]: https://discuss.eventstore.com/
+[discuss]: https://discuss.kurrent.io/
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [npm-badge]: https://img.shields.io/npm/v/@kurrent/db-client.svg

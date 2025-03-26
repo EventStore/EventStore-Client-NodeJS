@@ -19,7 +19,7 @@ Information on support can be found on our website: [Kurrent Support]
 Refer to our [contribution guidelines][contributing-guidelines].
 
 [Kurrent support]: https://kurrent.io/support/
-[discuss]: https://discuss.eventstore.com/
+[discuss]: https://discuss.kurrent.io/
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [contributing-guidelines]: https://github.com/prisma/prisma/blob/main/CONTRIBUTING.md

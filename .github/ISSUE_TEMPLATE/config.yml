@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Feature request
-    url: https://discuss.eventstore.com/
+    url: https://discuss.kurrent.io/
     about: Suggest an idea for this project
   - name: Question / Problem
-    url: https://discuss.eventstore.com/
+    url: https://discuss.kurrent.io/
     about: Questions and problems with n8n

@@ -15,7 +15,7 @@ npm install --save @kurrent/opentelemetry
 
 ### Supported Versions
 
-- `[6.x]`
+- `[1.x]`
 
 It's likely that the instrumentation would support earlier versions of KurrentDB, but this has not been tested.
 
@@ -35,7 +35,7 @@ provider.register();
 
 registerInstrumentations({
   instrumentations: [
-    new EventStoreDBInstrumentation(),
+    new KurrentDBInstrumentation(),
   ],
 });
 ```
@@ -59,13 +59,13 @@ Information on support can be found on our website: [Kurrent Support]
 
 ## Contributing
 
-Refer to our [contribution guidelines][contributing-guidelines].
+Refer to our [contribution guidelines]
 
 [Kurrent support]: https://kurrent.io/support/
-[discuss]: https://discuss.eventstore.com/
+[discuss]: https://discuss.kurrent.io/
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
-[contributing-guidelines]: https://github.com/prisma/prisma/blob/main/CONTRIBUTING.md
+[contribution guidelines]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
 [license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
 [ci-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/actions
