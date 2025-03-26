@@ -1101,45 +1101,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurrent/bridge@npm:^1.0.0-alpha.2":
-  version: 1.0.0-alpha.2
-  resolution: "@kurrent/bridge@npm:1.0.0-alpha.2"
-  dependencies:
-    "@kurrent/darwin-arm64": "npm:1.0.0-alpha.2"
-    "@kurrent/darwin-x64": "npm:1.0.0-alpha.2"
-    "@kurrent/linux-arm64-gnu": "npm:1.0.0-alpha.2"
-    "@kurrent/linux-x64-gnu": "npm:1.0.0-alpha.2"
-    "@kurrent/win32-x64-msvc": "npm:1.0.0-alpha.2"
-    "@neon-rs/load": "npm:^0.1.82"
-  dependenciesMeta:
-    "@kurrent/darwin-arm64":
-      optional: true
-    "@kurrent/darwin-x64":
-      optional: true
-    "@kurrent/linux-arm64-gnu":
-      optional: true
-    "@kurrent/linux-x64-gnu":
-      optional: true
-    "@kurrent/win32-x64-msvc":
-      optional: true
-  checksum: 10c0/99479f44cef936b8e7127f9ed8e22eccb8a06490a3bdaac05ac0b6749e38c9a7d68cbf7232c46ece29b8c76d673e4b98e21281a1e5a31f07da7107a9a9961259
-  languageName: node
-  linkType: hard
-
-"@kurrent/darwin-arm64@npm:1.0.0-alpha.2":
-  version: 1.0.0-alpha.2
-  resolution: "@kurrent/darwin-arm64@npm:1.0.0-alpha.2"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@kurrent/darwin-x64@npm:1.0.0-alpha.2":
-  version: 1.0.0-alpha.2
-  resolution: "@kurrent/darwin-x64@npm:1.0.0-alpha.2"
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@kurrent/kurrentdb-client@workspace:^, @kurrent/kurrentdb-client@workspace:packages/db-client":
   version: 0.0.0-use.local
   resolution: "@kurrent/kurrentdb-client@workspace:packages/db-client"
@@ -1160,20 +1121,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurrent/linux-arm64-gnu@npm:1.0.0-alpha.2":
-  version: 1.0.0-alpha.2
-  resolution: "@kurrent/linux-arm64-gnu@npm:1.0.0-alpha.2"
-  conditions: os=linux & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@kurrent/linux-x64-gnu@npm:1.0.0-alpha.2":
-  version: 1.0.0-alpha.2
-  resolution: "@kurrent/linux-x64-gnu@npm:1.0.0-alpha.2"
-  conditions: os=linux & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@kurrent/opentelemetry@workspace:^, @kurrent/opentelemetry@workspace:packages/opentelemetry":
   version: 0.0.0-use.local
   resolution: "@kurrent/opentelemetry@workspace:packages/opentelemetry"
@@ -1185,13 +1132,6 @@ __metadata:
     "@kurrent/kurrentdb-client": ^1
   languageName: unknown
   linkType: soft
-
-"@kurrent/win32-x64-msvc@npm:1.0.0-alpha.2":
-  version: 1.0.0-alpha.2
-  resolution: "@kurrent/win32-x64-msvc@npm:1.0.0-alpha.2"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
 
 "@mapbox/node-pre-gyp@npm:^1.0.5":
   version: 1.0.11
@@ -2752,7 +2692,7 @@ __metadata:
   resolution: "benchmark@workspace:packages/benchmark"
   dependencies:
     "@eventstore/db-client": "npm:^6.2.1"
-    "@kurrent/bridge": "npm:^1.0.0-alpha.2"
+    "@kurrent/bridge": "npm:^0.1.0"
     "@kurrent/kurrentdb-client": "workspace:^"
     clinic: "npm:^13.0.0"
     tinybench: "npm:^3.1.1"
