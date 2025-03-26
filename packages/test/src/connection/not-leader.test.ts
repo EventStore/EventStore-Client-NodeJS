@@ -4,10 +4,10 @@ import {
   FOLLOWER,
   ErrorType,
   NotLeaderError,
-  EventStoreDBClient,
+  KurrentDBClient,
   BACKWARDS,
   END,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("not-leader", () => {
   const cluster = createTestCluster();
@@ -23,13 +23,10 @@ describe("not-leader", () => {
   });
 
   test("should get an error here", async () => {
-    const followerClient = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
+    const followerClient = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
         nodePreference: FOLLOWER,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
+      })
     );
 
     const appendResult = await followerClient.appendToStream(
@@ -39,7 +36,7 @@ describe("not-leader", () => {
 
     expect(appendResult).toBeDefined();
 
-    const readFromTestStream = (client: EventStoreDBClient) => {
+    const readFromTestStream = async (client: KurrentDBClient) => {
       return collect(
         client.readStream(STREAM_NAME, {
           maxCount: 10,
@@ -62,12 +59,10 @@ describe("not-leader", () => {
         expect(error.leader).toBeDefined();
         expect(cluster.endpoints).toContainEqual(error.leader);
 
-        const leaderClient = new EventStoreDBClient(
-          {
-            endpoint: error.leader,
-          },
-          { rootCertificate: cluster.certs.root },
-          { username: "admin", password: "changeit" }
+        const leaderClient = KurrentDBClient.connectionString(
+          cluster.connectionStringWithOverrides({
+            endpoints: [error.leader],
+          })
         );
 
         const readResult = await readFromTestStream(leaderClient);

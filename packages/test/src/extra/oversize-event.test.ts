@@ -1,23 +1,19 @@
 import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   JSONEventType,
   RUNNING,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("oversize events", () => {
   const node = createTestNode();
 
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

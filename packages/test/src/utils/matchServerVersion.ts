@@ -1,4 +1,4 @@
-import type { ServerFeatures } from "@eventstore/db-client/dist/Client/ServerFeatures";
+import type { ServerFeatures } from "@kurrent/kurrentdb-client/dist/Client/ServerFeatures";
 
 declare global {
   // eslint-disable-next-line no-var

@@ -3,8 +3,8 @@ import { StreamsClient } from "../../generated/streams_grpc_pb";
 import { TombstoneReq } from "../../generated/streams_pb";
 
 import { Client } from "../Client";
-import { ANY, NO_STREAM, STREAM_EXISTS } from "../constants";
-import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
+import { ANY, NO_STREAM } from "../constants";
+import type { BaseOptions, DeleteResult, StreamState } from "../types";
 import { convertToCommandError, createStreamIdentifier, debug } from "../utils";
 
 export interface TombstoneStreamOptions extends BaseOptions {
@@ -12,7 +12,7 @@ export interface TombstoneStreamOptions extends BaseOptions {
    * Asks the server to check the stream is at specific revision before deleting.
    * @defaultValue ANY
    */
-  expectedRevision?: ExpectedRevision;
+  expectedRevision?: StreamState;
 }
 
 declare module "../Client" {
@@ -47,10 +47,6 @@ Client.prototype.tombstoneStream = async function (
     }
     case NO_STREAM: {
       options.setNoStream(new Empty());
-      break;
-    }
-    case STREAM_EXISTS: {
-      options.setStreamExists(new Empty());
       break;
     }
     default: {

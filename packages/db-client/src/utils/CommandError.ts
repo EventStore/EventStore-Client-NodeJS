@@ -1,14 +1,12 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 /* istanbul ignore file */
 
 import { status as StatusCode, ServiceError, Metadata } from "@grpc/grpc-js";
 import { isClientCancellationError } from ".";
 
 import type { WrongExpectedVersion } from "../../generated/shared_pb";
-import type {
-  CurrentRevision,
-  EndPoint,
-  AppendExpectedRevision,
-} from "../types";
+import type { CurrentStreamState, EndPoint, AppendStreamState } from "../types";
 
 export enum ErrorType {
   TIMEOUT = "timeout",
@@ -86,7 +84,9 @@ export class NotLeaderError extends CommandErrorBase {
 
   constructor(error: ServiceError) {
     super(error);
-    const metadata = error.metadata!.getMap();
+    const metadata: any = error.metadata?.getMap
+      ? error.metadata.getMap()
+      : error.metadata;
     this.leader = {
       address: metadata["leader-endpoint-host"].toString(),
       port: parseInt(metadata["leader-endpoint-port"].toString(), 10),
@@ -164,22 +164,22 @@ export class ScavengeNotFoundError extends CommandErrorBase {
 
 interface WrongExpectedVersionDetails {
   streamName: string;
-  expected: AppendExpectedRevision;
-  current: CurrentRevision;
+  expected: AppendStreamState;
+  current: CurrentStreamState;
 }
 
 export class WrongExpectedVersionError extends CommandErrorBase {
   public type: ErrorType.WRONG_EXPECTED_VERSION =
     ErrorType.WRONG_EXPECTED_VERSION;
   public streamName: string;
-  public expectedVersion: AppendExpectedRevision;
-  public actualVersion: CurrentRevision;
+  public expectedState: AppendStreamState;
+  public actualState: CurrentStreamState;
 
   static fromWrongExpectedVersion = (
     details: WrongExpectedVersion,
     streamName: string
   ) => {
-    let expected: AppendExpectedRevision = "any";
+    let expected: AppendStreamState = "any";
     switch (true) {
       case details.hasExpectedStreamPosition(): {
         expected = BigInt(details.getExpectedStreamPosition()!);
@@ -211,14 +211,14 @@ export class WrongExpectedVersionError extends CommandErrorBase {
     if (error) {
       const metadata = error.metadata!.getMap();
       this.streamName = metadata["stream-name"].toString();
-      this.expectedVersion = BigInt(metadata["expected-version"].toString());
-      this.actualVersion = metadata["actual-version"]
+      this.expectedState = BigInt(metadata["expected-version"].toString());
+      this.actualState = metadata["actual-version"]
         ? BigInt(metadata["actual-version"].toString())
         : "no_stream";
     } else {
       this.streamName = versions!.streamName;
-      this.expectedVersion = versions!.expected;
-      this.actualVersion = versions!.current;
+      this.expectedState = versions!.expected;
+      this.actualState = versions!.current;
     }
   }
 }
@@ -436,9 +436,9 @@ export type CommandError =
 export const convertToCommandError = (error: Error): CommandError | Error => {
   if (isCommandError(error) || !isServiceError(error)) return error;
 
-  const exeption = error.metadata?.getMap()["exception"]?.toString();
+  const exception = error.metadata?.getMap()["exception"]?.toString();
 
-  switch (exeption) {
+  switch (exception) {
     case ErrorType.NOT_LEADER:
       return new NotLeaderError(error);
     case ErrorType.STREAM_NOT_FOUND:
@@ -492,7 +492,7 @@ export const convertToCommandError = (error: Error): CommandError | Error => {
     }
   }
 
-  // This is a temporary workaround for a bug in node js. Must be removed when the bug is fixed.
+  // This is a temporary workaround for a bug in Node.js. Must be removed when the bug is fixed.
   // https://github.com/grpc/grpc-node/issues/2502
   // and https://github.com/nodejs/node/issues/49147
   if (error.details.includes("write after end")) {

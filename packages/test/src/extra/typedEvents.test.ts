@@ -2,23 +2,19 @@ import { createTestNode } from "@test-utils";
 import {
   binaryEvent,
   BinaryEventType,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   JSONEventType,
   persistentSubscriptionToStreamSettingsFromDefaults,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("typed events should compile", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

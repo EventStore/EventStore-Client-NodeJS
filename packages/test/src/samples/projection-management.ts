@@ -2,7 +2,7 @@
 
 import { v4 as uuid } from "uuid";
 
-import { EventStoreDBClient, isCommandError } from "@eventstore/db-client";
+import { KurrentDBClient, isCommandError } from "@kurrent/kurrentdb-client";
 import {
   createTestNode,
   delay,
@@ -20,7 +20,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
     const node = createTestNode();
     const log = console.log;
 
-    let client!: EventStoreDBClient;
+    let client!: KurrentDBClient;
 
     const createTestProjection = async (
       name: string = uuid(),
@@ -39,11 +39,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
     beforeAll(async () => {
       await node.up();
 
-      client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.appendToStream("some-stream", jsonTestEvents());
       console.log = jest.fn(log);
@@ -64,7 +60,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
       const PASSWORD = "changeit";
 
       // region createClient
-      const client = EventStoreDBClient.connectionString`
+      const client = KurrentDBClient.connectionString`
         esdb+discover://${ADMIN}:${PASSWORD}@${ENDPOINT}?nodePreference=leader
     `;
       // endregion createClient

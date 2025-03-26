@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { isAbsolute, resolve } from "path";
 import { Readable, Writable, Duplex, finished } from "stream";
+import * as bridge from "@kurrent/bridge";
 
 import { v4 as uuid } from "uuid";
 
@@ -50,12 +51,12 @@ interface ClientOptions {
   keepAliveInterval?: number;
   /**
    * The amount of time (in milliseconds) the sender of the keepalive ping waits for an acknowledgement.
-   * If it does not receive an acknowledgment within this time, it will close the connection.
+   * If it does not receive an acknowledgement within this time, it will close the connection.
    * @defaultValue 10_000
    */
   keepAliveTimeout?: number;
   /**
-   * Whether or not to immediately throw an exception when an append fails.
+   * Whether to immediately throw an exception when an append fails.
    * @defaultValue true
    */
   throwOnAppendFailure?: boolean;
@@ -118,14 +119,6 @@ export interface ChannelCredentialOptions {
    */
   rootCertificate?: Buffer;
   /**
-   * @deprecated Use the new {@link userKeyFile} instead.
-   */
-  privateKey?: Buffer;
-  /**
-   * @deprecated Use the new {@link userCertFile} instead.
-   */
-  certChain?: Buffer;
-  /**
    * The file containing the user certificate’s matching private key in PEM format.
    */
   userKeyFile?: Buffer;
@@ -145,6 +138,7 @@ interface NextChannelSettings {
 }
 
 export class Client {
+  #rustClient: bridge.RustClient;
   #throwOnAppendFailure: boolean;
   #connectionSettings: ConnectionSettings;
   #channelCredentials: ChannelCredentials;
@@ -237,6 +231,7 @@ export class Client {
       channelCredentials.userCertFile = readFileSync(certPathResolved);
     }
 
+    const rustClient = bridge.createClient(string);
     if (options.dnsDiscover) {
       const [discover] = options.hosts;
 
@@ -247,6 +242,7 @@ export class Client {
       }
 
       return new Client(
+        rustClient,
         {
           discover,
           nodePreference: options.nodePreference,
@@ -266,6 +262,7 @@ export class Client {
 
     if (options.hosts.length > 1) {
       return new Client(
+        rustClient,
         {
           endpoints: options.hosts,
           nodePreference: options.nodePreference,
@@ -284,6 +281,7 @@ export class Client {
     }
 
     return new Client(
+      rustClient,
       {
         endpoint: options.hosts[0],
         throwOnAppendFailure: options.throwOnAppendFailure,
@@ -297,22 +295,26 @@ export class Client {
     );
   }
 
-  constructor(
+  protected constructor(
+    rustClient: bridge.RustClient,
     connectionSettings: DNSClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
-  constructor(
+  protected constructor(
+    rustClient: bridge.RustClient,
     connectionSettings: GossipClusterOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
-  constructor(
+  protected constructor(
+    rustClient: bridge.RustClient,
     connectionSettings: SingleNodeOptions,
     channelCredentials?: ChannelCredentialOptions,
     defaultUserCredentials?: Credentials
   );
-  constructor(
+  protected constructor(
+    rustClient: bridge.RustClient,
     {
       throwOnAppendFailure = true,
       keepAliveInterval = 10_000,
@@ -348,12 +350,7 @@ export class Client {
       );
     }
 
-    if (channelCredentials.certChain || channelCredentials.privateKey) {
-      console.warn(
-        "The certChain and privateKey options have been deprecated and will be removed in the next major version. Please use userCertFile and userKeyFile instead."
-      );
-    }
-
+    this.#rustClient = rustClient;
     this.#throwOnAppendFailure = throwOnAppendFailure;
     this.#keepAliveInterval = keepAliveInterval;
     this.#keepAliveTimeout = keepAliveTimeout;
@@ -375,8 +372,8 @@ export class Client {
 
       this.#channelCredentials = grpcCredentials.createSsl(
         channelCredentials.rootCertificate,
-        channelCredentials.userKeyFile ?? channelCredentials.privateKey,
-        channelCredentials.userCertFile ?? channelCredentials.certChain,
+        channelCredentials.userKeyFile,
+        channelCredentials.userCertFile,
         channelCredentials.verifyOptions
       );
     }
@@ -525,7 +522,7 @@ export class Client {
     return [
       // Server is unavailable to take request
       error instanceof UnavailableError ||
-        // Server has cancelled a long running request
+        // Server has cancelled a long-running request
         error instanceof CancelledError,
     ];
   };
@@ -586,7 +583,7 @@ export class Client {
         this.#keepAliveTimeout < 0 ? Number.MAX_VALUE : this.#keepAliveTimeout,
       // EventStore allows events of up to 16mb to be written internally.
       // While you can't write events this large through gRPC, you could do so through the TCP client, or through projections.
-      // To allow the client to read any event that EventStoreDB was able to write, we want to hardcode the max receive message length to 17mb.
+      // To allow the client to read any event that KurrentDB was able to write, we want to hardcode the max receive message length to 17mb.
       "grpc.max_receive_message_length": 17 * 1024 * 1024,
     });
   };
@@ -691,5 +688,8 @@ export class Client {
 
   protected get throwOnAppendFailure(): boolean {
     return this.#throwOnAppendFailure;
+  }
+  public get rustClient(): bridge.RustClient {
+    return this.#rustClient;
   }
 }

@@ -1,11 +1,11 @@
 import { createTestCluster, createTestNode, jsonTestEvents } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   StreamNotFoundError,
   TimeoutError,
   WrongExpectedVersionError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 // This test can take time.
 jest.setTimeout(120_000);
@@ -16,15 +16,10 @@ describe("reconnect", () => {
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
-      {
-        endpoints: cluster.endpoints,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
+    const client = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
+        defaultDeadline: 100_000_000,
+      })
     );
 
     // make successful append to connect to node
@@ -69,15 +64,10 @@ describe("reconnect", () => {
     const credentials = { username: "admin", password: "changeit" };
     const STREAM_NAME = "try_get_timeout";
 
-    const client = new EventStoreDBClient(
-      {
-        endpoint: timeoutNode.uri,
-        // The timing of this test can be a bit variable,
-        // so it's better not to have deadlines here to force the errors we are testing.
-        defaultDeadline: Infinity,
-      },
-      { rootCertificate: timeoutNode.certs.root },
-      { username: "admin", password: "changeit" }
+    const client = KurrentDBClient.connectionString(
+      timeoutNode.connectionStringWithOverrides({
+        defaultDeadline: 100_000_000,
+      })
     );
 
     // make successful append to connect to node

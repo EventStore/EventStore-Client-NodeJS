@@ -3,27 +3,24 @@ import { createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionDoesNotExistError,
   persistentSubscriptionToStreamSettingsFromDefaults,
   ROUND_ROBIN,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("getPersistentSubscriptionToStreamInfo", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
+    client = KurrentDBClient.connectionString(
+      node.connectionStringWithOverrides({
         connectionName: "getPersistentSubscriptionInfo test client",
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
+      })
     );
   });
 

@@ -1,39 +1,37 @@
 {
-  "name": "eventstore-node-client-repository",
+  "name": "kurrent-node-client-repository",
   "private": true,
+  "packageManager": "yarn@4.6.0",
   "scripts": {
-    "build": "lerna run --stream build",
-    "build:ts": "lerna run --stream build:ts",
-    "build:watch": "lerna run build:watch --parallel",
-    "lint": "run-s -c lint:*",
-    "lint:prettier": "prettier --check \"packages/*/src/**/**/!(*.d).{ts,json}\"",
-    "lint:eslint": "eslint \"packages/*/src/**/*.ts\"",
+    "build": "nx run-many --target=build",
+    "build:ts": "nx run-many --target=build:ts",
+    "build:watch": "nx run-many --target=build:watch --parallel",
+    "lint": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\" && eslint packages/*/src --ext .ts --no-error-on-unmatched-pattern",
     "prettier:fix": "prettier --write \"packages/*/src/**/**/!(*.d).{ts,json}\"",
-    "clean": "lerna run --stream clean",
-    "prepublishOnly": "run-s clean build test",
-    "test": "lerna run --stream test --",
-    "postinstall": "yarn build"
+    "clean": "nx run-many --target=clean",
+    "prepublishOnly": "yarn clean && yarn build && yarn test",
+    "test": "nx run test:test"
   },
-  "author": "Event Store Limited",
+  "author": "Kurrent, Inc",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/EventStore/EventStore-Client-NodeJS/issues"
-  },
-  "homepage": "https://developers.eventstore.com/clients/grpc/getting-started?codeLanguage=NodeJS",
-  "devDependencies": {
-    "@tsconfig/node14": "^14.1.2",
-    "@types/node": "^16.18.67",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^7.32.0",
-    "eslint-plugin-tsdoc": "^0.2.17",
-    "lerna": "^6.6.2",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.4.1",
-    "typescript": "^4.9.5"
+    "url": "https://github.com/EventStore/KurrentDB-Client-NodeJS/issues"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "homepage": "https://developers.kurrent.io/clients/grpc/getting-started?codeLanguage=NodeJS",
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.4",
+    "@types/node": "18.19.76",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.10.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "eslint-plugin-tsdoc": "^0.2.17",
+    "nx": "20.1.3",
+    "prettier": "^2.8.8",
+    "semver": "^7.6.3",
+    "typescript": "^5.6.3"
+  }
 }

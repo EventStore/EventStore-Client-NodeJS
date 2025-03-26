@@ -4,15 +4,16 @@ import { promisify } from "util";
 import * as cp from "child_process";
 
 import { v4 as uuid } from "uuid";
-import * as getPort from "get-port";
+import getPort from "get-port";
 import { upAll, down, exec, stopOne, logs } from "docker-compose/dist/v2";
 
-import type { EndPoint, Certificate } from "@eventstore/db-client";
+import type { EndPoint, Certificate } from "@kurrent/kurrentdb-client";
 
 import { testDebug } from "./debug";
 import { dockerImages } from "./dockerImages";
+import { ConnectionFeatures } from "./index";
 
-const rmdir = promisify(fs.rmdir);
+const rmdir = promisify(fs.rm);
 const mkdir = promisify(fs.mkdir);
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
@@ -73,8 +74,8 @@ const createNodes = (
   internalIPs.reduce(
     (acc, { port, ipv4_address }, i, ipAddresses) => ({
       ...acc,
-      [`esdb-node-${i}`]: {
-        image: dockerImages.esdb,
+      [`kdb-node-${i}`]: {
+        image: dockerImages.kdb,
         environment: [
           `EVENTSTORE_GOSSIP_SEED=${ipAddresses
             .reduce<string[]>(
@@ -197,7 +198,7 @@ export class Cluster {
       },
     };
   }
-  public domain = "client.bespin.dev";
+  public domain = "localhost";
   public get uri(): string {
     return `${this.domain}:${this.locations[0].port}`;
   }
@@ -207,6 +208,78 @@ export class Cluster {
       port,
     }));
   }
+  public connectionString = (): string =>
+    this.connectionStringWithOverrides({});
+
+  public connectionStringWithOverrides = (
+    features: ConnectionFeatures
+  ): string => {
+    const endpoints = (features.endpoints ?? this.endpoints)
+      .map((x) => `${x.address}:${x.port}`)
+      .join(",");
+    const params: string[] = [];
+    let credentials = "";
+    let paramsString = "";
+
+    if (features.defaultUserCredentials) {
+      credentials = `${features.defaultUserCredentials.username}:${features.defaultUserCredentials.password}`;
+    } else {
+      credentials = `admin:changeit`;
+    }
+
+    if (features.nodePreference) {
+      params.push(`nodePreference=${features.nodePreference}`);
+    }
+
+    if (this.insecure) {
+      params.push("tls=false");
+    } else {
+      const paths = this.certPath;
+
+      params.push(`tls=true`);
+      params.push(`tlsCAFile=${paths.root}`);
+
+      switch (features.userCertificates) {
+        case "valid":
+          params.push(`userCertFile=${paths.admin.certPath}`);
+          params.push(`userKeyFile=${paths.admin.certKeyPath}`);
+          break;
+        case "invalid":
+          params.push(`userCertFile=${paths.invalid.certPath}`);
+          params.push(`userKeyFile=${paths.invalid.certKeyPath}`);
+          break;
+      }
+    }
+
+    if (features.maxDiscoverAttempts) {
+      params.push(`maxDiscoverAttempts=${features.maxDiscoverAttempts}`);
+    }
+
+    if (features.discoveryInterval) {
+      params.push(`discoveryInterval=${features.discoveryInterval}`);
+    }
+
+    if (
+      features.throwOnAppendFailure != undefined &&
+      !features.throwOnAppendFailure
+    ) {
+      params.push(`throwOnAppendFailure=false`);
+    }
+
+    if (features.defaultDeadline) {
+      params.push(`defaultDeadline=${features.defaultDeadline}`);
+    }
+
+    if (features.connectionName) {
+      params.push(`connectionName=${features.connectionName}`);
+    }
+
+    if (params.length > 0) {
+      paramsString = `?${params.join("&")}`;
+    }
+
+    return `esdb://${credentials}@${endpoints}${paramsString}`;
+  };
 
   public up = async (): Promise<void> => {
     await this.ready;
@@ -367,7 +440,7 @@ export class Cluster {
       },
       networks: {
         clusternetwork: {
-          name: `${this.id}.eventstoredb.local`,
+          name: `${this.id}.kurrentdb.local`,
           driver: "bridge",
           ipam: {
             driver: "default",
@@ -396,7 +469,7 @@ export class Cluster {
 
   private healthy = async (...nodes: string[]) => {
     nodes = !nodes.length
-      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      ? Array.from({ length: this.count }, (_, i) => `kdb-node-${i}`)
       : nodes;
 
     const healthy = new Set();
@@ -428,7 +501,7 @@ export class Cluster {
 
   private leaderElected = async (...nodes: string[]) => {
     nodes = !nodes.length
-      ? Array.from({ length: this.count }, (_, i) => `esdb-node-${i}`)
+      ? Array.from({ length: this.count }, (_, i) => `kdb-node-${i}`)
       : nodes;
 
     const ready = new Set();
@@ -493,6 +566,6 @@ export class Cluster {
       throw new Error(`unknown node ${endpoint.address}:${endpoint.port}`);
     }
 
-    return `esdb-node-${index}`;
+    return `kdb-node-${index}`;
   };
 }

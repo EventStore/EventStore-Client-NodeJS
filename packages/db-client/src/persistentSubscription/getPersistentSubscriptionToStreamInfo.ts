@@ -19,8 +19,7 @@ import {
   PersistentSubscriptionToStreamInfo,
 } from "./utils/mapPersistentSubscriptionInfo";
 
-export interface GetPersistentSubscriptionToStreamInfoOptions
-  extends BaseOptions {}
+export type GetPersistentSubscriptionToStreamInfoOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

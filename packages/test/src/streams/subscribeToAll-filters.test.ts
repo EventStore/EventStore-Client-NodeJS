@@ -9,7 +9,7 @@ import {
   optionalTest,
 } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   ResolvedEvent,
   streamNameFilter,
@@ -18,24 +18,18 @@ import {
   excludeSystemEvents,
   AllStreamSubscription,
   Position,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("subscribeToAll", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const STREAM_NAME_A = "stream_name_a";
   const STREAM_NAME_B = "stream_name_b";
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      {
-        rootCertificate: node.certs.root,
-      },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents(4));
     await client.appendToStream(STREAM_NAME_B, jsonTestEvents(4));

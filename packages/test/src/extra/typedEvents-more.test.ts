@@ -3,26 +3,21 @@ import { v4 as uuid } from "uuid";
 import { createTestNode } from "@test-utils";
 import {
   AppendResult,
-  EventStoreDBClient,
+  KurrentDBClient,
   EventType,
   jsonEvent,
   JSONEventType,
   RecordedEvent,
   ResolvedEvent,
-  StreamingRead,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("typed events should compile", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -40,7 +35,7 @@ describe("typed events should compile", () => {
         when: EventAggregator<Entity, StreamEvents>
       ) =>
       async (
-        eventStream: StreamingRead<ResolvedEvent<StreamEvents>>
+        eventStream: AsyncIterableIterator<ResolvedEvent<StreamEvents>>
       ): Promise<Entity> => {
         let currentState: Entity | undefined = undefined;
         for await (const { event } of eventStream) {
@@ -161,7 +156,7 @@ describe("typed events should compile", () => {
 
     const create =
       <Command, StreamEvent extends JSONEventType>(
-        client: EventStoreDBClient,
+        client: KurrentDBClient,
         handle: (command: Command) => StreamEvent
       ) =>
       (streamName: string, command: Command): Promise<AppendResult> => {

@@ -3,25 +3,21 @@ import {
   NO_STREAM,
   START,
   FORWARDS,
-  EventStoreDBClient,
+  KurrentDBClient,
   JSONEventType,
-  AppendExpectedRevision,
+  AppendStreamState,
   WrongExpectedVersionError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode } from "@test-utils";
 import { v4 as uuid } from "uuid";
 
 describe("[sample] appending-events", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -48,7 +44,7 @@ describe("[sample] appending-events", () => {
     });
 
     await client.appendToStream("some-stream", event, {
-      expectedRevision: NO_STREAM,
+      streamState: NO_STREAM,
     });
     // endregion append-to-stream
   });
@@ -108,12 +104,12 @@ describe("[sample] appending-events", () => {
       });
 
       await client.appendToStream("no-stream-stream", eventOne, {
-        expectedRevision: NO_STREAM,
+        streamState: NO_STREAM,
       });
 
       // attempt to append the same event again
       await client.appendToStream("no-stream-stream", eventTwo, {
-        expectedRevision: NO_STREAM,
+        streamState: NO_STREAM,
       });
       // endregion append-with-no-stream
     } catch (error) {
@@ -148,7 +144,7 @@ describe("[sample] appending-events", () => {
         direction: FORWARDS,
       });
 
-      let revision: AppendExpectedRevision = NO_STREAM;
+      let revision: AppendStreamState = NO_STREAM;
       for await (const { event } of events) {
         revision = event?.revision ?? revision;
       }
@@ -163,7 +159,7 @@ describe("[sample] appending-events", () => {
       });
 
       await client.appendToStream("concurrency-stream", clientOneEvent, {
-        expectedRevision: revision,
+        streamState: revision,
       });
 
       const clientTwoEvent = jsonEvent<SomeEvent>({
@@ -176,7 +172,7 @@ describe("[sample] appending-events", () => {
       });
 
       await client.appendToStream("concurrency-stream", clientTwoEvent, {
-        expectedRevision: revision,
+        streamState: revision,
       });
       // endregion append-with-concurrency-check
     } catch (error) {

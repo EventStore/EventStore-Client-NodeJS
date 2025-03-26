@@ -1,26 +1,20 @@
 /** @jest-environment ./src/utils/enableVersionCheck.ts */
-import type { Duplex } from "stream";
-
 import {
   createTestNode,
   matchServerVersion,
   optionalDescribe,
 } from "@test-utils";
-import { EventStoreDBClient, jsonEvent } from "@eventstore/db-client";
+import { KurrentDBClient, jsonEvent } from "@kurrent/kurrentdb-client";
 
 describe("appendToStream - batch append - flood", () => {
   const supported = matchServerVersion`>=21.10`;
 
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

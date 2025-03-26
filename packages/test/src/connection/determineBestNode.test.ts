@@ -6,12 +6,12 @@ import {
   RANDOM,
   READ_ONLY_REPLICA,
   VNodeState,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 import {
   determineBestNode,
   filterAndOrderMembers,
   MemberInfo,
-} from "@eventstore/db-client/dist/Client/discovery";
+} from "@kurrent/kurrentdb-client/dist/Client/discovery";
 
 const member = ({
   isAlive = true,

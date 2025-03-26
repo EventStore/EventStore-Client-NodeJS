@@ -1,27 +1,23 @@
 import { collect, createTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
-  EventStoreDBClient,
   BACKWARDS,
   END,
   AllStreamResolvedEvent,
   jsonEvent,
   AllStreamBinaryRecordedEvent,
   LinkEvent,
-} from "@eventstore/db-client";
+  KurrentDBClient,
+} from "@kurrent/kurrentdb-client";
 
 describe("readAll", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
   const STREAM_NAME_A = "stream_name_a";
   const STREAM_NAME_B = "stream_name_b";
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents());
     await client.appendToStream(STREAM_NAME_B, jsonTestEvents());

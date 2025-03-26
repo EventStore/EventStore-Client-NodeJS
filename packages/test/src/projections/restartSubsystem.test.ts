@@ -1,18 +1,14 @@
 import { createTestNode } from "@test-utils";
 
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("restartSubsystem", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/ban-types */
 
 import {
   Attributes,
@@ -18,7 +17,7 @@ import {
   InstrumentationConfig,
   InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
-import type * as esdb from "@eventstore/db-client";
+import type * as kdb from "@kurrent/kurrentdb-client";
 import type {
   AppendResult,
   BinaryEventType,
@@ -30,17 +29,17 @@ import type {
   SubscribeToPersistentSubscriptionToAllOptions,
   SubscribeToPersistentSubscriptionToStreamOptions,
   SubscribeToStreamOptions,
-} from "@eventstore/db-client";
-import type { ReadResp as StreamsReadResp } from "@eventstore/db-client/generated/streams_pb";
-import type { ReadResp as PersistentReadResp } from "@eventstore/db-client/generated/persistent_pb";
-import { EventStoreDBAttributes } from "./attributes";
-import type { PersistentSubscriptionImpl } from "@eventstore/db-client/src/persistentSubscription/utils/PersistentSubscriptionImpl";
-import type { Subscription } from "@eventstore/db-client/src/streams/utils/Subscription";
+} from "@kurrent/kurrentdb-client";
+import type { ReadResp as StreamsReadResp } from "@kurrent/kurrentdb-client/generated/streams_pb";
+import type { ReadResp as PersistentReadResp } from "@kurrent/kurrentdb-client/generated/persistent_pb";
+import { KurrentAttributes } from "./attributes";
+import type { PersistentSubscriptionImpl } from "@kurrent/kurrentdb-client/src/persistentSubscription/utils/PersistentSubscriptionImpl";
+import type { Subscription } from "@kurrent/kurrentdb-client/src/streams/utils/Subscription";
 import { INSTRUMENTATION_NAME, INSTRUMENTATION_VERSION } from "./version";
 import type {
   AppendToStreamParams,
-  SubscribeParameters,
   PersistentSubscribeParameters,
+  SubscribeParameters,
 } from "./types";
 import { hasConvertGrpcEventMethod, isJSONEventData } from "./utils";
 
@@ -53,42 +52,38 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   protected init() {
-    const moduleDefinition = new InstrumentationNodeModuleDefinition<
-      typeof esdb
-    >(
-      "@eventstore/db-client",
-      ["6.*"],
+    return new InstrumentationNodeModuleDefinition(
+      "@kurrent/kurrentdb-client",
+      ["1.*"],
       this._onPatchMain(),
       this._onUnPatchMain()
     );
-
-    return moduleDefinition;
   }
 
   private _onPatchMain() {
-    return (moduleExports: typeof esdb) => {
+    return (moduleExports: typeof kdb) => {
       this.wrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "appendToStream",
         this._patchAppendToStream()
       );
       this.wrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToStream",
         this._patchCatchUpSubscription()
       );
       this.wrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToAll",
         this._patchCatchUpSubscription()
       );
       this.wrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToPersistentSubscriptionToStream",
         this._patchPersistentSubscription()
       );
       this.wrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToPersistentSubscriptionToAll",
         this._patchPersistentSubscription()
       );
@@ -107,23 +102,20 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   private _onUnPatchMain() {
-    return (moduleExports: typeof esdb) => {
+    return (moduleExports: typeof kdb) => {
       this._diag.debug("un-patching");
 
+      this._unwrap(moduleExports.KurrentDBClient.prototype, "appendToStream");
       this._unwrap(
-        moduleExports.EventStoreDBClient.prototype,
-        "appendToStream"
-      );
-      this._unwrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToStream"
       );
       this._unwrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToPersistentSubscriptionToStream"
       );
       this._unwrap(
-        moduleExports.EventStoreDBClient.prototype,
+        moduleExports.KurrentDBClient.prototype,
         "subscribeToPersistentSubscriptionToAll"
       );
     };
@@ -131,17 +123,17 @@ export class Instrumentation extends InstrumentationBase {
 
   private _patchAppendToStream(): (
     original: Function,
-    operation: keyof esdb.EventStoreDBClient
+    operation: keyof kdb.KurrentDBClient
   ) => (...args: AppendToStreamParams) => Promise<AppendResult> {
     const instrumentation = this;
     const tracer = instrumentation.tracer;
 
     return function appendToStream(
       original: Function,
-      operation: keyof esdb.EventStoreDBClient
+      operation: keyof kdb.KurrentDBClient
     ) {
       return async function (
-        this: esdb.EventStoreDBClient,
+        this: kdb.KurrentDBClient,
         ...args: AppendToStreamParams
       ): Promise<AppendResult> {
         const [streamName, events, options] = [...args];
@@ -151,19 +143,19 @@ export class Instrumentation extends InstrumentationBase {
         const { hostname, port } = Instrumentation.getServerAddress(uri);
 
         const attributes: Attributes = {
-          [EventStoreDBAttributes.EVENT_STORE_STREAM]: streamName,
-          [EventStoreDBAttributes.SERVER_ADDRESS]: hostname,
-          [EventStoreDBAttributes.SERVER_PORT]: port,
-          [EventStoreDBAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
-          [EventStoreDBAttributes.DATABASE_OPERATION]: operation,
+          [KurrentAttributes.KURRENT_DB_STREAM]: streamName,
+          [KurrentAttributes.SERVER_ADDRESS]: hostname,
+          [KurrentAttributes.SERVER_PORT]: port,
+          [KurrentAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
+          [KurrentAttributes.DATABASE_OPERATION]: operation,
         };
 
         if (options?.credentials) {
-          attributes[EventStoreDBAttributes.DATABASE_USER] =
+          attributes[KurrentAttributes.DATABASE_USER] =
             options.credentials.username;
         }
 
-        const span = tracer.startSpan(EventStoreDBAttributes.STREAM_APPEND, {
+        const span = tracer.startSpan(KurrentAttributes.STREAM_APPEND, {
           kind: SpanKind.CLIENT,
           attributes,
         });
@@ -237,49 +229,49 @@ export class Instrumentation extends InstrumentationBase {
       const subscriptionId = subscription.id;
 
       const attributes: Attributes = {
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]:
-          resolvedEvent?.event?.streamId,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_ID]: resolvedEvent?.event?.id,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]:
-          resolvedEvent?.event?.type,
-        [EventStoreDBAttributes.EVENT_STORE_SUBSCRIPTION_ID]: subscriptionId,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: hostname,
-        [EventStoreDBAttributes.SERVER_PORT]: port,
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
-        [EventStoreDBAttributes.DATABASE_OPERATION]: operation,
-        [EventStoreDBAttributes.DATABASE_USER]: options?.credentials?.username,
+        [KurrentAttributes.KURRENT_DB_STREAM]: resolvedEvent?.event?.streamId,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: resolvedEvent?.event?.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: resolvedEvent?.event?.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscriptionId,
+        [KurrentAttributes.SERVER_ADDRESS]: hostname,
+        [KurrentAttributes.SERVER_PORT]: port,
+        [KurrentAttributes.DATABASE_SYSTEM]: INSTRUMENTATION_NAME,
+        [KurrentAttributes.DATABASE_OPERATION]: operation,
+        [KurrentAttributes.DATABASE_USER]: options?.credentials?.username,
       };
 
-      return context.with(parentContext, () => {
-        const span = tracer.startSpan(spanName, {
+      const span = tracer.startSpan(
+        spanName,
+        {
           attributes,
           kind: SpanKind.CONSUMER,
-        });
+        },
+        parentContext
+      );
 
-        try {
-          return resolved;
-        } catch (error) {
-          throw Instrumentation.handleError(error, span);
-        } finally {
-          span.end();
-        }
-      });
+      try {
+        return resolved;
+      } catch (error) {
+        throw Instrumentation.handleError(error, span);
+      } finally {
+        span.end();
+      }
     };
   }
 
   private _patchCatchUpSubscription(): (
     original: Function,
-    operation: keyof esdb.EventStoreDBClient
+    operation: keyof kdb.KurrentDBClient
   ) => (...args: any) => any {
     const instrumentation = this;
     const tracer = instrumentation.tracer;
 
     return function subscribe<KnownEventType extends EventType = EventType>(
       original: Function,
-      operation: keyof esdb.EventStoreDBClient
+      operation: keyof kdb.KurrentDBClient
     ) {
       return function (
-        this: esdb.EventStoreDBClient,
+        this: kdb.KurrentDBClient,
         ...args: SubscribeParameters
       ) {
         let options:
@@ -300,7 +292,7 @@ export class Instrumentation extends InstrumentationBase {
 
         this.resolveUri().then((uri) =>
           Instrumentation.applySubscriptionInstrumentation(
-            EventStoreDBAttributes.STREAM_SUBSCIBE,
+            KurrentAttributes.STREAM_SUBSCRIBE,
             subscription,
             uri,
             operation,
@@ -316,17 +308,17 @@ export class Instrumentation extends InstrumentationBase {
 
   private _patchPersistentSubscription(): (
     original: Function,
-    operation: keyof esdb.EventStoreDBClient
+    operation: keyof kdb.KurrentDBClient
   ) => (...args: any) => any {
     const instrumentation = this;
     const tracer = instrumentation.tracer;
 
     return function subscribe<E>(
       original: Function,
-      operation: keyof esdb.EventStoreDBClient
+      operation: keyof kdb.KurrentDBClient
     ) {
       return function (
-        this: esdb.EventStoreDBClient,
+        this: kdb.KurrentDBClient,
         ...args: PersistentSubscribeParameters
       ) {
         let options:
@@ -347,7 +339,7 @@ export class Instrumentation extends InstrumentationBase {
 
         this.resolveUri().then((uri) =>
           Instrumentation.applySubscriptionInstrumentation(
-            EventStoreDBAttributes.STREAM_SUBSCIBE,
+            KurrentAttributes.STREAM_SUBSCRIBE,
             subscription,
             uri,
             operation,
@@ -361,20 +353,18 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   private static restoreContext = (
-    metadata: esdb.MetadataType,
+    metadata: kdb.MetadataType,
     isRemote = true
   ): Context => {
     const traceId = metadata[TRACE_ID] as string;
     const spanId = metadata[SPAN_ID] as string;
 
-    const parentContext = trace.setSpanContext(context.active(), {
+    return trace.setSpanContext(context.active(), {
       traceId,
       spanId,
       traceFlags: TraceFlags.SAMPLED,
       isRemote,
     });
-
-    return parentContext;
   };
 
   private static handleError = (error: any, span: Span) => {
@@ -384,7 +374,7 @@ export class Instrumentation extends InstrumentationBase {
   };
 
   private static getServerAddress = (resolvedUri: string) => {
-    const uri = new URL(`http://${resolvedUri}`);
+    const uri = new URL(`http://${resolvedUri}`); // the protocol is not important because we are only interested in the hostname and port
 
     const hostname = uri.hostname;
     const port = uri.port;

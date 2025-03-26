@@ -7,26 +7,20 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   persistentSubscriptionToAllSettingsFromDefaults,
   UnsupportedError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("deletePersistentSubscriptionToAll", () => {
   const supported = matchServerVersion`>=21.10`;
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

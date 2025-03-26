@@ -4,16 +4,16 @@ import { createTestNode, matchServerVersion } from "@test-utils";
 
 import {
   ABORTED,
-  EventStoreDBClient,
+  KurrentDBClient,
   NotFoundError,
   RUNNING,
   STOPPED,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("enableProjection", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const projection = `
   fromAll()
@@ -28,11 +28,7 @@ describe("enableProjection", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

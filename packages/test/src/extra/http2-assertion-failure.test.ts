@@ -1,20 +1,20 @@
 import { v4 as uuid } from "uuid";
 import { createInsecureTestNode, delay, jsonTestEvents } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   NO_STREAM,
   ResolvedEvent,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("http2 assertion failure", () => {
   const node = createInsecureTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient({ endpoint: node.uri }, { insecure: true });
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -28,7 +28,7 @@ describe("http2 assertion failure", () => {
       const postEvents = jsonTestEvents(7);
 
       const appendRes = await client.appendToStream(stream, priorEvents, {
-        expectedRevision: NO_STREAM,
+        streamState: NO_STREAM,
         // we want to test classic append
         credentials: { username: "admin", password: "changeit" },
       });
@@ -49,7 +49,7 @@ describe("http2 assertion failure", () => {
       });
       while (received.length < 3) await delay(10);
       await client.appendToStream(stream, postEvents, {
-        expectedRevision: appendRes.nextExpectedRevision,
+        streamState: appendRes.nextExpectedRevision,
         // we want to test classic append
         credentials: { username: "admin", password: "changeit" },
       });

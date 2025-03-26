@@ -152,7 +152,7 @@ var GossipService = exports.GossipService = {
   },
 };
 
-exports.GossipClient = grpc.makeGenericClientConstructor(GossipService);
+exports.GossipClient = grpc.makeGenericClientConstructor(GossipService, 'Gossip');
 var ElectionsService = exports.ElectionsService = {
   viewChange: {
     path: '/event_store.cluster.Elections/ViewChange',
@@ -244,4 +244,4 @@ var ElectionsService = exports.ElectionsService = {
   },
 };
 
-exports.ElectionsClient = grpc.makeGenericClientConstructor(ElectionsService);
+exports.ElectionsClient = grpc.makeGenericClientConstructor(ElectionsService, 'Elections');

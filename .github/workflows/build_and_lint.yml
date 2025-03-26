@@ -14,12 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Corepack
+        run: corepack enable
+
       - name: Install
         run: yarn
+
       - name: Linting
         run: yarn lint
+
       - name: Build on Ubuntu
         run: yarn build
+
       - name: All generated code is commited
         run: |
           git update-index --refresh
@@ -30,54 +37,27 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .github/files/.nvmrc
-      - name: NodeJS version
-        run: node -v
-      - name: Install
-        run: yarn
-      - name: Build
-        run: yarn build
 
-  package:
-    name: Package compiles as a dependency
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
       - name: NodeJS version
         run: node -v
+
+      - name: Corepack
+        run: corepack enable
+
+      - name: Yarn version
+        run: yarn --version
+
       - name: Install
         run: yarn
+
       - name: Build
         run: yarn build
-      - name: Create and Test All Packages
-        run: |
-          for DIR in packages/*; do
-            if [ -d "$DIR" ]; then
-              cd $DIR
-              if [ -f "package.json" ]; then
-                PACKAGE_NAME=$(node -p "require('./package.json').name")
-                SHOULD_PUBLISH=$(node -p "require('./package.json').publishConfig && require('./package.json').publishConfig.public ? 'true' : 'false'")
-                if [[ $PACKAGE_NAME == @eventstore/* ]] && [[ $SHOULD_PUBLISH == 'true' ]]; then
-                  npm pack
-                  PACKAGE_PATH=$(pwd)/$(ls *.tgz)
-                  mkdir -p ../../../temp/$PACKAGE_NAME
-                  cd ../../../temp/$PACKAGE_NAME
-                  yarn init -y
-                  yarn add $PACKAGE_PATH
-                  yarn add --dev typescript
-                  cp ../../..$DIR/.github/files/package_check.txt ./main.ts
-                  yarn tsc main.ts --alwaysStrict --noImplicitAny --noImplicitReturns --strictNullChecks --module system --moduleResolution node --target es2018 --lib es2020 --types node
-                  cd ../../..
-                fi
-              fi
-              cd ..
-            fi
-          done

@@ -13,7 +13,7 @@ createDebug.formatters.h = function ({ Authorization, ...rest }) {
   return createDebug.formatters.O.call(this, headers);
 };
 
-const base = createDebug("esdb");
+const base = createDebug("kdb");
 const command = base.extend("command");
 const command_grpc = command.extend("grpc");
 const connection = base.extend("connection");

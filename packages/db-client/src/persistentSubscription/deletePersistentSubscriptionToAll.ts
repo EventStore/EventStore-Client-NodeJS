@@ -9,7 +9,7 @@ import { convertToCommandError, debug, UnsupportedError } from "../utils";
 import type { BaseOptions } from "../types";
 import { Client } from "../Client";
 
-export interface DeletePersistentSubscriptionToAllOptions extends BaseOptions {}
+export type DeletePersistentSubscriptionToAllOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

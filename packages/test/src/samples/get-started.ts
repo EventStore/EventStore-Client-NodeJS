@@ -1,10 +1,10 @@
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   START,
   FORWARDS,
   JSONEventType,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 import { optionalDescribe } from "@test-utils";
 import { v4 as uuid } from "uuid";
 
@@ -13,13 +13,13 @@ const STREAM_NAME = uuid();
 
 /*
 // region createClient
-const client = EventStoreDBClient.connectionString`{connectionString}`;
+const client = KurrentDBClient.connectionString`{connectionString}`;
 // endregion createClient
 */
 
 optionalDescribe(!!CLOUD_ID)("[sample] get-started", () => {
   test("get-started", async () => {
-    const client = EventStoreDBClient.connectionString`esdb+discover://${CLOUD_ID}.mesdb.eventstore.cloud`;
+    const client = KurrentDBClient.connectionString`esdb+discover://${CLOUD_ID}.mesdb.eventstore.cloud`;
 
     // region createEvent
     type TestEvent = JSONEventType<

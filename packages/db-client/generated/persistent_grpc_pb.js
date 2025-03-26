@@ -262,4 +262,4 @@ var PersistentSubscriptionsService = exports.PersistentSubscriptionsService = {
   },
 };
 
-exports.PersistentSubscriptionsClient = grpc.makeGenericClientConstructor(PersistentSubscriptionsService);
+exports.PersistentSubscriptionsClient = grpc.makeGenericClientConstructor(PersistentSubscriptionsService, 'PersistentSubscriptions');

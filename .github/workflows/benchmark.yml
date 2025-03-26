@@ -1,0 +1,57 @@
+name: Benchmark
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ ubuntu-latest ]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .github/files/.nvmrc
+
+      - name: Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+      - name: Start KurrentDB
+        run: docker compose -f packages/benchmark/docker-compose.yml up -d
+
+      - name: Load Events
+        run: yarn nx run benchmark:loadEvents
+
+      - name: Run Benchmarks
+        run: |
+          echo "Number of events: 10k"
+          echo "Size of each event: 23bytes"
+          echo "Node.js version: $(node --version)"
+          echo "1 warmup iteration"
+          echo "20 iterations"
+          yarn nx run benchmark:benchmark | tee benchmark-bridge-client-output-${{ matrix.os }}.txt
+
+      - name: Upload Benchmark Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark-bridge-client-output-${{ matrix.os }}.txt
+
+      - name: Shutdown KurrentDB
+        run: docker compose -f packages/benchmark/docker-compose.yml down

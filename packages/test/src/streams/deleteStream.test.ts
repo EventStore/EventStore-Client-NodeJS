@@ -1,23 +1,19 @@
 import { collect, createTestNode, jsonTestEvents } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   WrongExpectedVersionError,
   NO_STREAM,
   StreamNotFoundError,
   BACKWARDS,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("deleteStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -61,7 +57,7 @@ describe("deleteStream", () => {
             expect(error).toBeInstanceOf(WrongExpectedVersionError);
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM);
-              expect(error.expectedVersion).toBe(BigInt(2));
+              expect(error.expectedState).toBe(BigInt(2));
             }
           }
         });

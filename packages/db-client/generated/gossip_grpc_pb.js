@@ -42,4 +42,4 @@ var GossipService = exports.GossipService = {
   },
 };
 
-exports.GossipClient = grpc.makeGenericClientConstructor(GossipService);
+exports.GossipClient = grpc.makeGenericClientConstructor(GossipService, 'Gossip');

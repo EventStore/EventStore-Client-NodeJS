@@ -2,7 +2,7 @@
 
 import {
   AllStreamResolvedEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   JSONEventType,
   PARK,
@@ -11,7 +11,7 @@ import {
   ResolvedEvent,
   START,
   streamNameFilter,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 import {
   createTestNode,
   jsonTestEvents,
@@ -26,16 +26,12 @@ describe("[sample] persistent-subscriptions", () => {
   const node = createTestNode();
   const log = console.log;
 
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn(log);

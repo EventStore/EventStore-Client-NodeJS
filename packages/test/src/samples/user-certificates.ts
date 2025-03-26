@@ -1,4 +1,4 @@
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 import { v4 as uuid } from "uuid";
 
@@ -21,7 +21,7 @@ describe("[sample] user certificates", () => {
     try {
       // region client-with-user-certificates
       const connectionString = `esdb://admin:changeit@{endpoint}?tls=true&userCertFile={pathToCaFile}&userKeyFile={pathToKeyFile}`;
-      const client = EventStoreDBClient.connectionString(connectionString);
+      const client = KurrentDBClient.connectionString(connectionString);
       // endregion client-with-user-certificates
 
       expect(connectionString).toBe(connectionStringTemplate);
@@ -39,7 +39,7 @@ describe("[sample] user certificates", () => {
 
     connectionStringTest = `${connectionStringTest}&tlsCaFile=${node.certPath.root}`;
 
-    const client = EventStoreDBClient.connectionString(connectionStringTest);
+    const client = KurrentDBClient.connectionString(connectionStringTest);
 
     const result = await client.appendToStream(STREAM_NAME, jsonTestEvents(2));
     expect(result).toBeDefined();

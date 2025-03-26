@@ -11,17 +11,17 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   ResolvedEvent,
   jsonEvent,
   END,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 const asyncPipeline = promisify(pipeline);
 
 describe("subscribeToStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const finishEvent = () =>
     jsonEvent({
@@ -33,11 +33,7 @@ describe("subscribeToStream", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
     await client.appendToStream("out_of_stream_name", jsonTestEvents(4));
   });
 

@@ -1,6 +1,6 @@
 /** @jest-environment ./src/utils/enableVersionCheck.ts */
 
-import { pipeline, Writable, Readable, finished } from "stream";
+import { pipeline, Writable, Readable } from "stream";
 import { promisify } from "util";
 
 import {
@@ -12,30 +12,24 @@ import {
   TestEventData,
 } from "@test-utils";
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   ResolvedEvent,
   END,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 const asyncPipeline = promisify(pipeline);
 
 describe("subscribeToAll", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const STREAM_NAME_A = "stream_name_a";
   const STREAM_NAME_B = "stream_name_b";
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      {
-        rootCertificate: node.certs.root,
-      },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream(STREAM_NAME_A, jsonTestEvents(4));
     await client.appendToStream(STREAM_NAME_B, jsonTestEvents(4));

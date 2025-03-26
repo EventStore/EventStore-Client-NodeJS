@@ -1,1 +1,1 @@
-export { Instrumentation as EventStoreDBInstrumentation } from "./instrumentation";
+export { Instrumentation as KurrentDBInstrumentation } from "./instrumentation";

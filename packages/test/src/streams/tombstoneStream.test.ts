@@ -4,23 +4,19 @@ import {
   WrongExpectedVersionError,
   StreamDeletedError,
   NO_STREAM,
-  EventStoreDBClient,
+  KurrentDBClient,
   BACKWARDS,
   END,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("tombstoneStream", () => {
   describe("should successfully tombstone a stream", () => {
     const node = createTestNode();
-    let client!: EventStoreDBClient;
+    let client!: KurrentDBClient;
 
     beforeAll(async () => {
       await node.up();
-      client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = KurrentDBClient.connectionString(node.connectionString());
     });
 
     afterAll(async () => {
@@ -73,7 +69,7 @@ describe("tombstoneStream", () => {
             expect(error).toBeInstanceOf(WrongExpectedVersionError);
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM);
-              expect(error.expectedVersion).toBe(BigInt(2));
+              expect(error.expectedState).toBe(BigInt(2));
             }
           }
         });
@@ -143,9 +139,9 @@ describe("tombstoneStream", () => {
 
           expect(result).toBeDefined();
 
-          await expect(() =>
+          await expect(async () =>
             collect(client.readStream(NOT_A_STREAM, { maxCount: 10 }))
-          ).rejects.toThrowError(StreamDeletedError);
+          ).rejects.toThrow(StreamDeletedError);
         });
       });
     });

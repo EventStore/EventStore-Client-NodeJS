@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`deadline should throw on negative connectionString 1`] = `"Invalid defaultDeadline \\"-1\\". Please provide a positive integer."`;
+exports[`deadline should throw on negative connectionString 1`] = `"Invalid defaultDeadline "-1". Please provide a positive integer."`;
 
-exports[`deadline should throw on negative connectionString 2`] = `"Invalid defaultDeadline \\"-1000000000000000\\". Please provide a positive integer."`;
+exports[`deadline should throw on negative connectionString 2`] = `"Invalid defaultDeadline of -1000000000000000. Please provide a positive integer, or -1 to disable"`;
 
-exports[`deadline should throw on negative constructor 1`] = `"Invalid defaultDeadline \\"-1\\". Please provide a positive integer."`;
-
-exports[`deadline should throw on negative constructor 2`] = `"Invalid defaultDeadline \\"-1000000000000000\\". Please provide a positive integer."`;
-
-exports[`deadline should throw on zero connectionString 1`] = `"Invalid defaultDeadline \\"0\\". Please provide a positive integer."`;
-
-exports[`deadline should throw on zero constructor 1`] = `"Invalid defaultDeadline \\"0\\". Please provide a positive integer."`;
+exports[`deadline should throw on zero connectionString 1`] = `"Invalid defaultDeadline "0". Please provide a positive integer."`;

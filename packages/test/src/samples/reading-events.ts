@@ -1,12 +1,12 @@
 import {
   START,
   FORWARDS,
-  EventStoreDBClient,
+  KurrentDBClient,
   StreamNotFoundError,
   BACKWARDS,
   END,
   JSONEventType,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 
 type SomeEvent = JSONEventType<
@@ -20,15 +20,11 @@ type SomeEvent = JSONEventType<
 describe("[sample] reading-events", () => {
   const log = console.log;
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn();

@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "resolveJsonModule": true
   },
   "references": [
     {
@@ -10,7 +11,6 @@
     }
   ],
   "include": [
-    "./src/**/*.ts",
-    "./generated"
+    "./src/**/*.ts"
   ]
 }

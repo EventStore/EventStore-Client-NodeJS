@@ -5,38 +5,38 @@ import {
   SimpleSpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 import {
-  SEMATTRS_EXCEPTION_STACKTRACE,
-  SEMATTRS_EXCEPTION_TYPE,
+  ATTR_EXCEPTION_STACKTRACE,
+  ATTR_EXCEPTION_TYPE,
 } from "@opentelemetry/semantic-conventions";
-import { EventStoreDBInstrumentation } from "@eventstore/opentelemetry";
-import { EventStoreDBAttributes } from "@eventstore/opentelemetry/dist/attributes";
+import { KurrentDBInstrumentation } from "@kurrent/opentelemetry";
+import { KurrentAttributes } from "@kurrent/opentelemetry/dist/attributes";
 import { v4 } from "uuid";
 import { collect } from "@test-utils";
 
 const tracerProvider = new NodeTracerProvider();
 tracerProvider.register();
 
-const instrumentation = new EventStoreDBInstrumentation();
+const instrumentation = new KurrentDBInstrumentation();
 instrumentation.disable();
 
-import * as esdb from "@eventstore/db-client";
+import * as kdb from "@kurrent/kurrentdb-client";
 import {
   AppendToStreamOptions,
   ResolvedEvent,
   streamNameFilter,
   WrongExpectedVersionError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("instrumentation", () => {
   const node = createTestNode();
-  const moduleName = "@eventstore/opentelemetry";
+  const moduleName = "@kurrent/opentelemetry";
 
   const memoryExporter = new InMemorySpanExporter();
   instrumentation.setTracerProvider(tracerProvider);
   tracerProvider.addSpanProcessor(new SimpleSpanProcessor(memoryExporter));
 
   // @ts-expect-error the moduleExports property is private. This is needed to make the test work with auto-mocking
-  instrumentation._modules[0].moduleExports = esdb;
+  instrumentation._modules[0].moduleExports = kdb;
 
   beforeAll(async () => {
     await node.up();
@@ -62,20 +62,18 @@ describe("instrumentation", () => {
     ])(
       "should create a span for append operation, withCredentials: $withCredentials",
       async ({ withCredentials, credentials }) => {
-        const { EventStoreDBClient, jsonEvent } = await import(
-          "@eventstore/db-client"
+        const { KurrentDBClient, jsonEvent } = await import(
+          "@kurrent/kurrentdb-client"
         );
 
         const STREAM = v4();
 
-        const client = new EventStoreDBClient(
-          { endpoint: node.uri },
-          { rootCertificate: node.certs.root },
-          { username: "admin", password: "changeit" }
+        const client = KurrentDBClient.connectionString(
+          node.connectionString()
         );
 
         const appendOptions: AppendToStreamOptions = {
-          expectedRevision: "any",
+          streamState: "any",
         };
 
         if (withCredentials) {
@@ -104,16 +102,15 @@ describe("instrumentation", () => {
         });
 
         const expectedAttributes = {
-          [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-          [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-          [EventStoreDBAttributes.SERVER_PORT]:
-            node.endpoints[0].port.toString(),
-          [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-          [EventStoreDBAttributes.DATABASE_OPERATION]: "appendToStream",
+          [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+          [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+          [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+          [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+          [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
         };
 
         if (withCredentials) {
-          expectedAttributes[EventStoreDBAttributes.DATABASE_USER] =
+          expectedAttributes[KurrentAttributes.DATABASE_USER] =
             credentials!.username;
         }
 
@@ -123,13 +120,9 @@ describe("instrumentation", () => {
     );
 
     test("span contains error when append fails", async () => {
-      const { EventStoreDBClient } = await import("@eventstore/db-client");
+      const { KurrentDBClient } = await import("@kurrent/kurrentdb-client");
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       const STREAM_NAME = v4();
 
@@ -140,7 +133,7 @@ describe("instrumentation", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            expectedRevision: "no_stream",
+            streamState: "no_stream",
           }
         );
 
@@ -163,8 +156,8 @@ describe("instrumentation", () => {
             expect.objectContaining({
               name: "exception",
               attributes: {
-                [SEMATTRS_EXCEPTION_TYPE]: "Error",
-                [SEMATTRS_EXCEPTION_STACKTRACE]: error.stack,
+                [ATTR_EXCEPTION_TYPE]: "Error",
+                [ATTR_EXCEPTION_STACKTRACE]: error.stack,
               },
             })
           );
@@ -176,17 +169,13 @@ describe("instrumentation", () => {
   describe("catch up subscriptions", () => {
     test("should create child span in subscription to stream", async () => {
       const defer = new Defer();
-      const { EventStoreDBClient, jsonEvent } = await import(
-        "@eventstore/db-client"
+      const { KurrentDBClient, jsonEvent } = await import(
+        "@kurrent/kurrentdb-client"
       );
 
       const STREAM = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -224,10 +213,10 @@ describe("instrumentation", () => {
       const spans = memoryExporter.getFinishedSpans();
 
       const parentSpan = spans.find(
-        (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(handleConfirmation).toHaveBeenCalledTimes(1);
@@ -237,39 +226,35 @@ describe("instrumentation", () => {
       expect(parentSpan?.spanContext().spanId).toBe(childSpan?.parentSpanId);
 
       expect(childSpan?.attributes).toMatchObject({
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_ID]: event.id,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]: event.type,
-        [EventStoreDBAttributes.EVENT_STORE_SUBSCRIPTION_ID]: subscription.id,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [EventStoreDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [EventStoreDBAttributes.DATABASE_OPERATION]: "subscribeToStream",
-        [EventStoreDBAttributes.DATABASE_USER]: "admin",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: event.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "subscribeToStream",
+        [KurrentAttributes.DATABASE_USER]: "admin",
       });
 
       expect(parentSpan?.attributes).toMatchObject({
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [EventStoreDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [EventStoreDBAttributes.DATABASE_OPERATION]: "appendToStream",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
       });
     });
 
-    test.only("events with non-json metadata are not traced in subscriptions", async () => {
+    test("events with non-json metadata are not traced in subscriptions", async () => {
       const defer = new Defer();
-      const { EventStoreDBClient, jsonEvent, binaryEvent } = await import(
-        "@eventstore/db-client"
+      const { KurrentDBClient, jsonEvent, binaryEvent } = await import(
+        "@kurrent/kurrentdb-client"
       );
 
       const STREAM = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       const handleError = jest.fn((error) => {
         defer.reject(error);
@@ -317,11 +302,11 @@ describe("instrumentation", () => {
       const spans = memoryExporter.getFinishedSpans();
 
       const parentSpans = spans.filter(
-        (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
 
       const childSpans = spans.filter(
-        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(handleConfirmation).toHaveBeenCalledTimes(1);
@@ -333,10 +318,10 @@ describe("instrumentation", () => {
       expect(childSpans).toHaveLength(1);
 
       expect(
-        childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_ID]
+        childSpans[0].attributes[KurrentAttributes.KURRENT_DB_EVENT_ID]
       ).toBe(event1.id);
       expect(
-        childSpans[0].attributes[EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]
+        childSpans[0].attributes[KurrentAttributes.KURRENT_DB_EVENT_TYPE]
       ).toBe(event1.type);
     });
   });
@@ -344,20 +329,16 @@ describe("instrumentation", () => {
   describe("persistent subscriptions", () => {
     test("should create child span in persistent subscription to stream", async () => {
       const {
-        EventStoreDBClient,
+        KurrentDBClient,
         jsonEvent,
         persistentSubscriptionToStreamSettingsFromDefaults,
         START,
-      } = await import("@eventstore/db-client");
+      } = await import("@kurrent/kurrentdb-client");
 
       const STREAM = v4();
       const GROUP = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.createPersistentSubscriptionToStream(
         STREAM,
@@ -403,10 +384,10 @@ describe("instrumentation", () => {
       expect(handleEvent).toHaveBeenCalledTimes(1);
 
       const parentSpan = spans.find(
-        (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(parentSpan).toBeDefined();
@@ -414,42 +395,38 @@ describe("instrumentation", () => {
       expect(parentSpan?.spanContext().spanId).toBe(childSpan?.parentSpanId);
 
       expect(childSpan?.attributes).toMatchObject({
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_ID]: event.id,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]: event.type,
-        [EventStoreDBAttributes.EVENT_STORE_SUBSCRIPTION_ID]: subscription.id,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [EventStoreDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [EventStoreDBAttributes.DATABASE_OPERATION]:
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: event.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]:
           "subscribeToPersistentSubscriptionToStream",
       });
 
       expect(parentSpan?.attributes).toMatchObject({
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [EventStoreDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [EventStoreDBAttributes.DATABASE_OPERATION]: "appendToStream",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
       });
     });
 
     test("should create child span in persistent subscription to all", async () => {
       const {
-        EventStoreDBClient,
+        KurrentDBClient,
         jsonEvent,
         persistentSubscriptionToAllSettingsFromDefaults,
         START,
-      } = await import("@eventstore/db-client");
+      } = await import("@kurrent/kurrentdb-client");
 
       const GROUP = v4();
       const STREAM = v4();
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.createPersistentSubscriptionToAll(
         GROUP,
@@ -505,10 +482,10 @@ describe("instrumentation", () => {
       const spans = memoryExporter.getFinishedSpans();
 
       const parentSpan = spans.find(
-        (span) => span.name === EventStoreDBAttributes.STREAM_APPEND
+        (span) => span.name === KurrentAttributes.STREAM_APPEND
       );
       const childSpan = spans.find(
-        (span) => span.name === EventStoreDBAttributes.STREAM_SUBSCIBE
+        (span) => span.name === KurrentAttributes.STREAM_SUBSCRIBE
       );
 
       expect(parentSpan).toBeDefined();
@@ -516,24 +493,24 @@ describe("instrumentation", () => {
       expect(parentSpan?.spanContext().spanId).toBe(childSpan?.parentSpanId);
 
       expect(childSpan?.attributes).toMatchObject({
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_ID]: event.id,
-        [EventStoreDBAttributes.EVENT_STORE_EVENT_TYPE]: event.type,
-        [EventStoreDBAttributes.EVENT_STORE_SUBSCRIPTION_ID]: subscription.id,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [EventStoreDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [EventStoreDBAttributes.DATABASE_OPERATION]:
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.KURRENT_DB_EVENT_ID]: event.id,
+        [KurrentAttributes.KURRENT_DB_EVENT_TYPE]: event.type,
+        [KurrentAttributes.KURRENT_DB_SUBSCRIPTION_ID]: subscription.id,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]:
           "subscribeToPersistentSubscriptionToAll",
-        [EventStoreDBAttributes.DATABASE_USER]: "admin",
+        [KurrentAttributes.DATABASE_USER]: "admin",
       });
 
       expect(parentSpan?.attributes).toMatchObject({
-        [EventStoreDBAttributes.EVENT_STORE_STREAM]: STREAM,
-        [EventStoreDBAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
-        [EventStoreDBAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
-        [EventStoreDBAttributes.DATABASE_SYSTEM]: moduleName,
-        [EventStoreDBAttributes.DATABASE_OPERATION]: "appendToStream",
+        [KurrentAttributes.KURRENT_DB_STREAM]: STREAM,
+        [KurrentAttributes.SERVER_ADDRESS]: node.endpoints[0].address,
+        [KurrentAttributes.SERVER_PORT]: node.endpoints[0].port.toString(),
+        [KurrentAttributes.DATABASE_SYSTEM]: moduleName,
+        [KurrentAttributes.DATABASE_OPERATION]: "appendToStream",
       });
     });
   });

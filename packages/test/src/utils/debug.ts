@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import createDebug from "debug";
 
-export const testDebug = createDebug("esdb").extend("tests");
+export const testDebug = createDebug("kdb").extend("tests");

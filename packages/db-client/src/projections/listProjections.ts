@@ -10,7 +10,7 @@ import { Client } from "../Client";
 
 import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
 
-interface ListProjectionsOptions extends BaseOptions {}
+type ListProjectionsOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

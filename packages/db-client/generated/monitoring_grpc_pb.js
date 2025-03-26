@@ -41,4 +41,4 @@ var MonitoringService = exports.MonitoringService = {
   },
 };
 
-exports.MonitoringClient = grpc.makeGenericClientConstructor(MonitoringService);
+exports.MonitoringClient = grpc.makeGenericClientConstructor(MonitoringService, 'Monitoring');

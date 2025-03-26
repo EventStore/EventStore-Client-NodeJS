@@ -60,7 +60,7 @@ export const UNBOUNDED = "unbounded";
 // system streams
 
 /**
- * A stream containing links pointing to each stream in the EventStoreDB.
+ * A stream containing links pointing to each stream in the KurrentDB.
  */
 export const STREAMS_STREAM = "$streams";
 

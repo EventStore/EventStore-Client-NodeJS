@@ -1,37 +1,39 @@
-# EventStoreDB NodeJS Client
+# KurrentDB NodeJS Client
 
 [![license][license-badge]][license-badge-url]
 
-EventStoreDB is the event-native database, where business events are immutably stored and streamed. Designed for event-sourced, event-driven, and microservices architectures.
+KurrentDB is the event-native database, where business events are immutably
+stored and streamed. Designed for event-sourced, event-driven, and microservices
+architectures.
 
 ## Packages
 
 This monorepo contains the following packages:
 
-| Subfolder                                            | Package                                                                                |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| [`packages/db-client/`](packages/db-client/)         | [`@eventstore/client`](https://www.npmjs.com/package/@eventstore/db-client)            |
-| [`packages/opentelemetry/`](packages/opentelemetry/) | [`@eventstore/opentelemetry`](https://www.npmjs.com/package/@eventstore/opentelemetry) |
-| [`packages/test/`](packages/test/)                   | Internal tests                                                                         |
+| Subfolder                                            | Package                                                                          |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`packages/db-client/`](packages/db-client/)         | [`@kurrent/client`](https://www.npmjs.com/package/@kurrent/db-client)            |
+| [`packages/opentelemetry/`](packages/opentelemetry/) | [`@kurrent/opentelemetry`](https://www.npmjs.com/package/@kurrent/opentelemetry) |
+| [`packages/test/`](packages/test/)                   | Internal tests                                                                   |
 
 ## Support
 
-Information on support can be found on our website: [Event Store Support]
+Information on support can be found on our website: [Kurrent Support]
 
 ## Communities
 
 - [Discuss]
-- [Discord (Event Store)][discord-event-store]
+- [Discord (Kurrent)][discord-kurrent]
 - [Discord (ddd-cqrs-es)][discord-ddd-cqrs-es]
 
 ## Contributing
 
 Refer to our [Contribution Guidelines]
 
-[event store support]: https://eventstore.com/support/
-[discuss]: https://discuss.eventstore.com/
-[discord-event-store]: https://discord.gg/Phn9pmCw3t
+[Kurrent support]: https://kurrent.io/support/
+[discuss]: https://discuss.kurrent.io/
+[discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
-[license-badge]: https://img.shields.io/npm/l/@eventstore/db-client.svg
-[license-badge-url]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/LICENSE
-[contribution guidelines]: https://github.com/EventStore/EventStore-Client-NodeJS/blob/master/CONTRIBUTING.md
+[license-badge]: https://img.shields.io/npm/l/@kurrent/kurrentdb-client.svg
+[license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
+[contribution guidelines]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md

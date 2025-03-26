@@ -8,7 +8,7 @@ import type { BaseOptions, ProjectionDetails } from "../types";
 import { debug, convertToCommandError } from "../utils";
 import { mapGrpcProjectionDetails } from "./utils/mapGrpcProjectionDetails";
 
-export interface GetProjectionStatusOptions extends BaseOptions {}
+export type GetProjectionStatusOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

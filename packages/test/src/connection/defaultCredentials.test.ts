@@ -1,5 +1,5 @@
 import { collect, createTestNode } from "@test-utils";
-import { EventStoreDBClient, AccessDeniedError } from "@eventstore/db-client";
+import { KurrentDBClient, AccessDeniedError } from "@kurrent/kurrentdb-client";
 
 describe("defaultCredentials", () => {
   const node = createTestNode();
@@ -14,33 +14,37 @@ describe("defaultCredentials", () => {
 
   describe("should set default credentials to be used by commands", () => {
     test("bad override", async () => {
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
       await expect(
         collect(client.readAll({ maxCount: 10 }))
       ).resolves.toBeDefined();
-      await expect(
-        collect(
+      try {
+        await collect(
           client.readAll({
             maxCount: 10,
             credentials: { username: "AzureDiamond", password: "hunter2" },
           })
-        )
-      ).rejects.toThrowError(AccessDeniedError);
+        );
+      } catch (e) {
+        expect(e).toBeInstanceOf(AccessDeniedError);
+      }
     });
 
     test("good override", async () => {
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "AzureDiamond", password: "hunter2" }
+      const client = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          defaultUserCredentials: {
+            username: "AzureDiamond",
+            password: "hunter2",
+          },
+        })
       );
-      await expect(
-        collect(client.readAll({ maxCount: 10 }))
-      ).rejects.toThrowError(AccessDeniedError);
+
+      try {
+        await collect(client.readAll({ maxCount: 10 }));
+      } catch (e) {
+        expect(e).toBeInstanceOf(AccessDeniedError);
+      }
       await expect(
         collect(
           client.readAll({

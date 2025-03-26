@@ -8,26 +8,22 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   WrongExpectedVersionError,
   NO_STREAM,
   StreamDeletedError,
   MaxAppendSizeExceededError,
   AccessDeniedError,
   DeadlineExceededError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("appendToStream - errors", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri, throwOnAppendFailure: true },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -48,7 +44,7 @@ describe("appendToStream - errors", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            expectedRevision: "no_stream",
+            streamState: "no_stream",
           }
         );
 
@@ -58,8 +54,8 @@ describe("appendToStream - errors", () => {
 
         if (error instanceof WrongExpectedVersionError) {
           expect(error.streamName).toBe(STREAM_NAME);
-          expect(error.expectedVersion).toBe(NO_STREAM);
-          expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+          expect(error.expectedState).toBe(NO_STREAM);
+          expect(error.actualState).toBeGreaterThanOrEqual(1);
         }
       }
     });

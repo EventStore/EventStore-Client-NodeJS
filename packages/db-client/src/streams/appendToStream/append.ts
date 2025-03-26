@@ -3,11 +3,7 @@ import { Empty } from "../../../generated/shared_pb";
 import { StreamsClient } from "../../../generated/streams_grpc_pb";
 
 import type { Client } from "../../Client";
-import type {
-  AppendResult,
-  AppendExpectedRevision,
-  EventData,
-} from "../../types";
+import type { AppendResult, AppendStreamState, EventData } from "../../types";
 import {
   backpressuredWrite,
   convertToCommandError,
@@ -24,7 +20,7 @@ export const append = async function (
   this: Client,
   streamName: string,
   events: EventData[],
-  { expectedRevision, ...baseOptions }: InternalOptions<AppendToStreamOptions>
+  { streamState, ...baseOptions }: InternalOptions<AppendToStreamOptions>
 ): Promise<AppendResult> {
   const header = new AppendReq();
   const options = new AppendReq.Options();
@@ -32,7 +28,7 @@ export const append = async function (
 
   options.setStreamIdentifier(identifier);
 
-  switch (expectedRevision) {
+  switch (streamState) {
     case "any": {
       options.setAny(new Empty());
       break;
@@ -46,7 +42,7 @@ export const append = async function (
       break;
     }
     default: {
-      options.setRevision(expectedRevision.toString(10));
+      options.setRevision(streamState.toString(10));
       break;
     }
   }
@@ -56,7 +52,7 @@ export const append = async function (
   debug.command("appendToStream: %O", {
     streamName,
     events,
-    options: { expectedRevision, ...baseOptions },
+    options: { streamState: streamState, ...baseOptions },
   });
   debug.command_grpc("appendToStream: %g", header);
 
@@ -75,7 +71,7 @@ export const append = async function (
             if (resp.hasWrongExpectedVersion()) {
               const grpcError = resp.getWrongExpectedVersion()!;
 
-              let expected: AppendExpectedRevision = "any";
+              let expected: AppendStreamState = "any";
 
               switch (true) {
                 case grpcError.hasExpectedRevision(): {

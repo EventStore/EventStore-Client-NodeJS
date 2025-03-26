@@ -9,23 +9,19 @@ import {
 
 import {
   RUNNING,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   NotFoundError,
   UnknownError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("getProjectionResult", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.enableProjection("$by_category");
   });

@@ -1,16 +1,16 @@
-import type * as esdb from "@eventstore/db-client";
+import type * as kdb from "@kurrent/kurrentdb-client";
 
 export type SubscribeToStreamParameters = Parameters<
-  esdb.EventStoreDBClient["subscribeToStream"]
+  kdb.KurrentDBClient["subscribeToStream"]
 >;
 export type SubscribeToAllParameters = Parameters<
-  esdb.EventStoreDBClient["subscribeToAll"]
+  kdb.KurrentDBClient["subscribeToAll"]
 >;
 export type PersistentSubscribeToAllParameters = Parameters<
-  esdb.EventStoreDBClient["subscribeToPersistentSubscriptionToAll"]
+  kdb.KurrentDBClient["subscribeToPersistentSubscriptionToAll"]
 >;
 export type PersistentSubscribeToStreamParameters = Parameters<
-  esdb.EventStoreDBClient["subscribeToPersistentSubscriptionToStream"]
+  kdb.KurrentDBClient["subscribeToPersistentSubscriptionToStream"]
 >;
 
 export type SubscribeParameters =
@@ -21,5 +21,5 @@ export type PersistentSubscribeParameters =
   | PersistentSubscribeToAllParameters;
 
 export type AppendToStreamParams = Parameters<
-  esdb.EventStoreDBClient["appendToStream"]
+  kdb.KurrentDBClient["appendToStream"]
 >;

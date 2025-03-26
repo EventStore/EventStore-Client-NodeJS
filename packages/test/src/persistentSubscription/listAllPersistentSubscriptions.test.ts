@@ -14,19 +14,19 @@ import {
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionToAll,
   PINNED,
   Position,
   ROUND_ROBIN,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("listAllPersistentSubscriptions", () => {
   const psToAllSupported = matchServerVersion`>=21.10.1`;
 
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
   const created: Array<CreatedPSToAll | CreatedPS> = [];
   let psOfInterestToAll: CreatedPSToAll;
   let psOfInterestToStream: CreatedPS;
@@ -34,13 +34,7 @@ describe("listAllPersistentSubscriptions", () => {
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     if (psToAllSupported) {
       let position!: Position;
@@ -176,18 +170,12 @@ describe("listAllPersistentSubscriptions", () => {
 
   describe("errors", () => {
     const emptyNode = createTestNode();
-    let client!: EventStoreDBClient;
+    let client!: KurrentDBClient;
 
     beforeAll(async () => {
       await emptyNode.up();
 
-      client = new EventStoreDBClient(
-        {
-          endpoint: emptyNode.uri,
-        },
-        { rootCertificate: emptyNode.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      client = KurrentDBClient.connectionString(emptyNode.connectionString());
     });
 
     afterAll(async () => {

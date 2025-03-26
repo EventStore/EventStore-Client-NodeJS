@@ -3,7 +3,7 @@ import { Empty } from "../../generated/shared_pb";
 import { StreamsClient } from "../../generated/streams_grpc_pb";
 
 import { Client } from "../Client";
-import type { BaseOptions, DeleteResult, ExpectedRevision } from "../types";
+import type { BaseOptions, DeleteResult, StreamState } from "../types";
 import { debug, convertToCommandError, createStreamIdentifier } from "../utils";
 import { ANY, NO_STREAM } from "../constants";
 
@@ -12,7 +12,7 @@ export interface DeleteStreamOptions extends BaseOptions {
    * Asks the server to check the stream is at specific revision before deleting.
    * @defaultValue ANY
    */
-  expectedRevision?: ExpectedRevision;
+  expectedRevision?: StreamState;
 }
 
 declare module "../Client" {

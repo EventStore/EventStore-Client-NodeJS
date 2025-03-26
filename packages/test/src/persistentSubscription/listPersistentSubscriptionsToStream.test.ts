@@ -8,26 +8,20 @@ import {
 import {
   AccessDeniedError,
   END,
-  EventStoreDBClient,
+  KurrentDBClient,
   PersistentSubscriptionDoesNotExistError,
   ROUND_ROBIN,
   START,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("listPersistentSubscriptions", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

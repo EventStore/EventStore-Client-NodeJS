@@ -1,6 +1,6 @@
 import {
   START,
-  EventStoreDBClient,
+  KurrentDBClient,
   END,
   ReadRevision,
   JSONEventType,
@@ -8,14 +8,14 @@ import {
   AllStreamResolvedEvent,
   streamNameFilter,
   ReadPosition,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 import { createTestNode, jsonTestEvents } from "@test-utils";
 
 describe("[sample] server-side-filtering", () => {
   const log = console.log;
   const node = createTestNode();
   const handleEvent = jest.fn();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   type SomeStreamEvents =
     | JSONEventType<"a", { a: true }>
@@ -23,11 +23,7 @@ describe("[sample] server-side-filtering", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     await client.appendToStream("some-stream", jsonTestEvents());
     console.log = jest.fn();

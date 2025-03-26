@@ -1,5 +1,5 @@
-import { collect, createTestCluster } from "@test-utils";
-import { jsonEvent, EventStoreDBClient } from "@eventstore/db-client";
+import { collect, ConnectionFeatures, createTestCluster } from "@test-utils";
+import { jsonEvent, KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("cluster", () => {
   const cluster = createTestCluster();
@@ -15,11 +15,7 @@ describe("cluster", () => {
   });
 
   test("should successfully connect", async () => {
-    const client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(cluster.connectionString());
 
     const appendResult = await client.appendToStream(STREAM_NAME, event);
     const readResult = collect(
@@ -32,17 +28,16 @@ describe("cluster", () => {
 
   test("maxDiscoverAttempts", async () => {
     const maxDiscoverAttempts = 3;
-
-    const client = new EventStoreDBClient(
-      {
+    const client = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides({
         endpoints: [
           { address: "localhost", port: 8888 },
           { address: "localhost", port: 8889 },
           { address: "localhost", port: 8890 },
         ],
-        maxDiscoverAttempts,
-      },
-      { rootCertificate: cluster.certs.root }
+
+        maxDiscoverAttempts: 3,
+      })
     );
 
     await expect(
@@ -53,50 +48,50 @@ describe("cluster", () => {
   });
 
   test("discoverInterval", async () => {
-    const maxDiscoverAttempts = 3;
-    const endpoints = [
-      { address: "localhost", port: 8888 },
-      { address: "localhost", port: 8889 },
-      { address: "localhost", port: 8890 },
-    ];
+    let overrides: ConnectionFeatures = {
+      endpoints: [
+        { address: "localhost", port: 8888 },
+        { address: "localhost", port: 8889 },
+        { address: "localhost", port: 8890 },
+      ],
 
-    const client1DiscoveryInterval = 1;
-    const client2DiscoveryInterval = 5_000;
+      maxDiscoverAttempts: 3,
+      discoveryInterval: 1,
+    };
 
+    const client1DiscoveryInterval = overrides.discoveryInterval!;
+    const client1 = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides(overrides)
+    );
     const client1Start = Date.now();
-    const client1 = new EventStoreDBClient({
-      endpoints,
-      maxDiscoverAttempts,
-      discoveryInterval: client1DiscoveryInterval,
-    });
+
     await expect(
       client1.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Failed to discover after ${maxDiscoverAttempts} attempts."`
+      `"Failed to discover after ${overrides.maxDiscoverAttempts} attempts."`
     );
     const client1Duration = Date.now() - client1Start;
 
+    overrides.discoveryInterval = 5_000;
     const client2Start = Date.now();
-    const client2 = new EventStoreDBClient({
-      endpoints,
-      maxDiscoverAttempts,
-      discoveryInterval: client2DiscoveryInterval,
-    });
+    const client2 = KurrentDBClient.connectionString(
+      cluster.connectionStringWithOverrides(overrides)
+    );
     await expect(
       client2.appendToStream(STREAM_NAME, event)
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Failed to discover after ${maxDiscoverAttempts} attempts."`
+      `"Failed to discover after ${overrides.maxDiscoverAttempts} attempts."`
     );
     const client2Duration = Date.now() - client2Start;
 
     expect(client2Duration).toBeGreaterThan(client1Duration);
     expect(client2Duration).toBeGreaterThanOrEqual(
-      client2DiscoveryInterval * maxDiscoverAttempts
+      overrides.discoveryInterval * overrides.maxDiscoverAttempts!
     );
 
     const expectedDifference =
-      client2DiscoveryInterval * maxDiscoverAttempts -
-      client1DiscoveryInterval * maxDiscoverAttempts;
+      overrides.discoveryInterval * overrides.maxDiscoverAttempts! -
+      client1DiscoveryInterval * overrides.maxDiscoverAttempts!;
 
     const actualDifference = client2Duration - client1Duration;
     const discrepency = actualDifference - expectedDifference;

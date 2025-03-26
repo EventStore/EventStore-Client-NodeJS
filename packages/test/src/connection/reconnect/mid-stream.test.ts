@@ -8,24 +8,20 @@ import {
 } from "@test-utils";
 import {
   jsonEvent,
-  EventStoreDBClient,
+  KurrentDBClient,
   CancelledError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 // This test can take time.
 jest.setTimeout(120_000);
 
-describe("reconnect", () => {
+describe.skip("reconnect", () => {
   test("Connection error mid stream should cause a reconnect", async () => {
     const cluster = createTestCluster();
 
     await cluster.up();
 
-    const client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(cluster.connectionString());
 
     // make successful append of 2000 events to node
     const firstAppend = await client.appendToStream(

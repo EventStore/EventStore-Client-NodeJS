@@ -5,7 +5,7 @@ import { Client } from "../Client";
 import type { BaseOptions } from "../types";
 import { debug, convertToCommandError } from "../utils";
 
-export interface RestartSubsystemOptions extends BaseOptions {}
+export type RestartSubsystemOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {

@@ -2,24 +2,18 @@ import { createTestNode } from "@test-utils";
 
 import {
   PINNED,
-  EventStoreDBClient,
+  KurrentDBClient,
   persistentSubscriptionToStreamSettingsFromDefaults,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("updatePersistentSubscriptionToStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
 
-    client = new EventStoreDBClient(
-      {
-        endpoint: node.uri,
-      },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {

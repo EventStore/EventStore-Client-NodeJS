@@ -29,7 +29,7 @@ export interface GetStreamMetadataResult<
   metastreamRevision?: bigint;
 }
 
-export interface GetStreamMetadataOptions extends BaseOptions {}
+export type GetStreamMetadataOptions = BaseOptions;
 
 declare module "../Client" {
   interface Client {
@@ -64,7 +64,7 @@ Client.prototype.getStreamMetadata = async function <
   try {
     let metadataEvent;
 
-    for await (const e of this.readStream(metadataStreamName, {
+    for await (const e of await this.readStream(metadataStreamName, {
       ...baseOptions,
       fromRevision: END,
       maxCount: 1,

@@ -6,19 +6,19 @@ import {
   SimpleSpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
-import { EventStoreDBInstrumentation } from "@eventstore/opentelemetry";
+import { KurrentDBInstrumentation } from "@kurrent/opentelemetry";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
 import {} from "@opentelemetry/sdk-trace-node";
 // endregion import-required-packages
 import { createTestNode } from "@test-utils";
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
-import * as esdb from "@eventstore/db-client";
+import * as esdb from "@kurrent/kurrentdb-client";
 
 // region register-instrumentation
 const provider = new NodeTracerProvider();
 
-const instrumentation = new EventStoreDBInstrumentation();
+const instrumentation = new KurrentDBInstrumentation();
 
 registerInstrumentations({
   instrumentations: [instrumentation],
@@ -30,7 +30,7 @@ instrumentation.disable();
 
 describe("[sample] opentelemetry", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   // region setup-exporter
   const memoryExporter = new InMemorySpanExporter();
@@ -47,11 +47,7 @@ describe("[sample] opentelemetry", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   beforeAll(async () => {
@@ -70,15 +66,11 @@ describe("[sample] opentelemetry", () => {
 
   test("tracing", async () => {
     // region setup-client-for-tracing
-    const { EventStoreDBClient, jsonEvent } = await import(
-      "@eventstore/db-client"
+    const { KurrentDBClient, jsonEvent } = await import(
+      "@kurrent/kurrentdb-client"
     );
 
-    const client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    const client = KurrentDBClient.connectionString(node.connectionString());
     // endregion setup-client-for-tracing
 
     const response = await client.appendToStream(
@@ -91,7 +83,7 @@ describe("[sample] opentelemetry", () => {
         },
       }),
       {
-        expectedRevision: "any",
+        streamState: "any",
       }
     );
 

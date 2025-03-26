@@ -8,7 +8,7 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   persistentSubscriptionToAllSettingsFromDefaults,
   START,
@@ -16,12 +16,12 @@ import {
   END,
   excludeSystemEvents,
   eventTypeFilter,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   const supported = matchServerVersion`>=21.10`;
   const cluster = createTestCluster();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const finishEvent = (type: string) =>
     jsonEvent({
@@ -34,11 +34,7 @@ describe("subscribeToPersistentSubscriptionToAll (filters)", () => {
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(cluster.connectionString());
   });
 
   afterAll(async () => {

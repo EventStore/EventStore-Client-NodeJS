@@ -6,7 +6,7 @@ import {
 } from "@test-utils";
 
 import {
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   WrongExpectedVersionError,
   ANY,
@@ -15,19 +15,15 @@ import {
   binaryEvent,
   BinaryEventType,
   JSONEventType,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("appendToStream", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
   });
 
   afterAll(async () => {
@@ -48,11 +44,7 @@ describe("appendToStream", () => {
       const STREAM_NAME = "encode1";
       const KILLER = "CC ‐ 1830";
 
-      const client = new EventStoreDBClient(
-        { endpoint: node.uri },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
-      );
+      const client = KurrentDBClient.connectionString(node.connectionString());
 
       await client.appendToStream(
         STREAM_NAME,
@@ -383,7 +375,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: ANY,
+              streamState: ANY,
             }
           );
 
@@ -400,7 +392,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: NO_STREAM,
+              streamState: NO_STREAM,
             }
           );
 
@@ -418,7 +410,7 @@ describe("appendToStream", () => {
               STREAM_NAME,
               jsonTestEvents(),
               {
-                expectedRevision: "no_stream",
+                streamState: "no_stream",
               }
             );
 
@@ -428,8 +420,8 @@ describe("appendToStream", () => {
 
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM_NAME);
-              expect(error.expectedVersion).toBe(NO_STREAM);
-              expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+              expect(error.expectedState).toBe(NO_STREAM);
+              expect(error.actualState).toBeGreaterThanOrEqual(1);
             }
           }
         });
@@ -445,7 +437,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: STREAM_EXISTS,
+              streamState: STREAM_EXISTS,
             }
           );
           expect(result).toBeDefined();
@@ -460,7 +452,7 @@ describe("appendToStream", () => {
               STREAM_NAME,
               jsonTestEvents(),
               {
-                expectedRevision: STREAM_EXISTS,
+                streamState: STREAM_EXISTS,
               }
             );
 
@@ -470,8 +462,8 @@ describe("appendToStream", () => {
 
             if (error instanceof WrongExpectedVersionError) {
               expect(error.streamName).toBe(STREAM_NAME);
-              expect(error.expectedVersion).toBe(STREAM_EXISTS);
-              expect(error.actualVersion).toBe(NO_STREAM);
+              expect(error.expectedState).toBe(STREAM_EXISTS);
+              expect(error.actualState).toBe(NO_STREAM);
             }
           }
         });
@@ -490,7 +482,7 @@ describe("appendToStream", () => {
             STREAM_NAME,
             jsonTestEvents(),
             {
-              expectedRevision: nextExpectedRevision,
+              streamState: nextExpectedRevision,
             }
           );
 
@@ -506,7 +498,7 @@ describe("appendToStream", () => {
               const result = await client.appendToStream(
                 STREAM_NAME,
                 jsonTestEvents(),
-                { expectedRevision: BigInt(1) }
+                { streamState: BigInt(1) }
               );
 
               expect(result).toBe("unreachable");
@@ -515,8 +507,8 @@ describe("appendToStream", () => {
 
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
-                expect(error.expectedVersion).toBe(BigInt(1));
-                expect(error.actualVersion).toBe(NO_STREAM);
+                expect(error.expectedState).toBe(BigInt(1));
+                expect(error.actualState).toBe(NO_STREAM);
               }
             }
           });
@@ -534,7 +526,7 @@ describe("appendToStream", () => {
                 STREAM_NAME,
                 jsonTestEvents(),
                 {
-                  expectedRevision: nextExpectedRevision + BigInt(1),
+                  streamState: nextExpectedRevision + BigInt(1),
                 }
               );
 
@@ -544,10 +536,10 @@ describe("appendToStream", () => {
 
               if (error instanceof WrongExpectedVersionError) {
                 expect(error.streamName).toBe(STREAM_NAME);
-                expect(error.expectedVersion).toBe(
+                expect(error.expectedState).toBe(
                   nextExpectedRevision + BigInt(1)
                 );
-                expect(error.actualVersion).toBe(nextExpectedRevision);
+                expect(error.actualState).toBe(nextExpectedRevision);
               }
             }
           });
@@ -558,10 +550,10 @@ describe("appendToStream", () => {
 
   describe("throwOnAppendFailure", () => {
     test("throws on true", async () => {
-      const throwingClient = new EventStoreDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: true },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const throwingClient = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: true,
+        })
       );
 
       const STREAM_NAME = "throwing__no_stream_here_but_there_is";
@@ -573,7 +565,7 @@ describe("appendToStream", () => {
           STREAM_NAME,
           jsonTestEvents(),
           {
-            expectedRevision: "no_stream",
+            streamState: "no_stream",
           }
         );
 
@@ -583,17 +575,17 @@ describe("appendToStream", () => {
 
         if (error instanceof WrongExpectedVersionError) {
           expect(error.streamName).toBe(STREAM_NAME);
-          expect(error.expectedVersion).toBe(NO_STREAM);
-          expect(error.actualVersion).toBeGreaterThanOrEqual(1);
+          expect(error.expectedState).toBe(NO_STREAM);
+          expect(error.actualState).toBeGreaterThanOrEqual(1);
         }
       }
     });
 
     test("returns failure result on false", async () => {
-      const nonThrowingClient = new EventStoreDBClient(
-        { endpoint: node.uri, throwOnAppendFailure: false },
-        { rootCertificate: node.certs.root },
-        { username: "admin", password: "changeit" }
+      const nonThrowingClient = KurrentDBClient.connectionString(
+        node.connectionStringWithOverrides({
+          throwOnAppendFailure: false,
+        })
       );
 
       const STREAM_NAME = "no_throwing__no_stream_here_but_there_is";
@@ -604,7 +596,7 @@ describe("appendToStream", () => {
         STREAM_NAME,
         jsonTestEvents(),
         {
-          expectedRevision: "no_stream",
+          streamState: "no_stream",
         }
       );
 

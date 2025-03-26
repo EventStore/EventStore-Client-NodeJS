@@ -1,10 +1,10 @@
 import { createTestNode } from "@test-utils";
 
-import { EventStoreDBClient } from "@eventstore/db-client";
+import { KurrentDBClient } from "@kurrent/kurrentdb-client";
 
 describe("list projections", () => {
   const node = createTestNode();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   const basicProjection = `
   fromAll()
@@ -19,11 +19,7 @@ describe("list projections", () => {
 
   beforeAll(async () => {
     await node.up();
-    client = new EventStoreDBClient(
-      { endpoint: node.uri },
-      { rootCertificate: node.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(node.connectionString());
 
     for (const name of projectionNames) {
       await client.createProjection(name, basicProjection);

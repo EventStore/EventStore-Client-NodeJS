@@ -10,7 +10,7 @@ import {
 
 import {
   AccessDeniedError,
-  EventStoreDBClient,
+  KurrentDBClient,
   jsonEvent,
   PARK,
   PersistentSubscriptionDoesNotExistError,
@@ -18,21 +18,17 @@ import {
   START,
   streamNameFilter,
   UnsupportedError,
-} from "@eventstore/db-client";
+} from "@kurrent/kurrentdb-client";
 
 describe("replayParkedMessagesToAll", () => {
   const supported = matchServerVersion`>=21.10.1`;
   const cluster = createTestCluster();
-  let client!: EventStoreDBClient;
+  let client!: KurrentDBClient;
 
   beforeAll(async () => {
     await cluster.up();
 
-    client = new EventStoreDBClient(
-      { endpoints: cluster.endpoints, nodePreference: "leader" },
-      { rootCertificate: cluster.certs.root },
-      { username: "admin", password: "changeit" }
-    );
+    client = KurrentDBClient.connectionString(cluster.connectionString());
   });
 
   afterAll(async () => {
