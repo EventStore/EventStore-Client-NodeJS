@@ -10,17 +10,17 @@ describe("deadline", () => {
   >([
     [
       "should throw on zero",
-      "kurrent://host?defaultDeadline=0",
+      "kurrentdb://host?defaultDeadline=0",
       { defaultDeadline: 0 },
     ],
     [
       "should throw on negative",
-      "kurrent://host?defaultDeadline=-1",
+      "kurrentdb://host?defaultDeadline=-1",
       { defaultDeadline: -1 },
     ],
     [
       "should throw on negative",
-      "kurrent://host?defaultDeadline=-1000000000000000",
+      "kurrentdb://host?defaultDeadline=-1000000000000000",
       { defaultDeadline: -1000000000000000 },
     ],
   ])("%s", (_, connectionString, constructorOptions) => {

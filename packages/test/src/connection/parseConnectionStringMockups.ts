@@ -4,7 +4,7 @@ export const valid: Array<
   [connectionString: string, expected: ConnectionOptions]
 > = [
   [
-    "esdb://localhost",
+    "kurrentdb://localhost",
     {
       dnsDiscover: false,
       hosts: [
@@ -16,7 +16,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://localhost:2114",
+    "kurrentdb://localhost:2114",
     {
       dnsDiscover: false,
       hosts: [
@@ -28,23 +28,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://user:pass@localhost:2114",
-    {
-      dnsDiscover: false,
-      defaultCredentials: {
-        username: "user",
-        password: "pass",
-      },
-      hosts: [
-        {
-          address: "localhost",
-          port: 2114,
-        },
-      ],
-    },
-  ],
-  [
-    "esdb://user:pass@localhost:2114/",
+    "kurrentdb://user:pass@localhost:2114",
     {
       dnsDiscover: false,
       defaultCredentials: {
@@ -60,7 +44,23 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://user:pass@localhost:2114/?throwOnAppendFailure=false",
+    "kurrentdb://user:pass@localhost:2114/",
+    {
+      dnsDiscover: false,
+      defaultCredentials: {
+        username: "user",
+        password: "pass",
+      },
+      hosts: [
+        {
+          address: "localhost",
+          port: 2114,
+        },
+      ],
+    },
+  ],
+  [
+    "kurrentdb://user:pass@localhost:2114/?throwOnAppendFailure=false",
     {
       dnsDiscover: false,
       throwOnAppendFailure: false,
@@ -77,7 +77,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://user:pass@localhost:2114?tls=false",
+    "kurrentdb://user:pass@localhost:2114?tls=false",
     {
       dnsDiscover: false,
       tls: false,
@@ -94,7 +94,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host1,host2,host3",
+    "kurrentdb://host1,host2,host3",
     {
       dnsDiscover: false,
       hosts: [
@@ -114,7 +114,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host1:1234,host2:4321,host3:3231",
+    "kurrentdb://host1:1234,host2:4321,host3:3231",
     {
       dnsDiscover: false,
       hosts: [
@@ -134,7 +134,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://bubaqp2rh41uf5akmj0g-0.mesdb.eventstore.cloud:2113,bubaqp2rh41uf5akmj0g-1.mesdb.eventstore.cloud:2113,bubaqp2rh41uf5akmj0g-2.mesdb.eventstore.cloud:2113",
+    "kurrentdb://bubaqp2rh41uf5akmj0g-0.mesdb.eventstore.cloud:2113,bubaqp2rh41uf5akmj0g-1.mesdb.eventstore.cloud:2113,bubaqp2rh41uf5akmj0g-2.mesdb.eventstore.cloud:2113",
     {
       dnsDiscover: false,
       hosts: [
@@ -154,7 +154,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://user:pass@host1:1234,host2:4321,host3:3231?nodePreference=follower",
+    "kurrentdb://user:pass@host1:1234,host2:4321,host3:3231?nodePreference=follower",
     {
       dnsDiscover: false,
       nodePreference: "follower",
@@ -179,7 +179,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host1,host2,host3?tls=false",
+    "kurrentdb://host1,host2,host3?tls=false",
     {
       dnsDiscover: false,
       tls: false,
@@ -200,7 +200,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://127.0.0.1:21573?tls=false",
+    "kurrentdb://127.0.0.1:21573?tls=false",
     {
       dnsDiscover: false,
       tls: false,
@@ -213,7 +213,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host1,host2,host3?throwOnAppendFailure=false",
+    "kurrentdb://host1,host2,host3?throwOnAppendFailure=false",
     {
       dnsDiscover: false,
       throwOnAppendFailure: false,
@@ -265,7 +265,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?tlsCAFile=/home/user/dev/cert.ca",
+    "kurrentdb://host?tlsCAFile=/home/user/dev/cert.ca",
     {
       dnsDiscover: false,
       tlsCAFile: "/home/user/dev/cert.ca",
@@ -278,7 +278,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?tlsCAFile=./cert.ca",
+    "kurrentdb://host?tlsCAFile=./cert.ca",
     {
       dnsDiscover: false,
       tlsCAFile: "./cert.ca",
@@ -291,7 +291,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?tlsCAFile=C:\\Certificates\\EventStore\\Cert.ca",
+    "kurrentdb://host?tlsCAFile=C:\\Certificates\\EventStore\\Cert.ca",
     {
       dnsDiscover: false,
       tlsCAFile: "C:\\Certificates\\EventStore\\Cert.ca",
@@ -304,7 +304,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?tlsCAFile=..\\EventStore\\Cert.ca",
+    "kurrentdb://host?tlsCAFile=..\\EventStore\\Cert.ca",
     {
       dnsDiscover: false,
       tlsCAFile: "..\\EventStore\\Cert.ca",
@@ -317,7 +317,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?keepAliveInterval=-1&keepAliveTimeout=-1",
+    "kurrentdb://host?keepAliveInterval=-1&keepAliveTimeout=-1",
     {
       dnsDiscover: false,
       keepAliveInterval: -1,
@@ -331,7 +331,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://my%3Agreat%40username:UyeXx8%24%5EPsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false&connectionName=wh%40t%3F%3A%26",
+    "kurrentdb://my%3Agreat%40username:UyeXx8%24%5EPsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false&connectionName=wh%40t%3F%3A%26",
     {
       dnsDiscover: false,
       nodePreference: "follower",
@@ -373,7 +373,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=true&throwOnAppendFailure=false&keepAliveInterval=10&defaultDeadline=10000000",
+    "kurrentdb://host?maxDiscoverAttempts=200&discoveryInterval=1000&gossipTimeout=1&nodePreference=leader&tls=false&tlsVerifyCert=true&throwOnAppendFailure=false&keepAliveInterval=10&defaultDeadline=10000000",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -394,7 +394,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=true&THROWOnAppendFailure=false&KEEPALIVEinterval=200&CoNnEcTionNAME=wow, what a great connection",
+    "kurrentdb://host?MaxDiscoverAttempts=200&discoveryinterval=1000&GOSSIPTIMEOUT=1&nOdEpReFeReNcE=leader&TLS=false&TlsVerifyCert=true&THROWOnAppendFailure=false&KEEPALIVEinterval=200&CoNnEcTionNAME=wow, what a great connection",
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -415,7 +415,7 @@ export const valid: Array<
     },
   ],
   [
-    `esdb://host?MaxDiscoverAttempts=200&discovery-interval=1000&GOSSIP_TIMEOUT=1&node_preference=ReadOnlyReplica&TLS=false&TlsVerifyCert=true&DEFAULTdEADLINE=12&THROWOnAppendFailure=false      &   KEEPALIVEinterval=200`,
+    `kurrentdb://host?MaxDiscoverAttempts=200&discovery-interval=1000&GOSSIP_TIMEOUT=1&node_preference=ReadOnlyReplica&TLS=false&TlsVerifyCert=true&DEFAULTdEADLINE=12&THROWOnAppendFailure=false      &   KEEPALIVEinterval=200`,
     {
       dnsDiscover: false,
       maxDiscoverAttempts: 200,
@@ -436,7 +436,7 @@ export const valid: Array<
     },
   ],
   [
-    `esdb://     host
+    `kurrentdb://     host
       ?    MaxDiscoverAttempts=200
       &discoveryinterval=1000
       &GOSSIPTIMEOUT=1
@@ -469,7 +469,7 @@ export const valid: Array<
     },
   ],
   [
-    "esdb://host?userCertFile=/home/user/dev/cert.ca&userKeyFile=/home/user/dev/cert.key",
+    "kurrentdb://host?userCertFile=/home/user/dev/cert.ca&userKeyFile=/home/user/dev/cert.key",
     {
       dnsDiscover: false,
       userCertFile: "/home/user/dev/cert.ca",
@@ -488,24 +488,24 @@ export const invalid: string[] = [
   "localhost",
   "https://console.eventstore.cloud/",
   "esbd+discovery://localhost",
-  "esdb://my:great@username:UyeXx8$^PsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false",
-  "esdb://host1;host2;host3?throwOnAppendFailure=false",
-  "esdb://host1,host2:200:300?throwOnAppendFailure=false",
-  "esdb://throwOnAppendFailure=false",
-  "esdb://localhost/&throwOnAppendFailure=false",
-  "esdb://localhost?throwOnAppendFailure=false?nodePreference=follower",
-  "esdb://localhost?throwOnAppendFailure=false&nodePreference=any",
-  "esdb://localhost?throwOnAppendFailure=if you feel like it",
-  "esdb://localhost?throwOnAppendFailure=sometimes",
-  "esdb://localhost?keepAliveTimeout=please",
-  "esdb://localhost?keepAliveInterval=XXIV",
+  "kurrentdb://my:great@username:UyeXx8$^PsOo4jG88FlCauR1Coz25q@host?nodePreference=follower&throwOnAppendFailure=false",
+  "kurrentdb://host1;host2;host3?throwOnAppendFailure=false",
+  "kurrentdb://host1,host2:200:300?throwOnAppendFailure=false",
+  "kurrentdb://throwOnAppendFailure=false",
+  "kurrentdb://localhost/&throwOnAppendFailure=false",
+  "kurrentdb://localhost?throwOnAppendFailure=false?nodePreference=follower",
+  "kurrentdb://localhost?throwOnAppendFailure=false&nodePreference=any",
+  "kurrentdb://localhost?throwOnAppendFailure=if you feel like it",
+  "kurrentdb://localhost?throwOnAppendFailure=sometimes",
+  "kurrentdb://localhost?keepAliveTimeout=please",
+  "kurrentdb://localhost?keepAliveInterval=XXIV",
 ];
 
 export const warning: Array<
   [connectionString: string, expected: ConnectionOptions]
 > = [
   [
-    "esdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false",
+    "kurrentdb://localhost?catchOnAppendFailure=true&throwOnAppendFailure=false",
     {
       dnsDiscover: false,
       throwOnAppendFailure: false,
@@ -518,7 +518,7 @@ export const warning: Array<
     },
   ],
   [
-    "esdb://localhost?someNonsense=follower&doTheThing=true",
+    "kurrentdb://localhost?someNonsense=follower&doTheThing=true",
     {
       dnsDiscover: false,
       hosts: [
@@ -530,7 +530,7 @@ export const warning: Array<
     },
   ],
   [
-    "esdb://localhost?tlsVerifyCert=false",
+    "kurrentdb://localhost?tlsVerifyCert=false",
     {
       dnsDiscover: false,
       tlsVerifyCert: false,

@@ -1041,6 +1041,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kurrent/bridge-darwin-arm64@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@kurrent/bridge-darwin-arm64@npm:0.1.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@kurrent/bridge-darwin-x64@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@kurrent/bridge-darwin-x64@npm:0.1.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@kurrent/bridge-linux-arm64-gnu@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@kurrent/bridge-linux-arm64-gnu@npm:0.1.0"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@kurrent/bridge-linux-x64-gnu@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@kurrent/bridge-linux-x64-gnu@npm:0.1.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@kurrent/bridge-win32-x64-msvc@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@kurrent/bridge-win32-x64-msvc@npm:0.1.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@kurrent/bridge@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@kurrent/bridge@npm:0.1.0"
+  dependencies:
+    "@kurrent/bridge-darwin-arm64": "npm:0.1.0"
+    "@kurrent/bridge-darwin-x64": "npm:0.1.0"
+    "@kurrent/bridge-linux-arm64-gnu": "npm:0.1.0"
+    "@kurrent/bridge-linux-x64-gnu": "npm:0.1.0"
+    "@kurrent/bridge-win32-x64-msvc": "npm:0.1.0"
+    "@neon-rs/load": "npm:^0.1.82"
+  dependenciesMeta:
+    "@kurrent/bridge-darwin-arm64":
+      optional: true
+    "@kurrent/bridge-darwin-x64":
+      optional: true
+    "@kurrent/bridge-linux-arm64-gnu":
+      optional: true
+    "@kurrent/bridge-linux-x64-gnu":
+      optional: true
+    "@kurrent/bridge-win32-x64-msvc":
+      optional: true
+  checksum: 10c0/5ba30fc5f163ffd102b46d83d0a51479989f95acb142eaacb32672c514084f21f2e4ee2d79655874fc13824b10d41b1f3cf0ff48e8487f032594ab5246661fae
+  languageName: node
+  linkType: hard
+
 "@kurrent/bridge@npm:^1.0.0-alpha.2":
   version: 1.0.0-alpha.2
   resolution: "@kurrent/bridge@npm:1.0.0-alpha.2"
@@ -1066,41 +1126,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurrent/bridge@npm:^1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@kurrent/bridge@npm:1.0.0-alpha.3"
-  dependencies:
-    "@kurrent/darwin-arm64": "npm:1.0.0-alpha.3"
-    "@kurrent/darwin-x64": "npm:1.0.0-alpha.3"
-    "@kurrent/linux-arm64-gnu": "npm:1.0.0-alpha.3"
-    "@kurrent/linux-x64-gnu": "npm:1.0.0-alpha.3"
-    "@kurrent/win32-x64-msvc": "npm:1.0.0-alpha.3"
-    "@neon-rs/load": "npm:^0.1.82"
-  dependenciesMeta:
-    "@kurrent/darwin-arm64":
-      optional: true
-    "@kurrent/darwin-x64":
-      optional: true
-    "@kurrent/linux-arm64-gnu":
-      optional: true
-    "@kurrent/linux-x64-gnu":
-      optional: true
-    "@kurrent/win32-x64-msvc":
-      optional: true
-  checksum: 10c0/429b28204a70e6e3d5b47d3f7d1148a9fda7ec03f5930bb59f9090680904475c722f1cf90968aca5a0e6f508afbf19f92953a5d461cf829e09c1a79a516aa15d
-  languageName: node
-  linkType: hard
-
 "@kurrent/darwin-arm64@npm:1.0.0-alpha.2":
   version: 1.0.0-alpha.2
   resolution: "@kurrent/darwin-arm64@npm:1.0.0-alpha.2"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@kurrent/darwin-arm64@npm:1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@kurrent/darwin-arm64@npm:1.0.0-alpha.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
@@ -1112,19 +1140,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurrent/darwin-x64@npm:1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@kurrent/darwin-x64@npm:1.0.0-alpha.3"
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@kurrent/kurrentdb-client@workspace:^, @kurrent/kurrentdb-client@workspace:packages/db-client":
   version: 0.0.0-use.local
   resolution: "@kurrent/kurrentdb-client@workspace:packages/db-client"
   dependencies:
     "@grpc/grpc-js": "npm:^1.12.4"
-    "@kurrent/bridge": "npm:^1.0.0-alpha.3"
+    "@kurrent/bridge": "npm:^0.1.0"
     "@types/debug": "npm:^4.1.12"
     "@types/google-protobuf": "npm:^3.15.12"
     "@types/node": "npm:^22.10.2"
@@ -1146,23 +1167,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurrent/linux-arm64-gnu@npm:1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@kurrent/linux-arm64-gnu@npm:1.0.0-alpha.3"
-  conditions: os=linux & cpu=arm64
-  languageName: node
-  linkType: hard
-
 "@kurrent/linux-x64-gnu@npm:1.0.0-alpha.2":
   version: 1.0.0-alpha.2
   resolution: "@kurrent/linux-x64-gnu@npm:1.0.0-alpha.2"
-  conditions: os=linux & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@kurrent/linux-x64-gnu@npm:1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@kurrent/linux-x64-gnu@npm:1.0.0-alpha.3"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
@@ -1182,13 +1189,6 @@ __metadata:
 "@kurrent/win32-x64-msvc@npm:1.0.0-alpha.2":
   version: 1.0.0-alpha.2
   resolution: "@kurrent/win32-x64-msvc@npm:1.0.0-alpha.2"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@kurrent/win32-x64-msvc@npm:1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@kurrent/win32-x64-msvc@npm:1.0.0-alpha.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard

@@ -97,7 +97,7 @@ const parseProtocol = (
 
     if (match.groups.protocol.startsWith("esdb")) {
       console.warn(
-        `The 'esdb' protocol is deprecated. Please use 'kurrentdb', 'kdb' or 'kurrent' instead.`
+        `The 'esdb' protocol is deprecated. Please use 'kurrentdb' instead`
       );
     }
 

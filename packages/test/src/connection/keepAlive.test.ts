@@ -15,7 +15,7 @@ describe("keepAlive settings", () => {
     describe.each([
       [
         "keepAliveInterval should default to 10_000",
-        "esdb://host",
+        "kurrentdb://host",
         {},
         {
           "grpc.keepalive_time_ms": 10000,
@@ -23,7 +23,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "keepAliveTimeout should default to 10_000",
-        "esdb://host",
+        "kurrentdb://host",
         {},
         {
           "grpc.keepalive_timeout_ms": 10000,
@@ -31,7 +31,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "keepAliveInterval should be settable (leaving timeout as default)",
-        "esdb://host?keepAliveInterval=123456",
+        "kurrentdb://host?keepAliveInterval=123456",
         { keepAliveInterval: 123456 },
         {
           "grpc.keepalive_time_ms": 123456,
@@ -40,7 +40,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "keepAliveTimeout should be settable (leaving interval as default)",
-        "esdb://host?keepAliveTimeout=246810",
+        "kurrentdb://host?keepAliveTimeout=246810",
         { keepAliveTimeout: 246810 },
         {
           "grpc.keepalive_time_ms": 10000,
@@ -49,7 +49,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "both should be settable",
-        "esdb://host?keepAliveInterval=9987654&keepAliveTimeout=124816",
+        "kurrentdb://host?keepAliveInterval=9987654&keepAliveTimeout=124816",
         { keepAliveInterval: 9987654, keepAliveTimeout: 124816 },
         {
           "grpc.keepalive_time_ms": 9987654,
@@ -58,7 +58,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "-1 should disable (max_int) keepAliveInterval (leaving timeout as default)",
-        "esdb://host?keepAliveInterval=-1",
+        "kurrentdb://host?keepAliveInterval=-1",
         { keepAliveInterval: -1 },
         {
           "grpc.keepalive_time_ms": Number.MAX_VALUE,
@@ -67,7 +67,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "-1 should disable (max_int) keepAliveTimeout (leaving interval as default)",
-        "esdb://host?keepAliveTimeout=-1",
+        "kurrentdb://host?keepAliveTimeout=-1",
         { keepAliveTimeout: -1 },
         {
           "grpc.keepalive_time_ms": 10000,
@@ -76,7 +76,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "-1 should disable (max_int) both",
-        "esdb://host?keepAliveTimeout=-1&keepAliveInterval=-1",
+        "kurrentdb://host?keepAliveTimeout=-1&keepAliveInterval=-1",
         { keepAliveTimeout: -1, keepAliveInterval: -1 },
         {
           "grpc.keepalive_time_ms": Number.MAX_VALUE,
@@ -85,7 +85,7 @@ describe("keepAlive settings", () => {
       ],
       [
         "0 is fine (but a terrible choice)",
-        "esdb://host?keepAliveTimeout=0&keepAliveInterval=0",
+        "kurrentdb://host?keepAliveTimeout=0&keepAliveInterval=0",
         { keepAliveTimeout: 0, keepAliveInterval: 0 },
         {
           "grpc.keepalive_time_ms": 0,
@@ -126,7 +126,7 @@ describe("keepAlive settings", () => {
         [
           "connectionString",
           (option: string, value: number) =>
-            KurrentDBClient.connectionString`esdb://host?${option}=${value}`,
+            KurrentDBClient.connectionString`kurrentdb://host?${option}=${value}`,
         ],
       ])("%s", (_, testCase) => {
         expect(() => testCase(option, value)).toThrowErrorMatchingSnapshot();
@@ -139,7 +139,7 @@ describe("keepAlive settings", () => {
       [
         "connectionString",
         (value: number) =>
-          KurrentDBClient.connectionString`esdb://host?keepAliveInterval=${value}`,
+          KurrentDBClient.connectionString`kurrentdb://host?keepAliveInterval=${value}`,
       ],
     ])("%s", (_, testCase) => {
       for (const keepAliveInterval of [0, 1, 10, 1000, 9999]) {
