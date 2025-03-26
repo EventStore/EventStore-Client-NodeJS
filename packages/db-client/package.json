@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.4",
-    "@kurrent/bridge": "^0.1.0",
+    "@kurrent/bridge": "^0.1.1",
     "@types/debug": "^4.1.12",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.10.2",
