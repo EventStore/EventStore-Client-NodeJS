@@ -1,10 +1,11 @@
 {
   "name": "benchmark",
   "packageManager": "yarn@4.6.0",
+  "private": true,
   "scripts": {
-    "benchmark": "yarn benchmark:eventstoreClient && yarn benchmark:kurrentClient && yarn benchmark:bridge",
-    "benchmark:eventstoreClient": "node ./eventstoreClient/readStream.js",
-    "benchmark:kurrentClient": "node ./kurrentClient/readStream.js",
+    "benchmark": "yarn benchmark:legacy && yarn benchmark:kurrent && yarn benchmark:bridge",
+    "benchmark:legacy": "node ./legacy/readStream.js",
+    "benchmark:kurrent": "node ./kurrent/readStream.js",
     "benchmark:bridge": "node ./bridge/readStream.js",
     "loadEvents": "node ./load"
   },

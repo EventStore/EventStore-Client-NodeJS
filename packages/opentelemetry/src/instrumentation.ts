@@ -17,7 +17,7 @@ import {
   InstrumentationConfig,
   InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
-import type * as kdb from "@kurrent/kurrentdb-client";
+import type * as kurrentdb from "@kurrent/kurrentdb-client";
 import type {
   AppendResult,
   BinaryEventType,
@@ -61,7 +61,7 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   private _onPatchMain() {
-    return (moduleExports: typeof kdb) => {
+    return (moduleExports: typeof kurrentdb) => {
       this.wrap(
         moduleExports.KurrentDBClient.prototype,
         "appendToStream",
@@ -102,7 +102,7 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   private _onUnPatchMain() {
-    return (moduleExports: typeof kdb) => {
+    return (moduleExports: typeof kurrentdb) => {
       this._diag.debug("un-patching");
 
       this._unwrap(moduleExports.KurrentDBClient.prototype, "appendToStream");
@@ -123,17 +123,17 @@ export class Instrumentation extends InstrumentationBase {
 
   private _patchAppendToStream(): (
     original: Function,
-    operation: keyof kdb.KurrentDBClient
+    operation: keyof kurrentdb.KurrentDBClient
   ) => (...args: AppendToStreamParams) => Promise<AppendResult> {
     const instrumentation = this;
     const tracer = instrumentation.tracer;
 
     return function appendToStream(
       original: Function,
-      operation: keyof kdb.KurrentDBClient
+      operation: keyof kurrentdb.KurrentDBClient
     ) {
       return async function (
-        this: kdb.KurrentDBClient,
+        this: kurrentdb.KurrentDBClient,
         ...args: AppendToStreamParams
       ): Promise<AppendResult> {
         const [streamName, events, options] = [...args];
@@ -261,17 +261,17 @@ export class Instrumentation extends InstrumentationBase {
 
   private _patchCatchUpSubscription(): (
     original: Function,
-    operation: keyof kdb.KurrentDBClient
+    operation: keyof kurrentdb.KurrentDBClient
   ) => (...args: any) => any {
     const instrumentation = this;
     const tracer = instrumentation.tracer;
 
     return function subscribe<KnownEventType extends EventType = EventType>(
       original: Function,
-      operation: keyof kdb.KurrentDBClient
+      operation: keyof kurrentdb.KurrentDBClient
     ) {
       return function (
-        this: kdb.KurrentDBClient,
+        this: kurrentdb.KurrentDBClient,
         ...args: SubscribeParameters
       ) {
         let options:
@@ -308,17 +308,17 @@ export class Instrumentation extends InstrumentationBase {
 
   private _patchPersistentSubscription(): (
     original: Function,
-    operation: keyof kdb.KurrentDBClient
+    operation: keyof kurrentdb.KurrentDBClient
   ) => (...args: any) => any {
     const instrumentation = this;
     const tracer = instrumentation.tracer;
 
     return function subscribe<E>(
       original: Function,
-      operation: keyof kdb.KurrentDBClient
+      operation: keyof kurrentdb.KurrentDBClient
     ) {
       return function (
-        this: kdb.KurrentDBClient,
+        this: kurrentdb.KurrentDBClient,
         ...args: PersistentSubscribeParameters
       ) {
         let options:
@@ -353,7 +353,7 @@ export class Instrumentation extends InstrumentationBase {
   }
 
   private static restoreContext = (
-    metadata: kdb.MetadataType,
+    metadata: kurrentdb.MetadataType,
     isRemote = true
   ): Context => {
     const traceId = metadata[TRACE_ID] as string;

@@ -1,10 +1,11 @@
 {
   "name": "@kurrent/opentelemetry",
   "version": "1.0.0-alpha.1",
-  "description": "Kurrent NodeJS Client SDK interceptors for tracing with OpenTelemetry",
+  "description": "KurrentDB NodeJS Client SDK interceptors for tracing with OpenTelemetry",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
+  "author": "Kurrent, Inc",
   "scripts": {
     "build": "yarn build:ts",
     "build:ts": "tsc --build",
