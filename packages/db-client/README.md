@@ -1,4 +1,4 @@
-# @kurrent/db-client
+# @kurrent/kurrentdb-client
 
 [![npm][npm-badge]][npm-badge-url]
 [![Github action CI workflow][ci-badge]][ci-badge-url]
@@ -10,10 +10,10 @@ This is the package for the NodeJS client for KurrentDB 20+ and uses gRPC as the
 
 ```shell script
 # Yarn
-$ yarn add @kurrent/db-client
+$ yarn add @kurrent/kurrentdb-client
 
 # NPM
-$ npm install --save @kurrent/db-client
+$ npm install --save @kurrent/kurrentdb-client
 ```
 
 ## KurrentDB Server Compatibility
@@ -34,7 +34,7 @@ const {
   jsonEvent,
   FORWARDS,
   START,
-} = require('@kurrent/db-client');
+} = require('@kurrent/kurrentdb-client');
 
 const client = new KurrentDBClient({
   endpoint: "localhost:2113",
@@ -80,7 +80,7 @@ import {
   FORWARDS,
   START,
   JSONEventType,
-} from '@kurrent/db-client';
+} from '@kurrent/kurrentdb-client';
 
 const client = new KurrentDBClient({
   endpoint: 'localhost:2113',
