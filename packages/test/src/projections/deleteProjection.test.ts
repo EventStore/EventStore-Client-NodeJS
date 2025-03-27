@@ -53,11 +53,11 @@ describe("deleteProjection", () => {
     expect(disabledDetails).toBeDefined();
 
     // Incorrect projection status was switched (ABORTED -> STOPPED) in
-    // https://github.com/EventStore/EventStore/pull/2944
+    // https://github.com/kurrent-io/EventStore/pull/2944
     expect([STOPPED, ABORTED]).toContain(disabledDetails.projectionStatus);
 
     if (disabledDetails.projectionStatus === ABORTED) {
-      // before https://github.com/EventStore/EventStore/pull/2944
+      // before https://github.com/kurrent-io/EventStore/pull/2944
       // writeCheckpoint had to be false to stop the projection
       await client.abortProjection(PROJECTION_NAME);
 

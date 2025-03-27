@@ -146,7 +146,7 @@ optionalDescribe(matchServerVersion`<=23.10`)(
     test("Delete", async () => {
       const name = await createTestProjection();
 
-      // before https://github.com/EventStore/EventStore/pull/2944
+      // before https://github.com/kurrent-io/EventStore/pull/2944
       // writeCheckpoint had to be false (abort) to stop the projection
       await client.abortProjection(name);
 

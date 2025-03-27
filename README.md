@@ -24,7 +24,7 @@ This monorepo contains the following packages:
 | [`packages/opentelemetry/`](packages/opentelemetry/) | [`@kurrent/opentelemetry`](https://www.npmjs.com/package/@kurrent/opentelemetry) |
 | [`packages/test/`](packages/test/)                   | Internal tests                                                                   |
 
-The client uses [KurrentDB-Bridge-Client](https://github.com/EventStore/EventStore-Client-NodeJS) 
+The client uses [KurrentDB-Bridge-Client](https://github.com/kurrent-io/EventStore-Client-NodeJS) 
 to significantly improve read performance by leveraging Rust through native addons. 
 
 ## Support
@@ -46,5 +46,5 @@ Refer to our [Contribution Guidelines]
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [license-badge]: https://img.shields.io/npm/l/@kurrent/kurrentdb-client.svg
-[license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
-[contribution guidelines]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
+[license-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/LICENSE
+[contribution guidelines]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md

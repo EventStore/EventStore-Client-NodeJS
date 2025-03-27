@@ -16,11 +16,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EventStore/KurrentDB-Client-NodeJS.git"
+    "url": "git+https://github.com/kurrent-io/KurrentDB-Client-NodeJS.git"
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/EventStore/KurrentDB-Client-NodeJS/issues"
+    "url": "https://github.com/kurrent-io/KurrentDB-Client-NodeJS/issues"
   },
   "homepage": "https://developers.kurrent.io/clients/grpc/getting-started?codeLanguage=NodeJS",
   "keywords": [

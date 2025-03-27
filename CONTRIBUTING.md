@@ -103,4 +103,4 @@ See the Node.js documentation for [`util.inspect()`] for the complete list.
 [jest]: https://jestjs.io/
 [debug]: https://github.com/visionmedia/debug
 [`util.inspect()`]: https://nodejs.org/api/util.html#util_util_inspect_object_options
-[KurrentDB-Client-NodeJS]: https://github.com/EventStore/KurrentDB-Client-NodeJS
+[KurrentDB-Client-NodeJS]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS

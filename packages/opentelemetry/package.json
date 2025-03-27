@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EventStore/KurrentDB-Client-NodeJS.git"
+    "url": "git+https://github.com/kurrent-io/KurrentDB-Client-NodeJS.git"
   },
   "keywords": [
     "Kurrent",

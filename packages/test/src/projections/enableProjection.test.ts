@@ -50,7 +50,7 @@ describe("enableProjection", () => {
       expect(beforeDetails.projectionStatus).toBe(STOPPED);
     } else {
       // Incorrect projection status was switched (ABORTED -> STOPPED) in
-      // https://github.com/EventStore/EventStore/pull/2944
+      // https://github.com/kurrent-io/EventStore/pull/2944
       expect([STOPPED, ABORTED]).toContain(beforeDetails.projectionStatus);
     }
 

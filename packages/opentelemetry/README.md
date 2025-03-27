@@ -65,10 +65,10 @@ Refer to our [contribution guidelines]
 [discuss]: https://discuss.kurrent.io/
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
-[contribution guidelines]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
+[contribution guidelines]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
 [license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
-[license-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/blob/master/LICENSE
-[ci-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/actions
-[KurrentDB-Client-NodeJS]: https://github.com/EventStore/KurrentDB-Client-NodeJS
-[ci-badge]: https://github.com/EventStore/KurrentDB-Client-NodeJS/workflows/CI/badge.svg?branch=master
-[ci-badge-url]: https://github.com/EventStore/KurrentDB-Client-NodeJS/actions
+[license-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/LICENSE
+[ci-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions
+[KurrentDB-Client-NodeJS]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS
+[ci-badge]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/workflows/CI/badge.svg?branch=master
+[ci-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions

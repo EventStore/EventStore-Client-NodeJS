@@ -182,7 +182,7 @@ describe("subscribeToAll", () => {
     });
 
     // checkpoints behaviour was fixed in
-    // https://github.com/EventStore/EventStore/pull/2608
+    // https://github.com/kurrent-io/EventStore/pull/2608
     optionalTest(matchServerVersion`>=21.10`)("checkpoints", async () => {
       const defer = new Defer();
       const FINISH_TEST = "checkpoints-finish";

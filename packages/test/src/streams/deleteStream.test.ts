@@ -114,10 +114,10 @@ describe("deleteStream", () => {
               expectedRevision: NO_STREAM,
             });
 
-            // Before https://github.com/EventStore/EventStore/pull/3154 this should pass.
+            // Before https://github.com/kurrent-io/EventStore/pull/3154 this should pass.
             expect(result).toBeDefined();
           } catch (error) {
-            // After https://github.com/EventStore/EventStore/pull/3154 this will throw an error.
+            // After https://github.com/kurrent-io/EventStore/pull/3154 this will throw an error.
             expect(error).toBeInstanceOf(WrongExpectedVersionError);
 
             if (error instanceof WrongExpectedVersionError) {

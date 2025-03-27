@@ -15,7 +15,7 @@
   "author": "Kurrent, Inc",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/EventStore/KurrentDB-Client-NodeJS/issues"
+    "url": "https://github.com/kurrent-io/KurrentDB-Client-NodeJS/issues"
   },
   "workspaces": [
     "packages/*"
