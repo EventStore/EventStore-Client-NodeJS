@@ -1,8 +1,8 @@
 <a href="https://kurrent.io">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="KurrentLogo-White.png">
-    <source media="(prefers-color-scheme: light)" srcset="KurrentLogo-Black.png">
-    <img alt="Kurrent" src="KurrentLogo-Plum.png" height="50%" width="50%">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/KurrentLogo-White.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/KurrentLogo-Black.png">
+    <img alt="Kurrent" src="https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/KurrentLogo-Plum.png" height="50%" width="50%">
   </picture>
 </a>
 
@@ -18,14 +18,14 @@ architectures.
 
 This monorepo contains the following packages:
 
-| Subfolder                                            | Package                                                                          |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`packages/db-client/`](packages/db-client/)         | [`@kurrent/client`](https://www.npmjs.com/package/@kurrent/kurrentdb-client)     |
-| [`packages/opentelemetry/`](packages/opentelemetry/) | [`@kurrent/opentelemetry`](https://www.npmjs.com/package/@kurrent/opentelemetry) |
-| [`packages/test/`](packages/test/)                   | Internal tests                                                                   |
+| Subfolder                                            | Package                                                                                |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [`packages/db-client/`](packages/db-client/)         | [`@kurrent/kurrentdb-client`](https://www.npmjs.com/package/@kurrent/kurrentdb-client) |
+| [`packages/opentelemetry/`](packages/opentelemetry/) | [`@kurrent/opentelemetry`](https://www.npmjs.com/package/@kurrent/opentelemetry)       |
+| [`packages/test/`](packages/test/)                   | Internal tests                                                                         |
 
-The client uses [KurrentDB-Bridge-Client](https://github.com/kurrent-io/EventStore-Client-NodeJS) 
-to significantly improve read performance by leveraging Rust through native addons. 
+The client uses [KurrentDB-Bridge-Client](https://github.com/kurrent-io/EventStore-Client-NodeJS)
+to significantly improve read performance by leveraging Rust through native addons.
 
 ## Support
 
