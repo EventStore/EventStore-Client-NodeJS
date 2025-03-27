@@ -1,7 +1,10 @@
 # @kurrent/kurrentdb-client
 
 [![npm][npm-badge]][npm-badge-url]
-[![Github action CI workflow][ci-badge]][ci-badge-url]
+[![Previous LTS](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_previous_LTS.yml/badge.svg)](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_previous_LTS.yml)
+[![LTS](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_LTS.yml/badge.svg)](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_LTS.yml)
+[![next](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_next.yml/badge.svg)](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_next.yml)
+
 [![license][license-badge]][license-badge-url]
 
 This is the package for the NodeJS client for KurrentDB 20+ and uses gRPC as the communication protocol.
@@ -194,7 +197,6 @@ Refer to our [Contribution Guidelines]
 [npm-badge]: https://img.shields.io/npm/v/@kurrent/kurrentdb-client.svg
 [npm-badge-url]: https://www.npmjs.com/package/@kurrent/kurrentdb-client
 [ci-badge]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/workflows/CI/badge.svg?branch=master
-[ci-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions
 [license-badge]: https://img.shields.io/npm/l/@kurrent/kurrentdb-client.svg
 [license-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/LICENSE
 [contribution guidelines]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md

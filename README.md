@@ -1,14 +1,17 @@
 <a href="https://kurrent.io">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/KurrentLogo-White.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/KurrentLogo-Black.png">
-    <img alt="Kurrent" src="https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/KurrentLogo-Plum.png" height="50%" width="50%">
+    <source media="(prefers-color-scheme: dark)" srcset="KurrentLogo-White.png">
+    <source media="(prefers-color-scheme: light)" srcset="KurrentLogo-Black.png">
+    <img alt="Kurrent" src="KurrentLogo-Plum.png" height="50%" width="50%">
   </picture>
 </a>
 
 # KurrentDB NodeJS Client
 
 [![license][license-badge]][license-badge-url]
+[![Previous LTS](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_previous_LTS.yml/badge.svg)](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_previous_LTS.yml)
+[![LTS](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_LTS.yml/badge.svg)](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_LTS.yml)
+[![next](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_next.yml/badge.svg)](https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions/workflows/test_next.yml)
 
 KurrentDB is the event-native database, where business events are immutably
 stored and streamed. Designed for event-sourced, event-driven, and microservices
