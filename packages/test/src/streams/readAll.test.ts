@@ -7,6 +7,7 @@ import {
   AllStreamBinaryRecordedEvent,
   LinkEvent,
   KurrentDBClient,
+  streamNameFilter,
 } from "@kurrent/kurrentdb-client";
 
 describe("readAll", () => {
@@ -43,6 +44,27 @@ describe("readAll", () => {
       expect(count).toBeGreaterThan(8);
       expect(notSystemStreams.length).toEqual(8);
       expect(notSystemStreams[0]).toBe(STREAM_NAME_A);
+    });
+
+    test("with filter", async () => {
+      let count = 0;
+      const notSystemStreams = [];
+
+      for await (const { event } of client.readAll({
+        filter: streamNameFilter({
+          prefixes: [STREAM_NAME_A],
+        }),
+      })) {
+        count++;
+
+        if (event && !event.streamId.startsWith("$")) {
+          notSystemStreams.push(event.streamId);
+        }
+      }
+
+      expect(count).toEqual(4);
+      expect(notSystemStreams.length).toEqual(4);
+      expect(Array.from(new Set(notSystemStreams))).toEqual([STREAM_NAME_A]);
     });
 
     test("from position", async () => {

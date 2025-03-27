@@ -3,6 +3,7 @@ import type {
   ReadPosition,
   Direction,
   AllStreamResolvedEvent,
+  Filter,
 } from "../types";
 import { FORWARDS, START } from "../constants";
 import { Client } from "../Client";
@@ -34,6 +35,10 @@ export interface ReadAllOptions extends BaseOptions {
    * @defaultValue FORWARDS
    */
   direction?: Direction;
+  /**
+   * Filters events or streams based upon a predicate.
+   */
+  filter?: Filter;
 }
 
 declare module "../Client" {
@@ -66,6 +71,7 @@ Client.prototype.readAll = function (
     direction,
     requiresLeader: baseOptions.requiresLeader ?? true,
     credentials: baseOptions.credentials,
+    filter: baseOptions.filter,
   };
 
   let stream;
