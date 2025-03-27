@@ -66,7 +66,7 @@ Refer to our [contribution guidelines]
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [Discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
 [contribution guidelines]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
-[license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
+[license-badge]: https://img.shields.io/npm/l/@kurrent/kurrentdb-client.svg
 [license-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/LICENSE
 [ci-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions
 [KurrentDB-Client-NodeJS]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS

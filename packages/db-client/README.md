@@ -191,11 +191,11 @@ Refer to our [Contribution Guidelines]
 [discuss]: https://discuss.kurrent.io/
 [discord-kurrent]: https://discord.gg/Phn9pmCw3t
 [discord-ddd-cqrs-es]: https://discord.com/invite/sEZGSHNNbH
-[npm-badge]: https://img.shields.io/npm/v/@kurrent/db-client.svg
-[npm-badge-url]: https://www.npmjs.com/package/@kurrent/db-client
+[npm-badge]: https://img.shields.io/npm/v/@kurrent/kurrentdb-client.svg
+[npm-badge-url]: https://www.npmjs.com/package/@kurrent/kurrentdb-client
 [ci-badge]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/workflows/CI/badge.svg?branch=master
 [ci-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/actions
-[license-badge]: https://img.shields.io/npm/l/@kurrent/db-client.svg
+[license-badge]: https://img.shields.io/npm/l/@kurrent/kurrentdb-client.svg
 [license-badge-url]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/LICENSE
 [contribution guidelines]: https://github.com/kurrent-io/KurrentDB-Client-NodeJS/blob/master/CONTRIBUTING.md
-[Kurrent docs]: https://developers.kurrent.io/server/v24.6/quick-start/installation
+[Kurrent docs]: https://docs.kurrent.io/server/v25.0/quick-start/installation.html
